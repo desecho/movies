@@ -7,7 +7,7 @@ import json
 import tmdb3
 from operator import itemgetter
 import urllib2
-from annoying.decorators import ajax_request
+from annoying.decorators import ajax_request, render_to
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.template import RequestContext
