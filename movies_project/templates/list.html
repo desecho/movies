@@ -1,0 +1,205 @@
+{% extends "base.html" %}
+{% block content %}
+<script src="/static/js/jquery.raty.min.js" ></script>
+<script>
+    general_settings = {
+        path: '/static/images/raty/',
+        cancel: true,
+        {% if anothers_account %}
+            readOnly : true,
+        {% endif %}
+        click: function(score) {
+            //change from null to 0 to simplify saving
+            if (!score) {
+                score = 0;
+            }
+            change_rating($(this).attr('data-record_id'), score, $(this));
+        }
+    };
+
+    function change_rating(id, rating, element) {
+        function revert_to_previous_rating(element) {
+            score_settings = {score: element.attr('data-rating')};
+            settings = $.extend({}, general_settings, score_settings);
+            element.raty(settings);
+        }
+
+        $.post("{% url 'movies.views.ajax_change_rating' %}", {'id': id, 'rating': rating},
+            function(data, error, x) {
+                //update current rating
+                element.attr('data-rating', rating);
+            }
+        ).error(function() {
+            revert_to_previous_rating(element);
+            displayError('Ошибка добавления оценки.');
+        });
+    }
+
+    function remove_record_from_page(id) {
+        $('#record' + id).fadeOut('fast', function() {
+            $(this).remove();
+            check_if_no_records();
+        });
+    }
+
+    function remove_record(id) {
+        $.post("{% url 'movies.views.ajax_remove_record' %}", {'id': id},
+            function(data) {
+                remove_record_from_page(id);
+            }
+        ).error(function() {
+            displayError('Ошибка удаления фильма.');
+        });
+    }
+
+    function switch_mode(mode) {
+        $.post("{% url 'movies.views.ajax_apply_setting' %}", {'mode': mode},
+            function(data) {
+                location.reload();
+            }
+        ).error(function() {
+            displayError('Ошибка смены режима.');
+        });
+    }
+
+    function add_to_list(movie_id, list_id, record_id) {
+        $.post("{% url 'movies.views.ajax_add_to_list' %}", {'movie_id': movie_id, 'list_id': list_id},
+                function(data) {
+                    {% if not anothers_account %}
+                        remove_record_from_page(record_id);
+                    {% endif %}
+                }
+        ).error(function() {
+            displayError('Ошибка добавления фильма в список.');
+        });
+    }
+
+    function save_comment(id) {
+        comment = $('#comment' + id).val();
+        $.post("{% url 'movies.views.ajax_save_comment' %}", {'id': id, 'comment': comment},
+            function(data) {
+                if (!comment) {
+                    toggle_comment_area(id);
+                }
+            }
+        ).error(function() {
+            displayError('Ошибка сохранения комментария.');
+        });
+    }
+
+    function check_if_no_records() {
+        if (!$('.movie').length) {
+            $('#results').html('Список пуст.');
+        }
+    }
+
+    function toggle_comment_area(id) {
+        $('#comment_area' + id).toggle();
+        $('#comment_area_button' + id).toggle();
+        $('#comment' + id).focus();
+    }
+
+    $(function() {
+        score_settings = {
+            score: function() {
+                return $(this).attr('data-rating');
+            },
+        };
+        settings = $.extend({}, general_settings, score_settings);
+        $('.rating').raty(settings);
+    });
+</script>
+<script src="/static/js/ajax_loading.js"></script>
+
+<br>
+<input type="button" value="Полный режим" onclick="switch_mode('full')" /><br>
+<input type="button" value="Компактный режим" onclick="switch_mode('compact')" /><br>
+<br>
+{% if anothers_account %}
+    <h1>{{ anothers_account }}</h1>
+    <a href="watched">Просмотренные</a><br>
+    <a href="to-watch">Хочу посмотреть</a><br>
+    <br>
+{% endif %}
+
+<h1>{{ list_name }} - {{ number_of_movies }}</h1>
+
+<div id="results" class="results">
+{% if records %}
+    {% for record in records %}
+        <div id="record{{ record.id }}" class="movie">
+            <div class="poster">
+                <img src="{% ifequal mode 'full' %}{{ record.movie.poster_big_url }}{% else %}{{ record.movie.poster_small_url }}{% endifequal %}" alt="{{ record.movie.title }} poster"/>
+            </div>
+            <div class="details">
+                Название: {{ record.movie.title }}<br>
+                {% if record.movie.release_date %} Дата выпуска: {{ record.movie.release_date }}<br> {% endif %}
+                {% ifequal mode 'full' %}
+                    {% if record.movie.director %} Режисер: {{ record.movie.director }}<br> {% endif %}
+                    {% if record.movie.writer %} Сценарист: {{ record.movie.writer }}<br> {% endif %}
+                    {% if record.movie.genre %} Жанр: {{ record.movie.genre }}<br> {% endif %}
+                    {% if record.movie.actors %} Актеры: {{ record.movie.actors }}<br> {% endif %}
+                    {% if record.movie.trailers %} Трейлеры:<br>
+                        {% if record.movie.trailers.youtube %}
+                            YouTube:
+                                {% for trailer in record.movie.trailers.youtube %}
+                                    <a href="http://www.youtube.com/watch?v={{ trailer.source }}" target="_blank">{{ trailer.name }}</a>
+                                {% endfor %}
+                            <br>
+                        {% endif %}
+                        {% if record.movie.trailers.quicktime %}
+                            QuickTime:
+                            <ul>
+                                {% for trailer in record.movie.trailers.quicktime %}
+                                    <li>
+                                        {{ trailer.name }}:
+                                            {% for size in trailer.sizes %}
+                                                <a href="{{ size.source }}" target="_blank">{{ size.size }}</a>
+                                            {% endfor %}
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    {% endif %}
+                {% if record.movie.homepage %} <a href="{{ record.movie.homepage }}" target="_blank">Сайт</a><br> {% endif %}
+                <a href="{{ record.movie.imdb_url }}" target="_blank"><img src="/static/images/imdb.jpg" alt="IMDb" /></a><br>
+                {% if record.movie.imdb_rating %} IMDb rating: {{ record.movie.imdb_rating }}<br> {% endif %}
+                <br>
+                {% if record.movie.plot %} Описание: {{ record.movie.plot }}<br> {% endif %}
+                {% endifequal %}
+                {# Interaction panel #}
+                    {% ifequal list_id 1 %}
+                        Оценка: <div class="rating" data-record_id="{{ record.id }}" data-rating="{{ record.rating }}"></div>
+                        <div id="comment_area{{ record.id }}" style="display: {% if not record.comment %} none {% endif %}">
+                            Комментарий:
+                            {% if not anothers_account %}
+                                <textarea rows="3" cols="45" id="comment{{ record.id }}">{{ record.comment }}</textarea>
+                                <input type="button" value="Сохранить" onclick="save_comment({{ record.id }})" /><br>
+                            {% else %}
+                                <p>{{ record.comment }}</p>
+                            {% endif %}
+                        </div>
+                        {% if not anothers_account %}
+                            <input id="comment_area_button{{ record.id }}" type="button" value="Добавить комментарий" onclick="toggle_comment_area({{ record.id }})" style="display: {% if record.comment %} none {% endif %}" />
+                        {% endif %}
+                            <br>
+                    {% endifequal %}
+                {# Interaction panel #}
+            </div>
+            <div class="buttons">
+            {% if not anothers_account %}
+                <input type="button" value="Удалить" onclick="remove_record({{ record.id }})" />
+                {% ifequal list_id 2 %}
+                    <input type="button" value="Посмотрел" onclick="add_to_list({{ record.movie_id }}, 1, {{ record.id }})" />
+                {% endifequal %}
+            {% else %}
+                <input type="button" value="Смотрел" onclick="add_to_list({{ record.movie_id }}, 1)" />
+                <input type="button" value="Хочу посмотреть" onclick="add_to_list({{ record.movie_id }}, 2)" />
+            {% endif %}
+            </div>
+        </div>
+    {% endfor %}
+{% else %}
+<p>Список пуст.</p>
+{% endif %}
+</div>
+{% endblock %}

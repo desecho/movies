@@ -1,0 +1,1 @@
+INSERT  INTO `movies_list`(`id`,`title`,`key_name`) VALUES (1,'Просмотренные','watched'),(2,'Хочу посмотреть','to-watch');

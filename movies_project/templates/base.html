@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<link rel="stylesheet" href="/static/css/style.css" />
+<link rel="stylesheet" href="/static/css/jquery.jgrowl.css" />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" ></script>
+<script src="/static/js/jquery.jgrowl_minimized.js"></script>
+<script src="/static/js/main.js"></script>
+<meta charset="utf-8">
+<title>{% block title %}Фильмы{% endblock %}</title>
+
+{% block menu %}
+    <div id="loading" class="loading"></div>
+    <div class="login_panel">
+        <a href="/logout">Выход</a>
+    </div>
+    <div class="sidebar">
+        <a href="{% url 'movies.views.list' list='watched' %}">Просмотренные</a><br>
+        <a href="{% url 'movies.views.list' list='to-watch' %}">Хочу посмотреть</a><br>
+    </div>
+
+    <div class="menu">
+        <a href="{% url 'movies.views.search' %}">Поиск фильма</a><br>
+        <a href="{% url 'movies.views.people' %}">Люди</a><br>
+    </div>
+{% endblock %}
+
+<div id="content">
+    {% block content %}{% endblock %}
+</div>

@@ -1,0 +1,101 @@
+ul {
+    margin: 0;
+}
+
+.results {
+    margin-top: 10px;
+}
+
+.results .result {
+    border: 1px solid;
+    border-color: #808080;
+    float: left;
+    margin: 0 0 10px 70px;
+    padding: 10px;
+}
+
+.result .poster {
+    height: 180px;
+    float: left;
+}
+
+.result .details {
+    float: left;
+    margin-left: 5px;
+}
+
+.result .buttons {
+    clear: both;
+    text-align: center;
+}
+
+.movie {
+    margin-top: 30px;
+}
+
+.movie .details {
+    float: left;
+    margin-left: 15px;
+    width: 500px;
+}
+
+.movie .poster {
+    float: left;
+}
+
+.movie .buttons {
+    clear: both;
+}
+
+.search_panel {
+    margin-top: 15px;
+    width: 628px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.search_panel form input {
+    font-size: 30px;
+}
+
+.search_panel form div {
+    margin-left: 278px;
+}
+
+.search_field {
+    width: 500px;
+}
+
+.loading {
+    position: fixed;
+    bottom: 0;
+    background-image: url('../images/loading.gif');
+    width: 48px;
+    height: 48px;
+    right: 0;
+    display: none;
+}
+
+.login_panel {
+    float: right;
+    position: absolute;
+    top: 0;
+    right: 20px;
+}
+
+.menu {
+    width: 100px;
+    top: 0;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.sidebar {
+    position: absolute;
+    top: 10;
+    left: 10;
+}
+
+h1 {
+    margin: 0;
+}
