@@ -36,7 +36,7 @@ class Movie(models.Model):
     trailers = JSONField(null=True)
 
     def __unicode__(self):
-        return unicode(self.title, 'utf8')
+        return self.title
 
     def imdb_url(self):
         return settings.IMDB_BASE_URL + self.imdb_id + '/'
@@ -63,10 +63,4 @@ class Record(models.Model):
     comment = models.CharField(max_length=255, default='')
 
     def __unicode__(self):
-        return unicode(self.movie.title, 'utf8')
-
-
-# def create_user_profile(sender, instance, created, **kwargs):
-#     if created:
-#         UserProfile.objects.create(user=instance)
-#     post_save.connect(create_user_profile, sender=User)
+        return self.movie.title

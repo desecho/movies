@@ -5,8 +5,6 @@ It's coded in Python 2, Django 1.5. The interface is in Russian.
 
 ##Required packages:
 * [Django 1.5](http://djangoproject.com)
-
-
 * [django-annoying](https://github.com/skorokithakis/django-annoying)
 * [pytmdb3](https://github.com/wagnerrp/pytmdb3)
 
