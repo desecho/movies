@@ -17,8 +17,9 @@ It's coded in Python 2, Django 1.5. The interface is in Russian.
 
 ##Installation
 
-* Change the following variables in settings.py. You'll need an API key. You can obtain it here - http://api.themoviedb.org. Make sure that the user running the server has access to write to /cache/tmdb3.cache.
+* Change the following variables in settings.py. You'll need an API key. You can obtain it here - http://api.themoviedb.org. Make sure that the user running the server has access to write to /cache/tmdb3.cache. You can generate SECRET_KEY using [Django Secret Key Generator](http://www.miniwebtool.com/django-secret-key-generator/)
     * DATABASES
+    * SECRET_KEY
     * TMDB_KEY
     * BASE_PATH
     * DJANGO_PATH
