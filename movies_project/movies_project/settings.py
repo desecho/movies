@@ -165,7 +165,6 @@ LOGGING = {
 
 LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = '/login/'
-AUTH_PROFILE_MODULE = 'movies.UserProfile'
 SESSION_SAVE_EVERY_REQUEST = True
 TMDB_KEY = ''
 TMDB_CACHE_PATH = CACHE_DIR + 'tmdb3.cache'
