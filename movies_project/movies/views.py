@@ -1,12 +1,12 @@
 # -*- coding: utf8 -*-
 
-from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render_to_response, redirect
-from movies.models import Movie, Record, List, User
 import json
 import tmdb3
 from operator import itemgetter
 import urllib2
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render_to_response, redirect
+from movies.models import Movie, Record, List, User
 from annoying.decorators import ajax_request, render_to
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
