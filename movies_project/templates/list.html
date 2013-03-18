@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 {% block content %}
-<script src="/static/js/jquery.raty.min.js" ></script>
+<script src="/static/libs/raty/jquery.raty.min.js" ></script>
 <script>
     general_settings = {
-        path: '/static/images/raty/',
+        path: '/static/libs/raty/',
         cancel: true,
         {% if anothers_account %}
             readOnly : true,
