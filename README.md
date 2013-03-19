@@ -4,16 +4,16 @@ The web-application to create movie lists ("watched" and "to watch"), to share t
 
 ##Required packages
 
-* [Python 2](http://www.python.org)
-* [Django 1.5](http://djangoproject.com)
-* [django-annoying](https://github.com/skorokithakis/django-annoying)
-* [pytmdb3](https://github.com/wagnerrp/pytmdb3)
+* [Python v2.6.5+](http://www.python.org)
+* [Django v1.5](http://djangoproject.com)
+* [django-annoying v0.7.7+](https://github.com/skorokithakis/django-annoying)
+* [pytmdb3 v0.6.16+](https://github.com/wagnerrp/pytmdb3)
 
 ##Used Javascript libraries
 * [jQuery v1.9.1](http://jquery.com/)
 * [JQuery Raty v2.5.2](http://wbotelhos.com/raty/)
 * [jQuery plugin: Validation v1.11.0](http://bassistance.de/jquery-plugins/jquery-plugin-validation/)
-* [jGrowl 1.2.11]( https://github.com/stanlemon/jGrowl)
+* [jGrowl v1.2.11]( https://github.com/stanlemon/jGrowl)
 
 ##Installation instructions
 

@@ -1,7 +1,9 @@
-$("#loading").ajaxStart(function(){
-    $(this).show();
-});
+$(function() {
+    $(document).ajaxStart(function(){
+        $('#loading').show();
+    });
 
-$("#loading").ajaxStop(function(){
-    $(this).hide();
+    $(document).ajaxStop(function(){
+        $('#loading').hide();
+    });
 });
