@@ -1,9 +1,14 @@
 from django.conf.urls import patterns, include, url
 
+# Uncomment the next two lines to enable the admin:
 from django.contrib import admin
 admin.autodiscover()
 
-urlpatterns = patterns('',
+urlpatterns = patterns(
+    '',
+    # Examples:
+    # url(r'^$', 'applications_project.views.home', name='home'),
+    # url(r'^applications_project/', include('applications_project.foo.urls')),
     url(r'^$', 'movies.views.search'),
     url(r'^search/$', 'movies.views.search'),
 

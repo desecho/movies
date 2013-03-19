@@ -4,18 +4,18 @@ import json
 import tmdb3
 from operator import itemgetter
 import urllib2
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse
 from django.shortcuts import render_to_response, redirect
 from movies.models import Movie, Record, List, User
 from annoying.decorators import ajax_request, render_to
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
-from django.template import RequestContext
 from django.conf import settings
 
 
 tmdb3.set_key(settings.TMDB_KEY)
 tmdb3.set_cache(filename=settings.TMDB_CACHE_PATH)
+
 
 def logout_view(request):
     logout(request)
@@ -194,7 +194,7 @@ def ajax_search_movie(request):
                         'poster': getPosterUrl(result.poster),
                     }
                     movies.append(movie)
-            except IndexError:                                              #strange exception in "matrix case"
+            except IndexError:                                              # strange exception in "matrix case"
                 pass
             if options['popular_only']:
                 movies = removeNotPopularMovies(movies)
@@ -256,14 +256,12 @@ def ajax_add_to_list_from_tmdb(request):
             html = response.read()
             imdb_data = json.loads(html)
             if imdb_data.get('Response') == 'True':
-                movie = {
-                            'plot': processImdbData(imdb_data.get('Plot')),
-                            'writer': processImdbData(imdb_data.get('Writer')),
-                            'director': processImdbData(imdb_data.get('Director')),
-                            'actors': processImdbData(imdb_data.get('Actors')),
-                            'genre': processImdbData(imdb_data.get('Genre')),
-                            'imdb_rating': processImdbData(imdb_data.get('imdbRating')),
-                        }
+                movie = {'plot': processImdbData(imdb_data.get('Plot')),
+                         'writer': processImdbData(imdb_data.get('Writer')),
+                         'director': processImdbData(imdb_data.get('Director')),
+                         'actors': processImdbData(imdb_data.get('Actors')),
+                         'genre': processImdbData(imdb_data.get('Genre')),
+                         'imdb_rating': processImdbData(imdb_data.get('imdbRating'))}
                 return movie
 
         def getMovieFromTmdb(id):
