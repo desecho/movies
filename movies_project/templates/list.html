@@ -162,7 +162,7 @@
                     {% endif %}
                 {% if record.movie.homepage %} <a href="{{ record.movie.homepage }}" target="_blank">Сайт</a><br> {% endif %}
                 <a href="{{ record.movie.imdb_url }}" target="_blank"><img src="/static/images/imdb.jpg" alt="IMDb" /></a><br>
-                {% if record.movie.imdb_rating %} IMDb rating: {{ record.movie.imdb_rating }}<br> {% endif %}
+                {% if record.movie.imdb_rating %} IMDb рейтинг: {{ record.movie.imdb_rating }}<br> {% endif %}
                 <br>
                 {% if record.movie.plot %} Описание: {{ record.movie.plot }}<br> {% endif %}
                 {% endifequal %}

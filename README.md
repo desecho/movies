@@ -6,8 +6,9 @@ The web-application to create movie lists ("watched" and "to watch"), to share t
 
 * [Python v2.6.5+](http://www.python.org)
 * [Django v1.5](http://djangoproject.com)
-* [django-annoying v0.7.7+](https://github.com/skorokithakis/django-annoying)
 * [pytmdb3 v0.6.16+](https://github.com/wagnerrp/pytmdb3)
+* [django-annoying v0.7.7+](https://github.com/skorokithakis/django-annoying)
+* [django-vkontakte-iframe](https://bitbucket.org/kmike/django-vkontakte-iframe/)
 
 ##Used Javascript libraries
 * [jQuery v1.9.1](http://jquery.com/)
@@ -17,12 +18,14 @@ The web-application to create movie lists ("watched" and "to watch"), to share t
 
 ##Installation instructions
 
-* Change the following variables in settings.py. You can generate SECRET_KEY using [Django Secret Key Generator](http://www.miniwebtool.com/django-secret-key-generator/). Insert your path to django admin static directory to STATICFILES_DIRS. It should be like something like '/usr/local/lib/python2.7/dist-packages/django/contrib/admin/static'. You'll need an API key. You can obtain it here - http://api.themoviedb.org. Make sure that the user running the server has access to write to /cache/tmdb3.cache.
+* Change the following variables in settings.py. You can generate SECRET_KEY using [Django Secret Key Generator](http://www.miniwebtool.com/django-secret-key-generator/). Insert your path to django admin static directory to STATICFILES_DIRS. It should be like something like '/usr/local/lib/python2.7/dist-packages/django/contrib/admin/static'. You'll need an API key. You can obtain it here - http://api.themoviedb.org. Enter the VK details to integrate it with vk.com. Also check out [django-vkontakte-iframe](https://bitbucket.org/kmike/django-vkontakte-iframe/) for more information on how to set it up. Make sure that the user running the server has access to write to /cache/tmdb3.cache.
     * DATABASES
     * SECRET_KEY
     * TMDB_KEY
     * BASE_PATH
     * STATICFILES_DIRS
+    * VK_APP_ID
+    * VK_APP_SECRET
 
 * Run
 ```

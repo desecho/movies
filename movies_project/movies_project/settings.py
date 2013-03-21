@@ -103,9 +103,12 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'vk_iframe.middleware.IFrameFixMiddleware',
+    'vk_iframe.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # 'vk_iframe.middleware.LoginRequiredMiddleware',
 )
 
 ROOT_URLCONF = 'movies_project.urls'
@@ -132,6 +135,7 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable admin documentation:
     'django.contrib.admindocs',
     'movies',
+    'vk_iframe',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -163,6 +167,11 @@ LOGGING = {
     }
 }
 
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'vk_iframe.backends.VkontakteUserBackend',
+)
+
 LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = '/login/'
 SESSION_SAVE_EVERY_REQUEST = True
@@ -175,3 +184,7 @@ POSTER_SIZE_BIG = 'w185'
 POSTER_SIZE_SMALL = 'w92'
 POSTER_BASE_URL = 'http://cf2.imgobject.com/t/p/'
 IMDB_BASE_URL = 'http://www.imdb.com/title/'
+
+VK_APP_ID = ''      # Application ID
+VK_APP_SECRET = ''  # Secure key
+VK_P3P_POLICY = 'IDC DSP COR IVAi IVDi OUR TST'

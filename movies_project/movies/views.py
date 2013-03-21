@@ -5,14 +5,14 @@ import tmdb3
 from operator import itemgetter
 import urllib2
 from django.http import HttpResponse
-from django.shortcuts import render_to_response, redirect
+from django.shortcuts import redirect
 from movies.models import Movie, Record, List, User
 from annoying.decorators import ajax_request, render_to
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
 
-
+#tmdb3.set_key('')                    #  code special code for testing purposes
 tmdb3.set_key(settings.TMDB_KEY)
 tmdb3.set_cache(filename=settings.TMDB_CACHE_PATH)
 
@@ -22,24 +22,27 @@ def logout_view(request):
     return redirect('/login/')
 
 
+@render_to('search.html')
 @login_required
 def search(request):
-    return render_to_response('search.html')
+    return {}
 
 
 @render_to('list.html')
 @login_required
 def list(request, list, username=None):
     if username:
-        user_id = User.objects.get(username=username).id
+        user = User.objects.get(username=username)
+        anothers_account = user.first_name + ' ' + user.last_name
     else:
-        user_id = request.user.id
-    records = Record.objects.filter(list__key_name=list, user_id=user_id)
+        user = request.user
+        anothers_account = False
+    records = Record.objects.filter(list__key_name=list, user=user)
     return {'records': records,
             'list_id': List.objects.get(key_name=list).id,
             'list_name': List.objects.get(key_name=list),
             'mode': request.session.get('mode', 'full'),
-            'anothers_account': username,
+            'anothers_account': anothers_account,
             'number_of_movies': len(records)}
 
 
@@ -49,7 +52,7 @@ def people(request):
     users = User.objects.all()
     users_new = []
     for user in users:
-        u = {'username': user.username,
+        u = {'user': user,
              'number_of_watched': Record.objects.filter(list_id=1, user=user).count(),
              'number_of_want_to_watch': Record.objects.filter(list_id=2, user=user).count()}
         users_new.append(u)

@@ -3,8 +3,8 @@
 
 <h1>Люди</h1>
 {% for u in users %}
-    {% ifnotequal u user %}
-        <a href="/people/{{ u.username }}/watched">{{ u.username }}</a> - {{ u.number_of_watched }}/{{ u.number_of_want_to_watch }}<br>
+    {% ifnotequal u.user user %}
+        <a href="/people/{{ u.user.username }}/watched">{{ u.user.first_name }} {{ u.user.last_name }}</a> - {{ u.number_of_watched }}/{{ u.number_of_want_to_watch }}<br>
     {% endifnotequal %}
 {% endfor %}
 {% endblock %}

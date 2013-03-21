@@ -11,9 +11,11 @@
 <title>{% block title %}Фильмы{% endblock %}</title>
 
 {% block menu %}
+    {% ifequal user.vk_profile.pk 1 %}
     <div class="login_panel">
         <a href="/logout">Выход</a>
     </div>
+    {% endifequal %}
     <div class="sidebar">
         <a href="{% url 'movies.views.list' list='watched' %}">Просмотренные</a><br>
         <a href="{% url 'movies.views.list' list='to-watch' %}">Хочу посмотреть</a><br>
