@@ -30,6 +30,7 @@
 </div>
 
 {% if anothers_account %}
+  <!-- <img src="{{ anothers_account.vk_profile.photo }}"> -->
   <h3>{{ anothers_account.get_full_name }}</h3>
   <div class="btn-group" data-toggle="buttons-radio">
     <a href="watched" class="btn {% ifequal list_id 1 %} active {% endifequal %}">Смотрел</a><a href="to-watch" class="btn {% ifequal list_id 2 %} active {% endifequal %}">Хочет посмотреть</a>
