@@ -52,8 +52,8 @@
           </div>
           <div class="details">
             {% if record.movie.imdb_rating %} <strong>IMDb рейтинг:</strong> {{ record.movie.imdb_rating }}<br> {% endif %}
+            {% if record.movie.release_date %} <strong>Дата выпуска:</strong> {{ record.movie.release_date|date:'d.m.y' }}<br> {% endif %}
             {% ifequal mode 'full' %}
-                {% if record.movie.release_date %} <strong>Дата выпуска:</strong> {{ record.movie.release_date|date:'d.m.y' }}<br> {% endif %}
                 {% if record.movie.director %} <strong>Режиссёр:</strong> {{ record.movie.director }}<br> {% endif %}
                 {% if record.movie.writer %} <strong>Сценарист:</strong> {{ record.movie.writer }}<br> {% endif %}
                 {% if record.movie.genre %} <strong>Жанр:</strong> {{ record.movie.genre }}<br> {% endif %}

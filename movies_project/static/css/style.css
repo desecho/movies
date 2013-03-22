@@ -66,6 +66,11 @@ label.error {
     font-size: 25px;
     opacity: 0.7;
     position: fixed;
-    right: 13px;
+    right: 27px;
     top: 55px;
+}
+
+.vk {
+    overflow-y: scroll;
+    height: 800px;
 }

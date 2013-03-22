@@ -25,6 +25,7 @@
 
 <meta charset="utf-8">
 <title>{% block title %}Фильмы{% endblock %}</title>
+<div {% if user.is_vk_user %} class="vk" {% endif %}>
  <div class="navbar navbar-fixed-top">
     <div class="navbar-inner">
       <a class="brand active" href="/">Movies</a>
@@ -55,4 +56,5 @@
 </div>
 <div id="content">
     {% block content %}{% endblock %}
+</div>
 </div>

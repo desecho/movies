@@ -69,7 +69,7 @@ function change_search_type(id) {
         search_type = 1;
     }
     if (id == 2) {
-        ext = 'Актер';
+        text = 'Актёр';
         search_type = 2;
     }
     if (id == 3) {
