@@ -22,8 +22,17 @@
   var url_ajax_save_comment  = '{% url 'movies.views.ajax_save_comment' %}';
 </script>
 <script src="/static/js/list.js"></script>
+
+<div id="movie-count">
+  {% if not anothers_account %}
+    {{ user.get_movie_count }}
+  {% else %}
+    {{ anothers_account.get_movie_count }}
+  {% endif %}
+</div>
+
 {% if anothers_account %}
-  <h3>{{ anothers_account.get_full_name }} ({{ anothers_account.number_of_watched }} / {{ anothers_account.number_of_to_watch }})</h3>
+  <h3>{{ anothers_account.get_full_name }}</h3>
   <div class="btn-group" data-toggle="buttons-radio">
     <a href="watched" class="btn {% ifequal list_id 1 %} active {% endifequal %}" >Смотрел</a><a href="to-watch" class="btn {% ifequal list_id 2 %} active {% endifequal %}">Хочет посмотреть</a>
   </div>
@@ -39,7 +48,7 @@
   {% if records %}
     {% for record in records %}
       <div id="record{{ record.id }}" class="movie">
-          <div class="title"><h4>{{ record.movie.title }}</h4> <a href="#" onclick="remove_record({{ record.id }})"><i class="icon-minus-sign"></i></a></div>
+          <div class="title">{{ record.movie.title }} <a href="#" onclick="remove_record({{ record.id }})"><i class="icon-minus-sign"></i></a></div>
           <div class="poster">
               <img src="{% ifequal mode 'full' %}{{ record.movie.poster_big_url }}{% else %}{{ record.movie.poster_small_url }}{% endifequal %}" alt="{{ record.movie.title }} poster"/>
           </div>

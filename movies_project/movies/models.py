@@ -87,10 +87,15 @@ def number_of_to_watch(self):
     return number_of_movies(self, 2)
 
 
+def get_movie_count(self):
+    return '%d / %d' % (self.number_of_watched(), self.number_of_to_watch())
+
+
 def is_vk_user(self):
     if self.username.isdigit():
         return True
 
 User.add_to_class('number_of_watched', number_of_watched)
 User.add_to_class('number_of_to_watch', number_of_to_watch)
+User.add_to_class('get_movie_count', get_movie_count)
 User.add_to_class('is_vk_user', is_vk_user)

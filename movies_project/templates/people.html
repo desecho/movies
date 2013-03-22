@@ -3,7 +3,7 @@
 
 {% for u in users %}
     {% ifnotequal u user %}
-        <a href="/people/{{ u.username }}/watched">{{ u.get_full_name }}</a> ({{ u.number_of_watched }} / {{ u.number_of_to_watch }})<br>
+        <a href="/people/{{ u.username }}/watched">{{ u.get_full_name }}</a> {{ u.get_movie_count }} <br>
     {% endifnotequal %}
 {% endfor %}
 
