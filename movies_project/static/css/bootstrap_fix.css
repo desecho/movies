@@ -3,5 +3,5 @@ body {
 }
 
 .navbar .brand {
-    margin-left: 0;
+    margin-left: 0 !important;
 }
