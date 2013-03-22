@@ -31,6 +31,7 @@ def search(request):
 @render_to('list.html')
 @login_required
 def list(request, list, username=None):
+    sort = request.session.get('sort', 'release_date')
     if username:
         user = User.objects.get(username=username)
         anothers_account = user
@@ -38,6 +39,13 @@ def list(request, list, username=None):
         user = request.user
         anothers_account = False
     records = Record.objects.filter(list__key_name=list, user=user)
+    if sort == 'release_date':
+        records = records.order_by('-movie__release_date')
+    elif sort == 'rating':
+        records = records.order_by('-rating')
+    else:
+        records = records.order_by('-pk')
+
     if username:
         list_data = {}
         for record in records:
@@ -47,6 +55,7 @@ def list(request, list, username=None):
     return {'records': records,
             'list_id': List.objects.get(key_name=list).id,
             'mode': request.session.get('mode', 'full'),
+            'sort': sort,
             'anothers_account': anothers_account,
             'list_data': json.dumps(list_data)}
 
@@ -94,9 +103,10 @@ def friends(request):
 def ajax_apply_setting(request):
     if request.is_ajax() and request.method == 'POST':
             POST = request.POST
-            if 'mode' in POST:
-                mode = POST.get('mode')
-                request.session['mode'] = mode
+            if 'type' in POST and 'value' in POST:
+                type = POST.get('type')
+                value = POST.get('value')
+                request.session[type] = value
     return HttpResponse()
 
 

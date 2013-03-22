@@ -48,13 +48,21 @@ function remove_record(id) {
   });
 }
 
-function switch_mode(mode) {
-  $.post(url_ajax_apply_setting, {'mode': mode},
+function switch_mode(value) {
+  apply_setting('mode', value);
+}
+
+function switch_sort(value) {
+  apply_setting('sort', value);
+}
+
+function apply_setting(type, value) {
+  $.post(url_ajax_apply_setting, {'type': type, 'value': value},
     function(data) {
       location.reload();
     }
   ).error(function() {
-    displayError('Ошибка смены режима.');
+    displayError('Ошибка применения настройки.');
   });
 }
 
@@ -141,5 +149,6 @@ $(function() {
   settings = $.extend({}, general_settings, score_settings);
   $('.rating').raty(settings);
   $('#button_mode_' + mode).button('toggle');
+  $('#button_sort_' + sort).button('toggle');
   set_viewed_icons_and_remove_buttons();
 });
