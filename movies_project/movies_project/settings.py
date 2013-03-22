@@ -52,7 +52,7 @@ USE_TZ = False
 BASE_DIR = '/'
 
 # Caching directory.
-CACHE_DIR =  BASE_DIR + 'cache/'
+CACHE_DIR = BASE_DIR + 'cache/'
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/var/www/example.com/media/"
@@ -78,6 +78,7 @@ STATICFILES_DIRS = (
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
+
 )
 
 # List of finder classes that know how to find static files in
@@ -136,6 +137,7 @@ INSTALLED_APPS = (
     'django.contrib.admindocs',
     'movies',
     'vk_iframe',
+    'menu',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -172,6 +174,8 @@ AUTHENTICATION_BACKENDS = (
     'vk_iframe.backends.VkontakteUserBackend',
 )
 
+TEMPLATE_CONTEXT_PROCESSORS = ('django.core.context_processors.request', 'django.contrib.auth.context_processors.auth')
+
 LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = '/login/'
 SESSION_SAVE_EVERY_REQUEST = True
@@ -179,7 +183,8 @@ TMDB_KEY = ''
 TMDB_CACHE_PATH = CACHE_DIR + 'tmdb3.cache'
 MAX_RESULTS = 100
 MIN_POPULARITY = 50
-NO_POSTER_IMAGE_URL = STATIC_URL + 'images/no_poster.jpg'
+NO_POSTER_IMAGE_URL = STATIC_URL + 'img/no_poster.jpg'
+NO_POSTER_BIG_IMAGE_URL = STATIC_URL + 'img/no_poster_big.jpg'
 POSTER_SIZE_BIG = 'w185'
 POSTER_SIZE_SMALL = 'w92'
 POSTER_BASE_URL = 'http://cf2.imgobject.com/t/p/'

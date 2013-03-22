@@ -1,98 +1,56 @@
-ul {
-    margin: 0;
+#login-form {
+    margin-top: 20px;
 }
 
-.results {
-    margin-top: 10px;
-}
-
-.results .result {
-    border: 1px solid;
-    border-color: #808080;
-    float: left;
-    margin: 0 0 10px 70px;
-    padding: 10px;
-}
-
-.result .poster {
-    height: 180px;
-    float: left;
-}
-
-.result .details {
-    float: left;
-    margin-left: 5px;
-}
-
-.result .buttons {
-    clear: both;
-    text-align: center;
+#content {
+    margin: 0 20px;
 }
 
 .movie {
-    margin-top: 30px;
-}
-
-.movie .details {
-    float: left;
-    margin-left: 15px;
-    width: 500px;
+    width: 600px;
+    padding-top: 20px;
+    clear: both;
 }
 
 .movie .poster {
     float: left;
+    margin-right: 10px;
 }
 
-.movie .buttons {
+.movie .review {
+    padding-top: 10px;
+}
+
+.full {
     clear: both;
 }
 
+.title h4 {
+    display: inline;
+}
+
+.rating {
+    display: inline;
+}
+
+#query {
+    width: 250px;
+}
+
 .search_panel {
-    margin-top: 15px;
-    width: 628px;
+    width: 410px;
     margin-left: auto;
     margin-right: auto;
 }
 
-.search_panel form input {
-    font-size: 30px;
+label.error {
+    color: #b94a48;
 }
 
-.search_panel form div {
-    margin-left: 278px;
+#loading {
+    margin: 20px 20px 0 0;
 }
 
-.search_field {
-    width: 500px;
-}
-
-.loading {
-    background-image: url('../images/loading.gif');
-    width: 48px;
-    height: 48px;
-    display: none;
-}
-
-.login_panel {
-    float: right;
-    position: absolute;
-    top: 0;
-    right: 20px;
-}
-
-.menu {
-    width: 100px;
-    top: 0;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.sidebar {
-    position: absolute;
-    top: 10;
-    left: 10;
-}
-
-h1 {
-    margin: 0;
+.buttons {
+    margin-top: 10px;
 }

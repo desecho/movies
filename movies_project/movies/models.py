@@ -43,17 +43,21 @@ class Movie(models.Model):
         return settings.IMDB_BASE_URL + self.imdb_id + '/'
 
     def poster_url(self, size):
+        return settings.POSTER_BASE_URL + size + '/' + self.poster
+
+    def poster_big_url(self):
         if self.poster:
-            url = settings.POSTER_BASE_URL + size + '/' + self.poster
+            url = self.poster_url(settings.POSTER_SIZE_BIG)
+        else:
+            url = settings.NO_POSTER_BIG_IMAGE_URL
+        return url
+
+    def poster_small_url(self):
+        if self.poster:
+            url = self.poster_url(settings.POSTER_SIZE_SMALL)
         else:
             url = settings.NO_POSTER_IMAGE_URL
         return url
-
-    def poster_big_url(self):
-        return self.poster_url(settings.POSTER_SIZE_BIG)
-
-    def poster_small_url(self):
-        return self.poster_url(settings.POSTER_SIZE_SMALL)
 
 
 class Record(models.Model):
@@ -69,3 +73,24 @@ class Record(models.Model):
 
     def __unicode__(self):
         return self.movie.title
+
+
+def number_of_movies(user, list_id):
+    return Record.objects.filter(list_id=list_id, user=user).count()
+
+
+def number_of_watched(self):
+    return number_of_movies(self, 1)
+
+
+def number_of_to_watch(self):
+    return number_of_movies(self, 2)
+
+
+def is_vk_user(self):
+    if self.username.isdigit():
+        return True
+
+User.add_to_class('number_of_watched', number_of_watched)
+User.add_to_class('number_of_to_watch', number_of_to_watch)
+User.add_to_class('is_vk_user', is_vk_user)

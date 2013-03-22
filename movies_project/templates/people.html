@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 {% block content %}
 
-<h1>Люди</h1>
 {% for u in users %}
-    {% ifnotequal u.user user %}
-        <a href="/people/{{ u.user.username }}/watched">{{ u.user.first_name }} {{ u.user.last_name }}</a> - {{ u.number_of_watched }}/{{ u.number_of_want_to_watch }}<br>
+    {% ifnotequal u user %}
+        <a href="/people/{{ u.username }}/watched">{{ u.get_full_name }}</a> ({{ u.number_of_watched }} / {{ u.number_of_to_watch }})<br>
     {% endifnotequal %}
 {% endfor %}
+
 {% endblock %}

@@ -2,6 +2,7 @@
 
 import json
 import tmdb3
+import vkontakte
 from operator import itemgetter
 import urllib2
 from django.http import HttpResponse
@@ -33,30 +34,55 @@ def search(request):
 def list(request, list, username=None):
     if username:
         user = User.objects.get(username=username)
-        anothers_account = user.first_name + ' ' + user.last_name
+        anothers_account = user
     else:
         user = request.user
         anothers_account = False
     records = Record.objects.filter(list__key_name=list, user=user)
     return {'records': records,
             'list_id': List.objects.get(key_name=list).id,
-            'list_name': List.objects.get(key_name=list),
             'mode': request.session.get('mode', 'full'),
-            'anothers_account': anothers_account,
-            'number_of_movies': len(records)}
+            'anothers_account': anothers_account}
 
 
 @render_to('people.html')
 @login_required
 def people(request):
-    users = User.objects.all()
-    users_new = []
-    for user in users:
-        u = {'user': user,
-             'number_of_watched': Record.objects.filter(list_id=1, user=user).count(),
-             'number_of_want_to_watch': Record.objects.filter(list_id=2, user=user).count()}
-        users_new.append(u)
-    return {'users': users_new}
+    return {'users': User.objects.all()}
+
+
+@render_to('people.html')
+@login_required
+def friends(request):
+    # ???
+    # def intersect(list1, list2):
+    #     return list(set(list1) & set(list2))
+    def intersect(list1, list2):
+        return [x for x in list1 if x in list2]
+
+    def get_all_vk_ids():
+        vk_ids = []
+        for user in User.objects.all():
+            if user.is_vk_user():
+                vk_ids.append(int(user.username))
+        return vk_ids
+
+    def get_user_list_from_usernames(usernames):
+        users = []
+        for username in usernames:
+            users.append(User.objects.get(username=username))
+        return users
+
+    vk = vkontakte.API(settings.VK_APP_ID, settings.VK_APP_SECRET)
+    user = request.user
+    if user.is_vk_user():
+        all_friends = vk.friends.get(uid=user.username)
+        registered_vk_users = get_all_vk_ids()
+        friends = intersect(all_friends, registered_vk_users)
+        friends = get_user_list_from_usernames(friends)
+    else:
+        friends = None
+    return {'users': friends}
 
 
 def ajax_apply_setting(request):

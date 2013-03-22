@@ -3,8 +3,10 @@ import json
 from django.core.management.base import BaseCommand
 from movies.models import Movie
 
+
 class Command(BaseCommand):
     help = 'Updates the IMDB ratings'
+
     def handle(self, *args, **options):
         movies = Movie.objects.all()
         for movie in movies:

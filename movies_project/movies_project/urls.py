@@ -11,6 +11,7 @@ urlpatterns = patterns(
 
     url(r'^list/(?P<list>[\w-]+)/$', 'movies.views.list'),
     url(r'^people/$', 'movies.views.people'),
+    url(r'^friends/$', 'movies.views.friends'),
     url(r'^people/(?P<username>[\w\d]+)/(?P<list>[\w-]+)$', 'movies.views.list'),
 
     url(r'^remove-record/$', 'movies.views.ajax_remove_record'),
