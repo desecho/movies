@@ -1,9 +1,9 @@
 $(function() {
   var spinner_options = {
     lines: 12, // The number of lines to draw
-    length: 7, // The length of each line
-    width: 4, // The line thickness
-    radius: 8, // The radius of the inner circle
+    length: 5, // The length of each line
+    width: 3, // The line thickness
+    radius: 6, // The radius of the inner circle
     corners: 1, // Corner roundness (0..1)
     rotate: 40, // The rotation offset
     color: '#000', // #rgb or #rrggbb

@@ -3,7 +3,7 @@ var general_settings = {
   noRatedMsg:'Пока нет оценки',
   path: '/static/libs/raty/',
   cancel: true,
-  readOnly : raty_readonly,
+  readOnly : anothers_account,
   click: function(score) {
     //change from null to 0 to simplify saving
     if (!score) {
@@ -63,6 +63,8 @@ function add_to_list(movie_id, list_id, record_id) {
         function(data) {
           if (!anothers_account) {
             remove_record_from_page(record_id);
+          } else {
+            set_viewed_icon_and_remove_buttons(record_id, list_id);
           }
         }
   ).error(function() {
@@ -95,7 +97,42 @@ function toggle_comment_area(id) {
   $('#comment' + id).focus();
 }
 
+function set_viewed_icon_and_remove_buttons(record_id, list_id) {
+    function remove_buttons(){
+      $('#record' + record_id).children('.buttons').html('');
+    }
+    set_viewed_icon(record_id, list_id);
+    if (list_id !== 0) {
+      remove_buttons();
+    }
+}
+
+  function set_viewed_icon(record_id, list_id) {
+    var icon;
+    if (list_id === 0) {
+      return;
+    }
+    if (list_id == 1) {
+      icon = 'open';
+    }
+    if (list_id == 2) {
+      icon = 'close';
+    }
+    var html = '<i class="icon-eye-' + icon + '"></i>';
+    $('#record' + record_id).children('.title').prepend(html);
+  }
+
 $(function() {
+  function set_viewed_icons_and_remove_buttons(){
+    if (anothers_account) {
+      $('.movie').each(function(){
+          var id = $(this).attr('data-id');
+          var list_id = list_data[id];
+          set_viewed_icon_and_remove_buttons(id, list_id);
+        }
+      );
+    }
+  }
   score_settings = {
     score: function() {
       return $(this).attr('data-rating');
@@ -104,4 +141,5 @@ $(function() {
   settings = $.extend({}, general_settings, score_settings);
   $('.rating').raty(settings);
   $('#button_mode_' + mode).button('toggle');
+  set_viewed_icons_and_remove_buttons();
 });

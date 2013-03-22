@@ -91,6 +91,14 @@ def get_movie_count(self):
     return '%d / %d' % (self.number_of_watched(), self.number_of_to_watch())
 
 
+def get_list_id_from_movie_id(self, id):
+    record = Record.objects.filter(user=self, movie=id)
+    if record:
+        return record[0].list.pk
+    else:
+        return 0
+
+
 def is_vk_user(self):
     if self.username.isdigit():
         return True
@@ -98,4 +106,5 @@ def is_vk_user(self):
 User.add_to_class('number_of_watched', number_of_watched)
 User.add_to_class('number_of_to_watch', number_of_to_watch)
 User.add_to_class('get_movie_count', get_movie_count)
+User.add_to_class('get_list_id_from_movie_id', get_list_id_from_movie_id)
 User.add_to_class('is_vk_user', is_vk_user)

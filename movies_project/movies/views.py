@@ -13,7 +13,6 @@ from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
 
-#tmdb3.set_key('')                    #  code special code for testing purposes
 tmdb3.set_key(settings.TMDB_KEY)
 tmdb3.set_cache(filename=settings.TMDB_CACHE_PATH)
 
@@ -39,10 +38,17 @@ def list(request, list, username=None):
         user = request.user
         anothers_account = False
     records = Record.objects.filter(list__key_name=list, user=user)
+    if username:
+        list_data = {}
+        for record in records:
+            list_data[record.pk] = request.user.get_list_id_from_movie_id(record.movie.pk)
+    else:
+        list_data = None
     return {'records': records,
             'list_id': List.objects.get(key_name=list).id,
             'mode': request.session.get('mode', 'full'),
-            'anothers_account': anothers_account}
+            'anothers_account': anothers_account,
+            'list_data': json.dumps(list_data)}
 
 
 @render_to('people.html')

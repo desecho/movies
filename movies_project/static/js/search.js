@@ -5,9 +5,9 @@ jQuery.validator.setDefaults({
 
 function displayMovie(movie) {
   var html = '<div class="movie" id="movie' + movie.id + '"><div class="poster"><img src="' + movie.poster + '" alt="' + movie.title + ' poster"/></div>' +
-         '<div class="title"><h4>' + movie.title + '</h4></div>' + '<div class="details">';
+         '<div class="title">' + movie.title + '</div>' + '<div class="details">';
   if (movie.release_date) {
-    html += 'Дата выпуска: ' + movie.release_date;
+    html += '<strong>Дата выпуска:</strong> ' + movie.release_date;
   }
   html += '</div><div class="buttons"><input type="button" class="btn" value="Смотрел" onclick="add_to_list_from_tmdb(' + movie.id +
           ', 1)" /> <input class="btn" type="button" value="Хочу посмотреть" onclick="add_to_list_from_tmdb(' + movie.id + ', 2)" /></div></div>';
