@@ -198,7 +198,8 @@ def ajax_search_movie(request):
 
         def getData(query, type):
             query = query.encode('utf-8')
-            '''Types - 1 - movie, 2 - actor, 3 - director'''
+            '''Types - 1 - movie, 2 - actor, 3 - director
+               for actor, director search - the first is used.'''
             if type == 1:
                 try:
                     movies = tmdb3.searchMovie(query)
@@ -353,10 +354,10 @@ def ajax_add_to_list_from_tmdb(request):
             return movie
         movie_tmdb = getMovieFromTmdb(id)
         if not movie_tmdb['imdb_id']:
-            return -1                                         # return -1 if no imdb ID
+            return -1                                         # return -1 if the IMDB id is not found
         movie_imdb = getMovieFromImdb(movie_tmdb['imdb_id'])
         if not movie_imdb:
-            return -2                                         # return -2 if couldn't retreve imdb ID
+            return -2                                         # return -2 if there is a problem obtaining data from OMDB
         movie = dict(movie_tmdb.items() + movie_imdb.items())
         return saveMovieToDb(movie)
 

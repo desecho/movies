@@ -9,7 +9,7 @@ function displayMovie(movie) {
   if (movie.release_date) {
     html += '<strong>Дата выпуска:</strong> ' + movie.release_date;
   }
-  html += '</div><div class="buttons"><input type="button" class="btn" value="Смотрел" onclick="add_to_list_from_tmdb(' + movie.id +
+  html += '</div><div class="buttons"><input type="button" class="btn" value="Просмотрено" onclick="add_to_list_from_tmdb(' + movie.id +
           ', 1)" /> <input class="btn" type="button" value="Хочу посмотреть" onclick="add_to_list_from_tmdb(' + movie.id + ', 2)" /></div></div>';
   $('#results').append(html);
 }
