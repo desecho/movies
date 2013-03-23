@@ -193,3 +193,7 @@ IMDB_BASE_URL = 'http://www.imdb.com/title/'
 VK_APP_ID = ''      # Application ID
 VK_APP_SECRET = ''  # Secure key
 VK_P3P_POLICY = 'IDC DSP COR IVAi IVDi OUR TST'
+VK_IMAGE_PATH = 'http://vk.com/images/'
+VK_NO_IMAGE_SMALL = VK_IMAGE_PATH + 'camera_c.gif'
+VK_NO_IMAGE_MEDIUM = VK_IMAGE_PATH + 'camera_b.gif'
+VK_NO_IMAGE_BIG = VK_IMAGE_PATH + 'camera_a.gif'
