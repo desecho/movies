@@ -98,7 +98,7 @@
             <div class="review {% ifequal mode 'full' %} full {% endifequal %}">
               {% ifequal list_id 1 %}
                 <strong>Оценка:</strong> <div class="rating" data-record_id="{{ record.id }}" data-rating="{{ record.rating }}"></div>
-                <div id="comment_area{{ record.id }}" style="display: {% if not record.comment %} none {% endif %}">
+                <div class="comment" id="comment_area{{ record.id }}" style="display: {% if not record.comment %} none {% endif %}">
                   <strong>Комментарий:</strong>
                   {% if not anothers_account %}
                     <textarea rows="2" cols="15" id="comment{{ record.id }}">{{ record.comment }}</textarea>
