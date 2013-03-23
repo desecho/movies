@@ -33,7 +33,7 @@
   <!-- <img src="{{ anothers_account.vk_profile.photo }}"> -->
   <h3>{{ anothers_account.get_full_name }}</h3>
   <div class="btn-group" data-toggle="buttons-radio">
-    <a href="watched" class="btn {% ifequal list_id 1 %} active {% endifequal %}">Смотрел</a><a href="to-watch" class="btn {% ifequal list_id 2 %} active {% endifequal %}">Хочет посмотреть</a>
+    <a href="watched" class="btn {% ifequal list_id 1 %} active {% endifequal %}">Просмотрено</a><a href="to-watch" class="btn {% ifequal list_id 2 %} active {% endifequal %}">Хочет посмотреть</a>
   </div>
   <br><br>
 {% endif %}
@@ -117,10 +117,10 @@
           <div class="buttons">
           {% if not anothers_account %}
             {% ifequal list_id 2 %}
-              <input type="button" class="btn" value="Посмотрел" onclick="add_to_list({{ record.movie_id }}, 1, {{ record.id }})" />
+              <input type="button" class="btn" value="Просмотрено" onclick="add_to_list({{ record.movie_id }}, 1, {{ record.id }})" />
             {% endifequal %}
           {% else %}
-                <input type="button" class="btn" value="Смотрел" onclick="add_to_list({{ record.movie_id }}, 1, {{ record.id }})" />
+                <input type="button" class="btn" value="Просмотрено" onclick="add_to_list({{ record.movie_id }}, 1, {{ record.id }})" />
                 <input type="button" class="btn" value="Хочу посмотреть" onclick="add_to_list({{ record.movie_id }}, 2, {{ record.id }})" />
           {% endif %}
           </div>
