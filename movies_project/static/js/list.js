@@ -151,7 +151,7 @@ function activate_mode_minimal() {
   $('.poster, .comment, .release_date_label, .rating_label').hide();
   $('.details, .review').css('display', 'inline');
   $('.review').css('padding-top', '0');
-  $('.release_date, .imdb_rating').css({'float': 'right', 'margin-left': '10px'});
+  $('.release_date, .imdb_rating').css({'float': 'right', 'margin-right': '10px'});
   $('.movie').css({'padding-top': '0', 'margin-top': '7px', 'min-height': 'auto'});
 }
 
@@ -159,7 +159,7 @@ function disactivate_mode_minimal() {
   $('.poster, .comment, .release_date_label, .rating_label').show();
   $('.details, .imdb_rating, .review, .release_date').css('display', '');
   $('.review').css('padding-top', '10px');
-  $('.release_date, .imdb_rating').css({'float': '', 'margin-left': '0'});
+  $('.release_date, .imdb_rating').css({'float': '', 'margin-right': '0'});
   $('.movie').css({'padding-top': '20px', 'margin-top': '0', 'min-height': '145px'});
 }
 
