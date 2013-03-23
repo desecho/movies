@@ -42,7 +42,7 @@ def list(request, list, username=None):
     if sort == 'release_date':
         records = records.order_by('-movie__release_date')
     elif sort == 'rating':
-        records = records.order_by('-rating')
+        records = records.order_by('-rating', '-movie__release_date')
     else:
         records = records.order_by('-pk')
 
