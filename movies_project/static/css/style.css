@@ -67,12 +67,14 @@ label.error {
 #movie-count {
     font-size: 25px;
     opacity: 0.7;
-    position: absolute;
-    right: 27px;
-    top: 55px;
+    float: right;
 }
 
 .vk {
     overflow-y: scroll;
     height: 800px;
+}
+
+.person {
+    margin-bottom: 10px;
 }

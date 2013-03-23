@@ -3,7 +3,7 @@
 
 {% for u in users %}
     {% ifnotequal u user %}
-        <a href="/people/{{ u.username }}/watched"><img src="{{ u.vk_profile.photo }}"></a> <a href="/people/{{ u.username }}/watched">{{ u.get_full_name }}</a> {{ u.get_movie_count }} <br>
+        <div class="person"><a href="/people/{{ u.username }}/watched"><img src="{{ u.vk_profile.photo }}"></a> <a href="/people/{{ u.username }}/watched">{{ u.get_full_name }}</a> {{ u.get_movie_count }}</div>
     {% endifnotequal %}
 {% endfor %}
 
