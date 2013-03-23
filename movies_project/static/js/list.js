@@ -49,17 +49,34 @@ function remove_record(id) {
 }
 
 function switch_mode(value) {
-  apply_setting('mode', value);
+  var reload = false;
+  if (value == 'minimal') {
+    if (mode == 'full') {
+      reload = true;
+    } else {
+      activate_mode_minimal();
+      mode = 'minimal';
+    }
+  } else if (value == 'compact' && mode == 'minimal') {
+    disactivate_mode_minimal();
+    mode = 'compact';
+  } else {
+    reload = true;
+  }
+  apply_setting('mode', value, reload);
 }
 
 function switch_sort(value) {
   apply_setting('sort', value);
 }
 
-function apply_setting(type, value) {
+function apply_setting(type, value, reload) {
+  reload = typeof reload !== 'undefined' ? reload : true;
   $.post(url_ajax_apply_setting, {'type': type, 'value': value},
     function(data) {
-      location.reload();
+      if(reload) {
+        location.reload();
+      }
     }
   ).error(function() {
     displayError('Ошибка применения настройки.');
@@ -106,29 +123,49 @@ function toggle_comment_area(id) {
 }
 
 function set_viewed_icon_and_remove_buttons(record_id, list_id) {
-    function remove_buttons(){
-      $('#record' + record_id).children('.buttons').html('');
-    }
-    set_viewed_icon(record_id, list_id);
-    if (list_id !== 0) {
-      remove_buttons();
-    }
+  function remove_buttons(){
+    $('#record' + record_id).children('.buttons').html('');
+  }
+  set_viewed_icon(record_id, list_id);
+  if (list_id !== 0) {
+    remove_buttons();
+  }
 }
 
-  function set_viewed_icon(record_id, list_id) {
-    var icon;
-    if (list_id === 0) {
-      return;
-    }
-    if (list_id == 1) {
-      icon = 'open';
-    }
-    if (list_id == 2) {
-      icon = 'close';
-    }
-    var html = '<i class="icon-eye-' + icon + '"></i>';
-    $('#record' + record_id).children('.title').prepend(html);
+function set_viewed_icon(record_id, list_id) {
+  var icon;
+  if (list_id === 0) {
+    return;
   }
+  if (list_id == 1) {
+    icon = 'open';
+  }
+  if (list_id == 2) {
+    icon = 'close';
+  }
+  var html = '<i class="icon-eye-' + icon + '"></i>';
+  $('#record' + record_id).children('.title').prepend(html);
+}
+
+function activate_mode_minimal() {
+  $('.poster, .comment').hide();
+  $('.details, .review, .release_date, .imdb_rating').css('display', 'inline');
+  $('.review').css('float', 'right');
+  $('.review').css('padding-top', '0');
+  $('.movie').css('padding-top', '0');
+  $('.movie').css('margin-top', '7px');
+  $('.movie').css('min-height', 'auto');
+}
+
+function disactivate_mode_minimal() {
+  $('.poster, .comment').show();
+  $('.details, .imdb_rating, .review, .release_date').css('display', '');
+  $('.review').css('padding-top', '10px');
+  $('.review').css('float', '');
+  $('.movie').css('padding-top', '20px');
+  $('.movie').css('margin-top', '0');
+  $('.movie').css('min-height', '145px');
+}
 
 $(function() {
   function set_viewed_icons_and_remove_buttons(){
@@ -149,6 +186,9 @@ $(function() {
   settings = $.extend({}, general_settings, score_settings);
   $('.rating').raty(settings);
   $('#button_mode_' + mode).button('toggle');
+  if (mode == 'minimal') {
+    activate_mode_minimal();
+  }
   $('#button_sort_' + sort).button('toggle');
   set_viewed_icons_and_remove_buttons();
 });

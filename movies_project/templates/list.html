@@ -39,14 +39,15 @@
 {% endif %}
 
 <div class="btn-group" data-toggle="buttons-radio">
-  <button title="режим" id="button_mode_full" type="button" class="btn" onclick="switch_mode('full')">Полный</button>
-  <button title="режим" id="button_mode_compact" type="button" class="btn" onclick="switch_mode('compact')">Компактный</button>
+  <button title="Режим" id="button_mode_full" type="button" class="btn" onclick="switch_mode('full')">Полный</button>
+  <button title="Режим" id="button_mode_compact" type="button" class="btn" onclick="switch_mode('compact')">Компактный</button>
+  <button title="Режим" id="button_mode_minimal" type="button" class="btn" onclick="switch_mode('minimal')">Минимальный</button>
 </div>
 
 <div class="btn-group" data-toggle="buttons-radio">
-  <button title="сортировка" id="button_sort_release_date" type="button" class="btn" onclick="switch_sort('release_date')">Дата выпуска</button>
-  <button title="сортировка" id="button_sort_rating" type="button" class="btn" onclick="switch_sort('rating')">Оценка</button>
-  <button title="сортировка" id="button_sort_addition_date" type="button" class="btn" onclick="switch_sort('addition_date')">Дата добавления</button>
+  <button title="Сортировка" id="button_sort_release_date" type="button" class="btn" onclick="switch_sort('release_date')">Дата выпуска</button>
+  <button title="Сортировка" id="button_sort_rating" type="button" class="btn" onclick="switch_sort('rating')">Оценка</button>
+  <button title="Сортировка" id="button_sort_addition_date" type="button" class="btn" onclick="switch_sort('addition_date')">Дата добавления</button>
 </div>
 
 <br><br>
@@ -60,8 +61,8 @@
               <img src="{% ifequal mode 'full' %}{{ record.movie.poster_big_url }}{% else %}{{ record.movie.poster_small_url }}{% endifequal %}" alt="{{ record.movie.title }} poster"/>
           </div>
           <div class="details">
-            {% if record.movie.imdb_rating %} <strong>IMDb рейтинг:</strong> {{ record.movie.imdb_rating }}<br> {% endif %}
-            {% if record.movie.release_date %} <strong>Дата выпуска:</strong> {{ record.movie.release_date|date:'d.m.y' }}<br> {% endif %}
+            {% if record.movie.release_date %}<div class="release_date" title="Дата выпуска"><strong>Дата:</strong> {{ record.movie.release_date|date:'d.m.y' }}</div>{% endif %}
+            {% if record.movie.imdb_rating %}<div class="imdb_rating" title="Рейтинг"><strong>IMDb:</strong> {{ record.movie.imdb_rating }}</div> {% endif %}
             {% ifequal mode 'full' %}
                 {% if record.movie.director %} <strong>Режиссёр:</strong> {{ record.movie.director }}<br> {% endif %}
                 {% if record.movie.writer %} <strong>Сценарист:</strong> {{ record.movie.writer }}<br> {% endif %}
@@ -101,13 +102,13 @@
                   <strong>Комментарий:</strong>
                   {% if not anothers_account %}
                     <textarea rows="2" cols="15" id="comment{{ record.id }}">{{ record.comment }}</textarea>
-                    <input type="button" class="btn" value="Сохранить" onclick="save_comment({{ record.id }})" /><br>
+                    <input type="button" class="btn" value="Сохранить" onclick="save_comment({{ record.id }})"><br>
                   {% else %}
                     <p>{{ record.comment }}</p>
                   {% endif %}
                 </div>
                 {% if not anothers_account %}
-                  <input id="comment_area_button{{ record.id }}" type="button" class="btn" value="Добавить комментарий" onclick="toggle_comment_area({{ record.id }})" style="display: {% if record.comment %} none {% endif %}" />
+                  <input id="comment_area_button{{ record.id }}" type="button" class="btn comment" value="Добавить комментарий" onclick="toggle_comment_area({{ record.id }})" {% if record.comment %} style="display:  none "{% endif %} />
                 {% endif %}
                   <br>
               {% endifequal %}

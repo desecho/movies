@@ -7,17 +7,19 @@
 }
 
 .movie {
-    width: 600px;
+    width: 800px;
     padding-top: 20px;
     clear: both;
+    border-bottom: 1px solid grey;
+    min-height: 145px;
 }
 
-.movie .poster {
+.poster {
     float: left;
     margin-right: 10px;
 }
 
-.movie .review {
+.review {
     padding-top: 10px;
 }
 
@@ -59,7 +61,7 @@ label.error {
 }
 
 .buttons {
-    margin-top: 10px;
+    margin: 10px 0;
 }
 
 #movie-count {
