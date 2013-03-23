@@ -90,6 +90,12 @@ def number_of_to_watch(self):
 def get_movie_count(self):
     return '%d / %d' % (self.number_of_watched(), self.number_of_to_watch())
 
+def get_avatar(self):
+    if self.vk_profile.photo:
+        return self.vk_profile.photo
+    else:
+        return settings.VK_NO_IMAGE_SMALL
+
 
 def get_list_id_from_movie_id(self, id):
     record = Record.objects.filter(user=self, movie=id)
@@ -108,3 +114,4 @@ User.add_to_class('number_of_to_watch', number_of_to_watch)
 User.add_to_class('get_movie_count', get_movie_count)
 User.add_to_class('get_list_id_from_movie_id', get_list_id_from_movie_id)
 User.add_to_class('is_vk_user', is_vk_user)
+User.add_to_class('get_avatar', get_avatar)
