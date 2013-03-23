@@ -12,6 +12,7 @@ from annoying.decorators import ajax_request, render_to
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
+from django.views.decorators.csrf import ensure_csrf_cookie
 
 tmdb3.set_key(settings.TMDB_KEY)
 tmdb3.set_cache(filename=settings.TMDB_CACHE_PATH)
@@ -21,7 +22,7 @@ def logout_view(request):
     logout(request)
     return redirect('/login/')
 
-
+@ensure_csrf_cookie       # CSRF thing for vk
 @render_to('search.html')
 @login_required
 def search(request):
