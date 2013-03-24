@@ -21,6 +21,7 @@ urlpatterns = patterns(
     url(r'^save-comment/$', 'movies.views.ajax_save_comment'),
     url(r'^change-rating/$', 'movies.views.ajax_change_rating'),
     url(r'^apply-setting/$', 'movies.views.ajax_apply_setting'),
+    url(r'^download/$', 'movies.views.ajax_download'),
 
     url(r'^login/$', 'django.contrib.auth.views.login', {'template_name': 'login.html'}),
     url(r'^logout/$', 'movies.views.logout_view'),
