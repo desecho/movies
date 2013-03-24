@@ -106,6 +106,11 @@ def get_avatar(self):
     else:
         return settings.VK_NO_IMAGE_SMALL
 
+def movie_watched(self, movie):
+    for record in Record.objects.filter(user=self):
+        if record.movie == movie:
+            return True
+
 
 def get_list_id_from_movie_id(self, id):
     record = Record.objects.filter(user=self, movie=id)
@@ -125,3 +130,4 @@ User.add_to_class('get_movie_count', get_movie_count)
 User.add_to_class('get_list_id_from_movie_id', get_list_id_from_movie_id)
 User.add_to_class('is_vk_user', is_vk_user)
 User.add_to_class('get_avatar', get_avatar)
+User.add_to_class('movie_watched', movie_watched)

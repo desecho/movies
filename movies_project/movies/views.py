@@ -30,10 +30,32 @@ def search(request):
     return {}
 
 
+def filter_movies_for_recommendation(records, user):
+    def filter_watched_movies(records):
+        records_output = Record.objects.filter(pk=0)
+        for record in records:
+            if not user.movie_watched(record.movie):
+                records_output |= Record.objects.filter(pk=record.pk)
+        return records_output
+    records = records.filter(rating__gte=3)  # get only normal, good and excellent ratied movies
+    records = filter_watched_movies(records)
+    return records
+
+
+@render_to('recommendation.html')
+@login_required
+def recommendation(request):
+    records = Record.objects.exclude(user=request.user)
+    records = filter_movies_for_recommendation(records, request.user)
+    records = records.order_by('-rating', '-movie__imdb_rating')[:5]
+    return {'records': records}
+
+
 @render_to('list.html')
 @login_required
 def list(request, list, username=None):
     sort = request.session.get('sort', 'release_date')
+    recommendation = request.session.get('recommendation', False)
     if username:
         user = User.objects.get(username=username)
         anothers_account = user
@@ -41,6 +63,9 @@ def list(request, list, username=None):
         user = request.user
         anothers_account = False
     records = Record.objects.filter(list__key_name=list, user=user)
+
+    if anothers_account and recommendation:
+        records = filter_movies_for_recommendation(records, request.user)
     if sort == 'release_date':
         records = records.order_by('-movie__release_date')
     elif sort == 'rating':
@@ -58,6 +83,7 @@ def list(request, list, username=None):
             'list_id': List.objects.get(key_name=list).id,
             'mode': request.session.get('mode', 'full'),
             'sort': sort,
+            'recommendation': recommendation,
             'anothers_account': anothers_account,
             'list_data': json.dumps(list_data)}
 
@@ -102,13 +128,13 @@ def friends(request):
     return {'users': friends}
 
 
-def ajax_apply_setting(request):
+def ajax_apply_settings(request):
     if request.is_ajax() and request.method == 'POST':
             POST = request.POST
-            if 'type' in POST and 'value' in POST:
-                type = POST.get('type')
-                value = POST.get('value')
-                request.session[type] = value
+            if 'settings' in POST:
+                settings = json.loads(POST.get('settings'))
+                for setting in settings:
+                    request.session[setting] = settings[setting]
     return HttpResponse()
 
 

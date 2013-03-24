@@ -7,19 +7,24 @@
   var sort = '{{ sort }}';
   var list_data = $.parseJSON('{{ list_data|safe }}');
 
+  var recommendation = false;
+  {% if recommendation %}
+    recommendation = true;
+  {% endif %}
+
+  var anothers_account = false;
   {% if anothers_account %}
-    var anothers_account = true;
-  {% else %}
-    var anothers_account = false;
+    anothers_account = true;
   {% endif %}
 
   var url_ajax_change_rating = '{% url 'movies.views.ajax_change_rating' %}';
   var url_ajax_remove_record = '{% url 'movies.views.ajax_remove_record' %}';
-  var url_ajax_apply_setting = '{% url 'movies.views.ajax_apply_setting' %}';
+  var url_ajax_apply_settings = '{% url 'movies.views.ajax_apply_settings' %}';
   var url_ajax_add_to_list   = '{% url 'movies.views.ajax_add_to_list' %}';
   var url_ajax_save_comment  = '{% url 'movies.views.ajax_save_comment' %}';
   var url_ajax_download = '{% url 'movies.views.ajax_download' %}';
 </script>
+<script src="/static/js/list_general.js"></script>
 <script src="/static/js/list.js"></script>
 <div id="movie-count">
   {% if not anothers_account %}
@@ -44,6 +49,10 @@
   <button title="Режим" id="button_mode_minimal" type="button" class="btn" onclick="switch_mode('minimal')">Минимальный</button>
 </div>
 
+{% if anothers_account %}
+  <button id="button_recommendation" type="button" class="btn" data-toggle="button" onclick="toggle_recommendation()">Рекомендации</button>
+{% endif %}
+<br><br>
 <div class="btn-group" data-toggle="buttons-radio">
   <button title="Сортировка" id="button_sort_release_date" type="button" class="btn" onclick="switch_sort('release_date')">Дата выпуска</button>
   <button title="Сортировка" id="button_sort_rating" type="button" class="btn" onclick="switch_sort('rating')">Оценка</button>
