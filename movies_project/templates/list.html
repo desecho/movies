@@ -18,9 +18,9 @@
   var url_ajax_apply_setting = '{% url 'movies.views.ajax_apply_setting' %}';
   var url_ajax_add_to_list   = '{% url 'movies.views.ajax_add_to_list' %}';
   var url_ajax_save_comment  = '{% url 'movies.views.ajax_save_comment' %}';
+  var url_ajax_download = '{% url 'movies.views.ajax_download' %}';
 </script>
 <script src="/static/js/list.js"></script>
-
 <div id="movie-count">
   {% if not anothers_account %}
     {{ user.get_movie_count }}
@@ -51,12 +51,24 @@
 </div>
 
 <br><br>
+
+<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="myModalLabel">Торренты</h3>
+  </div>
+  <div class="modal-body">
+    <div id="torrents"></div>
+  </div>
+</div>
 <div id="results" class="results">
   {% if records %}
     {% for record in records %}
       <div id="record{{ record.id }}" data-id="{{ record.id }}" class="movie">
           <div class="title">
-           {{ record.movie.title }} {% if not anothers_account %}<a href="javascript:remove_record({{ record.id }})"><i class="icon-trash"></i></a> {% endif %}</div>
+           {{ record.movie.title }} {% if not anothers_account %}<a href="javascript:remove_record({{ record.id }})"><i class="icon-trash"></i></a> {% endif %}
+           <a href="javascript:show_torrents('{{ record.movie.torrent_search_title }}')"><i class="icon-download-alt"></i></a>
+         </div>
           <div class="poster">
               <img src="{% ifequal mode 'full' %}{{ record.movie.poster_big_url }}{% else %}{{ record.movie.poster_small_url }}{% endifequal %}" alt="{{ record.movie.title }} poster"/>
           </div>
@@ -68,7 +80,7 @@
                 {% if record.movie.writer %} <strong>Сценарист:</strong> {{ record.movie.writer }}<br> {% endif %}
                 {% if record.movie.genre %} <strong>Жанр:</strong> {{ record.movie.genre }}<br> {% endif %}
                 {% if record.movie.actors %} <strong>Актеры:</strong> {{ record.movie.actors }}<br> {% endif %}
-                {% if record.movie.trailers %} <strong>Трейлеры:</strong><br>
+                {% if record.movie.has_trailers %} <strong>Трейлеры:</strong><br>
                   <div class="trailers">
                   {% if record.movie.trailers.youtube %}
                     &nbsp;&nbsp;&nbsp;&nbsp;YouTube:

@@ -5,6 +5,7 @@ import tmdb3
 import vkontakte
 from operator import itemgetter
 import urllib2
+from django.utils.http import urlquote
 from django.http import HttpResponse
 from django.shortcuts import redirect
 from movies.models import Movie, Record, List, User
@@ -146,6 +147,19 @@ def ajax_change_rating(request):
 
 
 @ajax_request
+def ajax_download(request):
+    if request.is_ajax() and request.method == 'POST':
+        POST = request.POST
+        if 'query' in POST:
+            filter = urlquote(u'Íàéòè')
+            query = urlquote(POST.get('query'))
+            url = 'http://2torrents.org/search/listjson?filters[title]=%s&filter=%s&sort=seeders&type=desc' % (query, filter)
+            html = urllib2.urlopen(url).read()
+            html = html.replace('"items": {"list":[,{','"items": {"list":[{')
+            return {'data': html}
+
+
+@ajax_request
 def ajax_search_movie(request):
     def getMoviesFromTmdb(query, type, options):
         output = {}
@@ -153,7 +167,7 @@ def ajax_search_movie(request):
         def setProperDate(movies):
             def formatDate(date):
                 if date:
-                    return date.strftime("%d.%m.%y")
+                    return date.strftime('%d.%m.%y')
             m = []
             for movie in movies:
                 movie['release_date'] = formatDate(movie['release_date'])
@@ -241,7 +255,7 @@ def ajax_search_movie(request):
                         'poster': getPosterUrl(result.poster),
                     }
                     movies.append(movie)
-            except IndexError:                                              # strange exception in "matrix case"
+            except IndexError:                                              # strange exception in 'matrix case'
                 pass
             if options['popular_only']:
                 movies = removeNotPopularMovies(movies)
@@ -297,7 +311,7 @@ def ajax_add_to_list_from_tmdb(request):
                 if data != 'N/A':
                     return data
             try:
-                response = urllib2.urlopen("http://www.imdbapi.com/?i=%s" % id)
+                response = urllib2.urlopen('http://www.imdbapi.com/?i=%s' % id)
             except:
                 return
             html = response.read()

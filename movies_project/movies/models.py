@@ -45,6 +45,12 @@ class Movie(models.Model):
     def poster_url(self, size):
         return settings.POSTER_BASE_URL + size + '/' + self.poster
 
+    def has_trailers(self):
+        number_of_trailers = 0
+        for i in self.trailers:
+            number_of_trailers += len(self.trailers[i])
+        return number_of_trailers
+
     def poster_big_url(self):
         if self.poster:
             url = self.poster_url(settings.POSTER_SIZE_BIG)
@@ -58,6 +64,9 @@ class Movie(models.Model):
         else:
             url = settings.NO_POSTER_IMAGE_URL
         return url
+
+    def torrent_search_title(self):
+        return '%s %d 720p' % (self.title, self.release_date.year)
 
 
 class Record(models.Model):
