@@ -107,7 +107,7 @@ def get_avatar(self):
         return settings.VK_NO_IMAGE_SMALL
 
 def get_movie_ids(self):
-    Record.objects.filter(user=self)
+    records = Record.objects.filter(user=self)
     ids = []
     for record in records:
         ids.append(record.movie.pk)
