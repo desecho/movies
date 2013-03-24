@@ -1,0 +1,52 @@
+from django.core.management.base import BaseCommand
+from movies.models import User
+from django.conf import settings
+import vkontakte
+
+FIELDS = (
+    'first_name',
+    'last_name',
+    'nickname',
+    'domain',
+    'sex',
+    'city',
+    'country',
+    'timezone',
+    'photo',
+    'photo_medium',
+    'photo_big',
+    'photo_rec',
+)
+
+class Command(BaseCommand):
+    help = 'Updates VK profiles'
+
+    def handle(self, *args, **options):
+        vk = vkontakte.API(settings.VK_APP_ID, settings.VK_APP_SECRET)
+        for user in User.objects.all():
+            if user.is_vk_user():
+                vk_profile = user.vk_profile
+                new_data = vk.getProfiles(uids=str(user.username), fields=','.join(FIELDS))[0]
+                for field in FIELDS:
+                    if field == 'city':
+                        try:
+                            vk_profile.city_id = new_data[field]
+                        except:
+                            pass
+                    elif field == 'country':
+                        try:
+                            vk_profile.country_id = new_data[field]
+                        except:
+                            pass
+                    elif field == 'first_name' or field == 'last_name':
+                        try:
+                            setattr(user, field, new_data[field])
+                        except:
+                            pass
+                    else:
+                        try:
+                            setattr(vk_profile, field ,new_data[field])
+                        except:
+                            pass
+                vk_profile.save()
+                user.save()
