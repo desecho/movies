@@ -51,8 +51,9 @@
             <br>
             {# {% if record.movie.plot %} Описание: {{ record.movie.plot }}<br> {% endif %} #}
           </div>
-          <div class="buttons full">
-                <br />
+          <div class="clearfix"></div>
+          <br />
+          <div class="buttons">
                 <input type="button" class="btn" value="Просмотрено" onclick="add_to_list({{ record.movie_id }}, 1, {{ record.id }})" />
                 <input type="button" class="btn" value="Хочу посмотреть" onclick="add_to_list({{ record.movie_id }}, 2, {{ record.id }})" />
           </div>
