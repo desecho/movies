@@ -3,6 +3,7 @@ from django.db import models
 from annoying.fields import JSONField
 from django.contrib.auth.models import User
 from django.conf import settings
+import json
 
 
 class List(models.Model):
@@ -66,7 +67,7 @@ class Movie(models.Model):
         return url
 
     def torrent_search_title(self):
-        return '%s %d 720p' % (self.title, self.release_date.year)
+        return json.dumps('%s %d 720p' % (self.title, self.release_date.year))
 
 
 class Record(models.Model):
