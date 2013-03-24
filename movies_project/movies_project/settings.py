@@ -189,6 +189,8 @@ POSTER_SIZE_BIG = 'w185'
 POSTER_SIZE_SMALL = 'w92'
 POSTER_BASE_URL = 'http://cf2.imgobject.com/t/p/'
 IMDB_BASE_URL = 'http://www.imdb.com/title/'
+MAX_RECOMMENDATIONS_IN_LIST = 25
+MAX_RECOMMENDATIONS = 10
 
 VK_APP_ID = ''      # Application ID
 VK_APP_SECRET = ''  # Secure key
