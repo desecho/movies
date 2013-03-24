@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block content %}
+
+<script>
+  var url_ajax_add_to_list   = '{% url 'movies.views.ajax_add_to_list' %}';
+  var url_ajax_download = '{% url 'movies.views.ajax_download' %}';
+</script>
+<script src="/static/js/list_general.js"></script>
+<div id="results" class="results">
+  {% if records %}
+    {% for record in records %}
+      <div id="record{{ record.id }}" data-id="{{ record.id }}" class="movie">
+          <div class="title">
+           {{ record.movie.title }}
+           <a href="javascript:show_torrents('{{ record.movie.torrent_search_title }}')"><i class="icon-download-alt"></i></a>
+         </div>
+          <div class="poster">
+              <img src="{{ record.movie.poster_big_url }}" alt="{{ record.movie.title }} poster"/>
+          </div>
+          <div class="details">
+            {% if record.movie.release_date %}<div class="release_date" title="Дата выпуска"><strong class="release_date_label">Дата:</strong> {{ record.movie.release_date|date:'d.m.y' }}</div>{% endif %}
+            {% if record.movie.imdb_rating %}<div class="imdb_rating" title="Рейтинг"><strong>IMDb:</strong> {{ record.movie.imdb_rating }}</div> {% endif %}
+            {% if record.movie.director %} <strong>Режиссёр:</strong> {{ record.movie.director }}<br> {% endif %}
+            {% if record.movie.writer %} <strong>Сценарист:</strong> {{ record.movie.writer }}<br> {% endif %}
+            {% if record.movie.genre %} <strong>Жанр:</strong> {{ record.movie.genre }}<br> {% endif %}
+            {% if record.movie.actors %} <strong>Актеры:</strong> {{ record.movie.actors }}<br> {% endif %}
+            {% if record.movie.has_trailers %} <strong>Трейлеры:</strong><br>
+              <div class="trailers">
+              {% if record.movie.trailers.youtube %}
+                &nbsp;&nbsp;&nbsp;&nbsp;YouTube:
+                  {% for trailer in record.movie.trailers.youtube %}
+                    <a href="http://www.youtube.com/watch?v={{ trailer.source }}" target="_blank">{{ trailer.name }}</a>
+                  {% endfor %}
+                <br>
+              {% endif %}
+              {% if record.movie.trailers.quicktime %}
+                &nbsp;&nbsp;&nbsp;&nbsp;QuickTime:
+                <ul>
+                  {% for trailer in record.movie.trailers.quicktime %}
+                    <li>{{ trailer.name }}:
+                      {% for size in trailer.sizes %}
+                        <a href="{{ size.source }}" target="_blank">{{ size.size }}</a>
+                      {% endfor %}
+                  {% endfor %}
+                </ul>
+              {% endif %}
+              </div>
+            {% endif %}
+            {% if record.movie.homepage %} <a href="{{ record.movie.homepage }}" target="_blank">Сайт</a> / {% endif %}
+            <a href="{{ record.movie.imdb_url }}" target="_blank"><img src="/static/img/imdb.jpg" alt="IMDb" /></a><br>
+            <br>
+            {# {% if record.movie.plot %} Описание: {{ record.movie.plot }}<br> {% endif %} #}
+          </div>
+          <div class="buttons full">
+                <br />
+                <input type="button" class="btn" value="Просмотрено" onclick="add_to_list({{ record.movie_id }}, 1, {{ record.id }})" />
+                <input type="button" class="btn" value="Хочу посмотреть" onclick="add_to_list({{ record.movie_id }}, 2, {{ record.id }})" />
+          </div>
+        </div>
+    {% endfor %}
+  {% else %}
+    <p>Список пуст.</p>
+  {% endif %}
+</div>
+{% endblock %}

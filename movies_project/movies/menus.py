@@ -3,13 +3,18 @@ from menu import Menu, MenuItem
 from django.core.urlresolvers import reverse
 
 Menu.add_item('main', MenuItem(
-    'Смотрел',
+    'Просмотрено',
     reverse('movies.views.list', kwargs=({'list': 'watched'})),
     weight=10,))
 
 Menu.add_item('main', MenuItem(
     'Хочу посмотреть',
     reverse('movies.views.list', kwargs=({'list': 'to-watch'})),
+    weight=10,))
+
+Menu.add_item('main', MenuItem(
+    'Рекомендации',
+    reverse('movies.views.recommendation'),
     weight=10,))
 
 Menu.add_item('main', MenuItem(
