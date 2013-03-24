@@ -30,13 +30,17 @@ def search(request):
     return {}
 
 
-def filter_movies_for_recommendation(records, user):
+def filter_movies_for_recommendation(records, user, limit=settings.MAX_RECOMMENDATIONS_IN_LIST):
     def filter_watched_movies(records):
-        records_output = Record.objects.filter(pk=0)
+        records_output = []
+        movies_watched = user.get_movie_ids()
         for record in records:
-            if not user.movie_watched(record.movie):
-                records_output |= Record.objects.filter(pk=record.pk)
+            if record.movie.pk not in movies_watched:
+                records_output.append(record)
+                if len(records_output) == limit:
+                    break
         return records_output
+
     records = records.filter(rating__gte=3)  # get only normal, good and excellent ratied movies
     records = filter_watched_movies(records)
     return records
@@ -45,9 +49,8 @@ def filter_movies_for_recommendation(records, user):
 @render_to('recommendation.html')
 @login_required
 def recommendation(request):
-    records = Record.objects.exclude(user=request.user)
-    records = filter_movies_for_recommendation(records, request.user)
-    records = records.order_by('-rating', '-movie__imdb_rating')[:5]
+    records = Record.objects.exclude(user=request.user).order_by('-rating', '-movie__imdb_rating')
+    records = filter_movies_for_recommendation(records, request.user, settings.MAX_RECOMMENDATIONS)
     return {'records': records}
 
 
@@ -64,14 +67,15 @@ def list(request, list, username=None):
         anothers_account = False
     records = Record.objects.filter(list__key_name=list, user=user)
 
-    if anothers_account and recommendation:
-        records = filter_movies_for_recommendation(records, request.user)
     if sort == 'release_date':
         records = records.order_by('-movie__release_date')
     elif sort == 'rating':
         records = records.order_by('-rating', '-movie__release_date')
     else:
         records = records.order_by('-pk')
+
+    if username and recommendation:
+        records = filter_movies_for_recommendation(records, request.user)
 
     if username:
         list_data = {}
