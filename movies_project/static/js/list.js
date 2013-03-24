@@ -194,7 +194,7 @@ function get_torrents(query) {
             $("#torrents").html('Торрентов не найдено.');
         } else {
           html = '<ul>';
-          for (var i = 1; i < total_lists; i++) {
+          for (var i = 0; i < total_lists; i++) {
             html += '<li id="searchresult-' + i + '"><a href="' + json.items.list[i].uri + '" target="_blank">' + json.items.list[i].title + '</a> &#8593; ' + json.items.list[i].Seeds + ' &#8595; ' + json.items.list[i].leechers + '<br>' + json.items.list[i].tracker + ' &mdash; ' + bytes_to_size(json.items.list[i].size, 2) + ' &mdash; ' + json.items.list[i].regtime + '</li>'
           }
           html += '</ul>';
