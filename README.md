@@ -12,6 +12,13 @@ The web-application to create movie lists ("watched" and "to watch"), to share t
 * [vkontakte](https://bitbucket.org/kmike/vkontakte/src)
 * [django-simple-menu](https://github.com/fatbox/django-simple-menu)
 
+##Required API Keys
+* [TMDb](http://www.themoviedb.org/)
+
+##Used APIs
+* [OMDb](http://www.omdbapi.com/)
+* [2torrents.org](http://2torrents.org)
+
 ##Used Javascript libraries
 * [jQuery v1.9.1](http://jquery.com/)
 * [JQuery Raty v2.5.2](http://wbotelhos.com/raty/)
@@ -26,7 +33,7 @@ The web-application to create movie lists ("watched" and "to watch"), to share t
 
 ##Installation instructions
 
-* Change the following variables in settings.py. You can generate SECRET_KEY using [Django Secret Key Generator](http://www.miniwebtool.com/django-secret-key-generator/). Insert your path to django admin static directory to STATICFILES_DIRS. It should be like something like '/usr/local/lib/python2.7/dist-packages/django/contrib/admin/static'. You'll need an API key. You can obtain it here - http://api.themoviedb.org. Enter the VK details to integrate it with vk.com. Also check out [django-vkontakte-iframe](https://bitbucket.org/kmike/django-vkontakte-iframe/) for more information on how to set it up. Make sure that the user running the server has access to write to /cache/tmdb3.cache.
+* Change the following variables in settings.py.
     * DATABASES
     * SECRET_KEY
     * TMDB_KEY
@@ -34,6 +41,8 @@ The web-application to create movie lists ("watched" and "to watch"), to share t
     * STATICFILES_DIRS
     * VK_APP_ID
     * VK_APP_SECRET
+
+You can generate SECRET_KEY using [Django Secret Key Generator](http://www.miniwebtool.com/django-secret-key-generator/). Insert your path to django admin static directory to STATICFILES_DIRS. It should be  something like '/usr/local/lib/python2.7/dist-packages/django/contrib/admin/static'. Make sure that the user running the server has write access to /cache/tmdb3.cache.
 
 * Run
 ```
