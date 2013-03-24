@@ -75,6 +75,7 @@ class Record(models.Model):
     list = models.ForeignKey(List, verbose_name='список')
     rating = models.IntegerField('рейтинг', default=0)
     comment = models.CharField('комментарий', max_length=255, default='')
+    date = models.DateTimeField('дата добавления', auto_now_add=True)
 
     class Meta:
         verbose_name = 'запись'
