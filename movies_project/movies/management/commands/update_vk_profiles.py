@@ -30,12 +30,12 @@ class Command(BaseCommand):
                 for field in FIELDS:
                     if field == 'city':
                         try:
-                            vk_profile.city_id = new_data[field]
+                            vk_profile.city = new_data[field]
                         except:
                             pass
                     elif field == 'country':
                         try:
-                            vk_profile.country_id = new_data[field]
+                            vk_profile.country = new_data[field]
                         except:
                             pass
                     elif field == 'first_name' or field == 'last_name':
