@@ -29,6 +29,35 @@ def logout_view(request):
 def search(request):
     return {}
 
+def get_friends(user):
+    # ???
+    # def intersect(list1, list2):
+    #     return list(set(list1) & set(list2))
+    def intersect(list1, list2):
+        return [x for x in list1 if x in list2]
+
+    def get_all_vk_ids():
+        vk_ids = []
+        for user in User.objects.all():
+            if user.is_vk_user():
+                vk_ids.append(int(user.username))
+        return vk_ids
+
+    def get_user_list_from_usernames(usernames):
+        users = []
+        for username in usernames:
+            users.append(User.objects.get(username=username))
+        return users
+
+    vk = vkontakte.API(settings.VK_APP_ID, settings.VK_APP_SECRET)
+    if user.is_vk_user():
+        all_friends = vk.friends.get(uid=user.username)
+        registered_vk_users = get_all_vk_ids()
+        friends = intersect(all_friends, registered_vk_users)
+        friends = get_user_list_from_usernames(friends)
+    else:
+        friends = None
+    return friends
 
 def filter_movies_for_recommendation(records, user, limit=settings.MAX_RECOMMENDATIONS_IN_LIST):
     def filter_watched_movies(records):
@@ -49,8 +78,15 @@ def filter_movies_for_recommendation(records, user, limit=settings.MAX_RECOMMEND
 @render_to('recommendation.html')
 @login_required
 def recommendation(request):
-    records = Record.objects.exclude(user=request.user).order_by('-rating', '-movie__imdb_rating')
-    records = filter_movies_for_recommendation(records, request.user, settings.MAX_RECOMMENDATIONS)
+    friends = get_friends(request.user)
+    if friends:
+        records = Record.objects.exclude(user=request.user)
+        for friend in friends:
+            records = records.exclude(user=friend)
+        records = records.order_by('-rating', '-movie__imdb_rating')
+        records = filter_movies_for_recommendation(records, request.user, settings.MAX_RECOMMENDATIONS)
+    else:
+        records = None
     return {'records': records}
 
 
@@ -101,34 +137,7 @@ def people(request):
 @render_to('people.html')
 @login_required
 def friends(request):
-    # ???
-    # def intersect(list1, list2):
-    #     return list(set(list1) & set(list2))
-    def intersect(list1, list2):
-        return [x for x in list1 if x in list2]
-
-    def get_all_vk_ids():
-        vk_ids = []
-        for user in User.objects.all():
-            if user.is_vk_user():
-                vk_ids.append(int(user.username))
-        return vk_ids
-
-    def get_user_list_from_usernames(usernames):
-        users = []
-        for username in usernames:
-            users.append(User.objects.get(username=username))
-        return users
-
-    vk = vkontakte.API(settings.VK_APP_ID, settings.VK_APP_SECRET)
-    user = request.user
-    if user.is_vk_user():
-        all_friends = vk.friends.get(uid=user.username)
-        registered_vk_users = get_all_vk_ids()
-        friends = intersect(all_friends, registered_vk_users)
-        friends = get_user_list_from_usernames(friends)
-    else:
-        friends = None
+    friends = get_friends(request.user)
     return {'users': friends}
 
 
