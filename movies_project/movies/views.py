@@ -19,6 +19,10 @@ tmdb3.set_key(settings.TMDB_KEY)
 tmdb3.set_cache(filename=settings.TMDB_CACHE_PATH)
 
 
+import logging
+logger = logging.getLogger('movies.test')
+#logger.debug(options)
+
 def logout_view(request):
     logout(request)
     return redirect('/login/')
