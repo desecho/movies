@@ -80,9 +80,7 @@ def filter_movies_for_recommendation(records, user, limit=settings.MAX_RECOMMEND
 def recommendation(request):
     friends = get_friends(request.user)
     if friends:
-        records = Record.objects.exclude(user=request.user)
-        for friend in friends:
-            records = records.exclude(user=friend)
+        records = Record.objects.exclude(user=request.user).filter(user__in=friends)
         records = records.order_by('-rating', '-movie__imdb_rating')
         records = filter_movies_for_recommendation(records, request.user, settings.MAX_RECOMMENDATIONS)
     else:
