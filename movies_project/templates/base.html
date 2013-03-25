@@ -1,6 +1,7 @@
 {% load menu %}{% generate_menu %}
 
 <!DOCTYPE html>
+<head>
 <link rel="stylesheet" href="/static/css/style.css" />
 {% if user.is_vk_user %} <script src="http://vk.com/js/api/xd_connection.js?2" type="text/javascript"></script> {% endif %}
 
@@ -26,6 +27,8 @@
 
 <meta charset="utf-8">
 <title>{% block title %}Фильмы{% endblock %}</title>
+</head>
+<body>
 <div {% if user.is_vk_user %} class="vk" {% endif %}>
  <div class="navbar navbar-fixed-top">
     <div class="navbar-inner">
@@ -59,3 +62,4 @@
     {% block content %}{% endblock %}
 </div>
 </div>
+</body>

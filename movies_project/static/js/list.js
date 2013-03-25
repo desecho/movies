@@ -1,5 +1,6 @@
 var general_settings = {
   hints: ['ужасно','плохо','нормально','хорошо','великолепно'],
+  cancelHint: 'Отменить эту оценку',
   noRatedMsg:'Пока нет оценки',
   path: '/static/libs/raty/',
   cancel: true,

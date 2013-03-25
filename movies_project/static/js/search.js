@@ -16,7 +16,7 @@ function displayMovie(movie) {
 
 function search_movie() {
   function isChecked(id) {
-    if ($('#' + id).attr('checked')) {
+    if ($('#' + id + ':checked').val()) {
       return 1;
     } else {
       return 0;
