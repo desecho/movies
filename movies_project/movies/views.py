@@ -61,15 +61,20 @@ def get_friends(user):
 
 def filter_movies_for_recommendation(records, user, limit=settings.MAX_RECOMMENDATIONS_IN_LIST):
     def filter_watched_movies(records):
-        records_output = []
-        movies_watched = user.get_movie_ids()
-        for record in records:
-            if record.movie.pk not in movies_watched:
-                records_output.append(record)
-                if len(records_output) == limit:
-                    break
-        return records_output
-
+        def filter_duplicated_movies_and_limit(records):
+            records_output = []
+            movies = []
+            for record in records:
+                if record.movie.pk not in movies:
+                    records_output.append(record)
+                    if len(records_output) == limit:
+                        break
+                    movies.append(record.movie.pk)
+            return records_output
+        user_movies = user.get_movie_ids()
+        records = records.exclude(movie__in=user_movies)
+        records = filter_duplicated_movies_and_limit(records)
+        return records
     records = records.filter(rating__gte=3)  # get only normal, good and excellent ratied movies
     records = filter_watched_movies(records)
     return records
