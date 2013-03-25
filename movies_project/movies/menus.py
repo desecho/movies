@@ -8,7 +8,7 @@ Menu.add_item('main', MenuItem(
     weight=10,))
 
 Menu.add_item('main', MenuItem(
-    'Хочу посмотреть',
+    'К просмотру',
     reverse('movies.views.list', kwargs=({'list': 'to-watch'})),
     weight=10,))
 
