@@ -6,6 +6,15 @@
   var url_ajax_download = '{% url 'movies.views.ajax_download' %}';
 </script>
 <script src="/static/js/list_general.js"></script>
+<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="myModalLabel">Торренты</h3>
+  </div>
+  <div class="modal-body">
+    <div id="torrents"></div>
+  </div>
+</div>
 <div id="results" class="results">
   {% if records %}
     {% for record in records %}
