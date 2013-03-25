@@ -28,7 +28,7 @@
 <script src="/static/js/list.js"></script>
 <div id="movie-count">
   {% if not anothers_account %}
-    {{ user.get_movie_count }}
+    {{ user.get_movie_count|safe }}
   {% else %}
     {{ anothers_account.get_movie_count }}
   {% endif %}
@@ -38,7 +38,7 @@
   <!-- <img src="{{ anothers_account.vk_profile.photo }}"> -->
   <h3>{{ anothers_account.get_full_name }}</h3>
   <div class="btn-group" data-toggle="buttons-radio">
-    <a href="watched" class="btn {% ifequal list_id 1 %} active {% endifequal %}">Просмотрено</a><a href="to-watch" class="btn {% ifequal list_id 2 %} active {% endifequal %}">Хочет посмотреть</a>
+    <a href="watched" class="btn {% ifequal list_id 1 %} active {% endifequal %}">Просмотрено</a><a href="to-watch" class="btn {% ifequal list_id 2 %} active {% endifequal %}">К просмотру</a>
   </div>
   <br><br>
 {% endif %}
@@ -142,7 +142,7 @@
             {% endifequal %}
           {% else %}
                 <input type="button" class="btn" value="Просмотрено" onclick="add_to_list({{ record.movie_id }}, 1, {{ record.id }})" />
-                <input type="button" class="btn" value="Хочу посмотреть" onclick="add_to_list({{ record.movie_id }}, 2, {{ record.id }})" />
+                <input type="button" class="btn" value="К просмотру" onclick="add_to_list({{ record.movie_id }}, 2, {{ record.id }})" />
           {% endif %}
           </div>
         </div>

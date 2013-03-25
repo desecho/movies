@@ -98,7 +98,7 @@ def number_of_to_watch(self):
 
 
 def get_movie_count(self):
-    return '%d / %d' % (self.number_of_watched(), self.number_of_to_watch())
+    return '<span title="Просмотрено">%d</span> / <span title="К просмотру">%d' % (self.number_of_watched(), self.number_of_to_watch())
 
 def get_avatar(self):
     if self.vk_profile.photo:
