@@ -21,7 +21,7 @@
       <div id="record{{ record.id }}" data-id="{{ record.id }}" class="movie">
           <div class="title">
            {{ record.movie.title }}
-           <a href="javascript:show_torrents('{{ record.movie.torrent_search_title }}')"><i class="icon-download-alt"></i></a>
+           <a href="javascript:show_torrents('{{ record.movie.torrent_search_title }}')" title="Скачать"><i class="icon-download-alt"></i></a>
          </div>
           <div class="poster">
               <img src="{{ record.movie.poster_big_url }}" alt="{{ record.movie.title }} poster"/>

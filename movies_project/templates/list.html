@@ -75,8 +75,8 @@
     {% for record in records %}
       <div id="record{{ record.id }}" data-id="{{ record.id }}" class="movie">
           <div class="title">
-           {{ record.movie.title }} {% if not anothers_account %}<a href="javascript:remove_record({{ record.id }})"><i class="icon-trash"></i></a> {% endif %}
-           <a href="javascript:show_torrents('{{ record.movie.torrent_search_title }}')"><i class="icon-download-alt"></i></a>
+           {{ record.movie.title }} {% if not anothers_account %}<a href="javascript:remove_record({{ record.id }})" title="Удалить"><i class="icon-trash"></i></a> {% endif %}
+           <a href="javascript:show_torrents('{{ record.movie.torrent_search_title }}')" title="Скачать"><i class="icon-download-alt"></i></a>
          </div>
           <div class="poster">
               <img src="{% ifequal mode 'full' %}{{ record.movie.poster_big_url }}{% else %}{{ record.movie.poster_small_url }}{% endifequal %}" alt="{{ record.movie.title }} poster"/>
