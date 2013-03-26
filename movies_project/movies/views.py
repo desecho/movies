@@ -195,8 +195,9 @@ def ajax_add_to_list_from_db(request):
     if request.is_ajax() and request.method == 'POST':
         POST = request.POST
         if 'movie_id' in POST and 'list_id' in POST:
-            if add_to_list_from_db(int(POST.get('movie_id')), int(POST.get('list_id')), request.user):
-                return {'status': id}
+            error_code = add_to_list_from_db(int(POST.get('movie_id')), int(POST.get('list_id')), request.user)
+            if error_code:
+                return {'status': error_code}
     return HttpResponse()
 
 
