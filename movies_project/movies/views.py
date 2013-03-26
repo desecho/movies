@@ -1,12 +1,11 @@
 # -*- coding: utf8 -*-
 
 import json
-from operator import itemgetter
 import urllib2
 from django.utils.http import urlquote
 from django.http import HttpResponse
 from django.shortcuts import redirect
-from movies.models import Movie, Record, List, User
+from movies.models import Record, List, User
 from annoying.decorators import ajax_request, render_to
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
@@ -15,20 +14,23 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from movies.functions import (get_friends, filter_movies_for_recommendation,
                               add_movie_to_list, add_to_list_from_db,
                               get_movies_from_tmdb)
-
 import logging
+
 logger = logging.getLogger('movies.test')
 #logger.debug(options)
+
 
 def logout_view(request):
     logout(request)
     return redirect('/login/')
+
 
 @ensure_csrf_cookie       # CSRF thing for vk
 @render_to('search.html')
 @login_required
 def search(request):
     return {}
+
 
 @render_to('recommendation.html')
 @login_required
@@ -126,9 +128,9 @@ def ajax_apply_settings(request):
     if request.is_ajax() and request.method == 'POST':
             POST = request.POST
             if 'settings' in POST:
-                settings = json.loads(POST.get('settings'))
-                for setting in settings:
-                    request.session[setting] = settings[setting]
+                session_settings = json.loads(POST.get('settings'))
+                for setting in session_settings:
+                    request.session[setting] = session_settings[setting]
     return HttpResponse()
 
 
@@ -175,7 +177,7 @@ def ajax_download(request):
             query = urlquote(POST.get('query'))
             url = 'http://2torrents.org/search/listjson?filters[title]=%s&filter=%s&sort=seeders&type=desc' % (query, filter)
             html = urllib2.urlopen(url).read()
-            html = html.replace('"items": {"list":[,{','"items": {"list":[{')
+            html = html.replace('"items": {"list":[,{', '"items": {"list":[{')
             return {'data': html}
 
 
@@ -189,6 +191,7 @@ def ajax_search_movie(request):
             options = {'popular_only': int(POST.get('options[popular_only]')), 'sort_by_date': int(POST.get('options[sort_by_date]'))}
             output = get_movies_from_tmdb(query, type, options)
             return output
+
 
 @ajax_request
 def ajax_add_to_list_from_db(request):
