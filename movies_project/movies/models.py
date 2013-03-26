@@ -69,7 +69,7 @@ class Movie(models.Model):
         title = self.title.replace("'", r"\'") + ' '
         if self.release_date:
             title += self.release_date.year + ' '
-        return title +'720p'
+        return title + '720p'
 
 
 class Record(models.Model):
@@ -103,11 +103,20 @@ def number_of_to_watch(self):
 def get_movie_count(self):
     return '<span title="Просмотрено">%d</span> / <span title="К просмотру">%d' % (self.number_of_watched(), self.number_of_to_watch())
 
+
 def get_avatar(self):
     if self.vk_profile.photo:
         return self.vk_profile.photo
     else:
         return settings.VK_NO_IMAGE_SMALL
+
+
+def get_avatar_medium(self):
+    if self.vk_profile.photo_medium:
+        return self.vk_profile.photo_medium
+    else:
+        return settings.VK_NO_IMAGE_MEDIUM
+
 
 def get_movie_ids(self):
     records = Record.objects.filter(user=self)
@@ -136,4 +145,5 @@ User.add_to_class('get_movie_count', get_movie_count)
 User.add_to_class('get_list_id_from_movie_id', get_list_id_from_movie_id)
 User.add_to_class('is_vk_user', is_vk_user)
 User.add_to_class('get_avatar', get_avatar)
+User.add_to_class('get_avatar_medium', get_avatar_medium)
 User.add_to_class('get_movie_ids', get_movie_ids)

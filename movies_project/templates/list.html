@@ -28,16 +28,15 @@
 <script src="/static/js/list_general.js"></script>
 <script src="/static/js/list.js"></script>
 <div id="movie-count">
-  {% if not anothers_account %}
-    {{ user.get_movie_count|safe }}
-  {% else %}
+  {% if anothers_account %}
     {{ anothers_account.get_movie_count|safe }}
+  {% else %}
+    {{ user.get_movie_count|safe }}
   {% endif %}
 </div>
 
 {% if anothers_account %}
-  <!-- <img src="{{ anothers_account.vk_profile.photo }}"> -->
-  <h3>{{ anothers_account.get_full_name }}</h3>
+  <p><img src="{{ anothers_account.get_avatar_medium }}" alt="{{ anothers_account.get_full_name }}" title="{{ anothers_account.get_full_name }}"></p>
   <div class="btn-group" data-toggle="buttons-radio">
     <a href="watched" class="btn {% ifequal list_id 1 %} active {% endifequal %}">Просмотрено</a><a href="to-watch" class="btn {% ifequal list_id 2 %} active {% endifequal %}">К просмотру</a>
   </div>
