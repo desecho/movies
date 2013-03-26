@@ -68,7 +68,7 @@ class Movie(models.Model):
     def torrent_search_title(self):
         title = self.title.replace("'", r"\'") + ' '
         if self.release_date:
-            title += self.release_date.year + ' '
+            title += str(self.release_date.year) + ' '
         return title + '720p'
 
 
