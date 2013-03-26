@@ -68,17 +68,17 @@ def filter_movies_for_recommendation(records, user, limit=settings.MAX_RECOMMEND
     records = filter_watched_movies(records)
     return records
 
-def add_movie_to_list(id, list_id, user_id):
+def add_movie_to_list(id, list_id, user):
     try:
-        r = Record.objects.get(movie_id=id, user_id=user_id)
+        r = Record.objects.get(movie_id=id, user=user)
         if r.list_id != list_id:
             r.list_id = list_id
             r.save()
     except:
-        r = Record(movie_id=id, list_id=list_id, user_id=user_id)
+        r = Record(movie_id=id, list_id=list_id, user=user)
         r.save()
 
-def add_to_list_from_db(movie_id, list_id, user_id):
+def add_to_list_from_db(movie_id, list_id, user):
     def check_if_movie_exists_in_db(id):
         try:
             movie = Movie.objects.get(tmdb_id=id)
@@ -165,7 +165,7 @@ def add_to_list_from_db(movie_id, list_id, user_id):
     if not id:
         id = add_movie_to_db(movie_id)
     if id > 0:
-        add_movie_to_list(id, list_id, user_id)
+        add_movie_to_list(id, list_id, user)
     else:
         return id
 
