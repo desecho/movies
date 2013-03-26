@@ -72,6 +72,10 @@ label.error {
     color: #707070;
 }
 
+#movie-count img {
+    margin-top: 10px;
+}
+
 .vk {
     overflow-y: scroll;
     height: 800px;
