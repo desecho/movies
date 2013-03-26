@@ -66,7 +66,10 @@ class Movie(models.Model):
         return url
 
     def torrent_search_title(self):
-        return ('%s %d 720p' % (self.title, self.release_date.year)).replace("'", r"\'")
+        title = self.title.replace("'", r"\'") + ' '
+        if self.release_date:
+            title += self.release_date.year + ' '
+        return title +'720p'
 
 
 class Record(models.Model):
