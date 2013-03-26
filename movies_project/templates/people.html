@@ -1,4 +1,6 @@
 {% extends "base.html" %}
+{% load bootstrap_pagination %}
+
 {% block content %}
 
 {% for u in users %}
@@ -6,5 +8,7 @@
         <div class="person"><a href="/people/{{ u.username }}/watched"><img src="{{ u.get_avatar }}"></a> <a href="/people/{{ u.username }}/watched">{{ u.get_full_name }}</a> {{ u.get_movie_count|safe }}</div>
     {% endifnotequal %}
 {% endfor %}
+
+{% bootstrap_paginate records range=10 show_prev_next="true" show_first_last="true" alignment="left" %}
 
 {% endblock %}

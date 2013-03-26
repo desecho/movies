@@ -4,11 +4,12 @@ from movies.functions import (get_movie_id_from_tmdb_from_imdb_id,
 from movies.models import User
 from django.core.management.base import BaseCommand
 
+
 class Command(BaseCommand):
     help = 'Import data from IMDB ids'
 
     def handle(self, *args, **options):
-        user_id = 3
+        user_id = 0
         list_id = 1
 
         imdb_ids = '''

@@ -7,10 +7,11 @@ The web-application to create movie lists ("watched" and "to watch"), to share t
 * [Python v2.6.5+](http://www.python.org)
 * [Django v1.5](http://djangoproject.com)
 * [pytmdb3 v0.6.16+](https://github.com/wagnerrp/pytmdb3)
+* [vkontakte](https://bitbucket.org/kmike/vkontakte/src)
 * [django-annoying v0.7.7+](https://github.com/skorokithakis/django-annoying)
 * [django-vkontakte-iframe](https://bitbucket.org/kmike/django-vkontakte-iframe/)
-* [vkontakte](https://bitbucket.org/kmike/vkontakte/src)
 * [django-simple-menu](https://github.com/fatbox/django-simple-menu)
+* [django-bootstrap-pagination](https://github.com/jmcclell/django-bootstrap-pagination)
 
 ##Required API Keys
 * [TMDb](http://www.themoviedb.org/)
