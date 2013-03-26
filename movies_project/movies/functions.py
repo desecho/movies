@@ -4,6 +4,7 @@ import vkontakte
 import urllib2
 import json
 import tmdb3
+from operator import itemgetter
 
 tmdb3.set_key(settings.TMDB_KEY)
 tmdb3.set_cache(filename=settings.TMDB_CACHE_PATH)
@@ -46,6 +47,7 @@ def get_friends(user):
         friends = None
     return friends
 
+
 def filter_movies_for_recommendation(records, user, limit=settings.MAX_RECOMMENDATIONS_IN_LIST):
     'keeps movies only with 3+ rating, removes watched movies, removes duplicated records and limits the results'
     def filter_watched_movies(records):
@@ -68,6 +70,7 @@ def filter_movies_for_recommendation(records, user, limit=settings.MAX_RECOMMEND
     records = filter_watched_movies(records)
     return records
 
+
 def add_movie_to_list(id, list_id, user):
     try:
         r = Record.objects.get(movie_id=id, user=user)
@@ -77,6 +80,7 @@ def add_movie_to_list(id, list_id, user):
     except:
         r = Record(movie_id=id, list_id=list_id, user=user)
         r.save()
+
 
 def add_to_list_from_db(movie_id, list_id, user):
     def check_if_movie_exists_in_db(id):
@@ -146,7 +150,7 @@ def add_to_list_from_db(movie_id, list_id, user):
             movie = {
                 'tmdb_id': id,
                 'imdb_id': result.imdb,
-                'release_date'  : date,
+                'release_date': date,
                 'title': result.originaltitle,
                 'poster': get_poster(result.poster),
                 'homepage': result.homepage,
@@ -168,6 +172,7 @@ def add_to_list_from_db(movie_id, list_id, user):
         add_movie_to_list(id, list_id, user)
     else:
         return id
+
 
 def get_movies_from_tmdb(query, type, options):
         def set_proper_date(movies):
