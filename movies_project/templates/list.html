@@ -3,12 +3,12 @@
 {% block content %}
 <script src="/static/libs/raty/jquery.raty.min.js"></script>
 <script>
-  var mode = '{{ mode }}';
-  var sort = '{{ sort }}';
+  var mode = '{{ request.session.mode }}';
+  var sort = '{{ request.session.sort }}';
   var list_data = $.parseJSON('{{ list_data|safe }}');
 
   var recommendation = false;
-  {% if recommendation %}
+  {% if request.session.recommendation %}
     recommendation = true;
   {% endif %}
 
@@ -30,7 +30,7 @@
   {% if not anothers_account %}
     {{ user.get_movie_count|safe }}
   {% else %}
-    {{ anothers_account.get_movie_count }}
+    {{ anothers_account.get_movie_count|safe }}
   {% endif %}
 </div>
 
@@ -79,12 +79,12 @@
            <a href="javascript:show_torrents('{{ record.movie.torrent_search_title }}')" title="Скачать"><i class="icon-download-alt"></i></a>
          </div>
           <div class="poster">
-              <img src="{% ifequal mode 'full' %}{{ record.movie.poster_big_url }}{% else %}{{ record.movie.poster_small_url }}{% endifequal %}" alt="{{ record.movie.title }} poster"/>
+              <img src="{% ifequal request.session.mode 'full' %}{{ record.movie.poster_big_url }}{% else %}{{ record.movie.poster_small_url }}{% endifequal %}" alt="{{ record.movie.title }} poster"/>
           </div>
           <div class="details">
             {% if record.movie.release_date %}<div class="release_date" title="Дата выпуска"><strong class="release_date_label">Дата:</strong> {{ record.movie.release_date|date:'d.m.y' }}</div>{% endif %}
             {% if record.movie.imdb_rating %}<div class="imdb_rating" title="Рейтинг"><strong>IMDb:</strong> {{ record.movie.imdb_rating }}</div> {% endif %}
-            {% ifequal mode 'full' %}
+            {% ifequal request.session.mode 'full' %}
                 {% if record.movie.director %} <strong>Режиссёр:</strong> {{ record.movie.director }}<br> {% endif %}
                 {% if record.movie.writer %} <strong>Сценарист:</strong> {{ record.movie.writer }}<br> {% endif %}
                 {% if record.movie.genre %} <strong>Жанр:</strong> {{ record.movie.genre }}<br> {% endif %}
@@ -116,7 +116,7 @@
             <br>
             {# {% if record.movie.plot %} Описание: {{ record.movie.plot }}<br> {% endif %} #}
             {% endifequal %}
-            <div class="review {% ifequal mode 'full' %} full {% endifequal %}">
+            <div class="review {% ifequal request.session.mode 'full' %} full {% endifequal %}">
               {% ifequal list_id 1 %}
                 <strong class="rating_label">Оценка:</strong> <div class="rating" data-record_id="{{ record.id }}" data-rating="{{ record.rating }}"></div>
                 <div class="comment" id="comment_area{{ record.id }}" style="display: {% if not record.comment %} none {% endif %}">

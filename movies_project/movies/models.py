@@ -115,6 +115,7 @@ def get_movie_ids(self):
 
 
 def get_list_id_from_movie_id(self, id):
+    'outputs list_id from movie_id. ouputs 0 if movie is not in list'
     record = Record.objects.filter(user=self, movie=id)
     if record:
         return record[0].list.pk

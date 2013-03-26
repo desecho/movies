@@ -1,8 +1,6 @@
 # -*- coding: utf8 -*-
 
 import json
-import tmdb3
-import vkontakte
 from operator import itemgetter
 import urllib2
 from django.utils.http import urlquote
@@ -14,10 +12,8 @@ from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from django.views.decorators.csrf import ensure_csrf_cookie
-
-tmdb3.set_key(settings.TMDB_KEY)
-tmdb3.set_cache(filename=settings.TMDB_CACHE_PATH)
-
+from movies.functions import (get_friends, filter_movies_for_recommendation,
+                              add_movie_to_list, add_to_list_from_db)
 
 import logging
 logger = logging.getLogger('movies.test')
@@ -33,65 +29,19 @@ def logout_view(request):
 def search(request):
     return {}
 
-def get_friends(user):
-    # ???
-    # def intersect(list1, list2):
-    #     return list(set(list1) & set(list2))
-    def intersect(list1, list2):
-        return [x for x in list1 if x in list2]
-
-    def get_all_vk_ids():
-        vk_ids = []
-        for user in User.objects.all():
-            if user.is_vk_user():
-                vk_ids.append(int(user.username))
-        return vk_ids
-
-    def get_user_list_from_usernames(usernames):
-        users = []
-        for username in usernames:
-            users.append(User.objects.get(username=username))
-        return users
-
-    vk = vkontakte.API(settings.VK_APP_ID, settings.VK_APP_SECRET)
-    if user.is_vk_user():
-        all_friends = vk.friends.get(uid=user.username)
-        registered_vk_users = get_all_vk_ids()
-        friends = intersect(all_friends, registered_vk_users)
-        friends = get_user_list_from_usernames(friends)
-    else:
-        friends = None
-    return friends
-
-def filter_movies_for_recommendation(records, user, limit=settings.MAX_RECOMMENDATIONS_IN_LIST):
-    def filter_watched_movies(records):
-        def filter_duplicated_movies_and_limit(records):
-            records_output = []
-            movies = []
-            for record in records:
-                if record.movie.pk not in movies:
-                    records_output.append(record)
-                    if len(records_output) == limit:
-                        break
-                    movies.append(record.movie.pk)
-            return records_output
-        user_movies = user.get_movie_ids()
-        records = records.exclude(movie__in=user_movies)
-        records = filter_duplicated_movies_and_limit(records)
-        return records
-    records = records.filter(rating__gte=3)  # get only normal, good and excellent ratied movies
-    records = filter_watched_movies(records)
-    return records
-
-
 @render_to('recommendation.html')
 @login_required
 def recommendation(request):
+    def get_recommendations_from_friends():
+        # exclude own records and include only friends' records
+        records = Record.objects.exclude(user=request.user).filter(user__in=friends)
+        # order records by user rating and by imdb rating
+        records = records.order_by('-rating', '-movie__imdb_rating')
+        return filter_movies_for_recommendation(records, request.user, settings.MAX_RECOMMENDATIONS)
+
     friends = get_friends(request.user)
     if friends:
-        records = Record.objects.exclude(user=request.user).filter(user__in=friends)
-        records = records.order_by('-rating', '-movie__imdb_rating')
-        records = filter_movies_for_recommendation(records, request.user, settings.MAX_RECOMMENDATIONS)
+        records = get_recommendations_from_friends()
     else:
         records = None
     return {'records': records}
@@ -100,37 +50,60 @@ def recommendation(request):
 @render_to('list.html')
 @login_required
 def list(request, list, username=None):
-    sort = request.session.get('sort', 'release_date')
-    recommendation = request.session.get('recommendation', False)
-    if username:
-        user = User.objects.get(username=username)
-        anothers_account = user
-    else:
-        user = request.user
-        anothers_account = False
-    records = Record.objects.filter(list__key_name=list, user=user)
+    def initialize_session_values():
+        if 'sort' not in request.session:
+            request.session['sort'] = 'addition_date'
+        if 'recommendation' not in request.session:
+            request.session['recommendation'] = False
+        if 'mode' not in request.session:
+            request.session['mode'] = 'full'
 
-    if sort == 'release_date':
-        records = records.order_by('-movie__release_date')
-    elif sort == 'rating':
-        records = records.order_by('-rating', '-movie__release_date')
-    else:
-        records = records.order_by('-pk')
-
-    if username and recommendation:
-        records = filter_movies_for_recommendation(records, request.user)
-
-    if username:
+    def get_list_data(records):
         list_data = {}
         for record in records:
             list_data[record.pk] = request.user.get_list_id_from_movie_id(record.movie.pk)
+        return list_data
+
+    def sort_records(records, sort):
+        if sort == 'release_date':
+            records = records.order_by('-movie__release_date')
+        elif sort == 'rating':
+            records = records.order_by('-rating', '-movie__release_date')
+        else:
+            records = records.order_by('-pk')
+        return records
+
+    def get_records():
+        'gets records for certain user and list'
+        if username:
+            user = anothers_account
+        else:
+            user = request.user
+        return Record.objects.filter(list__key_name=list, user=user)
+
+    def get_anothers_account():
+        "returns User if it's another's acccount and False if it's not"
+        if username:
+            anothers_account = User.objects.get(username=username)
+        else:
+            anothers_account = False
+        return anothers_account
+
+    initialize_session_values()
+    anothers_account = get_anothers_account()
+    records = get_records()
+    records = sort_records(records, request.session['sort'])
+
+    if username and request.session['recommendation']:
+        records = filter_movies_for_recommendation(records, request.user)
+
+    if username:
+        list_data = get_list_data(records)
     else:
         list_data = None
+
     return {'records': records,
             'list_id': List.objects.get(key_name=list).id,
-            'mode': request.session.get('mode', 'full'),
-            'sort': sort,
-            'recommendation': recommendation,
             'anothers_account': anothers_account,
             'list_data': json.dumps(list_data)}
 
@@ -207,16 +180,14 @@ def ajax_download(request):
 
 @ajax_request
 def ajax_search_movie(request):
-    def getMoviesFromTmdb(query, type, options):
-        output = {}
-
-        def setProperDate(movies):
-            def formatDate(date):
+    def get_movies_from_tmdb(query, type, options):
+        def set_proper_date(movies):
+            def format_date(date):
                 if date:
                     return date.strftime('%d.%m.%y')
             m = []
             for movie in movies:
-                movie['release_date'] = formatDate(movie['release_date'])
+                movie['release_date'] = format_date(movie['release_date'])
                 m.append(movie)
             return movies
 
@@ -225,7 +196,7 @@ def ajax_search_movie(request):
         #     for movie in movies:
         #         del movie['popularity']
         #     return movies
-        def removeNotPopularMovies(movies):
+        def remove_not_popular_movies(movies):
             m = []
             for movie in movies:
                 if movie['popularity'] > settings.MIN_POPULARITY:
@@ -235,7 +206,7 @@ def ajax_search_movie(request):
                 m = movies
             return m
 
-        def sortByDate(movies):
+        def sort_by_date(movies):
             movies_with_date = []
             movies_without_date = []
             for movie in movies:
@@ -249,14 +220,14 @@ def ajax_search_movie(request):
             movies = movies_with_date + movies_without_date
             return movies
 
-        def getPosterUrl(poster):
+        def get_posterUrl(poster):
             if poster:
                 url = settings.POSTER_BASE_URL + settings.POSTER_SIZE_SMALL + '/' + poster.filename
             else:
                 url = settings.NO_POSTER_IMAGE_URL
             return url
 
-        def getData(query, type):
+        def get_data(query, type):
             query = query.encode('utf-8')
             '''Types - 1 - movie, 2 - actor, 3 - director
                for actor, director search - the first is used.'''
@@ -281,7 +252,9 @@ def ajax_search_movie(request):
                                 movies.append(m)
             return movies
 
-        results = getData(query, type)
+        output = {}
+
+        results = get_data(query, type)
         if results == -1:
             output['status'] = -1
             return output
@@ -298,18 +271,18 @@ def ajax_search_movie(request):
                         'release_date': result.releasedate,
                         'popularity': result.popularity,                    # for popularity sorting
                         'title': result.originaltitle,
-                        'poster': getPosterUrl(result.poster),
+                        'poster': get_posterUrl(result.poster),
                     }
                     movies.append(movie)
             except IndexError:                                              # strange exception in 'matrix case'
                 pass
             if options['popular_only']:
-                movies = removeNotPopularMovies(movies)
+                movies = remove_not_popular_movies(movies)
             if options['sort_by_date']:
-                movies = sortByDate(movies)
+                movies = sort_by_date(movies)
             #movies = sortByPopularity(movies)
 
-            movies = setProperDate(movies)
+            movies = set_proper_date(movies)
             output['status'] = 1
             output['movies'] = movies
         else:
@@ -321,117 +294,15 @@ def ajax_search_movie(request):
             query = POST.get('query')
             type = int(POST.get('type'))
             options = {'popular_only': int(POST.get('options[popular_only]')), 'sort_by_date': int(POST.get('options[sort_by_date]'))}
-            output = getMoviesFromTmdb(query, type, options)
+            output = get_movies_from_tmdb(query, type, options)
             return output
 
-
-def addMovieToList(id, list_id, user_id):
-    #used by ajax_add_to_list_from_tmdb and ajax_add_to_list
-    try:
-        r = Record.objects.get(movie_id=id, user_id=user_id)
-        if r.list_id != list_id:
-            r.list_id = list_id
-            r.save()
-    except:
-        r = Record(movie_id=id, list_id=list_id, user_id=user_id)
-        r.save()
-
-
 @ajax_request
-def ajax_add_to_list_from_tmdb(request):
-    def checkIfMovieExistsInDb(id):
-        try:
-            movie = Movie.objects.get(tmdb_id=id)
-            return movie.id
-        except:
-            return
-
-    def addMovieToDb(id):
-        def saveMovieToDb(movie):
-            m = Movie(**movie)
-            m.save()
-            return Movie.objects.get(tmdb_id=movie['tmdb_id']).id
-
-        def getMovieFromImdb(id):
-            def processImdbData(data):
-                if data != 'N/A':
-                    return data
-            try:
-                response = urllib2.urlopen('http://www.imdbapi.com/?i=%s' % id)
-            except:
-                return
-            html = response.read()
-            imdb_data = json.loads(html)
-            if imdb_data.get('Response') == 'True':
-                movie = {'plot': processImdbData(imdb_data.get('Plot')),
-                         'writer': processImdbData(imdb_data.get('Writer')),
-                         'director': processImdbData(imdb_data.get('Director')),
-                         'actors': processImdbData(imdb_data.get('Actors')),
-                         'genre': processImdbData(imdb_data.get('Genre')),
-                         'imdb_rating': processImdbData(imdb_data.get('imdbRating'))}
-                return movie
-
-        def getMovieFromTmdb(id):
-            def getPoster(poster):
-                if poster:
-                    return poster.filename
-
-            def getTrailers(movie):
-                youtube_trailers = []
-                for trailer in movie.youtube_trailers:
-                    t = {'name': trailer.name, 'source': trailer.source}
-                    youtube_trailers.append(t)
-                apple_trailers = []
-                for trailer in movie.apple_trailers:
-                    trailers = []
-                    i = 0
-                    for size in trailer.sources:
-                        tr = {'size': size, 'source': trailer.sources[size].source}
-                        trailers.append(tr)
-                        i += 1
-                    apple_trailers.append({'name': trailer.name, 'sizes': trailers})
-                trailers = {'youtube': youtube_trailers, 'quicktime': apple_trailers}
-                return trailers
-            try:
-                result = tmdb3.Movie(id)
-            except:
-                return
-            if not result.releasedate:
-                date = None
-            else:
-                date = result.releasedate
-                if result.imdb == 'tt0019387':  # X-files Fight the future hack
-                    result.imdb = 'tt0120902'   # -----------
-            movie = {
-                'tmdb_id': id,
-                'imdb_id': result.imdb,
-                'release_date': date,
-                'title': result.originaltitle,
-                'poster': getPoster(result.poster),
-                'homepage': result.homepage,
-                'trailers': getTrailers(result),
-            }
-            return movie
-        movie_tmdb = getMovieFromTmdb(id)
-        if not movie_tmdb['imdb_id']:
-            return -1                                         # return -1 if the IMDB id is not found
-        movie_imdb = getMovieFromImdb(movie_tmdb['imdb_id'])
-        if not movie_imdb:
-            return -2                                         # return -2 if there is a problem obtaining data from OMDB
-        movie = dict(movie_tmdb.items() + movie_imdb.items())
-        return saveMovieToDb(movie)
-
+def ajax_add_to_list_from_db(request):
     if request.is_ajax() and request.method == 'POST':
         POST = request.POST
         if 'movie_id' in POST and 'list_id' in POST:
-            movie_id = POST.get('movie_id')
-            list_id = POST.get('list_id')
-            id = checkIfMovieExistsInDb(movie_id)
-            if not id:
-                id = addMovieToDb(movie_id)
-            if id > 0:
-                addMovieToList(id, list_id, request.user.id)
-            else:
+            if add_to_list_from_db(POST.get('movie_id'), POST.get('list_id'), request.user):
                 return {'status': id}
     return HttpResponse()
 
@@ -442,5 +313,5 @@ def ajax_add_to_list(request):
         if 'movie_id' in POST and 'list_id' in POST:
             movie_id = POST.get('movie_id')
             list_id = POST.get('list_id')
-            addMovieToList(movie_id, list_id, request.user.id)
+            add_movie_to_list(movie_id, list_id, request.user)
     return HttpResponse()
