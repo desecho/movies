@@ -66,8 +66,10 @@ label.error {
 
 #movie-count {
     font-size: 25px;
-    opacity: 0.7;
     float: right;
+    text-align: right;
+    line-height: 27px;
+    color: #707070;
 }
 
 .vk {
