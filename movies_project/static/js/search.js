@@ -9,8 +9,8 @@ function displayMovie(movie) {
   if (movie.release_date) {
     html += '<strong>Дата выпуска:</strong> ' + movie.release_date;
   }
-  html += '</div><div class="buttons"><input type="button" class="btn" value="Просмотрено" onclick="add_to_list_from_tmdb(' + movie.id +
-          ', 1)" /> <input class="btn" type="button" value="К просмотру" onclick="add_to_list_from_tmdb(' + movie.id + ', 2)" /></div></div>';
+  html += '</div><div class="buttons"><input type="button" class="btn" value="Просмотрено" onclick="add_to_list_from_db(' + movie.id +
+          ', 1)" /> <input class="btn" type="button" value="К просмотру" onclick="add_to_list_from_db(' + movie.id + ', 2)" /></div></div>';
   $('#results').append(html);
 }
 
@@ -45,8 +45,8 @@ function search_movie() {
   });
 }
 
-function add_to_list_from_tmdb(movie_id, list_id) {
-  $.post(url_ajax_add_to_list_from_tmdb,
+function add_to_list_from_db(movie_id, list_id) {
+  $.post(url_ajax_add_to_list_from_db,
         {'movie_id': movie_id, 'list_id': list_id },
         function(data) {
           if (data.status == -1) {

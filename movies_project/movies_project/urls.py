@@ -18,7 +18,7 @@ urlpatterns = patterns(
     url(r'^remove-record/$', 'movies.views.ajax_remove_record'),
     url(r'^search-movie/$', 'movies.views.ajax_search_movie'),
     url(r'^add-to-list/$', 'movies.views.ajax_add_to_list'),
-    url(r'^add-to-list-from-tmdb/$', 'movies.views.ajax_add_to_list_from_tmdb'),
+    url(r'^add-to-list-from-db/$', 'movies.views.ajax_add_to_list_from_db'),
     url(r'^save-comment/$', 'movies.views.ajax_save_comment'),
     url(r'^change-rating/$', 'movies.views.ajax_change_rating'),
     url(r'^apply-setting/$', 'movies.views.ajax_apply_settings'),
