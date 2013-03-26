@@ -15,6 +15,8 @@ from movies.functions import (get_friends, filter_movies_for_recommendation,
                               add_movie_to_list, add_to_list_from_db,
                               get_movies_from_tmdb)
 import logging
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
 
 logger = logging.getLogger('movies.test')
 #logger.debug(options)
@@ -48,6 +50,19 @@ def recommendation(request):
     else:
         records = None
     return {'records': records}
+
+
+def paginate(objects, page, objects_on_page):
+    paginator = Paginator(objects, objects_on_page)
+    try:
+        objects = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        objects = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        objects = paginator.page(paginator.num_pages)
+    return objects
 
 
 @render_to('list.html')
@@ -91,7 +106,6 @@ def list(request, list, username=None):
         else:
             anothers_account = False
         return anothers_account
-
     initialize_session_values()
     anothers_account = get_anothers_account()
     records = get_records()
@@ -105,6 +119,7 @@ def list(request, list, username=None):
     else:
         list_data = None
 
+    records = paginate(records, request.GET.get('page'), settings.RECORDS_ON_PAGE)
     return {'records': records,
             'list_id': List.objects.get(key_name=list).id,
             'anothers_account': anothers_account,
@@ -114,7 +129,8 @@ def list(request, list, username=None):
 @render_to('people.html')
 @login_required
 def people(request):
-    return {'users': User.objects.all()}
+    users = paginate(User.objects.all(), request.GET.get('page'), settings.PEOPLE_ON_PAGE)
+    return {'users': users}
 
 
 @render_to('people.html')
