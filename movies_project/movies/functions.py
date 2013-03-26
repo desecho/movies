@@ -18,31 +18,11 @@ def get_movie_id_from_tmdb_from_imdb_id(id):
 
 
 def get_friends(user):
-    # ???
-    # def intersect(list1, list2):
-    #     return list(set(list1) & set(list2))
-    def intersect(list1, list2):
-        return [x for x in list1 if x in list2]
-
-    def get_all_vk_ids():
-        vk_ids = []
-        for user in User.objects.all():
-            if user.is_vk_user():
-                vk_ids.append(int(user.username))
-        return vk_ids
-
-    def get_user_list_from_usernames(usernames):
-        users = []
-        for username in usernames:
-            users.append(User.objects.get(username=username))
-        return users
-
-    vk = vkontakte.API(settings.VK_APP_ID, settings.VK_APP_SECRET)
     if user.is_vk_user():
-        all_friends = vk.friends.get(uid=user.username)
-        registered_vk_users = get_all_vk_ids()
-        friends = intersect(all_friends, registered_vk_users)
-        friends = get_user_list_from_usernames(friends)
+        vk = vkontakte.API(settings.VK_APP_ID, settings.VK_APP_SECRET)
+        friends = vk.friends.get(uid=user.username)
+        friends = [str(x) for x in friends]
+        friends = User.objects.filter(username__in=friends)
     else:
         friends = None
     return friends
