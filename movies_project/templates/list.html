@@ -29,14 +29,14 @@
 <script src="/static/js/list.js"></script>
 <div id="movie-count">
   {% if anothers_account %}
-    {{ anothers_account.get_movie_count|safe }}
+    {{ anothers_account.get_movie_count|safe }}<br>
+    <img src="{{ anothers_account.get_avatar_medium }}" alt="{{ anothers_account.get_full_name }}" title="{{ anothers_account.get_full_name }}">
   {% else %}
     {{ user.get_movie_count|safe }}
   {% endif %}
 </div>
 
 {% if anothers_account %}
-  <p><img src="{{ anothers_account.get_avatar_medium }}" alt="{{ anothers_account.get_full_name }}" title="{{ anothers_account.get_full_name }}"></p>
   <div class="btn-group" data-toggle="buttons-radio">
     <a href="watched" class="btn {% ifequal list_id 1 %} active {% endifequal %}">Просмотрено</a><a href="to-watch" class="btn {% ifequal list_id 2 %} active {% endifequal %}">К просмотру</a>
   </div>
