@@ -1,6 +1,7 @@
 from movies.functions import (get_movie_id_from_tmdb_from_imdb_id,
                               add_to_list_from_db)
 
+from movies.models import User
 from django.core.management.base import BaseCommand
 
 class Command(BaseCommand):
@@ -19,7 +20,7 @@ class Command(BaseCommand):
             if imdb_id:
                 id = get_movie_id_from_tmdb_from_imdb_id(imdb_id)
                 if id:
-                    result = add_to_list_from_db(id, list_id, user_id)
+                    result = add_to_list_from_db(id, list_id, User.objects.get(pk=user_id))
                     if result:
                         print('%s - error #%d' % (imdb_id, result))
                     else:
