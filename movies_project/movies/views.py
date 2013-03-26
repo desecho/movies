@@ -136,7 +136,7 @@ def people(request):
 @render_to('people.html')
 @login_required
 def friends(request):
-    friends = get_friends(request.user)
+    friends = paginate(get_friends(request.user), request.GET.get('page'), settings.PEOPLE_ON_PAGE)
     return {'users': friends}
 
 
