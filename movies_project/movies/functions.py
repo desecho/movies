@@ -154,7 +154,7 @@ def add_to_list_from_db(movie_id, list_id, user):
         return id
 
 
-def get_movies_from_tmdb(query, type, options):
+def get_movies_from_tmdb(query, type, options, user):
         def set_proper_date(movies):
             def format_date(date):
                 if date:
@@ -206,10 +206,11 @@ def get_movies_from_tmdb(query, type, options):
             '''Types - 1 - movie, 2 - actor, 3 - director
                for actor, director search - the first is used.'''
             if type == 1:
-                try:
-                    movies = tmdb3.searchMovie(query)
-                except:
-                    return -1
+                movies = tmdb3.searchMovie(query)
+                # try:
+                #     movies = tmdb3.searchMovie(query)
+                # except:
+                #     return -1
             else:
                 try:
                     result = tmdb3.searchPerson(query)
@@ -240,6 +241,8 @@ def get_movies_from_tmdb(query, type, options):
                     i += 1
                     if i > settings.MAX_RESULTS:
                         break
+                    if Record.objects.filter(movie__tmdb_id=result.id, user=user).exists():
+                        continue
                     movie = {
                         'id': result.id,
                         'release_date': result.releasedate,
@@ -257,8 +260,9 @@ def get_movies_from_tmdb(query, type, options):
             #movies = sortByPopularity(movies)
 
             movies = set_proper_date(movies)
-            output['status'] = 1
-            output['movies'] = movies
-        else:
-            output['status'] = 0
+            if len(movies):
+                output['status'] = 1
+                output['movies'] = movies
+            else:
+                output['status'] = 0
         return output

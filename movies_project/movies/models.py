@@ -133,6 +133,7 @@ def is_vk_user(self):
     if self.username.isdigit():
         return True
 
+
 User.add_to_class('number_of_watched', number_of_watched)
 User.add_to_class('number_of_to_watch', number_of_to_watch)
 User.add_to_class('get_movie_count', get_movie_count)
