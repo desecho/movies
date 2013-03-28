@@ -105,17 +105,11 @@ def get_movie_count(self):
 
 
 def get_avatar(self):
-    if self.vk_profile.photo:
-        return self.vk_profile.photo
-    else:
-        return settings.VK_NO_IMAGE_SMALL
+    return self.vk_profile.photo or settings.VK_NO_IMAGE_SMALL
 
 
 def get_avatar_medium(self):
-    if self.vk_profile.photo_medium:
-        return self.vk_profile.photo_medium
-    else:
-        return settings.VK_NO_IMAGE_MEDIUM
+    return self.vk_profile.photo_medium or settings.VK_NO_IMAGE_MEDIUM
 
 
 def get_movie_ids(self):

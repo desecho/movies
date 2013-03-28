@@ -97,10 +97,10 @@ def list(request, list, username=None):
             user = anothers_account
         else:
             user = request.user
-        return Record.objects.filter(list__key_name=list, user=user)
+        return Record.objects.select_related().filter(list__key_name=list, user=user)
 
     def get_anothers_account():
-        "returns User if it's another's acccount and False if it's not"
+        "returns User if it's another's account and False if it's not"
         if username:
             anothers_account = User.objects.get(username=username)
         else:
@@ -129,7 +129,7 @@ def list(request, list, username=None):
 @render_to('people.html')
 @login_required
 def people(request):
-    users = paginate(User.objects.all(), request.GET.get('page'), settings.PEOPLE_ON_PAGE)
+    users = paginate(User.objects.all().order_by('first_name'), request.GET.get('page'), settings.PEOPLE_ON_PAGE)
     return {'users': users}
 
 
