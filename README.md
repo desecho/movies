@@ -12,6 +12,7 @@ The web-application to create movie lists ("watched" and "to watch"), to share t
 * [django-vkontakte-iframe](https://bitbucket.org/kmike/django-vkontakte-iframe/)
 * [django-simple-menu](https://github.com/fatbox/django-simple-menu)
 * [django-bootstrap-pagination](https://github.com/jmcclell/django-bootstrap-pagination)
+* [django-admin-tools](https://bitbucket.org/izi/django-admin-tools)
 
 ##Required API Keys
 * [TMDb](http://www.themoviedb.org/)
@@ -49,6 +50,7 @@ You can generate SECRET_KEY using [Django Secret Key Generator](http://www.miniw
 ```
 python manage.py syncdb
 python manage.py collectstatic
+python manage.py loaddata vk-geo
 ```
 
 * Import db.sql to your database
