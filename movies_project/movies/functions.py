@@ -22,7 +22,7 @@ def get_friends(user):
         vk = vkontakte.API(settings.VK_APP_ID, settings.VK_APP_SECRET)
         friends = vk.friends.get(uid=user.username)
         friends = [str(x) for x in friends]
-        friends = User.objects.filter(username__in=friends)
+        friends = User.objects.filter(username__in=friends).order_by('first_name')
     else:
         friends = None
     return friends
