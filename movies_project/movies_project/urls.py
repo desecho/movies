@@ -28,6 +28,7 @@ urlpatterns = patterns(
     url(r'^logout/$', 'movies.views.logout_view'),
 
     # Uncomment the admin/doc line below to enable admin documentation:
+    url(r'^admin_tools/', include('admin_tools.urls')),
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 
     # Uncomment the next line to enable the admin:
