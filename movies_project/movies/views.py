@@ -205,7 +205,7 @@ def ajax_search_movie(request):
             query = POST.get('query')
             type = int(POST.get('type'))
             options = {'popular_only': int(POST.get('options[popular_only]')), 'sort_by_date': int(POST.get('options[sort_by_date]'))}
-            output = get_movies_from_tmdb(query, type, options)
+            output = get_movies_from_tmdb(query, type, options, request.user)
             return output
 
 
