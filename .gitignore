@@ -1,7 +1,7 @@
 *.py[cod]
 tmdb3.cache
 movies_project/static/admin/
-movies_project/static/admin_tools/
+#movies_project/static/admin_tools/
 
 # C extensions
 *.so
