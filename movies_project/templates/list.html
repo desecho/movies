@@ -28,11 +28,10 @@
 <script src="/static/js/list_general.js"></script>
 <script src="/static/js/list.js"></script>
 <div id="movie-count">
+  {{ movie_count|safe }}
   {% if anothers_account %}
-    {{ anothers_account.get_movie_count|safe }}<br>
+    <br>
     <img src="{{ anothers_account.get_avatar_medium }}" alt="{{ anothers_account.get_full_name }}" title="{{ anothers_account.get_full_name }}">
-  {% else %}
-    {{ user.get_movie_count|safe }}
   {% endif %}
 </div>
 
