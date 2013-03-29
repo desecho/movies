@@ -172,7 +172,7 @@ def get_avatar(photo):
 @render_to('feed.html')
 @login_required
 def feed(request):
-    actions = ActionRecord.objects.filter(user__in=get_friends(request.user)).order_by('pk')[:50].values('user__vk_profile__photo', 'user__username', 'user__first_name', 'user__last_name', 'action__name', 'movie__title', 'list__title', 'comment', 'rating', 'date')
+    actions = ActionRecord.objects.filter(user__in=get_friends(request.user)).order_by('-pk')[:50].values('user__vk_profile__photo', 'user__username', 'user__first_name', 'user__last_name', 'action__name', 'movie__title', 'list__title', 'comment', 'rating', 'date')
     actions_output = []
     for action in actions:
         a = {}
