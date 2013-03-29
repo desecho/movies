@@ -28,26 +28,12 @@ def get_friends(user):
     return friends
 
 
-def filter_movies_for_recommendation(records, user, limit=settings.MAX_RECOMMENDATIONS_IN_LIST):
-    'keeps movies only with 3+ rating, removes watched movies, removes duplicated records and limits the results'
-    def filter_watched_movies(records):
-        def filter_duplicated_movies_and_limit(records):
-            records_output = []
-            movies = []
-            for record in records:
-                if record.movie.pk not in movies:
-                    records_output.append(record)
-                    if len(records_output) == limit:
-                        break
-                    movies.append(record.movie.pk)
-            return records_output
-        # removes watched movies
-        records = records.exclude(movie__in=user.get_movie_ids())
-        records = filter_duplicated_movies_and_limit(records)
-        return records
+def filter_movies_for_recommendation(records, user):
+    'keeps movies only with 3+ rating, removes watched movies'
     # filters only 3+ ratied movies
     records = records.filter(rating__gte=3)
-    records = filter_watched_movies(records)
+    # removes watched movies
+    records = records.exclude(movie__in=user.get_movie_ids())
     return records
 
 

@@ -1,5 +1,6 @@
 # -*- coding: utf8 -*-
 
+from django.views.decorators.cache import cache_page
 import json
 import urllib2
 from django.utils.http import urlquote
@@ -38,11 +39,22 @@ def search(request):
 @login_required
 def recommendation(request):
     def get_recommendations_from_friends():
+        def filter_duplicated_movies_and_limit(records):
+            records_output = []
+            movies = []
+            for record in records:
+                if record.movie.pk not in movies:
+                    records_output.append(record)
+                    if len(records_output) == settings.MAX_RECOMMENDATIONS:
+                        break
+                    movies.append(record.movie.pk)
+            return records_output
         # exclude own records and include only friends' records
-        records = Record.objects.exclude(user=request.user).filter(user__in=friends)
+        records = Record.objects.exclude(user=request.user).filter(user__in=friends).select_related()
         # order records by user rating and by imdb rating
         records = records.order_by('-rating', '-movie__imdb_rating')
-        return filter_movies_for_recommendation(records, request.user, settings.MAX_RECOMMENDATIONS)
+        records = filter_movies_for_recommendation(records, request.user)
+        return filter_duplicated_movies_and_limit(records)
 
     friends = get_friends(request.user)
     if friends:
@@ -65,6 +77,12 @@ def paginate(objects, page, objects_on_page):
     return objects
 
 
+def get_movie_count(username):
+    def number_of_movies(list_id):
+        return Record.objects.filter(list_id=list_id, user__username=username).count()
+    return '<span title="Просмотрено">%d</span> / <span title="К просмотру">%d' % (number_of_movies(1), number_of_movies(2))
+
+
 @render_to('list.html')
 @login_required
 def list(request, list, username=None):
@@ -77,9 +95,20 @@ def list(request, list, username=None):
             request.session['mode'] = 'full'
 
     def get_list_data(records):
+        record_ids_and_movies = records.values_list('id', 'movie_id')
+        movies = [x[1] for x in record_ids_and_movies]
+        record_ids_and_movies_dict = {}
+        for x in record_ids_and_movies:
+            record_ids_and_movies_dict[x[0]] = x[1]
+        movie_ids_and_list_ids = Record.objects.filter(user=request.user, movie_id__in=movies).values_list('movie_id', 'list_id')
+
+        movie_id_and_list_id_dict = {}
+        for x in movie_ids_and_list_ids:
+            movie_id_and_list_id_dict[x[0]] = x[1]
+
         list_data = {}
-        for record in records:
-            list_data[record.pk] = request.user.get_list_id_from_movie_id(record.movie.pk)
+        for record_id in record_ids_and_movies_dict:
+            list_data[record_id] = movie_id_and_list_id_dict.get(record_ids_and_movies_dict[record_id], 0)
         return list_data
 
     def sort_records(records, sort):
@@ -116,28 +145,58 @@ def list(request, list, username=None):
 
     if username:
         list_data = get_list_data(records)
+        movie_count =  get_movie_count(username)
     else:
         list_data = None
+        movie_count =  get_movie_count(request.user.username)
 
+    # if not username and list == 'to-watch':
+    #     for record in records:
+    #         comments_and_ratings = {}
+    #         friends = get_friends(request.user)
+    #         comments_and_ratings[record.pk] = Record.objects.filter(user__in=friends, movie=record.movie)
+    # else:
+    #     comments_and_ratings = None
     records = paginate(records, request.GET.get('page'), settings.RECORDS_ON_PAGE)
     return {'records': records,
+            #'comments_and_ratings': comments_and_ratings,
             'list_id': List.objects.get(key_name=list).id,
             'anothers_account': anothers_account,
+            'movie_count': movie_count,
             'list_data': json.dumps(list_data)}
 
 
+@cache_page(settings.CACHE_TIMEOUT)
 @render_to('people.html')
 @login_required
-def people(request):
-    users = paginate(User.objects.all().order_by('first_name'), request.GET.get('page'), settings.PEOPLE_ON_PAGE)
+def generic_people(request, users):
+    def get_avatar(photo):
+        return photo or settings.VK_NO_IMAGE_SMALL
+    users = users.values('first_name', 'last_name', 'username', 'vk_profile__photo')
+
+    users_output = []
+    for user in users:
+        u = {}
+        u['full_name'] = user['first_name'] + ' ' + user['last_name']
+        u['username'] = user['username']
+        u['avatar'] = get_avatar(user['vk_profile__photo'])
+        u['movie_count'] = get_movie_count(user['username'])
+        users_output.append(u)
+
+    users = paginate(users_output, request.GET.get('page'), settings.PEOPLE_ON_PAGE)
     return {'users': users}
 
 
-@render_to('people.html')
+@cache_page(settings.CACHE_TIMEOUT)
+@login_required
+def people(request):
+    return generic_people(request, User.objects.all().order_by('first_name'))
+
+
+@cache_page(settings.CACHE_TIMEOUT)
 @login_required
 def friends(request):
-    friends = paginate(get_friends(request.user), request.GET.get('page'), settings.PEOPLE_ON_PAGE)
-    return {'users': friends}
+    return generic_people(request, get_friends(request.user))
 
 
 def ajax_apply_settings(request):

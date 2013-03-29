@@ -87,6 +87,14 @@ class Record(models.Model):
     def __unicode__(self):
         return self.movie.title
 
+    def has_comement(self):
+        if self.comment:
+            return True
+
+    def has_rating(self):
+        if self.rating:
+            return True
+
 
 class Action(models.Model):
     name = models.CharField('название', max_length=255)
@@ -116,58 +124,19 @@ class ActionRecord(models.Model):
         return self.movie.title + ' ' + self.action.name
 
 
-def number_of_movies(user, list_id):
-    return Record.objects.filter(list_id=list_id, user=user).count()
-
-
-def number_of_watched(self):
-    return number_of_movies(self, 1)
-
-
-def number_of_to_watch(self):
-    return number_of_movies(self, 2)
-
-
-def get_movie_count(self):
-    return '<span title="Просмотрено">%d</span> / <span title="К просмотру">%d' % (self.number_of_watched(), self.number_of_to_watch())
-
-
-def get_avatar(self):
-    return self.vk_profile.photo or settings.VK_NO_IMAGE_SMALL
-
-
 def get_avatar_medium(self):
     return self.vk_profile.photo_medium or settings.VK_NO_IMAGE_MEDIUM
 
 
 def get_movie_ids(self):
-    records = Record.objects.filter(user=self)
-    ids = []
-    for record in records:
-        ids.append(record.movie.pk)
-    return ids
-
-
-def get_list_id_from_movie_id(self, id):
-    'outputs list_id from movie_id. ouputs 0 if movie is not in list'
-    record = Record.objects.filter(user=self, movie=id)
-    if record:
-        return record[0].list.pk
-    else:
-        return 0
+    return Record.objects.filter(user=self).values_list('movie__pk')
 
 
 def is_vk_user(self):
     if self.username.isdigit():
         return True
 
-
-User.add_to_class('number_of_watched', number_of_watched)
-User.add_to_class('number_of_to_watch', number_of_to_watch)
-User.add_to_class('get_movie_count', get_movie_count)
-User.add_to_class('get_list_id_from_movie_id', get_list_id_from_movie_id)
 User.add_to_class('is_vk_user', is_vk_user)
-User.add_to_class('get_avatar', get_avatar)
 User.add_to_class('get_avatar_medium', get_avatar_medium)
 User.add_to_class('get_movie_ids', get_movie_ids)
 
