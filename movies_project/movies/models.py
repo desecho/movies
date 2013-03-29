@@ -88,6 +88,34 @@ class Record(models.Model):
         return self.movie.title
 
 
+class Action(models.Model):
+    name = models.CharField('название', max_length=255)
+
+    class Meta:
+        verbose_name = 'действие'
+        verbose_name_plural = 'действия'
+
+    def __unicode__(self):
+        return self.name
+
+
+class ActionRecord(models.Model):
+    user = models.ForeignKey(User, verbose_name='пользователь')
+    action = models.ForeignKey(Action, verbose_name='тип действия')
+    movie = models.ForeignKey(Movie, verbose_name='фильм')
+    list = models.ForeignKey(List, verbose_name='список', blank=True, null=True)
+    comment = models.CharField('комментарий', max_length=255, blank=True, null=True)
+    rating = models.IntegerField('рейтинг', blank=True, null=True)
+    date = models.DateTimeField('дата', auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'запись действия'
+        verbose_name_plural = 'записи действий'
+
+    def __unicode__(self):
+        return self.movie + ' ' + self.action
+
+
 def number_of_movies(user, list_id):
     return Record.objects.filter(list_id=list_id, user=user).count()
 
