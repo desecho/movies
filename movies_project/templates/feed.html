@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+<table class="table feed">
+<tbody>
+{% for action in actions %}
+        <tr>
+            <td>
+                <a href="/people/{{ action.username }}/watched"><img src="{{ action.avatar }}" alt="{{ action.full_name }}"></a>
+            </td>
+            <td>
+                {{ action.date }}
+            </td>
+            <td>
+                {{ action.movie }}
+            </td>
+            <td>
+                {{ action.action }}
+            </td>
+            <td>
+                {% if action.list %} {{ action.list }} {% endif %}
+                {% if action.rating %} {{ action.rating }} {% endif %}
+                {% if action.comment %} {{ action.comment }} {% endif %}
+            </td>
+        </tr>
+    </div>
+{% endfor %}
+</tbody>
+</table>
+{% endblock %}
+

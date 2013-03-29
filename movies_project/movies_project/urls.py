@@ -12,6 +12,7 @@ urlpatterns = patterns(
     url(r'^list/(?P<list>[\w-]+)/$', 'movies.views.list'),
     url(r'^people/$', 'movies.views.people'),
     url(r'^friends/$', 'movies.views.friends'),
+    url(r'^feed/$', 'movies.views.feed'),
     url(r'^people/(?P<username>[\w\d]+)/(?P<list>[\w-]+)$', 'movies.views.list'),
     url(r'^recommendation/$', 'movies.views.recommendation'),
 
