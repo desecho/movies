@@ -165,13 +165,34 @@ def list(request, list, username=None):
             'movie_count': movie_count,
             'list_data': json.dumps(list_data)}
 
+def get_avatar(photo):
+    return photo or settings.VK_NO_IMAGE_SMALL
+
+
+@render_to('feed.html')
+@login_required
+def feed(request):
+    actions = ActionRecord.objects.filter(user__in=get_friends(request.user)).order_by('pk')[:50].values('user__vk_profile__photo', 'user__username', 'user__first_name', 'user__last_name', 'action__name', 'movie__title', 'list__title', 'comment', 'rating', 'date')
+    actions_output = []
+    for action in actions:
+        a = {}
+        a['avatar'] = get_avatar(action['user__vk_profile__photo'])
+        a['full_name'] = action['user__first_name'] + ' ' + action['user__last_name']
+        a['username'] = action['user__username']
+        a['action'] = action['action__name']
+        a['movie'] = action['movie__title']
+        a['list'] = action['list__title']
+        a['comment'] = action['comment']
+        a['rating'] = action['rating']
+        a['date'] = action['date']
+        actions_output.append(a)
+    return {'actions': actions_output}
+
 
 @cache_page(settings.CACHE_TIMEOUT)
 @render_to('people.html')
 @login_required
 def generic_people(request, users):
-    def get_avatar(photo):
-        return photo or settings.VK_NO_IMAGE_SMALL
     users = users.values('first_name', 'last_name', 'username', 'vk_profile__photo')
 
     users_output = []

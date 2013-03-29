@@ -27,3 +27,8 @@ Menu.add_item('main', MenuItem(
     'Люди',
     reverse('movies.views.people'),
     weight=20,))
+
+Menu.add_item('main', MenuItem(
+    'Лента',
+    reverse('movies.views.feed'),
+    weight=20,))

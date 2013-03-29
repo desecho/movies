@@ -84,3 +84,7 @@ label.error {
 .person {
     margin-bottom: 10px;
 }
+
+.feed {
+    width: 800px !important;
+}
