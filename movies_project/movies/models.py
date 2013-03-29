@@ -113,7 +113,7 @@ class ActionRecord(models.Model):
         verbose_name_plural = 'записи действий'
 
     def __unicode__(self):
-        return self.movie + ' ' + self.action
+        return self.movie.title + ' ' + self.action.name
 
 
 def number_of_movies(user, list_id):
@@ -170,3 +170,10 @@ User.add_to_class('is_vk_user', is_vk_user)
 User.add_to_class('get_avatar', get_avatar)
 User.add_to_class('get_avatar_medium', get_avatar_medium)
 User.add_to_class('get_movie_ids', get_movie_ids)
+
+
+def user_unicode(self):
+    #return u'%s, %s' % (self.last_name, self.first_name)
+    return self.get_full_name()
+
+User.__unicode__ = user_unicode
