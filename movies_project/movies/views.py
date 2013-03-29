@@ -5,7 +5,7 @@ import urllib2
 from django.utils.http import urlquote
 from django.http import HttpResponse
 from django.shortcuts import redirect
-from movies.models import Record, List, User
+from movies.models import Record, List, User, ActionRecord
 from annoying.decorators import ajax_request, render_to
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
@@ -165,8 +165,10 @@ def ajax_save_comment(request):
         if 'id' in POST and 'comment' in POST:
             id = POST.get('id')
             comment = POST.get('comment')
-            r = Record.objects.get(pk=id, user_id=request.user.id)
+            r = Record.objects.get(pk=id, user=request.user)
             if r.comment != comment:
+                if not r.comment:
+                    ActionRecord(action_id=4, user=request.user, movie=r.movie, comment=comment).save()
                 r.comment = comment
                 r.save()
     return HttpResponse()
@@ -178,9 +180,12 @@ def ajax_change_rating(request):
         if 'id' in POST and 'rating' in POST:
             id = POST.get('id')
             rating = POST.get('rating')
-            r = Record.objects.get(pk=id, user_id=request.user.id)
-            r.rating = rating
-            r.save()
+            r = Record.objects.get(pk=id, user=request.user)
+            if r.rating != rating:
+                if not r.rating:
+                    ActionRecord(action_id=3, user=request.user, movie=r.movie, rating=rating).save()
+                r.rating = rating
+                r.save()
     return HttpResponse()
 
 
