@@ -1,5 +1,5 @@
 var raty_custom_settings = {
-  readOnly : anothers_account,
+  readOnly : raty_readonly,
   click: function(score) {
     //change from null to 0 to simplify saving
     if (!score) {
