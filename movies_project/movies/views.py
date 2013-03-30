@@ -118,7 +118,7 @@ def list(request, list, username=None):
 
     def get_comments_and_ratings(records):
         movies, record_ids_and_movies_dict = get_record_movie_data(records)
-        comments_and_ratings = Record.objects.filter(user__in=get_friends(request.user), list_id=1, movie_id__in=movies).values_list('movie_id', 'comment', 'rating')
+        comments_and_ratings = Record.objects.filter(user__in=get_friends(request.user), list_id=1, movie_id__in=movies).values_list('movie_id', 'comment', 'rating', 'user__vk_profile__photo', 'user__first_name', 'user__last_name', 'user__username')
         comments_and_ratings_dict = {}
         for x in comments_and_ratings:
             if x[1] or x[2]:
