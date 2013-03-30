@@ -17,7 +17,8 @@ from movies.functions import (get_friends, filter_movies_for_recommendation,
                               get_movies_from_tmdb)
 import logging
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
 
 logger = logging.getLogger('movies.test')
 #logger.debug(options)
@@ -171,8 +172,12 @@ def get_avatar(photo):
 
 @render_to('feed.html')
 @login_required
-def feed(request):
-    actions = ActionRecord.objects.filter(user__in=get_friends(request.user)).order_by('-pk')[:50].values('user__vk_profile__photo', 'user__username', 'user__first_name', 'user__last_name', 'action__name', 'movie__title', 'list__title', 'comment', 'rating', 'date')
+def feed(request, list):
+    date_from = datetime.today()
+    date_to = date_from + relativedelta(days=settings.FEED_DAYS)
+    actions = ActionRecord.objects.filter(date__range=(date_from, date_to)).order_by('-pk').values('user__vk_profile__photo', 'user__username', 'user__first_name', 'user__last_name', 'action__name', 'movie__title', 'list__title', 'comment', 'rating', 'date')
+    if list == 'friends':
+        actions = actions.filter(user__in=get_friends(request.user))
     actions_output = []
     for action in actions:
         a = {}
