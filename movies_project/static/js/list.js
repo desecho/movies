@@ -1,9 +1,4 @@
-var general_settings = {
-  hints: ['ужасно','плохо','нормально','хорошо','великолепно'],
-  cancelHint: 'Отменить эту оценку',
-  noRatedMsg:'Пока нет оценки',
-  path: '/static/libs/raty/',
-  cancel: true,
+var raty_custom_settings = {
   readOnly : anothers_account,
   click: function(score) {
     //change from null to 0 to simplify saving
@@ -17,7 +12,7 @@ var general_settings = {
 function change_rating(id, rating, element) {
   function revert_to_previous_rating(element) {
     score_settings = {score: element.attr('data-rating')};
-    settings = $.extend({}, general_settings, score_settings);
+    settings = $.extend({}, raty_settings, raty_custom_settings, score_settings);
     element.raty(settings);
   }
 
@@ -137,13 +132,6 @@ $(function() {
       );
     }
   }
-  score_settings = {
-    score: function() {
-      return $(this).attr('data-rating');
-    }
-  };
-  settings = $.extend({}, general_settings, score_settings);
-  $('.rating').raty(settings);
   $('#button_mode_' + mode).button('toggle');
   if (mode == 'minimal') {
     activate_mode_minimal();

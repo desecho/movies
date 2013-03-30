@@ -1,6 +1,8 @@
 {% extends "base.html" %}
-
 {% block content %}
+<script src="/static/libs/raty/jquery.raty.min.js"></script>
+<script src="/static/js/raty.js"></script>
+<script src="/static/js/feed.js"></script>
 <table class="table feed">
 <tbody>
 {% for action in actions %}
@@ -19,7 +21,7 @@
             </td>
             <td>
                 {% if action.list %} {{ action.list }} {% endif %}
-                {% if action.rating %} {{ action.rating }} {% endif %}
+                {% if action.rating %} <div class="rating" data-rating="{{ action.rating }}"></div> {% endif %}
                 {% if action.comment %} {{ action.comment }} {% endif %}
             </td>
         </tr>
@@ -28,4 +30,3 @@
 </tbody>
 </table>
 {% endblock %}
-

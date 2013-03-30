@@ -178,8 +178,8 @@ def feed(request, list):
     actions = ActionRecord.objects.filter(date__range=(date_from, date_to)).order_by('-pk').values('user__vk_profile__photo', 'user__username', 'user__first_name', 'user__last_name', 'action__name', 'movie__title', 'list__title', 'comment', 'rating', 'date')
     if list == 'friends':
         actions = actions.filter(user__in=get_friends(request.user))
-    else:
-        actions = actions.exclude(user=request.user)
+    #else:
+        #actions = actions.exclude(user=request.user)
     actions_output = []
     for action in actions:
         a = {}
