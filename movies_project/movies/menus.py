@@ -18,6 +18,10 @@ Menu.add_item('main', MenuItem('Друзья',
     reverse('movies.views.friends'),
     weight=20,))
 
+Menu.add_item('main', MenuItem('Люди',
+    reverse('movies.views.people'),
+    weight=20,))
+
 feed_children = (
     MenuItem('Друзья',
         reverse('movies.views.feed', kwargs=({'list': 'friends'})),
@@ -31,7 +35,3 @@ Menu.add_item('main', MenuItem('Лента',
     reverse('movies.views.search'),  # doesn't really matter because of the submenus
     weight=20,
     children=feed_children))
-
-Menu.add_item('main', MenuItem('Люди',
-    reverse('movies.views.people'),
-    weight=20,))
