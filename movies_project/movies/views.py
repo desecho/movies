@@ -173,11 +173,13 @@ def get_avatar(photo):
 @render_to('feed.html')
 @login_required
 def feed(request, list):
-    date_from = datetime.today()
-    date_to = date_from + relativedelta(days=settings.FEED_DAYS)
+    date_to = datetime.today()
+    date_from = date_to - relativedelta(days=settings.FEED_DAYS)
     actions = ActionRecord.objects.filter(date__range=(date_from, date_to)).order_by('-pk').values('user__vk_profile__photo', 'user__username', 'user__first_name', 'user__last_name', 'action__name', 'movie__title', 'list__title', 'comment', 'rating', 'date')
     if list == 'friends':
         actions = actions.filter(user__in=get_friends(request.user))
+    else:
+        actions = actions.exclude(user=request.user)
     actions_output = []
     for action in actions:
         a = {}
