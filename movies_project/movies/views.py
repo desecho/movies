@@ -95,12 +95,16 @@ def list(request, list, username=None):
         if 'mode' not in request.session:
             request.session['mode'] = 'full'
 
-    def get_list_data(records):
+    def get_record_movie_data(records):
         record_ids_and_movies = records.values_list('id', 'movie_id')
         movies = [x[1] for x in record_ids_and_movies]
         record_ids_and_movies_dict = {}
         for x in record_ids_and_movies:
             record_ids_and_movies_dict[x[0]] = x[1]
+        return (movies, record_ids_and_movies_dict)
+
+    def get_list_data(records):
+        movies, record_ids_and_movies_dict = get_record_movie_data(records)
         movie_ids_and_list_ids = Record.objects.filter(user=request.user, movie_id__in=movies).values_list('movie_id', 'list_id')
 
         movie_id_and_list_id_dict = {}
@@ -111,6 +115,28 @@ def list(request, list, username=None):
         for record_id in record_ids_and_movies_dict:
             list_data[record_id] = movie_id_and_list_id_dict.get(record_ids_and_movies_dict[record_id], 0)
         return list_data
+
+    def get_comments_and_ratings(records):
+        movies, record_ids_and_movies_dict = get_record_movie_data(records)
+        comments_and_ratings = Record.objects.filter(user__in=get_friends(request.user), list_id=1, movie_id__in=movies).values_list('movie_id', 'comment', 'rating')
+        comments_and_ratings_dict = {}
+        for x in comments_and_ratings:
+            if x[1] or x[2]:
+                if x[0] not in comments_and_ratings_dict:
+                    comments_and_ratings_dict[x[0]] = []
+                data = {}
+                if x[1]:
+                    data['comment'] = x[1]
+                if x[2]:
+                    data['rating'] = x[2]
+                data['avatar'] = x[3]
+                data['full_name'] = x[4] + ' ' + x[5]
+                data['username'] = x[6]
+                comments_and_ratings_dict[x[0]].append(data)
+        data = {}
+        for record_id in record_ids_and_movies_dict:
+            data[record_id] = comments_and_ratings_dict.get(record_ids_and_movies_dict[record_id], None)
+        return data
 
     def sort_records(records, sort):
         if sort == 'release_date':
@@ -151,16 +177,13 @@ def list(request, list, username=None):
         list_data = None
         movie_count =  get_movie_count(request.user.username)
 
-    # if not username and list == 'to-watch':
-    #     for record in records:
-    #         comments_and_ratings = {}
-    #         friends = get_friends(request.user)
-    #         comments_and_ratings[record.pk] = Record.objects.filter(user__in=friends, movie=record.movie)
-    # else:
-    #     comments_and_ratings = None
+    if not username and list == 'to-watch':
+        comments_and_ratings = get_comments_and_ratings(records)
+    else:
+        comments_and_ratings = None
     records = paginate(records, request.GET.get('page'), settings.RECORDS_ON_PAGE)
     return {'records': records,
-            #'comments_and_ratings': comments_and_ratings,
+            'reviews': comments_and_ratings,
             'list_id': List.objects.get(key_name=list).id,
             'anothers_account': anothers_account,
             'movie_count': movie_count,
