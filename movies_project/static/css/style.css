@@ -97,3 +97,8 @@ ul.nav li.dropdown:hover > ul.dropdown-menu{
 .navbar .dropdown-menu {
     margin-top: 0px;
 }
+/* nav dropdown on hover bootstrap fix */
+
+.small-poster {
+    width: 60px;
+}

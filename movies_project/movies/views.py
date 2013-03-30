@@ -175,12 +175,15 @@ def get_avatar(photo):
 def feed(request, list):
     date_to = datetime.today()
     date_from = date_to - relativedelta(days=settings.FEED_DAYS)
-    actions = ActionRecord.objects.filter(date__range=(date_from, date_to)).order_by('-pk').values('user__vk_profile__photo', 'user__username', 'user__first_name', 'user__last_name', 'action__name', 'movie__title', 'list__title', 'comment', 'rating', 'date')
+    actions = ActionRecord.objects.filter(date__range=(date_from, date_to)).order_by('-pk')
+    posters = [action.movie.poster_small_url for action in actions]
+    actions = actions.values('user__vk_profile__photo', 'user__username', 'user__first_name', 'user__last_name', 'action__name', 'movie__title', 'list__title', 'comment', 'rating', 'date')
     if list == 'friends':
         actions = actions.filter(user__in=get_friends(request.user))
     #else:
         #actions = actions.exclude(user=request.user)
     actions_output = []
+    i = 0
     for action in actions:
         a = {}
         a['avatar'] = get_avatar(action['user__vk_profile__photo'])
@@ -188,11 +191,13 @@ def feed(request, list):
         a['username'] = action['user__username']
         a['action'] = action['action__name']
         a['movie'] = action['movie__title']
+        a['movie_poster'] = posters[i]
         a['list'] = action['list__title']
         a['comment'] = action['comment']
         a['rating'] = action['rating']
         a['date'] = action['date']
         actions_output.append(a)
+        i += 1
     return {'actions': actions_output}
 
 
