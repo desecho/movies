@@ -130,13 +130,14 @@
                   <strong>Комментарий:</strong>
                   {% if not anothers_account %}
                     <textarea rows="2" cols="15" id="comment{{ record.id }}">{{ record.comment }}</textarea>
-                    <input type="button" class="btn" value="Сохранить" onclick="save_comment({{ record.id }})"><br>
+                    <button type="button" title="Сохранить" class="btn" onclick="save_comment({{ record.id }})"><i class="icon-save"></i></button>
+                    <br>
                   {% else %}
                     <p>{{ record.comment }}</p>
                   {% endif %}
                 </div>
                 {% if not anothers_account %}
-                  <input id="comment_area_button{{ record.id }}" type="button" class="btn comment" value="Добавить комментарий" onclick="toggle_comment_area({{ record.id }})" {% if record.comment %} style="display:  none "{% endif %} />
+                  <button id="comment_area_button{{ record.id }}"  type="button" title="Добавить комментарий" class="btn comment" onclick="toggle_comment_area({{ record.id }})" {% if record.comment %} style="display:  none "{% endif %}><i class="icon-comment"></i></button>
                 {% endif %}
                   <br>
               {% endifequal %}
@@ -163,11 +164,11 @@
           <div class="buttons">
           {% if not anothers_account %}
             {% ifequal list_id 2 %}
-              <input type="button" class="btn" value="Просмотрено" onclick="add_to_list({{ record.movie_id }}, 1, {{ record.id }})" />
+              <button type="button" title="Добавить в список &quot;Просмотрено&quot;" class="btn" onclick="add_to_list({{ record.movie_id }}, 1, {{ record.id }})"><i class="icon-eye-open"></i></button>
             {% endifequal %}
           {% else %}
-                <input type="button" class="btn" value="Просмотрено" onclick="add_to_list({{ record.movie_id }}, 1, {{ record.id }})" />
-                <input type="button" class="btn" value="К просмотру" onclick="add_to_list({{ record.movie_id }}, 2, {{ record.id }})" />
+                <button type="button" title="Добавить в список &quot;Просмотрено&quot;" class="btn" onclick="add_to_list({{ record.movie_id }}, 1, {{ record.id }})"><i class="icon-eye-open"></i></button>
+                <button type="button" title="Добавить в список &quot;К просмотру&quot;" class="btn" onclick="add_to_list({{ record.movie_id }}, 2, {{ record.id }})"><i class="icon-eye-close"></i></button>
           {% endif %}
           </div>
         </div>

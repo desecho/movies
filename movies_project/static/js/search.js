@@ -9,10 +9,13 @@ function displayMovie(movie) {
   if (movie.release_date) {
     html += '<strong>Дата выпуска:</strong> ' + movie.release_date;
   }
-  html += '</div><div class="buttons"><input type="button" class="btn" value="Просмотрено" onclick="add_to_list_from_db(' + movie.id +
-          ', 1)" /> <input class="btn" type="button" value="К просмотру" onclick="add_to_list_from_db(' + movie.id + ', 2)" /></div></div>';
+  html += '</div><div class="buttons"><button type="button" title="Добавить в список &quot;Просмотрено&quot;" class="btn" onclick="add_to_list_from_db(' + movie.id + ', 1)"><i class="icon-eye-open"></i></button><button type="button" title="Добавить в список &quot;К просмотру&quot;" class="btn" onclick="add_to_list_from_db(' + movie.id + ', 2)"><i class="icon-eye-close"></i></button></div></div>';
   $('#results').append(html);
 }
+
+
+
+
 
 function search_movie() {
   function isChecked(id) {

@@ -38,11 +38,13 @@ function set_viewed_icon(record_id, list_id) {
   }
   if (list_id == 1) {
     icon = 'open';
+    title = 'Просмотрено';
   }
   if (list_id == 2) {
     icon = 'close';
+    title = 'К просмотру';
   }
-  var html = '<i class="icon-eye-' + icon + '"></i>';
+  var html = '<i class="icon-eye-' + icon + '" title="' + title + '"></i>';
   $('#record' + record_id).children('.title').prepend(html);
 }
 

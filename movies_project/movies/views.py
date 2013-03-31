@@ -85,7 +85,7 @@ def recommendation(request):
         # exclude own records and include only friends' records
         records = Record.objects.exclude(user=request.user).filter(user__in=friends).select_related()
         # order records by user rating and by imdb rating
-        records = records.order_by('-rating', '-movie__imdb_rating')
+        records = records.order_by('-rating', '-movie__imdb_rating', '-movie__release_date')
         records = filter_movies_for_recommendation(records, request.user)
         return filter_duplicated_movies_and_limit(records)
 
@@ -146,7 +146,11 @@ def list(request, list, username=None):
         if sort == 'release_date':
             records = records.order_by('-movie__release_date')
         elif sort == 'rating':
-            records = records.order_by('-rating', '-movie__release_date')
+            if not username and list == 'to-watch':
+                # sorting is changing here because there is no user rating yet.
+                records = records.order_by('-movie__imdb_rating', '-movie__release_date')
+            else:
+                records = records.order_by('-rating', '-movie__release_date')
         else:
             records = records.order_by('-pk')
         return records
