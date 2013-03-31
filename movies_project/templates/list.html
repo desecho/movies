@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load bootstrap_pagination %}
-{% load list_functions %}
+{% load functions %}
 
 {% block content %}
 <script src="/static/libs/raty/jquery.raty.min.js"></script>
@@ -155,7 +155,6 @@
                       {% if review.rating %}<strong>Оценка:</strong> <div class="rating" data-rating="{{ review.rating }}"></div><br>{% endif %}
                       {% if review.comment %}<strong>Комментарий:</strong> {{ review.comment }}{% endif %}
                     </td>
-
                   </tr>
                 </table>
               {% endfor %}
