@@ -194,11 +194,10 @@ def get_movies_from_tmdb(query, type, options, user):
             '''Types - 1 - movie, 2 - actor, 3 - director
                for actor, director search - the first is used.'''
             if type == 1:
-                movies = tmdb3.searchMovie(query)
-                # try:
-                #     movies = tmdb3.searchMovie(query)
-                # except:
-                #     return -1
+                try:
+                    movies = tmdb3.searchMovie(query)
+                except:
+                    return -1
             else:
                 try:
                     result = tmdb3.searchPerson(query)
@@ -252,5 +251,7 @@ def get_movies_from_tmdb(query, type, options, user):
                 output['status'] = 1
                 output['movies'] = movies
             else:
+                output['status'] = 0
+        else:
                 output['status'] = 0
         return output
