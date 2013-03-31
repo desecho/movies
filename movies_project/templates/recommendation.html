@@ -1,6 +1,9 @@
 {% extends "base.html" %}
 {% block content %}
-
+{% load functions %}
+<script src="/static/libs/raty/jquery.raty.min.js"></script>
+<script src="/static/js/raty.js"></script>
+<script src="/static/js/raty_readonly.js"></script>
 <script>
   var url_ajax_add_to_list   = '{% url 'movies.views.ajax_add_to_list' %}';
   var url_ajax_download = '{% url 'movies.views.ajax_download' %}';
@@ -60,8 +63,22 @@
             <br>
             {# {% if record.movie.plot %} Описание: {{ record.movie.plot }}<br> {% endif %} #}
           </div>
-          <div class="clearfix"></div>
-          <br />
+          <div class="clearfix"></div><br>
+          {% if reviews|get:record.id %}
+            {% for review in reviews|get:record.id %}
+              <table class="table">
+                <tr>
+                  <td>
+                      <a href="/people/{{ review.username }}/watched"><img src="{{ review.avatar }}" alt="{{ review.full_name }}" title="{{ review.full_name }}"></a>
+                  </td>
+                  <td>
+                    {% if review.rating %}<strong>Оценка:</strong> <div class="rating" data-rating="{{ review.rating }}"></div><br>{% endif %}
+                    {% if review.comment %}<strong>Комментарий:</strong> {{ review.comment }}{% endif %}
+                  </td>
+                </tr>
+              </table>
+            {% endfor %}
+          {% endif %}
           <div class="buttons">
                 <input type="button" class="btn" value="Просмотрено" onclick="add_to_list({{ record.movie_id }}, 1, {{ record.id }})" />
                 <input type="button" class="btn" value="К просмотру" onclick="add_to_list({{ record.movie_id }}, 2, {{ record.id }})" />
