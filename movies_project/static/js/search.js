@@ -13,10 +13,6 @@ function displayMovie(movie) {
   $('#results').append(html);
 }
 
-
-
-
-
 function search_movie() {
   function isChecked(id) {
     if ($('#' + id + ':checked').val()) {
@@ -66,7 +62,6 @@ function add_to_list_from_db(movie_id, list_id) {
 
 function change_search_type(id) {
     var text;
-    var search_type;
     if (id == 1) {
         text = 'Фильм';
         search_type = 1;
