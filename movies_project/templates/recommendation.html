@@ -80,8 +80,8 @@
             {% endfor %}
           {% endif %}
           <div class="buttons">
-                <input type="button" class="btn" value="Просмотрено" onclick="add_to_list({{ record.movie_id }}, 1, {{ record.id }})" />
-                <input type="button" class="btn" value="К просмотру" onclick="add_to_list({{ record.movie_id }}, 2, {{ record.id }})" />
+                <button type="button" title="Добавить в список &quot;Просмотрено&quot;" class="btn" onclick="add_to_list({{ record.movie_id }}, 1, {{ record.id }})"><i class="icon-eye-open"></i></button>
+                <button type="button" title="Добавить в список &quot;К просмотру&quot;" class="btn" onclick="add_to_list({{ record.movie_id }}, 2, {{ record.id }})"><i class="icon-eye-close"></i></button>
           </div>
         </div>
     {% endfor %}
