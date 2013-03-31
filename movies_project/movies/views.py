@@ -207,12 +207,12 @@ def feed(request, list):
     date_to = datetime.today()
     date_from = date_to - relativedelta(days=settings.FEED_DAYS)
     actions = ActionRecord.objects.filter(date__range=(date_from, date_to)).order_by('-pk')
-    posters = [action.movie.poster_small_url for action in actions]
-    actions = actions.values('user__vk_profile__photo', 'user__username', 'user__first_name', 'user__last_name', 'action__name', 'movie__title', 'list__title', 'comment', 'rating', 'date')
     if list == 'friends':
         actions = actions.filter(user__in=get_friends(request.user))
     else:
         actions = actions.exclude(user=request.user)
+    posters = [action.movie.poster_small_url for action in actions]
+    actions = actions.values('user__vk_profile__photo', 'user__username', 'user__first_name', 'user__last_name', 'action__name', 'movie__title', 'list__title', 'comment', 'rating', 'date')
     actions_output = []
     i = 0
     for action in actions:
