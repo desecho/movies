@@ -35,22 +35,20 @@ The web-application to create movie lists ("watched" and "to watch"), to share t
 
 ##Installation instructions
 
-* Change the following variables in settings.py.
+* Change the following variables in settings.py:
     * DATABASES
-    * SECRET_KEY
     * TMDB_KEY
-    * BASE_PATH
-    * STATICFILES_DIRS
     * VK_APP_ID
     * VK_APP_SECRET
 
-You can generate SECRET_KEY using [Django Secret Key Generator](http://www.miniwebtool.com/django-secret-key-generator/). Insert your path to django admin static directory to STATICFILES_DIRS. It should be  something like '/usr/local/lib/python2.7/dist-packages/django/contrib/admin/static'. Make sure that the user running the server has write access to /cache/tmdb3.cache.
+Make sure that the user running the server has write access to /cache/tmdb3.cache.
 
 * Run
 ```
 python manage.py syncdb
 python manage.py collectstatic
 python manage.py loaddata vk-geo
+python manage.py shell
 ```
 
 * Import db.sql to your database
