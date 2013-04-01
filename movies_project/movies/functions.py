@@ -40,10 +40,11 @@ def filter_movies_for_recommendation(records, user):
 def add_movie_to_list(id, list_id, user):
     r = Record.objects.filter(movie_id=id, user=user)
     if r.exists():
-        if r[0].list_id != list_id:
+        r = r[0]
+        if r.list_id != list_id:
             ActionRecord(action_id=2, user=user, movie_id=id, list_id=list_id).save()
-            r[0].list_id = list_id
-            r[0].save()
+            r.list_id = list_id
+            r.save()
     else:
         r = Record(movie_id=id, list_id=list_id, user=user)
         r.save()
