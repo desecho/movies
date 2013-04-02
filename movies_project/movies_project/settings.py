@@ -95,6 +95,7 @@ try:
     from secret import SECRET_KEY
 except ImportError:
     def gen_secret_key():
+        here = lambda x: os.path.abspath(os.path.join(os.path.dirname(__file__), x))
         print "Django's SECRET_KEY not found, generating new."
         from random import choice
         secret_key = ''.join([choice('abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(-_=+)') for i in range(50)])
