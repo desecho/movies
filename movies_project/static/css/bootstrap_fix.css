@@ -5,3 +5,19 @@ body {
 .navbar .brand {
     margin-left: 0 !important;
 }
+
+/* nav dropdown on hover bootstrap fix */
+ul.nav li.dropdown:hover > ul.dropdown-menu{
+    display: block;
+}
+
+.navbar .dropdown-menu {
+    margin-top: 0px;
+}
+/* nav dropdown on hover bootstrap fix */
+
+/* bootstrap fix in feed in chrome */
+img {
+    max-width: none;
+}
+/* bootstrap fix in feed in chrome */

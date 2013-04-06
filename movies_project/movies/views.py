@@ -1,6 +1,6 @@
 # -*- coding: utf8 -*-
 
-from django.views.decorators.cache import cache_page
+#from django.views.decorators.cache import cache_page
 import json
 import urllib2
 from django.utils.http import urlquote
@@ -43,9 +43,16 @@ def get_record_movie_data(record_ids_and_movies):
         record_ids_and_movies_dict[x[0]] = x[1]
     return (movies, record_ids_and_movies_dict)
 
+
 def get_comments_and_ratings(record_ids_and_movies, user):
     movies, record_ids_and_movies_dict = get_record_movie_data(record_ids_and_movies)
-    comments_and_ratings = Record.objects.filter(user__in=get_friends(user), list_id=1, movie_id__in=movies).values_list('movie_id', 'comment', 'rating', 'user__vk_profile__photo', 'user__first_name', 'user__last_name', 'user__username')
+    comments_and_ratings = Record.objects.filter(
+        user__in=get_friends(user),
+        list_id=1,
+        movie_id__in=movies
+    ).values_list('movie_id', 'comment', 'rating', 'user__vk_profile__photo',
+                  'user__first_name', 'user__last_name', 'user__username')
+
     comments_and_ratings_dict = {}
     for x in comments_and_ratings:
         if x[1] or x[2]:
@@ -180,10 +187,10 @@ def list(request, list, username=None):
 
     if username:
         list_data = get_list_data(records)
-        movie_count =  get_movie_count(username)
+        movie_count = get_movie_count(username)
     else:
         list_data = None
-        movie_count =  get_movie_count(request.user.username)
+        movie_count = get_movie_count(request.user.username)
 
     if not username and list == 'to-watch':
         comments_and_ratings = get_comments_and_ratings(records.values_list('id', 'movie_id'), request.user)
@@ -196,6 +203,7 @@ def list(request, list, username=None):
             'anothers_account': anothers_account,
             'movie_count': movie_count,
             'list_data': json.dumps(list_data)}
+
 
 def get_avatar(photo):
     return photo or settings.VK_NO_IMAGE_SMALL
@@ -212,7 +220,9 @@ def feed(request, list):
     else:
         actions = actions.exclude(user=request.user)
     posters = [action.movie.poster_small_url for action in actions]
-    actions = actions.values('user__vk_profile__photo', 'user__username', 'user__first_name', 'user__last_name', 'action__name', 'movie__title', 'list__title', 'comment', 'rating', 'date')
+    actions = actions.values('user__vk_profile__photo', 'user__username', 'user__first_name',
+                             'user__last_name', 'action__name', 'movie__title', 'list__title',
+                             'comment', 'rating', 'date')
     actions_output = []
     i = 0
     for action in actions:
@@ -232,7 +242,7 @@ def feed(request, list):
     return {'actions': actions_output}
 
 
-@cache_page(settings.CACHE_TIMEOUT)
+#@cache_page(settings.CACHE_TIMEOUT)
 @render_to('people.html')
 @login_required
 def generic_people(request, users):
@@ -251,13 +261,13 @@ def generic_people(request, users):
     return {'users': users}
 
 
-@cache_page(settings.CACHE_TIMEOUT)
+#@cache_page(settings.CACHE_TIMEOUT)
 @login_required
 def people(request):
     return generic_people(request, User.objects.all().order_by('first_name'))
 
 
-@cache_page(settings.CACHE_TIMEOUT)
+#@cache_page(settings.CACHE_TIMEOUT)
 @login_required
 def friends(request):
     return generic_people(request, get_friends(request.user))
