@@ -86,18 +86,8 @@ label.error {
 }
 
 .feed {
-    width: 800px !important;
+    width: 745px !important;
 }
-
-/* nav dropdown on hover bootstrap fix */
-ul.nav li.dropdown:hover > ul.dropdown-menu{
-    display: block;
-}
-
-.navbar .dropdown-menu {
-    margin-top: 0px;
-}
-/* nav dropdown on hover bootstrap fix */
 
 .small-poster {
     width: 60px;
