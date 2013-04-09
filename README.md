@@ -43,12 +43,12 @@ The web-application to create movie lists ("watched" and "to watch"), to share t
 
 Make sure that the user running the server has write access to /cache/tmdb3.cache.
 
+* Insert your analytics code here if you'd like /static/js/analytics.js
 * Run
 ```
 python manage.py syncdb
 python manage.py collectstatic
 python manage.py loaddata vk-geo
-python manage.py shell
 ```
 
 * Import db.sql to your database
