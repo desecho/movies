@@ -3,6 +3,7 @@ tmdb3.cache
 movies_project/static/admin/
 movies_project/static/admin_tools/
 movies_project/movies_project/secret.py
+movies_project/static/js/analytics.js
 
 # C extensions
 *.so
