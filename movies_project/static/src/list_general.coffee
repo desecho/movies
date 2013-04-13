@@ -7,8 +7,7 @@ remove_record_from_page = (id) ->
 add_to_list = (movie_id, list_id, record_id) ->
   $.post(url_ajax_add_to_list,
     movie_id: movie_id
-    list_id: list_id,
-    (data) ->
+    list_id: list_id, (data) ->
       set_viewed_icon_and_remove_buttons(record_id, list_id)
   ).error ->
     displayError 'Ошибка добавления фильма в список.'
@@ -27,14 +26,14 @@ set_viewed_icon_and_remove_buttons = (record_id, list_id) ->
 set_viewed_icon = (record_id, list_id) ->
   if list_id is 0
     return
-  else if list_id  is 1
+  else if list_id is 1
     icon = 'open'
     title = 'Просмотрено'
   else if list_id is 2
     icon = 'close'
     title = 'К просмотру'
-  html = '<i class="icon-eye-' + icon + '" title="' + title + '"></i>'
-  $('#record' + record_id).children('.title').prepend(html)
+  html = """ <i class="icon-eye-#{ icon }" title="#{ title }"></i> """
+  $('#record' + record_id).children('.title').prepend html
 
 show_torrents = (query) ->
   get_torrents = (query) ->
@@ -45,11 +44,11 @@ show_torrents = (query) ->
       terabyte = gigabyte * 1024
       if (bytes >= 0) and (bytes < kilobyte)
         bytes + ' B'
-      else if (bytes >= kilobyte) and (bytes < megabyte)
+      else if bytes >= kilobyte and bytes < megabyte
         (bytes / kilobyte).toFixed(precision) + ' KB'
-      else if (bytes >= megabyte) and (bytes < gigabyte)
+      else if bytes >= megabyte and bytes < gigabyte
         (bytes / megabyte).toFixed(precision) + ' MB'
-      else if (bytes >= gigabyte) and (bytes < terabyte)
+      else if bytes >= gigabyte and bytes < terabyte
         (bytes / gigabyte).toFixed(precision) + ' GB'
       else if bytes >= terabyte
         (bytes / terabyte).toFixed(precision) + ' TB'
@@ -69,17 +68,22 @@ show_torrents = (query) ->
           html = '<ul>'
           i = 0
           while i < total_lists
-            html += '<li id="searchresult-' + i + '"><a href="' + json.items.list[i].uri + '" target="_blank">' +
-                    json.items.list[i].title + '</a> &#8593; ' + json.items.list[i].Seeds + ' &#8595; ' +
-                    json.items.list[i].leechers + '<br>' + json.items.list[i].tracker + ' &mdash; ' +
-                    bytes_to_size(json.items.list[i].size, 2) + ' &mdash; ' + json.items.list[i].regtime + '</li>'
+            item = json.items.list[i]
+            size = bytes_to_size(item.size, 2)
+            time_of_registration = item.regtime
+            html += """
+                    <li id="searchresult-#{ i }">
+                      <a href="#{ item.uri }" target="_blank">#{ item.title }</a> ↑ #{ item.Seeds } ↓ #{ item.leechers }<br>
+                      #{ item.tracker } — #{ size } — #{ time_of_registration }
+                    </li>
+                    """
             i++
           html += '</ul>'
-          $("#torrents").html(html)
+          $("#torrents").html html
       ,
       async: false
     ).error ->
       displayError 'Ошибка поиска торрентов.'
-  get_torrents(query)
-  $('#myModal').modal('toggle')
+  get_torrents query
+  $('#myModal').modal 'toggle'
   undefined

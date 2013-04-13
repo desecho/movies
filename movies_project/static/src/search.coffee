@@ -3,19 +3,27 @@ search_type = 1
 jQuery.validator.setDefaults success: 'valid'
 
 displayMovie = (movie) ->
-  html = '<div class="movie" id="movie' + movie.id + '"><div class="poster"><img src="' + movie.poster + '" alt="' + movie.title + ' poster"/></div>
-              <div class="title">' + movie.title + '</div>' + '<div class="details">'
+  html = """
+            <div class="movie" id="movie#{ movie.id }">
+            <div class="poster"><img src="#{ movie.poster }" alt="#{ movie.title } poster"/></div>
+            <div class="title">#{ movie.title }</div>
+            <div class="details">
+         """
   if movie.release_date
-    html += '<strong>Дата выпуска:</strong> ' + movie.release_date + '</div>
-             <div class="buttons"><button type="button" title="Добавить в список &quot;Просмотрено&quot;"
-             class="btn" onclick="add_to_list_from_db(' + movie.id + ', 1)"><i class="icon-eye-open"></i></button>
-             <button type="button" title="Добавить в список &quot;К просмотру&quot;" class="btn" onclick="add_to_list_from_db(' + movie.id + ', 2)">
-             <i class="icon-eye-close"></i></button></div></div>'
+    html += """
+            <strong>Дата выпуска:</strong> #{ movie.release_date }
+            </div>
+            <div class="buttons">
+              <button type="button" title="Добавить в список \"Просмотрено\"" class="btn" onclick="add_to_list_from_db(#{ movie.id }, 1)"><i class="icon-eye-open"></i></button>
+              <button type="button" title="Добавить в список \"К просмотру\"" class="btn" onclick="add_to_list_from_db(#{ movie.id }, 2)"><i class="icon-eye-close"></i></button>
+            </div>
+            </div>
+            """
   $('#results').append(html)
 
 search_movie = ->
   isChecked = (id) ->
-    if $('#' + id + ':checked').val()
+    if $("##{ id }:checked").val()
       1
     else
       0
@@ -36,7 +44,7 @@ search_movie = ->
         jQuery.each(data.movies,
           (i, movie) ->
             displayMovie(movie)
-        );
+        )
       else if data.status is 0
         $('#results').html 'Ничего не найдено.'
       else
@@ -54,7 +62,7 @@ add_to_list_from_db = (movie_id, list_id) ->
       else if data.status is -2
         displayError 'Ошибка! Код #2.'
       else
-        $('#movie' + movie_id).fadeOut('fast',
+        $("#movie #{ movie_id }").fadeOut('fast',
           ->
             $(this).remove()
         )
@@ -71,7 +79,8 @@ change_search_type = (id) ->
   if id is 3
     text = 'Режиссёр'
     search_type = 3
-  $('#search_type_button').html(text + ' <span class="caret"></span>')
+  html = """ #{ text } <span class="caret"></span> """
+  $('#search_type_button').html html
 
 $ ->
   $('#query').focus()

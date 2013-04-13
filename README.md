@@ -6,13 +6,14 @@ The web-application to create movie lists ("watched" and "to watch"), to share t
 
 * [Python v2.6.5+](http://www.python.org)
 * [Django v1.5](http://djangoproject.com)
-* [pytmdb3 v0.6.16+](https://github.com/wagnerrp/pytmdb3)
-* [vkontakte](https://bitbucket.org/kmike/vkontakte/src)
 * [django-annoying v0.7.7+](https://github.com/skorokithakis/django-annoying)
-* [django-vkontakte-iframe](https://bitbucket.org/kmike/django-vkontakte-iframe/)
 * [django-simple-menu](https://github.com/fatbox/django-simple-menu)
 * [django-bootstrap-pagination](https://github.com/jmcclell/django-bootstrap-pagination)
+* [pytmdb3 v0.6.16+](https://github.com/wagnerrp/pytmdb3)
+* [vkontakte](https://bitbucket.org/kmike/vkontakte/src)
+* [django-vkontakte-iframe](https://bitbucket.org/kmike/django-vkontakte-iframe/)
 * [django-admin-tools](https://bitbucket.org/izi/django-admin-tools)
+* [CoffeeScript v1.6.1](http://coffeescript.org)
 
 ##Required API Keys
 * [TMDb](http://www.themoviedb.org/)
@@ -52,9 +53,10 @@ python manage.py loaddata vk-geo
 ```
 
 * Import db.sql to your database.
-* Use the following command to recompile coffeescript.
+
+* Run the following command to compile coffeescript.
 ```
-coffee -bo js/ -cw src/
+coffee -bo movies_project/static/js/ -cw movies_project/static/src/
 ```
 
-* Delete the /static/src folder in production
+* Delete movies_project/static/src folder before deployment.
