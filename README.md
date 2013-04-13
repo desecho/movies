@@ -56,3 +56,5 @@ python manage.py loaddata vk-geo
 ```
 coffee -bo js/ -cw src/
 ```
+
+* Delete the /static/src folder in production
