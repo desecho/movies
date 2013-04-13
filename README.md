@@ -43,7 +43,7 @@ The web-application to create movie lists ("watched" and "to watch"), to share t
 
 Make sure that the user running the server has write access to /cache/tmdb3.cache.
 
-* Insert your analytics code here if you'd like /static/js/analytics.js
+* Insert your analytics code to /static/js/analytics.js if you'd like
 * Run
 ```
 python manage.py syncdb
@@ -51,4 +51,8 @@ python manage.py collectstatic
 python manage.py loaddata vk-geo
 ```
 
-* Import db.sql to your database
+* Import db.sql to your database.
+* Use the following command to recompile coffeescript.
+```
+coffee -bo js/ -cw src/
+```
