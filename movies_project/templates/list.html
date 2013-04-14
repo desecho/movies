@@ -31,6 +31,8 @@
   var url_ajax_add_to_list   = '{% url 'movies.views.ajax_add_to_list' %}';
   var url_ajax_save_comment  = '{% url 'movies.views.ajax_save_comment' %}';
   var url_ajax_download = '{% url 'movies.views.ajax_download' %}';
+  var url_ajax_upload_photo_to_wall = '{% url 'movies.views.ajax_upload_photo_to_wall' %}';
+
 </script>
 <script src="/static/js/list_general.js"></script>
 <script src="/static/js/raty.js"></script>
@@ -80,7 +82,7 @@
 <div id="results" class="results">
   {% if records %}
     {% for record in records %}
-      <div id="record{{ record.id }}" data-id="{{ record.id }}" class="movie">
+      <div id="record{{ record.id }}" data-id="{{ record.id }}" data-title="{{ record.movie.title }}" class="movie">
           <div class="title">
            {{ record.movie.title }} {% if not anothers_account %}<a href="javascript:remove_record({{ record.id }})" title="Удалить"><i class="icon-trash"></i></a> {% endif %}
            <a href="javascript:show_torrents('{{ record.movie.torrent_search_title }}')" title="Скачать"><i class="icon-download-alt"></i></a>
@@ -137,7 +139,8 @@
                   {% endif %}
                 </div>
                 {% if not anothers_account %}
-                  <button id="comment_area_button{{ record.id }}"  type="button" title="Добавить комментарий" class="btn comment-button" onclick="toggle_comment_area({{ record.id }})" {% if record.comment %} style="display:  none "{% endif %}><i class="icon-comment"></i></button>
+                  <button id="comment_area_button{{ record.id }}" type="button" title="Добавить комментарий" class="btn comment-button" onclick="toggle_comment_area({{ record.id }})" {% if record.comment %} style="display: none "{% endif %}><i class="icon-comment"></i></button>
+                  <button class="wall-post btn" type="button" title="Отправить на стену" onclick="post_to_wall({{ record.id }})"><i class="icon-share"></i></button>
                 {% endif %}
                   <br>
               {% endifequal %}

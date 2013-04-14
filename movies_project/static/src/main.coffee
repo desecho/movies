@@ -31,4 +31,4 @@ $.ajaxSetup({
 # CSRF handling for Django
 
 $.jGrowl.defaults.closerTemplate = '<div>Закрыть все уведомления</div>'
-displayError = (message) -> $.jGrowl(message)
+display_message = (message) -> $.jGrowl(message)

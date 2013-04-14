@@ -65,6 +65,13 @@ class Movie(models.Model):
             url = settings.NO_POSTER_IMAGE_URL
         return url
 
+    def poster_huge_url(self):
+        if self.poster:
+            url = self.poster_url(settings.POSTER_SIZE_HUGE)
+        else:
+            url = settings.NO_POSTER_IMAGE_URL
+        return url
+
     def torrent_search_title(self):
         title = self.title.replace("'", r"\'") + ' '
         if self.release_date:
