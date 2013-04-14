@@ -18,14 +18,14 @@ change_rating = (id, rating, element) ->
       element.attr('data-rating', rating)
   ).error ->
     revert_to_previous_rating(element)
-    display_message 'Ошибка добавления оценки.'
+    display_message 'Ошибка добавления оценки'
 
 remove_record = (id) ->
   $.post(url_ajax_remove_record, {id: id},
     (data) ->
       remove_record_from_page(id)
   ).error ->
-    display_message 'Ошибка добавления фильма.'
+    display_message 'Ошибка добавления фильма'
   undefined
 
 switch_mode = (value) ->
@@ -57,7 +57,7 @@ apply_settings = (settings, reload = true) ->
       if reload
         location.reload()
   ).error ->
-    display_message 'Ошибка применения настройки.'
+    display_message 'Ошибка применения настройки'
 
 save_comment = (id) ->
   comment = $('#comment' + id).val()
@@ -66,7 +66,7 @@ save_comment = (id) ->
       if not comment
         toggle_comment_area(id)
   ).error ->
-    display_message 'Ошибка сохранения комментария.'
+    display_message 'Ошибка сохранения комментария'
 
 toggle_comment_area = (id) ->
   $('#comment_area' + id).toggle()
@@ -133,6 +133,8 @@ post_to_wall = (id) ->
           error_code = data.error.error_code
           if error_code isnt 10007
             display_message 'Ошибка публикации на стену #' + error_code
+        else
+          display_message 'Запись отправлена на стену'
     )
 
   save_wall_photo = (response) ->
@@ -148,7 +150,7 @@ post_to_wall = (id) ->
       (data) ->
          save_wall_photo($.parseJSON(data.response))
     ).error ->
-      display_message 'Ошибка загрузки изображения.'
+      display_message 'Ошибка загрузки изображения'
 
   get_wall_upload_server_and_upload_photo_and_post_to_wall = ->
     VK.api('photos.getWallUploadServer', (data) ->
@@ -162,4 +164,4 @@ post_to_wall = (id) ->
   if rating
     get_wall_upload_server_and_upload_photo_and_post_to_wall()
   else
-    display_message 'Поставьте оценку фильму.'
+    display_message 'Поставьте оценку фильму'

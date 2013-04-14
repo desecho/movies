@@ -45,11 +45,11 @@ search_movie = ->
             displayMovie(movie)
         )
       else if data.status is 0
-        $('#results').html 'Ничего не найдено.'
+        $('#results').html 'Ничего не найдено'
       else
-        display_message 'Ошибка поиска.'
+        display_message 'Ошибка поиска'
   ).error ->
-    display_message 'Ошибка поиска.'
+    display_message 'Ошибка поиска'
 
 add_to_list_from_db = (movie_id, list_id) ->
   $.post(url_ajax_add_to_list_from_db,
@@ -57,16 +57,16 @@ add_to_list_from_db = (movie_id, list_id) ->
     list_id: list_id,
     (data) ->
       if data.status is -1
-        display_message 'Ошибка! Код #1.'
+        display_message 'Ошибка! Код #1'
       else if data.status is -2
-        display_message 'Ошибка! Код #2.'
+        display_message 'Ошибка! Код #2'
       else
         $('#movie' + movie_id).fadeOut('fast',
           ->
             $(this).remove()
         )
   ).error ->
-    display_message 'Ошибка добавления фильма.'
+    display_message 'Ошибка добавления фильма'
 
 change_search_type = (id) ->
   if id is 1
