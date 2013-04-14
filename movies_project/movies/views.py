@@ -159,7 +159,7 @@ def list(request, list, username=None):
             else:
                 records = records.order_by('-rating', '-movie__release_date')
         else:
-            records = records.order_by('-pk')
+            records = records.order_by('-date')
         return records
 
     def get_records():

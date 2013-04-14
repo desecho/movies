@@ -5,6 +5,7 @@ import urllib2
 import json
 import tmdb3
 from operator import itemgetter
+from datetime import datetime
 
 tmdb3.set_key(settings.TMDB_KEY)
 tmdb3.set_cache(filename=settings.TMDB_CACHE_PATH)
@@ -44,6 +45,7 @@ def add_movie_to_list(id, list_id, user):
         if r.list_id != list_id:
             ActionRecord(action_id=2, user=user, movie_id=id, list_id=list_id).save()
             r.list_id = list_id
+            r.date = datetime.today()
             r.save()
     else:
         r = Record(movie_id=id, list_id=list_id, user=user)
