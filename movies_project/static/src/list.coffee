@@ -123,7 +123,7 @@ post_to_wall = (id) ->
                  Моя оценка - #{ rating_post }
              """
       if comment
-        text += "\nМой комментарий - #{ comment }"
+        text += "\n #{ comment }"
       text
 
     VK.api('wall.post',
