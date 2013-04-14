@@ -6,6 +6,7 @@ The web-application to create movie lists ("watched" and "to watch"), to share t
 
 * [Python v2.6.5+](http://www.python.org)
 * [Django v1.5](http://djangoproject.com)
+* [CoffeeScript v1.6.1](http://coffeescript.org)
 * [django-annoying v0.7.7+](https://github.com/skorokithakis/django-annoying)
 * [django-simple-menu](https://github.com/fatbox/django-simple-menu)
 * [django-bootstrap-pagination](https://github.com/jmcclell/django-bootstrap-pagination)
@@ -13,7 +14,7 @@ The web-application to create movie lists ("watched" and "to watch"), to share t
 * [vkontakte](https://bitbucket.org/kmike/vkontakte/src)
 * [django-vkontakte-iframe](https://bitbucket.org/kmike/django-vkontakte-iframe/)
 * [django-admin-tools](https://bitbucket.org/izi/django-admin-tools)
-* [CoffeeScript v1.6.1](http://coffeescript.org)
+* [poster 0.8.1](https://pypi.python.org/pypi/poster/)
 
 ##Required API Keys
 * [TMDb](http://www.themoviedb.org/)
