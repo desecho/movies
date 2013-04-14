@@ -44,7 +44,7 @@ The web-application to create movie lists ("watched" and "to watch"), to share t
 
 Make sure that the user running the server has write access to /cache/tmdb3.cache.
 
-* Insert your analytics code to /static/js/analytics.js if you'd like
+* Insert your analytics code to movies_project/static/js/analytics.js if you'd like
 * Run
 ```
 python manage.py syncdb
