@@ -1,7 +1,11 @@
 # -*- coding: utf8 -*-
 
 #from django.views.decorators.cache import cache_page
+import tempfile
+import os
 import json
+from poster.encode import multipart_encode
+from poster.streaminghttp import register_openers
 import urllib2
 from django.utils.http import urlquote
 from django.http import HttpResponse
@@ -365,4 +369,35 @@ def ajax_add_to_list(request):
             movie_id = POST.get('movie_id')
             list_id = POST.get('list_id')
             add_movie_to_list(movie_id, list_id, request.user)
+    return HttpResponse()
+
+
+@ajax_request
+def ajax_upload_photo_to_wall(request):
+    def get_filepath(record_id):
+        movie = Record.objects.get(pk=record_id).movie
+        poster_url = movie.poster_huge_url()
+        file_contents = urllib2.urlopen(poster_url).read()
+        path = tempfile.mkstemp()[1]
+        file = open(path, 'w')
+        file.write(file_contents)
+        file.close()
+        path_jpg = path + '.jpg'
+        os.chmod(path, 0666)
+        os.rename(path, path_jpg)
+        return path_jpg
+
+    def upload_file(url, filepath):
+        register_openers()
+        datagen, headers = multipart_encode({'photo': open(filepath, 'rb')})
+        request = urllib2.Request(url, datagen, headers)
+        response = urllib2.urlopen(request).read()
+        return response
+
+    if request.is_ajax() and request.method == 'POST':
+        POST = request.POST
+        if 'url' in POST and 'record_id' in POST:
+            filepath = get_filepath(POST.get('record_id'))
+            response = upload_file(POST.get('url'), filepath)
+            return {'response': response}
     return HttpResponse()

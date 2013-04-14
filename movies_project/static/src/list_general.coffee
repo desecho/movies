@@ -10,7 +10,7 @@ add_to_list = (movie_id, list_id, record_id) ->
     list_id: list_id, (data) ->
       set_viewed_icon_and_remove_buttons(record_id, list_id)
   ).error ->
-    displayError 'Ошибка добавления фильма в список.'
+    display_message 'Ошибка добавления фильма в список.'
 
 check_if_no_records = ->
   if not $('.movie').length
@@ -83,7 +83,7 @@ show_torrents = (query) ->
       ,
       async: false
     ).error ->
-      displayError 'Ошибка поиска торрентов.'
+      display_message 'Ошибка поиска торрентов.'
   get_torrents query
   $('#myModal').modal 'toggle'
   undefined

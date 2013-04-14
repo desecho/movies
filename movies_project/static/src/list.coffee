@@ -18,14 +18,14 @@ change_rating = (id, rating, element) ->
       element.attr('data-rating', rating)
   ).error ->
     revert_to_previous_rating(element)
-    displayError 'Ошибка добавления оценки.'
+    display_message 'Ошибка добавления оценки.'
 
 remove_record = (id) ->
   $.post(url_ajax_remove_record, {id: id},
     (data) ->
       remove_record_from_page(id)
   ).error ->
-    displayError 'Ошибка добавления фильма.'
+    display_message 'Ошибка добавления фильма.'
   undefined
 
 switch_mode = (value) ->
@@ -57,7 +57,7 @@ apply_settings = (settings, reload = true) ->
       if reload
         location.reload()
   ).error ->
-    displayError 'Ошибка применения настройки.'
+    display_message 'Ошибка применения настройки.'
 
 save_comment = (id) ->
   comment = $('#comment' + id).val()
@@ -66,7 +66,7 @@ save_comment = (id) ->
       if not comment
         toggle_comment_area(id)
   ).error ->
-    displayError 'Ошибка сохранения комментария.'
+    display_message 'Ошибка сохранения комментария.'
 
 toggle_comment_area = (id) ->
   $('#comment_area' + id).toggle()
@@ -74,14 +74,14 @@ toggle_comment_area = (id) ->
   $('#comment' + id).focus()
 
 activate_mode_minimal = ->
-  $('.poster, .comment, .comment-button, .release_date_label, .rating_label').hide()
+  $('.poster, .comment, .comment-button, .release_date_label, .rating_label, .wall-post').hide()
   $('.details, .review').css('display', 'inline')
   $('.review').css('padding-top', '0')
   $('.release_date, .imdb_rating').css({float: 'right', 'margin-right': '10px'})
   $('.movie').css({'padding-top': '0', 'margin-top': '7px', 'min-height': 'auto'})
 
 disactivate_mode_minimal = ->
-  $('.poster, .comment-button, .release_date_label, .rating_label').show()
+  $('.poster, .comment-button, .release_date_label, .rating_label, .wall-post').show()
   $('.details, .imdb_rating, .review, .release_date').css('display', '')
   $('.review').css('padding-top', '10px')
   $('.release_date, .imdb_rating').css({float: '', 'margin-right': '0'})
@@ -108,3 +108,58 @@ $ ->
   if recommendation
     $('#button_recommendation').button('toggle')
   set_viewed_icons_and_remove_buttons()
+
+post_to_wall = (id) ->
+  post = (photo) ->
+    create_wall_post = ->
+      title = $('#record' + id).attr('data-title')
+      comment = $('#comment' + id).html()
+      rating_post = raty_settings['hints'][rating - 1]
+      if rating > 2
+        text = 'Рекомендую посмотреть'
+      else
+        text = 'Не рекомендую смотреть'
+      text += """ "#{ title }".
+                 Моя оценка - #{ rating_post }
+             """
+      if comment
+        text += "\nМой комментарий - #{ comment }"
+      text
+
+    VK.api('wall.post',
+      message: create_wall_post()
+      attachments: photo, (data) ->
+        if data.error
+          error_code = data.error.error_code
+          if error_code isnt 10007
+            display_message 'Ошибка публикации на стену #' + error_code
+    )
+
+  save_wall_photo = (response) ->
+    VK.api('photos.saveWallPhoto', response, (data) ->
+      if data.error
+        display_message 'Ошибка сохранения изображения на стену #' + data.error.error_code
+      else
+        post(data.response[0].id)
+    )
+
+  upload_photo_to_wall = (url) ->
+    $.post(url_ajax_upload_photo_to_wall, {url: url, record_id: id},
+      (data) ->
+         save_wall_photo($.parseJSON(data.response))
+    ).error ->
+      display_message 'Ошибка загрузки изображения.'
+
+  get_wall_upload_server_and_upload_photo_and_post_to_wall = ->
+    VK.api('photos.getWallUploadServer', (data) ->
+      if data.error
+        display_message 'Ошибка получения сервера загрузки на стену #' + data.error.error_code
+      else
+        upload_photo_to_wall(data.response.upload_url)
+    )
+
+  rating = parseInt($('#record' + id).children('.details').children('.review').children('.rating').attr('data-rating'))
+  if rating
+    get_wall_upload_server_and_upload_photo_and_post_to_wall()
+  else
+    display_message 'Поставьте оценку фильму.'
