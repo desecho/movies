@@ -38,8 +38,7 @@ search_movie = ->
   $.post(url_ajax_search_movie,
     query: $('#query').val()
     type: search_type.toString()
-    options: options,
-    ->
+    options: options, (data) ->
       if data.status is 1
         jQuery.each(data.movies,
           (i, movie) ->
@@ -62,7 +61,7 @@ add_to_list_from_db = (movie_id, list_id) ->
       else if data.status is -2
         displayError 'Ошибка! Код #2.'
       else
-        $("#movie #{ movie_id }").fadeOut('fast',
+        $('#movie' + movie_id).fadeOut('fast',
           ->
             $(this).remove()
         )
