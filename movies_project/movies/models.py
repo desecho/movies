@@ -29,6 +29,7 @@ class Movie(models.Model):
     imdb_rating = models.DecimalField('IMDB рейтинг', max_digits=2, decimal_places=1, null=True)
     poster = models.URLField('постер', max_length=255, null=True)
     release_date = models.DateField('дата выпуска', null=True)
+    runtime = models.TimeField('длительность', null=True)
     homepage = models.URLField('сайт', null=True)
     trailers = JSONField('трейлеры', null=True)
 
