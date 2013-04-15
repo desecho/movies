@@ -14,7 +14,13 @@ class Command(BaseCommand):
             runtime = imdb_data.get('Runtime')
             print(runtime)
             if runtime != 'N/A':
-                runtime = datetime.strptime(runtime, '%H h %M min')
+                try:
+                    runtime = datetime.strptime(runtime, '%H h %M min')
+                except:
+                    try:
+                        runtime = datetime.strptime(runtime, '%H h')
+                    except:
+                        runtime = datetime.strptime(runtime, '%M min')
                 print(runtime)
                 return runtime
 
