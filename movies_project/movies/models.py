@@ -18,7 +18,9 @@ class List(models.Model):
 
 
 class Movie(models.Model):
-    title = models.CharField('название', max_length=255)
+    title = models.CharField('оригинальное название', max_length=255)
+    title_ru = models.CharField('название', max_length=255)
+    overview = models.TextField('описание', null=True)
     plot = models.TextField('описание', null=True)
     director = models.CharField('режиссёр', max_length=255, null=True)
     writer = models.CharField('сценарист', max_length=255, null=True)
