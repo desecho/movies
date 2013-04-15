@@ -5,7 +5,7 @@ import tmdb3
 
 tmdb3.set_key(settings.TMDB_KEY)
 tmdb3.set_cache(filename=settings.TMDB_CACHE_PATH)
-tmdb3.set_locale('ru', 'ru')
+tmdb3.set_locale(settings.LANGUAGE_CODE, settings.LANGUAGE_CODE)
 
 class Command(BaseCommand):
     help = 'Gets russian title and overview'
