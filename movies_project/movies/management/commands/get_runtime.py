@@ -18,7 +18,7 @@ class Command(BaseCommand):
                 print(runtime)
                 return runtime
 
-        for movie in Movie.objects.all()[:5]:
+        for movie in Movie.objects.all():
             print (movie.pk)
             runtime = get_runtime(movie.imdb_id)
             movie.runtime = runtime
