@@ -23,11 +23,11 @@
     {% for record in records %}
       <div id="record{{ record.id }}" data-id="{{ record.id }}" class="movie">
           <div class="title">
-           {{ record.movie.title }}
+           {{ record.movie.title_ru }}
            <a href="javascript:show_torrents('{{ record.movie.torrent_search_title }}')" title="Скачать"><i class="icon-download-alt"></i></a>
          </div>
           <div class="poster">
-              <img src="{{ record.movie.poster_big_url }}" alt="{{ record.movie.title }} poster"/>
+              <img src="{{ record.movie.poster_big_url }}" alt="{{ record.movie.title_ru }} poster"/>
           </div>
           <div class="details">
             {% if record.movie.release_date %}<div class="release_date" title="Дата выпуска"><strong class="release_date_label">Дата:</strong> {{ record.movie.release_date|date:'d.m.y' }}</div>{% endif %}

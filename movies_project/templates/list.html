@@ -82,13 +82,13 @@
 <div id="results" class="results">
   {% if records %}
     {% for record in records %}
-      <div id="record{{ record.id }}" data-id="{{ record.id }}" data-title="{{ record.movie.title }}" class="movie">
+      <div id="record{{ record.id }}" data-id="{{ record.id }}" data-title="{{ record.movie.title_ru }}" class="movie">
           <div class="title">
-           {{ record.movie.title }} {% if not anothers_account %}<a href="javascript:remove_record({{ record.id }})" title="Удалить"><i class="icon-trash"></i></a> {% endif %}
+           {{ record.movie.title_ru }} {% if not anothers_account %}<a href="javascript:remove_record({{ record.id }})" title="Удалить"><i class="icon-trash"></i></a> {% endif %}
            <a href="javascript:show_torrents('{{ record.movie.torrent_search_title }}')" title="Скачать"><i class="icon-download-alt"></i></a>
          </div>
           <div class="poster">
-              <img src="{% ifequal request.session.mode 'full' %}{{ record.movie.poster_big_url }}{% else %}{{ record.movie.poster_small_url }}{% endifequal %}" alt="{{ record.movie.title }} poster"/>
+              <img src="{% ifequal request.session.mode 'full' %}{{ record.movie.poster_big_url }}{% else %}{{ record.movie.poster_small_url }}{% endifequal %}" alt="{{ record.movie.title_ru }} poster"/>
           </div>
           <div class="details">
             {% if record.movie.release_date %}<div class="release_date" title="Дата выпуска"><strong class="release_date_label">Дата:</strong> {{ record.movie.release_date|date:'d.m.y' }}</div>{% endif %}
@@ -99,6 +99,7 @@
                 {% if record.movie.genre %} <strong>Жанр:</strong> {{ record.movie.genre }}<br> {% endif %}
                 {% if record.movie.actors %} <strong>Актеры:</strong> {{ record.movie.actors }}<br> {% endif %}
                 {% if record.movie.runtime %} <strong>Время:</strong> {{ record.movie.runtime|date:'H:i' }}<br> {% endif %}
+                {% if record.movie.overview %} <strong>Описание:</strong> {{ record.movie.overview }}<br> {% endif %}
                 {% if record.movie.has_trailers %} <strong>Трейлеры:</strong><br>
                   <div class="trailers">
                   {% if record.movie.trailers.youtube %}

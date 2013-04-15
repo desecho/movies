@@ -9,7 +9,7 @@ from datetime import datetime
 
 tmdb3.set_key(settings.TMDB_KEY)
 tmdb3.set_cache(filename=settings.TMDB_CACHE_PATH)
-
+tmdb3.set_locale(settings.LANGUAGE_CODE, settings.LANGUAGE_CODE)
 
 def get_movie_id_from_tmdb_from_imdb_id(id):
     try:
@@ -72,6 +72,20 @@ def add_to_list_from_db(movie_id, list_id, user):
             def process_imdb_data(data):
                 if data != 'N/A':
                     return data
+
+            def get_runtime(runtime):
+                if runtime:
+                    try:
+                        runtime = datetime.strptime(runtime, '%H h %M min')
+                    except:
+                        try:
+                            runtime = datetime.strptime(runtime, '%H h')
+                        except:
+                            try:
+                                runtime = datetime.strptime(runtime, '%M min')
+                            except:
+                                return
+                    return runtime
             try:
                 response = urllib2.urlopen('http://www.imdbapi.com/?i=%s' % id)
             except:
@@ -84,7 +98,8 @@ def add_to_list_from_db(movie_id, list_id, user):
                          'director': process_imdb_data(imdb_data.get('Director')),
                          'actors': process_imdb_data(imdb_data.get('Actors')),
                          'genre': process_imdb_data(imdb_data.get('Genre')),
-                         'imdb_rating': process_imdb_data(imdb_data.get('imdbRating'))}
+                         'imdb_rating': process_imdb_data(imdb_data.get('imdbRating')),
+                         'runtime': get_runtime(process_imdb_data(imdb_data.get('Runtime')))}
                 return movie
 
         def get_movie_from_tmdb(id):
@@ -126,6 +141,8 @@ def add_to_list_from_db(movie_id, list_id, user):
                 'poster': get_poster(result.poster),
                 'homepage': result.homepage,
                 'trailers': get_trailers(result),
+                'title_ru': result.title,
+                'overview': result.overview,
             }
             return movie
         movie_tmdb = get_movie_from_tmdb(id)
@@ -237,7 +254,9 @@ def get_movies_from_tmdb(query, type, options, user):
                         'id': result.id,
                         'release_date': result.releasedate,
                         'popularity': result.popularity,                    # for popularity sorting
-                        'title': result.originaltitle,
+                        # 2DO create an option for original titles
+                        #'title': result.originaltitle,
+                        'title': result.title,
                         'poster': get_posterUrl(result.poster),
                     }
                     movies.append(movie)

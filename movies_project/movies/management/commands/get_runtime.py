@@ -12,7 +12,6 @@ class Command(BaseCommand):
             html = urllib2.urlopen("http://www.imdbapi.com/?i=%s" % id).read()
             imdb_data = json.loads(html)
             runtime = imdb_data.get('Runtime')
-            print(runtime)
             if runtime != 'N/A':
                 try:
                     runtime = datetime.strptime(runtime, '%H h %M min')
@@ -20,12 +19,13 @@ class Command(BaseCommand):
                     try:
                         runtime = datetime.strptime(runtime, '%H h')
                     except:
-                        runtime = datetime.strptime(runtime, '%M min')
-                print(runtime)
+                        try:
+                            runtime = datetime.strptime(runtime, '%M min')
+                        except:
+                            return
                 return runtime
 
         for movie in Movie.objects.all():
-            print (movie.pk)
             runtime = get_runtime(movie.imdb_id)
             movie.runtime = runtime
             movie.save()

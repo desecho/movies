@@ -225,7 +225,7 @@ def feed(request, list):
         actions = actions.exclude(user=request.user)
     posters = [action.movie.poster_small_url for action in actions]
     actions = actions.values('user__vk_profile__photo', 'user__username', 'user__first_name',
-                             'user__last_name', 'action__name', 'movie__title', 'list__title',
+                             'user__last_name', 'action__name', 'movie__title_ru', 'list__title',
                              'comment', 'rating', 'date')
     actions_output = []
     i = 0
@@ -235,7 +235,7 @@ def feed(request, list):
         a['full_name'] = action['user__first_name'] + ' ' + action['user__last_name']
         a['username'] = action['user__username']
         a['action'] = action['action__name']
-        a['movie'] = action['movie__title']
+        a['movie'] = action['movie__title_ru']
         a['movie_poster'] = posters[i]
         a['list'] = action['list__title']
         a['comment'] = action['comment']
