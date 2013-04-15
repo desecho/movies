@@ -98,6 +98,7 @@
                 {% if record.movie.writer %} <strong>Сценарист:</strong> {{ record.movie.writer }}<br> {% endif %}
                 {% if record.movie.genre %} <strong>Жанр:</strong> {{ record.movie.genre }}<br> {% endif %}
                 {% if record.movie.actors %} <strong>Актеры:</strong> {{ record.movie.actors }}<br> {% endif %}
+                {% if record.movie.runtime %} <strong>Время:</strong> {{ record.movie.runtime|date:'H:i' }}<br> {% endif %}
                 {% if record.movie.has_trailers %} <strong>Трейлеры:</strong><br>
                   <div class="trailers">
                   {% if record.movie.trailers.youtube %}
