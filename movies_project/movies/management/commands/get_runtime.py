@@ -1,31 +1,26 @@
-import urllib2
-import json
 from django.core.management.base import BaseCommand
 from movies.models import Movie
-from datetime import datetime
+from datetime import datetime, timedelta
+from django.conf import settings
+import tmdb3
+
+tmdb3.set_key(settings.TMDB_KEY)
+tmdb3.set_cache(filename=settings.TMDB_CACHE_PATH)
+tmdb3.set_locale(settings.LANGUAGE_CODE, settings.LANGUAGE_CODE)
 
 class Command(BaseCommand):
     help = 'Gets runtime'
 
     def handle(self, *args, **options):
         def get_runtime(id):
-            html = urllib2.urlopen("http://www.imdbapi.com/?i=%s" % id).read()
-            imdb_data = json.loads(html)
-            runtime = imdb_data.get('Runtime')
-            if runtime != 'N/A':
-                try:
-                    runtime = datetime.strptime(runtime, '%H h %M min')
-                except:
-                    try:
-                        runtime = datetime.strptime(runtime, '%H h')
-                    except:
-                        try:
-                            runtime = datetime.strptime(runtime, '%M min')
-                        except:
-                            return
-                return runtime
+            try:
+                runtime = tmdb3.Movie(id).runtime
+            except:
+                return
+            if runtime:
+                runtime = datetime(1990, 1, 1, 0, 0) + timedelta(minutes=runtime)
+                return runtime.time()
 
-        for movie in Movie.objects.all():
-            runtime = get_runtime(movie.imdb_id)
-            movie.runtime = runtime
+        for movie in Movie.objects.filter(runtime=None):
+            movie.runtime = get_runtime(movie.tmdb_id)
             movie.save()
