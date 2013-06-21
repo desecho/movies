@@ -1,0 +1,10 @@
+mysql-python
+Django<1.6
+django-annoying>=0.7.7
+django-simple-menu
+django-bootstrap-pagination
+pytmdb3>=0.6.16
+vkontakte
+django-vkontakte-iframe
+django-admin-tools
+poster
