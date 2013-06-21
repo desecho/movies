@@ -226,3 +226,11 @@ VK_IMAGE_PATH = 'http://vk.com/images/'
 VK_NO_IMAGE_SMALL = VK_IMAGE_PATH + 'camera_c.gif'
 VK_NO_IMAGE_MEDIUM = VK_IMAGE_PATH + 'camera_b.gif'
 VK_NO_IMAGE_BIG = VK_IMAGE_PATH + 'camera_a.gif'
+
+try:
+    LOCAL_SETTINGS
+except NameError:
+    try:
+        from local_settings import *
+    except ImportError:
+        pass
