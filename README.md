@@ -37,7 +37,7 @@ The web-application to create movie lists ("watched" and "to watch"), to share t
 
 ##Installation instructions
 
-* Change the following variables in settings.py:
+* Change/Add the following variables in settings.py:
     * DATABASES
     * TMDB_KEY
     * VK_APP_ID
