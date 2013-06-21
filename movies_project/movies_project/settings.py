@@ -1,6 +1,7 @@
 # Django settings for movies_project project.
 
-import os, django
+import os
+import django
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -13,13 +14,13 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': '',                      # Or path to database file if using sqlite3.
+        'ENGINE': 'django.db.backends.',  # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': '',                       # Or path to database file if using sqlite3.
         # The following settings are not used with sqlite3:
         'USER': '',
         'PASSWORD': '',
-        'HOST': '',                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
-        'PORT': '',                      # Set to empty string for default.
+        'HOST': '',                       # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
+        'PORT': '',                       # Set to empty string for default.
     }
 }
 
@@ -194,35 +195,32 @@ AUTHENTICATION_BACKENDS = (
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = ('django.core.context_processors.request', 'django.contrib.auth.context_processors.auth')
-
 LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = '/login/'
 SESSION_SAVE_EVERY_REQUEST = True
-TMDB_KEY = ''
 TMDB_CACHE_PATH = CACHE_DIR + 'tmdb3.cache'
 MAX_RESULTS = 100
 MIN_POPULARITY = 50
 NO_POSTER_IMAGE_URL = STATIC_URL + 'img/no_poster.jpg'
 NO_POSTER_BIG_IMAGE_URL = STATIC_URL + 'img/no_poster_big.jpg'
-POSTER_SIZE_BIG = 'w185'
 POSTER_SIZE_SMALL = 'w92'
+POSTER_SIZE_BIG = 'w185'
+POSTER_SIZE_HUGE = 'w500'
 POSTER_BASE_URL = 'http://cf2.imgobject.com/t/p/'
 IMDB_BASE_URL = 'http://www.imdb.com/title/'
 MAX_RECOMMENDATIONS = 50
 RECORDS_ON_PAGE = 50
 PEOPLE_ON_PAGE = 25
-FEED_DAYS = 1
+FEED_DAYS = 7
 
-CACHE_TIMEOUT = 60 * 60 * 12
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-        'LOCATION': 'movies'
-    }
-}
+# CACHE_TIMEOUT = 60 * 60 * 12
+# CACHES = {
+#     'default': {
+#         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+#         'LOCATION': 'movies_dev'
+#     }
+# }
 
-VK_APP_ID = ''      # Application ID
-VK_APP_SECRET = ''  # Secure key
 VK_P3P_POLICY = 'IDC DSP COR IVAi IVDi OUR TST'
 VK_IMAGE_PATH = 'http://vk.com/images/'
 VK_NO_IMAGE_SMALL = VK_IMAGE_PATH + 'camera_c.gif'
