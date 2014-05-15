@@ -14,8 +14,8 @@ displayMovie = (movie) ->
             <strong>Дата выпуска:</strong> #{ movie.release_date }
             </div>
             <div class="buttons">
-              <button type="button" title="Добавить в список \"Просмотрено\"" class="btn" onclick="add_to_list_from_db(#{ movie.id }, 1)"><i class="icon-eye-open"></i></button>
-              <button type="button" title="Добавить в список \"К просмотру\"" class="btn" onclick="add_to_list_from_db(#{ movie.id }, 2)"><i class="icon-eye-close"></i></button>
+              <button type="button" title="Добавить в список \"Просмотрено\"" class="btn" onclick="add_to_list_from_db(#{ movie.id }, 1)"><i class="fa fa-eye"></i></button>
+              <button type="button" title="Добавить в список \"К просмотру\"" class="btn" onclick="add_to_list_from_db(#{ movie.id }, 2)"><i class="fa fa-eye-slash"></i></button>
             </div>
             </div>
             """

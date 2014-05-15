@@ -24,7 +24,7 @@
       <div id="record{{ record.id }}" data-id="{{ record.id }}" class="movie">
           <div class="title">
            {{ record.movie.title_ru }}
-           <a href="javascript:show_torrents('{{ record.movie.torrent_search_title }}')" title="Скачать"><i class="icon-download-alt"></i></a>
+           <a href="javascript:show_torrents('{{ record.movie.torrent_search_title }}')" title="Скачать"><i class="fa fa-download"></i></a>
          </div>
           <div class="poster">
               <img src="{{ record.movie.poster_big_url }}" alt="{{ record.movie.title_ru }} poster"/>
@@ -70,7 +70,7 @@
               <table class="table">
                 <tr>
                   <td>
-                      <a href="/people/{{ review.username }}/watched"><img src="{{ review.avatar }}" alt="{{ review.full_name }}" title="{{ review.full_name }}"></a>
+                      <a href="/people/{{ review.username }}/watched"><img class="avatar-smallest" src="{{ review.avatar }}" alt="{{ review.full_name }}" title="{{ review.full_name }}"></a>
                   </td>
                   <td>
                     {% if review.rating %}<strong>Оценка:</strong> <div class="rating" data-rating="{{ review.rating }}"></div><br>{% endif %}
@@ -81,8 +81,8 @@
             {% endfor %}
           {% endif %}
           <div class="buttons">
-                <button type="button" title="Добавить в список &quot;Просмотрено&quot;" class="btn" onclick="add_to_list({{ record.movie_id }}, 1, {{ record.id }})"><i class="icon-eye-open"></i></button>
-                <button type="button" title="Добавить в список &quot;К просмотру&quot;" class="btn" onclick="add_to_list({{ record.movie_id }}, 2, {{ record.id }})"><i class="icon-eye-close"></i></button>
+                <button type="button" title="Добавить в список &quot;Просмотрено&quot;" class="btn" onclick="add_to_list({{ record.movie_id }}, 1, {{ record.id }})"><i class="fa fa-eye"></i></button>
+                <button type="button" title="Добавить в список &quot;К просмотру&quot;" class="btn" onclick="add_to_list({{ record.movie_id }}, 2, {{ record.id }})"><i class="fa fa-eye-slash"></i></button>
           </div>
         </div>
     {% endfor %}

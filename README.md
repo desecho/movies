@@ -14,6 +14,7 @@ The web-application to create movie lists ("watched" and "to watch"), to share t
 * [vkontakte](https://bitbucket.org/kmike/vkontakte/src)
 * [django-vkontakte-iframe](https://bitbucket.org/kmike/django-vkontakte-iframe/)
 * [django-admin-tools](https://bitbucket.org/izi/django-admin-tools)
+* [python-dateutil](http://labix.org/python-dateutil)
 * [poster 0.8.1](https://pypi.python.org/pypi/poster/)
 
 ##Required API Keys
@@ -24,12 +25,12 @@ The web-application to create movie lists ("watched" and "to watch"), to share t
 * [2torrents.org](http://2torrents.org)
 
 ##Used Javascript libraries
-* [jQuery v1.9.1](http://jquery.com/)
+
+* [jQuery v2.1.1](http://jquery.com/)
 * [JQuery Raty v2.5.2](http://wbotelhos.com/raty/)
-* [jQuery plugin: Validation v1.11.0](http://bassistance.de/jquery-plugins/jquery-plugin-validation/)
+* [jQuery plugin: Validation v1.11.1](http://bassistance.de/jquery-plugins/jquery-plugin-validation/)
 * [jGrowl v1.2.11](https://github.com/stanlemon/jGrowl)
-* [Spin.js v1.2.8](http://fgnass.github.com/spin.js/)
-* [jQuery Plugin for Spin.js](https://gist.github.com/its-florida/1290439/)
+* [Spin.js v2.0.1](http://fgnass.github.com/spin.js/)
 * [Bootstrap v2.3.1](http://twitter.github.com/bootstrap/)
 
 ##Used Graphics Packages

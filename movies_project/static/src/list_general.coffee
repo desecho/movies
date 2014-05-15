@@ -27,12 +27,12 @@ set_viewed_icon = (record_id, list_id) ->
   if list_id is 0
     return
   else if list_id is 1
-    icon = 'open'
+    icon = ''
     title = 'Просмотрено'
   else if list_id is 2
-    icon = 'close'
+    icon = '-slash'
     title = 'К просмотру'
-  html = """ <i class="icon-eye-#{ icon }" title="#{ title }"></i> """
+  html = """ <i class="fa fa-eye#{ icon }" title="#{ title }"></i> """
   $('#record' + record_id).children('.title').prepend html
 
 show_torrents = (query) ->
