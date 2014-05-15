@@ -9,6 +9,7 @@ vkontakte
 django-vkontakte-iframe
 django-admin-tools
 poster
+python-dateutil
 
 # pytmdb3>=0.6.16
 # git clone https://github.com/wagnerrp/pytmdb3.git

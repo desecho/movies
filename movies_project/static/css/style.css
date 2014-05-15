@@ -92,3 +92,15 @@ label.error {
 .small-poster {
     width: 60px;
 }
+
+.avatar {
+    border-radius: 15px;
+}
+
+.avatar-small {
+    border-radius: 10px;
+}
+
+.avatar-smallest {
+    border-radius: 5px;
+}

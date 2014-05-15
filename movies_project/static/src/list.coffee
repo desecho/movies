@@ -78,7 +78,7 @@ activate_mode_minimal = ->
   $('.details, .review').css('display', 'inline')
   $('.review').css('padding-top', '0')
   $('.release_date, .imdb_rating').css({float: 'right', 'margin-right': '10px'})
-  $('.movie').css({'padding-top': '0', 'margin-top': '7px', 'min-height': 'auto'})
+  $('.movie').css({'padding-top': '0', 'margin-top': '7px', 'min-height': '0'})
 
 disactivate_mode_minimal = ->
   $('.poster, .comment-button, .release_date_label, .rating_label, .wall-post').show()
