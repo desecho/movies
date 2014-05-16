@@ -206,7 +206,7 @@ def get_movies_from_tmdb(query, type, options, user):
             if poster:
                 url = settings.POSTER_BASE_URL + settings.POSTER_SIZE_SMALL + '/' + poster.filename
             else:
-                url = settings.NO_POSTER_IMAGE_URL
+                url = settings.NO_POSTER_SMALL_IMAGE_URL
             return url
 
         def get_data(query, type):

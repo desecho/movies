@@ -7,7 +7,6 @@ django-simple-menu
 django-bootstrap-pagination
 vkontakte
 django-vkontakte-iframe
-django-admin-tools
 poster
 python-dateutil
 

@@ -15,6 +15,7 @@ urlpatterns = patterns(
     url(r'^feed/(?P<list>[\w-]+)/$', 'movies.views.feed'),
     url(r'^people/(?P<username>[\w\d]+)/(?P<list>[\w-]+)$', 'movies.views.list'),
     url(r'^recommendation/$', 'movies.views.recommendation'),
+    url(r'^preferences/$', 'movies.views.preferences'),
 
     url(r'^remove-record/$', 'movies.views.ajax_remove_record'),
     url(r'^search-movie/$', 'movies.views.ajax_search_movie'),
@@ -25,6 +26,7 @@ urlpatterns = patterns(
     url(r'^apply-setting/$', 'movies.views.ajax_apply_settings'),
     url(r'^download/$', 'movies.views.ajax_download'),
     url(r'^upload-photo-to-wall/$', 'movies.views.ajax_upload_photo_to_wall'),
+    url(r'^save-preferences/$', 'movies.views.ajax_save_preferences'),
 
     url(r'^login/$', 'django.contrib.auth.views.login', {'template_name': 'login.html'}),
     url(r'^logout/$', 'movies.views.logout_view'),
