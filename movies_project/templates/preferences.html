@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+<label class="radio">
+  <input type="radio" name="titles" value="original" {% ifequal user.preferences.titles 'original' %} checked {% endifequal %}> отображать названия в оригинале
+</label>
+<label class="radio">
+  <input type="radio" name="titles" value="russian" {% ifequal user.preferences.titles 'russian' %} checked {% endifequal %}> отображать названия на русском<br>
+</label>
+
+<script>
+  var url_ajax_save_preferences = '{% url 'movies.views.ajax_save_preferences' %}';
+</script>
+
+<script src="/static/js/preferences.js"></script>
+{% endblock %}

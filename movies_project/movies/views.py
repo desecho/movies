@@ -109,6 +109,49 @@ def recommendation(request):
         reviews = None
     return {'records': records, 'reviews': reviews}
 
+@render_to('preferences.html')
+@login_required
+def preferences(request):
+    #request.user.preferences.titles
+
+    def get_recommendations_from_friends():
+        def filter_duplicated_movies_and_limit(records):
+            records_output = []
+            movies = []
+            record_ids_and_movies = []
+            for record in records:
+                if record.movie.pk not in movies:
+                    records_output.append(record)
+                    record_ids_and_movies.append((record.pk, record.movie.pk))
+                    if len(records_output) == settings.MAX_RECOMMENDATIONS:
+                        break
+                    movies.append(record.movie.pk)
+            return (records_output, record_ids_and_movies)
+        # exclude own records and include only friends' records
+        records = Record.objects.exclude(user=request.user).filter(user__in=friends).select_related()
+        # order records by user rating and by imdb rating
+        records = records.order_by('-rating', '-movie__imdb_rating', '-movie__release_date')
+        records = filter_movies_for_recommendation(records, request.user)
+        return filter_duplicated_movies_and_limit(records)
+
+    friends = get_friends(request.user)
+    if friends:
+        records, record_ids_and_movies = get_recommendations_from_friends()
+        reviews = get_comments_and_ratings(record_ids_and_movies, request.user)
+    else:
+        records = None
+        reviews = None
+    return {'records': records, 'reviews': reviews}
+
+def ajax_save_preferences(request):
+    if request.is_ajax() and request.method == 'POST':
+        POST = request.POST
+        if 'titles' in POST:
+            user = User.objects.get(pk=request.user.pk)
+            user.preferences = POST
+            user.save()
+            return HttpResponse()
+
 
 def paginate(objects, page, objects_on_page):
     paginator = Paginator(objects, objects_on_page)
@@ -225,9 +268,16 @@ def feed(request, list):
         actions = actions.exclude(user=request.user)
     posters = [action.movie.poster_small_url for action in actions]
     actions = actions.values('user__vk_profile__photo', 'user__username', 'user__first_name',
-                             'user__last_name', 'action__name', 'movie__title_ru', 'list__title',
+                             'user__last_name', 'action__name', 'movie__title', 'movie__title_ru', 'list__title',
                              'comment', 'rating', 'date')
     actions_output = []
+
+    def get_title(action):
+        if request.user.preferences['titles'] == 'original':
+            title = action['movie__title']
+        else:
+            title = action['movie__title_ru']
+        return title
     i = 0
     for action in actions:
         a = {}
@@ -235,7 +285,7 @@ def feed(request, list):
         a['full_name'] = action['user__first_name'] + ' ' + action['user__last_name']
         a['username'] = action['user__username']
         a['action'] = action['action__name']
-        a['movie'] = action['movie__title_ru']
+        a['movie'] = get_title(action)
         a['movie_poster'] = posters[i]
         a['list'] = action['list__title']
         a['comment'] = action['comment']

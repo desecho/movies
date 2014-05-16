@@ -1,11 +1,3 @@
-raty_custom_settings =
-  readOnly : raty_readonly
-  click: (score) ->
-    # change from null to 0 to simplify saving
-    if not score
-      score = 0
-    change_rating($(this).attr('data-record_id'), score, $(this))
-
 change_rating = (id, rating, element) ->
   revert_to_previous_rating = (element) ->
     score_settings = score: element.attr('data-rating')
@@ -78,14 +70,26 @@ activate_mode_minimal = ->
   $('.details, .review').css('display', 'inline')
   $('.review').css('padding-top', '0')
   $('.release_date, .imdb_rating').css({float: 'right', 'margin-right': '10px'})
-  $('.movie').css({'padding-top': '0', 'margin-top': '7px', 'min-height': '0'})
+  $('.movie').css({
+    'width': '750px',
+    'padding': '0',
+    'border-width': '0 0 1px 0',
+    'border-radius': '0',
+    'margin': '10px 0 0 0',
+    'min-height': '0'})
 
 disactivate_mode_minimal = ->
   $('.poster, .comment-button, .release_date_label, .rating_label, .wall-post').show()
   $('.details, .imdb_rating, .review, .release_date').css('display', '')
   $('.review').css('padding-top', '10px')
   $('.release_date, .imdb_rating').css({float: '', 'margin-right': '0'})
-  $('.movie').css({'padding-top': '20px', 'margin-top': '0', 'min-height': '145px'})
+  $('.movie').css({
+    'width': '730px',
+    'border-width': '1px',
+    'border-radius': '4px',
+    'padding': '10px',
+    'margin': '0 0 10px 0',
+    'min-height': '145px'})
 
 toggle_recommendation = ->
   if recommendation
@@ -113,14 +117,14 @@ post_to_wall = (id) ->
   post = (photo) ->
     create_wall_post = ->
       title = $('#record' + id).attr('data-title')
-      comment = $('#comment' + id).html()
+      comment = $('#comment' + id).val()
       rating_post = raty_settings['hints'][rating - 1]
       if rating > 2
         text = 'Рекомендую посмотреть'
       else
         text = 'Не рекомендую смотреть'
       text += """ "#{ title }".
-                 Моя оценка - #{ rating_post }
+                 Моя оценка - #{ rating_post }.
              """
       if comment
         text += "\n #{ comment }"
@@ -165,3 +169,13 @@ post_to_wall = (id) ->
     get_wall_upload_server_and_upload_photo_and_post_to_wall()
   else
     display_message 'Поставьте оценку фильму'
+
+raty_custom_settings =
+  readOnly : raty_readonly
+  click: (score) ->
+    # change from null to 0 to simplify saving
+    if not score
+      score = 0
+    change_rating($(this).attr('data-record_id'), score, $(this))
+
+$ -> $('textarea').autosize()

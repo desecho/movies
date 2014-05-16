@@ -140,10 +140,6 @@ TEMPLATE_DIRS = (
 )
 
 INSTALLED_APPS = (
-    'admin_tools',
-    'admin_tools.theming',
-    'admin_tools.menu',
-    'admin_tools.dashboard',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -194,6 +190,11 @@ AUTHENTICATION_BACKENDS = (
     'vk_iframe.backends.VkontakteUserBackend',
 )
 
+ADMIN_REORDER = (
+    ('movies', ('User', 'Movie', 'Record', 'List', 'Action', 'ActionRecord')),
+)
+
+AUTH_USER_MODEL = 'movies.User'
 TEMPLATE_CONTEXT_PROCESSORS = ('django.core.context_processors.request', 'django.contrib.auth.context_processors.auth')
 LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = '/login/'
@@ -201,11 +202,11 @@ SESSION_SAVE_EVERY_REQUEST = True
 TMDB_CACHE_PATH = CACHE_DIR + 'tmdb3.cache'
 MAX_RESULTS = 100
 MIN_POPULARITY = 50
-NO_POSTER_IMAGE_URL = STATIC_URL + 'img/no_poster.jpg'
-NO_POSTER_BIG_IMAGE_URL = STATIC_URL + 'img/no_poster_big.jpg'
+NO_POSTER_SMALL_IMAGE_URL = STATIC_URL + 'img/no_poster_small.jpg'
+NO_POSTER_NORMAL_IMAGE_URL = STATIC_URL + 'img/no_poster_normal.jpg'
 POSTER_SIZE_SMALL = 'w92'
-POSTER_SIZE_BIG = 'w185'
-POSTER_SIZE_HUGE = 'w500'
+POSTER_SIZE_NORMAL = 'w185'
+POSTER_SIZE_BIG = 'w500'
 POSTER_BASE_URL = 'http://cf2.imgobject.com/t/p/'
 IMDB_BASE_URL = 'http://www.imdb.com/title/'
 MAX_RECOMMENDATIONS = 50

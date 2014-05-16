@@ -1,9 +1,10 @@
 {% extends "base.html" %}
 {% load bootstrap_pagination %}
-{% load functions %}
+{% load set_var %}
 
 {% block content %}
 <script src="/static/libs/raty/jquery.raty.min.js"></script>
+<script src="/static/libs/jquery.autosize.min.js"></script>
 <script>
   var mode = '{{ request.session.mode }}';
   var sort = '{{ request.session.sort }}';
@@ -32,7 +33,6 @@
   var url_ajax_save_comment  = '{% url 'movies.views.ajax_save_comment' %}';
   var url_ajax_download = '{% url 'movies.views.ajax_download' %}';
   var url_ajax_upload_photo_to_wall = '{% url 'movies.views.ajax_upload_photo_to_wall' %}';
-
 </script>
 <script src="/static/js/list_general.js"></script>
 <script src="/static/js/raty.js"></script>
@@ -82,13 +82,18 @@
 <div id="results" class="results">
   {% if records %}
     {% for record in records %}
-      <div id="record{{ record.id }}" data-id="{{ record.id }}" data-title="{{ record.movie.title_ru }}" class="movie">
+      {% ifequal user.preferences.titles 'original' %}
+        {% set title = record.movie.title %}
+      {% else %}
+        {% set title = record.movie.title_ru %}
+      {% endifequal %}
+      <div id="record{{ record.id }}" data-id="{{ record.id }}" data-title="{{ title }}" class="movie">
           <div class="title">
-           {{ record.movie.title_ru }} {% if not anothers_account %}<a href="javascript:remove_record({{ record.id }})" title="Удалить"><i class="fa fa-trash-o"></i></a> {% endif %}
+           {{ title }} {% if not anothers_account %}<a href="javascript:remove_record({{ record.id }})" title="Удалить"><i class="fa fa-trash-o"></i></a> {% endif %}
            <a href="javascript:show_torrents('{{ record.movie.torrent_search_title }}')" title="Скачать"><i class="fa fa-download"></i></a>
          </div>
           <div class="poster">
-              <img src="{% ifequal request.session.mode 'full' %}{{ record.movie.poster_big_url }}{% else %}{{ record.movie.poster_small_url }}{% endifequal %}" alt="{{ record.movie.title_ru }} poster"/>
+              <img src="{% ifequal request.session.mode 'full' %}{{ record.movie.poster_normal_url }}{% else %}{{ record.movie.poster_small_url }}{% endifequal %}" alt="{{ title }} poster"/>
           </div>
           <div class="details">
             {% if record.movie.release_date %}<div class="release_date" title="Дата выпуска"><strong class="release_date_label">Дата:</strong> {{ record.movie.release_date|date:'d.m.y' }}</div>{% endif %}
@@ -125,7 +130,6 @@
             {% if record.movie.homepage %} <a href="{{ record.movie.homepage }}" target="_blank">Сайт</a> / {% endif %}
             <a href="{{ record.movie.imdb_url }}" target="_blank"><img src="/static/img/imdb.jpg" alt="IMDb" /></a><br>
             <br>
-            {# {% if record.movie.plot %} Описание: {{ record.movie.plot }}<br> {% endif %} #}
             {% endifequal %}
             <div class="review {% ifequal request.session.mode 'full' %} full {% endifequal %}">
               {% ifequal list_id 1 %}
@@ -133,7 +137,7 @@
                 <div class="comment" id="comment_area{{ record.id }}" style="display: {% if not record.comment %} none {% endif %}">
                   <strong>Комментарий:</strong>
                   {% if not anothers_account %}
-                    <textarea rows="2" cols="15" id="comment{{ record.id }}">{{ record.comment }}</textarea>
+                    <textarea id="comment{{ record.id }}">{{ record.comment }}</textarea>
                     <button type="button" title="Сохранить" class="btn" onclick="save_comment({{ record.id }})"><i class="fa fa-save"></i></button>
                     <br>
                   {% else %}
@@ -150,35 +154,19 @@
           </div>
           <div class="clearfix"></div>
           {% if list_id == 2 and not anothers_account %}
-            {% if reviews|get:record.id %}
-              {% for review in reviews|get:record.id %}
-                <table class="table">
-                  <tr>
-                    <td>
-                        <a href="/people/{{ review.username }}/watched"><img class="avatar-smallest" src="{{ review.avatar }}" alt="{{ review.full_name }}" title="{{ review.full_name }}"></a>
-                    </td>
-                    <td>
-                      {% if review.rating %}<strong>Оценка:</strong> <div class="rating" data-rating="{{ review.rating }}"></div><br>{% endif %}
-                      {% if review.comment %}<strong>Комментарий:</strong> {{ review.comment }}{% endif %}
-                    </td>
-                  </tr>
-                </table>
-              {% endfor %}
-            {% endif %}
+            {% include 'includes/reviews.html' %}
           {% endif %}
           <div class="buttons">
           {% if not anothers_account %}
             {% ifequal list_id 2 %}
-              <button type="button" title="Добавить в список &quot;Просмотрено&quot;" class="btn" onclick="add_to_list({{ record.movie_id }}, 1, {{ record.id }})"><i class="fa fa-eye"></i></button>
+              {% include 'includes/add_to_watched_list_button.html' %}
             {% endifequal %}
           {% else %}
-                <button type="button" title="Добавить в список &quot;Просмотрено&quot;" class="btn" onclick="add_to_list({{ record.movie_id }}, 1, {{ record.id }})"><i class="fa fa-eye"></i></button>
-                <button type="button" title="Добавить в список &quot;К просмотру&quot;" class="btn" onclick="add_to_list({{ record.movie_id }}, 2, {{ record.id }})"><i class="fa fa-eye-slash"></i></button>
+            {% include 'includes/add_to_list_buttons.html' %}
           {% endif %}
           </div>
         </div>
     {% endfor %}
-
   {% if records.has_other_pages %}
     {% bootstrap_paginate records range=10 show_prev_next="true" show_first_last="true" alignment="left" %}
   {% endif %}

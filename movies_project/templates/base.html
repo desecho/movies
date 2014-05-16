@@ -1,9 +1,8 @@
-{% load menu %}{% generate_menu %}
-
 <!DOCTYPE html>
 <head>
   <meta HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
   <meta HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <link rel="stylesheet" href="/static/libs/jquery_jgrowl/jquery.jgrowl.css" />
   <link href="/static/libs/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
   <link rel="stylesheet" href="/static/graphics/font-awesome/css/font-awesome.min.css">
@@ -13,6 +12,7 @@
   {% if user.is_vk_user %} <script src="http://vk.com/js/api/xd_connection.js?2" type="text/javascript"></script> {% endif %}
 
   <script src="/static/libs/jquery-2.1.1.min.js"></script>
+
   <script src="/static/libs/jquery_jgrowl/jquery.jgrowl.min.js"></script>
 
 
@@ -38,33 +38,22 @@
    <div class="navbar navbar-fixed-top">
       <div class="navbar-inner">
         <a class="brand active" href="/">Movies</a>
-        <ul class="nav">
-          {% for item in menus.main %}
-          {% if item.separator %}<li class="divider-vertical"></li>{% endif %}
-          <li class="{% if item.selected %} active{% endif %}{% if item.children %} dropdown{% endif %}" id="top-menu-{{ item.slug }}">
-              {% if item.children %}
-              <a href="#" class="dropdown-toggle" data-hover="dropdown" data-toggle="dropdown">{% if item.icon %}<i class="icon-{{ item.icon }} icon-white"></i>&nbsp;{% endif %}{{ item.title }}&nbsp;<b class="caret"></b></a>
-              <ul class="dropdown-menu">
-                  {% for child in item.children %}<li{% if child.selected %} class="active"{% endif %}><a href="{{ child.url }}">{{ child.title }}</a></li>{% endfor %}
-              </ul>
-              {% else %}
-              <a href="{{ item.url }}">{% if item.icon %}<i class="icon-{{ item.icon }} icon-white"></i>&nbsp;{% endif %}{{ item.title }}</a>
-              {% endif %}
-          </li>
-          {% endfor %}
+        {% include 'includes/menu.html' %}
+        <ul class="nav pull-right">
+          <li><a href="/preferences"><i class="fa fa-cog"></i></a></li>
         </ul>
         {% if not user.is_vk_user %}
           <ul class="nav pull-right">
-            <li><a href="/logout">Выход</a></li>
+            <li><a href="/logout"><i class="fa fa-sign-out"></i></a></li>
           </ul>
         {% endif %}
         <ul class="nav pull-right">
           <li><div id="loading"></div></li>
         </ul>
       </div>
-  </div>
-  <div id="content">
+    </div>
+    <div id="content">
       {% block content %}{% endblock %}
-  </div>
+    </div>
   </div>
 </body>

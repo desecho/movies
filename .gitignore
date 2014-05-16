@@ -1,10 +1,13 @@
 *.py[cod]
 tmdb3.cache
 movies_project/static/admin/
-movies_project/static/admin_tools/
-movies_project/movies_project/secret.py
 movies_project/static/js/
+movies_project/movies_project/secret.py
 movies_project/movies_project/local_settings.py
+
+# OS X meta data
+._*
+.DS_Store
 
 # C extensions
 *.so
@@ -39,7 +42,3 @@ nosetests.xml
 .mr.developer.cfg
 .project
 .pydevproject
-
-# OS X meta data
-._*
-.DS_Store

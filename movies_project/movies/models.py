@@ -1,8 +1,33 @@
 # -*- coding: utf8 -*-
 from django.db import models
 from annoying.fields import JSONField
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 from django.conf import settings
+
+
+class User(AbstractUser):
+    preferences = JSONField('настройки', default='{"titles": "russian"}')
+
+def get_avatar_medium(self):
+    return self.vk_profile.photo_medium or settings.VK_NO_IMAGE_MEDIUM
+
+User.add_to_class('get_avatar_medium', get_avatar_medium)
+
+def get_movie_ids(self):
+    return Record.objects.filter(user=self).values_list('movie__pk')
+
+User.add_to_class('get_movie_ids', get_movie_ids)
+
+def is_vk_user(self):
+    if self.username.isdigit():
+        return True
+
+User.add_to_class('is_vk_user', is_vk_user)
+
+def user_unicode(self):
+    return self.get_full_name()
+
+User.__unicode__ = user_unicode
 
 
 class List(models.Model):
@@ -20,8 +45,8 @@ class List(models.Model):
 class Movie(models.Model):
     title = models.CharField('оригинальное название', max_length=255)
     title_ru = models.CharField('название', max_length=255)
-    overview = models.TextField('описание', null=True)
-    plot = models.TextField('описание', null=True)
+    overview = models.TextField('описание (рус)', null=True)
+    plot = models.TextField('описание (англ)', null=True)
     director = models.CharField('режиссёр', max_length=255, null=True)
     writer = models.CharField('сценарист', max_length=255, null=True)
     genre = models.CharField('жанр', max_length=255, null=True)
@@ -29,7 +54,7 @@ class Movie(models.Model):
     imdb_id = models.CharField('IMDB id', max_length=15, unique=True)
     tmdb_id = models.IntegerField('TMDB id', unique=True)
     imdb_rating = models.DecimalField('IMDB рейтинг', max_digits=2, decimal_places=1, null=True)
-    poster = models.URLField('постер', max_length=255, null=True)
+    poster = models.CharField('постер', max_length=255, null=True)
     release_date = models.DateField('дата выпуска', null=True)
     runtime = models.TimeField('длительность', null=True)
     homepage = models.URLField('сайт', null=True)
@@ -54,25 +79,25 @@ class Movie(models.Model):
             number_of_trailers += len(self.trailers[i])
         return number_of_trailers
 
-    def poster_big_url(self):
+    def poster_normal_url(self):
         if self.poster:
-            url = self.poster_url(settings.POSTER_SIZE_BIG)
+            url = self.poster_url(settings.POSTER_SIZE_NORMAL)
         else:
-            url = settings.NO_POSTER_BIG_IMAGE_URL
+            url = settings.NO_POSTER_NORMAL_IMAGE_URL
         return url
 
     def poster_small_url(self):
         if self.poster:
             url = self.poster_url(settings.POSTER_SIZE_SMALL)
         else:
-            url = settings.NO_POSTER_IMAGE_URL
+            url = settings.NO_POSTER_SMALL_IMAGE_URL
         return url
 
     def poster_huge_url(self):
         if self.poster:
-            url = self.poster_url(settings.POSTER_SIZE_HUGE)
+            url = self.poster_url(settings.POSTER_SIZE_BIG)
         else:
-            url = settings.NO_POSTER_IMAGE_URL
+            url = settings.NO_POSTER_SMALL_IMAGE_URL
         return url
 
     def torrent_search_title(self):
@@ -96,14 +121,6 @@ class Record(models.Model):
 
     def __unicode__(self):
         return self.movie.title
-
-    def has_comement(self):
-        if self.comment:
-            return True
-
-    def has_rating(self):
-        if self.rating:
-            return True
 
 
 class Action(models.Model):
@@ -132,27 +149,3 @@ class ActionRecord(models.Model):
 
     def __unicode__(self):
         return self.movie.title + ' ' + self.action.name
-
-
-def get_avatar_medium(self):
-    return self.vk_profile.photo_medium or settings.VK_NO_IMAGE_MEDIUM
-
-
-def get_movie_ids(self):
-    return Record.objects.filter(user=self).values_list('movie__pk')
-
-
-def is_vk_user(self):
-    if self.username.isdigit():
-        return True
-
-User.add_to_class('is_vk_user', is_vk_user)
-User.add_to_class('get_avatar_medium', get_avatar_medium)
-User.add_to_class('get_movie_ids', get_movie_ids)
-
-
-def user_unicode(self):
-    #return u'%s, %s' % (self.last_name, self.first_name)
-    return self.get_full_name()
-
-User.__unicode__ = user_unicode

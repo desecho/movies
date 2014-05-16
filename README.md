@@ -13,7 +13,6 @@ The web-application to create movie lists ("watched" and "to watch"), to share t
 * [pytmdb3 v0.6.16+](https://github.com/wagnerrp/pytmdb3)
 * [vkontakte](https://bitbucket.org/kmike/vkontakte/src)
 * [django-vkontakte-iframe](https://bitbucket.org/kmike/django-vkontakte-iframe/)
-* [django-admin-tools](https://bitbucket.org/izi/django-admin-tools)
 * [python-dateutil](http://labix.org/python-dateutil)
 * [poster 0.8.1](https://pypi.python.org/pypi/poster/)
 
@@ -30,6 +29,7 @@ The web-application to create movie lists ("watched" and "to watch"), to share t
 * [JQuery Raty v2.5.2](http://wbotelhos.com/raty/)
 * [jQuery plugin: Validation v1.11.1](http://bassistance.de/jquery-plugins/jquery-plugin-validation/)
 * [jGrowl v1.2.11](https://github.com/stanlemon/jGrowl)
+* [jQuery Autosize v1.18.7](http://www.jacklmoore.com/autosize/)
 * [Spin.js v2.0.1](http://fgnass.github.com/spin.js/)
 * [Bootstrap v2.3.1](http://twitter.github.com/bootstrap/)
 
