@@ -35,14 +35,14 @@
               <img src="{{ record.movie.poster_normal_url }}" alt="{{ title }} poster"/>
           </div>
           <div class="details">
-            {% if record.movie.release_date %}<div class="release_date" title="Дата выпуска"><strong class="release_date_label">Дата:</strong> {{ record.movie.release_date|date:'d.m.y' }}</div>{% endif %}
-            {% if record.movie.imdb_rating %}<div class="imdb_rating" title="Рейтинг"><strong>IMDb:</strong> {{ record.movie.imdb_rating }}</div> {% endif %}
-            {% if record.movie.director %} <strong>Режиссёр:</strong> {{ record.movie.director }}<br> {% endif %}
-            {% if record.movie.writer %} <strong>Сценарист:</strong> {{ record.movie.writer }}<br> {% endif %}
-            {% if record.movie.genre %} <strong>Жанр:</strong> {{ record.movie.genre }}<br> {% endif %}
-            {% if record.movie.actors %} <strong>Актеры:</strong> {{ record.movie.actors }}<br> {% endif %}
-            {% if record.movie.runtime %} <strong>Время:</strong> {{ record.movie.runtime|date:'H:i' }}<br> {% endif %}
-            {% if record.movie.has_trailers %} <strong>Трейлеры:</strong><br>
+            {% if record.movie.release_date %}<div class="release_date" title="Дата выпуска"><span class="release_date_label item-desc">Дата:</span> {{ record.movie.release_date|date:'d.m.y' }}</div>{% endif %}
+            {% if record.movie.imdb_rating %}<div class="imdb_rating" title="Рейтинг"><span class="item-desc">IMDb:</span> {{ record.movie.imdb_rating }}</div> {% endif %}
+            {% if record.movie.director %} <span class="item-desc">Режиссёр:</span> {{ record.movie.director }}<br> {% endif %}
+            {% if record.movie.writer %} <span class="item-desc">Сценарист:</span> {{ record.movie.writer }}<br> {% endif %}
+            {% if record.movie.genre %} <span class="item-desc">Жанр:</span> {{ record.movie.genre }}<br> {% endif %}
+            {% if record.movie.actors %} <span class="item-desc">Актеры:</span> {{ record.movie.actors }}<br> {% endif %}
+            {% if record.movie.runtime %} <span class="item-desc">Время:</span> {{ record.movie.runtime|date:'H:i' }}<br> {% endif %}
+            {% if record.movie.has_trailers %} <span class="item-desc">Трейлеры:</span><br>
               <div class="trailers">
               {% if record.movie.trailers.youtube %}
                 &nbsp;&nbsp;&nbsp;&nbsp;YouTube:

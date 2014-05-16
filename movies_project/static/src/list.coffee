@@ -115,7 +115,7 @@ $ ->
 
 post_to_wall = (id) ->
   post = (photo) ->
-    create_wall_post = ->
+    create_wall_post_message = ->
       title = $('#record' + id).attr('data-title')
       comment = $('#comment' + id).val()
       rating_post = raty_settings['hints'][rating - 1]
@@ -130,15 +130,19 @@ post_to_wall = (id) ->
         text += "\n #{ comment }"
       text
 
-    VK.api('wall.post',
-      message: create_wall_post()
-      attachments: photo, (data) ->
-        if data.error
-          error_code = data.error.error_code
-          if error_code isnt 10007
-            display_message 'Ошибка публикации на стену #' + error_code
-        else
-          display_message 'Запись отправлена на стену'
+    create_wall_post = ->
+      post = {}
+      post.message = create_wall_post_message()
+      if photo
+        post.attachments = photo
+      post
+    VK.api('wall.post', create_wall_post(), (data) ->
+      if data.error
+        error_code = data.error.error_code
+        if error_code isnt 10007
+          display_message 'Ошибка публикации на стену #' + error_code
+      else
+        display_message 'Запись отправлена на стену'
     )
 
   save_wall_photo = (response) ->
@@ -165,8 +169,14 @@ post_to_wall = (id) ->
     )
 
   rating = parseInt($('#record' + id).children('.details').children('.review').children('.rating').attr('data-rating'))
+
+  has_poster = ->
+    $('#record' + id).children('.poster').children('img').attr('src').indexOf('no_poster') == -1
   if rating
-    get_wall_upload_server_and_upload_photo_and_post_to_wall()
+    if has_poster()
+      get_wall_upload_server_and_upload_photo_and_post_to_wall()
+    else
+      post()
   else
     display_message 'Поставьте оценку фильму'
 

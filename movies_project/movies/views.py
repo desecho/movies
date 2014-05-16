@@ -426,7 +426,7 @@ def ajax_add_to_list(request):
 def ajax_upload_photo_to_wall(request):
     def get_filepath(record_id):
         movie = Record.objects.get(pk=record_id).movie
-        poster_url = movie.poster_huge_url()
+        poster_url = movie.poster_big_url()
         file_contents = urllib2.urlopen(poster_url).read()
         path = tempfile.mkstemp()[1]
         file = open(path, 'w')

@@ -96,16 +96,16 @@
               <img src="{% ifequal request.session.mode 'full' %}{{ record.movie.poster_normal_url }}{% else %}{{ record.movie.poster_small_url }}{% endifequal %}" alt="{{ title }} poster"/>
           </div>
           <div class="details">
-            {% if record.movie.release_date %}<div class="release_date" title="Дата выпуска"><strong class="release_date_label">Дата:</strong> {{ record.movie.release_date|date:'d.m.y' }}</div>{% endif %}
-            {% if record.movie.imdb_rating %}<div class="imdb_rating" title="Рейтинг"><strong>IMDb:</strong> {{ record.movie.imdb_rating }}</div> {% endif %}
+            {% if record.movie.release_date %}<div class="release_date" title="Дата выпуска"><span class="release_date_label item-desc">Дата:</span> {{ record.movie.release_date|date:'d.m.y' }}</div>{% endif %}
+            {% if record.movie.imdb_rating %}<div class="imdb_rating" title="Рейтинг"><span class="item-desc">IMDb:</span> {{ record.movie.imdb_rating }}</div> {% endif %}
             {% ifequal request.session.mode 'full' %}
-                {% if record.movie.director %} <strong>Режиссёр:</strong> {{ record.movie.director }}<br> {% endif %}
-                {% if record.movie.writer %} <strong>Сценарист:</strong> {{ record.movie.writer }}<br> {% endif %}
-                {% if record.movie.genre %} <strong>Жанр:</strong> {{ record.movie.genre }}<br> {% endif %}
-                {% if record.movie.actors %} <strong>Актеры:</strong> {{ record.movie.actors }}<br> {% endif %}
-                {% if record.movie.runtime %} <strong>Время:</strong> {{ record.movie.runtime|date:'H:i' }}<br> {% endif %}
-                {% if record.movie.overview %} <strong>Описание:</strong> {{ record.movie.overview }}<br> {% endif %}
-                {% if record.movie.has_trailers %} <strong>Трейлеры:</strong><br>
+                {% if record.movie.director %} <span class="item-desc">Режиссёр:</span> {{ record.movie.director }}<br> {% endif %}
+                {% if record.movie.writer %} <span class="item-desc">Сценарист:</span> {{ record.movie.writer }}<br> {% endif %}
+                {% if record.movie.genre %} <span class="item-desc">Жанр:</span> {{ record.movie.genre }}<br> {% endif %}
+                {% if record.movie.actors %} <span class="item-desc">Актеры:</span> {{ record.movie.actors }}<br> {% endif %}
+                {% if record.movie.runtime %} <span class="item-desc">Время:</span> {{ record.movie.runtime|date:'H:i' }}<br> {% endif %}
+                {% if record.movie.overview %} <span class="item-desc">Описание:</span> {{ record.movie.overview }}<br> {% endif %}
+                {% if record.movie.has_trailers %} <span class="item-desc">Трейлеры:</span><br>
                   <div class="trailers">
                   {% if record.movie.trailers.youtube %}
                     &nbsp;&nbsp;&nbsp;&nbsp;YouTube:
@@ -133,11 +133,10 @@
             {% endifequal %}
             <div class="review {% ifequal request.session.mode 'full' %} full {% endifequal %}">
               {% ifequal list_id 1 %}
-                <strong class="rating_label">Оценка:</strong> <div class="rating" data-record_id="{{ record.id }}" data-rating="{{ record.rating }}"></div>
+                <div class="rating" data-record_id="{{ record.id }}" data-rating="{{ record.rating }}"></div>
                 <div class="comment" id="comment_area{{ record.id }}" style="display: {% if not record.comment %} none {% endif %}">
-                  <strong>Комментарий:</strong>
                   {% if not anothers_account %}
-                    <textarea id="comment{{ record.id }}">{{ record.comment }}</textarea>
+                    <textarea title="комментарий" id="comment{{ record.id }}">{{ record.comment }}</textarea>
                     <button type="button" title="Сохранить" class="btn" onclick="save_comment({{ record.id }})"><i class="fa fa-save"></i></button>
                     <br>
                   {% else %}
