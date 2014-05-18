@@ -210,7 +210,7 @@ def list(request, list, username=None):
         return records
 
     def get_records():
-        'gets records for certain user and list'
+        'Gets records for certain user and list'
         if username:
             user = anothers_account
         else:
@@ -218,7 +218,7 @@ def list(request, list, username=None):
         return Record.objects.select_related().filter(list__key_name=list, user=user)
 
     def get_anothers_account():
-        "returns User if it's another's account and False if it's not"
+        "Returns User if it's another's account and False if it's not"
         if username:
             anothers_account = User.objects.get(username=username)
         else:
