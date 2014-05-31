@@ -24,6 +24,7 @@ class Command(BaseCommand):
                         batch = False
                 else:
                     movie_id = None
+                    batch = None
                 return movie_id, batch
 
             movie_id, batch = get_args()
