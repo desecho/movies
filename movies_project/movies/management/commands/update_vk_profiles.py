@@ -2,6 +2,7 @@ from django.core.management.base import BaseCommand
 from movies.models import User
 from django.conf import settings
 import vkontakte
+import time
 
 FIELDS = (
     'first_name',
@@ -50,3 +51,5 @@ class Command(BaseCommand):
                             pass
                 vk_profile.save()
                 user.save()
+                print user.get_full_name()
+                time.sleep(0.34)
