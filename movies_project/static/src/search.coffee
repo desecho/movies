@@ -6,19 +6,17 @@ displayMovie = (movie) ->
   html = """
             <div class="movie" id="movie#{ movie.id }">
             <div class="poster"><img src="#{ movie.poster }" alt="#{ movie.title } poster"/></div>
-            <div class="title">#{ movie.title }</div>
+            <div class="title">#{ movie.title }
+              <div class="add-to-list-buttons">
+                <a href="#" title="Добавить в список \"Просмотрено\"" onclick="add_to_list_from_db(#{ movie.id }, 1)"><i class="fa fa-eye"></i></a>
+                <a href="#" title="Добавить в список \"К просмотру\"" onclick="add_to_list_from_db(#{ movie.id }, 2)"><i class="fa fa-eye-slash"></i></a>
+              </div>
+            </div>
             <div class="details">
          """
   if movie.release_date
-    html += """
-            <strong>Дата выпуска:</strong> #{ movie.release_date }
-            </div>
-            <div class="buttons">
-              <button type="button" title="Добавить в список \"Просмотрено\"" class="btn" onclick="add_to_list_from_db(#{ movie.id }, 1)"><i class="fa fa-eye"></i></button>
-              <button type="button" title="Добавить в список \"К просмотру\"" class="btn" onclick="add_to_list_from_db(#{ movie.id }, 2)"><i class="fa fa-eye-slash"></i></button>
-            </div>
-            </div>
-            """
+    html += """<strong>Дата выпуска:</strong> #{ movie.release_date }"""
+  html += '</div></div>'
   $('#results').append(html)
 
 search_movie = ->

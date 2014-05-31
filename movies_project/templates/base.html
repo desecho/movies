@@ -9,12 +9,9 @@
   <link href="/static/css/bootstrap_fix.css" rel="stylesheet" media="screen">
   <link rel="stylesheet" href="/static/css/style.css" />
 
-  {% if user.is_vk_user %} <script src="http://vk.com/js/api/xd_connection.js?2" type="text/javascript"></script> {% endif %}
-
   <script src="/static/libs/jquery-2.1.1.min.js"></script>
 
   <script src="/static/libs/jquery_jgrowl/jquery.jgrowl.min.js"></script>
-
 
   {# <link href="/static/libs/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet" media="screen"> #}
   <script src="/static/libs/bootstrap/js/bootstrap.min.js"></script>
@@ -26,10 +23,13 @@
   <script src="/static/js/ajax_loading.js"></script>
 
   <script src="/static/js/analytics.js"></script>
-  {% if user.is_vk_user %}
-    <script src="/static/js/vk.js"></script>
-  {% endif %}
 
+  {% if user.is_vk_user %}
+    <script src="http://vk.com/js/api/xd_connection.js?2"></script>
+    <script src="/static/js/vk.js"></script>
+  {% else %}
+    <script src="/static/js/no_vk.js"></script>
+  {% endif %}
   <meta charset="utf-8">
   <title>{% block title %}Movies{% endblock %}</title>
 </head>
@@ -39,12 +39,17 @@
       <div class="navbar-inner">
         <a class="brand active" href="/">Movies</a>
         {% include 'includes/menu.html' %}
-        <ul class="nav pull-right">
-          <li><a href="/preferences"><i class="fa fa-cog"></i></a></li>
-        </ul>
         {% if not user.is_vk_user %}
           <ul class="nav pull-right">
             <li><a href="/logout"><i class="fa fa-sign-out"></i></a></li>
+          </ul>
+        {% endif %}
+        <ul class="nav pull-right">
+          <li><a href="/preferences"><i class="fa fa-cog"></i></a></li>
+        </ul>
+        {% if user.is_vk_user %}
+          <ul class="nav pull-right">
+            <li><a id="invite"><i class="fa fa-envelope-o"></i></a></li>
           </ul>
         {% endif %}
         <ul class="nav pull-right">

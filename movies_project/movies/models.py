@@ -4,30 +4,40 @@ from annoying.fields import JSONField
 from django.contrib.auth.models import AbstractUser
 from django.conf import settings
 
+def get_poster_url(size, poster, filename=None):
+    if size == 'small':
+        poster_size = settings.POSTER_SIZE_SMALL
+        no_image_url = settings.NO_POSTER_SMALL_IMAGE_URL
+    elif size == 'normal':
+        poster_size = settings.POSTER_SIZE_NORMAL
+        no_image_url = settings.NO_POSTER_NORMAL_IMAGE_URL
+    elif size == 'big':
+        poster_size = settings.POSTER_SIZE_BIG
+        no_image_url = None
+
+    if poster:
+        if filename is None:
+            filename = poster.filename
+        return settings.POSTER_BASE_URL + poster_size + '/' + filename
+    else:
+        return no_image_url
+
 
 class User(AbstractUser):
-    preferences = JSONField('настройки', default='{"titles": "russian"}')
+    preferences = JSONField('настройки', default='{"lang": "ru"}')
 
-def get_avatar_medium(self):
-    return self.vk_profile.photo_medium or settings.VK_NO_IMAGE_MEDIUM
+    def get_avatar_medium(self):
+        return self.vk_profile.photo_medium or settings.VK_NO_IMAGE_MEDIUM
 
-User.add_to_class('get_avatar_medium', get_avatar_medium)
+    def get_movie_ids(self):
+        return Record.objects.filter(user=self).values_list('movie__pk')
 
-def get_movie_ids(self):
-    return Record.objects.filter(user=self).values_list('movie__pk')
+    def is_vk_user(self):
+        if self.username.isdigit():
+            return True
 
-User.add_to_class('get_movie_ids', get_movie_ids)
-
-def is_vk_user(self):
-    if self.username.isdigit():
-        return True
-
-User.add_to_class('is_vk_user', is_vk_user)
-
-def user_unicode(self):
-    return self.get_full_name()
-
-User.__unicode__ = user_unicode
+    def __unicode__(self):
+        return self.get_full_name()
 
 
 class List(models.Model):
@@ -51,10 +61,11 @@ class Movie(models.Model):
     writer = models.CharField('сценарист', max_length=255, null=True)
     genre = models.CharField('жанр', max_length=255, null=True)
     actors = models.CharField('актёры', max_length=255, null=True)
-    omdb_id = models.CharField('OMDB id', max_length=15, unique=True)
+    imdb_id = models.CharField('IMDB id', max_length=15, unique=True)
     tmdb_id = models.IntegerField('TMDB id', unique=True)
     imdb_rating = models.DecimalField('IMDB рейтинг', max_digits=2, decimal_places=1, null=True)
-    poster = models.CharField('постер', max_length=255, null=True)
+    poster_ru = models.CharField('постер (рус)', max_length=255, null=True)
+    poster_en = models.CharField('постер (англ)', max_length=255, null=True)
     release_date = models.DateField('дата выпуска', null=True)
     runtime = models.TimeField('длительность', null=True)
     homepage = models.URLField('сайт', null=True)
@@ -63,6 +74,7 @@ class Movie(models.Model):
     class Meta:
         verbose_name = 'фильм'
         verbose_name_plural = 'фильмы'
+        ordering = ['pk']
 
     def __unicode__(self):
         return self.title
@@ -70,32 +82,33 @@ class Movie(models.Model):
     def imdb_url(self):
         return settings.IMDB_BASE_URL + self.imdb_id + '/'
 
-    def poster_url(self, size):
-        return settings.POSTER_BASE_URL + size + '/' + self.poster
-
     def has_trailers(self):
-        number_of_trailers = 0
-        for i in self.trailers:
-            number_of_trailers += len(self.trailers[i])
-        return number_of_trailers
+        for trailer_type in self.trailers:
+            if len(self.trailers[trailer_type]) > 0:
+                return True
 
-    def poster_normal_url(self):
-        if self.poster:
-            url = self.poster_url(settings.POSTER_SIZE_NORMAL)
-        else:
-            url = settings.NO_POSTER_NORMAL_IMAGE_URL
-        return url
+    def get_poster(self, size, lang):
+        poster = self.poster_ru
+        filename = eval('self.poster_' + lang)
+        return get_poster_url(size, poster, filename)
 
-    def poster_small_url(self):
-        if self.poster:
-            url = self.poster_url(settings.POSTER_SIZE_SMALL)
-        else:
-            url = settings.NO_POSTER_SMALL_IMAGE_URL
-        return url
+    def poster_en_small_url(self):
+        return self.get_poster('small', 'en')
 
-    def poster_big_url(self):
-        if self.poster:
-            return self.poster_url(settings.POSTER_SIZE_BIG)
+    def poster_ru_small_url(self):
+        return self.get_poster('small', 'ru')
+
+    def poster_en_normal_url(self):
+        return self.get_poster('normal', 'en')
+
+    def poster_ru_normal_url(self):
+        return self.get_poster('normal', 'ru')
+
+    def poster_en_big_url(self):
+        return self.get_poster('big', 'en')
+
+    def poster_ru_big_url(self):
+        return self.get_poster('big', 'ru')
 
     def torrent_search_title(self):
         title = self.title.replace("'", r"\'") + ' '

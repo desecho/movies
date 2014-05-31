@@ -154,6 +154,7 @@ INSTALLED_APPS = (
     'vk_iframe',
     'menu',
     'bootstrap-pagination',
+    'south',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -207,12 +208,14 @@ NO_POSTER_NORMAL_IMAGE_URL = STATIC_URL + 'img/no_poster_normal.jpg'
 POSTER_SIZE_SMALL = 'w92'
 POSTER_SIZE_NORMAL = 'w185'
 POSTER_SIZE_BIG = 'w500'
-POSTER_BASE_URL = 'http://cf2.imgobject.com/t/p/'
+POSTER_BASE_URL = 'http://image.tmdb.org/t/p/'
 IMDB_BASE_URL = 'http://www.imdb.com/title/'
 MAX_RECOMMENDATIONS = 50
 RECORDS_ON_PAGE = 50
 PEOPLE_ON_PAGE = 25
 FEED_DAYS = 7
+LOCALES = {'ru': ('ru', 'ru'),
+           'en': ('en', 'US')}
 
 # CACHE_TIMEOUT = 60 * 60 * 12
 # CACHES = {
@@ -235,3 +238,5 @@ except NameError:
         from local_settings import *
     except ImportError:
         pass
+
+MENU_SELECT_PARENTS = True
