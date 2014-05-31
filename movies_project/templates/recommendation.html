@@ -21,18 +21,23 @@
 <div id="results" class="results">
   {% if records %}
     {% for record in records %}
-      {% ifequal user.preferences.titles 'original' %}
+      {% ifequal user.preferences.lang 'en' %}
         {% set title = record.movie.title %}
+        {% set poster_normal_url = record.movie.poster_en_normal_url %}
       {% else %}
         {% set title = record.movie.title_ru %}
+        {% set poster_normal_url = record.movie.poster_ru_normal_url %}
       {% endifequal %}
       <div id="record{{ record.id }}" data-id="{{ record.id }}" class="movie">
           <div class="title">
            {{ title }}
-           <a href="javascript:show_torrents('{{ record.movie.torrent_search_title }}')" title="Скачать"><i class="fa fa-download"></i></a>
+           <a href="#" onclick="show_torrents('{{ record.movie.torrent_search_title }}')" title="Скачать"><i class="fa fa-download"></i></a>
+           <div class="add-to-list-buttons">
+            {% include 'includes/add_to_list_buttons.html' %}
+           </div>
          </div>
           <div class="poster">
-              <img src="{{ record.movie.poster_normal_url }}" alt="{{ title }} poster"/>
+              <img src="{{ poster_normal_url }}" alt="{{ title }} poster"/>
           </div>
           <div class="details">
             {% if record.movie.release_date %}<div class="release_date" title="Дата выпуска"><span class="release_date_label item-desc">Дата:</span> {{ record.movie.release_date|date:'d.m.y' }}</div>{% endif %}
@@ -70,7 +75,6 @@
           </div>
           <div class="clearfix"></div><br>
           {% include 'includes/reviews.html' %}
-          {% include 'includes/add_to_list_buttons.html' %}
         </div>
     {% endfor %}
   {% else %}

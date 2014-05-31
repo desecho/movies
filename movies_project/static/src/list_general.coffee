@@ -18,7 +18,7 @@ check_if_no_records = ->
 
 set_viewed_icon_and_remove_buttons = (record_id, list_id) ->
   remove_buttons = ->
-    $('#record' + record_id).children('.buttons').html ''
+    $('#record' + record_id).children('.title').children('.add-to-list-buttons').html ''
   set_viewed_icon(record_id, list_id)
   if list_id isnt 0
     remove_buttons()

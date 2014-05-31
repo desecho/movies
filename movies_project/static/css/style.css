@@ -69,10 +69,6 @@ label.error {
     margin: 20px 20px 0 0;
 }
 
-.buttons {
-    margin: 10px 0;
-}
-
 #movie-count {
     font-size: 25px;
     float: right;
@@ -125,4 +121,27 @@ textarea {
 
 .item-desc {
     color: grey;
+}
+
+form {margin: 0}
+
+.input-append, .input-prepend {
+    margin-bottom: 0;
+}
+
+.search {
+    display: inline;
+    margin-left: 30px;
+}
+
+legend {
+    margin-bottom: 0;
+}
+
+.navbar .nav>li>a {
+    padding-right: 14px;
+}
+
+.add-to-list-buttons {
+    display: inline;
 }

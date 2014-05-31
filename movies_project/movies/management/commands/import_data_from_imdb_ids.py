@@ -1,4 +1,4 @@
-from movies.functions import get_tmdb_id, add_to_list_from_db
+from movies.functions import tmdb, add_to_list_from_db
 from movies.models import User
 from django.core.management.base import BaseCommand
 
@@ -13,6 +13,12 @@ class Command(BaseCommand):
         # imdb_ids = '''
 
         # '''
+        def get_tmdb_id(imdb_id):
+            try:
+                return tmdb.Movie.fromIMDB(imdb_id).id
+            except:
+                return
+
         imdb_ids = imdb_ids.split('\n')
         for imdb_id in imdb_ids:
             imdb_id = imdb_id.strip()

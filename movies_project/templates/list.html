@@ -67,7 +67,13 @@
   <button title="Сортировка" id="button_sort_rating" type="button" class="btn" onclick="switch_sort('rating')">Оценка</button>
   <button title="Сортировка" id="button_sort_addition_date" type="button" class="btn" onclick="switch_sort('addition_date')">Дата добавления</button>
 </div>
-
+<form action="" method="post" class="search">
+  {% csrf_token %}
+  <div class="input-append">
+    <input class="span2" name="search" type="text">
+    <button class="btn" type="submit">Найти</button>
+  </div>
+</form>
 <br><br>
 
 <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -82,18 +88,35 @@
 <div id="results" class="results">
   {% if records %}
     {% for record in records %}
-      {% ifequal user.preferences.titles 'original' %}
+      {% ifequal user.preferences.lang 'en' %}
         {% set title = record.movie.title %}
+        {% set poster_small_url = record.movie.poster_en_small_url %}
+        {% set poster_normal_url = record.movie.poster_en_normal_url %}
       {% else %}
         {% set title = record.movie.title_ru %}
+        {% set poster_small_url = record.movie.poster_ru_small_url %}
+        {% set poster_normal_url = record.movie.poster_ru_normal_url %}
       {% endifequal %}
       <div id="record{{ record.id }}" data-id="{{ record.id }}" data-title="{{ title }}" class="movie">
-          <div class="title">
-           {{ title }} {% if not anothers_account %}<a href="javascript:remove_record({{ record.id }})" title="Удалить"><i class="fa fa-trash-o"></i></a> {% endif %}
-           <a href="javascript:show_torrents('{{ record.movie.torrent_search_title }}')" title="Скачать"><i class="fa fa-download"></i></a>
-         </div>
+        <div class="title">
+          {{ title }}
+          {% if not anothers_account %}
+            <a href="#" title="Удалить" onlick="remove_record({{ record.id }})"><i class="fa fa-trash-o"></i></a>
+            <a href="#" class="wall-post" title="Отправить на стену" onclick="post_to_wall({{ record.id }})"><i class="fa fa-share"></i></a>
+          {% endif %}
+          <a href="#" onclick="show_torrents('{{ record.movie.torrent_search_title }}')" title="Скачать"><i class="fa fa-download"></i></a>
+          <div class="add-to-list-buttons">
+            {% if not anothers_account %}
+              {% ifequal list_id 2 %}
+                {% include 'includes/add_to_watched_list_button.html' %}
+              {% endifequal %}
+            {% else %}
+              {% include 'includes/add_to_list_buttons.html' %}
+            {% endif %}
+          </div>
+        </div>
           <div class="poster">
-              <img src="{% ifequal request.session.mode 'full' %}{{ record.movie.poster_normal_url }}{% else %}{{ record.movie.poster_small_url }}{% endifequal %}" alt="{{ title }} poster"/>
+              <img src="{% ifequal request.session.mode 'full' %}{{ poster_normal_url }}{% else %}{{ poster_small_url }}{% endifequal %}" alt="{{ title }} poster"/>
           </div>
           <div class="details">
             {% if record.movie.release_date %}<div class="release_date" title="Дата выпуска"><span class="release_date_label item-desc">Дата:</span> {{ record.movie.release_date|date:'d.m.y' }}</div>{% endif %}
@@ -145,7 +168,6 @@
                 </div>
                 {% if not anothers_account %}
                   <button id="comment_area_button{{ record.id }}" type="button" title="Добавить комментарий" class="btn comment-button" onclick="toggle_comment_area({{ record.id }})" {% if record.comment %} style="display: none "{% endif %}><i class="fa fa-comment"></i></button>
-                  <button class="wall-post btn" type="button" title="Отправить на стену" onclick="post_to_wall({{ record.id }})"><i class="fa fa-share"></i></button>
                 {% endif %}
                   <br>
               {% endifequal %}
@@ -155,15 +177,6 @@
           {% if list_id == 2 and not anothers_account %}
             {% include 'includes/reviews.html' %}
           {% endif %}
-          <div class="buttons">
-          {% if not anothers_account %}
-            {% ifequal list_id 2 %}
-              {% include 'includes/add_to_watched_list_button.html' %}
-            {% endifequal %}
-          {% else %}
-            {% include 'includes/add_to_list_buttons.html' %}
-          {% endif %}
-          </div>
         </div>
     {% endfor %}
   {% if records.has_other_pages %}

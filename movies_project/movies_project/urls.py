@@ -9,11 +9,11 @@ urlpatterns = patterns(
     url(r'^$', 'movies.views.search'),
     url(r'^search/$', 'movies.views.search'),
 
-    url(r'^list/(?P<list>[\w-]+)/$', 'movies.views.list'),
+    url(r'^list/(?P<list_name>[\w-]+)/$', 'movies.views.list_view'),
     url(r'^people/$', 'movies.views.people'),
     url(r'^friends/$', 'movies.views.friends'),
-    url(r'^feed/(?P<list>[\w-]+)/$', 'movies.views.feed'),
-    url(r'^people/(?P<username>[\w\d]+)/(?P<list>[\w-]+)$', 'movies.views.list'),
+    url(r'^feed/(?P<list_name>[\w-]+)/$', 'movies.views.feed'),
+    url(r'^people/(?P<username>[\w\d]+)/(?P<list_name>[\w-]+)$', 'movies.views.list_username'),
     url(r'^recommendation/$', 'movies.views.recommendation'),
     url(r'^preferences/$', 'movies.views.preferences'),
 
@@ -32,7 +32,6 @@ urlpatterns = patterns(
     url(r'^logout/$', 'movies.views.logout_view'),
 
     # Uncomment the admin/doc line below to enable admin documentation:
-    url(r'^admin_tools/', include('admin_tools.urls')),
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 
     # Uncomment the next line to enable the admin:

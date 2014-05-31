@@ -1,15 +1,14 @@
-# Django<1.6
-# pip install Django<1.6
-
+Django==1.6.5
 mysql-python
-django-annoying>=0.7.7
+django-annoying
 django-simple-menu
 django-bootstrap-pagination
 vkontakte
 django-vkontakte-iframe
 poster
 python-dateutil
+south
 
-# pytmdb3>=0.6.16
-# git clone https://github.com/wagnerrp/pytmdb3.git
-# ./setup.py install
+#django_extensions
+#   Werkzeug
+#django-debug_toolbar

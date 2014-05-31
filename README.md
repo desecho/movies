@@ -5,21 +5,20 @@ The web-application to create movie lists ("watched" and "to watch"), to share t
 ##Required packages
 
 * [Python v2.6.5+](http://www.python.org)
-* [Django v1.5](http://djangoproject.com)
+* [Django v1.6.5](http://djangoproject.com)
 * [CoffeeScript v1.6.1](http://coffeescript.org)
-* [django-annoying v0.7.7+](https://github.com/skorokithakis/django-annoying)
+* [django-annoying](https://github.com/skorokithakis/django-annoying)
 * [django-simple-menu](https://github.com/fatbox/django-simple-menu)
 * [django-bootstrap-pagination](https://github.com/jmcclell/django-bootstrap-pagination)
-* [pytmdb3 v0.6.16+](https://github.com/wagnerrp/pytmdb3)
+* [pytmdb3](https://github.com/wagnerrp/pytmdb3)
 * [vkontakte](https://bitbucket.org/kmike/vkontakte/src)
 * [django-vkontakte-iframe](https://bitbucket.org/kmike/django-vkontakte-iframe/)
 * [python-dateutil](http://labix.org/python-dateutil)
-* [poster 0.8.1](https://pypi.python.org/pypi/poster/)
-
-##Required API Keys
-* [TMDb](http://www.themoviedb.org/)
+* [poster](https://pypi.python.org/pypi/poster/)
+* [south](http://south.aeracode.org/)
 
 ##Used APIs
+* [TMDb](http://www.themoviedb.org/) (Requires API Key)
 * [OMDb](http://www.omdbapi.com/)
 * [2torrents.org](http://2torrents.org)
 

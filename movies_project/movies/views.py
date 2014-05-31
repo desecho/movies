@@ -10,22 +10,160 @@ import urllib2
 from django.utils.http import urlquote
 from django.http import HttpResponse
 from django.shortcuts import redirect
-from movies.models import Record, List, User, ActionRecord
+from movies.models import Record, List, User, ActionRecord, get_poster_url
+from movies.functions import add_movie_to_list, add_to_list_from_db, tmdb
 from annoying.decorators import ajax_request, render_to
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from django.views.decorators.csrf import ensure_csrf_cookie
-from movies.functions import (get_friends, filter_movies_for_recommendation,
-                              add_movie_to_list, add_to_list_from_db,
-                              get_movies_from_tmdb)
 import logging
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
+from django.db.models import Q
+import vkontakte
+from operator import itemgetter
 
 logger = logging.getLogger('movies.test')
 #logger.debug(options)
+
+def get_movies_from_tmdb(query, type, options, user):
+    STATUS_CODES = {
+        'error': -1,
+        'not found': 0,
+        'found': 1,
+    }
+
+    def set_proper_date(movies):
+        def format_date(date):
+            if date:
+                return date.strftime('%d.%m.%y')
+        for movie in movies:
+            movie['release_date'] = format_date(movie['release_date'])
+        return movies
+
+    # def sortByPopularity(movies):
+    #     movies = sorted(movies, key=itemgetter('popularity'), reverse=True)
+    #     for movie in movies:
+    #         del movie['popularity']
+    #     return movies
+
+    def remove_not_popular_movies(movies):
+        movies_output = []
+        for movie in movies:
+            if movie['popularity'] > settings.MIN_POPULARITY:
+                del movie['popularity']  # remove unnesessary data
+                movies_output.append(movie)
+        if not movies_output:                  # keep initial movie list if all are unpopular
+            movies_output = movies
+        return movies_output
+
+    def sort_by_date(movies):
+        movies_with_date = []
+        movies_without_date = []
+        for movie in movies:
+            if movie['release_date']:
+                movies_with_date.append(movie)
+            else:
+                movies_without_date.append(movie)
+        movies_with_date = sorted(movies_with_date, key=itemgetter('release_date'), reverse=True)
+        movies = movies_with_date + movies_without_date
+        return movies
+
+    def get_data(query, type):
+        'For actor, director search - the first is used.'
+        tmdb.set_locale(*settings.LOCALES[user.preferences['lang']])
+        query = query.encode('utf-8')
+        SEARCH_TYPES_IDS = {
+            'movie': 1,
+            'actor': 2,
+            'director': 3,
+        }
+        if type == SEARCH_TYPES_IDS['movie']:
+            try:
+                movies = tmdb.searchMovie(query)
+            except:
+                return -1
+        else:
+            try:
+                result = tmdb.searchPerson(query)
+            except:
+                return -1
+            movies = []
+            if len(result):
+                person = result[0]
+                if type == SEARCH_TYPES_IDS['actor']:
+                    movies = person.roles
+                else:
+                    for movie in person.crew:
+                        if movie.job == 'Director':
+                            movies.append(movie)
+        return movies
+
+    def get_title():
+        if user.preferences['lang'] == 'en':
+            return movie.originaltitle
+        else:
+            return movie.title
+
+    output = {}
+    movies_data = get_data(query, type)
+    if movies_data == STATUS_CODES['error']:
+        output['status'] = STATUS_CODES['error']
+        return output
+    movies = []
+    i = 0
+
+    if len(movies_data):
+        try:
+            for movie in movies_data:
+                i += 1
+                if i > settings.MAX_RESULTS:
+                    break
+                if Record.objects.filter(movie__tmdb_id=movie.id,
+                    user=user).exists() or not movie.imdb: #ignore movies if imdb not found
+                    continue
+
+                movie = {
+                    'id': movie.id,
+                    'release_date': movie.releasedate,
+                    'popularity': movie.popularity,
+                    'title': get_title(),
+                    'poster': get_poster_url('small', movie.poster),
+                }
+                movies.append(movie)
+        except IndexError:         # strange exception in 'matrix case'
+            pass
+        if options['popular_only']:
+            movies = remove_not_popular_movies(movies)
+        if options['sort_by_date']:
+            movies = sort_by_date(movies)
+        #movies = sortByPopularity(movies)
+
+        movies = set_proper_date(movies)
+        if len(movies):
+            output['status'] = STATUS_CODES['found']
+            output['movies'] = movies
+        else:
+            output['status'] = STATUS_CODES['not found']
+    else:
+            output['status'] = STATUS_CODES['not found']
+    return output
+
+
+def get_friends(user):
+    if user.is_vk_user():
+        vk = vkontakte.API(settings.VK_APP_ID, settings.VK_APP_SECRET)
+        friends = vk.friends.get(uid=user.username)
+        friends = map(str, friends)
+        return User.objects.filter(username__in=friends)
+
+
+def filter_movies_for_recommendation(records, user):
+    'Keeps movies only with 3+ rating, removes watched movies'
+    return records.filter(rating__gte=3). \
+                   exclude(movie__in=user.get_movie_ids())
 
 
 def logout_view(request):
@@ -42,10 +180,7 @@ def search(request):
 
 def get_record_movie_data(record_ids_and_movies):
     movies = [x[1] for x in record_ids_and_movies]
-    record_ids_and_movies_dict = {}
-    for x in record_ids_and_movies:
-        record_ids_and_movies_dict[x[0]] = x[1]
-    return (movies, record_ids_and_movies_dict)
+    return (movies, {x[0]: x[1] for x in record_ids_and_movies})
 
 
 def get_comments_and_ratings(record_ids_and_movies, user):
@@ -54,26 +189,26 @@ def get_comments_and_ratings(record_ids_and_movies, user):
         user__in=get_friends(user),
         list_id=1,
         movie_id__in=movies
-    ).values_list('movie_id', 'comment', 'rating', 'user__vk_profile__photo',
+    ).values('movie_id', 'comment', 'rating', 'user__vk_profile__photo',
                   'user__first_name', 'user__last_name', 'user__username')
 
     comments_and_ratings_dict = {}
     for x in comments_and_ratings:
-        if x[1] or x[2]:
-            if x[0] not in comments_and_ratings_dict:
-                comments_and_ratings_dict[x[0]] = []
+        if x['comment'] or x['rating']:
+            if x['movie_id'] not in comments_and_ratings_dict:
+                comments_and_ratings_dict[x['movie_id']] = []
             data = {}
-            if x[1]:
-                data['comment'] = x[1]
-            if x[2]:
-                data['rating'] = x[2]
-            data['avatar'] = x[3]
-            data['full_name'] = x[4] + ' ' + x[5]
-            data['username'] = x[6]
-            comments_and_ratings_dict[x[0]].append(data)
+            if x['comment']:
+                data['comment'] = x['comment']
+            if x['rating']:
+                data['rating'] = x['rating']
+            data['avatar'] = x['user__vk_profile__photo']
+            data['full_name'] = x['user__first_name'] + ' ' + x['user__last_name']
+            data['username'] = x['user__username']
+            comments_and_ratings_dict[x['movie_id']].append(data)
     data = {}
-    for record_id in record_ids_and_movies_dict:
-        data[record_id] = comments_and_ratings_dict.get(record_ids_and_movies_dict[record_id], None)
+    for record_id, value in record_ids_and_movies_dict.items():
+        data[record_id] = comments_and_ratings_dict.get(value, None)
     return data
 
 
@@ -94,7 +229,8 @@ def recommendation(request):
                     movies.append(record.movie.pk)
             return (records_output, record_ids_and_movies)
         # exclude own records and include only friends' records
-        records = Record.objects.exclude(user=request.user).filter(user__in=friends).select_related()
+        records = Record.objects.exclude(user=request.user) \
+            .filter(user__in=friends).select_related()
         # order records by user rating and by imdb rating
         records = records.order_by('-rating', '-movie__imdb_rating', '-movie__release_date')
         records = filter_movies_for_recommendation(records, request.user)
@@ -108,45 +244,18 @@ def recommendation(request):
         records = None
         reviews = None
     return {'records': records, 'reviews': reviews}
+
 
 @render_to('preferences.html')
 @login_required
 def preferences(request):
-    #request.user.preferences.titles
+    return {}
 
-    def get_recommendations_from_friends():
-        def filter_duplicated_movies_and_limit(records):
-            records_output = []
-            movies = []
-            record_ids_and_movies = []
-            for record in records:
-                if record.movie.pk not in movies:
-                    records_output.append(record)
-                    record_ids_and_movies.append((record.pk, record.movie.pk))
-                    if len(records_output) == settings.MAX_RECOMMENDATIONS:
-                        break
-                    movies.append(record.movie.pk)
-            return (records_output, record_ids_and_movies)
-        # exclude own records and include only friends' records
-        records = Record.objects.exclude(user=request.user).filter(user__in=friends).select_related()
-        # order records by user rating and by imdb rating
-        records = records.order_by('-rating', '-movie__imdb_rating', '-movie__release_date')
-        records = filter_movies_for_recommendation(records, request.user)
-        return filter_duplicated_movies_and_limit(records)
-
-    friends = get_friends(request.user)
-    if friends:
-        records, record_ids_and_movies = get_recommendations_from_friends()
-        reviews = get_comments_and_ratings(record_ids_and_movies, request.user)
-    else:
-        records = None
-        reviews = None
-    return {'records': records, 'reviews': reviews}
 
 def ajax_save_preferences(request):
     if request.is_ajax() and request.method == 'POST':
         POST = request.POST
-        if 'titles' in POST:
+        if 'lang' in POST:
             user = User.objects.get(pk=request.user.pk)
             user.preferences = POST
             user.save()
@@ -169,12 +278,19 @@ def paginate(objects, page, objects_on_page):
 def get_movie_count(username):
     def number_of_movies(list_id):
         return Record.objects.filter(list_id=list_id, user__username=username).count()
-    return '<span title="Просмотрено">%d</span> / <span title="К просмотру">%d' % (number_of_movies(1), number_of_movies(2))
+    return '<span title="Просмотрено">%d</span> / <span title="К просмотру">%d' % \
+        (number_of_movies(1), number_of_movies(2))
+
+
+@login_required
+def list_username(request, list_name, username=None):
+    if User.objects.get(username=username) in get_available_users_and_friends(request.user):
+        return list_view(request, list_name, username)
 
 
 @render_to('list.html')
 @login_required
-def list(request, list, username=None):
+def list_view(request, list_name, username=None):
     def initialize_session_values():
         if 'sort' not in request.session:
             request.session['sort'] = 'addition_date'
@@ -184,23 +300,25 @@ def list(request, list, username=None):
             request.session['mode'] = 'full'
 
     def get_list_data(records):
-        movies, record_ids_and_movies_dict = get_record_movie_data(records.values_list('id', 'movie_id'))
-        movie_ids_and_list_ids = Record.objects.filter(user=request.user, movie_id__in=movies).values_list('movie_id', 'list_id')
+        movies, record_ids_and_movies_dict = get_record_movie_data(
+            records.values_list('id', 'movie_id'))
+        movie_ids_and_list_ids = Record.objects.filter(user=request.user,
+            movie_id__in=movies).values_list('movie_id', 'list_id')
 
         movie_id_and_list_id_dict = {}
         for x in movie_ids_and_list_ids:
             movie_id_and_list_id_dict[x[0]] = x[1]
 
         list_data = {}
-        for record_id in record_ids_and_movies_dict:
-            list_data[record_id] = movie_id_and_list_id_dict.get(record_ids_and_movies_dict[record_id], 0)
+        for record_id, value in record_ids_and_movies_dict.items():
+            list_data[record_id] = movie_id_and_list_id_dict.get(value, 0)
         return list_data
 
     def sort_records(records, sort):
         if sort == 'release_date':
             records = records.order_by('-movie__release_date')
         elif sort == 'rating':
-            if not username and list == 'to-watch':
+            if not username and list_name == 'to-watch':
                 # sorting is changing here because there is no user rating yet.
                 records = records.order_by('-movie__imdb_rating', '-movie__release_date')
             else:
@@ -215,7 +333,7 @@ def list(request, list, username=None):
             user = anothers_account
         else:
             user = request.user
-        return Record.objects.select_related().filter(list__key_name=list, user=user)
+        return Record.objects.select_related().filter(list__key_name=list_name, user=user)
 
     def get_anothers_account():
         "Returns User if it's another's account and False if it's not"
@@ -224,9 +342,15 @@ def list(request, list, username=None):
         else:
             anothers_account = False
         return anothers_account
+
+    def search_records(query):
+        return records.filter(Q(movie__title__icontains=query) | Q(movie__title_ru__icontains=query))
+
     initialize_session_values()
     anothers_account = get_anothers_account()
     records = get_records()
+    if request.POST.get('search', False):
+        records = search_records(request.POST['search'])
     records = sort_records(records, request.session['sort'])
 
     if username and request.session['recommendation']:
@@ -239,14 +363,15 @@ def list(request, list, username=None):
         list_data = None
         movie_count = get_movie_count(request.user.username)
 
-    if not username and list == 'to-watch':
-        comments_and_ratings = get_comments_and_ratings(records.values_list('id', 'movie_id'), request.user)
+    if not username and list_name == 'to-watch' and records:
+        comments_and_ratings = get_comments_and_ratings(
+            records.values_list('id', 'movie_id'), request.user)
     else:
         comments_and_ratings = None
     records = paginate(records, request.GET.get('page'), settings.RECORDS_ON_PAGE)
     return {'records': records,
             'reviews': comments_and_ratings,
-            'list_id': List.objects.get(key_name=list).id,
+            'list_id': List.objects.get(key_name=list_name).id,
             'anothers_account': anothers_account,
             'movie_count': movie_count,
             'list_data': json.dumps(list_data)}
@@ -255,76 +380,108 @@ def list(request, list, username=None):
 def get_avatar(photo):
     return photo or settings.VK_NO_IMAGE_SMALL
 
+def get_available_users_and_friends(user, sort=False):
+    def available_users():
+        return [u for u in User.objects.exclude(pk=user.pk) if not \
+            u.preferences.get('only_for_friends', False)]
+
+    def join(x, z):
+        # convert to list doesn't work for some reason.
+        # list(get_friends(request.user)) - error
+        output = []
+        for a in x:
+            output.append(a)
+        if z is not None:
+            for a in z:
+                output.append(a)
+        return output
+
+    def sort_users(users):
+        def username(x):
+            return x.first_name
+        return sorted(users, key=username)
+
+    users = set(join(available_users(), get_friends(user)))
+    if sort:
+        users = sort_users(users)
+    return users
+
 
 @render_to('feed.html')
 @login_required
-def feed(request, list):
+def feed(request, list_name):
+    FEED_TITLE = {
+        'people': 'Люди',
+        'friends': 'Друзья',
+    }
+    def get_title(action):
+        if request.user.preferences['lang'] == 'en':
+            return action['movie__title']
+        else:
+            return action['movie__title_ru']
+
     date_to = datetime.today()
     date_from = date_to - relativedelta(days=settings.FEED_DAYS)
     actions = ActionRecord.objects.filter(date__range=(date_from, date_to)).order_by('-pk')
-    if list == 'friends':
+    if list_name == 'friends':
         actions = actions.filter(user__in=get_friends(request.user))
     else:
-        actions = actions.exclude(user=request.user)
-    posters = [action.movie.poster_small_url for action in actions]
-    actions = actions.values('user__vk_profile__photo', 'user__username', 'user__first_name',
-                             'user__last_name', 'action__name', 'movie__title', 'movie__title_ru', 'list__title',
-                             'comment', 'rating', 'date')
+        actions = actions.filter(user__in=get_available_users_and_friends(request.user))
+
+    posters = [action.movie.get_poster('small', request.user.preferences['lang']) for action in actions]
+    actions = actions.values('user__vk_profile__photo', 'user__username',
+                             'user__first_name', 'user__last_name',
+                             'action__name', 'movie__title', 'movie__title_ru',
+                             'list__title', 'comment', 'rating', 'date')
     actions_output = []
 
-    def get_title(action):
-        if request.user.preferences['titles'] == 'original':
-            title = action['movie__title']
-        else:
-            title = action['movie__title_ru']
-        return title
     i = 0
     for action in actions:
-        a = {}
-        a['avatar'] = get_avatar(action['user__vk_profile__photo'])
-        a['full_name'] = action['user__first_name'] + ' ' + action['user__last_name']
-        a['username'] = action['user__username']
-        a['action'] = action['action__name']
-        a['movie'] = get_title(action)
-        a['movie_poster'] = posters[i]
-        a['list'] = action['list__title']
-        a['comment'] = action['comment']
-        a['rating'] = action['rating']
-        a['date'] = action['date']
+        a = {
+            'avatar': get_avatar(action['user__vk_profile__photo']),
+            'full_name': action['user__first_name'] + ' ' + action['user__last_name'],
+            'username': action['user__username'],
+            'action': action['action__name'],
+            'movie': get_title(action),
+            'movie_poster': posters[i],
+            'list': action['list__title'],
+            'comment': action['comment'],
+            'rating': action['rating'],
+            'date': action['date'],
+        }
         actions_output.append(a)
         i += 1
-    return {'actions': actions_output}
+    return {'list_name': FEED_TITLE[list_name],
+        'actions': actions_output}
 
 
 #@cache_page(settings.CACHE_TIMEOUT)
 @render_to('people.html')
 @login_required
 def generic_people(request, users):
-    users = users.values('first_name', 'last_name', 'username', 'vk_profile__photo')
-
     users_output = []
     for user in users:
-        u = {}
-        u['full_name'] = user['first_name'] + ' ' + user['last_name']
-        u['username'] = user['username']
-        u['avatar'] = get_avatar(user['vk_profile__photo'])
-        u['movie_count'] = get_movie_count(user['username'])
-        users_output.append(u)
-
-    users = paginate(users_output, request.GET.get('page'), settings.PEOPLE_ON_PAGE)
-    return {'users': users}
+        users_output.append({
+            'full_name': user.get_full_name(),
+            'username': user.username,
+            'avatar': get_avatar(user.vk_profile.photo),
+            'movie_count': get_movie_count(user.username)})
+    return {'users': paginate(users_output, request.GET.get('page'),
+        settings.PEOPLE_ON_PAGE)}
 
 
 #@cache_page(settings.CACHE_TIMEOUT)
 @login_required
 def people(request):
-    return generic_people(request, User.objects.all().order_by('first_name'))
+    return generic_people(request,
+        get_available_users_and_friends(user=request.user, sort=True))
 
 
 #@cache_page(settings.CACHE_TIMEOUT)
 @login_required
 def friends(request):
-    return generic_people(request, get_friends(request.user))
+    return generic_people(request,
+        get_friends(request.user).order_by('first_name'))
 
 
 def ajax_apply_settings(request):
@@ -355,7 +512,8 @@ def ajax_save_comment(request):
             r = Record.objects.get(pk=id, user=request.user)
             if r.comment != comment:
                 if not r.comment:
-                    ActionRecord(action_id=4, user=request.user, movie=r.movie, comment=comment).save()
+                    ActionRecord(action_id=4, user=request.user, movie=r.movie,
+                        comment=comment).save()
                 r.comment = comment
                 r.save()
     return HttpResponse()
@@ -370,7 +528,8 @@ def ajax_change_rating(request):
             r = Record.objects.get(pk=id, user=request.user)
             if r.rating != rating:
                 if not r.rating:
-                    ActionRecord(action_id=3, user=request.user, movie=r.movie, rating=rating).save()
+                    ActionRecord(action_id=3, user=request.user, movie=r.movie,
+                        rating=rating).save()
                 r.rating = rating
                 r.save()
     return HttpResponse()
@@ -383,7 +542,8 @@ def ajax_download(request):
         if 'query' in POST:
             filter = urlquote(u'Íàéòè')
             query = urlquote(POST.get('query'))
-            url = 'http://2torrents.org/search/listjson?filters[title]=%s&filter=%s&sort=seeders&type=desc' % (query, filter)
+            url = 'http://2torrents.org/search/listjson?filters[title]=%s&filter=%s&sort=seeders&type=desc' % \
+                (query, filter)
             html = urllib2.urlopen(url).read()
             html = html.replace('"items": {"list":[,{', '"items": {"list":[{')
             return {'data': html}
@@ -393,10 +553,12 @@ def ajax_download(request):
 def ajax_search_movie(request):
     if request.is_ajax() and request.method == 'POST':
         POST = request.POST
-        if 'query' in POST and 'type' in POST and 'options[popular_only]' in POST and 'options[sort_by_date]' in POST:
+        if 'query' in POST and 'type' in POST and 'options[popular_only]' \
+            in POST and 'options[sort_by_date]' in POST:
             query = POST.get('query')
             type = int(POST.get('type'))
-            options = {'popular_only': int(POST.get('options[popular_only]')), 'sort_by_date': int(POST.get('options[sort_by_date]'))}
+            options = {'popular_only': int(POST.get('options[popular_only]')),
+                'sort_by_date': int(POST.get('options[sort_by_date]'))}
             output = get_movies_from_tmdb(query, type, options, request.user)
             return output
 
@@ -426,7 +588,7 @@ def ajax_add_to_list(request):
 def ajax_upload_photo_to_wall(request):
     def get_filepath(record_id):
         movie = Record.objects.get(pk=record_id).movie
-        poster_url = movie.poster_big_url()
+        poster_url = eval('movie.poster_%s_big_url()' % request.user.preferences['lang'])
         file_contents = urllib2.urlopen(poster_url).read()
         path = tempfile.mkstemp()[1]
         file = open(path, 'w')
