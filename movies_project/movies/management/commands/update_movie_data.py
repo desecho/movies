@@ -2,6 +2,7 @@ from movies.functions import add_movie_to_db
 from movies.models import Movie
 from django.core.management.base import BaseCommand
 import sys
+from tmdb3.tmdb_exceptions import TMDBRequestInvalid
 
 class Command(BaseCommand):
     help = '''Updates movie data
@@ -40,6 +41,6 @@ class Command(BaseCommand):
         for tmdb_id in get_tmdb_ids():
             try:
                 print add_movie_to_db(tmdb_id, True)
-            except:
+            except TMDBRequestInvalid:
                 print 'Movie id - %d' % Movie.objects.get(tmdb_id=tmdb_id).id
-                print sys.exc_info()
+                print sys.exc_info()[1]
