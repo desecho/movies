@@ -79,6 +79,7 @@ def add_movie_to_db(tmdb_id, refresh=False):
             'director': movie_data.get('Director'),
             'actors': movie_data.get('Actors'),
             'genre': movie_data.get('Genre'),
+            'country': movie_data.get('Country'),
             'imdb_rating': movie_data.get('imdbRating'),
             'runtime': get_runtime(movie_data.get('Runtime'))}
 

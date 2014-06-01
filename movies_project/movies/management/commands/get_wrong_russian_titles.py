@@ -2,7 +2,7 @@
 from movies.models import Movie
 from django.core.management.base import BaseCommand
 
-ALLOWED_CHARS = u'абвгдеёжзийклмнопрстуфхцчшщьыъэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЬЫЪЭЮЯ123456789 -:0,"«».?+/'
+ALLOWED_CHARS = u'абвгдеёжзийклмнопрстуфхцчшщьыъэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЬЫЪЭЮЯ123456789 -:0,"«».?+/–º·№!'
 
 class Command(BaseCommand):
     help = 'Displays wrong russian titles'

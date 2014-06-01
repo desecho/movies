@@ -3,6 +3,9 @@ from django.db import models
 from annoying.fields import JSONField
 from django.contrib.auth.models import AbstractUser
 from django.conf import settings
+from south.modelsinspector import add_introspection_rules
+
+add_introspection_rules([], ["^annoying.fields.JSONField"])
 
 def get_poster_url(size, poster, filename=None):
     if size == 'small':
@@ -55,6 +58,7 @@ class List(models.Model):
 class Movie(models.Model):
     title = models.CharField('оригинальное название', max_length=255)
     title_ru = models.CharField('название', max_length=255)
+    country = models.CharField('страна', max_length=255, null=True, blank=True)
     overview = models.TextField('описание (рус)', null=True, blank=True)
     plot = models.TextField('описание (англ)', null=True, blank=True)
     director = models.CharField('режиссёр', max_length=255, null=True, blank=True)
