@@ -119,7 +119,7 @@ class Movie(models.Model):
 
 class Record(models.Model):
     user = models.ForeignKey(User, verbose_name='пользователь')
-    movie = models.ForeignKey(Movie, verbose_name='фильм')
+    movie = models.ForeignKey(Movie, verbose_name='фильм', related_name='records')
     list = models.ForeignKey(List, verbose_name='список')
     rating = models.IntegerField('рейтинг', default=0)
     comment = models.CharField('комментарий', max_length=255, default='')

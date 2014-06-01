@@ -1,7 +1,7 @@
 from movies.functions import add_movie_to_db
 from movies.models import Movie
 from django.core.management.base import BaseCommand
-
+import sys
 
 class Command(BaseCommand):
     help = '''Updates movie data
@@ -38,4 +38,8 @@ class Command(BaseCommand):
             return movies.values_list('tmdb_id', flat=True)
 
         for tmdb_id in get_tmdb_ids():
-            print add_movie_to_db(tmdb_id, True)
+            try:
+                print add_movie_to_db(tmdb_id, True)
+            except:
+                print 'Movie id - %d' % Movie.objects.get(tmdb_id=tmdb_id).id
+                print sys.exc_info()
