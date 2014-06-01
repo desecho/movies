@@ -119,8 +119,8 @@
               <img src="{% ifequal request.session.mode 'full' %}{{ poster_normal_url }}{% else %}{{ poster_small_url }}{% endifequal %}" alt="{{ title }} poster"/>
           </div>
           <div class="details">
-            {% if record.movie.release_date %}<div class="release_date" title="Дата выпуска"><span class="release_date_label item-desc">Дата:</span> {{ record.movie.release_date|date:'d.m.y' }}</div>{% endif %}
             {% if record.movie.imdb_rating %}<div class="imdb_rating" title="Рейтинг"><span class="item-desc">IMDb:</span> {{ record.movie.imdb_rating }}</div> {% endif %}
+            {% if record.movie.release_date %}<div class="release_date" title="Дата выпуска"><span class="release_date_label item-desc">Дата:</span> {{ record.movie.release_date|date:'d.m.y' }}</div>{% endif %}
             {% ifequal request.session.mode 'full' %}
                 {% if record.movie.country %} <span class="item-desc">Страна:</span> {{ record.movie.country }}<br> {% endif %}
                 {% if record.movie.director %} <span class="item-desc">Режиссёр:</span> {{ record.movie.director }}<br> {% endif %}
