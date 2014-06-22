@@ -2,6 +2,7 @@
 tmdb3.cache
 movies_project/static/admin/
 movies_project/static/js/
+movies_project/static/bower/
 movies_project/movies_project/secret.py
 movies_project/movies_project/local_settings.py
 

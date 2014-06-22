@@ -1,4 +1,5 @@
 pip install -r requirements.txt
+bower install
 mkdir temp
 cd temp
 git clone https://github.com/wagnerrp/pytmdb3.git

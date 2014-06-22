@@ -2,39 +2,13 @@
 
 The web-application to create movie lists ("watched" and "to watch"), to share these lists along with ratings and comments. The interface is in Russian.
 
-##Required packages
-
-* [Python v2.6.5+](http://www.python.org)
-* [Django v1.6.5](http://djangoproject.com)
-* [CoffeeScript v1.6.1](http://coffeescript.org)
-* [django-annoying](https://github.com/skorokithakis/django-annoying)
-* [django-simple-menu](https://github.com/fatbox/django-simple-menu)
-* [django-bootstrap-pagination](https://github.com/jmcclell/django-bootstrap-pagination)
-* [pytmdb3](https://github.com/wagnerrp/pytmdb3)
-* [vkontakte](https://bitbucket.org/kmike/vkontakte/src)
-* [django-vkontakte-iframe](https://bitbucket.org/kmike/django-vkontakte-iframe/)
-* [python-dateutil](http://labix.org/python-dateutil)
-* [poster](https://pypi.python.org/pypi/poster/)
-* [south](http://south.aeracode.org/)
+Uses Python 2, Django 1.6 and CoffeeScript.
 
 ##Used APIs
 * [TMDb](http://www.themoviedb.org/) (Requires API Key)
 * [OMDb](http://www.omdbapi.com/)
 * [2torrents.org](http://2torrents.org)
-
-##Used Javascript libraries
-
-* [jQuery v2.1.1](http://jquery.com/)
-* [JQuery Raty v2.5.2](http://wbotelhos.com/raty/)
-* [jQuery plugin: Validation v1.11.1](http://bassistance.de/jquery-plugins/jquery-plugin-validation/)
-* [jGrowl v1.2.11](https://github.com/stanlemon/jGrowl)
-* [jQuery Autosize v1.18.7](http://www.jacklmoore.com/autosize/)
-* [Spin.js v2.0.1](http://fgnass.github.com/spin.js/)
-* [Bootstrap v2.3.1](http://twitter.github.com/bootstrap/)
-
-##Used Graphics Packages
-* [Font Awesome v3.0.2](http://fortawesome.github.com/Font-Awesome/)
-
+ 
 ##Installation instructions
 
 * Change/Add the following variables in settings.py:
@@ -43,9 +17,8 @@ The web-application to create movie lists ("watched" and "to watch"), to share t
     * VK_APP_ID
     * VK_APP_SECRET
 
-Make sure that the user running the server has write access to /cache/tmdb3.cache.
-
 * Insert your analytics code to movies_project/static/js/analytics.js if you'd like
+* Run install.sh
 * Run
 ```
 python manage.py syncdb
