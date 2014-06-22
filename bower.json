@@ -1,0 +1,16 @@
+{
+  "name": "movies",
+  "version": "0.1.0",
+  "dependencies": {
+    "jquery": "Used for bootstrap2",
+    "jquery": "2.0.3",
+    "raty": "latest",
+    "jquery-validation": "latest",
+    "jgrowl": "latest",
+    "jquery-autosize": "latest",
+    "bootstrap": "~2",
+    "spinjs": "latest",
+    "font-awesome": "latest",
+  },
+  "private": true
+}

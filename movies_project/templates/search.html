@@ -1,8 +1,9 @@
 {% extends "base.html" %}
 {% block content %}
 
-<script src="/static/libs/jquery-validation-plugin/jquery.validate.min.js"></script>
-<script src="/static/libs/jquery-validation-plugin/validate.messages_ru.js"></script>
+<script src="/static/bower/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="/static/bower/jquery-validation/src/localization/messages_ru.js"></script>
+
 <script>
   var url_ajax_search_movie = '{% url 'movies.views.ajax_search_movie' %}';
   var url_ajax_add_to_list_from_db = '{% url 'movies.views.ajax_add_to_list_from_db' %}';

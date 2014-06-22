@@ -2,7 +2,7 @@ raty_settings =
   hints: ['Ужасно','Плохо','Нормально','Хорошо','Отлично']
   cancelHint: 'Отменить эту оценку'
   noRatedMsg:'Пока нет оценки'
-  path: '/static/libs/raty/'
+  path: '/static/bower/raty/lib/images/',
   cancel: true
 
 $ ->

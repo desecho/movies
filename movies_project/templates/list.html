@@ -3,8 +3,8 @@
 {% load set_var %}
 
 {% block content %}
-<script src="/static/libs/raty/jquery.raty.min.js"></script>
-<script src="/static/libs/jquery.autosize.min.js"></script>
+<script src="/static/bower/raty/lib/jquery.raty.js"></script>
+<script src="/static/bower/jquery-autosize/jquery.autosize.min.js"></script>
 <script>
   var mode = '{{ request.session.mode }}';
   var sort = '{{ request.session.sort }}';
@@ -101,7 +101,7 @@
         <div class="title">
           {{ title }}
           {% if not anothers_account %}
-            <a href="#" title="Удалить" onlick="remove_record({{ record.id }})"><i class="fa fa-trash-o"></i></a>
+            <a href="#" title="Удалить" onclick="remove_record({{ record.id }})"><i class="fa fa-trash-o"></i></a>
             <a href="#" class="wall-post" title="Отправить на стену" onclick="post_to_wall({{ record.id }})"><i class="fa fa-share"></i></a>
           {% endif %}
           <a href="#" onclick="show_torrents('{{ record.movie.torrent_search_title }}')" title="Скачать"><i class="fa fa-download"></i></a>
