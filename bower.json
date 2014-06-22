@@ -10,7 +10,7 @@
     "jquery-autosize": "latest",
     "bootstrap": "~2",
     "spinjs": "latest",
-    "font-awesome": "latest",
+    "font-awesome": "latest"
   },
   "private": true
 }
