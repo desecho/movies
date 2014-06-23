@@ -25,12 +25,6 @@ python manage.py syncdb
 python manage.py collectstatic
 python manage.py loaddata vk-geo
 ```
-
 * Import db.sql to your database.
-
-* Run the following command to compile coffeescript.
-```
-coffee -bo movies_project/static/js/ -cw movies_project/static/src/
-```
-
-* Delete movies_project/static/src folder before deployment.
+* Run deploy.sh to deploy 
+* You can delete movies_project/static/src folder before deployment.
