@@ -2,13 +2,17 @@ Django==1.6.5
 mysql-python
 django-annoying
 django-simple-menu
-django-bootstrap-pagination
+#django-bootstrap-pagination - used outdated translated version in project dir.
 vkontakte
 django-vkontakte-iframe
 poster
 python-dateutil
 south
+-e git+https://github.com/wagnerrp/pytmdb3.git#egg=pytmdb3
 
 #django_extensions
 #   Werkzeug
 #django-debug_toolbar
+
+
+

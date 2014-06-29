@@ -16,8 +16,8 @@ Uses Python 2, Django 1.6 and CoffeeScript.
     * TMDB_KEY
     * VK_APP_ID
     * VK_APP_SECRET
-
 * Insert your analytics code to movies_project/static/js/analytics.js if you'd like
+* Change variable in installation_settings.sh
 * Run install.sh
 * Run
 ```
