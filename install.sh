@@ -25,3 +25,7 @@ mkdir movies_project/cache
 cd movies_project/cache
 touch tmdb3.cache
 chmod 777 tmdb3.cache
+
+cd ..
+./manage.py syncdb
+./manage.py collectstatic
