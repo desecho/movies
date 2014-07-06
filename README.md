@@ -20,4 +20,4 @@ The interface is in Russian.
 * Run install.sh
 * Import db.sql to your database.
 * Run deploy.sh to deploy 
-* You can delete movies_project/static/src folder before deployment.
+* You can delete movies_project/static/src directory after deployment.
