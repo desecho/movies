@@ -1,9 +1,10 @@
-from movies.models import Movie, Record, ActionRecord
-from django.conf import settings
 import urllib2
 import json
 import tmdb3
 from datetime import datetime
+from django.conf import settings
+from .models import Movie, Record, ActionRecord
+
 
 def init_tmdb():
     tmdb3.set_key(settings.TMDB_KEY)

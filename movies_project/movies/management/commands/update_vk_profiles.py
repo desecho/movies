@@ -19,6 +19,7 @@ FIELDS = (
     'photo_rec',
 )
 
+
 class Command(BaseCommand):
     help = 'Updates VK profiles'
 
@@ -27,7 +28,8 @@ class Command(BaseCommand):
         for user in User.objects.all():
             if user.is_vk_user():
                 vk_profile = user.vk_profile
-                new_data = vk.getProfiles(uids=str(user.username), fields=','.join(FIELDS))[0]
+                new_data = vk.getProfiles(uids=str(user.username),
+                                          fields=','.join(FIELDS))[0]
                 for field in FIELDS:
                     if field == 'city':
                         try:
@@ -46,7 +48,7 @@ class Command(BaseCommand):
                             pass
                     else:
                         try:
-                            setattr(vk_profile, field ,new_data[field])
+                            setattr(vk_profile, field, new_data[field])
                         except:
                             pass
                 vk_profile.save()

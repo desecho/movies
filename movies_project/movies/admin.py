@@ -1,5 +1,5 @@
-from movies.models import Movie, Record, List, Action, ActionRecord, User
 from django.contrib import admin
+from .models import Movie, Record, List, Action, ActionRecord, User
 
 
 class RecordAdmin(admin.ModelAdmin):
@@ -8,7 +8,6 @@ class RecordAdmin(admin.ModelAdmin):
 
 class ActionRecordAdmin(admin.ModelAdmin):
     list_display = ['user', 'movie', 'action', 'list', 'date']
-
 
 admin.site.register(User)
 admin.site.register(Movie)

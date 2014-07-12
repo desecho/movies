@@ -3,6 +3,7 @@ from movies.models import Movie
 from datetime import datetime, timedelta
 from movies.functions import tmdb
 
+
 class Command(BaseCommand):
     # Not used
     help = 'Gets runtime'
@@ -14,7 +15,8 @@ class Command(BaseCommand):
             except:
                 return
             if runtime:
-                runtime = datetime(1990, 1, 1, 0, 0) + timedelta(minutes=runtime)
+                runtime = datetime(1990, 1, 1, 0, 0) + timedelta(
+                    minutes=runtime)
                 return runtime.time()
 
         for movie in Movie.objects.filter(runtime=None):

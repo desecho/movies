@@ -13,7 +13,8 @@ urlpatterns = patterns(
     url(r'^people/$', 'movies.views.people'),
     url(r'^friends/$', 'movies.views.friends'),
     url(r'^feed/(?P<list_name>[\w-]+)/$', 'movies.views.feed'),
-    url(r'^people/(?P<username>[\w\d]+)/(?P<list_name>[\w-]+)$', 'movies.views.list_username'),
+    url(r'^people/(?P<username>[\w\d]+)/(?P<list_name>[\w-]+)$',
+        'movies.views.list_username'),
     url(r'^recommendation/$', 'movies.views.recommendation'),
     url(r'^preferences/$', 'movies.views.preferences'),
 
@@ -28,7 +29,8 @@ urlpatterns = patterns(
     url(r'^upload-photo-to-wall/$', 'movies.views.ajax_upload_photo_to_wall'),
     url(r'^save-preferences/$', 'movies.views.ajax_save_preferences'),
 
-    url(r'^login/$', 'django.contrib.auth.views.login', {'template_name': 'login.html'}),
+    url(r'^login/$', 'django.contrib.auth.views.login',
+        {'template_name': 'login.html'}),
     url(r'^logout/$', 'movies.views.logout_view'),
 
     # Uncomment the admin/doc line below to enable admin documentation:
