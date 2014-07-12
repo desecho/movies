@@ -4,6 +4,7 @@ from django.core.management.base import BaseCommand
 import sys
 from tmdb3.tmdb_exceptions import TMDBRequestInvalid
 
+
 class Command(BaseCommand):
     help = '''Updates movie data
     optional arguments -

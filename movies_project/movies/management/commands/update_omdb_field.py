@@ -2,6 +2,7 @@ from django.core.management.base import BaseCommand
 from movies.models import Movie
 from movies.functions import load_omdb_movie_data
 
+
 class Command(BaseCommand):
     help = 'Updates field from omdb'
 

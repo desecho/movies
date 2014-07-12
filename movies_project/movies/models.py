@@ -1,11 +1,12 @@
 # -*- coding: utf8 -*-
-from django.db import models
 from annoying.fields import JSONField
+from south.modelsinspector import add_introspection_rules
+from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.conf import settings
-from south.modelsinspector import add_introspection_rules
 
 add_introspection_rules([], ["^annoying.fields.JSONField"])
+
 
 def get_poster_url(size, poster, filename=None):
     if size == 'small':

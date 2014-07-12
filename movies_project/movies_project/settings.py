@@ -89,7 +89,7 @@ STATICFILES_DIRS = (
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-#    'django.contrib.staticfiles.finders.DefaultStorageFinder',
+    # 'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
 try:
@@ -110,7 +110,7 @@ except ImportError:
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
-#     'django.template.loaders.eggs.Loader',
+    #'django.template.loaders.eggs.Loader',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -133,9 +133,6 @@ ROOT_URLCONF = 'movies_project.urls'
 WSGI_APPLICATION = 'movies_project.wsgi.application'
 
 TEMPLATE_DIRS = (
-    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
     BASE_DIR + '/templates'
 )
 
@@ -196,7 +193,8 @@ ADMIN_REORDER = (
 )
 
 AUTH_USER_MODEL = 'movies.User'
-TEMPLATE_CONTEXT_PROCESSORS = ('django.core.context_processors.request', 'django.contrib.auth.context_processors.auth')
+TEMPLATE_CONTEXT_PROCESSORS = ('django.core.context_processors.request',
+                               'django.contrib.auth.context_processors.auth')
 LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = '/login/'
 SESSION_SAVE_EVERY_REQUEST = True

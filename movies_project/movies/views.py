@@ -4,29 +4,33 @@
 import tempfile
 import os
 import json
+import vkontakte
+import logging
+import urllib2
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
+from operator import itemgetter
 from poster.encode import multipart_encode
 from poster.streaminghttp import register_openers
-import urllib2
+
 from django.utils.http import urlquote
 from django.http import HttpResponse
 from django.shortcuts import redirect
-from movies.models import Record, List, User, ActionRecord, get_poster_url
-from movies.functions import add_movie_to_list, add_to_list_from_db, tmdb
-from annoying.decorators import ajax_request, render_to
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from django.views.decorators.csrf import ensure_csrf_cookie
-import logging
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from datetime import datetime
-from dateutil.relativedelta import relativedelta
 from django.db.models import Q
-import vkontakte
-from operator import itemgetter
+from annoying.decorators import ajax_request, render_to
+
+from .models import Record, List, User, ActionRecord, get_poster_url
+from .functions import add_movie_to_list, add_to_list_from_db, tmdb
+
 
 logger = logging.getLogger('movies.test')
 #logger.debug(options)
+
 
 def get_movies_from_tmdb(query, type, options, user):
     STATUS_CODES = {
@@ -55,7 +59,7 @@ def get_movies_from_tmdb(query, type, options, user):
             if movie['popularity'] > settings.MIN_POPULARITY:
                 del movie['popularity']  # remove unnesessary data
                 movies_output.append(movie)
-        if not movies_output:                  # keep initial movie list if all are unpopular
+        if not movies_output:  # keep initial movie list if all are unpopular
             movies_output = movies
         return movies_output
 
@@ -67,7 +71,8 @@ def get_movies_from_tmdb(query, type, options, user):
                 movies_with_date.append(movie)
             else:
                 movies_without_date.append(movie)
-        movies_with_date = sorted(movies_with_date, key=itemgetter('release_date'), reverse=True)
+        movies_with_date = sorted(movies_with_date,
+                                  key=itemgetter('release_date'), reverse=True)
         movies = movies_with_date + movies_without_date
         return movies
 
@@ -121,8 +126,9 @@ def get_movies_from_tmdb(query, type, options, user):
                 i += 1
                 if i > settings.MAX_RESULTS:
                     break
+                # ignore movies if imdb not found
                 if Record.objects.filter(movie__tmdb_id=movie.id,
-                    user=user).exists() or not movie.imdb: #ignore movies if imdb not found
+                                         user=user).exists() or not movie.imdb:
                     continue
 
                 movie = {
@@ -162,8 +168,8 @@ def get_friends(user):
 
 def filter_movies_for_recommendation(records, user):
     'Keeps movies only with 3+ rating, removes watched movies'
-    return records.filter(rating__gte=3). \
-                   exclude(movie__in=user.get_movie_ids())
+    return records.filter(rating__gte=3) \
+                  .exclude(movie__in=user.get_movie_ids())
 
 
 def logout_view(request):
@@ -184,13 +190,14 @@ def get_record_movie_data(record_ids_and_movies):
 
 
 def get_comments_and_ratings(record_ids_and_movies, user):
-    movies, record_ids_and_movies_dict = get_record_movie_data(record_ids_and_movies)
+    movies, record_ids_and_movies_dict = get_record_movie_data(
+        record_ids_and_movies)
     comments_and_ratings = Record.objects.filter(
         user__in=get_friends(user),
         list_id=1,
         movie_id__in=movies
     ).values('movie_id', 'comment', 'rating', 'user__vk_profile__photo',
-                  'user__first_name', 'user__last_name', 'user__username')
+             'user__first_name', 'user__last_name', 'user__username')
 
     comments_and_ratings_dict = {}
     for x in comments_and_ratings:
@@ -203,7 +210,8 @@ def get_comments_and_ratings(record_ids_and_movies, user):
             if x['rating']:
                 data['rating'] = x['rating']
             data['avatar'] = x['user__vk_profile__photo']
-            data['full_name'] = x['user__first_name'] + ' ' + x['user__last_name']
+            data['full_name'] = '%s %s' % (x['user__first_name'],
+                                           x['user__last_name'])
             data['username'] = x['user__username']
             comments_and_ratings_dict[x['movie_id']].append(data)
     data = {}
@@ -232,7 +240,8 @@ def recommendation(request):
         records = Record.objects.exclude(user=request.user) \
             .filter(user__in=friends).select_related()
         # order records by user rating and by imdb rating
-        records = records.order_by('-rating', '-movie__imdb_rating', '-movie__release_date')
+        records = records.order_by('-rating', '-movie__imdb_rating',
+                                   '-movie__release_date')
         records = filter_movies_for_recommendation(records, request.user)
         return filter_duplicated_movies_and_limit(records)
 
@@ -276,15 +285,24 @@ def paginate(objects, page, objects_on_page):
 
 
 def get_movie_count(username):
-    def number_of_movies(list_id):
-        return Record.objects.filter(list_id=list_id, user__username=username).count()
-    return '<span title="Просмотрено">%d</span> / <span title="К просмотру">%d' % \
-        (number_of_movies(1), number_of_movies(2))
+    LIST_IDS = {'watched': 1, 'to_watch': 2}
+
+    def create_span_tag(title, list_id):
+        def number_of_movies():
+            return Record.objects.filter(list_id=list_id,
+                                         user__username=username).count()
+
+        return '<span title="%s">%d</span>' % (title, number_of_movies())
+
+    watched = create_span_tag('Просмотрено', LIST_IDS['watched'])
+    to_watch = create_span_tag('К просмотру', LIST_IDS['to_watch'])
+    return '%s / %s' % (watched, to_watch)
 
 
 @login_required
 def list_username(request, list_name, username=None):
-    if User.objects.get(username=username) in get_available_users_and_friends(request.user):
+    if User.objects.get(username=username) in \
+            get_available_users_and_friends(request.user):
         return list_view(request, list_name, username)
 
 
@@ -303,7 +321,9 @@ def list_view(request, list_name, username=None):
         movies, record_ids_and_movies_dict = get_record_movie_data(
             records.values_list('id', 'movie_id'))
         movie_ids_and_list_ids = Record.objects.filter(user=request.user,
-            movie_id__in=movies).values_list('movie_id', 'list_id')
+                                                       movie_id__in=movies) \
+                                               .values_list('movie_id',
+                                                            'list_id')
 
         movie_id_and_list_id_dict = {}
         for x in movie_ids_and_list_ids:
@@ -380,10 +400,11 @@ def list_view(request, list_name, username=None):
 def get_avatar(photo):
     return photo or settings.VK_NO_IMAGE_SMALL
 
+
 def get_available_users_and_friends(user, sort=False):
     def available_users():
-        return [u for u in User.objects.exclude(pk=user.pk) if not \
-            u.preferences.get('only_for_friends', False)]
+        return [u for u in User.objects.exclude(pk=user.pk) if not
+                u.preferences.get('only_for_friends', False)]
 
     def join(x, z):
         # convert to list doesn't work for some reason.
@@ -414,6 +435,7 @@ def feed(request, list_name):
         'people': 'Люди',
         'friends': 'Друзья',
     }
+
     def get_title(action):
         if request.user.preferences['lang'] == 'en':
             return action['movie__title']
@@ -467,21 +489,22 @@ def generic_people(request, users):
             'avatar': get_avatar(user.vk_profile.photo),
             'movie_count': get_movie_count(user.username)})
     return {'users': paginate(users_output, request.GET.get('page'),
-        settings.PEOPLE_ON_PAGE)}
+            settings.PEOPLE_ON_PAGE)}
 
 
 #@cache_page(settings.CACHE_TIMEOUT)
 @login_required
 def people(request):
     return generic_people(request,
-        get_available_users_and_friends(user=request.user, sort=True))
+                          get_available_users_and_friends(user=request.user,
+                                                          sort=True))
 
 
 #@cache_page(settings.CACHE_TIMEOUT)
 @login_required
 def friends(request):
     return generic_people(request,
-        get_friends(request.user).order_by('first_name'))
+                          get_friends(request.user).order_by('first_name'))
 
 
 def ajax_apply_settings(request):
@@ -513,7 +536,7 @@ def ajax_save_comment(request):
             if r.comment != comment:
                 if not r.comment:
                     ActionRecord(action_id=4, user=request.user, movie=r.movie,
-                        comment=comment).save()
+                                 comment=comment).save()
                 r.comment = comment
                 r.save()
     return HttpResponse()
@@ -529,7 +552,7 @@ def ajax_change_rating(request):
             if r.rating != rating:
                 if not r.rating:
                     ActionRecord(action_id=3, user=request.user, movie=r.movie,
-                        rating=rating).save()
+                                 rating=rating).save()
                 r.rating = rating
                 r.save()
     return HttpResponse()
@@ -537,13 +560,16 @@ def ajax_change_rating(request):
 
 @ajax_request
 def ajax_download(request):
+    def get_url(query):
+        filter = urlquote(u'Íàéòè')
+        query = urlquote(query)
+        return 'http://2torrents.org/search/listjson?filters[title]=%s&filter=%s&sort=seeders&type=desc' % \
+            (query, filter)
+
     if request.is_ajax() and request.method == 'POST':
         POST = request.POST
         if 'query' in POST:
-            filter = urlquote(u'Íàéòè')
-            query = urlquote(POST.get('query'))
-            url = 'http://2torrents.org/search/listjson?filters[title]=%s&filter=%s&sort=seeders&type=desc' % \
-                (query, filter)
+            url = get_url(POST.get('query'))
             html = urllib2.urlopen(url).read()
             html = html.replace('"items": {"list":[,{', '"items": {"list":[{')
             return {'data': html}
@@ -553,14 +579,16 @@ def ajax_download(request):
 def ajax_search_movie(request):
     if request.is_ajax() and request.method == 'POST':
         POST = request.POST
-        if 'query' in POST and 'type' in POST and 'options[popular_only]' \
-            in POST and 'options[sort_by_date]' in POST:
-            query = POST.get('query')
-            type = int(POST.get('type'))
-            options = {'popular_only': int(POST.get('options[popular_only]')),
-                'sort_by_date': int(POST.get('options[sort_by_date]'))}
-            output = get_movies_from_tmdb(query, type, options, request.user)
-            return output
+        if ('query' in POST and
+            'type' in POST and
+            'options[popular_only]' in POST and
+            'options[sort_by_date]' in POST):
+                query = POST.get('query')
+                type = int(POST.get('type'))
+                options = {'popular_only': int(POST.get('options[popular_only]')),
+                           'sort_by_date': int(POST.get('options[sort_by_date]'))}
+                output = get_movies_from_tmdb(query, type, options, request.user)
+                return output
 
 
 @ajax_request
@@ -568,7 +596,8 @@ def ajax_add_to_list_from_db(request):
     if request.is_ajax() and request.method == 'POST':
         POST = request.POST
         if 'movie_id' in POST and 'list_id' in POST:
-            error_code = add_to_list_from_db(int(POST.get('movie_id')), int(POST.get('list_id')), request.user)
+            error_code = add_to_list_from_db(int(POST.get('movie_id')),
+                                             int(POST.get('list_id')), request.user)
             if error_code:
                 return {'status': error_code}
     return HttpResponse()
@@ -587,8 +616,8 @@ def ajax_add_to_list(request):
 @ajax_request
 def ajax_upload_photo_to_wall(request):
     def get_filepath(record_id):
-        movie = Record.objects.get(pk=record_id).movie
-        poster_url = eval('movie.poster_%s_big_url()' % request.user.preferences['lang'])
+        poster_url = eval('movie.poster_%s_big_url()' %
+                          request.user.preferences['lang'])
         file_contents = urllib2.urlopen(poster_url).read()
         path = tempfile.mkstemp()[1]
         file = open(path, 'w')
