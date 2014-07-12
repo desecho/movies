@@ -340,7 +340,8 @@ def list_view(request, list_name, username=None):
         elif sort == 'rating':
             if not username and list_name == 'to-watch':
                 # sorting is changing here because there is no user rating yet.
-                records = records.order_by('-movie__imdb_rating', '-movie__release_date')
+                records = records.order_by('-movie__imdb_rating',
+                                           '-movie__release_date')
             else:
                 records = records.order_by('-rating', '-movie__release_date')
         else:
@@ -353,7 +354,8 @@ def list_view(request, list_name, username=None):
             user = anothers_account
         else:
             user = request.user
-        return Record.objects.select_related().filter(list__key_name=list_name, user=user)
+        return Record.objects.select_related().filter(list__key_name=list_name,
+                                                      user=user)
 
     def get_anothers_account():
         "Returns User if it's another's account and False if it's not"
@@ -364,7 +366,8 @@ def list_view(request, list_name, username=None):
         return anothers_account
 
     def search_records(query):
-        return records.filter(Q(movie__title__icontains=query) | Q(movie__title_ru__icontains=query))
+        return records.filter(Q(movie__title__icontains=query) |
+                              Q(movie__title_ru__icontains=query))
 
     initialize_session_values()
     anothers_account = get_anothers_account()
@@ -388,7 +391,8 @@ def list_view(request, list_name, username=None):
             records.values_list('id', 'movie_id'), request.user)
     else:
         comments_and_ratings = None
-    records = paginate(records, request.GET.get('page'), settings.RECORDS_ON_PAGE)
+    records = paginate(records, request.GET.get('page'),
+                       settings.RECORDS_ON_PAGE)
     return {'records': records,
             'reviews': comments_and_ratings,
             'list_id': List.objects.get(key_name=list_name).id,
@@ -444,13 +448,16 @@ def feed(request, list_name):
 
     date_to = datetime.today()
     date_from = date_to - relativedelta(days=settings.FEED_DAYS)
-    actions = ActionRecord.objects.filter(date__range=(date_from, date_to)).order_by('-pk')
+    actions = ActionRecord.objects.filter(
+        date__range=(date_from, date_to)).order_by('-pk')
     if list_name == 'friends':
         actions = actions.filter(user__in=get_friends(request.user))
     else:
-        actions = actions.filter(user__in=get_available_users_and_friends(request.user))
+        actions = actions.filter(
+            user__in=get_available_users_and_friends(request.user))
 
-    posters = [action.movie.get_poster('small', request.user.preferences['lang']) for action in actions]
+    posters = [action.movie.get_poster(
+        'small', request.user.preferences['lang']) for action in actions]
     actions = actions.values('user__vk_profile__photo', 'user__username',
                              'user__first_name', 'user__last_name',
                              'action__name', 'movie__title', 'movie__title_ru',
@@ -459,9 +466,11 @@ def feed(request, list_name):
 
     i = 0
     for action in actions:
+        full_name = '%s %s' % (action['user__first_name'],
+                               action['user__last_name'])
         a = {
             'avatar': get_avatar(action['user__vk_profile__photo']),
-            'full_name': action['user__first_name'] + ' ' + action['user__last_name'],
+            'full_name': full_name,
             'username': action['user__username'],
             'action': action['action__name'],
             'movie': get_title(action),
@@ -474,7 +483,7 @@ def feed(request, list_name):
         actions_output.append(a)
         i += 1
     return {'list_name': FEED_TITLE[list_name],
-        'actions': actions_output}
+            'actions': actions_output}
 
 
 #@cache_page(settings.CACHE_TIMEOUT)
@@ -597,7 +606,8 @@ def ajax_add_to_list_from_db(request):
         POST = request.POST
         if 'movie_id' in POST and 'list_id' in POST:
             error_code = add_to_list_from_db(int(POST.get('movie_id')),
-                                             int(POST.get('list_id')), request.user)
+                                             int(POST.get('list_id')),
+                                             request.user)
             if error_code:
                 return {'status': error_code}
     return HttpResponse()

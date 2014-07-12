@@ -12,7 +12,7 @@ ul.nav li.dropdown:hover > ul.dropdown-menu{
 }
 
 .navbar .dropdown-menu {
-    margin-top: 0px;
+    margin-top: 0;
 }
 /* nav dropdown on hover bootstrap fix */
 
