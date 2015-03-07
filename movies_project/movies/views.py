@@ -626,6 +626,7 @@ def ajax_add_to_list(request):
 @ajax_request
 def ajax_upload_photo_to_wall(request):
     def get_filepath(record_id):
+        movie = Record.objects.get(pk=record_id).movie
         poster_url = eval('movie.poster_%s_big_url()' %
                           request.user.preferences['lang'])
         file_contents = urllib2.urlopen(poster_url).read()
