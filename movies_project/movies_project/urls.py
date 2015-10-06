@@ -25,7 +25,7 @@ urlpatterns = patterns(
     url(r'^save-comment/$', 'movies.views.ajax_save_comment'),
     url(r'^change-rating/$', 'movies.views.ajax_change_rating'),
     url(r'^apply-setting/$', 'movies.views.ajax_apply_settings'),
-    url(r'^download/$', 'movies.views.ajax_download'),
+    # url(r'^download/$', 'movies.views.ajax_download'),
     url(r'^upload-photo-to-wall/$', 'movies.views.ajax_upload_photo_to_wall'),
     url(r'^save-preferences/$', 'movies.views.ajax_save_preferences'),
 

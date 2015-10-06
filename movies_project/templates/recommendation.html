@@ -6,7 +6,6 @@
 <script src="/static/js/raty_readonly.js"></script>
 <script>
   var url_ajax_add_to_list   = '{% url 'movies.views.ajax_add_to_list' %}';
-  var url_ajax_download = '{% url 'movies.views.ajax_download' %}';
 </script>
 <script src="/static/js/list_general.js"></script>
 <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -31,7 +30,6 @@
       <div id="record{{ record.id }}" data-id="{{ record.id }}" class="movie">
           <div class="title">
            {{ title }}
-           <a href="#" onclick="show_torrents('{{ record.movie.torrent_search_title }}')" title="Скачать"><i class="fa fa-download"></i></a>
            <div class="add-to-list-buttons">
             {% include 'includes/add_to_list_buttons.html' %}
            </div>
