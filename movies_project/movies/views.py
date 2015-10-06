@@ -5,7 +5,7 @@ import tempfile
 import os
 import json
 import vkontakte
-import logging
+# import logging
 import urllib2
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
@@ -28,8 +28,8 @@ from .models import Record, List, User, ActionRecord, get_poster_url
 from .functions import add_movie_to_list, add_to_list_from_db, tmdb
 
 
-logger = logging.getLogger('movies.test')
-logger.debug(options)
+# logger = logging.getLogger('movies.test')
+# logger.debug(options)
 
 
 def get_friends(user):
