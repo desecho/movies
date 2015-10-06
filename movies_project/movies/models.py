@@ -115,11 +115,11 @@ class Movie(models.Model):
     def poster_ru_big_url(self):
         return self.get_poster('big', 'ru')
 
-    def torrent_search_title(self):
-        title = self.title.replace("'", r"\'") + ' '
-        if self.release_date:
-            title += str(self.release_date.year) + ' '
-        return title + '720p'
+    # def torrent_search_title(self):
+    #     title = self.title.replace("'", r"\'") + ' '
+    #     if self.release_date:
+    #         title += str(self.release_date.year) + ' '
+    #     return title + '720p'
 
 
 class Record(models.Model):

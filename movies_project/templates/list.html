@@ -31,7 +31,6 @@
   var url_ajax_apply_settings = '{% url 'movies.views.ajax_apply_settings' %}';
   var url_ajax_add_to_list   = '{% url 'movies.views.ajax_add_to_list' %}';
   var url_ajax_save_comment  = '{% url 'movies.views.ajax_save_comment' %}';
-  var url_ajax_download = '{% url 'movies.views.ajax_download' %}';
   var url_ajax_upload_photo_to_wall = '{% url 'movies.views.ajax_upload_photo_to_wall' %}';
 </script>
 <script src="/static/js/list_general.js"></script>
@@ -104,7 +103,6 @@
             <a href="#" title="Удалить" onclick="remove_record({{ record.id }})"><i class="fa fa-trash-o"></i></a>
             <a href="#" class="wall-post" title="Отправить на стену" onclick="post_to_wall({{ record.id }})"><i class="fa fa-share"></i></a>
           {% endif %}
-          <a href="#" onclick="show_torrents('{{ record.movie.torrent_search_title }}')" title="Скачать"><i class="fa fa-download"></i></a>
           <div class="add-to-list-buttons">
             {% if not anothers_account %}
               {% ifequal list_id 2 %}
