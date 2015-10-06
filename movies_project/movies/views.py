@@ -5,7 +5,7 @@ import tempfile
 import os
 import json
 import vkontakte
-# import logging
+import logging
 import urllib2
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
