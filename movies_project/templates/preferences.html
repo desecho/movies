@@ -1,31 +1,38 @@
 {% extends "base.html" %}
+
+{% block header_extra %}
+<script>
+  var urlSavePreferences = '{% url 'movies.views.ajax_save_preferences' %}';
+</script>
+
+<script src="/static/js/preferences.js"></script>
+{% endblock %}
+
 {% block content %}
+<div ng-controller="PreferencesController">
 <form class="form-horizontal">
 	<legend>Настройки</legend>
   <div class="control-group">
     <label class="control-label" for="lang">Язык</label>
     <div class="controls">
 		<label class="radio">
-		  <input type="radio" name="lang" value="en" {% ifequal user.preferences.lang 'en' %} checked {% endifequal %}> Оригинал / Английский
+		  <input type="radio" ng-click="savePreferences()" name="lang" value="en" {% ifequal user.preferences.lang 'en' %} checked {% endifequal %}> Оригинал / Английский
 		</label>
 		<label class="radio">
-		  <input type="radio" name="lang" value="ru" {% ifequal user.preferences.lang 'ru' %} checked {% endifequal %}> Русский<br>
+		  <input type="radio" ng-click="savePreferences()" name="lang" value="ru" {% ifequal user.preferences.lang 'ru' %} checked {% endifequal %}> Русский<br>
 		</label>
     </div>
   </div>
-  <div class="control-group">
-    <label class="control-label" for="only_for_friends">Доступ</label>
-    <div class="controls">
-        <label class="checkbox">
-          <input type="checkbox" name="only_for_friends" {% if user.preferences.only_for_friends %} checked {% endif %}> Показывать профиль только друзьям<br>
-        </label>
-    </div>
-  </div>
+  {% if user.is_vk_user %}
+      <div class="control-group">
+        <label class="control-label" for="only_for_friends">Доступ</label>
+        <div class="controls">
+            <label class="checkbox">
+              <input type="checkbox" name="only_for_friends" {% if user.preferences.only_for_friends %} checked {% endif %}> Показывать профиль только друзьям<br>
+            </label>
+        </div>
+      </div>
+  {% endif %}
 </form>
-
-<script>
-  var url_ajax_save_preferences = '{% url 'movies.views.ajax_save_preferences' %}';
-</script>
-
-<script src="/static/js/preferences.js"></script>
+</div>
 {% endblock %}

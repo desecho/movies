@@ -1,7 +1,11 @@
-{% extends "base.html" %}
-{% block content %}
-
-<form method="post" action="{% url 'django.contrib.auth.views.login' %}" class="form-horizontal" id="login-form">
+<!DOCTYPE html>
+<head>
+    <link href="/static/bower/bootstrap/docs/assets/css/bootstrap.css" rel="stylesheet" media="screen">
+</head>
+<body>
+<br>
+<form method="post" action="{% url 'django.contrib.auth.views.login' %}" class="form-horizontal" id="login-
+form">
   {% csrf_token %}
   <div class="control-group">
     <label class="control-label" for="username">{{ form.username.label_tag }}</label>
@@ -30,4 +34,4 @@
   <input type="hidden" name="next" value="{{ next }}">
 </form>
 
-{% endblock %}
+</body>

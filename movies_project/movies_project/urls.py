@@ -1,4 +1,5 @@
 from django.conf.urls import patterns, include, url
+from django.views.generic import TemplateView
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
@@ -16,18 +17,18 @@ urlpatterns = patterns(
     url(r'^people/(?P<username>[\w\d]+)/(?P<list_name>[\w-]+)$',
         'movies.views.list_username'),
     url(r'^recommendation/$', 'movies.views.recommendation'),
-    url(r'^preferences/$', 'movies.views.preferences'),
+    url(r'^preferences$', TemplateView.as_view(template_name='preferences.html')),
 
-    url(r'^remove-record/$', 'movies.views.ajax_remove_record'),
-    url(r'^search-movie/$', 'movies.views.ajax_search_movie'),
+    url(r'^remove-record/?$', 'movies.views.ajax_remove_record'),
+    url(r'^search-movie/?$', 'movies.views.ajax_search_movie'),
     url(r'^add-to-list/$', 'movies.views.ajax_add_to_list'),
-    url(r'^add-to-list-from-db/$', 'movies.views.ajax_add_to_list_from_db'),
+    url(r'^add-to-list-from-db$', 'movies.views.ajax_add_to_list_from_db'),
     url(r'^save-comment/$', 'movies.views.ajax_save_comment'),
     url(r'^change-rating/$', 'movies.views.ajax_change_rating'),
     url(r'^apply-setting/$', 'movies.views.ajax_apply_settings'),
     # url(r'^download/$', 'movies.views.ajax_download'),
     url(r'^upload-photo-to-wall/$', 'movies.views.ajax_upload_photo_to_wall'),
-    url(r'^save-preferences/$', 'movies.views.ajax_save_preferences'),
+    url(r'^save-preferences/?$', 'movies.views.ajax_save_preferences'),
 
     url(r'^login/$', 'django.contrib.auth.views.login',
         {'template_name': 'login.html'}),

@@ -27,7 +27,7 @@
   }
 
   var url_ajax_change_rating = '{% url 'movies.views.ajax_change_rating' %}';
-  var url_ajax_remove_record = '{% url 'movies.views.ajax_remove_record' %}';
+  var urlRemoveRecord = '{% url 'movies.views.ajax_remove_record' %}';
   var url_ajax_apply_settings = '{% url 'movies.views.ajax_apply_settings' %}';
   var url_ajax_add_to_list   = '{% url 'movies.views.ajax_add_to_list' %}';
   var url_ajax_save_comment  = '{% url 'movies.views.ajax_save_comment' %}';
@@ -36,6 +36,7 @@
 <script src="/static/js/list_general.js"></script>
 <script src="/static/js/raty.js"></script>
 <script src="/static/js/list.js"></script>
+<div ng-controller="ListController">
 <div id="movie-count">
   {{ movie_count|safe }}
   {% if anothers_account %}
@@ -91,8 +92,8 @@
         <div class="title">
           {{ title }}
           {% if not anothers_account %}
-            <a href="#" title="Удалить" onclick="remove_record({{ record.id }})"><i class="fa fa-trash-o"></i></a>
-            <a href="#" class="wall-post" title="Отправить на стену" onclick="post_to_wall({{ record.id }})"><i class="fa fa-share"></i></a>
+            <a href="#" title="Удалить" ng-click="remove_record({{ record.id }})"><i class="fa fa-trash-o"></i></a>
+            {% if user.is_vk_user %}<a href="#" class="wall-post" title="Отправить на стену" onclick="post_to_wall({{ record.id }})"><i class="fa fa-share"></i></a>{% endif %}
           {% endif %}
           <div class="add-to-list-buttons">
             {% if not anothers_account %}
@@ -176,5 +177,5 @@
     <p>Список пуст.</p>
   {% endif %}
 </div>
-
+</div>
 {% endblock %}

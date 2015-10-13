@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<html ng-app="movies">
 <head>
   <meta HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
   <meta HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE">
@@ -14,13 +15,17 @@
   <script src="/static/bower/jgrowl/jquery.jgrowl.min.js"></script>
 
   <script src="/static/bower/bootstrap/docs/assets/js/bootstrap.min.js"></script>
+  <script src="/static/bower/angular/angular.js"></script>
+  <script src="/static/bower/angular-resource/angular-resource.min.js"></script>
 
-  <script src="/static/bower/spinjs/spin.js"></script>
-  <script src="/static/bower/spinjs/jquery.spin.js"></script>
+  <script src="/static/bower/spin.js/spin.js"></script>
+  <script src="/static/bower/angular-spinner/angular-spinner.min.js"></script>
+  <script src="/static/bower/angular-loading-spinner/angular-loading-spinner.js"></script>
+
+  <script src="/static/bower/angular-route/angular-route.min.js"></script>
+  <script src="/static/bower/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
 
   <script src="/static/js/main.js"></script>
-  <script src="/static/js/ajax_loading.js"></script>
-
   <script src="/static/js/analytics.js"></script>
 
   {% if user.is_vk_user %}
@@ -31,6 +36,7 @@
   {% endif %}
   <meta charset="utf-8">
   <title>{% block title %}Movies{% endblock %}</title>
+  {% block header_extra %}{% endblock %}
 </head>
 <body>
   <div {% if user.is_vk_user %} class="vk" {% endif %}>
@@ -52,7 +58,7 @@
           </ul>
         {% endif %}
         <ul class="nav pull-right">
-          <li><div id="loading"></div></li>
+          <li><div id="loading" us-spinner="{radius:6, width:3, length: 5, lines: 12}"></div></li>
         </ul>
       </div>
     </div>
@@ -61,3 +67,4 @@
     </div>
   </div>
 </body>
+</script>

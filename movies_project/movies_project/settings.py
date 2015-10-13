@@ -192,6 +192,8 @@ ADMIN_REORDER = (
     ('movies', ('User', 'Movie', 'Record', 'List', 'Action', 'ActionRecord')),
 )
 
+APPEND_SLASH = False
+
 AUTH_USER_MODEL = 'movies.User'
 TEMPLATE_CONTEXT_PROCESSORS = ('django.core.context_processors.request',
                                'django.contrib.auth.context_processors.auth')

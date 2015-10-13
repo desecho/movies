@@ -9,8 +9,12 @@
     "jgrowl": "latest",
     "jquery-autosize": "latest",
     "bootstrap": "~2",
-    "spinjs": "latest",
-    "font-awesome": "latest"
+    "font-awesome": "latest",
+    "angular": "latest",
+    "angular-bootstrap": "latest",
+    "angular-loading-spinner": "latest",
+    "angular-resource": "latest",
+    "angular-route": "latest"
   },
   "private": true
 }
