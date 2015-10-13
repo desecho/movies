@@ -14,7 +14,7 @@ from poster.encode import multipart_encode
 from poster.streaminghttp import register_openers
 
 # from django.utils.http import urlquote
-from django.http import HttpResponse
+from django.http import HttpResponse, QueryDict, HttpResponseBadRequest
 from django.shortcuts import redirect
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
@@ -127,12 +127,6 @@ def recommendation(request):
         records = None
         reviews = None
     return {'records': records, 'reviews': reviews}
-
-
-@render_to('preferences.html')
-@login_required
-def preferences(request):
-    return {}
 
 
 def ajax_save_preferences(request):
@@ -583,24 +577,21 @@ def ajax_search_movie(request):
         else:
                 output['status'] = STATUS_CODES['not found']
         return output
-    if request.is_ajax() and request.method == 'POST':
-        POST = request.POST
-        if ('query' in POST and
-            'type' in POST and
-            'options[popular_only]' in POST and
-            'options[sort_by_date]' in POST):
-                query = POST.get('query')
-                type = int(POST.get('type'))
-                options = {'popular_only': int(POST.get('options[popular_only]')),
-                           'sort_by_date': int(POST.get('options[sort_by_date]'))}
-                output = get_movies_from_tmdb(query, type, options, request.user)
-                return output
+    if request.method == 'GET':
+        type = int(request.GET.get('type'))
+        query = request.GET.get('query')
+        options = QueryDict(request.GET['options'])
+        options = {'popular_only': json.loads(options['popular_only']),
+                   'sort_by_date': json.loads(options['sort_by_date'])}
+        output = get_movies_from_tmdb(query, type, options, request.user)
+        return output
 
 
 @ajax_request
 def ajax_add_to_list_from_db(request):
     if request.is_ajax() and request.method == 'POST':
         POST = request.POST
+        print POST
         if 'movie_id' in POST and 'list_id' in POST:
             error_code = add_to_list_from_db(int(POST.get('movie_id')),
                                              int(POST.get('list_id')),
