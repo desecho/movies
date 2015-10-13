@@ -69,6 +69,10 @@ label.error {
     margin: 40px 40px 0 0;
 }
 
+#loading2 {
+    margin: 20px 20px 0 0;
+}
+
 #movie-count {
     font-size: 25px;
     float: right;

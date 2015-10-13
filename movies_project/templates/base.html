@@ -18,7 +18,10 @@
   <script src="/static/bower/angular/angular.js"></script>
   <script src="/static/bower/angular-resource/angular-resource.min.js"></script>
 
+  <script src="/static/js/ajax_loading.js"></script>
   <script src="/static/bower/spin.js/spin.js"></script>
+  <script src="/static/bower/spin.js/jquery.spin.js"></script>
+
   <script src="/static/bower/angular-spinner/angular-spinner.min.js"></script>
   <script src="/static/bower/angular-loading-spinner/angular-loading-spinner.js"></script>
 
@@ -58,7 +61,8 @@
           </ul>
         {% endif %}
         <ul class="nav pull-right">
-          <li><div id="loading" us-spinner="{radius:6, width:3, length: 5, lines: 12}"></div></li>
+          <li><div id="loading" us-spinner="{radius:6, width:3, length: 5, lines: 12}"></div>
+          <div id="loading2"></div></li>
         </ul>
       </div>
     </div>
