@@ -2,7 +2,7 @@
 {% load bootstrap_pagination %}
 {% load set_var %}
 
-{% block content %}
+{% block header_extra %}
 <script src="/static/bower/raty/lib/jquery.raty.js"></script>
 <script src="/static/bower/jquery-autosize/jquery.autosize.min.js"></script>
 <script>
@@ -36,6 +36,10 @@
 <script src="/static/js/list_general.js"></script>
 <script src="/static/js/raty.js"></script>
 <script src="/static/js/list.js"></script>
+
+{% endblock %}
+
+{% block content %}
 <div ng-controller="ListController">
 <div id="movie-count">
   {{ movie_count|safe }}
