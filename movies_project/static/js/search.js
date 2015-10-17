@@ -28,9 +28,6 @@ App.controller('MoviesSearchController', function ($scope, SearchMovie, AddToLis
   $scope.searchTypeId = 1;
   $scope.submit = function(){
     $scope.searchResults = '';
-    if (!$scope.query) {
-      return;
-    }
     var options = {
       popular_only: $('#popular_only').prop('checked'),
       sort_by_date: $('#sort_by_date').prop('checked')

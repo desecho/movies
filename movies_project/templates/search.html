@@ -11,9 +11,9 @@
 {% block content %}
 <div ng-controller="MoviesSearchController">
     <div class="search_panel">
-      <form id="search" ng-submit="submit()">
+      <form name="search" id="search" ng-submit="search.$valid && submit()" novalidate>
         <div class="input-append">
-          <input class="span2" id="query" name="query" type="text" autofocus ng-model="query">
+          <input class="span2" id="query" name="query" type="text" autofocus ng-model="query" required>
           <button class="btn" type="submit">Найти</button>
           <div class="btn-group">
             <button id="search_type_button" class="btn dropdown-toggle" data-toggle="dropdown">[[ searchType ]] <span class="caret"></span></button>
