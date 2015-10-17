@@ -10,24 +10,11 @@ App.factory('AddToListFromDb', function($resource) {
   });
 });
 
-App.directive('dynamic', function ($compile) {
-  return {
-    restrict: 'A',
-    replace: true,
-    link: function (scope, ele, attrs) {
-      scope.$watch(attrs.dynamic, function(html) {
-        ele.html(html);
-        $compile(ele.contents())(scope);
-      });
-    }
-  };
-});
-
 App.controller('MoviesSearchController', function ($scope, SearchMovie, AddToListFromDb) {
   $scope.searchType = 'Фильм';
   $scope.searchTypeId = 1;
   $scope.submit = function(){
-    $scope.searchResults = '';
+    $scope.searchResults = [];
     var options = {
       popular_only: $('#popular_only').prop('checked'),
       sort_by_date: $('#sort_by_date').prop('checked')
@@ -37,24 +24,11 @@ App.controller('MoviesSearchController', function ($scope, SearchMovie, AddToLis
       type: $scope.searchTypeId.toString(),
       options: $.param(options)
     }, function(data) {
-      function displayMovie(movie) {
-        var html;
-        html = "<div class=\"movie\" id=\"movie" + movie.id + "\">\n<div class=\"poster\"><img src=\"" + movie.poster + "\" alt=\"" + movie.title + " poster\"/></div>\n<div class=\"title\">" + movie.title + "\n  <div class=\"add-to-list-buttons\">\n    <a href=\"#\" title=\"Добавить в список Просмотрено\" ng-click=\"addToListFromDb(" + movie.id + ", 1)\"><i class=\"fa fa-eye\"></i></a>\n    <a href=\"#\" title=\"Добавить в список К просмотру\" ng-click=\"addToListFromDb(" + movie.id + ", 2)\"><i class=\"fa fa-eye-slash\"></i></a>\n  </div>\n</div>\n<div class=\"details\">";
-        if (movie.release_date) {
-          html += "<strong>Дата выпуска:</strong> " + movie.release_date;
-        }
-        html += '</div></div>';
-        return html;
-      };
-
+      $scope.nothing_found = false;
       if (data.status === 1) {
-        var html = ''
-        jQuery.each(data.movies, function(i, movie) {
-          html += displayMovie(movie);
-        });
-        $scope.searchResults = html;
+        $scope.searchResults = data.movies;
       } else if (data.status === 0) {
-        $scope.searchResults ='Ничего не найдено';
+        $scope.nothing_found = true;
       } else {
         display_message('Ошибка поиска');
       }
