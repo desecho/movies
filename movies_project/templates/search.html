@@ -32,6 +32,19 @@
         </label>
       </form>
     </div>
-    <div id="results" class="results" dynamic="searchResults"></div>
+    <div id="results" class="results" ng-repeat="searchResult in searchResults">
+        <div class="movie" id="movie[[searchResult.id]]">
+            <div class="poster"><img ng-src="[[searchResult.poster]]" alt="[[searchResult.title]] poster"/></div>
+            <div class="title">"[[searchResult.title]]"
+            <div class="add-to-list-buttons">
+            <a href="#" title="Добавить в список Просмотрено" ng-click="addToListFromDb(searchResult.id, 1)"><i class="fa fa-eye"></i></a>
+            <a href="#" title="Добавить в список К просмотру" ng-click="addToListFromDb(searchResult.id, 2)"><i class="fa fa-eye-slash"></i></a>
+            </div></div>
+            <div class="details" ng-show="searchResult.release_date">
+                <strong>Дата выпуска:</strong> [[searchResult.release_date]]
+            </div>
+        </div>
+    </div>
+    <div ng-show="nothing_found">Ничего не найдено.</div>
 </div>
 {% endblock %}

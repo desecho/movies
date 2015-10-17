@@ -67,11 +67,16 @@ def get_comments_and_ratings(record_ids_and_movies, user):
     movies, record_ids_and_movies_dict = get_record_movie_data(
         record_ids_and_movies)
     comments_and_ratings = Record.objects.filter(
-        user__in=get_friends(user),
         list_id=1,
         movie_id__in=movies
-    ).values('movie_id', 'comment', 'rating', 'user__vk_profile__photo',
-             'user__first_name', 'user__last_name', 'user__username')
+    )
+    friends = get_friends(user)
+    if friends is None:
+        comments_and_ratings = []
+    else:
+        comments_and_ratings = comments_and_ratings.filter(user__in=friends).values(
+            'movie_id', 'comment', 'rating', 'user__vk_profile__photo',
+            'user__first_name', 'user__last_name', 'user__username')
 
     comments_and_ratings_dict = {}
     for x in comments_and_ratings:
