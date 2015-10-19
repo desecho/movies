@@ -1,16 +1,16 @@
-App.factory('SearchMovie', function($resource) {
+app.factory('SearchMovie', function($resource) {
   return $resource(urlSearchMovie, {}, {
     get: {method: 'GET'}
   });
 });
 
-App.factory('AddToListFromDb', function($resource) {
+app.factory('AddToListFromDb', function($resource) {
   return $resource(urlAddToListFromDb, {}, {
     post: {method: 'POST', headers: headers}
   });
 });
 
-App.controller('MoviesSearchController', function ($scope, SearchMovie, AddToListFromDb) {
+app.controller('MoviesSearchController', function ($scope, SearchMovie, AddToListFromDb) {
   $scope.searchType = 'Фильм';
   $scope.searchTypeId = 1;
   $scope.submit = function(){
@@ -55,17 +55,15 @@ App.controller('MoviesSearchController', function ($scope, SearchMovie, AddToLis
   };
 
   $scope.changeSearchType = function(id) {
+    $scope.searchTypeId = id;
     if (id === 1) {
       $scope.searchType = 'Фильм';
-      $scope.searchTypeId = 1;
     }
     if (id === 2) {
       $scope.searchType = 'Актёр';
-      $scope.searchTypeId = 2;
     }
     if (id === 3) {
       $scope.searchType = 'Режиссёр';
-      $scope.searchTypeId = 3;
     }
   };
 });

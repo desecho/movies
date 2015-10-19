@@ -44,8 +44,8 @@ var headers = {
           'X-Requested-With': 'XMLHttpRequest',
         };
 
-var App = angular.module('movies', ['ngResource', 'ngLoadingSpinner']);
-App.config(function($interpolateProvider) {
+var app = angular.module('movies', ['ngResource', 'ngLoadingSpinner']);
+app.config(function($interpolateProvider) {
   $interpolateProvider.startSymbol('[[');
   $interpolateProvider.endSymbol(']]');
 });
