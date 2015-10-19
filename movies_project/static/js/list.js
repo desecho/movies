@@ -1,10 +1,10 @@
-App.factory('RemoveRecord', function($resource) {
+app.factory('RemoveRecord', function($resource) {
   return $resource(urlRemoveRecord, {}, {
     post: {method: 'POST', headers: headers}
   });
 });
 
-App.controller('ListController', function ($scope, RemoveRecord) {
+app.controller('ListController', function ($scope, RemoveRecord) {
   $scope.remove_record = function(id) {
     RemoveRecord.post($.param({id: id}), function(data) {
       return remove_record_from_page(id);
@@ -12,9 +12,39 @@ App.controller('ListController', function ($scope, RemoveRecord) {
       display_message('Ошибка удаления фильма');
     });
   };
+  $scope.mode = mode;
+  $scope.switch_mode = function(new_mode) {
+    function disactivate_mode_minimal() {
+      // TODO .comment, .comment-button fix display
+      $('.poster, .comment, .release_date_label, .rating_label, .wall-post').show();
+      $('.details, .imdb_rating, .review, .release_date').css('display', '');
+      $('.review').css('padding-top', '10px');
+      $('.release_date, .imdb_rating').css({
+        float: '',
+        'margin-right': '0'
+      });
+      $('.movie').css({
+        'width': '730px',
+        'border-width': '1px',
+        'border-radius': '4px',
+        'padding': '10px',
+        'margin': '0 0 10px 0',
+        'min-height': '145px'
+      });
+    };
+    if (new_mode === 'minimal') {
+      activate_mode_minimal();
+    } else {
+      disactivate_mode_minimal();
+    }
+    apply_settings({
+      mode: new_mode
+    }, false);
+    $scope.mode = new_mode;
+  };
 });
 
-var activate_mode_minimal, apply_settings, change_rating, disactivate_mode_minimal, post_to_wall, raty_custom_settings, save_comment, switch_mode, switch_sort, toggle_comment_area, toggle_recommendation;
+var activate_mode_minimal, apply_settings, change_rating, post_to_wall, raty_custom_settings, save_comment, switch_mode, switch_sort, toggle_comment_area, toggle_recommendation;
 
 change_rating = function(id, rating, element) {
   var revert_to_previous_rating;
@@ -35,27 +65,6 @@ change_rating = function(id, rating, element) {
     revert_to_previous_rating(element);
     return display_message('Ошибка добавления оценки');
   });
-};
-
-switch_mode = function(value) {
-  var reload;
-  reload = false;
-  if (value === 'minimal') {
-    if (mode === 'full') {
-      reload = true;
-    } else {
-      activate_mode_minimal();
-      this.mode = 'minimal';
-    }
-  } else if (value === 'compact' && mode === 'minimal') {
-    disactivate_mode_minimal();
-    this.mode = 'compact';
-  } else {
-    reload = true;
-  }
-  return apply_settings({
-    mode: value
-  }, reload);
 };
 
 switch_sort = function(value) {
@@ -124,24 +133,6 @@ activate_mode_minimal = function() {
     'border-radius': '0',
     'margin': '10px 0 0 0',
     'min-height': '0'
-  });
-};
-
-disactivate_mode_minimal = function() {
-  $('.poster, .comment-button, .release_date_label, .rating_label, .wall-post').show();
-  $('.details, .imdb_rating, .review, .release_date').css('display', '');
-  $('.review').css('padding-top', '10px');
-  $('.release_date, .imdb_rating').css({
-    float: '',
-    'margin-right': '0'
-  });
-  return $('.movie').css({
-    'width': '730px',
-    'border-width': '1px',
-    'border-radius': '4px',
-    'padding': '10px',
-    'margin': '0 0 10px 0',
-    'min-height': '145px'
   });
 };
 
@@ -270,10 +261,10 @@ raty_custom_settings = {
     if (!score) {
       score = 0;
     }
-    return change_rating($(this).attr('data-record_id'), score, $(this));
+    change_rating($(this).attr('data-record_id'), score, $(this));
   }
 };
 
 $(function() {
-  return $('textarea').autosize();
+  $('textarea').autosize();
 });

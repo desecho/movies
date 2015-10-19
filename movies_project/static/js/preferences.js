@@ -1,10 +1,10 @@
-App.factory('SavePreferences', function($resource) {
+app.factory('SavePreferences', function($resource) {
   return $resource(urlSavePreferences, {}, {
     post: {method: 'POST', headers: headers}
   });
 });
 
-App.controller('PreferencesController', function ($scope, SavePreferences) {
+app.controller('PreferencesController', function ($scope, SavePreferences) {
   $scope.savePreferences = function(){
     var preferences = {lang: $('input:radio[name=lang]:checked').val()};
     if (typeof vk !== undefined) {

@@ -11,10 +11,8 @@
     "bootstrap": "~2",
     "font-awesome": "latest",
     "angular": "latest",
-    "angular-bootstrap": "latest",
     "angular-loading-spinner": "latest",
-    "angular-resource": "latest",
-    "angular-route": "latest"
+    "angular-resource": "latest"
   },
   "private": true
 }
