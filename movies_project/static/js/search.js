@@ -1,16 +1,18 @@
-app.factory('SearchMovie', function($resource) {
+app.factory('SearchMovie', ['$resource', function($resource) {
   return $resource(urlSearchMovie, {}, {
     get: {method: 'GET'}
   });
-});
+}]);
 
-app.factory('AddToListFromDb', function($resource) {
+app.factory('AddToListFromDb', ['$resource', function($resource) {
   return $resource(urlAddToListFromDb, {}, {
     post: {method: 'POST', headers: headers}
   });
-});
+}]);
 
-app.controller('MoviesSearchController', function ($scope, SearchMovie, AddToListFromDb) {
+app.controller('MoviesSearchController', ['$scope', 'SearchMovie', 'AddToListFromDb',
+
+function ($scope, SearchMovie, AddToListFromDb) {
   $scope.searchType = 'Фильм';
   $scope.searchTypeId = 1;
   $scope.submit = function(){
@@ -30,9 +32,9 @@ app.controller('MoviesSearchController', function ($scope, SearchMovie, AddToLis
       } else if (data.status === 0) {
         $scope.nothing_found = true;
       } else {
-        display_message('Ошибка поиска');
+        displayMessage('Ошибка поиска');
       }
-    }, function(){display_message('Ошибка поиска')}
+    }, function(){displayMessage('Ошибка поиска')}
     );
   }
 
@@ -42,15 +44,15 @@ app.controller('MoviesSearchController', function ($scope, SearchMovie, AddToLis
       list_id: list_id
     }), function(data) {
       if (data.status === -1) {
-        return display_message('Ошибка! Код #1');
+        return displayMessage('Ошибка! Код #1');
       } else if (data.status === -2) {
-        return display_message('Ошибка! Код #2');
+        return displayMessage('Ошибка! Код #2');
       } else {
         return $('#movie' + movie_id).fadeOut('fast', function() {
           return $(this).remove();
         });
       }
-    }, function(){display_message('Ошибка добавления фильма')}
+    }, function(){displayMessage('Ошибка добавления фильма')}
     );
   };
 
@@ -66,4 +68,4 @@ app.controller('MoviesSearchController', function ($scope, SearchMovie, AddToLis
       $scope.searchType = 'Режиссёр';
     }
   };
-});
+}]);

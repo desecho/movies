@@ -30,11 +30,11 @@ $.ajaxSetup({
     }
 });
 
-var display_message;
+var displayMessage;
 
 $.jGrowl.defaults.closerTemplate = '<div>Закрыть все уведомления</div>';
 
-display_message = function(message) {
+displayMessage = function(message) {
   return $.jGrowl(message);
 };
 
@@ -49,3 +49,7 @@ app.config(function($interpolateProvider) {
   $interpolateProvider.startSymbol('[[');
   $interpolateProvider.endSymbol(']]');
 });
+app.config(['$resourceProvider', function($resourceProvider) {
+  // Don't strip trailing slashes from calculated URLs
+  $resourceProvider.defaults.stripTrailingSlashes = false;
+}]);
