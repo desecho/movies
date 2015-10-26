@@ -1,22 +1,42 @@
-app.factory('RemoveRecord', function($resource) {
+app.factory('RemoveRecord', ['$resource', function($resource) {
   return $resource(urlRemoveRecord, {}, {
     post: {method: 'POST', headers: headers}
   });
-});
+}]);
 
-app.controller('ListController', function ($scope, RemoveRecord) {
-  $scope.remove_record = function(id) {
+app.factory('SaveComment', ['$resource', function($resource) {
+  return $resource(urlSaveComment, {}, {
+    post: {method: 'POST', headers: headers}
+  });
+}]);
+
+app.controller('ListController', ['$scope', 'RemoveRecord', 'SaveComment',
+
+function ($scope, RemoveRecord, SaveComment) {
+    removeRecordFromPage = function(id) {
+      function checkIfNoRecords() {
+        if (!$('.movie').length) {
+          $('#results').html('Список пуст.');
+        }
+      };
+      $('#record' + id).fadeOut('fast', function() {
+        $(this).remove();
+        checkIfNoRecords();
+      });
+    };
+  $scope.removeRecord = function(id) {
     RemoveRecord.post($.param({id: id}), function(data) {
-      return remove_record_from_page(id);
+      removeRecordFromPage(id);
     }, function(){
-      display_message('Ошибка удаления фильма');
+      displayMessage('Ошибка удаления фильма');
     });
   };
   $scope.mode = mode;
-  $scope.switch_mode = function(new_mode) {
-    function disactivate_mode_minimal() {
+  $scope.switchMode = function(newMode) {
+    function disactivateModeMinimal() {
       // TODO .comment, .comment-button fix display
       $('.poster, .comment, .release_date_label, .rating_label, .wall-post').show();
+      $('.comment-button').hide();
       $('.details, .imdb_rating, .review, .release_date').css('display', '');
       $('.review').css('padding-top', '10px');
       $('.release_date, .imdb_rating').css({
@@ -32,38 +52,55 @@ app.controller('ListController', function ($scope, RemoveRecord) {
         'min-height': '145px'
       });
     };
-    if (new_mode === 'minimal') {
-      activate_mode_minimal();
+    if (newMode === 'minimal') {
+      activateModeMinimal();
     } else {
-      disactivate_mode_minimal();
+      disactivateModeMinimal();
     }
     apply_settings({
-      mode: new_mode
+      mode: newMode
     }, false);
-    $scope.mode = new_mode;
+    $scope.mode = newMode;
   };
-});
+  $scope.saveComment = function(id) {
+    var comment = $('#comment' + id).val();
+    SaveComment.post($.param({
+      id: id,
+      comment: comment
+    }), function(data) {
+      if (!comment) {
+        $scope.toggleCommentArea(id);
+      }
+    }, function() {
+      displayMessage('Ошибка сохранения комментария');
+    });
+  };
 
-var activate_mode_minimal, apply_settings, change_rating, post_to_wall, raty_custom_settings, save_comment, switch_mode, switch_sort, toggle_comment_area, toggle_recommendation;
+  $scope.toggleCommentArea = function(id) {
+    $('#comment_area' + id).toggle();
+    $('#comment_area_button' + id).toggle();
+    $('#comment' + id).focus();
+  };
+}]);
 
-change_rating = function(id, rating, element) {
-  var revert_to_previous_rating;
-  revert_to_previous_rating = function(element) {
-    var score_settings, settings;
-    score_settings = {
+var activateModeMinimal, apply_settings, post_to_wall, ratyCustomSettings, switch_sort, toggle_recommendation;
+
+function changeRating(id, rating, element) {
+  function revertToPreviousRating(element) {
+    var scoreSettings = {
       score: element.attr('data-rating')
     };
-    settings = $.extend({}, raty_settings, raty_custom_settings, score_settings);
-    return element.raty(settings);
+    var settings = $.extend({}, ratySettings, ratyCustomSettings, scoreSettings);
+    element.raty(settings);
   };
-  return $.post(url_ajax_change_rating, {
+  $.post(urlChangeRating, {
     id: id,
     rating: rating
   }, function(data, error, x) {
-    return element.attr('data-rating', rating);
+    element.attr('data-rating', rating);
   }).error(function() {
-    revert_to_previous_rating(element);
-    return display_message('Ошибка добавления оценки');
+    revertToPreviousRating(element);
+    displayMessage('Ошибка добавления оценки');
   });
 };
 
@@ -79,46 +116,25 @@ switch_sort = function(value) {
   settings = jQuery.extend({
     sort: value
   }, additional_setting);
-  return apply_settings(settings);
+  apply_settings(settings);
 };
 
 apply_settings = function(settings, reload) {
   if (reload == null) {
     reload = true;
   }
-  return $.post(url_ajax_apply_settings, {
+  $.post(url_ajax_apply_settings, {
     settings: JSON.stringify(settings)
   }, function(data) {
     if (reload) {
-      return location.reload();
+      location.reload();
     }
   }).error(function() {
-    return display_message('Ошибка применения настройки');
+    displayMessage('Ошибка применения настройки');
   });
 };
 
-save_comment = function(id) {
-  var comment;
-  comment = $('#comment' + id).val();
-  return $.post(url_ajax_save_comment, {
-    id: id,
-    comment: comment
-  }, function(data) {
-    if (!comment) {
-      return toggle_comment_area(id);
-    }
-  }).error(function() {
-    return display_message('Ошибка сохранения комментария');
-  });
-};
-
-toggle_comment_area = function(id) {
-  $('#comment_area' + id).toggle();
-  $('#comment_area_button' + id).toggle();
-  return $('#comment' + id).focus();
-};
-
-activate_mode_minimal = function() {
+activateModeMinimal = function() {
   $('.poster, .comment, .comment-button, .release_date_label, .rating_label, .wall-post').hide();
   $('.details, .review').css('display', 'inline');
   $('.review').css('padding-top', '0');
@@ -126,7 +142,7 @@ activate_mode_minimal = function() {
     float: 'right',
     'margin-right': '10px'
   });
-  return $('.movie').css({
+  $('.movie').css({
     'width': '750px',
     'padding': '0',
     'border-width': '0 0 1px 0',
@@ -138,11 +154,11 @@ activate_mode_minimal = function() {
 
 toggle_recommendation = function() {
   if (recommendation) {
-    return apply_settings({
+    apply_settings({
       recommendation: false
     });
   } else {
-    return apply_settings({
+    apply_settings({
       sort: 'rating',
       recommendation: true
     });
@@ -153,23 +169,23 @@ $(function() {
   var set_viewed_icons_and_remove_buttons;
   set_viewed_icons_and_remove_buttons = function() {
     if (anothers_account) {
-      return $('.movie').each(function() {
+      $('.movie').each(function() {
         var id, list_id;
         id = $(this).attr('data-id');
         list_id = list_data[id];
-        return set_viewed_icon_and_remove_buttons(id, list_id);
+        set_viewed_icon_and_remove_buttons(id, list_id);
       });
     }
   };
   $('#button_mode_' + mode).button('toggle');
   if (mode === 'minimal') {
-    activate_mode_minimal();
+    activateModeMinimal();
   }
   $('#button_sort_' + sort).button('toggle');
   if (recommendation) {
     $('#button_recommendation').button('toggle');
   }
-  return set_viewed_icons_and_remove_buttons();
+  set_viewed_icons_and_remove_buttons();
 });
 
 post_to_wall = function(id) {
@@ -180,7 +196,7 @@ post_to_wall = function(id) {
       var comment, rating_post, text, title;
       title = $('#record' + id).attr('data-title');
       comment = $('#comment' + id).val();
-      rating_post = raty_settings['hints'][rating - 1];
+      rating_post = ratySettings['hints'][rating - 1];
       if (rating > 2) {
         text = 'Рекомендую посмотреть';
       } else {
@@ -205,17 +221,17 @@ post_to_wall = function(id) {
       if (data.error) {
         error_code = data.error.error_code;
         if (error_code !== 10007) {
-          return display_message('Ошибка публикации на стену #' + error_code);
+          return displayMessage('Ошибка публикации на стену #' + error_code);
         }
       } else {
-        return display_message('Запись отправлена на стену');
+        return displayMessage('Запись отправлена на стену');
       }
     });
   };
   save_wall_photo = function(response) {
     return VK.api('photos.saveWallPhoto', response, function(data) {
       if (data.error) {
-        return display_message('Ошибка сохранения изображения на стену #' + data.error.error_code);
+        return displayMessage('Ошибка сохранения изображения на стену #' + data.error.error_code);
       } else {
         return post(data.response[0].id);
       }
@@ -228,13 +244,13 @@ post_to_wall = function(id) {
     }, function(data) {
       return save_wall_photo($.parseJSON(data.response));
     }).error(function() {
-      return display_message('Ошибка загрузки изображения');
+      return displayMessage('Ошибка загрузки изображения');
     });
   };
   get_wall_upload_server_and_upload_photo_and_post_to_wall = function() {
     return VK.api('photos.getWallUploadServer', function(data) {
       if (data.error) {
-        return display_message('Ошибка получения сервера загрузки на стену #' + data.error.error_code);
+        return displayMessage('Ошибка получения сервера загрузки на стену #' + data.error.error_code);
       } else {
         return upload_photo_to_wall(data.response.upload_url);
       }
@@ -251,17 +267,17 @@ post_to_wall = function(id) {
       return post();
     }
   } else {
-    return display_message('Поставьте оценку фильму');
+    return displayMessage('Поставьте оценку фильму');
   }
 };
 
-raty_custom_settings = {
+ratyCustomSettings = {
   readOnly: raty_readonly,
   click: function(score) {
     if (!score) {
       score = 0;
     }
-    change_rating($(this).attr('data-record_id'), score, $(this));
+    changeRating($(this).attr('data-record_id'), score, $(this));
   }
 };
 
