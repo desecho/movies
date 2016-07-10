@@ -19,11 +19,4 @@ echo "0 0 1 * * $PYTHON_PATH/python $PWD/scripts/update_movie_data.sh > $PWD/log
 crontab crontab
 rm crontab
 
-#create cache dirs
-mkdir cache
-touch cache/tmdb3.cache
-chmod 777 cache/tmdb3.cache
-
-cd src
-./manage.py syncdb
-./manage.py collectstatic
+python src/manage.py collectstatic

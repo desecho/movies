@@ -42,8 +42,8 @@ class Command(BaseCommand):
             return movies.values_list('tmdb_id', flat=True)
 
         for tmdb_id in get_tmdb_ids():
-            try:
-                print add_movie_to_db(tmdb_id, True)
-            except TMDBRequestInvalid:
-                print 'Movie id - %d' % Movie.objects.get(tmdb_id=tmdb_id).id
-                print sys.exc_info()[1]
+            id = add_movie_to_db(tmdb_id, True)
+            if id < 0:
+                print 'Error - %d' % Movie.objects.get(tmdb_id=tmdb_id).id
+            else:
+                print id

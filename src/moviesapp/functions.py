@@ -80,7 +80,7 @@ def add_movie_to_db(tmdb_id, refresh=False):
             'director': movie_data.get('Director'),
             'actors': movie_data.get('Actors'),
             'genre': movie_data.get('Genre'),
-            # 'country': movie_data.get('Country'), #todo
+            'country': movie_data.get('Country'),
             'imdb_rating': movie_data.get('imdbRating'),
             'runtime': get_runtime(movie_data.get('Runtime'))}
 
@@ -88,12 +88,6 @@ def add_movie_to_db(tmdb_id, refresh=False):
         def get_release_date(release_date):
             if release_date:
                 return release_date
-
-        def process_hacks(movie_data):
-            # X-files Fight the future hack
-            if movie_data.imdb == 'tt0019387':
-                movie_data.imdb = 'tt0120902'
-            return movie_data
 
         def get_poster(poster):
             if poster:
@@ -118,24 +112,33 @@ def add_movie_to_db(tmdb_id, refresh=False):
         def get_movie_data(tmdb_id, lang):
             tmdb.set_locale(*settings.LOCALES[lang])
             try:
-                return tmdb.Movie(tmdb_id)
-            except:
+                movie_data = tmdb.Movie(tmdb_id)
+                movie_data.imdb  # any request to trigger a request
+                return movie_data
+            except Exception:
                 return
 
         def get_poster_en(tmdb_id):
             movie_data = get_movie_data(tmdb_id, 'en')
+            if movie_data is None:
+                return None
             return get_poster(movie_data.poster)
 
         movie_data = get_movie_data(tmdb_id, 'ru')
+        if movie_data is None:
+            return None
+        poster_en = get_poster_en(tmdb_id)
+        if poster_en is None:
+            return None
+
         if movie_data.imdb:
-            movie_data = process_hacks(movie_data)
             return {
                 'tmdb_id': tmdb_id,
                 'imdb_id': movie_data.imdb,
                 'release_date': get_release_date(movie_data.releasedate),
                 'title': movie_data.originaltitle,
-                'poster': get_poster(movie_data.poster), # TODO
-                # 'poster_en': get_poster_en(tmdb_id), TODO
+                'poster_ru': get_poster(movie_data.poster),
+                'poster_en': poster_en,
                 'homepage': movie_data.homepage,
                 'trailers': get_trailers(movie_data),
                 'title_ru': movie_data.title,

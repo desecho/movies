@@ -4,17 +4,17 @@
   "dependencies": {
     "jquery": "Used for bootstrap2",
     "jquery": "2.0.3",
-    "raty": "latest",
-    "jquery-validation": "latest",
-    "jgrowl": "latest",
-    "autosize": "latest",
+    "raty": "2.7.0",
+    "jquery-validation": "1.15.0",
+    "jgrowl": "1.4.5",
+    "autosize": "3.0.15",
     "bootstrap": "~2",
-    "font-awesome": "latest",
-    "angular": "latest",
-    "angular-loading-spinner": "latest",
-    "angular-resource": "latest",
-    "angular-route": "latest",
-    "angular-bootstrap": "latest"
+    "font-awesome": "4.6.3",
+    "angular": "1.5.7",
+    "angular-loading-spinner": "0.0.3",
+    "angular-resource": "1.5.7",
+    "angular-route": "1.5.7",
+    "angular-bootstrap": "1.3.3"
   },
   "private": true
 }
