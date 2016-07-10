@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block header_extra %}
+<script>
+  var urlSearchMovie = '{% url 'moviesapp.views.ajax_search_movie' %}';
+  var urlAddToListFromDb = '{% url 'moviesapp.views.ajax_add_to_list_from_db' %}';
+</script>
+<script src="/static/js/search.js"></script>
+{% endblock %}
+
+{% block content %}
+<div ng-controller="MoviesSearchController">
+    <div class="search_panel">
+      <form name="search" id="search" ng-submit="search.$valid && submit()" novalidate>
+        <div class="input-append">
+          <input class="span2" id="query" name="query" type="text" autofocus ng-model="query" required>
+          <button class="btn" type="submit">Найти</button>
+          <div class="btn-group">
+            <button id="search_type_button" class="btn dropdown-toggle" data-toggle="dropdown">[[ searchType ]] <span class="caret"></span></button>
+            <ul class="dropdown-menu">
+              <li><a href="#" ng-click="changeSearchType(1);">Фильм</a></li>
+              <li><a href="#" ng-click="changeSearchType(2);">Актёр</a></li>
+              <li><a href="#" ng-click="changeSearchType(3);">Режиссёр</a></li>
+            </ul>
+          </div>
+        </div>
+        <label class="checkbox">
+          <input type="checkbox" id="popular_only" checked> отображать только популярные<br>
+        </label>
+        <label class="checkbox">
+          <input type="checkbox" id="sort_by_date"> сортировка по дате
+        </label>
+      </form>
+    </div>
+    <div id="results" class="results" ng-repeat="searchResult in searchResults">
+        <div class="movie" id="movie[[searchResult.id]]">
+            <div class="poster"><img ng-src="[[searchResult.poster]]" alt="[[searchResult.title]] poster"/></div>
+            <div class="title">"[[searchResult.title]]"
+            <div class="add-to-list-buttons">
+            <a href="#" title="Добавить в список Просмотрено" ng-click="addToListFromDb(searchResult.id, 1)"><i class="fa fa-eye"></i></a>
+            <a href="#" title="Добавить в список К просмотру" ng-click="addToListFromDb(searchResult.id, 2)"><i class="fa fa-eye-slash"></i></a>
+            </div></div>
+            <div class="details" ng-show="searchResult.release_date">
+                <strong>Дата выпуска:</strong> [[searchResult.release_date]]
+            </div>
+        </div>
+    </div>
+    <div ng-show="nothing_found">Ничего не найдено.</div>
+</div>
+{% endblock %}

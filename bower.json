@@ -7,12 +7,14 @@
     "raty": "latest",
     "jquery-validation": "latest",
     "jgrowl": "latest",
-    "jquery-autosize": "latest",
+    "autosize": "latest",
     "bootstrap": "~2",
     "font-awesome": "latest",
     "angular": "latest",
     "angular-loading-spinner": "latest",
-    "angular-resource": "latest"
+    "angular-resource": "latest",
+    "angular-route": "latest",
+    "angular-bootstrap": "latest"
   },
   "private": true
 }
