@@ -1,46 +1,11 @@
 tmdb3.cache
 installation_settings.sh
-movies_project/static/admin/
-#movies_project/static/js/
-movies_project/static/bower/
-movies_project/movies_project/secret.py
-movies_project/movies_project/local_settings.py
+src/moviesapp/static/bower/
+__pycache__
+/.vagrant
+.tox
+*.pyc
 
-*.py[cod]
 # OS X meta data
 ._*
 .DS_Store
-
-# C extensions
-*.so
-
-# Packages
-*.egg
-*.egg-info
-dist
-build
-eggs
-parts
-bin
-var
-sdist
-develop-eggs
-.installed.cfg
-lib
-lib64
-
-# Installer logs
-pip-log.txt
-
-# Unit test / coverage reports
-.coverage
-.tox
-nosetests.xml
-
-# Translations
-*.mo
-
-# Mr Developer
-.mr.developer.cfg
-.project
-.pydevproject

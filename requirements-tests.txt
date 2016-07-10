@@ -1,0 +1,4 @@
+-r requirements-base.txt
+flake8
+pep8
+beautifulsoup4
