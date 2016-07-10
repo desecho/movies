@@ -1,11 +1,8 @@
 # -*- coding: utf8 -*-
 from annoying.fields import JSONField
-from south.modelsinspector import add_introspection_rules
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.conf import settings
-
-add_introspection_rules([], ["^annoying.fields.JSONField"])
 
 
 def get_poster_url(size, poster, filename=None):
@@ -28,11 +25,7 @@ def get_poster_url(size, poster, filename=None):
 
 
 class User(AbstractUser):
-    # preferences = JSONField('настройки', default='{"lang": "ru"}') REMOVED
-
-    @property
-    def preferences(self):
-        return {'lang': 'ru'}
+    preferences = JSONField('настройки', default='{"lang": "ru"}')
 
     def get_avatar_medium(self):
         return self.vk_profile.photo_medium or settings.VK_NO_IMAGE_MEDIUM
@@ -63,7 +56,7 @@ class List(models.Model):
 class Movie(models.Model):
     title = models.CharField('оригинальное название', max_length=255)
     title_ru = models.CharField('название', max_length=255)
-    # country = models.CharField('страна', max_length=255, null=True, blank=True) REMOVED
+    country = models.CharField('страна', max_length=255, null=True, blank=True)
     overview = models.TextField('описание (рус)', null=True, blank=True)
     plot = models.TextField('описание (англ)', null=True, blank=True)
     director = models.CharField('режиссёр', max_length=255, null=True, blank=True)
@@ -73,8 +66,8 @@ class Movie(models.Model):
     imdb_id = models.CharField('IMDB id', max_length=15, unique=True)
     tmdb_id = models.IntegerField('TMDB id', unique=True)
     imdb_rating = models.DecimalField('IMDB рейтинг', max_digits=2, decimal_places=1, null=True)
-    # poster_ru = models.CharField('постер (рус)', max_length=255, null=True) REMOVED
-    poster = models.CharField('постер (англ)', max_length=255, null=True)  # RENAMED FROM poster_en
+    poster_ru = models.CharField('постер (рус)', max_length=255, null=True)
+    poster_en = models.CharField('постер (англ)', max_length=255, null=True)
     release_date = models.DateField('дата выпуска', null=True)
     runtime = models.TimeField('длительность', null=True, blank=True)
     homepage = models.URLField('сайт', null=True, blank=True)
@@ -97,11 +90,8 @@ class Movie(models.Model):
                 return True
 
     def get_poster(self, size, lang):
-        return 'http://media.creativebloq.futurecdn.net/sites/creativebloq.com/files/articles/article/2012/07/postersilence.jpg'
-        #TODO
-        # poster = self.poster_ru # TODO Fix this
-        # filename = eval('self.poster_' + lang) # TODO Fix this
-        filename = None  # TODO Fix this
+        poster = self.poster_ru
+        filename = eval('self.poster_' + lang)
         return get_poster_url(size, poster, filename)
 
     def poster_en_small_url(self):

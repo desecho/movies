@@ -14,7 +14,7 @@ from poster.encode import multipart_encode
 from poster.streaminghttp import register_openers
 
 # from django.utils.http import urlquote
-from django.http import HttpResponse, QueryDict, HttpResponseBadRequest
+from django.http import HttpResponse, QueryDict
 from django.shortcuts import redirect
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required

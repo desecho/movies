@@ -75,8 +75,8 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'vk_iframe.middleware.IFrameFixMiddleware',
-    'vk_iframe.middleware.AuthenticationMiddleware',
+    #'vk_iframe.middleware.IFrameFixMiddleware',
+    #'vk_iframe.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.gzip.GZipMiddleware',
     # Uncomment the next line for simple clickjacking protection:
@@ -105,10 +105,9 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable admin documentation:
     'django.contrib.admindocs',
     'moviesapp',
-    'vk_iframe',
+    # 'vk_iframe',
     'menu',
     'bootstrap-pagination',
-    'south',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -142,7 +141,7 @@ INSTALLED_APPS = (
 
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
-    'vk_iframe.backends.VkontakteUserBackend',
+    # 'vk_iframe.backends.VkontakteUserBackend',
 )
 
 ADMIN_REORDER = (
@@ -165,7 +164,8 @@ MEDIA_ROOT = op.join(local_settings.PROJECT_ROOT, 'media')
 MEDIA_URL = '/media/'
 
 CACHE_DIR = op.join(local_settings.PROJECT_ROOT, 'cache')
-TMDB_CACHE_PATH = CACHE_DIR + 'tmdb3.cache'
+TMDB_CACHE_PATH = op.join(CACHE_DIR, 'tmdb3.cache')
+
 
 MAX_RESULTS = 100
 MIN_POPULARITY = 50
@@ -205,3 +205,5 @@ VK_APP_ID = local_settings.VK_APP_ID
 VK_APP_SECRET = local_settings.VK_APP_SECRET
 
 TMDB_KEY = local_settings.TMDB_KEY
+
+APPEND_SLASH = True

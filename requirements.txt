@@ -1,10 +1,9 @@
-Django==1.6.5
-django-annoying
-django-simple-menu
+Django==1.7
+django-annoying==0.9.0
+django-simple-menu==1.2.1
 #django-bootstrap-pagination - used outdated translated version in project dir.
-vkontakte
-django-vkontakte-iframe
-poster
-python-dateutil
-south
--e git+https://github.com/wagnerrp/pytmdb3.git#egg=pytmdb3
+vkontakte==1.3.5
+poster==0.8.1
+python-dateutil==2.5.3
+# tmdb3
+-e git+https://github.com/desecho/pytmdb3.git#egg=pytmdb3

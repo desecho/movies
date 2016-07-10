@@ -17,3 +17,12 @@ The web application on Python2/Django/javascript/jQuery to create movie lists ("
 * Insert your analytics code to src/static/js/analytics.js if you'd like
 * Change variable in installation_settings.sh
 * Run install.sh
+* Run the following commands:
+
+```bash
+mkdir cache
+touch cache/tmdb3.cache
+chmod 777 cache/tmdb3.cache
+./manage.py migrate
+./manage.py collectstatic
+```
