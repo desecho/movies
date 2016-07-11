@@ -1,5 +1,8 @@
 # -*- coding: utf8 -*-
+from __future__ import unicode_literals
+
 from annoying.fields import JSONField
+
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.conf import settings

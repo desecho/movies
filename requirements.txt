@@ -6,4 +6,4 @@ vkontakte==1.3.5
 poster==0.8.1
 python-dateutil==2.5.3
 # tmdb3
--e git+https://github.com/desecho/pytmdb3.git#egg=pytmdb3
+-e git+https://github.com/desecho/pytmdb3.git@16e19176bc4946369999bcdf4151b2cbdf4f4bbe#egg=pytmdb3
