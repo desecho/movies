@@ -18,5 +18,3 @@ echo "0 0 * * * $PYTHON_PATH/python $PWD/src/manage.py update_vk_profiles > $PWD
 echo "0 0 1 * * $PYTHON_PATH/python $PWD/scripts/update_movie_data.sh > $PWD/logs/update_movie_data.log 2>&1" > crontab
 crontab crontab
 rm crontab
-
-python src/manage.py collectstatic

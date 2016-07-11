@@ -1,6 +1,7 @@
 # -*- coding: utf8 -*-
+from __future__ import unicode_literals
 
-#from django.views.decorators.cache import cache_page
+# from django.views.decorators.cache import cache_page
 import tempfile
 import os
 import json
