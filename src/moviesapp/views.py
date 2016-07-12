@@ -1,7 +1,6 @@
-# -*- coding: utf8 -*-
+# coding: utf8
 from __future__ import unicode_literals
 
-# from django.views.decorators.cache import cache_page
 import tempfile
 import os
 import json
@@ -15,6 +14,7 @@ from poster.encode import multipart_encode
 from poster.streaminghttp import register_openers
 
 # from django.utils.http import urlquote
+# from django.views.decorators.cache import cache_page
 from django.http import HttpResponse, QueryDict
 from django.shortcuts import redirect
 from django.contrib.auth import logout
@@ -23,6 +23,7 @@ from django.conf import settings
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Q
+
 from annoying.decorators import ajax_request, render_to
 
 from .models import Record, List, User, ActionRecord, get_poster_url

@@ -1,11 +1,11 @@
-# -*- coding: utf8 -*-
+# coding: utf8
 from __future__ import unicode_literals
-
-from annoying.fields import JSONField
 
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.conf import settings
+
+from annoying.fields import JSONField
 
 
 def get_poster_url(size, poster, filename=None):
