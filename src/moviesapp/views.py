@@ -194,9 +194,8 @@ def list_view(request, list_name, username=None):
     def get_list_data(records):
         movies, record_ids_and_movies_dict = get_record_movie_data(
             records.values_list('id', 'movie_id'))
-        movie_ids_and_list_ids = (Record.objects
-            .filter(user=request.user, movie_id__in=movies)
-            .values_list('movie_id', 'list_id'))
+        movie_ids_and_list_ids = (Record.objects.filter(user=request.user, movie_id__in=movies)
+                                                .values_list('movie_id', 'list_id'))
 
         movie_id_and_list_id_dict = {}
         for x in movie_ids_and_list_ids:
@@ -231,7 +230,7 @@ def list_view(request, list_name, username=None):
                                                       user=user)
 
     def get_anothers_account():
-        "Returns User if it's another's account and False if it's not"
+        """Returns User if it's another's account and False if it's not"""
         if username:
             anothers_account = User.objects.get(username=username)
         else:
@@ -359,7 +358,7 @@ def feed(request, list_name):
             'actions': actions_output}
 
 
-#@cache_page(settings.CACHE_TIMEOUT)
+# @cache_page(settings.CACHE_TIMEOUT)
 @render_to('people.html')
 @login_required
 def generic_people(request, users):
@@ -374,7 +373,7 @@ def generic_people(request, users):
             settings.PEOPLE_ON_PAGE)}
 
 
-#@cache_page(settings.CACHE_TIMEOUT)
+# @cache_page(settings.CACHE_TIMEOUT)
 @login_required
 def people(request):
     return generic_people(request,
@@ -382,7 +381,7 @@ def people(request):
                                                           sort=True))
 
 
-#@cache_page(settings.CACHE_TIMEOUT)
+# @cache_page(settings.CACHE_TIMEOUT)
 @login_required
 def friends(request):
     return generic_people(request,
@@ -572,7 +571,7 @@ def ajax_search_movie(request):
                 movies = remove_not_popular_movies(movies)
             if options['sort_by_date']:
                 movies = sort_by_date(movies)
-            #movies = sortByPopularity(movies)
+            # movies = sortByPopularity(movies)
 
             movies = set_proper_date(movies)
             if len(movies):

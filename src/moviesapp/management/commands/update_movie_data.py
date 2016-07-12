@@ -1,6 +1,3 @@
-import sys
-from tmdb3.tmdb_exceptions import TMDBRequestInvalid
-
 from django.core.management.base import BaseCommand
 
 from ...functions import add_movie_to_db
