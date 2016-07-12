@@ -5,7 +5,7 @@
 <script src="/static/js/raty.js"></script>
 <script src="/static/js/raty_readonly.js"></script>
 <script>
-  var url_ajax_add_to_list   = '{% url 'moviesapp.views.ajax_add_to_list' %}';
+  var urlAddToList   = '{% url 'moviesapp.views.ajax_add_to_list' %}';
 </script>
 <script src="/static/js/list_general.js"></script>
 <div id="results" class="results">
@@ -29,8 +29,8 @@
               <img src="{{ poster_normal_url }}" alt="{{ title }} poster"/>
           </div>
           <div class="details">
-            {% if record.movie.imdb_rating %}<div class="imdb_rating" title="Рейтинг"><span class="item-desc">IMDb:</span> {{ record.movie.imdb_rating }}</div> {% endif %}
-            {% if record.movie.release_date %}<div class="release_date" title="Дата выпуска"><span class="release_date_label item-desc">Дата:</span> {{ record.movie.release_date|date:'d.m.y' }}</div>{% endif %}
+            {% if record.movie.imdb_rating %}<div class="imdb-rating" title="Рейтинг"><span class="item-desc">IMDb:</span> {{ record.movie.imdb_rating }}</div> {% endif %}
+            {% if record.movie.release_date %}<div class="release-date" title="Дата выпуска"><span class="release-date-label item-desc">Дата:</span> {{ record.movie.release_date|date:'d.m.y' }}</div>{% endif %}
             {% if record.movie.country %} <span class="item-desc">Страна:</span> {{ record.movie.country }}<br> {% endif %}
             {% if record.movie.director %} <span class="item-desc">Режиссёр:</span> {{ record.movie.director }}<br> {% endif %}
             {% if record.movie.writer %} <span class="item-desc">Сценарист:</span> {{ record.movie.writer }}<br> {% endif %}
