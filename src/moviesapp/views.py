@@ -470,7 +470,7 @@ def ajax_search_movie(request):
                 if date:
                     return date.strftime('%d.%m.%y')
             for movie in movies:
-                movie['release_date'] = format_date(movie['release_date'])
+                movie['releaseDate'] = format_date(movie['releaseDate'])
             return movies
 
         # def sortByPopularity(movies):
@@ -493,12 +493,12 @@ def ajax_search_movie(request):
             movies_with_date = []
             movies_without_date = []
             for movie in movies:
-                if movie['release_date']:
+                if movie['releaseDate']:
                     movies_with_date.append(movie)
                 else:
                     movies_without_date.append(movie)
             movies_with_date = sorted(movies_with_date,
-                                      key=itemgetter('release_date'), reverse=True)
+                                      key=itemgetter('releaseDate'), reverse=True)
             movies = movies_with_date + movies_without_date
             return movies
 
@@ -559,7 +559,7 @@ def ajax_search_movie(request):
 
                     movie = {
                         'id': movie.id,
-                        'release_date': movie.releasedate,
+                        'releaseDate': movie.releasedate,
                         'popularity': movie.popularity,
                         'title': get_title(),
                         'poster': get_poster_url('small', movie.poster),

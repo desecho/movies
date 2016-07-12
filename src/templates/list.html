@@ -28,8 +28,8 @@
 
   var urlChangeRating = '{% url 'moviesapp.views.ajax_change_rating' %}';
   var urlRemoveRecord = '{% url 'moviesapp.views.ajax_remove_record' %}';
-  var url_ajax_apply_settings = '{% url 'moviesapp.views.ajax_apply_settings' %}';
-  var url_ajax_add_to_list   = '{% url 'moviesapp.views.ajax_add_to_list' %}';
+  var urlApplySettings = '{% url 'moviesapp.views.ajax_apply_settings' %}';
+  var urlAddToList   = '{% url 'moviesapp.views.ajax_add_to_list' %}';
   var urlSaveComment  = '{% url 'moviesapp.views.ajax_save_comment' %}';
   var url_ajax_upload_photo_to_wall = '{% url 'moviesapp.views.ajax_upload_photo_to_wall' %}';
 </script>
@@ -63,13 +63,13 @@
 </div>
 
 {% if anothers_account %}
-  <button id="button_recommendation" type="button" class="btn" data-toggle="button" onclick="toggle_recommendation()">Рекомендации</button>
+  <button id="button_recommendation" type="button" class="btn" data-toggle="button" onclick="toggleRecommendation()">Рекомендации</button>
 {% endif %}
 <br><br>
 <div class="btn-group" data-toggle="buttons-radio">
-  <button title="Сортировка" id="button_sort_release_date" type="button" class="btn" onclick="switch_sort('release_date')">Дата выпуска</button>
-  <button title="Сортировка" id="button_sort_rating" type="button" class="btn" onclick="switch_sort('rating')">Оценка</button>
-  <button title="Сортировка" id="button_sort_addition_date" type="button" class="btn" onclick="switch_sort('addition_date')">Дата добавления</button>
+  <button title="Сортировка" id="button_sort_release_date" type="button" class="btn" onclick="switchSort('release-date')">Дата выпуска</button>
+  <button title="Сортировка" id="button_sort_rating" type="button" class="btn" onclick="switchSort('rating')">Оценка</button>
+  <button title="Сортировка" id="button_sort_addition_date" type="button" class="btn" onclick="switchSort('addition_date')">Дата добавления</button>
 </div>
 <form action="" method="post" class="search">
   {% csrf_token %}
@@ -97,7 +97,7 @@
           {{ title }}
           {% if not anothers_account %}
             <a href="javascript:void(0);" title="Удалить" ng-click="removeRecord({{ record.id }})"><i class="fa fa-trash-o"></i></a>
-            {% if user.is_vk_user %}<a href="javascript:void(0);" class="wall-post" title="Отправить на стену" onclick="post_to_wall({{ record.id }})"><i class="fa fa-share"></i></a>{% endif %}
+            {% if user.is_vk_user %}<a href="javascript:void(0);" class="wall-post" title="Отправить на стену" onclick="postToWall({{ record.id }})"><i class="fa fa-share"></i></a>{% endif %}
           {% endif %}
           <div class="add-to-list-buttons">
             {% if not anothers_account %}
@@ -114,8 +114,8 @@
               <img src="{{ poster_small_url }}" alt="{{ title }} poster" ng-show="mode != 'full'"/>
           </div>
           <div class="details">
-            {% if record.movie.imdb_rating %}<div class="imdb_rating" title="Рейтинг"><span class="item-desc">IMDb:</span> {{ record.movie.imdb_rating }}</div> {% endif %}
-            {% if record.movie.release_date %}<div class="release_date" title="Дата выпуска"><span class="release_date_label item-desc">Дата:</span> {{ record.movie.release_date|date:'d.m.y' }}</div>{% endif %}
+            {% if record.movie.imdb_rating %}<div class="imdb-rating" title="Рейтинг"><span class="item-desc">IMDb:</span> {{ record.movie.imdb_rating }}</div> {% endif %}
+            {% if record.movie.release_date %}<div class="release-date" title="Дата выпуска"><span class="release-date-label item-desc">Дата:</span> {{ record.movie.release_date|date:'d.m.y' }}</div>{% endif %}
             <div ng-show="mode == 'full'">
                 {% if record.movie.country %} <span class="item-desc">Страна:</span> {{ record.movie.country }}<br> {% endif %}
                 {% if record.movie.director %} <span class="item-desc">Режиссёр:</span> {{ record.movie.director }}<br> {% endif %}

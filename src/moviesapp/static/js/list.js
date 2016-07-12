@@ -35,11 +35,11 @@ function ($scope, RemoveRecord, SaveComment) {
   $scope.switchMode = function(newMode) {
     function disactivateModeMinimal() {
       // TODO .comment, .comment-button fix display
-      $('.poster, .comment, .release_date_label, .rating_label, .wall-post').show();
+      $('.poster, .comment, .release-date-label, .wall-post').show();
       $('.comment-button').hide();
-      $('.details, .imdb_rating, .review, .release_date').css('display', '');
+      $('.details, .imdb-rating, .review, .release-date').css('display', '');
       $('.review').css('padding-top', '10px');
-      $('.release_date, .imdb_rating').css({
+      $('.release-date, .imdb-rating').css({
         float: '',
         'margin-right': '0'
       });
@@ -57,7 +57,7 @@ function ($scope, RemoveRecord, SaveComment) {
     } else {
       disactivateModeMinimal();
     }
-    apply_settings({
+    applySettings({
       mode: newMode
     }, false);
     $scope.mode = newMode;
@@ -83,7 +83,7 @@ function ($scope, RemoveRecord, SaveComment) {
   };
 }]);
 
-var activateModeMinimal, apply_settings, post_to_wall, ratyCustomSettings, switch_sort, toggle_recommendation;
+var activateModeMinimal, applySettings, postToWall, ratyCustomSettings, switchSort, toggleRecommendation;
 
 function changeRating(id, rating, element) {
   function revertToPreviousRating(element) {
@@ -104,26 +104,26 @@ function changeRating(id, rating, element) {
   });
 };
 
-switch_sort = function(value) {
-  var additional_setting, settings;
+switchSort = function(value) {
+  var additionalSetting, settings;
   if (value !== 'rating') {
-    additional_setting = {
+    additionalSetting = {
       recommendation: false
     };
   } else {
-    additional_setting = {};
+    additionalSetting = {};
   }
   settings = jQuery.extend({
     sort: value
-  }, additional_setting);
-  apply_settings(settings);
+  }, additionalSetting);
+  applySettings(settings);
 };
 
-apply_settings = function(settings, reload) {
+applySettings = function(settings, reload) {
   if (reload == null) {
     reload = true;
   }
-  $.post(url_ajax_apply_settings, {
+  $.post(urlApplySettings, {
     settings: JSON.stringify(settings)
   }, function(data) {
     if (reload) {
@@ -135,10 +135,10 @@ apply_settings = function(settings, reload) {
 };
 
 activateModeMinimal = function() {
-  $('.poster, .comment, .comment-button, .release_date_label, .rating_label, .wall-post').hide();
+  $('.poster, .comment, .comment-button, .release-date-label, .wall-post').hide();
   $('.details, .review').css('display', 'inline');
   $('.review').css('padding-top', '0');
-  $('.release_date, .imdb_rating').css({
+  $('.release-date, .imdb-rating').css({
     float: 'right',
     'margin-right': '10px'
   });
@@ -152,13 +152,13 @@ activateModeMinimal = function() {
   });
 };
 
-toggle_recommendation = function() {
+toggleRecommendation = function() {
   if (recommendation) {
-    apply_settings({
+    applySettings({
       recommendation: false
     });
   } else {
-    apply_settings({
+    applySettings({
       sort: 'rating',
       recommendation: true
     });
@@ -173,7 +173,7 @@ $(function() {
         var id, list_id;
         id = $(this).attr('data-id');
         list_id = list_data[id];
-        set_viewed_icon_and_remove_buttons(id, list_id);
+        setViewedIconAndRemoveButtons(id, list_id);
       });
     }
   };
@@ -188,7 +188,7 @@ $(function() {
   set_viewed_icons_and_remove_buttons();
 });
 
-post_to_wall = function(id) {
+postToWall = function(id) {
   var get_wall_upload_server_and_upload_photo_and_post_to_wall, has_poster, post, rating, save_wall_photo, upload_photo_to_wall;
   post = function(photo) {
     var create_wall_post, create_wall_post_message;

@@ -10,7 +10,7 @@
 
 {% block content %}
 <div ng-controller="MoviesSearchController">
-    <div class="search_panel">
+    <div class="search-panel">
       <form name="search" id="search" ng-submit="search.$valid && submit()" novalidate>
         <div class="input-append">
           <input class="span2" id="query" name="query" type="text" autofocus ng-model="query" required>
@@ -40,8 +40,8 @@
             <a href="javascript:void(0)" title="Добавить в список Просмотрено" ng-click="addToListFromDb(searchResult.id, 1)"><i class="fa fa-eye"></i></a>
             <a href="javascript:void(0)" title="Добавить в список К просмотру" ng-click="addToListFromDb(searchResult.id, 2)"><i class="fa fa-eye-slash"></i></a>
             </div></div>
-            <div class="details" ng-show="searchResult.release_date">
-                <strong>Дата выпуска:</strong> [[searchResult.release_date]]
+            <div class="details" ng-show="searchResult.releaseDate">
+                <strong>Дата выпуска:</strong> [[searchResult.releaseDate]]
             </div>
         </div>
     </div>
