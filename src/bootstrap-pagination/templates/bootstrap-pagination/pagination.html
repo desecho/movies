@@ -14,7 +14,7 @@
     {% for pagenum, url in page_urls %}
         {% if page.number == pagenum %}
             <li class="active">
-                <a title="Текущая страница" href="#">{{ pagenum }}</a>
+                <a title="Текущая страница" href="javascript:void(0)">{{ pagenum }}</a>
             </li>
         {% else %}
             <li>
