@@ -96,8 +96,8 @@
         <div class="title">
           {{ title }}
           {% if not anothers_account %}
-            <a href="#" title="Удалить" ng-click="removeRecord({{ record.id }})"><i class="fa fa-trash-o"></i></a>
-            {% if user.is_vk_user %}<a href="#" class="wall-post" title="Отправить на стену" onclick="post_to_wall({{ record.id }})"><i class="fa fa-share"></i></a>{% endif %}
+            <a href="javascript:void(0);" title="Удалить" ng-click="removeRecord({{ record.id }})"><i class="fa fa-trash-o"></i></a>
+            {% if user.is_vk_user %}<a href="javascript:void(0);" class="wall-post" title="Отправить на стену" onclick="post_to_wall({{ record.id }})"><i class="fa fa-share"></i></a>{% endif %}
           {% endif %}
           <div class="add-to-list-buttons">
             {% if not anothers_account %}

@@ -18,9 +18,9 @@
           <div class="btn-group">
             <button id="search_type_button" class="btn dropdown-toggle" data-toggle="dropdown">[[ searchType ]] <span class="caret"></span></button>
             <ul class="dropdown-menu">
-              <li><a href="#" ng-click="changeSearchType(1);">Фильм</a></li>
-              <li><a href="#" ng-click="changeSearchType(2);">Актёр</a></li>
-              <li><a href="#" ng-click="changeSearchType(3);">Режиссёр</a></li>
+              <li><a href="javascript:void(0)" ng-click="changeSearchType(1);">Фильм</a></li>
+              <li><a href="javascript:void(0)" ng-click="changeSearchType(2);">Актёр</a></li>
+              <li><a href="javascript:void(0)" ng-click="changeSearchType(3);">Режиссёр</a></li>
             </ul>
           </div>
         </div>
@@ -37,8 +37,8 @@
             <div class="poster"><img ng-src="[[searchResult.poster]]" alt="[[searchResult.title]] poster"/></div>
             <div class="title">"[[searchResult.title]]"
             <div class="add-to-list-buttons">
-            <a href="#" title="Добавить в список Просмотрено" ng-click="addToListFromDb(searchResult.id, 1)"><i class="fa fa-eye"></i></a>
-            <a href="#" title="Добавить в список К просмотру" ng-click="addToListFromDb(searchResult.id, 2)"><i class="fa fa-eye-slash"></i></a>
+            <a href="javascript:void(0)" title="Добавить в список Просмотрено" ng-click="addToListFromDb(searchResult.id, 1)"><i class="fa fa-eye"></i></a>
+            <a href="javascript:void(0)" title="Добавить в список К просмотру" ng-click="addToListFromDb(searchResult.id, 2)"><i class="fa fa-eye-slash"></i></a>
             </div></div>
             <div class="details" ng-show="searchResult.release_date">
                 <strong>Дата выпуска:</strong> [[searchResult.release_date]]
