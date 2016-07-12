@@ -2,8 +2,9 @@
 
 from __future__ import unicode_literals
 
-from menu import Menu, MenuItem
 from django.core.urlresolvers import reverse
+
+from menu import Menu, MenuItem
 
 
 def is_vk_user(request):
