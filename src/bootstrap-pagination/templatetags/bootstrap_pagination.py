@@ -25,7 +25,7 @@ def get_page_url(page_num, current_app, url_view_name, url_extra_args, url_extra
         # Add page param to the kwargs list. Overrides any previously set parameter of the same name.
         url_extra_kwargs[url_param_name] = page_num
 
-       # This bit of code comes from the default django url tag
+        # This bit of code comes from the default django url tag
         try:
             url = reverse(url_view_name, args=url_extra_args, kwargs=url_extra_kwargs, current_app=current_app)
         except NoReverseMatch, e:
@@ -56,7 +56,7 @@ class BootstrapPagerNode(Node):
         page = self.page.resolve(context)
         kwargs = {}
 
-         # Retrieve variable instances from context where necessary
+        # Retrieve variable instances from context where necessary
         for argname, argvalue in self.kwargs.items():
             try:
                 kwargs[argname] = argvalue.resolve(context)

@@ -45,8 +45,10 @@ feed_children = (
              weight=20),
 )
 
-Menu.add_item('main', MenuItem('Лента',
-              # doesn't really matter because of the submenus
-              reverse('moviesapp.views.search'),
-              weight=20,
-              children=feed_children))
+Menu.add_item(
+    'main',
+    MenuItem('Лента',
+             # doesn't really matter because of the submenus
+             reverse('moviesapp.views.search'),
+             weight=20,
+             children=feed_children))

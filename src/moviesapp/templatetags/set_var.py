@@ -2,6 +2,7 @@ from django import template
 
 register = template.Library()
 
+
 class SetVarNode(template.Node):
 
     def __init__(self, var_name, var_value):
@@ -12,9 +13,10 @@ class SetVarNode(template.Node):
         try:
             value = template.Variable(self.var_value).resolve(context)
         except template.VariableDoesNotExist:
-            value = ""
+            value = ''
         context[self.var_name] = value
-        return u""
+        return u''
+
 
 def set_var(parser, token):
     """
