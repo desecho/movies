@@ -175,8 +175,18 @@ TMDB_CACHE_PATH = op.join(CACHE_DIR, 'tmdb3.cache')
 MAX_RESULTS = 100
 MIN_POPULARITY = 50
 
-NO_POSTER_SMALL_IMAGE_URL = STATIC_URL + 'img/no_poster_small.jpg'
-NO_POSTER_NORMAL_IMAGE_URL = STATIC_URL + 'img/no_poster_normal.jpg'
+NO_POSTER_SMALL_IMAGE_URL = STATIC_URL + 'img/no_poster_small.png'
+NO_POSTER_NORMAL_IMAGE_URL = STATIC_URL + 'img/no_poster_normal.png'
+
+# Available sizes:
+# "w92",
+# "w154",
+# "w185",
+# "w342",
+# "w500",
+# "w780",
+# "original"
+
 POSTER_SIZE_SMALL = 'w92'
 POSTER_SIZE_NORMAL = 'w185'
 POSTER_SIZE_BIG = 'w500'

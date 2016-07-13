@@ -9,6 +9,17 @@
   <link href="/static/bower/font-awesome/css/font-awesome.min.css" rel="stylesheet">
   <link href="/static/css/bootstrap_fix.css" rel="stylesheet" media="screen">
   <link href="/static/css/style.css" rel="stylesheet">
+  <meta charset="utf-8">
+  <title>{% block title %}Movies{% endblock %}</title>
+</head>
+<body>
+  <div {% if user.is_vk_user %} class="vk" {% endif %}>
+    {% include 'includes/menu.html' %}
+
+    <div id="content" class="container-fluid">
+      {% block content %}{% endblock %}
+    </div>
+  </div>
 
   <script src="/static/bower/jquery/dist/jquery.min.js"></script>
 
@@ -35,17 +46,9 @@
     <script src="https://vk.com/js/api/xd_connection.js?2"></script>
     <script src="/static/js/vk.js"></script>
   {% endif %}
-  <meta charset="utf-8">
-  <title>{% block title %}Movies{% endblock %}</title>
-  {% block header_extra %}{% endblock %}
-</head>
-<body>
-  <div {% if user.is_vk_user %} class="vk" {% endif %}>
-    {% include 'includes/menu.html' %}
+  <script type="text/javascript" src="/static/bower/retinajs/dist/retina.min.js"></script>
 
-    <div id="content" class="container-fluid">
-      {% block content %}{% endblock %}
-    </div>
-  </div>
+{% block js %}{% endblock %}
+
 </body>
 </script>

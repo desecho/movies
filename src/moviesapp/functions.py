@@ -15,6 +15,11 @@ def init_tmdb():
     return tmdb3
 
 
+def get_poster_from_tmdb(poster):
+    if poster:
+        return poster.filename
+
+
 def load_omdb_movie_data(imdb_id):
     try:
         response = urllib2.urlopen('http://www.omdbapi.com/?i=%s' % imdb_id)
@@ -90,10 +95,6 @@ def add_movie_to_db(tmdb_id, refresh=False):
             if release_date:
                 return release_date
 
-        def get_poster(poster):
-            if poster:
-                return poster.filename
-
         def get_trailers(movie_data):
             youtube_trailers = []
             for trailer in movie_data.youtube_trailers:
@@ -133,8 +134,8 @@ def add_movie_to_db(tmdb_id, refresh=False):
                 'imdb_id': movie_data_en.imdb,
                 'release_date': get_release_date(movie_data_en.releasedate),
                 'title_original': movie_data_en.originaltitle,
-                'poster_ru': get_poster(movie_data_ru.poster),
-                'poster_en': get_poster(movie_data_en.poster),
+                'poster_ru': get_poster_from_tmdb(movie_data_ru.poster),
+                'poster_en': get_poster_from_tmdb(movie_data_en.poster),
                 'homepage': movie_data_en.homepage,
                 'trailers': get_trailers(movie_data_en),
                 'title_en': movie_data_en.title,

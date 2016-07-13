@@ -3,43 +3,6 @@
 {% load set_var %}
 {% load i18n %}
 
-{% block header_extra %}
-<script src="/static/bower/raty/lib/jquery.raty.js"></script>
-<script src="/static/bower/autosize/dist/autosize.min.js"></script>
-<script>
-  var mode = '{{ request.session.mode }}';
-  var sort = '{{ request.session.sort }}';
-  var list_data = $.parseJSON('{{ list_data|safe }}');
-  var list_id = {{ list_id }};
-
-  var recommendation = false;
-  {% if request.session.recommendation %}
-    recommendation = true;
-  {% endif %}
-
-  var anothers_account = false;
-  {% if anothers_account %}
-    anothers_account = true;
-  {% endif %}
-
-  var raty_readonly = false;
-  if (anothers_account || list_id == 2) {
-    raty_readonly = true;
-  }
-
-  var urlChangeRating = '{% url 'moviesapp.views.ajax_change_rating' %}';
-  var urlRemoveRecord = '{% url 'moviesapp.views.ajax_remove_record' %}';
-  var urlApplySettings = '{% url 'moviesapp.views.ajax_apply_settings' %}';
-  var urlAddToList   = '{% url 'moviesapp.views.ajax_add_to_list' %}';
-  var urlSaveComment  = '{% url 'moviesapp.views.ajax_save_comment' %}';
-  var url_ajax_upload_photo_to_wall = '{% url 'moviesapp.views.ajax_upload_photo_to_wall' %}';
-</script>
-<script src="/static/js/list_general.js"></script>
-<script src="/static/js/raty.js"></script>
-<script src="/static/js/list.js"></script>
-
-{% endblock %}
-
 {% block content %}
 <div ng-controller="ListController">
 <div id="movie-count">
@@ -58,6 +21,7 @@
 {% endif %}
 
 <div class="btn-group" data-toggle="buttons">
+  <!-- id values are being used as variable name combination to control the button statuses -->
   <label id="button_mode_full" class="btn btn-default active" title="Режим" ng-click="switchMode('full')">
     <input type="radio">Полный
   </label>
@@ -69,7 +33,6 @@
   </label>
 </div>
 
-
 {% if anothers_account %}
   <button data-toggle="button" id="button_recommendation" type="button" class="btn btn-default" onclick="toggleRecommendation()">Рекомендации</button>
 {% endif %}
@@ -78,6 +41,7 @@
 <div class="toolbar">
   <div>
     <div class="btn-group" data-toggle="buttons">
+      <!-- id values are being used as variable name combination to control the button statuses -->
       <label id="button_sort_release_date" class="btn btn-default active" title="Сортировка" onclick="switchSort('release-date')">
         <input type="radio">Дата выпуска
       </label>
@@ -108,13 +72,6 @@
 <div id="results" class="results">
   {% if records %}
     {% for record in records %}
-      {% ifequal user.preferences.lang 'en' %}
-        {% set poster_small_url = record.movie.poster_en_small_url %}
-        {% set poster_normal_url = record.movie.poster_en_normal_url %}
-      {% else %}
-        {% set poster_small_url = record.movie.poster_ru_small_url %}
-        {% set poster_normal_url = record.movie.poster_ru_normal_url %}
-      {% endifequal %}
       <div id="record{{ record.id }}" data-id="{{ record.id }}" data-title="{{ record.movie.title }}" class="movie">
         <div class="title">
           <span title="{{ record.movie.title_original }}">{{ record.movie.title }}</span>
@@ -133,12 +90,12 @@
           </div>
         </div>
           <div class="poster">
-              <img src="{{ poster_normal_url }}" alt="{{ title }} poster" ng-show="mode == 'full'"/>
-              <img src="{{ poster_small_url }}" alt="{{ title }} poster" ng-show="mode != 'full'"/>
+              <img src="{{ record.movie.poster_normal }}" data-rjs="2" alt="{{ record.movie.title }} poster" ng-show="mode == 'full'"/>
+              <img src="{{ record.movie.poster_small }}" data-rjs="2" alt="{{ record.movie.title }} poster" ng-show="mode != 'full'"/>
           </div>
           <div class="details">
-            {% if record.movie.imdb_rating %}<div class="imdb-rating" title="Рейтинг"><span class="item-desc">IMDb:</span> {{ record.movie.imdb_rating }}</div> {% endif %}
-            {% if record.movie.release_date %}<div class="release-date" title="Дата выпуска"><span class="release-date-label item-desc">Дата:</span> {{ record.movie.release_date|date:'d.m.y' }}</div>{% endif %}
+            {% if record.movie.imdb_rating %}<div class="imdb-rating"><span class="item-desc">{% trans 'IMDb Rating' %}:</span> {{ record.movie.imdb_rating }}</div> {% endif %}
+            {% if record.movie.release_date %}<div class="release-date"><span class="release-date-label item-desc">Дата выпуска:</span> {{ record.movie.release_date|date:'d.m.y' }}</div>{% endif %}
             <div ng-show="mode == 'full'">
                 {% if record.movie.country %} <span class="item-desc">Страна:</span> {{ record.movie.country }}<br> {% endif %}
                 {% if record.movie.director %} <span class="item-desc">Режиссёр:</span> {{ record.movie.director }}<br> {% endif %}
@@ -206,4 +163,41 @@
   {% endif %}
 </div>
 </div>
+{% endblock %}
+
+{% block js %}
+<script src="/static/bower/raty/lib/jquery.raty.js"></script>
+<script src="/static/bower/autosize/dist/autosize.min.js"></script>
+<script>
+  var mode = '{{ request.session.mode }}';
+  var sort = '{{ request.session.sort }}';
+  var list_data = $.parseJSON('{{ list_data|safe }}');
+  var list_id = {{ list_id }};
+
+  var recommendation = false;
+  {% if request.session.recommendation %}
+    recommendation = true;
+  {% endif %}
+
+  var anothers_account = false;
+  {% if anothers_account %}
+    anothers_account = true;
+  {% endif %}
+
+  var raty_readonly = false;
+  if (anothers_account || list_id == 2) {
+    raty_readonly = true;
+  }
+
+  var urlChangeRating = '{% url 'moviesapp.views.ajax_change_rating' %}';
+  var urlRemoveRecord = '{% url 'moviesapp.views.ajax_remove_record' %}';
+  var urlApplySettings = '{% url 'moviesapp.views.ajax_apply_settings' %}';
+  var urlAddToList   = '{% url 'moviesapp.views.ajax_add_to_list' %}';
+  var urlSaveComment  = '{% url 'moviesapp.views.ajax_save_comment' %}';
+  var url_ajax_upload_photo_to_wall = '{% url 'moviesapp.views.ajax_upload_photo_to_wall' %}';
+</script>
+<script src="/static/js/list_general.js"></script>
+<script src="/static/js/raty.js"></script>
+<script src="/static/js/list.js"></script>
+
 {% endblock %}

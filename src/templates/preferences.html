@@ -1,13 +1,5 @@
 {% extends "base.html" %}
 
-{% block header_extra %}
-<script>
-  var urlSavePreferences = '{% url 'moviesapp.views.ajax_save_preferences' %}';
-</script>
-
-<script src="/static/js/preferences.js"></script>
-{% endblock %}
-
 {% block content %}
 <div ng-controller="PreferencesController">
 <form class="form-horizontal">
@@ -17,10 +9,10 @@
     <label class="control-label col-sm-2" for="lang"><strong>Язык:</strong></label>
     <div class="col-sm-2">
     <label class="radio">
-      <input type="radio" ng-click="savePreferences()" name="lang" value="en" {% ifequal user.preferences.lang 'en' %} checked {% endifequal %}> Оригинал / Английский
+      <input type="radio" ng-click="savePreferences()" name="lang" value="en" {% ifequal user.language 'en' %} checked {% endifequal %}> Оригинал / Английский
     </label>
     <label class="radio">
-      <input type="radio" ng-click="savePreferences()" name="lang" value="ru" {% ifequal user.preferences.lang 'ru' %} checked {% endifequal %}> Русский<br>
+      <input type="radio" ng-click="savePreferences()" name="lang" value="ru" {% ifequal user.language 'ru' %} checked {% endifequal %}> Русский<br>
     </label>
     </div>
   </div>
@@ -41,11 +33,19 @@
         <label class="control-label" for="only_for_friends">Доступ</label>
         <div class="controls">
             <label class="checkbox">
-              <input type="checkbox" name="only_for_friends" {% if user.preferences.only_for_friends %} checked {% endif %}> Показывать профиль только друзьям<br>
+              <input type="checkbox" name="only_for_friends" {% if user.only_for_friends %} checked {% endif %}> Показывать профиль только друзьям<br>
             </label>
         </div>
       </div>
   {% endif %}
 </form>
 </div>
+{% endblock %}
+
+{% block js %}
+<script>
+  var urlSavePreferences = '{% url 'moviesapp.views.ajax_save_preferences' %}';
+</script>
+
+<script src="/static/js/preferences.js"></script>
 {% endblock %}
