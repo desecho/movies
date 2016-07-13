@@ -12,16 +12,29 @@
 <div ng-controller="PreferencesController">
 <form class="form-horizontal">
 	<legend>Настройки</legend>
-  <div class="control-group">
-    <label class="control-label" for="lang">Язык</label>
-    <div class="controls">
-		<label class="radio">
-		  <input type="radio" ng-click="savePreferences()" name="lang" value="en" {% ifequal user.preferences.lang 'en' %} checked {% endifequal %}> Оригинал / Английский
-		</label>
-		<label class="radio">
-		  <input type="radio" ng-click="savePreferences()" name="lang" value="ru" {% ifequal user.preferences.lang 'ru' %} checked {% endifequal %}> Русский<br>
-		</label>
+
+  <div class="form-group">
+    <label class="control-label col-sm-2" for="lang"><strong>Язык:</strong></label>
+    <div class="col-sm-2">
+    <label class="radio">
+      <input type="radio" ng-click="savePreferences()" name="lang" value="en" {% ifequal user.preferences.lang 'en' %} checked {% endifequal %}> Оригинал / Английский
+    </label>
+    <label class="radio">
+      <input type="radio" ng-click="savePreferences()" name="lang" value="ru" {% ifequal user.preferences.lang 'ru' %} checked {% endifequal %}> Русский<br>
+    </label>
     </div>
+  </div>
+
+
+
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+
+
+    </div>
+  </div>
+
+
   </div>
   {% if user.is_vk_user %}
       <div class="control-group">

@@ -165,29 +165,6 @@ toggleRecommendation = function() {
   }
 };
 
-$(function() {
-  var set_viewed_icons_and_remove_buttons;
-  set_viewed_icons_and_remove_buttons = function() {
-    if (anothers_account) {
-      $('.movie').each(function() {
-        var id, list_id;
-        id = $(this).attr('data-id');
-        list_id = list_data[id];
-        setViewedIconAndRemoveButtons(id, list_id);
-      });
-    }
-  };
-  $('#button_mode_' + mode).button('toggle');
-  if (mode === 'minimal') {
-    activateModeMinimal();
-  }
-  $('#button_sort_' + sort).button('toggle');
-  if (recommendation) {
-    $('#button_recommendation').button('toggle');
-  }
-  set_viewed_icons_and_remove_buttons();
-});
-
 postToWall = function(id) {
   var get_wall_upload_server_and_upload_photo_and_post_to_wall, has_poster, post, rating, save_wall_photo, upload_photo_to_wall;
   post = function(photo) {
@@ -282,5 +259,28 @@ ratyCustomSettings = {
 };
 
 $(function() {
+  function set_viewed_icons_and_remove_buttons() {
+    if (anothers_account) {
+      $('.movie').each(function() {
+        var id, list_id;
+        id = $(this).attr('data-id');
+        list_id = list_data[id];
+        setViewedIconAndRemoveButtons(id, list_id);
+      });
+    }
+  };
+
+  $('#button_mode_' + mode).button('toggle');
+  if (mode === 'minimal') {
+    activateModeMinimal();
+  }
+  $('#button_sort_' + sort).button('toggle');
+
+  if (recommendation) {
+    $('#button_recommendation').button('toggle');
+  }
+  set_viewed_icons_and_remove_buttons();
   autosize($('textarea'));
+
 });
+

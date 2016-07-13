@@ -4,6 +4,8 @@ import os
 import os.path as op
 import sys
 
+from django.utils.translation import ugettext_lazy as _
+
 try:
     import local_settings
 except ImportError:
@@ -38,7 +40,7 @@ TIME_ZONE = 'US/Eastern'
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
-LANGUAGE_CODE = 'ru'
+LANGUAGE_CODE = 'en'
 
 SITE_ID = 1
 
@@ -75,6 +77,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     # 'vk_iframe.middleware.IFrameFixMiddleware',
     # 'vk_iframe.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -107,7 +110,9 @@ INSTALLED_APPS = (
     'moviesapp',
     # 'vk_iframe',
     'menu',
-    'bootstrap-pagination',
+    'bootstrap_pagination',
+    'rosetta',
+    'modeltranslation',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -207,3 +212,12 @@ VK_APP_SECRET = local_settings.VK_APP_SECRET
 TMDB_KEY = local_settings.TMDB_KEY
 
 APPEND_SLASH = True
+
+LANGUAGES = (
+    ('en', _('English')),
+    ('ru', _('Russian')),
+)
+
+LOCALE_PATHS = (
+    op.join(local_settings.PROJECT_ROOT, 'project', 'src', 'locale'),
+)

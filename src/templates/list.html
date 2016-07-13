@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load bootstrap_pagination %}
 {% load set_var %}
+{% load i18n %}
 
 {% block header_extra %}
 <script src="/static/bower/raty/lib/jquery.raty.js"></script>
@@ -56,45 +57,67 @@
   <br><br>
 {% endif %}
 
-<div class="btn-group" data-toggle="buttons-radio">
-  <button title="Режим" id="button_mode_full" type="button" class="btn" ng-click="switchMode('full')">Полный</button>
-  <button title="Режим" id="button_mode_compact" type="button" class="btn" ng-click="switchMode('compact')">Компактный</button>
-  <button title="Режим" id="button_mode_minimal" type="button" class="btn" ng-click="switchMode('minimal')">Минимальный</button>
+<div class="btn-group" data-toggle="buttons">
+  <label id="button_mode_full" class="btn btn-default active" title="Режим" ng-click="switchMode('full')">
+    <input type="radio">Полный
+  </label>
+  <label id="button_mode_compact" class="btn btn-default" title="Режим" ng-click="switchMode('compact')">
+    <input type="radio">Компактный
+  </label>
+  <label id="button_mode_minimal" class="btn btn-default" title="Режим" ng-click="switchMode('minimal')">
+    <input type="radio">Минимальный
+  </label>
 </div>
 
+
 {% if anothers_account %}
-  <button id="button_recommendation" type="button" class="btn" data-toggle="button" onclick="toggleRecommendation()">Рекомендации</button>
+  <button data-toggle="button" id="button_recommendation" type="button" class="btn btn-default" onclick="toggleRecommendation()">Рекомендации</button>
 {% endif %}
 <br><br>
-<div class="btn-group" data-toggle="buttons-radio">
-  <button title="Сортировка" id="button_sort_release_date" type="button" class="btn" onclick="switchSort('release-date')">Дата выпуска</button>
-  <button title="Сортировка" id="button_sort_rating" type="button" class="btn" onclick="switchSort('rating')">Оценка</button>
-  <button title="Сортировка" id="button_sort_addition_date" type="button" class="btn" onclick="switchSort('addition_date')">Дата добавления</button>
-</div>
-<form action="" method="post" class="search">
-  {% csrf_token %}
-  <div class="input-append">
-    <input class="span2" name="search" type="text">
-    <button class="btn" type="submit">Найти</button>
+
+<div class="toolbar">
+  <div>
+    <div class="btn-group" data-toggle="buttons">
+      <label id="button_sort_release_date" class="btn btn-default active" title="Сортировка" onclick="switchSort('release-date')">
+        <input type="radio">Дата выпуска
+      </label>
+      <label id="button_sort_rating" class="btn btn-default" title="Сортировка" onclick="switchSort('rating')">
+        <input type="radio">Оценка
+      </label>
+      <label id="button_sort_addition_date" class="btn btn-default" title="Сортировка" onclick="switchSort('addition_date')">
+        <input type="radio">Дата добавления
+      </label>
+    </div>
   </div>
-</form>
-<br><br>
+
+  <div>
+    <form action="" method="post" class="search">
+      {% csrf_token %}
+        <div class="input-group">
+          <input type="text" class="form-control" name="search">
+          <span class="input-group-btn">
+            <button class="btn btn-default" type="submit">Найти</button>
+          </span>
+        </div>
+    </form>
+  </div>
+</div>
+
+<br>
 
 <div id="results" class="results">
   {% if records %}
     {% for record in records %}
       {% ifequal user.preferences.lang 'en' %}
-        {% set title = record.movie.title %}
         {% set poster_small_url = record.movie.poster_en_small_url %}
         {% set poster_normal_url = record.movie.poster_en_normal_url %}
       {% else %}
-        {% set title = record.movie.title_ru %}
         {% set poster_small_url = record.movie.poster_ru_small_url %}
         {% set poster_normal_url = record.movie.poster_ru_normal_url %}
       {% endifequal %}
-      <div id="record{{ record.id }}" data-id="{{ record.id }}" data-title="{{ title }}" class="movie">
+      <div id="record{{ record.id }}" data-id="{{ record.id }}" data-title="{{ record.movie.title }}" class="movie">
         <div class="title">
-          {{ title }}
+          <span title="{{ record.movie.title_original }}">{{ record.movie.title }}</span>
           {% if not anothers_account %}
             <a href="javascript:void(0);" title="Удалить" ng-click="removeRecord({{ record.id }})"><i class="fa fa-trash-o"></i></a>
             {% if user.is_vk_user %}<a href="javascript:void(0);" class="wall-post" title="Отправить на стену" onclick="postToWall({{ record.id }})"><i class="fa fa-share"></i></a>{% endif %}
@@ -123,7 +146,7 @@
                 {% if record.movie.genre %} <span class="item-desc">Жанр:</span> {{ record.movie.genre }}<br> {% endif %}
                 {% if record.movie.actors %} <span class="item-desc">Актеры:</span> {{ record.movie.actors }}<br> {% endif %}
                 {% if record.movie.runtime %} <span class="item-desc">Время:</span> {{ record.movie.runtime|date:'H:i' }}<br> {% endif %}
-                {% if record.movie.overview %} <span class="item-desc">Описание:</span> {{ record.movie.overview }}<br> {% endif %}
+                {% if record.movie.description %} <span class="item-desc">Описание:</span> {{ record.movie.description }}<br> {% endif %}
                 {% if record.movie.has_trailers %} <span class="item-desc">Трейлеры:</span><br>
                   <div class="trailers">
                   {% if record.movie.trailers.youtube %}
@@ -155,15 +178,15 @@
                 <div class="rating" data-record_id="{{ record.id }}" data-rating="{{ record.rating }}"></div>
                 <div class="comment" id="comment_area{{ record.id }}" style="display: {% if not record.comment %} none {% endif %}">
                   {% if not anothers_account %}
-                    <textarea title="комментарий" id="comment{{ record.id }}">{{ record.comment }}</textarea>
-                    <button type="button" title="Сохранить" class="btn" ng-click="saveComment({{ record.id }})"><i class="fa fa-save"></i></button>
+                    <textarea class="form-control" title="комментарий" id="comment{{ record.id }}">{{ record.comment }}</textarea>
+                    <button type="button" title="Сохранить" class="btn btn-default" ng-click="saveComment({{ record.id }})"><i class="fa fa-save"></i></button>
                     <br>
                   {% else %}
                     <p>{{ record.comment }}</p>
                   {% endif %}
                 </div>
                 {% if not anothers_account %}
-                  <button id="comment_area_button{{ record.id }}" type="button" title="Добавить комментарий" class="btn comment-button" ng-click="toggleCommentArea({{ record.id }})" {% if record.comment %} style="display: none "{% endif %}><i class="fa fa-comment"></i></button>
+                  <button id="comment_area_button{{ record.id }}" type="button" title="Добавить комментарий" class="btn btn-default comment-button" ng-click="toggleCommentArea({{ record.id }})" {% if record.comment %} style="display: none "{% endif %}><i class="fa fa-comment"></i></button>
                 {% endif %}
                   <br>
               {% endifequal %}

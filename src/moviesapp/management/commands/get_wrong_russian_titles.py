@@ -1,4 +1,4 @@
-# coding: utf8
+# coding: utf-8
 from django.core.management.base import BaseCommand
 
 from ...models import Movie
@@ -14,5 +14,5 @@ class Command(BaseCommand):
             for letter in movie.title_ru:
                 if letter not in ALLOWED_CHARS:
                     print '%d - %s - %s' % (movie.id, movie.title_ru,
-                                            movie.title)
+                                            movie.title_original)
                     break

@@ -1,9 +1,12 @@
-# coding: utf8
+# coding: utf-8
 from __future__ import unicode_literals
 
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.signals import user_logged_in
 from django.conf import settings
+from django.utils.translation import ugettext_lazy as _, activate, LANGUAGE_SESSION_KEY
+from django.dispatch import receiver
 
 from annoying.fields import JSONField
 
@@ -28,7 +31,12 @@ def get_poster_url(size, poster, filename=None):
 
 
 class User(AbstractUser):
-    preferences = JSONField('настройки', default='{"lang": "ru"}')
+    preferences = JSONField('настройки', default='{"lang": "en"}')
+    language = models.CharField(
+        max_length=2,
+        choices=settings.LANGUAGES,
+        default='en',
+    )
 
     def get_avatar_medium(self):
         return self.vk_profile.photo_medium or settings.VK_NO_IMAGE_MEDIUM
@@ -45,7 +53,7 @@ class User(AbstractUser):
 
 
 class List(models.Model):
-    title = models.CharField('название', max_length=255)
+    name = models.CharField('название', max_length=255)
     key_name = models.CharField('ключевое имя', max_length=255)
 
     class Meta:
@@ -53,15 +61,14 @@ class List(models.Model):
         verbose_name_plural = 'списки'
 
     def __unicode__(self):
-        return self.title
+        return self.name
 
 
 class Movie(models.Model):
-    title = models.CharField('оригинальное название', max_length=255)
-    title_ru = models.CharField('название', max_length=255)
+    title = models.CharField(_('title'), max_length=255)
+    title_original = models.CharField(_('original title'), max_length=255)
     country = models.CharField('страна', max_length=255, null=True, blank=True)
-    overview = models.TextField('описание (рус)', null=True, blank=True)
-    plot = models.TextField('описание (англ)', null=True, blank=True)
+    description = models.TextField(_('description'), null=True, blank=True)
     director = models.CharField('режиссёр', max_length=255, null=True, blank=True)
     writer = models.CharField('сценарист', max_length=255, null=True, blank=True)
     genre = models.CharField('жанр', max_length=255, null=True, blank=True)
@@ -69,8 +76,7 @@ class Movie(models.Model):
     imdb_id = models.CharField('IMDB id', max_length=15, unique=True)
     tmdb_id = models.IntegerField('TMDB id', unique=True)
     imdb_rating = models.DecimalField('IMDB рейтинг', max_digits=2, decimal_places=1, null=True)
-    poster_ru = models.CharField('постер (рус)', max_length=255, null=True)
-    poster_en = models.CharField('постер (англ)', max_length=255, null=True)
+    poster = models.CharField(_('poster'), max_length=255, null=True)
     release_date = models.DateField('дата выпуска', null=True)
     runtime = models.TimeField('длительность', null=True, blank=True)
     homepage = models.URLField('сайт', null=True, blank=True)
@@ -115,12 +121,6 @@ class Movie(models.Model):
     def poster_ru_big_url(self):
         return self.get_poster('big', 'ru')
 
-    # def torrent_search_title(self):
-    #     title = self.title.replace("'", r"\'") + ' '
-    #     if self.release_date:
-    #         title += str(self.release_date.year) + ' '
-    #     return title + '720p'
-
 
 class Record(models.Model):
     user = models.ForeignKey(User, verbose_name='пользователь')
@@ -164,3 +164,10 @@ class ActionRecord(models.Model):
 
     def __unicode__(self):
         return self.movie.title + ' ' + self.action.name
+
+
+@receiver(user_logged_in)
+def lang(sender, **kwargs):
+    user_language = kwargs['user'].language
+    activate(user_language)
+    kwargs['request'].session[LANGUAGE_SESSION_KEY] = user_language

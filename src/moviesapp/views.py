@@ -1,4 +1,4 @@
-# coding: utf8
+# coding: utf-8
 from __future__ import unicode_literals
 
 import tempfile
@@ -239,7 +239,7 @@ def list_view(request, list_name, username=None):
         return anothers_account
 
     def search_records(query):
-        return records.filter(Q(movie__title__icontains=query) |
+        return records.filter(Q(movie__title_en__icontains=query) |  # TODO check if can be done better
                               Q(movie__title_ru__icontains=query))
 
     initialize_session_values()
@@ -313,12 +313,6 @@ def feed(request, list_name):
         'friends': 'Друзья',
     }
 
-    def get_title(action):
-        if request.user.preferences['lang'] == 'en':
-            return action['movie__title']
-        else:
-            return action['movie__title_ru']
-
     date_to = datetime.today()
     date_from = date_to - relativedelta(days=settings.FEED_DAYS)
     actions = ActionRecord.objects.filter(
@@ -333,22 +327,21 @@ def feed(request, list_name):
         'small', request.user.preferences['lang']) for action in actions]
     actions = actions.values('user__vk_profile__photo', 'user__username',
                              'user__first_name', 'user__last_name',
-                             'action__name', 'movie__title', 'movie__title_ru',
-                             'list__title', 'comment', 'rating', 'date')
+                             'action__name', 'movie__title',
+                             'list__name', 'comment', 'rating', 'date')
     actions_output = []
 
     i = 0
     for action in actions:
-        full_name = '%s %s' % (action['user__first_name'],
-                               action['user__last_name'])
+        full_name = '%s %s' % (action['user__first_name'], action['user__last_name'])
         a = {
             'avatar': get_avatar(action['user__vk_profile__photo']),
             'full_name': full_name,
             'username': action['user__username'],
             'action': action['action__name'],
-            'movie': get_title(action),
+            'movie': action['movie__title'],
             'movie_poster': posters[i],
-            'list': action['list__title'],
+            'list': action['list__name'],
             'comment': action['comment'],
             'rating': action['rating'],
             'date': action['date'],
@@ -534,7 +527,7 @@ def ajax_search_movie(request):
             return movies
 
         def get_title():
-            if user.preferences['lang'] == 'en':
+            if user.preferences['lang'] == 'en':  # TODO fix craziness
                 return movie.originaltitle
             else:
                 return movie.title

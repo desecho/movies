@@ -1,9 +1,11 @@
 Django==1.8.7
 django-annoying==0.9.0
 django-simple-menu==1.2.1
-#django-bootstrap-pagination - used outdated translated version in project dir.
+django-bootstrap-pagination==1.6.1
 vkontakte==1.3.5
 poster==0.8.1
 python-dateutil==2.5.3
 # tmdb3
 -e git+https://github.com/desecho/pytmdb3.git@16e19176bc4946369999bcdf4151b2cbdf4f4bbe#egg=pytmdb3
+django-modeltranslation
+django-rosetta
