@@ -26,9 +26,9 @@ from django.db.models import Q
 
 from annoying.decorators import ajax_request, render_to
 
-from .models import Record, List, User, ActionRecord, get_poster_url
-from .functions import add_movie_to_list, add_to_list_from_db, tmdb
-
+from .models import Record, List, User, ActionRecord
+from .functions import add_movie_to_list, add_to_list_from_db, tmdb, get_poster_from_tmdb
+from .utils import activate_user_language_preference, get_poster_url
 
 # logger = logging.getLogger('moviesapp.test')
 # logger.debug(options)
@@ -139,10 +139,11 @@ def recommendation(request):
 def ajax_save_preferences(request):
     if request.is_ajax() and request.method == 'POST':
         POST = request.POST
-        if 'lang' in POST:
+        if 'language' in POST:
             user = User.objects.get(pk=request.user.pk)
-            user.preferences = POST
+            user.language = POST['language']
             user.save()
+            activate_user_language_preference(request, POST['language'])
             return HttpResponse()
 
 
@@ -280,8 +281,7 @@ def get_avatar(photo):
 
 def get_available_users_and_friends(user, sort=False):
     def available_users():
-        return [u for u in User.objects.exclude(pk=user.pk) if not
-                u.preferences.get('only_for_friends', False)]
+        return [u for u in User.objects.exclude(pk=user.pk, only_for_friends=True)]
 
     def join(x, z):
         # convert to list doesn't work for some reason.
@@ -323,8 +323,7 @@ def feed(request, list_name):
         actions = actions.filter(
             user__in=get_available_users_and_friends(request.user))
 
-    posters = [action.movie.get_poster(
-        'small', request.user.preferences['lang']) for action in actions]
+    posters = [action.movie.poster_small for action in actions]
     actions = actions.values('user__vk_profile__photo', 'user__username',
                              'user__first_name', 'user__last_name',
                              'action__name', 'movie__title',
@@ -498,7 +497,7 @@ def ajax_search_movie(request):
 
         def get_data(query, type):
             'For actor, director search - the first is used.'
-            tmdb.set_locale(*settings.LOCALES[user.preferences['lang']])
+            tmdb.set_locale(*settings.LOCALES[user.language])
             query = query.encode('utf-8')
             SEARCH_TYPES_IDS = {
                 'movie': 1,
@@ -525,13 +524,6 @@ def ajax_search_movie(request):
                             if movie.job == 'Director':
                                 movies.append(movie)
             return movies
-
-        def get_title():
-            if user.preferences['lang'] == 'en':  # TODO fix craziness
-                return movie.originaltitle
-            else:
-                return movie.title
-
         output = {}
         movies_data = get_data(query, type)
         if movies_data == STATUS_CODES['error']:
@@ -555,8 +547,8 @@ def ajax_search_movie(request):
                         'id': movie.id,
                         'releaseDate': movie.releasedate,
                         'popularity': movie.popularity,
-                        'title': get_title(),
-                        'poster': get_poster_url('small', movie.poster),
+                        'title': movie.title,
+                        'poster': get_poster_url('small', get_poster_from_tmdb(movie.poster)),
                     }
                     movies.append(movie)
             except IndexError:         # strange exception in 'matrix case'
@@ -614,9 +606,7 @@ def ajax_add_to_list(request):
 def ajax_upload_photo_to_wall(request):
     def get_filepath(record_id):
         movie = Record.objects.get(pk=record_id).movie
-        poster_url = eval('movie.poster_%s_big_url()' %
-                          request.user.preferences['lang'])
-        file_contents = urllib2.urlopen(poster_url).read()
+        file_contents = urllib2.urlopen(movie.poster_big).read()
         path = tempfile.mkstemp()[1]
         file = open(path, 'w')
         file.write(file_contents)

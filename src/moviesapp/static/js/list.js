@@ -281,6 +281,6 @@ $(function() {
   }
   set_viewed_icons_and_remove_buttons();
   autosize($('textarea'));
-
+  retinajs();
 });
 

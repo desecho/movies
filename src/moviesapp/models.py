@@ -5,33 +5,16 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.signals import user_logged_in
 from django.conf import settings
-from django.utils.translation import ugettext_lazy as _, activate, LANGUAGE_SESSION_KEY
+from django.utils.translation import ugettext_lazy as _
 from django.dispatch import receiver
 
 from annoying.fields import JSONField
 
-
-def get_poster_url(size, poster, filename=None):
-    if size == 'small':
-        poster_size = settings.POSTER_SIZE_SMALL
-        no_image_url = settings.NO_POSTER_SMALL_IMAGE_URL
-    elif size == 'normal':
-        poster_size = settings.POSTER_SIZE_NORMAL
-        no_image_url = settings.NO_POSTER_NORMAL_IMAGE_URL
-    elif size == 'big':
-        poster_size = settings.POSTER_SIZE_BIG
-        no_image_url = None
-
-    if poster:
-        if filename is None:
-            filename = poster.filename
-        return settings.POSTER_BASE_URL + poster_size + '/' + filename
-    else:
-        return no_image_url
+from .utils import activate_user_language_preference, get_poster_url
 
 
 class User(AbstractUser):
-    preferences = JSONField('настройки', default='{"lang": "en"}')
+    only_for_friends = models.BooleanField(_('only for friends'), default=False)
     language = models.CharField(
         max_length=2,
         choices=settings.LANGUAGES,
@@ -98,28 +81,20 @@ class Movie(models.Model):
             if len(self.trailers[trailer_type]) > 0:
                 return True
 
-    def get_poster(self, size, lang):
-        poster = self.poster_ru
-        filename = eval('self.poster_' + lang)
-        return get_poster_url(size, poster, filename)
+    def _get_poster(self, size):
+        return get_poster_url(size, self.poster)
 
-    def poster_en_small_url(self):
-        return self.get_poster('small', 'en')
+    @property
+    def poster_normal(self):
+        return self._get_poster('normal')
 
-    def poster_ru_small_url(self):
-        return self.get_poster('small', 'ru')
+    @property
+    def poster_small(self):
+        return self._get_poster('small')
 
-    def poster_en_normal_url(self):
-        return self.get_poster('normal', 'en')
-
-    def poster_ru_normal_url(self):
-        return self.get_poster('normal', 'ru')
-
-    def poster_en_big_url(self):
-        return self.get_poster('big', 'en')
-
-    def poster_ru_big_url(self):
-        return self.get_poster('big', 'ru')
+    @property
+    def poster_big(self):
+        return self._get_poster('big')
 
 
 class Record(models.Model):
@@ -168,6 +143,4 @@ class ActionRecord(models.Model):
 
 @receiver(user_logged_in)
 def lang(sender, **kwargs):
-    user_language = kwargs['user'].language
-    activate(user_language)
-    kwargs['request'].session[LANGUAGE_SESSION_KEY] = user_language
+    activate_user_language_preference(kwargs['request'], kwargs['user'].language)
