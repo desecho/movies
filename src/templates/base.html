@@ -5,16 +5,16 @@
   <meta HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <link href="/static/bower/jgrowl/jquery.jgrowl.min.css" rel="stylesheet">
-  <link href="/static/bower/bootstrap/docs/assets/css/bootstrap.css" rel="stylesheet" media="screen">
+  <link href="/static/bower/bootstrap/dist/css/bootstrap.css" rel="stylesheet" media="screen">
   <link href="/static/bower/font-awesome/css/font-awesome.min.css" rel="stylesheet">
   <link href="/static/css/bootstrap_fix.css" rel="stylesheet" media="screen">
   <link href="/static/css/style.css" rel="stylesheet">
 
-  <script src="/static/bower/jquery/jquery.min.js"></script>
+  <script src="/static/bower/jquery/dist/jquery.min.js"></script>
 
   <script src="/static/bower/jgrowl/jquery.jgrowl.min.js"></script>
 
-  <script src="/static/bower/bootstrap/docs/assets/js/bootstrap.min.js"></script>
+  <script src="/static/bower/bootstrap/dist/js/bootstrap.min.js"></script>
   <script src="/static/bower/angular/angular.js"></script>
   <script src="/static/bower/angular-resource/angular-resource.min.js"></script>
 
@@ -41,30 +41,9 @@
 </head>
 <body>
   <div {% if user.is_vk_user %} class="vk" {% endif %}>
-   <div class="navbar navbar-fixed-top">
-      <div class="navbar-inner">
-        <a class="brand active" href="/">Movies</a>
-        {% include 'includes/menu.html' %}
-        {% if not user.is_vk_user %}
-          <ul class="nav pull-right">
-            <li><a href="/logout"><i class="fa fa-sign-out"></i></a></li>
-          </ul>
-        {% endif %}
-        <ul class="nav pull-right">
-          <li><a href="/preferences/"><i class="fa fa-cog"></i></a></li>
-        </ul>
-        {% if user.is_vk_user %}
-          <ul class="nav pull-right">
-            <li><a id="invite" href="javascript:void(0)" onclick="VK.callMethod('showInviteBox')"><i class="fa fa-envelope-o"></i></a></li>
-          </ul>
-        {% endif %}
-        <ul class="nav pull-right">
-          <li><div id="loading" us-spinner="{radius:6, width:3, length: 5, lines: 12}"></div>
-          <div id="loading2"></div></li>
-        </ul>
-      </div>
-    </div>
-    <div id="content">
+    {% include 'includes/menu.html' %}
+
+    <div id="content" class="container-fluid">
       {% block content %}{% endblock %}
     </div>
   </div>

@@ -1,23 +1,11 @@
-body {
-    padding-top: 60px;
-}
-
-.navbar .brand {
-    margin-left: 0 !important;
-}
-
 /* nav dropdown on hover bootstrap fix */
 ul.nav li.dropdown:hover > ul.dropdown-menu{
     display: block;
 }
-
-.navbar .dropdown-menu {
-    margin-top: 0;
-}
 /* nav dropdown on hover bootstrap fix */
 
 /* bootstrap fix in feed in chrome */
-img {
+/*img {
     max-width: none;
-}
+}*/
 /* bootstrap fix in feed in chrome */

@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 
+{% load i18n %}
+
 {% block header_extra %}
 <script>
   var urlSearchMovie = '{% url 'moviesapp.views.ajax_search_movie' %}';
@@ -12,24 +14,28 @@
 <div ng-controller="MoviesSearchController">
     <div class="search-panel">
       <form name="search" id="search" ng-submit="search.$valid && submit()" novalidate>
-        <div class="input-append">
-          <input class="span2" id="query" name="query" type="text" autofocus ng-model="query" required>
-          <button class="btn" type="submit">Найти</button>
-          <div class="btn-group">
-            <button id="search_type_button" class="btn dropdown-toggle" data-toggle="dropdown">[[ searchType ]] <span class="caret"></span></button>
-            <ul class="dropdown-menu">
-              <li><a href="javascript:void(0)" ng-click="changeSearchType(1);">Фильм</a></li>
-              <li><a href="javascript:void(0)" ng-click="changeSearchType(2);">Актёр</a></li>
-              <li><a href="javascript:void(0)" ng-click="changeSearchType(3);">Режиссёр</a></li>
-            </ul>
-          </div>
+        <div class="input-group">
+          <input class="span2 form-control" id="query" name="query" type="text" autofocus ng-model="query" required>
+          <span class="input-group-btn">
+            <button class="btn btn-default" type="submit">Найти</button>
+            <div class="btn-group">
+              <button id="search_type_button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">[[ searchType ]] <span class="caret"></span></button>
+              <ul class="dropdown-menu">
+                <li><a href="javascript:void(0)" ng-click="changeSearchType(1);">Фильм</a></li>
+                <li><a href="javascript:void(0)" ng-click="changeSearchType(2);">Актёр</a></li>
+                <li><a href="javascript:void(0)" ng-click="changeSearchType(3);">Режиссёр</a></li>
+              </ul>
+            </div>
+          </span>
         </div>
-        <label class="checkbox">
-          <input type="checkbox" id="popular_only" checked> отображать только популярные<br>
-        </label>
-        <label class="checkbox">
-          <input type="checkbox" id="sort_by_date"> сортировка по дате
-        </label>
+        <div class="search-panel-additional">
+          <label class="checkbox">
+            <input type="checkbox" id="popular_only" checked> отображать только популярные<br>
+          </label>
+          <label class="checkbox">
+            <input type="checkbox" id="sort_by_date"> сортировка по дате
+          </label>
+        </div>
       </form>
     </div>
     <div id="results" class="results" ng-repeat="searchResult in searchResults">

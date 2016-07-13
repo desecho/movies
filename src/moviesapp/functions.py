@@ -77,7 +77,6 @@ def add_movie_to_db(tmdb_id, refresh=False):
 
         movie_data = load_omdb_movie_data(imdb_id)
         return {
-            'plot': movie_data.get('Plot'),
             'writer': movie_data.get('Writer'),
             'director': movie_data.get('Director'),
             'actors': movie_data.get('Actors'),
@@ -120,31 +119,28 @@ def add_movie_to_db(tmdb_id, refresh=False):
             except Exception:
                 return
 
-        def get_poster_en(tmdb_id):
-            movie_data = get_movie_data(tmdb_id, 'en')
-            if movie_data is None:
-                return None
-            return get_poster(movie_data.poster)
-
-        movie_data = get_movie_data(tmdb_id, 'ru')
-        if movie_data is None:
-            return None
-        poster_en = get_poster_en(tmdb_id)
-        if poster_en is None:
+        movie_data_en = get_movie_data(tmdb_id, 'en')
+        if movie_data_en is None:
             return None
 
-        if movie_data.imdb:
+        movie_data_ru = get_movie_data(tmdb_id, 'ru')
+        if movie_data_ru is None:
+            return None
+
+        if movie_data_en.imdb:
             return {
                 'tmdb_id': tmdb_id,
-                'imdb_id': movie_data.imdb,
-                'release_date': get_release_date(movie_data.releasedate),
-                'title': movie_data.originaltitle,
-                'poster_ru': get_poster(movie_data.poster),
-                'poster_en': poster_en,
-                'homepage': movie_data.homepage,
-                'trailers': get_trailers(movie_data),
-                'title_ru': movie_data.title,
-                'overview': movie_data.overview,
+                'imdb_id': movie_data_en.imdb,
+                'release_date': get_release_date(movie_data_en.releasedate),
+                'title_original': movie_data_en.originaltitle,
+                'poster_ru': get_poster(movie_data_ru.poster),
+                'poster_en': get_poster(movie_data_en.poster),
+                'homepage': movie_data_en.homepage,
+                'trailers': get_trailers(movie_data_en),
+                'title_en': movie_data_en.title,
+                'title_ru': movie_data_ru.title,
+                'description_en': movie_data_en.overview,
+                'description_ru': movie_data_ru.overview,
             }
     movie_data_tmdb = get_tmdb_movie_data(tmdb_id)
     if movie_data_tmdb is None:

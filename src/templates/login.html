@@ -1,37 +1,38 @@
 <!DOCTYPE html>
 <head>
-    <link href="/static/bower/bootstrap/docs/assets/css/bootstrap.css" rel="stylesheet" media="screen">
+    <link href="/static/bower/bootstrap/dist/css/bootstrap.css" rel="stylesheet" media="screen">
 </head>
 <body>
 <br>
+<div class="container-fluid">
 <form method="post" action="{% url 'django.contrib.auth.views.login' %}" class="form-horizontal" id="login-
 form">
   {% csrf_token %}
-  <div class="control-group">
-    <label class="control-label" for="username">{{ form.username.label_tag }}</label>
-    <div class="controls">
-      <input type="text" name="username" required {% if form.username.value %} value="{{ form.username.value}}" {% endif %} autofocus>
+  <div class="form-group">
+    <label class="control-label col-sm-2" for="username">{{ form.username.label_tag }}</label>
+    <div class="col-sm-2">
+      <input type="text" class="form-control" name="username" required {% if form.username.value %} value="{{ form.username.value}}" {% endif %} autofocus>
     </div>
   </div>
-  <div class="control-group">
-    <label class="control-label" for="password">{{ form.password.label_tag }}</label>
-    <div class="controls">
-      <input type="password" name="password" required {% if form.password.value %} value="{{ form.password.value}}" {% endif %}>
+  <div class="form-group">
+    <label class="control-label col-sm-2" for="password">{{ form.password.label_tag }}</label>
+    <div class="col-sm-2">
+      <input type="password" class="form-control" name="password" required {% if form.password.value %} value="{{ form.password.value}}" {% endif %}>
     </div>
   </div>
   {% if form.errors %}
-    <div class="control-group">
+    <div class="form-group">
       <div class="controls">
         <span class="text-error">Вы ввели неправильный логин/пароль.</span>
       </div>
     </div>
   {% endif %}
-  <div class="control-group">
-    <div class="controls">
-      <input type="submit" class="btn btn-primary" value="Войти">
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <input type="submit" class="btn btn-default" value="Войти">
     </div>
   </div>
   <input type="hidden" name="next" value="{{ next }}">
 </form>
-
+</div>
 </body>

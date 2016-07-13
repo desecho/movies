@@ -2,10 +2,6 @@
     margin-top: 20px;
 }
 
-#content {
-    margin: 0 20px;
-}
-
 .movie {
     width: 730px;
     clear: both;
@@ -51,12 +47,8 @@
     display: inline;
 }
 
-#query {
-    width: 250px;
-}
-
 .search-panel {
-    width: 410px;
+    width: 435px;
     margin-left: auto;
     margin-right: auto;
 }
@@ -129,15 +121,6 @@ textarea {
 
 form {margin: 0}
 
-.input-append, .input-prepend {
-    margin-bottom: 0;
-}
-
-.search {
-    display: inline;
-    margin-left: 30px;
-}
-
 legend {
     margin-bottom: 0;
 }
@@ -148,4 +131,37 @@ legend {
 
 .add-to-list-buttons {
     display: inline;
+}
+
+.toolbar
+{
+  position: relative;
+  display: table;
+}
+
+.toolbar > div
+{
+  display: table-cell;
+  padding-right: 8px;
+  vertical-align: top;
+}
+
+.toolbar .btn-group, .btn-group-vertical {
+    vertical-align: inherit;
+}
+
+.comment button {
+    margin-top: -26px;
+}
+
+.comment textarea {
+    display: inline;
+}
+
+label {
+    font-weight: normal;
+}
+
+.search-panel-additional {
+    margin-left: 25px;
 }
