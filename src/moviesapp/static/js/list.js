@@ -16,7 +16,7 @@ function ($scope, RemoveRecord, SaveComment) {
     removeRecordFromPage = function(id) {
       function checkIfNoRecords() {
         if (!$('.movie').length) {
-          $('#results').html('Список пуст.');
+          $('#results').html(gettext('The list is empty') + '.');
         }
       };
       $('#record' + id).fadeOut('fast', function() {
@@ -28,7 +28,7 @@ function ($scope, RemoveRecord, SaveComment) {
     RemoveRecord.post($.param({id: id}), function(data) {
       removeRecordFromPage(id);
     }, function(){
-      displayMessage('Ошибка удаления фильма');
+      displayMessage(gettext('Error removing the movie'));
     });
   };
   $scope.mode = mode;
@@ -72,7 +72,7 @@ function ($scope, RemoveRecord, SaveComment) {
         $scope.toggleCommentArea(id);
       }
     }, function() {
-      displayMessage('Ошибка сохранения комментария');
+      displayMessage(gettext('Error saving a comment'));
     });
   };
 
@@ -100,7 +100,7 @@ function changeRating(id, rating, element) {
     element.attr('data-rating', rating);
   }).error(function() {
     revertToPreviousRating(element);
-    displayMessage('Ошибка добавления оценки');
+    displayMessage(gettext('Error adding a rating'));
   });
 };
 
@@ -130,7 +130,7 @@ applySettings = function(settings, reload) {
       location.reload();
     }
   }).error(function() {
-    displayMessage('Ошибка применения настройки');
+    displayMessage(gettext('Error applying the setting'));
   });
 };
 
@@ -175,11 +175,11 @@ postToWall = function(id) {
       comment = $('#comment' + id).val();
       rating_post = ratySettings['hints'][rating - 1];
       if (rating > 2) {
-        text = 'Рекомендую посмотреть';
+        text = gettext('I recommend watching');
       } else {
-        text = 'Не рекомендую смотреть';
+        text = gettext("I don't recommend watching");
       }
-      text += " \"" + title + "\".\nМоя оценка - " + rating_post + ".";
+      text += " \"" + title + "\".\n" + gettext('My rating') + " - " + rating_post + ".";
       if (comment) {
         text += "\n " + comment;
       }
@@ -198,17 +198,17 @@ postToWall = function(id) {
       if (data.error) {
         error_code = data.error.error_code;
         if (error_code !== 10007) {
-          return displayMessage('Ошибка публикации на стену #' + error_code);
+          return displayMessage(gettext('Error posting to the wall #') + error_code);
         }
       } else {
-        return displayMessage('Запись отправлена на стену');
+        return displayMessage(gettext('Your post has been posted'));
       }
     });
   };
   save_wall_photo = function(response) {
     return VK.api('photos.saveWallPhoto', response, function(data) {
       if (data.error) {
-        return displayMessage('Ошибка сохранения изображения на стену #' + data.error.error_code);
+        return displayMessage(gettext('Error posting a poster to the wall #') + data.error.error_code);
       } else {
         return post(data.response[0].id);
       }
@@ -221,13 +221,13 @@ postToWall = function(id) {
     }, function(data) {
       return save_wall_photo($.parseJSON(data.response));
     }).error(function() {
-      return displayMessage('Ошибка загрузки изображения');
+      return displayMessage(gettext('Error loading a poster'));
     });
   };
   get_wall_upload_server_and_upload_photo_and_post_to_wall = function() {
     return VK.api('photos.getWallUploadServer', function(data) {
       if (data.error) {
-        return displayMessage('Ошибка получения сервера загрузки на стену #' + data.error.error_code);
+        return displayMessage(gettext('Error getting an upload server for wall posting #') + data.error.error_code);
       } else {
         return upload_photo_to_wall(data.response.upload_url);
       }
@@ -244,7 +244,7 @@ postToWall = function(id) {
       return post();
     }
   } else {
-    return displayMessage('Поставьте оценку фильму');
+    return displayMessage(gettext('Add a rating to the movie'));
   }
 };
 

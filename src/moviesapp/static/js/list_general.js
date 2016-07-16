@@ -8,7 +8,7 @@ add_to_list = function(movie_id, list_id, record_id) {
   }, function(data) {
     return setViewedIconAndRemoveButtons(record_id, list_id);
   }).error(function() {
-    return displayMessage('Ошибка добавления фильма в список');
+    return displayMessage(gettext('Error adding the movie to the list'));
   });
 };
 
@@ -29,10 +29,10 @@ set_viewed_icon = function(record_id, list_id) {
     return;
   } else if (list_id === 1) {
     icon = '';
-    title = 'Просмотрено';
+    title = gettext('Watched');
   } else if (list_id === 2) {
     icon = '-slash';
-    title = 'К просмотру';
+    title = gettext('To Watch');
   }
   html = " <i class=\"fa fa-eye" + icon + "\" title=\"" + title + "\"></i> ";
   return $('#record' + record_id).children('.title').prepend(html);

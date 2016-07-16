@@ -22,19 +22,19 @@
 
 <div class="btn-group" data-toggle="buttons">
   <!-- id values are being used as variable name combination to control the button statuses -->
-  <label id="button_mode_full" class="btn btn-default active" title="Режим" ng-click="switchMode('full')">
-    <input type="radio">Полный
+  <label id="button_mode_full" class="btn btn-default active" title="{% trans 'Mode' %}" ng-click="switchMode('full')">
+    <input type="radio">{% trans 'Full' %}
   </label>
-  <label id="button_mode_compact" class="btn btn-default" title="Режим" ng-click="switchMode('compact')">
-    <input type="radio">Компактный
+  <label id="button_mode_compact" class="btn btn-default" title="{% trans 'Mode' %}" ng-click="switchMode('compact')">
+    <input type="radio">{% trans 'Compact' %}
   </label>
-  <label id="button_mode_minimal" class="btn btn-default" title="Режим" ng-click="switchMode('minimal')">
-    <input type="radio">Минимальный
+  <label id="button_mode_minimal" class="btn btn-default" title="{% trans 'Mode' %}" ng-click="switchMode('minimal')">
+    <input type="radio">{% trans 'Minimal' %}
   </label>
 </div>
 
 {% if anothers_account %}
-  <button data-toggle="button" id="button_recommendation" type="button" class="btn btn-default" onclick="toggleRecommendation()">Рекомендации</button>
+  <button data-toggle="button" id="button_recommendation" type="button" class="btn btn-default" onclick="toggleRecommendation()">{% trans 'Recommendations' %}</button>
 {% endif %}
 <br><br>
 
@@ -42,14 +42,14 @@
   <div>
     <div class="btn-group" data-toggle="buttons">
       <!-- id values are being used as variable name combination to control the button statuses -->
-      <label id="button_sort_release_date" class="btn btn-default active" title="Сортировка" onclick="switchSort('release-date')">
-        <input type="radio">Дата выпуска
+      <label id="button_sort_release_date" class="btn btn-default active" title="{% trans 'Sorting' %}" onclick="switchSort('release-date')">
+        <input type="radio">{% trans 'Release date' %}
       </label>
-      <label id="button_sort_rating" class="btn btn-default" title="Сортировка" onclick="switchSort('rating')">
-        <input type="radio">Оценка
+      <label id="button_sort_rating" class="btn btn-default" title="{% trans 'Sorting' %}" onclick="switchSort('rating')">
+        <input type="radio">{% trans 'Rating' %}
       </label>
-      <label id="button_sort_addition_date" class="btn btn-default" title="Сортировка" onclick="switchSort('addition_date')">
-        <input type="radio">Дата добавления
+      <label id="button_sort_addition_date" class="btn btn-default" title="{% trans 'Sorting' %}" onclick="switchSort('addition_date')">
+        <input type="radio">{% trans 'Added date' %}
       </label>
     </div>
   </div>
@@ -60,7 +60,7 @@
         <div class="input-group">
           <input type="text" class="form-control" name="search">
           <span class="input-group-btn">
-            <button class="btn btn-default" type="submit">Найти</button>
+            <button class="btn btn-default" type="submit">{% trans 'Search' %}</button>
           </span>
         </div>
     </form>
@@ -95,16 +95,16 @@
           </div>
           <div class="details">
             {% if record.movie.imdb_rating %}<div class="imdb-rating"><span class="item-desc">{% trans 'IMDb Rating' %}:</span> {{ record.movie.imdb_rating }}</div> {% endif %}
-            {% if record.movie.release_date %}<div class="release-date"><span class="release-date-label item-desc">Дата выпуска:</span> {{ record.movie.release_date|date:'d.m.y' }}</div>{% endif %}
+            {% if record.movie.release_date %}<div class="release-date"><span class="release-date-label item-desc">{% trans 'Release Date' %}:</span> {{ record.movie.release_date|date:'d.m.y' }}</div>{% endif %}
             <div ng-show="mode == 'full'">
-                {% if record.movie.country %} <span class="item-desc">Страна:</span> {{ record.movie.country }}<br> {% endif %}
-                {% if record.movie.director %} <span class="item-desc">Режиссёр:</span> {{ record.movie.director }}<br> {% endif %}
-                {% if record.movie.writer %} <span class="item-desc">Сценарист:</span> {{ record.movie.writer }}<br> {% endif %}
-                {% if record.movie.genre %} <span class="item-desc">Жанр:</span> {{ record.movie.genre }}<br> {% endif %}
-                {% if record.movie.actors %} <span class="item-desc">Актеры:</span> {{ record.movie.actors }}<br> {% endif %}
-                {% if record.movie.runtime %} <span class="item-desc">Время:</span> {{ record.movie.runtime|date:'H:i' }}<br> {% endif %}
-                {% if record.movie.description %} <span class="item-desc">Описание:</span> {{ record.movie.description }}<br> {% endif %}
-                {% if record.movie.has_trailers %} <span class="item-desc">Трейлеры:</span><br>
+                {% if record.movie.country %} <span class="item-desc">{% trans 'Country' %}:</span> {{ record.movie.country }}<br> {% endif %}
+                {% if record.movie.director %} <span class="item-desc">{% trans 'Director' %}:</span> {{ record.movie.director }}<br> {% endif %}
+                {% if record.movie.writer %} <span class="item-desc">{% trans 'Writer' %}:</span> {{ record.movie.writer }}<br> {% endif %}
+                {% if record.movie.genre %} <span class="item-desc">{% trans 'Genre' %}:</span> {{ record.movie.genre }}<br> {% endif %}
+                {% if record.movie.actors %} <span class="item-desc">{% trans 'Actors' %}:</span> {{ record.movie.actors }}<br> {% endif %}
+                {% if record.movie.runtime %} <span class="item-desc">{% trans 'Runtime' %}:</span> {{ record.movie.runtime|date:'H:i' }}<br> {% endif %}
+                {% if record.movie.description %} <span class="item-desc">{% trans 'Description' %}:</span> {{ record.movie.description }}<br> {% endif %}
+                {% if record.movie.has_trailers %} <span class="item-desc">{% trans 'Trailers' %}:</span><br>
                   <div class="trailers">
                   {% if record.movie.trailers.youtube %}
                     &nbsp;&nbsp;&nbsp;&nbsp;YouTube:
@@ -126,7 +126,7 @@
                   {% endif %}
                   </div>
                 {% endif %}
-            {% if record.movie.homepage %} <a href="{{ record.movie.homepage }}" target="_blank">Сайт</a> / {% endif %}
+            {% if record.movie.homepage %} <a href="{{ record.movie.homepage }}" target="_blank">{% trans 'Website' %}</a> / {% endif %}
             <a href="{{ record.movie.imdb_url }}" target="_blank"><img src="/static/img/imdb.jpg" alt="IMDb" /></a><br>
             <br>
             </div>
@@ -135,15 +135,15 @@
                 <div class="rating" data-record_id="{{ record.id }}" data-rating="{{ record.rating }}"></div>
                 <div class="comment" id="comment_area{{ record.id }}" style="display: {% if not record.comment %} none {% endif %}">
                   {% if not anothers_account %}
-                    <textarea class="form-control" title="комментарий" id="comment{{ record.id }}">{{ record.comment }}</textarea>
-                    <button type="button" title="Сохранить" class="btn btn-default" ng-click="saveComment({{ record.id }})"><i class="fa fa-save"></i></button>
+                    <textarea class="form-control" title="{% trans 'Comment' %}" id="comment{{ record.id }}">{{ record.comment }}</textarea>
+                    <button type="button" title="{% trans 'Save' %}" class="btn btn-default" ng-click="saveComment({{ record.id }})"><i class="fa fa-save"></i></button>
                     <br>
                   {% else %}
                     <p>{{ record.comment }}</p>
                   {% endif %}
                 </div>
                 {% if not anothers_account %}
-                  <button id="comment_area_button{{ record.id }}" type="button" title="Добавить комментарий" class="btn btn-default comment-button" ng-click="toggleCommentArea({{ record.id }})" {% if record.comment %} style="display: none "{% endif %}><i class="fa fa-comment"></i></button>
+                  <button id="comment_area_button{{ record.id }}" type="button" title="{% trans 'Add comment' %}" class="btn btn-default comment-button" ng-click="toggleCommentArea({{ record.id }})" {% if record.comment %} style="display: none "{% endif %}><i class="fa fa-comment"></i></button>
                 {% endif %}
                   <br>
               {% endifequal %}
@@ -159,7 +159,7 @@
     {% bootstrap_paginate records range=10 show_prev_next="true" show_first_last="true" alignment="left" %}
   {% endif %}
   {% else %}
-    <p>Список пуст.</p>
+    <p>{% trans 'The list is empty' %}.</p>
   {% endif %}
 </div>
 </div>

@@ -2,12 +2,17 @@
 var ratySettings;
 
 ratySettings = {
-  hints: ['Ужасно', 'Плохо', 'Нормально', 'Хорошо', 'Отлично'],
-  cancelHint: 'Отменить эту оценку',
-  noRatedMsg: 'Пока нет оценки',
   path: '/static/bower/raty/lib/images/',
   cancel: true
 };
+
+if (language == 'ru') {
+  $.extend(ratySettings, {
+    hints: ['Ужасно', 'Плохо', 'Нормально', 'Хорошо', 'Отлично'],
+    cancelHint: 'Отменить эту оценку',
+    noRatedMsg: 'Пока нет оценки',
+  });
+}
 
 $(function() {
   var score_settings, settings;

@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-07-12 02:26-0400\n"
-"PO-Revision-Date: 2016-07-12 02:27-0400\n"
+"POT-Creation-Date: 2016-07-16 08:05-0400\n"
+"PO-Revision-Date: 2016-07-16 08:05-0400\n"
 "Last-Translator: Admin  <desecho@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -19,38 +19,161 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Translated-Using: django-rosetta 0.7.11\n"
 
-#: movies/settings.py:216
+#: movies/settings.py:227
 msgid "English"
-msgstr ""
+msgstr "Английский"
 
-#: movies/settings.py:217
+#: movies/settings.py:228
 msgid "Russian"
-msgstr ""
+msgstr "Русский"
 
-#: moviesapp/models.py:68
-msgid "title"
-msgstr ""
+#: moviesapp/menus.py:31 templates/search.html:38
+msgid "Watched"
+msgstr "Просмотрено"
 
-#: moviesapp/models.py:69
-msgid "original title"
-msgstr ""
+#: moviesapp/menus.py:33 templates/search.html:39
+msgid "To Watch"
+msgstr "К Просмотру"
 
-#: moviesapp/models.py:71
-msgid "description"
-msgstr ""
+#: moviesapp/menus.py:36 templates/list.html:37
+msgid "Recommendations"
+msgstr "Рекоммендации"
 
-#: moviesapp/models.py:79
-msgid "poster"
-msgstr ""
+#: moviesapp/menus.py:38 moviesapp/menus.py:45 moviesapp/views.py:313
+msgid "Friends"
+msgstr "Друзья"
 
-#: templates/admin/base_site.html:4
-msgid "Django site admin"
-msgstr ""
+#: moviesapp/menus.py:41 moviesapp/menus.py:48 moviesapp/views.py:312
+msgid "People"
+msgstr "Люди"
 
-#: templates/admin/base_site.html:8
-msgid "Django administration"
-msgstr ""
+#: moviesapp/menus.py:54
+msgid "Feed"
+msgstr "Лента"
+
+#: templates/admin/base_site.html:4 templates/admin/base_site.html.py:8
+msgid "Movies administration"
+msgstr "Фильмы - панель администрирования"
+
+#: templates/list.html:25 templates/list.html.py:28 templates/list.html:31
+msgid "Mode"
+msgstr "Режим"
+
+#: templates/list.html:26
+msgid "Full"
+msgstr "Полный"
+
+#: templates/list.html:29
+msgid "Compact"
+msgstr "Компактный"
+
+#: templates/list.html:32
+msgid "Minimal"
+msgstr "Минимальный"
+
+#: templates/list.html:45 templates/list.html.py:48 templates/list.html:51
+msgid "Sorting"
+msgstr "Сортировка"
+
+#: templates/list.html:46 templates/search.html:45
+msgid "Release date"
+msgstr "Дата выпуска"
+
+#: templates/list.html:49
+msgid "Rating"
+msgstr "Рейтинг"
+
+#: templates/list.html:52
+msgid "Added date"
+msgstr "Дата добавления"
+
+#: templates/list.html:63 templates/search.html:12
+msgid "Search"
+msgstr "Поиск"
+
+#: templates/list.html:97 templates/recommendation.html:28
+msgid "IMDb Rating"
+msgstr "IMDb Рейтинг"
 
 #: templates/list.html:98
-msgid "test"
-msgstr "ТЕСТ"
+msgid "Release Date"
+msgstr "Дата Выпуска"
+
+#: templates/list.html:100
+msgid "Country"
+msgstr "Страна"
+
+#: templates/list.html:101 templates/search.html:18
+msgid "Director"
+msgstr "Режиссёр"
+
+#: templates/list.html:102
+msgid "Writer"
+msgstr "Сценарист"
+
+#: templates/list.html:103
+msgid "Genre"
+msgstr "Жанр"
+
+#: templates/list.html:104
+msgid "Actors"
+msgstr "Актёры"
+
+#: templates/list.html:105
+msgid "Runtime"
+msgstr "Длительность"
+
+#: templates/list.html:106
+msgid "Description"
+msgstr "Описание"
+
+#: templates/list.html:107
+msgid "Trailers"
+msgstr "Трейлеры"
+
+#: templates/list.html:129
+msgid "Website"
+msgstr "Вебсайт"
+
+#: templates/list.html:138
+msgid "Comment"
+msgstr "Комментарий"
+
+#: templates/list.html:139
+msgid "Save"
+msgstr "Сохранить"
+
+#: templates/list.html:146
+msgid "Add comment"
+msgstr "Добавить комментарий"
+
+#: templates/list.html:162
+msgid "The list is empty"
+msgstr "Список пуст"
+
+#: templates/search.html:16
+msgid "Movie"
+msgstr "Фильм"
+
+#: templates/search.html:17
+msgid "Actor"
+msgstr "Актёр"
+
+#: templates/search.html:25
+msgid "show only popular"
+msgstr "показывать только популярные"
+
+#: templates/search.html:28
+msgid "sort by date"
+msgstr "сортировать по дате"
+
+#: templates/search.html:38 templates/search.html.py:39
+msgid "Add to the list"
+msgstr "Добавить в список"
+
+#: templates/search.html:49
+msgid "Nothing has been found"
+msgstr "Ничего не найдено"
+
+#~ msgid "test"
+#~ msgstr "ТЕСТ"
