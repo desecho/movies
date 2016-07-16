@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
 
-from ...functions import tmdb, add_to_list_from_db
+from ...utils import tmdb, add_to_list_from_db
 from ...models import User
 
 

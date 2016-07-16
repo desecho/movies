@@ -13,7 +13,7 @@ app.factory('AddToListFromDb', ['$resource', function($resource) {
 app.controller('MoviesSearchController', ['$scope', 'SearchMovie', 'AddToListFromDb',
 
 function ($scope, SearchMovie, AddToListFromDb) {
-  $scope.searchType = 'Фильм';
+  $scope.searchType = gettext('Movie');
   $scope.searchTypeId = 1;
   $scope.submit = function(){
     $scope.searchResults = [];
@@ -32,9 +32,9 @@ function ($scope, SearchMovie, AddToListFromDb) {
       } else if (data.status === 0) {
         $scope.nothing_found = true;
       } else {
-        displayMessage('Ошибка поиска');
+        displayMessage(gettext('Search Error'));
       }
-    }, function(){displayMessage('Ошибка поиска')}
+    }, function(){displayMessage(gettext('Search Error'))}
     );
   }
 
@@ -44,28 +44,28 @@ function ($scope, SearchMovie, AddToListFromDb) {
       list_id: list_id
     }), function(data) {
       if (data.status === -1) {
-        return displayMessage('Ошибка! Код #1');
+        return displayMessage(gettext('Error! Code #') + '1');
       } else if (data.status === -2) {
-        return displayMessage('Ошибка! Код #2');
+        return displayMessage(gettext('Error! Code #') + '2');
       } else {
         return $('#movie' + movie_id).fadeOut('fast', function() {
           return $(this).remove();
         });
       }
-    }, function(){displayMessage('Ошибка добавления фильма')}
+    }, function(){displayMessage(gettext('Error adding a movie'))}
     );
   };
 
   $scope.changeSearchType = function(id) {
     $scope.searchTypeId = id;
     if (id === 1) {
-      $scope.searchType = 'Фильм';
+      $scope.searchType = gettext('Movie');
     }
     if (id === 2) {
-      $scope.searchType = 'Актёр';
+      $scope.searchType = gettext('Actor');
     }
     if (id === 3) {
-      $scope.searchType = 'Режиссёр';
+      $scope.searchType = gettext('Director');
     }
   };
 }]);

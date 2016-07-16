@@ -11,8 +11,10 @@ function ($scope, SavePreferences) {
     if (typeof vk !== undefined) {
       preferences.onlyForFriends = $('input[name=only_for_friends]:checked').val();
     }
-    SavePreferences.post($.param(preferences), function(){}, function(){
-      displayMessage('Ошибка сохранения настроек');
+    SavePreferences.post($.param(preferences), function(){
+      location.reload();
+    }, function(){
+      displayMessage(gettext('Error saving settings'));
     });
   }
 }]);

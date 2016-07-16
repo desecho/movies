@@ -32,7 +32,7 @@ $.ajaxSetup({
 
 var displayMessage;
 
-$.jGrowl.defaults.closerTemplate = '<div>Закрыть все уведомления</div>';
+$.jGrowl.defaults.closerTemplate = '<div>' + gettext('Close all notifications') + '</div>';
 
 displayMessage = function(message) {
   return $.jGrowl(message);

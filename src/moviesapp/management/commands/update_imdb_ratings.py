@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand
 
 from ...models import Movie
-from ...functions import load_omdb_movie_data
+from ...utils import load_omdb_movie_data
 
 
 class Command(BaseCommand):

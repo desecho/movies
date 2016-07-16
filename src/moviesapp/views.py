@@ -15,6 +15,7 @@ from poster.streaminghttp import register_openers
 
 # from django.utils.http import urlquote
 # from django.views.decorators.cache import cache_page
+from django.utils.translation import ugettext_lazy as _
 from django.http import HttpResponse, QueryDict
 from django.shortcuts import redirect
 from django.contrib.auth import logout
@@ -26,9 +27,8 @@ from django.db.models import Q
 
 from annoying.decorators import ajax_request, render_to
 
-from .models import Record, List, User, ActionRecord
-from .functions import add_movie_to_list, add_to_list_from_db, tmdb, get_poster_from_tmdb
-from .utils import activate_user_language_preference, get_poster_url
+from .models import Record, List, User, ActionRecord, activate_user_language_preference, get_poster_url
+from .utils import add_movie_to_list, add_to_list_from_db, tmdb, get_poster_from_tmdb
 
 # logger = logging.getLogger('moviesapp.test')
 # logger.debug(options)
@@ -309,8 +309,8 @@ def get_available_users_and_friends(user, sort=False):
 @login_required
 def feed(request, list_name):
     FEED_TITLE = {
-        'people': 'Люди',
-        'friends': 'Друзья',
+        'people': _('People'),
+        'friends': _('Friends'),
     }
 
     date_to = datetime.today()
