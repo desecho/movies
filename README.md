@@ -1,11 +1,10 @@
 #Movies
 
-The web application on Python2/Django/javascript/jQuery to create movie lists ("watched" and "to watch"), rate movies and add comments, share your lists with friends, get recommendations from friends. Works in Russian social network [htp://vk.com](htp://vk.com). [http://vk.com/app3504693_2912142](http://vk.com/app3504693_2912142). The interface is in Russian.
+The web application on Python2/Django/javascript/jQuery to create movie lists ("watched" and "to watch"), rate movies and add comments, share your lists with friends, get recommendations from friends. Works in Russian social network [htp://vk.com](htp://vk.com). [http://vk.com/app3504693_2912142](http://vk.com/app3504693_2912142). The interface is available in Russian and English.
 
 ##Used APIs
 * [TMDb](http://www.themoviedb.org/) (Requires API Key)
 * [OMDb](http://www.omdbapi.com/)
-* [2torrents.org](http://2torrents.org)
  
 ##Installation instructions
 
