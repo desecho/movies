@@ -2,7 +2,6 @@ tmdb3.cache
 installation_settings.sh
 src/moviesapp/static/bower/
 __pycache__
-/.vagrant
 .tox
 *.pyc
 

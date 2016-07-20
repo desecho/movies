@@ -33,8 +33,8 @@ urlpatterns = patterns(
     url(r'^save-preferences/$', 'moviesapp.views.ajax_save_preferences'),
 
     url(r'^login/$', 'django.contrib.auth.views.login',
-        {'template_name': 'login.html'}),
-    url(r'^logout/$', 'moviesapp.views.logout_view'),
+        {'template_name': 'login.html'}, name='login'),
+    url(r'^logout/$', 'moviesapp.views.logout_view', name='logout'),
 
     # Uncomment the admin/doc line below to enable admin documentation:
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
