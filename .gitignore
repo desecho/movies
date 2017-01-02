@@ -8,3 +8,4 @@ __pycache__
 # OS X meta data
 ._*
 .DS_Store
+local_settings.py
