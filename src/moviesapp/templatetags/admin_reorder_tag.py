@@ -27,7 +27,7 @@ def register_render_tag(renderer):
 def admin_reorder(context, token):
     """
     Called in admin/base_site.html template override and applies custom ordering
-    of apps/models defined by settings.ADMIN_REORDER
+    of apps/models defined by settings.ADMIN_REORDER.
     """
     # sort key function - use index of item in order if exists, otherwise item
     def sort(order, item):

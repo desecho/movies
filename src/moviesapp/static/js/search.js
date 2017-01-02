@@ -18,19 +18,19 @@ function ($scope, SearchMovie, AddToListFromDb) {
   $scope.submit = function(){
     $scope.searchResults = [];
     var options = {
-      popular_only: $('#popular_only').prop('checked'),
-      sort_by_date: $('#sort_by_date').prop('checked')
+      popularOnly: $('#popular-only').prop('checked'),
+      sortByDate: $('#sort-by-date').prop('checked')
     };
     SearchMovie.get({
       query: $scope.query,
       type: $scope.searchTypeId.toString(),
       options: $.param(options)
     }, function(data) {
-      $scope.nothing_found = false;
+      $scope.nothingFound = false;
       if (data.status === 1) {
         $scope.searchResults = data.movies;
       } else if (data.status === 0) {
-        $scope.nothing_found = true;
+        $scope.nothingFound = true;
       } else {
         displayMessage(gettext('Search Error'));
       }
@@ -38,17 +38,17 @@ function ($scope, SearchMovie, AddToListFromDb) {
     );
   }
 
-  $scope.addToListFromDb = function(movie_id, list_id) {
+  $scope.addToListFromDb = function(movieId, listId) {
     AddToListFromDb.post($.param({
-      movie_id: movie_id,
-      list_id: list_id
+      movieId: movieId,
+      listId: listId
     }), function(data) {
       if (data.status === -1) {
         return displayMessage(gettext('Error! Code #') + '1');
       } else if (data.status === -2) {
         return displayMessage(gettext('Error! Code #') + '2');
       } else {
-        return $('#movie' + movie_id).fadeOut('fast', function() {
+        return $('#movie' + movieId).fadeOut('fast', function() {
           return $(this).remove();
         });
       }

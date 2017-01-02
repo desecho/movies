@@ -572,8 +572,8 @@ def ajax_search_movie(request):
         type = int(request.GET.get('type'))
         query = request.GET.get('query')
         options = QueryDict(request.GET['options'])
-        options = {'popular_only': json.loads(options['popular_only']),
-                   'sort_by_date': json.loads(options['sort_by_date'])}
+        options = {'popular_only': json.loads(options['popularOnly']),
+                   'sort_by_date': json.loads(options['sortByDate'])}
         output = get_movies_from_tmdb(query, type, options, request.user)
         return output
 
@@ -583,9 +583,9 @@ def ajax_add_to_list_from_db(request):
     if request.is_ajax() and request.method == 'POST':
         POST = request.POST
         print POST
-        if 'movie_id' in POST and 'list_id' in POST:
-            error_code = add_to_list_from_db(int(POST.get('movie_id')),
-                                             int(POST.get('list_id')),
+        if 'movieId' in POST and 'listId' in POST:
+            error_code = add_to_list_from_db(int(POST.get('movieId')),
+                                             int(POST.get('listId')),
                                              request.user)
             if error_code:
                 return {'status': error_code}
@@ -595,9 +595,9 @@ def ajax_add_to_list_from_db(request):
 def ajax_add_to_list(request):
     if request.is_ajax() and request.method == 'POST':
         POST = request.POST
-        if 'movie_id' in POST and 'list_id' in POST:
-            movie_id = POST.get('movie_id')
-            list_id = POST.get('list_id')
+        if 'movieId' in POST and 'listId' in POST:
+            movie_id = POST.get('movieId')
+            list_id = POST.get('listId')
             add_movie_to_list(movie_id, list_id, request.user)
     return HttpResponse()
 
@@ -625,8 +625,8 @@ def ajax_upload_photo_to_wall(request):
 
     if request.is_ajax() and request.method == 'POST':
         POST = request.POST
-        if 'url' in POST and 'record_id' in POST:
-            filepath = get_filepath(POST.get('record_id'))
+        if 'url' in POST and 'recordId' in POST:
+            filepath = get_filepath(POST.get('recordId'))
             response = upload_file(POST.get('url'), filepath)
             return {'response': response}
     return HttpResponse()

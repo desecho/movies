@@ -8,12 +8,13 @@ class Command(BaseCommand):
     help = 'Import data from IMDB ids'
 
     def handle(self, *args, **options):
-        # user_id = 0
-        # list_id = 1
+        user_id = 0
+        list_id = 1
 
-        # imdb_ids = '''
+        imdb_ids = '''
 
-        # '''
+        '''
+
         def get_tmdb_id(imdb_id):
             try:
                 return tmdb.Movie.fromIMDB(imdb_id).id

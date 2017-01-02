@@ -1,1 +1,3 @@
-<a href="javascript:void(0);" title="Добавить в список &quot;Просмотрено&quot;" onclick="add_to_list({{ record.movie_id }}, 1, {{ record.id }})"><i class="fa fa-eye"></i></a>
+{% load i18n %}
+
+<a href="javascript:void(0);" title="{% trans 'Add to &quot;Watched&quot; list' %}" onclick="addToList({{ record.movie_id }}, 1, {{ record.id }})"><i class="fa fa-eye"></i></a>

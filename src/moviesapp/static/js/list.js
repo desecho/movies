@@ -13,17 +13,18 @@ app.factory('SaveComment', ['$resource', function($resource) {
 app.controller('ListController', ['$scope', 'RemoveRecord', 'SaveComment',
 
 function ($scope, RemoveRecord, SaveComment) {
-    removeRecordFromPage = function(id) {
-      function checkIfNoRecords() {
-        if (!$('.movie').length) {
-          $('#results').html(gettext('The list is empty') + '.');
-        }
-      };
-      $('#record' + id).fadeOut('fast', function() {
-        $(this).remove();
-        checkIfNoRecords();
-      });
+  function removeRecordFromPage(id) {
+    function checkIfNoRecords() {
+      if (!$('.movie').length) {
+        $('#results').html(gettext('The list is empty') + '.');
+      }
     };
+    $('#record' + id).fadeOut('fast', function() {
+      $(this).remove();
+      checkIfNoRecords();
+    });
+  };
+
   $scope.removeRecord = function(id) {
     RemoveRecord.post($.param({id: id}), function(data) {
       removeRecordFromPage(id);
@@ -31,7 +32,7 @@ function ($scope, RemoveRecord, SaveComment) {
       displayMessage(gettext('Error removing the movie'));
     });
   };
-  $scope.mode = mode;
+
   $scope.switchMode = function(newMode) {
     function disactivateModeMinimal() {
       // TODO .comment, .comment-button fix display
@@ -62,6 +63,7 @@ function ($scope, RemoveRecord, SaveComment) {
     }, false);
     $scope.mode = newMode;
   };
+
   $scope.saveComment = function(id) {
     var comment = $('#comment' + id).val();
     SaveComment.post($.param({
@@ -77,13 +79,12 @@ function ($scope, RemoveRecord, SaveComment) {
   };
 
   $scope.toggleCommentArea = function(id) {
-    $('#comment_area' + id).toggle();
-    $('#comment_area_button' + id).toggle();
+    $('#comment-area' + id).toggle();
+    $('#comment-area-button' + id).toggle();
     $('#comment' + id).focus();
   };
+  $scope.mode = mode;
 }]);
-
-var activateModeMinimal, applySettings, postToWall, ratyCustomSettings, switchSort, toggleRecommendation;
 
 function changeRating(id, rating, element) {
   function revertToPreviousRating(element) {
@@ -93,6 +94,7 @@ function changeRating(id, rating, element) {
     var settings = $.extend({}, ratySettings, ratyCustomSettings, scoreSettings);
     element.raty(settings);
   };
+
   $.post(urlChangeRating, {
     id: id,
     rating: rating
@@ -104,7 +106,7 @@ function changeRating(id, rating, element) {
   });
 };
 
-switchSort = function(value) {
+function switchSort(value) {
   var additionalSetting, settings;
   if (value !== 'rating') {
     additionalSetting = {
@@ -119,7 +121,7 @@ switchSort = function(value) {
   applySettings(settings);
 };
 
-applySettings = function(settings, reload) {
+function applySettings(settings, reload) {
   if (reload == null) {
     reload = true;
   }
@@ -134,7 +136,7 @@ applySettings = function(settings, reload) {
   });
 };
 
-activateModeMinimal = function() {
+function activateModeMinimal() {
   $('.poster, .comment, .comment-button, .release-date-label, .wall-post').hide();
   $('.details, .review').css('display', 'inline');
   $('.review').css('padding-top', '0');
@@ -152,7 +154,7 @@ activateModeMinimal = function() {
   });
 };
 
-toggleRecommendation = function() {
+function toggleRecommendation(){
   if (recommendation) {
     applySettings({
       recommendation: false
@@ -165,47 +167,48 @@ toggleRecommendation = function() {
   }
 };
 
-postToWall = function(id) {
-  var get_wall_upload_server_and_upload_photo_and_post_to_wall, has_poster, post, rating, save_wall_photo, upload_photo_to_wall;
-  post = function(photo) {
-    var create_wall_post, create_wall_post_message;
-    create_wall_post_message = function() {
-      var comment, rating_post, text, title;
+function postToWall(id) {
+  function post(photo) {
+    function createWallPostMessage() {
+      var comment, ratingPost, text, title;
       title = $('#record' + id).attr('data-title');
       comment = $('#comment' + id).val();
-      rating_post = ratySettings['hints'][rating - 1];
+      ratingPost = ratySettings['hints'][rating - 1];
       if (rating > 2) {
         text = gettext('I recommend watching');
       } else {
         text = gettext("I don't recommend watching");
       }
-      text += " \"" + title + "\".\n" + gettext('My rating') + " - " + rating_post + ".";
+      text += " \"" + title + "\".\n" + gettext('My rating') + " - " + ratingPost + ".";
       if (comment) {
         text += "\n " + comment;
       }
       return text;
     };
-    create_wall_post = function() {
+
+    function createWallPost() {
       post = {};
-      post.message = create_wall_post_message();
+      post.message = createWallPostMessage();
       if (photo) {
         post.attachments = photo;
       }
       return post;
     };
-    return VK.api('wall.post', create_wall_post(), function(data) {
-      var error_code;
+
+    return VK.api('wall.post', createWallPost(), function(data) {
+      var errorCode;
       if (data.error) {
-        error_code = data.error.error_code;
-        if (error_code !== 10007) {
-          return displayMessage(gettext('Error posting to the wall #') + error_code);
+        errorCode = data.error.error_code;
+        if (errorCode !== 10007) {
+          return displayMessage(gettext('Error posting to the wall #') + errorCode);
         }
       } else {
         return displayMessage(gettext('Your post has been posted'));
       }
     });
   };
-  save_wall_photo = function(response) {
+
+  function saveWallPhoto(response) {
     return VK.api('photos.saveWallPhoto', response, function(data) {
       if (data.error) {
         return displayMessage(gettext('Error posting a poster to the wall #') + data.error.error_code);
@@ -214,32 +217,37 @@ postToWall = function(id) {
       }
     });
   };
-  upload_photo_to_wall = function(url) {
-    return $.post(url_ajax_upload_photo_to_wall, {
+
+  function uploadPhotoToWall(url) {
+    return $.post(urlAjaxUploadPhotoToWall, {
       url: url,
-      record_id: id
+      recordId: id
     }, function(data) {
-      return save_wall_photo($.parseJSON(data.response));
+      return saveWallPhoto($.parseJSON(data.response));
     }).error(function() {
       return displayMessage(gettext('Error loading a poster'));
     });
   };
-  get_wall_upload_server_and_upload_photo_and_post_to_wall = function() {
+
+  function getWallUploadServerAndUploadPhotoAndPostToWall() {
     return VK.api('photos.getWallUploadServer', function(data) {
       if (data.error) {
         return displayMessage(gettext('Error getting an upload server for wall posting #') + data.error.error_code);
       } else {
-        return upload_photo_to_wall(data.response.upload_url);
+        return uploadPhotoToWall(data.response.upload_url);
       }
     });
   };
-  rating = parseInt($('#record' + id).children('.details').children('.review').children('.rating').attr('data-rating'));
-  has_poster = function() {
+
+  function hasPoster() {
     return $('#record' + id).children('.poster').children('img').attr('src').indexOf('no_poster') === -1;
   };
+
+  rating = parseInt($('#record' + id).children('.details').children('.review').children('.rating').attr('data-rating'));
+
   if (rating) {
-    if (has_poster()) {
-      return get_wall_upload_server_and_upload_photo_and_post_to_wall();
+    if (hasPoster()) {
+      return getWallUploadServerAndUploadPhotoAndPostToWall();
     } else {
       return post();
     }
@@ -249,38 +257,37 @@ postToWall = function(id) {
 };
 
 ratyCustomSettings = {
-  readOnly: raty_readonly,
+  readOnly: ratyReadonly,
   click: function(score) {
     if (!score) {
       score = 0;
     }
-    changeRating($(this).attr('data-record_id'), score, $(this));
+    changeRating($(this).attr('data-record-id'), score, $(this));
   }
 };
 
 $(function() {
-  function set_viewed_icons_and_remove_buttons() {
-    if (anothers_account) {
+  function setViewedIconsAndRemoveButtons() {
+    if (anothersAccount) {
       $('.movie').each(function() {
-        var id, list_id;
+        var id, listId;
         id = $(this).attr('data-id');
-        list_id = list_data[id];
-        setViewedIconAndRemoveButtons(id, list_id);
+        listId = listData[id];
+        setViewedIconAndRemoveButtons(id, listId);
       });
     }
   };
 
-  $('#button_mode_' + mode).button('toggle');
+  $('#button-mode-' + mode).button('toggle');
   if (mode === 'minimal') {
     activateModeMinimal();
   }
-  $('#button_sort_' + sort).button('toggle');
+  $('#button-sort-' + sort).button('toggle');
 
   if (recommendation) {
-    $('#button_recommendation').button('toggle');
+    $('#button-recommendation').button('toggle');
   }
-  set_viewed_icons_and_remove_buttons();
+  setViewedIconsAndRemoveButtons();
   autosize($('textarea'));
   retinajs();
 });
-
