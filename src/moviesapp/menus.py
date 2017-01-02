@@ -14,6 +14,7 @@ def is_vk_user(request):
     except:
         return False
 
+
 Menu.add_item('main', MenuItem(_('Watched'), reverse('moviesapp.views.list_view', kwargs={'list_name': 'watched'})))
 
 Menu.add_item('main', MenuItem(_('To Watch'),

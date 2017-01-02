@@ -1,39 +1,36 @@
 {% extends "base.html" %}
 
+{% load i18n %}
+
 {% block content %}
 <div ng-controller="PreferencesController">
 <form class="form-horizontal">
-	<legend>Настройки</legend>
+	<legend>{% trans 'Settings' %}</legend>
 
   <div class="form-group">
-    <label class="control-label col-sm-2" for="lang"><strong>Язык:</strong></label>
+    <label class="control-label col-sm-2" for="lang"><strong>{% trans 'Language' %}:</strong></label>
     <div class="col-sm-2">
     <label class="radio">
-      <input type="radio" ng-click="savePreferences()" name="lang" value="en" {% ifequal user.language 'en' %} checked {% endifequal %}> Оригинал / Английский
+      <input type="radio" ng-click="savePreferences()" name="lang" value="en" {% ifequal user.language 'en' %} checked {% endifequal %}> {% trans 'English' %}
     </label>
     <label class="radio">
-      <input type="radio" ng-click="savePreferences()" name="lang" value="ru" {% ifequal user.language 'ru' %} checked {% endifequal %}> Русский<br>
+      <input type="radio" ng-click="savePreferences()" name="lang" value="ru" {% ifequal user.language 'ru' %} checked {% endifequal %}> {% trans 'Russian' %}<br>
     </label>
     </div>
   </div>
-
-
 
   <div class="form-group">
     <div class="col-sm-offset-2 col-sm-10">
-
-
     </div>
   </div>
-
 
   </div>
   {% if user.is_vk_user %}
       <div class="control-group">
-        <label class="control-label" for="only_for_friends">Доступ</label>
+        <label class="control-label" for="only-for-friends">{% trans 'Access' %}</label>
         <div class="controls">
             <label class="checkbox">
-              <input type="checkbox" name="only_for_friends" {% if user.only_for_friends %} checked {% endif %}> Показывать профиль только друзьям<br>
+              <input type="checkbox" id="only-for-friends" name="only_for_friends" {% if user.only_for_friends %} checked {% endif %}> {% trans 'Show my profile only to friends' %}<br>
             </label>
         </div>
       </div>

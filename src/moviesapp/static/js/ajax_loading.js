@@ -1,5 +1,5 @@
 $(function(){
-  var spinner_options = {
+  var spinnerOptions = {
     lines: 12,
     length: 5,
     width: 3,
@@ -17,7 +17,7 @@ $(function(){
     left: 'auto'
   }
   $(document).ajaxStart(function(){
-    $('#loading2').spin(spinner_options);
+    $('#loading2').spin(spinnerOptions);
   });
   $(document).ajaxStop(function(){
     $('#loading2').spin(false);

@@ -10,6 +10,7 @@ class RecordAdmin(admin.ModelAdmin):
 class ActionRecordAdmin(admin.ModelAdmin):
     list_display = ('user', 'movie', 'action', 'list', 'date')
 
+
 admin.site.register(User)
 admin.site.register(Movie)
 admin.site.register(Record, RecordAdmin)

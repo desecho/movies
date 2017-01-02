@@ -177,4 +177,5 @@ def add_to_list_from_db(tmdb_id, list_id, user):
     else:
         return movie_id
 
+
 tmdb = init_tmdb()

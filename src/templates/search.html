@@ -11,7 +11,7 @@
           <span class="input-group-btn">
             <button class="btn btn-default" type="submit">{% trans 'Search' %}</button>
             <div class="btn-group">
-              <button id="search_type_button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">[[ searchType ]] <span class="caret"></span></button>
+              <button id="search-type-button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">[[ searchType ]] <span class="caret"></span></button>
               <ul class="dropdown-menu">
                 <li><a href="javascript:void(0)" ng-click="changeSearchType(1);">{% trans 'Movie' %}</a></li>
                 <li><a href="javascript:void(0)" ng-click="changeSearchType(2);">{% trans 'Actor' %}</a></li>
@@ -22,10 +22,10 @@
         </div>
         <div class="search-panel-additional">
           <label class="checkbox">
-            <input type="checkbox" id="popular_only" checked> {% trans 'show only popular' %}<br>
+            <input type="checkbox" id="popular-only" checked> {% trans 'show only popular' %}<br>
           </label>
           <label class="checkbox">
-            <input type="checkbox" id="sort_by_date"> {% trans 'sort by date' %}
+            <input type="checkbox" id="sort-by-date"> {% trans 'sort by date' %}
           </label>
         </div>
       </form>
@@ -37,16 +37,13 @@
             <div class="add-to-list-buttons">
             <a href="javascript:void(0)" title="{% trans 'Add to the list' %} {% trans 'Watched' %}" ng-click="addToListFromDb(searchResult.id, 1)"><i class="fa fa-eye"></i></a>
             <a href="javascript:void(0)" title="{% trans 'Add to the list' %} {% trans 'To Watch' %}" ng-click="addToListFromDb(searchResult.id, 2)"><i class="fa fa-eye-slash"></i></a>
-
-            ></a>
-
             </div></div>
             <div class="details" ng-show="searchResult.releaseDate">
                 <strong>{% trans 'Release date' %}:</strong> [[searchResult.releaseDate]]
             </div>
         </div>
     </div>
-    <div ng-show="nothing_found">{% trans 'Nothing has been found' %}.</div>
+    <div ng-show="nothingFound">{% trans 'Nothing has been found' %}.</div>
 </div>
 {% endblock %}
 
