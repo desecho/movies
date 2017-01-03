@@ -43,7 +43,7 @@ def get_friends(user):
 
 
 def filter_movies_for_recommendation(records, user):
-    'Keeps movies only with 3+ rating, removes watched movies'
+    """Keep movies only with 3+ rating, removes watched movies."""
     return records.filter(rating__gte=3) \
                   .exclude(movie__in=user.get_movie_ids())
 
@@ -223,7 +223,7 @@ def list_view(request, list_name, username=None):
         return records
 
     def get_records():
-        'Gets records for certain user and list'
+        """Get records for certain user and list."""
         if username:
             user = anothers_account
         else:
@@ -232,7 +232,7 @@ def list_view(request, list_name, username=None):
                                                       user=user)
 
     def get_anothers_account():
-        """Returns User if it's another's account and False if it's not"""
+        """Return User if it's another's account and False if it's not."""
         if username:
             anothers_account = User.objects.get(username=username)
         else:

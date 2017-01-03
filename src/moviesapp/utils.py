@@ -56,7 +56,7 @@ def add_movie_to_list(movie_id, list_id, user):
 
 
 def add_movie_to_db(tmdb_id, refresh=False):
-    'Return movie id or error codes -1 or -2'
+    """Return movie id or error codes -1 or -2."""
 
     def save_movie_to_db(movie_data):
         if refresh:
@@ -156,12 +156,12 @@ def add_movie_to_db(tmdb_id, refresh=False):
 
 
 def add_to_list_from_db(tmdb_id, list_id, user):
-    '''Returns error code on error or None on success'
-       Returns -1 if there is a problem with obtaining data from TMDB
-       Returns -2 if there is a problem with obtaining data from OMDB'''
+    """Return error code on error or None on success'
+       Return -1 if there is a problem with obtaining data from TMDB
+       Return -2 if there is a problem with obtaining data from OMDB"""
 
     def get_movie_id(tmdb_id):
-        'Return movie id or None if movie is not found'
+        """Return movie id or None if movie is not found."""
         try:
             movie = Movie.objects.get(tmdb_id=tmdb_id)
             return movie.id
