@@ -11,7 +11,7 @@ def register_render_tag(renderer):
     """
     Decorator that creates a template tag using the given renderer as the
     render function for the template tag node - the render function takes two
-    arguments - the template context and the tag token
+    arguments - the template context and the tag token.
     """
     def tag(parser, token):
         class TagNode(template.Node):

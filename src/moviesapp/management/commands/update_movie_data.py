@@ -5,14 +5,14 @@ from ...models import Movie
 
 
 class Command(BaseCommand):
-    help = '''Updates movie data
+    help = """Updates movie data
     optional arguments -
     1 - movie_id
     2 - any char
     If one argument is used then the movie with the selected movie_id is updated
     If two arguments are used then movie update starts from the selected movie_id
     If no arguments are used - all movies get updated
-    '''
+    """
 
     def handle(self, *args, **options):
         def get_tmdb_ids():
