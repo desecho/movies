@@ -1,0 +1,46 @@
+/* Taken from vk widget Start */
+.wauth_head {
+    background: #507299;
+    padding-left: 10px;
+    height: 40px;
+    line-height: 38px;
+    font-size: 13px;
+    font-weight: 500;
+    -webkit-font-smoothing: subpixel-antialiased;
+    -moz-osx-font-smoothing: auto;
+    color: #fff;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.wauth_logo {
+    margin: 6px 6px 0 10px;
+    position: relative;
+    z-index: 1;
+    float: right;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+}
+
+.wauth_logo:before {
+    pointer-events: none;
+    content: '';
+    display: block;
+    background: url(../img/vk.png);
+    width: 20px;
+    height: 12px;
+    margin: 8px 4px;
+}
+/* Taken from vk widget End */
+
+.wauth_head a {
+	color: #fff;
+}
+
+.wauth_head a.text {
+	width: 100%;
+	height: 100%;
+	position: absolute;
+}

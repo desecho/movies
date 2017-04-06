@@ -9,3 +9,4 @@ python-dateutil==2.5.3
 -e git+https://github.com/webtweakers/pytmdb3.git@add-missing-properties#egg=pytmdb3
 django-modeltranslation
 django-rosetta
+social-auth-app-django==1.1.0
