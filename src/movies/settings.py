@@ -78,13 +78,11 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.middleware.locale.LocaleMiddleware',
-    # 'vk_iframe.middleware.IFrameFixMiddleware',
-    # 'vk_iframe.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.gzip.GZipMiddleware',
+    'social_django.middleware.SocialAuthExceptionMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    # 'vk_iframe.middleware.LoginRequiredMiddleware',
 )
 
 ROOT_URLCONF = 'movies.urls'
@@ -108,11 +106,11 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable admin documentation:
     'django.contrib.admindocs',
     'moviesapp',
-    # 'vk_iframe',
     'menu',
     'bootstrap_pagination',
     'rosetta',
     'modeltranslation',
+    'social_django',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -145,8 +143,8 @@ INSTALLED_APPS = (
 # }
 
 AUTHENTICATION_BACKENDS = (
+    'social_core.backends.vk.VKOAuth2',
     'django.contrib.auth.backends.ModelBackend',
-    # 'vk_iframe.backends.VkontakteUserBackend',
 )
 
 ADMIN_REORDER = (
@@ -157,9 +155,12 @@ APPEND_SLASH = False
 
 AUTH_USER_MODEL = 'moviesapp.User'
 TEMPLATE_CONTEXT_PROCESSORS = ('django.core.context_processors.request',
-                               'django.contrib.auth.context_processors.auth')
+                               'django.contrib.auth.context_processors.auth',
+                               'social_django.context_processors.backends',
+                               'social_django.context_processors.login_redirect')
 LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = '/login/'
+
 SESSION_SAVE_EVERY_REQUEST = True
 
 STATIC_ROOT = op.join(local_settings.PROJECT_ROOT, 'static')
@@ -208,7 +209,6 @@ LOCALES = {'ru': ('ru', 'ru'),
 #     }
 # }
 
-VK_P3P_POLICY = 'IDC DSP COR IVAi IVDi OUR TST'
 VK_IMAGE_PATH = 'http://vk.com/images/'
 VK_NO_IMAGE_SMALL = VK_IMAGE_PATH + 'camera_c.gif'
 VK_NO_IMAGE_MEDIUM = VK_IMAGE_PATH + 'camera_b.gif'
@@ -216,8 +216,57 @@ VK_NO_IMAGE_BIG = VK_IMAGE_PATH + 'camera_a.gif'
 
 MENU_SELECT_PARENTS = True
 
-VK_APP_ID = local_settings.VK_APP_ID
-VK_APP_SECRET = local_settings.VK_APP_SECRET
+SOCIAL_AUTH_USER_MODEL = AUTH_USER_MODEL
+SOCIAL_AUTH_PIPELINE = (
+    # Get the information we can about the user and return it in a simple
+    # format to create the user instance later. On some cases the details are
+    # already part of the auth response from the provider, but sometimes this
+    # could hit a provider API.
+    'social.pipeline.social_auth.social_details',
+
+    # Get the social uid from whichever service we're authing thru. The uid is
+    # the unique identifier of the given user in the provider.
+    'social.pipeline.social_auth.social_uid',
+
+    # Verifies that the current auth process is valid within the current
+    # project, this is where emails and domains whitelists are applied (if
+    # defined).
+    'social.pipeline.social_auth.auth_allowed',
+
+    # Checks if the current social-account is already associated in the site.
+    'social.pipeline.social_auth.social_user',
+
+    # Make up a username for this person, appends a random string at the end if
+    # there's any collision.
+    'social.pipeline.user.get_username',
+
+    # Send a validation email to the user to verify its email address.
+    # Disabled by default.
+    # 'social.pipeline.mail.mail_validation',
+
+    # Associates the current social details with another user account with
+    # a similar email address. Disabled by default.
+    'social.pipeline.social_auth.associate_by_email',
+
+    # Create a user account if we haven't found one yet.
+    'social.pipeline.user.create_user',
+
+    # Create the record that associates the social account with the user.
+    'social.pipeline.social_auth.associate_user',
+
+    # Populate the extra_data field in the social record with the values
+    # specified by settings (and the default ones like access_token, etc).
+    'social.pipeline.social_auth.load_extra_data',
+
+    # Update the user record with any changed info from the auth service.
+    'social.pipeline.user.user_details',
+)
+
+LOGIN_ERROR_URL = '/login-error/'
+
+SOCIAL_AUTH_VK_OAUTH2_KEY = local_settings.SOCIAL_AUTH_VK_OAUTH2_KEY
+SOCIAL_AUTH_VK_OAUTH2_SECRET = local_settings.SOCIAL_AUTH_VK_OAUTH2_SECRET
+SOCIAL_AUTH_VK_OAUTH2_SCOPE = ['friends', 'email']
 
 TMDB_KEY = local_settings.TMDB_KEY
 
