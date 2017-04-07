@@ -1,6 +1,6 @@
 #Movies
 
-The web application on Python/Django/JavaScript/jQuery to create movie lists ("watched" and "to watch"), rate movies and add comments.
+The web application on Python/Django, jQuery to create movie lists ("watched" and "to watch"), rate movies and add comments.
 
 The interface is available in Russian and English.
 
