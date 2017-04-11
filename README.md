@@ -16,7 +16,7 @@ Temporary not working: Share your lists with friends, get recommendations from f
     * VK_APP_ID
     * VK_APP_SECRET
 * Insert your analytics code to src/static/js/analytics.js if you'd like
-* Change variable in installation_settings.sh
+* Change the variable in installation_settings.sh
 * Run install.sh
 * Run the following commands:
 
