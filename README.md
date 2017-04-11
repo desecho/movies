@@ -1,14 +1,14 @@
-#Movies
+# Movies
 
 The interface is available in Russian and English.
 
 Temporary not working: Share your lists with friends, get recommendations from friends. Available on [VK](http://vk.com/app3504693_2912142).
 
-##Used APIs
+## Used APIs
 * [TMDb](http://www.themoviedb.org/) (Requires API Key)
 * [OMDb](http://www.omdbapi.com/)
  
-##Installation instructions
+## Installation instructions
 
 * Change/Add the following variables in settings.py:
     * DATABASES
