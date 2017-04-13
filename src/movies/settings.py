@@ -280,3 +280,9 @@ LANGUAGES = (
 LOCALE_PATHS = (
     op.join(local_settings.PROJECT_ROOT, 'project', 'src', 'locale'),
 )
+
+# This is here to fix the problem with static files on dev
+try:
+	from local_settings2 import *  # noqa
+except ImportError:
+    pass
