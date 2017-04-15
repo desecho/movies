@@ -21,16 +21,18 @@
 {% endif %}
 
 <div class="btn-group" data-toggle="buttons">
+  {% with request.session.mode as mode %}
   <!-- id values are being used as variable name combination to control the button statuses -->
-  <label id="button-mode-full" class="btn btn-default active" title="{% trans 'Mode' %}" ng-click="switchMode('full')">
+  <label id="button-mode-full" class="btn btn-default {% if mode == 'full' %} active {% endif %}" title="{% trans 'Mode' %}" ng-click="switchMode('full')">
     <input type="radio">{% trans 'Full' %}
   </label>
-  <label id="button-mode-compact" class="btn btn-default" title="{% trans 'Mode' %}" ng-click="switchMode('compact')">
+  <label id="button-mode-compact" class="btn btn-default {% if mode == 'compact' %} active {% endif %}" title="{% trans 'Mode' %}" ng-click="switchMode('compact')">
     <input type="radio">{% trans 'Compact' %}
   </label>
-  <label id="button-mode-minimal" class="btn btn-default" title="{% trans 'Mode' %}" ng-click="switchMode('minimal')">
+  <label id="button-mode-minimal" class="btn btn-default {% if mode == 'minimal' %} active {% endif %}" title="{% trans 'Mode' %}" ng-click="switchMode('minimal')">
     <input type="radio">{% trans 'Minimal' %}
   </label>
+  {% endwith %}
 </div>
 
 {% if anothers_account %}
@@ -40,17 +42,19 @@
 
 <div class="toolbar">
   <div>
-    <div class="btn-group" data-toggle="buttons" id="sort-buttons">
+    <div class="btn-group" data-toggle="buttons">
       <!-- id values are being used as variable name combination to control the button statuses -->
-      <label class="btn btn-default active" data-sort="release_date" title="{% trans 'Sorting' %}" onclick="switchSort('release_date')">
+      {% with request.session.sort as sort %}
+      <label class="btn btn-default {% if sort == 'release_date' %} active {% endif %}" title="{% trans 'Sort by release date' %}" onclick="switchSort('release_date')">
         <input type="radio">{% trans 'Release date' %}
       </label>
-      <label class="btn btn-default" title="{% trans 'Sorting' %}" data-sort="rating" onclick="switchSort('rating')">
+      <label class="btn btn-default {% if sort == 'rating' %} active {% endif %}" title="{% trans 'Sort by rating' %}" onclick="switchSort('rating')">
         <input type="radio">{% trans 'Rating' %}
       </label>
-      <label class="btn btn-default" title="{% trans 'Sorting' %}" data-sort="addition_date" onclick="switchSort('addition_date')">
-        <input type="radio">{% trans 'Added date' %}
+      <label class="btn btn-default {% if sort == 'addition_date' %} active {% endif %}" title="{% trans 'Sort by date added' %}" onclick="switchSort('addition_date')">
+        <input type="radio">{% trans 'Date added' %}
       </label>
+      {% endwith %}
     </div>
   </div>
 
@@ -69,7 +73,7 @@
 
 <br>
 
-<div id="results" class="results">
+<div id="results" class="results" style="display: none;">
   {% if records %}
     {% for record in records %}
       <div id="record{{ record.id }}" data-id="{{ record.id }}" data-title="{{ record.movie.title }}" class="movie">
@@ -170,7 +174,6 @@
 <script src="/static/bower/autosize/dist/autosize.min.js"></script>
 <script>
   var mode = '{{ request.session.mode }}';
-  var sort = '{{ request.session.sort }}';
   var listData = $.parseJSON('{{ list_data|safe }}');
   var listId = {{ list_id }};
 
