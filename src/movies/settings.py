@@ -3,6 +3,7 @@
 import os
 import os.path as op
 import sys
+import raven
 
 from django.utils.translation import ugettext_lazy as _
 
@@ -111,6 +112,7 @@ INSTALLED_APPS = (
     'rosetta',
     'modeltranslation',
     'social_django',
+    'raven.contrib.django.raven_compat',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -280,6 +282,10 @@ LANGUAGES = (
 LOCALE_PATHS = (
     op.join(local_settings.PROJECT_ROOT, 'project', 'src', 'locale'),
 )
+RAVEN_CONFIG = {
+    'dsn': local_settings.RAVEN_DSN,
+    'release': raven.fetch_git_sha(local_settings.GIT_ROOT),
+}
 
 # This is here to fix the problem with static files on dev
 try:
