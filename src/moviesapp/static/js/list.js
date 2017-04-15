@@ -277,11 +277,9 @@ $(function() {
     }
   };
 
-  $('#button-mode-' + mode).button('toggle');
   if (mode === 'minimal') {
     activateModeMinimal();
   }
-  $(`#sort-buttons label[data-sort="${sort}"]`).button('toggle');
 
   if (recommendation) {
     $('#button-recommendation').button('toggle');
@@ -289,4 +287,5 @@ $(function() {
   setViewedIconsAndRemoveButtons();
   autosize($('textarea'));
   retinajs();
+  $('#results').show();
 });
