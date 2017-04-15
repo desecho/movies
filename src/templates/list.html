@@ -40,15 +40,15 @@
 
 <div class="toolbar">
   <div>
-    <div class="btn-group" data-toggle="buttons">
+    <div class="btn-group" data-toggle="buttons" id="sort-buttons">
       <!-- id values are being used as variable name combination to control the button statuses -->
-      <label id="button-sort-release-date" class="btn btn-default active" title="{% trans 'Sorting' %}" onclick="switchSort('release_date')">
+      <label class="btn btn-default active" data-sort="release_date" title="{% trans 'Sorting' %}" onclick="switchSort('release_date')">
         <input type="radio">{% trans 'Release date' %}
       </label>
-      <label id="button-sort-rating" class="btn btn-default" title="{% trans 'Sorting' %}" onclick="switchSort('rating')">
+      <label class="btn btn-default" title="{% trans 'Sorting' %}" data-sort="rating" onclick="switchSort('rating')">
         <input type="radio">{% trans 'Rating' %}
       </label>
-      <label id="button-sort-addition-date" class="btn btn-default" title="{% trans 'Sorting' %}" onclick="switchSort('addition_date')">
+      <label class="btn btn-default" title="{% trans 'Sorting' %}" data-sort="addition_date" onclick="switchSort('addition_date')">
         <input type="radio">{% trans 'Added date' %}
       </label>
     </div>

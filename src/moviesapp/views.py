@@ -218,7 +218,7 @@ def list_view(request, list_name, username=None):
                                            '-movie__release_date')
             else:
                 records = records.order_by('-rating', '-movie__release_date')
-        else:
+        elif sort == 'addition_date':
             records = records.order_by('-date')
         return records
 

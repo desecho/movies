@@ -281,7 +281,7 @@ $(function() {
   if (mode === 'minimal') {
     activateModeMinimal();
   }
-  $('#button-sort-' + sort).button('toggle');
+  $(`#sort-buttons label[data-sort="${sort}"]`).button('toggle');
 
   if (recommendation) {
     $('#button-recommendation').button('toggle');
