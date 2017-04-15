@@ -4,7 +4,7 @@ function addToList(movieId, listId, recordId) {
     listId: listId
   }, function(data) {
     return setViewedIconAndRemoveButtons(recordId, listId);
-  }).error(function() {
+  }).fail(function() {
     return displayMessage(gettext('Error adding the movie to the list'));
   });
 };

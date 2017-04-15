@@ -100,7 +100,7 @@ function changeRating(id, rating, element) {
     rating: rating
   }, function(data, error, x) {
     element.attr('data-rating', rating);
-  }).error(function() {
+  }).fail(function() {
     revertToPreviousRating(element);
     displayMessage(gettext('Error adding a rating'));
   });
@@ -131,7 +131,7 @@ function applySettings(settings, reload) {
     if (reload) {
       location.reload();
     }
-  }).error(function() {
+  }).fail(function() {
     displayMessage(gettext('Error applying the setting'));
   });
 };
@@ -224,7 +224,7 @@ ${myRating} - ${ratingPost}.`
       recordId: id
     }, function(data) {
       return saveWallPhoto($.parseJSON(data.response));
-    }).error(function() {
+    }).fail(function() {
       return displayMessage(gettext('Error loading a poster'));
     });
   };
