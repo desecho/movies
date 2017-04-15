@@ -17,7 +17,7 @@ function ($scope, SearchMovie, AddToListFromDb) {
   $scope.searchTypeId = 1;
   $scope.submit = function(){
     $scope.searchResults = [];
-    var options = {
+    const options = {
       popularOnly: $('#popular-only').prop('checked'),
       sortByDate: $('#sort-by-date').prop('checked')
     };

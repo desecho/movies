@@ -34,7 +34,7 @@ function ($scope, RemoveRecord, SaveComment) {
   };
 
   $scope.switchMode = function(newMode) {
-    function disactivateModeMinimal() {
+    function deactivateModeMinimal() {
       // TODO .comment, .comment-button fix display
       $('.poster, .comment, .release-date-label, .wall-post').show();
       $('.comment-button').hide();
@@ -56,7 +56,7 @@ function ($scope, RemoveRecord, SaveComment) {
     if (newMode === 'minimal') {
       activateModeMinimal();
     } else {
-      disactivateModeMinimal();
+      deactivateModeMinimal();
     }
     applySettings({
       mode: newMode
@@ -65,7 +65,7 @@ function ($scope, RemoveRecord, SaveComment) {
   };
 
   $scope.saveComment = function(id) {
-    var comment = $('#comment' + id).val();
+    const comment = $('#comment' + id).val();
     SaveComment.post($.param({
       id: id,
       comment: comment
@@ -88,10 +88,10 @@ function ($scope, RemoveRecord, SaveComment) {
 
 function changeRating(id, rating, element) {
   function revertToPreviousRating(element) {
-    var scoreSettings = {
+    const scoreSettings = {
       score: element.attr('data-rating')
     };
-    var settings = $.extend({}, ratySettings, ratyCustomSettings, scoreSettings);
+    const settings = $.extend({}, ratySettings, ratyCustomSettings, scoreSettings);
     element.raty(settings);
   };
 
@@ -107,7 +107,7 @@ function changeRating(id, rating, element) {
 };
 
 function switchSort(value) {
-  var additionalSetting, settings;
+  let additionalSetting;
   if (value !== 'rating') {
     additionalSetting = {
       recommendation: false
@@ -115,7 +115,7 @@ function switchSort(value) {
   } else {
     additionalSetting = {};
   }
-  settings = jQuery.extend({
+  const settings = jQuery.extend({
     sort: value
   }, additionalSetting);
   applySettings(settings);
@@ -170,25 +170,26 @@ function toggleRecommendation(){
 function postToWall(id) {
   function post(photo) {
     function createWallPostMessage() {
-      var comment, ratingPost, text, title;
-      title = $('#record' + id).attr('data-title');
-      comment = $('#comment' + id).val();
-      ratingPost = ratySettings['hints'][rating - 1];
+      let text;
+      const title = $('#record' + id).attr('data-title');
+      const comment = $('#comment' + id).val();
+      const ratingPost = ratySettings['hints'][rating - 1];
       if (rating > 2) {
         text = gettext('I recommend watching');
       } else {
         text = gettext("I don't recommend watching");
       }
-      text += " \"" + title + "\".\n" + gettext('My rating') + " - " + ratingPost + ".";
+      const myRating = gettext('My rating');
+      text += ` "${title}".
+${myRating} - ${ratingPost}.`
       if (comment) {
-        text += "\n " + comment;
+        text += '\n ' + comment;
       }
       return text;
     };
 
     function createWallPost() {
-      post = {};
-      post.message = createWallPostMessage();
+      const post = {message: createWallPostMessage()};
       if (photo) {
         post.attachments = photo;
       }
@@ -196,9 +197,8 @@ function postToWall(id) {
     };
 
     return VK.api('wall.post', createWallPost(), function(data) {
-      var errorCode;
       if (data.error) {
-        errorCode = data.error.error_code;
+        const errorCode = data.error.error_code;
         if (errorCode !== 10007) {
           return displayMessage(gettext('Error posting to the wall #') + errorCode);
         }
@@ -270,9 +270,8 @@ $(function() {
   function setViewedIconsAndRemoveButtons() {
     if (anothersAccount) {
       $('.movie').each(function() {
-        var id, listId;
-        id = $(this).attr('data-id');
-        listId = listData[id];
+        const id = $(this).attr('data-id');
+        const listId = listData[id];
         setViewedIconAndRemoveButtons(id, listId);
       });
     }
