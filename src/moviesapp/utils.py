@@ -1,14 +1,14 @@
 # coding: utf-8
 from __future__ import unicode_literals
 
-import urllib2
 import json
-import tmdb3
+import urllib2
 from datetime import datetime
 
+import tmdb3
 from django.conf import settings
 
-from .models import Movie, Record, ActionRecord
+from .models import ActionRecord, Movie, Record
 
 
 def init_tmdb():

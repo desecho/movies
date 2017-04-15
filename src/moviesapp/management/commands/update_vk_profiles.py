@@ -1,11 +1,10 @@
-import vkontakte
 import time
 
-from django.core.management.base import BaseCommand
+import vkontakte
 from django.conf import settings
+from django.core.management.base import BaseCommand
 
 from ...models import User
-
 
 FIELDS = (
     'first_name',

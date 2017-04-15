@@ -1,34 +1,34 @@
 # coding: utf-8
 from __future__ import unicode_literals
 
-import tempfile
-import os
 import json
-import vkontakte
+import os
+import tempfile
 # import logging
 import urllib2
 from datetime import datetime
-from dateutil.relativedelta import relativedelta
 from operator import itemgetter
+
+import vkontakte
+from annoying.decorators import ajax_request, render_to
+from dateutil.relativedelta import relativedelta
+from django.conf import settings
+from django.contrib.auth import logout
+from django.contrib.auth.decorators import login_required
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
+from django.db.models import Q
+from django.http import HttpResponse, QueryDict
+from django.shortcuts import redirect
+from django.utils.translation import ugettext_lazy as _
+from django.views.decorators.csrf import ensure_csrf_cookie
 from poster.encode import multipart_encode
 from poster.streaminghttp import register_openers
 
-# from django.utils.http import urlquote
-# from django.views.decorators.cache import cache_page
-from django.utils.translation import ugettext_lazy as _
-from django.http import HttpResponse, QueryDict
-from django.shortcuts import redirect
-from django.contrib.auth import logout
-from django.contrib.auth.decorators import login_required
-from django.conf import settings
-from django.views.decorators.csrf import ensure_csrf_cookie
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.db.models import Q
+from .models import (ActionRecord, List, Record, User,
+                     activate_user_language_preference, get_poster_url)
+from .utils import (add_movie_to_list, add_to_list_from_db,
+                    get_poster_from_tmdb, tmdb)
 
-from annoying.decorators import ajax_request, render_to
-
-from .models import Record, List, User, ActionRecord, activate_user_language_preference, get_poster_url
-from .utils import add_movie_to_list, add_to_list_from_db, tmdb, get_poster_from_tmdb
 
 # logger = logging.getLogger('moviesapp.test')
 # logger.debug(options)

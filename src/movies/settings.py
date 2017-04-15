@@ -3,8 +3,8 @@
 import os
 import os.path as op
 import sys
-import raven
 
+import raven
 from django.utils.translation import ugettext_lazy as _
 
 try:

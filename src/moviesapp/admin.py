@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Movie, Record, List, Action, ActionRecord, User
+from .models import Action, ActionRecord, List, Movie, Record, User
 
 
 class RecordAdmin(admin.ModelAdmin):
