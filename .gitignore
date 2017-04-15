@@ -9,3 +9,4 @@ __pycache__
 ._*
 .DS_Store
 local_settings.py
+.coverage
