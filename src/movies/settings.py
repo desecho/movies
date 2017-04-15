@@ -115,34 +115,49 @@ INSTALLED_APPS = (
     'raven.contrib.django.raven_compat',
 )
 
-# A sample logging configuration. The only tangible logging
-# performed by this configuration is to send an email to
-# the site admins on every HTTP 500 error when DEBUG=False.
-# See http://docs.djangoproject.com/en/dev/topics/logging for
-# more details on how to customize your logging configuration.
-# LOGGING = {
-#     'version': 1,
-#     'disable_existing_loggers': False,
-#     'filters': {
-#         'require_debug_false': {
-#             '()': 'django.utils.log.RequireDebugFalse'
-#         }
-#     },
-#     'handlers': {
-#         'mail_admins': {
-#             'level': 'ERROR',
-#             'filters': ['require_debug_false'],
-#             'class': 'django.utils.log.AdminEmailHandler'
-#         }
-#     },
-#     'loggers': {
-#         'django.request': {
-#             'handlers': ['mail_admins'],
-#             'level': 'ERROR',
-#             'propagate': True,
-#         },
-#     }
-# }
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': True,
+    'root': {
+        'level': 'WARNING',
+        'handlers': ['sentry'],
+    },
+    'formatters': {
+        'verbose': {
+            'format': '%(levelname)s %(asctime)s %(module)s '
+                      '%(process)d %(thread)d %(message)s'
+        },
+    },
+    'handlers': {
+        'sentry': {
+            'level': 'ERROR', # To capture more than ERROR, change to WARNING, INFO, etc.
+            'class': 'raven.contrib.django.raven_compat.handlers.SentryHandler',
+            'tags': {'custom-tag': 'x'},
+        },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose'
+        }
+    },
+    'loggers': {
+        'django.db.backends': {
+            'level': 'ERROR',
+            'handlers': ['console'],
+            'propagate': False,
+        },
+        'raven': {
+            'level': 'DEBUG',
+            'handlers': ['console'],
+            'propagate': False,
+        },
+        'sentry.errors': {
+            'level': 'DEBUG',
+            'handlers': ['console'],
+            'propagate': False,
+        },
+    },
+}
 
 AUTHENTICATION_BACKENDS = (
     'social_core.backends.vk.VKOAuth2',
