@@ -1,5 +1,7 @@
 # Movies
 
+[![Requirements Status](https://requires.io/github/desecho/movies/requirements.svg?branch=master)](https://requires.io/github/desecho/movies/requirements/?branch=master)
+
 The interface is available in Russian and English.
 
 Temporary not working: Share your lists with friends, get recommendations from friends. Available on [VK](http://vk.com/app3504693_2912142).
