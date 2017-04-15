@@ -33,6 +33,9 @@ DATABASES = local_settings.DATABASES
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
 ALLOWED_HOSTS = [local_settings.PROJECT_DOMAIN]
 
+if DEBUG:
+	ALLOWED_HOSTS.append('moviestest.pagekite.me')
+
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # although not all choices may be available on all operating systems.
@@ -161,6 +164,7 @@ LOGGING = {
 
 AUTHENTICATION_BACKENDS = (
     'social_core.backends.vk.VKOAuth2',
+    'social_core.backends.vk.VKAppOAuth2',
     'django.contrib.auth.backends.ModelBackend',
 )
 
@@ -284,6 +288,10 @@ LOGIN_ERROR_URL = '/login-error/'
 SOCIAL_AUTH_VK_OAUTH2_KEY = local_settings.SOCIAL_AUTH_VK_OAUTH2_KEY
 SOCIAL_AUTH_VK_OAUTH2_SECRET = local_settings.SOCIAL_AUTH_VK_OAUTH2_SECRET
 SOCIAL_AUTH_VK_OAUTH2_SCOPE = ['friends', 'email']
+
+SOCIAL_AUTH_VK_APP_KEY = local_settings.SOCIAL_AUTH_VK_APP_KEY
+SOCIAL_AUTH_VK_APP_SECRET = local_settings.SOCIAL_AUTH_VK_APP_SECRET
+SOCIAL_AUTH_VK_APP_USER_MODE = 2
 
 TMDB_KEY = local_settings.TMDB_KEY
 
