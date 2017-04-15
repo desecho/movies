@@ -3,7 +3,7 @@
 {% load i18n %}
 
 {% block content %}
-<div ng-controller="MoviesSearchController">
+<div ng-controller="MoviesSearchController" id="search" style="display: none">
     <div class="search-panel">
       <form name="search" id="search" ng-submit="search.$valid && submit()" novalidate>
         <div class="input-group">
