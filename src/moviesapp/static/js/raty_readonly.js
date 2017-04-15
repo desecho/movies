@@ -1,3 +1,3 @@
-var ratyCustomSettings = {
+const ratyCustomSettings = {
   readOnly: true
 };

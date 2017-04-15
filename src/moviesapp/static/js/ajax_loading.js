@@ -1,5 +1,5 @@
 $(function(){
-  var spinnerOptions = {
+  const spinnerOptions = {
     lines: 12,
     length: 5,
     width: 3,

@@ -7,7 +7,7 @@ app.factory('SavePreferences', ['$resource', function($resource) {
 app.controller('PreferencesController', ['$scope', 'SavePreferences',
 function ($scope, SavePreferences) {
   $scope.savePreferences = function(){
-    var preferences = {language: $('input:radio[name=lang]:checked').val()};
+    const preferences = {language: $('input:radio[name=lang]:checked').val()};
     if (typeof vk !== undefined) {
       preferences.onlyForFriends = $('input[name=only_for_friends]:checked').val();
     }
