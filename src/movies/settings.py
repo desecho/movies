@@ -130,7 +130,7 @@ LOGGING = {
     },
     'handlers': {
         'sentry': {
-            'level': 'ERROR', # To capture more than ERROR, change to WARNING, INFO, etc.
+            'level': 'ERROR',  # To capture more than ERROR, change to WARNING, INFO, etc.
             'class': 'raven.contrib.django.raven_compat.handlers.SentryHandler',
             'tags': {'custom-tag': 'x'},
         },
@@ -304,6 +304,6 @@ RAVEN_CONFIG = {
 
 # This is here to fix the problem with static files on dev
 try:
-	from local_settings2 import *  # noqa
+    from local_settings2 import *  # noqa
 except ImportError:
     pass
