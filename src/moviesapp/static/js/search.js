@@ -69,3 +69,7 @@ function ($scope, SearchMovie, AddToListFromDb) {
     }
   };
 }]);
+
+$(function(){
+  $('#search').show();
+});
