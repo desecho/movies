@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand
 
-from ...utils import add_movie_to_db
 from ...models import Movie
+from ...utils import add_movie_to_db
 
 
 class Command(BaseCommand):

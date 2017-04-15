@@ -1,14 +1,13 @@
 # coding: utf-8
 from __future__ import unicode_literals
 
-from django.db import models
+from annoying.fields import JSONField
+from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.signals import user_logged_in
-from django.conf import settings
+from django.db import models
 from django.dispatch import receiver
-from django.utils.translation import activate, LANGUAGE_SESSION_KEY
-
-from annoying.fields import JSONField
+from django.utils.translation import LANGUAGE_SESSION_KEY, activate
 
 
 def activate_user_language_preference(request, lang):
