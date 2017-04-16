@@ -233,11 +233,6 @@ LOCALES = {'ru': ('ru', 'ru'),
 #     }
 # }
 
-VK_IMAGE_PATH = 'http://vk.com/images/'
-VK_NO_IMAGE_SMALL = VK_IMAGE_PATH + 'camera_c.gif'
-VK_NO_IMAGE_MEDIUM = VK_IMAGE_PATH + 'camera_b.gif'
-VK_NO_IMAGE_BIG = VK_IMAGE_PATH + 'camera_a.gif'
-
 MENU_SELECT_PARENTS = True
 
 SOCIAL_AUTH_USER_MODEL = AUTH_USER_MODEL

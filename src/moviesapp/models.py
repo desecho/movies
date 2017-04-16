@@ -34,19 +34,26 @@ def get_poster_url(size, poster):
 class User(AbstractUser):
     only_for_friends = models.BooleanField(default=False)
     language = models.CharField(max_length=2, choices=settings.LANGUAGES, default='en')
+    avatar = models.URLField(null=True, blank=True)
 
-    def get_avatar_medium(self):
-        return self.vk_profile.photo_medium or settings.VK_NO_IMAGE_MEDIUM
+    def get_avatar(self):
+        return self.avatar or ''
 
     def get_movie_ids(self):
         return Record.objects.filter(user=self).values_list('movie__pk')
+
+    def _get_vk_accounts(self):
+        return self.social_auth.filter(provider__in=['vk-app', 'vk-oauth2'])
 
     def is_vk_user(self):
         """Shows if a user has a vk-app account. It doesn't necessarily mean that he is currently using the app.
         Note: currently it does because it is not possible to link a vk-app account and a website account.
         But it is likely to change in the future.
         """
-        return self.social_auth.filter(provider='vk-app').exists()
+        return self._get_vk_accounts().exists()
+
+    def get_vk_uid(self):
+        return self._get_vk_accounts()[0].uid
 
     def __unicode__(self):
         return self.get_full_name()

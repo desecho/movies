@@ -37,7 +37,7 @@ from .utils import (add_movie_to_list, add_to_list_from_db,
 def get_friends(user):
     if user.is_vk_user():
         vk = vkontakte.API(settings.SOCIAL_AUTH_VK_APP_KEY, settings.SOCIAL_AUTH_VK_APP_SECRET)
-        friends = vk.friends.get(uid=user.social_auth.get(provider='vk-app').uid)
+        friends = vk.friends.get(uid=user.get_vk_uid())
         friends = map(str, friends)
         return User.objects.filter(username__in=friends)
 
@@ -77,7 +77,7 @@ def get_comments_and_ratings(record_ids_and_movies, user):
         comments_and_ratings = []
     else:
         comments_and_ratings = comments_and_ratings.filter(user__in=friends).values(
-            'movie_id', 'comment', 'rating', 'user__vk_profile__photo',
+            'movie_id', 'comment', 'rating',
             'user__first_name', 'user__last_name', 'user__username')
 
     comments_and_ratings_dict = {}
@@ -90,7 +90,7 @@ def get_comments_and_ratings(record_ids_and_movies, user):
                 data['comment'] = x['comment']
             if x['rating']:
                 data['rating'] = x['rating']
-            data['avatar'] = x['user__vk_profile__photo']
+            data['avatar'] = ''
             data['full_name'] = '%s %s' % (x['user__first_name'],
                                            x['user__last_name'])
             data['username'] = x['user__username']
@@ -276,10 +276,6 @@ def list_view(request, list_name, username=None):
             'list_data': json.dumps(list_data)}
 
 
-def get_avatar(photo):
-    return photo or settings.VK_NO_IMAGE_SMALL
-
-
 def get_available_users_and_friends(user, sort=False):
     def available_users():
         return [u for u in User.objects.exclude(pk=user.pk, only_for_friends=True)]
@@ -325,7 +321,7 @@ def feed(request, list_name):
             user__in=get_available_users_and_friends(request.user))
 
     posters = [action.movie.poster_small for action in actions]
-    actions = actions.values('user__vk_profile__photo', 'user__username',
+    actions = actions.values('user__username',
                              'user__first_name', 'user__last_name',
                              'action__name', 'movie__title',
                              'list__name', 'comment', 'rating', 'date')
@@ -335,7 +331,7 @@ def feed(request, list_name):
     for action in actions:
         full_name = '%s %s' % (action['user__first_name'], action['user__last_name'])
         a = {
-            'avatar': get_avatar(action['user__vk_profile__photo']),
+            'avatar': '',
             'full_name': full_name,
             'username': action['user__username'],
             'action': action['action__name'],
@@ -361,7 +357,7 @@ def generic_people(request, users):
         users_output.append({
             'full_name': user.get_full_name(),
             'username': user.username,
-            'avatar': get_avatar(user.vk_profile.photo),
+            'avatar': user.get_avatar(),
             'movie_count': get_movie_count(user.username)})
     return {'users': paginate(users_output, request.GET.get('page'),
             settings.PEOPLE_ON_PAGE)}
