@@ -16,7 +16,7 @@
   <title>{% block title %}Movies{% endblock %}</title>
 </head>
 <body>
-  <div {% if user.is_vk_user %} class="vk" {% endif %}>
+  <div>
     {% include 'includes/menu.html' %}
 
     <div id="content" class="container-fluid">
@@ -50,10 +50,9 @@
   <script src="/static/js/main.js"></script>
   <script src="/static/js/analytics.js"></script>
 
-  {% if user.is_vk_user %}
-    <script src="https://vk.com/js/api/xd_connection.js?2"></script>
-    <script src="/static/js/vk.js"></script>
-  {% endif %}
+  <script src="//vk.com/js/api/xd_connection.js?2"></script>
+  <script src="/static/js/vk.js"></script>
+
   <script type="text/javascript" src="/static/bower/retinajs/dist/retina.min.js"></script>
 {% block js %}{% endblock %}
 

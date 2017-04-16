@@ -3,13 +3,17 @@ var ratySettings = {
   cancel: true
 };
 
-if (language == 'ru') {
-  $.extend(ratySettings, {
-    hints: ['Ужасно', 'Плохо', 'Нормально', 'Хорошо', 'Отлично'],
-    cancelHint: 'Отменить эту оценку',
-    noRatedMsg: 'Пока нет оценки',
-  });
-}
+$.extend(ratySettings, {
+  hints: [
+    gettext('Bad'),
+    gettext('Poor'),
+    gettext('Regular'),
+    gettext('Good'),
+    gettext('Awesome'),
+  ],
+  cancelHint: gettext('Cancel rating'),
+  noRatedMsg: gettext('No rating yet'),
+});
 
 $(function() {
   var scoreSettings, settings;

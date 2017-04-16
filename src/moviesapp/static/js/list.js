@@ -84,6 +84,7 @@ function ($scope, RemoveRecord, SaveComment) {
     $('#comment' + id).focus();
   };
   $scope.mode = mode;
+  $scope.isVkApp = isVkApp;
 }]);
 
 function changeRating(id, rating, element) {

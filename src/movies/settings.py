@@ -34,7 +34,7 @@ DATABASES = local_settings.DATABASES
 ALLOWED_HOSTS = [local_settings.PROJECT_DOMAIN]
 
 if DEBUG:
-	ALLOWED_HOSTS.append('moviestest.pagekite.me')
+    ALLOWED_HOSTS.append(local_settings.HOST_MOVIES_TEST)
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -180,6 +180,8 @@ TEMPLATE_CONTEXT_PROCESSORS = ('django.core.context_processors.request',
                                'social_django.context_processors.backends',
                                'social_django.context_processors.login_redirect')
 LOGIN_REDIRECT_URL = '/'
+if DEBUG:
+    LOGIN_REDIRECT_URL = 'https://{}'.format(local_settings.HOST_MOVIES_TEST)
 LOGIN_URL = '/login/'
 
 SESSION_SAVE_EVERY_REQUEST = True
