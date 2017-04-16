@@ -9,7 +9,7 @@
   {{ movie_count|safe }}
   {% if anothers_account %}
     <br>
-    <img class="avatar" src="{{ anothers_account.get_avatar }}" alt="{{ anothers_account.get_full_name }}" title="{{ anothers_account.get_full_name }}">
+    {{ anothers_account.get_avatar_big|safe }}
   {% endif %}
 </div>
 
