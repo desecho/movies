@@ -15,7 +15,7 @@ urlpatterns = patterns(
     url(r'^friends/$', 'moviesapp.views.friends'),
     url(r'^feed/(?P<list_name>[\w-]+)/$', 'moviesapp.views.feed'),
     url(r'^people/(?P<username>[\w\d]+)/(?P<list_name>[\w-]+)$',
-        'moviesapp.views.list_username'),
+        'moviesapp.views.list_username', name='people'),
     url(r'^recommendation/$', 'moviesapp.views.recommendation'),
     url(r'^preferences/$', TemplateView.as_view(template_name='preferences.html')),
 
