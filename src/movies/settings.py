@@ -18,7 +18,7 @@ SECRET_KEY = local_settings.SECRET_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = local_settings.DEBUG
-IS_DEV = local_settings.IS_DEV
+IS_VK_DEV = local_settings.IS_VK_DEV
 
 TEMPLATE_DEBUG = DEBUG
 
@@ -34,7 +34,7 @@ DATABASES = local_settings.DATABASES
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
 ALLOWED_HOSTS = [local_settings.PROJECT_DOMAIN]
 
-if IS_DEV:
+if IS_VK_DEV:
     ALLOWED_HOSTS.append(local_settings.HOST_MOVIES_TEST)
 
 # Local time zone for this installation. Choices can be found here:
@@ -181,7 +181,7 @@ TEMPLATE_CONTEXT_PROCESSORS = ('django.core.context_processors.request',
                                'social_django.context_processors.backends',
                                'social_django.context_processors.login_redirect')
 LOGIN_REDIRECT_URL = '/'
-if IS_DEV:
+if IS_VK_DEV:
     LOGIN_REDIRECT_URL = 'https://{}'.format(local_settings.HOST_MOVIES_TEST)
 LOGIN_URL = '/login/'
 
