@@ -14,8 +14,15 @@
 </div>
 
 {% if anothers_account %}
-  <div class="btn-group" data-toggle="buttons-radio">
-    <a href="watched" class="btn {% ifequal list_id 1 %} active {% endifequal %}">Просмотрено</a><a href="to-watch" class="btn {% ifequal list_id 2 %} active {% endifequal %}">К просмотру</a>
+  <div class="btn-group" data-toggle="buttons">
+    <label class="btn btn-default {% ifequal list_id 1 %} active {% endifequal %}" title="{% trans 'Watched' %}"
+           ng-click="openUrl('{% url 'people' anothers_account.username 'watched' %}')">
+      <input type="radio">{% trans 'Watched' %}
+    </label>
+    <label class="btn btn-default {% ifequal list_id 2 %} active {% endifequal %}" title="{% trans 'To watch' %}"
+           ng-click="openUrl('{% url 'people' anothers_account.username 'to-watch' %}')">
+      <input type="radio">{% trans 'To watch' %}
+    </label>
   </div>
   <br><br>
 {% endif %}

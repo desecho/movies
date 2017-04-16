@@ -25,6 +25,10 @@ function ($scope, RemoveRecord, SaveComment) {
     });
   };
 
+  $scope.openUrl = function(url) {
+    window.location.href = url;
+  }
+
   $scope.removeRecord = function(id) {
     RemoveRecord.post($.param({id: id}), function(data) {
       removeRecordFromPage(id);
