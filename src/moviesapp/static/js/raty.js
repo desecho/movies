@@ -5,8 +5,8 @@ var ratySettings = {
 
 $.extend(ratySettings, {
   hints: [
+    gettext('Awful'),
     gettext('Bad'),
-    gettext('Poor'),
     gettext('Regular'),
     gettext('Good'),
     gettext('Awesome'),
