@@ -4,7 +4,7 @@
 {% block content %}
 
 {% for u in users %}
-    <div class="person"><a href="/people/{{ u.username }}/watched"><img class="avatar-small" src="{{ u.avatar }}" alt="{{ u.full_name }}"></a> <a href="/people/{{ u.username }}/watched">{{ u.full_name }}</a> {{ u.movie_count|safe }}</div>
+    <div class="person"><a href="/people/{{ u.username }}/watched">{{ u.avatar|safe }} <a href="/people/{{ u.username }}/watched">{{ u.full_name }}</a> {{ u.movie_count|safe }}</div>
 {% endfor %}
 
 {% if users.has_other_pages %}

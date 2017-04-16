@@ -8,8 +8,7 @@
   {% for action in actions %}
       <tr>
           <td>
-            <a href="/people/{{ action.username }}/watched"><img class="avatar-small" src="{{ action.avatar }}"
-               alt="{{ action.full_name }}" title="{{ action.full_name }}"></a>
+            <a href="/people/{{ action.username }}/watched">{{ action.avatar|safe }}</a>
           </td>
           <td>
             {{ action.date }}
