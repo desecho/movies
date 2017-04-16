@@ -13,12 +13,11 @@ function inIframe() {
 }
 
 const isVkApp = inIframe();
-  if (!isVkApp) {
-    $('.vk-app').hide();
-  }
 
 $(function(){
   if (isVkApp) {
-    $('.vk-app').show();
+    $('.vk-app-show').show();
+  } else {
+    $('.vk-app-hide').show();
   }
 })

@@ -34,12 +34,10 @@
       <div id="loading2"></div>
     </li>
     {% if user.is_vk_user %}
-      <li class="vk-app" style="display: none;"><a id="invite" href="javascript:void(0)" onclick="VK.callMethod('showInviteBox')"><i class="fa fa-envelope-o"></i></a></li>
+      <li class="vk-app-show" style="display: none;"><a id="invite" href="javascript:void(0)" onclick="VK.callMethod('showInviteBox')"><i class="fa fa-envelope-o"></i></a></li>
     {% endif %}
     <li><a href="/preferences/"><i class="fa fa-cog"></i></a></li>
-    {% if not user.is_vk_user %}
-      <li><a href="/logout"><i class="fa fa-sign-out"></i></a></li>
-    {% endif %}
+    <li style="display: none" class="vk-app-hide"><a href="/logout"><i class="fa fa-sign-out"></i></a></li>
   </ul>
 </div><!-- /.navbar-collapse -->
 
