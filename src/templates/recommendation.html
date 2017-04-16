@@ -4,13 +4,6 @@
 {% load set_var %}
 
 {% block content %}
-<script src="/static/bower/raty/lib/jquery.raty.js"></script>
-<script src="/static/js/raty.js"></script>
-<script src="/static/js/raty_readonly.js"></script>
-<script>
-  var urlAddToList = '{% url 'moviesapp.views.ajax_add_to_list' %}';
-</script>
-<script src="/static/js/list_general.js"></script>
 <div id="results" class="results">
   {% if records %}
     {% for record in records %}
@@ -68,4 +61,14 @@
     <p>{% trans 'The list is empty' %}.</p>
   {% endif %}
 </div>
+{% endblock %}
+
+{% block js %}
+<script src="/static/bower/raty/lib/jquery.raty.js"></script>
+<script src="/static/js/raty.js"></script>
+<script src="/static/js/raty_readonly.js"></script>
+<script>
+  var urlAddToList = '{% url 'moviesapp.views.ajax_add_to_list' %}';
+</script>
+<script src="/static/js/list_general.js"></script>
 {% endblock %}

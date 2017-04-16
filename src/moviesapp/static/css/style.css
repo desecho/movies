@@ -83,12 +83,13 @@ label.error {
     height: 800px;
 }
 */
-.person {
-    margin-bottom: 10px;
+
+.feed-action-data {
+    min-width: 125px;
 }
 
-.feed {
-    width: 745px !important;
+.person {
+    margin-bottom: 10px;
 }
 
 .small-poster {
