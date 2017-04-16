@@ -6,13 +6,17 @@ app.factory('SavePreferences', ['$resource', function($resource) {
 
 app.controller('PreferencesController', ['$scope', 'SavePreferences',
 function ($scope, SavePreferences) {
-  $scope.savePreferences = function(){
+  $scope.savePreferences = function(reload){
     const preferences = {language: $('input:radio[name=lang]:checked').val()};
-    if (typeof vk !== undefined) {
-      preferences.onlyForFriends = $('input[name=only_for_friends]:checked').val();
+    var field = $('input[name=only_for_friends]');
+    if (field.length !== 0) {
+      preferences.onlyForFriends = field.prop('checked');
     }
     SavePreferences.post($.param(preferences), function(){
-      location.reload();
+      console.log(reload)
+      if (reload) {
+        location.reload();
+      }
     }, function(){
       displayMessage(gettext('Error saving settings'));
     });

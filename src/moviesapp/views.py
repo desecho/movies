@@ -36,8 +36,8 @@ from .utils import (add_movie_to_list, add_to_list_from_db,
 
 def get_friends(user):
     if user.is_vk_user():
-        vk = vkontakte.API(settings.VK_APP_ID, settings.VK_APP_SECRET)
-        friends = vk.friends.get(uid=user.username)
+        vk = vkontakte.API(settings.SOCIAL_AUTH_VK_APP_KEY, settings.SOCIAL_AUTH_VK_APP_SECRET)
+        friends = vk.friends.get(uid=user.social_auth.get(provider='vk-app').uid)
         friends = map(str, friends)
         return User.objects.filter(username__in=friends)
 
@@ -142,6 +142,7 @@ def ajax_save_preferences(request):
         if 'language' in POST:
             user = User.objects.get(pk=request.user.pk)
             user.language = POST['language']
+            user.only_for_friends = json.loads(POST.get('onlyForFriends', 'false'))
             user.save()
             activate_user_language_preference(request, POST['language'])
             return HttpResponse()
