@@ -53,7 +53,7 @@ def logout_view(request):
     return redirect('/login/')
 
 
-@ensure_csrf_cookie       # CSRF thing for vk
+@ensure_csrf_cookie  # for vk
 @render_to('search.html')
 @login_required
 def search(request):

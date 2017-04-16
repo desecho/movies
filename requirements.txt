@@ -13,3 +13,6 @@ raven==6.0.0
 # tmdb3
 -e git+https://github.com/webtweakers/pytmdb3.git@add-missing-properties#egg=tmdb3
 
+# social-auth-core==1.2.0
+# dependency of social-auth-app-django
+-e git+https://github.com/desecho/social-core.git@bugfix#egg=social-auth-core

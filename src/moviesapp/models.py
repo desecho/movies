@@ -42,8 +42,11 @@ class User(AbstractUser):
         return Record.objects.filter(user=self).values_list('movie__pk')
 
     def is_vk_user(self):
-        if self.username.isdigit():
-            return True
+        """Shows if a user has a vk-app account. It doesn't necessarily mean that he is currently using the app.
+        Note: currently it does because it is not possible to link a vk-app account and a website account.
+        But it is likely to change in the future.
+        """
+        return self.social_auth.filter(provider='vk-app').exists()
 
     def __unicode__(self):
         return self.get_full_name()
