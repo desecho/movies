@@ -76,25 +76,23 @@ def get_comments_and_ratings(record_ids_and_movies, user):
     if friends is None:
         comments_and_ratings = []
     else:
-        comments_and_ratings = comments_and_ratings.filter(user__in=friends).values(
-            'movie_id', 'comment', 'rating',
-            'user__first_name', 'user__last_name', 'user__username')
+        comments_and_ratings = comments_and_ratings.filter(user__in=friends)
 
     comments_and_ratings_dict = {}
     for x in comments_and_ratings:
-        if x['comment'] or x['rating']:
-            if x['movie_id'] not in comments_and_ratings_dict:
-                comments_and_ratings_dict[x['movie_id']] = []
-            data = {}
-            if x['comment']:
-                data['comment'] = x['comment']
-            if x['rating']:
-                data['rating'] = x['rating']
-            data['avatar'] = ''
-            data['full_name'] = '%s %s' % (x['user__first_name'],
-                                           x['user__last_name'])
-            data['username'] = x['user__username']
-            comments_and_ratings_dict[x['movie_id']].append(data)
+        if x.comment or x.rating:
+            data = {
+                'avatar': '',
+                'full_name': x.user.get_full_name(),
+                'username': x.user.username
+            }
+            if x.movie.pk not in comments_and_ratings_dict:
+                comments_and_ratings_dict[x.movie.pk] = []
+            if x.comment:
+                data['comment'] = x.comment
+            if x.rating:
+                data['rating'] = x.rating
+            comments_and_ratings_dict[x.movie.pk].append(data)
     data = {}
     for record_id, value in record_ids_and_movies_dict.items():
         data[record_id] = comments_and_ratings_dict.get(value, None)
@@ -321,26 +319,21 @@ def feed(request, list_name):
             user__in=get_available_users_and_friends(request.user))
 
     posters = [action.movie.poster_small for action in actions]
-    actions = actions.values('user__username',
-                             'user__first_name', 'user__last_name',
-                             'action__name', 'movie__title',
-                             'list__name', 'comment', 'rating', 'date')
     actions_output = []
 
     i = 0
     for action in actions:
-        full_name = '%s %s' % (action['user__first_name'], action['user__last_name'])
         a = {
             'avatar': '',
-            'full_name': full_name,
-            'username': action['user__username'],
-            'action': action['action__name'],
-            'movie': action['movie__title'],
+            'full_name': action.user.get_full_name(),
+            'username': action.user.username,
+            'action': action,
+            'movie': action.movie,
             'movie_poster': posters[i],
-            'list': action['list__name'],
-            'comment': action['comment'],
-            'rating': action['rating'],
-            'date': action['date'],
+            'list': action.list,
+            'comment': action.comment,
+            'rating': action.rating,
+            'date': action.date,
         }
         actions_output.append(a)
         i += 1
