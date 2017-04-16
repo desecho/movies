@@ -8,32 +8,26 @@
 	<legend>{% trans 'Settings' %}</legend>
 
   <div class="form-group">
-    <label class="control-label col-sm-2" for="lang"><strong>{% trans 'Language' %}:</strong></label>
+    <label class="control-label col-sm-2" for="lang">{% trans 'Language' %}:</label>
     <div class="col-sm-2">
     <label class="radio">
-      <input type="radio" ng-click="savePreferences()" name="lang" value="en" {% ifequal user.language 'en' %} checked {% endifequal %}> {% trans 'English' %}
+      <input type="radio" ng-click="savePreferences(true)" name="lang" value="en" {% ifequal user.language 'en' %} checked {% endifequal %}> {% trans 'English' %}
     </label>
     <label class="radio">
-      <input type="radio" ng-click="savePreferences()" name="lang" value="ru" {% ifequal user.language 'ru' %} checked {% endifequal %}> {% trans 'Russian' %}<br>
+      <input type="radio" ng-click="savePreferences(true)" name="lang" value="ru" {% ifequal user.language 'ru' %} checked {% endifequal %}> {% trans 'Russian' %}<br>
     </label>
     </div>
   </div>
 
-  <div class="form-group">
-    <div class="col-sm-offset-2 col-sm-10">
-    </div>
-  </div>
-
-  </div>
   {% if user.is_vk_user %}
-      <div class="control-group">
-        <label class="control-label" for="only-for-friends">{% trans 'Access' %}</label>
-        <div class="controls">
-            <label class="checkbox">
-              <input type="checkbox" id="only-for-friends" name="only_for_friends" {% if user.only_for_friends %} checked {% endif %}> {% trans 'Show my profile only to friends' %}<br>
-            </label>
-        </div>
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="only-for-friends">{% trans 'Access' %}:</label>
+      <div class="col-sm-4">
+        <label class="checkbox">
+          <input type="checkbox" ng-click="savePreferences()" id="only-for-friends" name="only_for_friends" {% if user.only_for_friends %} checked {% endif %}> {% trans 'Show my profile only to friends' %}<br>
+        </label>
       </div>
+    </div>
   {% endif %}
 </form>
 </div>

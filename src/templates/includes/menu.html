@@ -17,31 +17,31 @@
   <ul class="nav navbar-nav">
       {% for item in menus.main %}
       <li class="{% if item.selected %} active{% endif %}{% if item.children %} dropdown{% endif %}" id="top-menu-{{ item.slug }}">
-          {% if item.children %}
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{% if item.icon %}<i class="icon-{{ item.icon }} icon-white"></i>&nbsp;{% endif %}{{ item.title }}&nbsp;<span class="caret"></span></a>
-              <ul class="dropdown-menu">
-                  {% for child in item.children %}<li{% if child.selected %} class="active"{% endif %}><a href="{{ child.url }}">{{ child.title }}</a></li>{% endfor %}
-              </ul>
-          {% else %}
-            <a href="{{ item.url }}">{% if item.icon %}<i class="icon-{{ item.icon }} icon-white"></i>&nbsp;{% endif %}{{ item.title }}</a>
-          {% endif %}
+        {% if item.children %}
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{% if item.icon %}<i class="icon-{{ item.icon }} icon-white"></i>&nbsp;{% endif %}{{ item.title }}&nbsp;<span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            {% for child in item.children %}<li{% if child.selected %} class="active"{% endif %}><a href="{{ child.url }}">{{ child.title }}</a></li>{% endfor %}
+          </ul>
+        {% else %}
+          <a href="{{ item.url }}">{% if item.icon %}<i class="icon-{{ item.icon }} icon-white"></i>&nbsp;{% endif %}{{ item.title }}</a>
+        {% endif %}
       </li>
       {% endfor %}
   </ul>
 
   <ul class="nav navbar-nav navbar-right">
     <li><div id="loading" us-spinner="{radius:6, width:3, length: 5, lines: 12}"></div>
-        <div id="loading2"></div>
+      <div id="loading2"></div>
     </li>
     {% if user.is_vk_user %}
-        <li><a id="invite" href="javascript:void(0)" onclick="VK.callMethod('showInviteBox')"><i class="fa fa-envelope-o"></i></a></li>
+      <li class="vk-app" style="display: none;"><a id="invite" href="javascript:void(0)" onclick="VK.callMethod('showInviteBox')"><i class="fa fa-envelope-o"></i></a></li>
     {% endif %}
     <li><a href="/preferences/"><i class="fa fa-cog"></i></a></li>
     {% if not user.is_vk_user %}
-        <li><a href="/logout"><i class="fa fa-sign-out"></i></a></li>
+      <li><a href="/logout"><i class="fa fa-sign-out"></i></a></li>
     {% endif %}
   </ul>
 </div><!-- /.navbar-collapse -->
 
-  </div><!-- /.container-fluid -->
+</div><!-- /.container-fluid -->
 </nav>
