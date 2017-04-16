@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-15 13:43-0400\n"
-"PO-Revision-Date: 2017-04-15 13:45-0400\n"
-"Last-Translator: Admin  <>\n"
+"POT-Creation-Date: 2017-04-16 15:33-0400\n"
+"PO-Revision-Date: 2017-04-16 15:34-0400\n"
+"Last-Translator: Anton Samarchyan <desecho@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -19,35 +19,35 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Translated-Using: django-rosetta 0.7.13\n"
 
-#: movies/settings.py:293 templates/preferences.html:14
+#: movies/settings.py:299 templates/preferences.html:14
 msgid "English"
 msgstr "Английский"
 
-#: movies/settings.py:294 templates/preferences.html:17
+#: movies/settings.py:300 templates/preferences.html:17
 msgid "Russian"
 msgstr "Русский"
 
-#: moviesapp/menus.py:18 templates/search.html:38
+#: moviesapp/menus.py:17 templates/search.html:38
 msgid "Watched"
 msgstr "Просмотрено"
 
-#: moviesapp/menus.py:20 templates/search.html:39
+#: moviesapp/menus.py:19 templates/search.html:39
 msgid "To Watch"
 msgstr "К Просмотру"
 
-#: moviesapp/menus.py:23 templates/list.html:39
+#: moviesapp/menus.py:22 templates/list.html:39
 msgid "Recommendations"
 msgstr "Рекоммендации"
 
-#: moviesapp/menus.py:25 moviesapp/menus.py:32 moviesapp/views.py:313
+#: moviesapp/menus.py:24 moviesapp/menus.py:31 moviesapp/views.py:310
 msgid "Friends"
 msgstr "Друзья"
 
-#: moviesapp/menus.py:28 moviesapp/menus.py:35 moviesapp/views.py:312
+#: moviesapp/menus.py:27 moviesapp/menus.py:34 moviesapp/views.py:309
 msgid "People"
 msgstr "Люди"
 
-#: moviesapp/menus.py:41
+#: moviesapp/menus.py:40
 msgid "Feed"
 msgstr "Лента"
 
@@ -80,7 +80,6 @@ msgid "Minimal"
 msgstr "Минимальный"
 
 #: templates/list.html:48
-#| msgid "Release date"
 msgid "Sort by release date"
 msgstr "Сортировать по дате выпуска"
 
@@ -89,7 +88,6 @@ msgid "Release date"
 msgstr "Дата выпуска"
 
 #: templates/list.html:51
-#| msgid "sort by date"
 msgid "Sort by rating"
 msgstr "Сортировать по рейтингу"
 
@@ -98,7 +96,6 @@ msgid "Rating"
 msgstr "Рейтинг"
 
 #: templates/list.html:54
-#| msgid "sort by date"
 msgid "Sort by date added"
 msgstr "Сортировать по дате добавления"
 
@@ -109,6 +106,14 @@ msgstr "Дата добавления"
 #: templates/list.html:67 templates/search.html:12
 msgid "Search"
 msgstr "Поиск"
+
+#: templates/list.html:83
+msgid "Delete"
+msgstr "Удалить"
+
+#: templates/list.html:84
+msgid "Post to the wall"
+msgstr "Отправить на стену"
 
 #: templates/list.html:101 templates/recommendation.html:28
 msgid "IMDb Rating"
@@ -191,11 +196,11 @@ msgstr "Настройки"
 msgid "Language"
 msgstr "Язык"
 
-#: templates/preferences.html:30
+#: templates/preferences.html:24
 msgid "Access"
 msgstr "Доступ"
 
-#: templates/preferences.html:33
+#: templates/preferences.html:27
 msgid "Show my profile only to friends"
 msgstr "Показывать мой профиль только друзьям"
 
