@@ -147,6 +147,7 @@ def add_movie_to_db(tmdb_id, refresh=False):
                 'description_en': movie_data_en.overview,
                 'description_ru': movie_data_ru.overview,
             }
+
     movie_data_tmdb = get_tmdb_movie_data(tmdb_id)
     if movie_data_tmdb is None:
         return -1

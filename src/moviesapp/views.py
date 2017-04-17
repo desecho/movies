@@ -46,7 +46,7 @@ def get_friends(user):
 def filter_movies_for_recommendation(records, user):
     """Keep movies only with 3+ rating, removes watched movies."""
     return records.filter(rating__gte=3) \
-                  .exclude(movie__in=user.get_movie_ids())
+        .exclude(movie__in=user.get_movie_ids())
 
 
 def logout_view(request):
@@ -114,6 +114,7 @@ def recommendation(request):
                         break
                     movies.append(record.movie.pk)
             return (records_output, record_ids_and_movies)
+
         # exclude own records and include only friends' records
         records = Record.objects.exclude(user=request.user) \
             .filter(user__in=friends).select_related()
@@ -180,7 +181,7 @@ def list_view(request, list_name, username=None):
         movies, record_ids_and_movies_dict = get_record_movie_data(
             records.values_list('id', 'movie_id'))
         movie_ids_and_list_ids = (Record.objects.filter(user=request.user, movie_id__in=movies)
-                                                .values_list('movie_id', 'list_id'))
+                                  .values_list('movie_id', 'list_id'))
 
         movie_id_and_list_id_dict = {}
         for x in movie_ids_and_list_ids:
@@ -273,6 +274,7 @@ def get_available_users_and_friends(user, sort=False):
     def sort_users(users):
         def username(x):
             return x.first_name
+
         return sorted(users, key=username)
 
     users = set(join(available_users(), get_friends(user)))
@@ -325,7 +327,7 @@ def feed(request, list_name):
 @login_required
 def generic_people(request, users):
     return {'users': paginate(users, request.GET.get('page'),
-            settings.PEOPLE_ON_PAGE)}
+                              settings.PEOPLE_ON_PAGE)}
 
 
 # @cache_page(settings.CACHE_TIMEOUT)
@@ -345,20 +347,20 @@ def friends(request):
 
 def ajax_apply_settings(request):
     if request.is_ajax() and request.method == 'POST':
-            POST = request.POST
-            if 'settings' in POST:
-                session_settings = json.loads(POST.get('settings'))
-                for setting in session_settings:
-                    request.session[setting] = session_settings[setting]
+        POST = request.POST
+        if 'settings' in POST:
+            session_settings = json.loads(POST.get('settings'))
+            for setting in session_settings:
+                request.session[setting] = session_settings[setting]
     return HttpResponse()
 
 
 def ajax_remove_record(request):
     if request.is_ajax() and request.method == 'POST':
-            POST = request.POST
-            if 'id' in POST:
-                id = POST.get('id')
-                Record.objects.get(pk=id, user_id=request.user.id).delete()
+        POST = request.POST
+        if 'id' in POST:
+            id = POST.get('id')
+            Record.objects.get(pk=id, user_id=request.user.id).delete()
     return HttpResponse()
 
 
@@ -424,6 +426,7 @@ def ajax_search_movie(request):
             def format_date(date):
                 if date:
                     return date.strftime('%d.%m.%y')
+
             for movie in movies:
                 movie['releaseDate'] = format_date(movie['releaseDate'])
             return movies
@@ -486,6 +489,7 @@ def ajax_search_movie(request):
                             if movie.job == 'Director':
                                 movies.append(movie)
             return movies
+
         output = {}
         movies_data = get_data(query, type)
         if movies_data == STATUS_CODES['error']:
@@ -513,7 +517,7 @@ def ajax_search_movie(request):
                         'poster': get_poster_url('small', get_poster_from_tmdb(movie.poster)),
                     }
                     movies.append(movie)
-            except IndexError:         # strange exception in 'matrix case'
+            except IndexError:  # strange exception in 'matrix case'
                 pass
             if options['popular_only']:
                 movies = remove_not_popular_movies(movies)
@@ -528,8 +532,9 @@ def ajax_search_movie(request):
             else:
                 output['status'] = STATUS_CODES['not found']
         else:
-                output['status'] = STATUS_CODES['not found']
+            output['status'] = STATUS_CODES['not found']
         return output
+
     if request.method == 'GET':
         type = int(request.GET.get('type'))
         query = request.GET.get('query')

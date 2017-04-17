@@ -196,7 +196,6 @@ MEDIA_URL = '/media/'
 CACHE_DIR = op.join(local_settings.PROJECT_ROOT, 'cache')
 TMDB_CACHE_PATH = op.join(CACHE_DIR, 'tmdb3.cache')
 
-
 MAX_RESULTS = 100
 MIN_POPULARITY = 50
 
