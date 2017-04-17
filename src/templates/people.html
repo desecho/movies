@@ -1,10 +1,14 @@
 {% extends "base.html" %}
+
 {% load bootstrap_pagination %}
+{% load avatar %}
 
 {% block content %}
 
-{% for u in users %}
-    <div class="person"><a href="/people/{{ u.username }}/watched">{{ u.avatar|safe }} <a href="/people/{{ u.username }}/watched">{{ u.full_name }}</a> {{ u.movie_count|safe }}</div>
+{% for user in users %}
+    <div class="person"><a href="/people/{{ user.user.username }}/watched">
+      {% avatar user.user %} <a href="/people/{{ user.user.username }}/watched">{{ user.user }}</a> {{ user.movie_count|safe }}
+    </div>
 {% endfor %}
 
 {% if users.has_other_pages %}

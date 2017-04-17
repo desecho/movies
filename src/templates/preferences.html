@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% load i18n %}
+{% load avatar %}
 
 {% block content %}
 <div ng-controller="PreferencesController">
@@ -10,7 +11,7 @@
   <div class="form-group vk-app-hide" style="display: none;">
     <label class="control-label col-sm-2" for="lang">{% trans 'Avatar' %}:</label>
     <div class="col-sm-2">
-      {{ user.get_avatar_big|safe }}
+      {% avatar_big user %}
       {% if user.is_linked %}
         <br>
         {% trans 'You can change your avatar on' %} <a href="http://gravatar.com" target="_blank">Gravatar</a>

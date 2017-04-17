@@ -1,4 +1,7 @@
 {% extends "base.html" %}
+
+{% load avatar %}
+
 {% block content %}
 <legend>{{ list_name }}</legend>
 <br>
@@ -8,7 +11,7 @@
   {% for action in actions %}
       <tr>
           <td>
-            <a href="/people/{{ action.username }}/watched">{{ action.avatar|safe }}</a>
+            <a href="/people/{{ action.user.username }}/watched">{% avatar action.user %}</a>
           </td>
           <td>
             {{ action.date }}

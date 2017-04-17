@@ -82,9 +82,7 @@ def get_comments_and_ratings(record_ids_and_movies, user):
     for x in comments_and_ratings:
         if x.comment or x.rating:
             data = {
-                'avatar': x.user.get_avatar(),
-                'full_name': x.user.get_full_name(),
-                'username': x.user.username
+                'user': x.user
             }
             if x.movie.pk not in comments_and_ratings_dict:
                 comments_and_ratings_dict[x.movie.pk] = []
@@ -324,9 +322,7 @@ def feed(request, list_name):
     i = 0
     for action in actions:
         a = {
-            'avatar': action.user.get_avatar(),
-            'full_name': action.user.get_full_name(),
-            'username': action.user.username,
+            'user': action.user,
             'action': action,
             'movie': action.movie,
             'movie_poster': posters[i],
@@ -348,9 +344,7 @@ def generic_people(request, users):
     users_output = []
     for user in users:
         users_output.append({
-            'full_name': user.get_full_name(),
-            'username': user.username,
-            'avatar': user.get_avatar(),
+            'user': user,
             'movie_count': get_movie_count(user.username)})
     return {'users': paginate(users_output, request.GET.get('page'),
             settings.PEOPLE_ON_PAGE)}

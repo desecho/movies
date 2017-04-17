@@ -1,9 +1,6 @@
 # coding: utf-8
 from __future__ import unicode_literals
 
-import hashlib
-import urllib
-
 from annoying.fields import JSONField
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
@@ -37,32 +34,6 @@ class User(AbstractUser):
     only_for_friends = models.BooleanField(default=False)
     language = models.CharField(max_length=2, choices=settings.LANGUAGES, default='en')
     avatar = models.URLField(null=True, blank=True)
-
-    def get_avatar(self, size='small'):
-        AVATAR_SIZES = {
-            'small': 100,
-            'big': 200
-        }
-
-        def get_url():
-            if self.avatar:
-                if size == 'small':
-                    return self.avatar
-                elif size == 'big':
-                    return self.avatar_big
-
-            params = urllib.urlencode({'s': str(avatar_size)})
-            return 'https://www.gravatar.com/avatar/%s?%s' % (hashlib.md5(self.email.lower()).hexdigest(), params)
-
-        avatar_size = AVATAR_SIZES[size]
-        url = get_url()
-        # Avatars will be always 2 times larger than the image shown to look good at retina displays
-        avatar_size /= 2
-        return '<img class="avatar-{0}" src="{1}" width="{2}" height="{2}" alt="{3}" title="{3}"></img>'.format(
-            size, url, avatar_size, self)
-
-    def get_avatar_big(self):
-        return self.get_avatar('big')
 
     def get_movie_ids(self):
         return Record.objects.filter(user=self).values_list('movie__pk')
