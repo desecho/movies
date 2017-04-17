@@ -46,5 +46,6 @@ def load_user_data(backend, user, response, *args, **kwargs):
         data = Vk(user).get_data(FIELDS)
         user.first_name = data['first_name']
         user.last_name = data['last_name']
+        user.language = 'ru'
         user.loaded_initial_data = True
         user.save()
