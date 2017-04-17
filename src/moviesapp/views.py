@@ -9,7 +9,6 @@ import urllib2
 from datetime import datetime
 from operator import itemgetter
 
-import vkontakte
 from annoying.decorators import ajax_request, render_to
 from dateutil.relativedelta import relativedelta
 from django.conf import settings
@@ -23,6 +22,8 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.csrf import ensure_csrf_cookie
 from poster.encode import multipart_encode
 from poster.streaminghttp import register_openers
+
+import vkontakte
 
 from .models import (ActionRecord, List, Record, User,
                      activate_user_language_preference, get_poster_url)
