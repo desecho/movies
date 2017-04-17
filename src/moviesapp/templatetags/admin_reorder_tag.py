@@ -12,11 +12,14 @@ def register_render_tag(renderer):
     render function for the template tag node - the render function takes two
     arguments - the template context and the tag token.
     """
+
     def tag(parser, token):
         class TagNode(template.Node):
             def render(self, context):
                 return renderer(context, token)
+
         return TagNode()
+
     for copy_attr in ('__dict__', '__doc__', '__name__'):
         setattr(tag, copy_attr, getattr(renderer, copy_attr))
     return register.tag(tag)
@@ -28,6 +31,7 @@ def admin_reorder(context, token):
     Called in admin/base_site.html template override and applies custom ordering
     of apps/models defined by settings.ADMIN_REORDER.
     """
+
     # sort key function - use index of item in order if exists, otherwise item
     def sort(order, item):
         if item in order:

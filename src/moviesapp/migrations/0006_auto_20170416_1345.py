@@ -7,7 +7,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('moviesapp', '0005_auto_20160713_0122'),
     ]

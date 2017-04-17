@@ -4,7 +4,6 @@ register = template.Library()
 
 
 class SetVarNode(template.Node):
-
     def __init__(self, var_name, var_value):
         self.var_name = var_name
         self.var_value = var_value
