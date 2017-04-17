@@ -17,8 +17,7 @@ urlpatterns = patterns(
     url(r'^people/(?P<username>[\w\d]+)/(?P<list_name>[\w-]+)$',
         'moviesapp.views.list_username', name='people'),
     url(r'^recommendation/$', 'moviesapp.views.recommendation'),
-    url(r'^preferences/$', TemplateView.as_view(template_name='preferences.html')),
-
+    url(r'^preferences/$', 'moviesapp.views.preferences'),
     url(r'^remove-record/$', 'moviesapp.views.ajax_remove_record'),
     url(r'^search-movie/$', 'moviesapp.views.ajax_search_movie'),
     url(r'^add-to-list/$', 'moviesapp.views.ajax_add_to_list'),

@@ -8,7 +8,9 @@ from menu import Menu, MenuItem
 
 
 def is_linked(request):
-    return request.user.is_linked()
+    user = request.user
+    if user.is_authenticated():
+        return user.is_linked()
 
 Menu.add_item('main', MenuItem(_('Watched'), reverse('moviesapp.views.list_view', kwargs={'list_name': 'watched'})))
 

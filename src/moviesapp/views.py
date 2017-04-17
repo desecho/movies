@@ -61,6 +61,12 @@ def search(request):
     return {}
 
 
+@render_to('preferences.html')
+@login_required
+def preferences(request):
+    return {}
+
+
 def get_record_movie_data(record_ids_and_movies):
     movies = [x[1] for x in record_ids_and_movies]
     return (movies, {x[0]: x[1] for x in record_ids_and_movies})
