@@ -1,14 +1,12 @@
+{% extends "base.html" %}
+
 {% load i18n %}
 
-<!DOCTYPE html>
-<head>
-    <link href="/static/bower/bootstrap/dist/css/bootstrap.css" rel="stylesheet" media="screen">
-    <link href="/static/bower/bootstrap-social/bootstrap-social.css" rel="stylesheet" media="screen">
-    <link href="/static/bower/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-</head>
-<body>
-<br>
-<div class="container-fluid">
+{% block head %}
+  <link href="/static/bower/bootstrap-social/bootstrap-social.css" rel="stylesheet" media="screen">
+{% endblock %}
+
+{% block content %}
 <form method="post" action="{% url 'login' %}" class="form-horizontal" id="login-form">
   {% csrf_token %}
   <div class="form-group">
@@ -24,8 +22,8 @@
     </div>
   </div>
   <div class="form-group">
-    <div class="col-sm-offset-2 col-sm-10">
-      <input type="submit" class="btn btn-default" value="{% trans 'Enter' %}">
+    <div class="col-sm-offset-2 col-sm-2">
+      <input type="submit" class="btn btn-block btn-default" value="{% trans 'Log in' %}">
     </div>
   </div>
   <input type="hidden" name="next" value="{{ next }}">
@@ -37,7 +35,7 @@
     </div>
   {% endif %}
   <div class="form-group">
-	<div class="col-sm-offset-2 col-sm-2">
+  <div class="col-sm-offset-2 col-sm-2">
     <a href="{% url 'social:begin' 'facebook' %}" class="btn btn-block btn-social btn-facebook">
       <span class="fa fa-facebook"></span> {% trans 'Log in with Facebook' %}
     </a>
@@ -48,5 +46,4 @@
   </div>
   </div>
 </form>
-</div>
-</body>
+{% endblock %}
