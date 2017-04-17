@@ -5,8 +5,9 @@ import json
 import urllib2
 from datetime import datetime
 
-import tmdb3
 from django.conf import settings
+
+import tmdb3
 
 from .models import ActionRecord, Movie, Record
 

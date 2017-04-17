@@ -30,6 +30,7 @@ def get_poster_url(size, poster):
     else:
         return no_image_url
 
+
 class User(AbstractUser):
     only_for_friends = models.BooleanField(default=False)
     language = models.CharField(max_length=2, choices=settings.LANGUAGES, default='en')
