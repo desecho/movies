@@ -20,9 +20,9 @@
            ng-click="openUrl('{% url 'people' anothers_account.username 'watched' %}')">
       <input type="radio">{% trans 'Watched' %}
     </label>
-    <label class="btn btn-default {% ifequal list_id 2 %} active {% endifequal %}" title="{% trans 'To watch' %}"
+    <label class="btn btn-default {% ifequal list_id 2 %} active {% endifequal %}" title="{% trans 'To Watch' %}"
            ng-click="openUrl('{% url 'people' anothers_account.username 'to-watch' %}')">
-      <input type="radio">{% trans 'To watch' %}
+      <input type="radio">{% trans 'To Watch' %}
     </label>
   </div>
   <br><br>
