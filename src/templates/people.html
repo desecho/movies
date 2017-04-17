@@ -2,12 +2,15 @@
 
 {% load bootstrap_pagination %}
 {% load avatar %}
+{% load movie_count %}
 
 {% block content %}
 
 {% for user in users %}
-    <div class="person"><a href="/people/{{ user.user.username }}/watched">
-      {% avatar user.user %} <a href="/people/{{ user.user.username }}/watched">{{ user.user }}</a> {{ user.movie_count|safe }}
+    <div class="person">
+      <a href="/people/{{ user.username }}/watched">{% avatar user %}</a>
+      <a href="/people/{{ user.username }}/watched">{{ user }}</a>
+      {% movie_count user %}
     </div>
 {% endfor %}
 

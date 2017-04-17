@@ -158,21 +158,6 @@ def paginate(objects, page, objects_on_page):
     return objects
 
 
-def get_movie_count(username):
-    LIST_IDS = {'watched': 1, 'to_watch': 2}
-
-    def create_span_tag(title, list_id):
-        def number_of_movies():
-            return Record.objects.filter(list_id=list_id,
-                                         user__username=username).count()
-
-        return '<span title="%s">%d</span>' % (title, number_of_movies())
-
-    watched = create_span_tag('Просмотрено', LIST_IDS['watched'])
-    to_watch = create_span_tag('К просмотру', LIST_IDS['to_watch'])
-    return '%s / %s' % (watched, to_watch)
-
-
 @login_required
 def list_username(request, list_name, username=None):
     if User.objects.get(username=username) in \
@@ -253,10 +238,8 @@ def list_view(request, list_name, username=None):
 
     if username:
         list_data = get_list_data(records)
-        movie_count = get_movie_count(username)
     else:
         list_data = None
-        movie_count = get_movie_count(request.user.username)
 
     if not username and list_name == 'to-watch' and records:
         comments_and_ratings = get_comments_and_ratings(
@@ -269,7 +252,6 @@ def list_view(request, list_name, username=None):
             'reviews': comments_and_ratings,
             'list_id': List.objects.get(key_name=list_name).id,
             'anothers_account': anothers_account,
-            'movie_count': movie_count,
             'list_data': json.dumps(list_data)}
 
 
@@ -342,12 +324,7 @@ def feed(request, list_name):
 @render_to('people.html')
 @login_required
 def generic_people(request, users):
-    users_output = []
-    for user in users:
-        users_output.append({
-            'user': user,
-            'movie_count': get_movie_count(user.username)})
-    return {'users': paginate(users_output, request.GET.get('page'),
+    return {'users': paginate(users, request.GET.get('page'),
             settings.PEOPLE_ON_PAGE)}
 
 

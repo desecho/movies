@@ -2,12 +2,18 @@
 {% load bootstrap_pagination %}
 {% load set_var %}
 {% load avatar %}
+{% load movie_count %}
 {% load i18n %}
 
 {% block content %}
 <div ng-controller="ListController">
 <div id="movie-count">
-  {{ movie_count|safe }}
+  {% if anothers_account %}
+   {% movie_count anothers_account %}
+  {% else %}
+   {% movie_count user %}
+  {% endif %}
+
   {% if anothers_account %}
     <br>
     {% avatar_big anothers_account %}
