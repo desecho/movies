@@ -166,6 +166,7 @@ LOGGING = {
 AUTHENTICATION_BACKENDS = (
     'social_core.backends.vk.VKOAuth2',
     'social_core.backends.vk.VKAppOAuth2',
+    'social_core.backends.facebook.FacebookOAuth2',
     'django.contrib.auth.backends.ModelBackend',
 )
 
@@ -289,6 +290,10 @@ SOCIAL_AUTH_VK_OAUTH2_SCOPE = ['friends', 'email']
 SOCIAL_AUTH_VK_APP_KEY = local_settings.SOCIAL_AUTH_VK_APP_KEY
 SOCIAL_AUTH_VK_APP_SECRET = local_settings.SOCIAL_AUTH_VK_APP_SECRET
 SOCIAL_AUTH_VK_APP_USER_MODE = 2
+
+SOCIAL_AUTH_FACEBOOK_KEY = local_settings.SOCIAL_AUTH_FACEBOOK_KEY
+SOCIAL_AUTH_FACEBOOK_SECRET = local_settings.SOCIAL_AUTH_FACEBOOK_SECRET
+SOCIAL_AUTH_FACEBOOK_SCOPE = ['email', 'user_friends', 'public_profile', 'user_location']
 
 TMDB_KEY = local_settings.TMDB_KEY
 
