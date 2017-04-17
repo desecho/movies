@@ -8,13 +8,16 @@ from .models import User
 
 class Vk:
     def __init__(self, user):
-        self.vk = vkontakte.API(settings.SOCIAL_AUTH_VK_APP_KEY, settings.SOCIAL_AUTH_VK_APP_SECRET)
+        self.vk_account = user.get_vk_account()
+        self.vk = vkontakte.API(*settings.VK_BACKENDS_CREDENTIALS[self.vk_account.provider])
         self.user = user
 
     def get_friends(self):
-        friends = self.vk.friends.get(uid=self.user.get_vk_uid())
-        friends = map(str, friends)
-        return User.objects.filter(username__in=friends)
+        friends = self.vk.friends.get(uid=self.vk_account.uid)
+        friends_ids = map(str, friends)
+        friends = User.objects.filter(social_auth__provider__in=settings.VK_BACKENDS,
+                                      social_auth__uid__in=friends_ids)
+        return friends
 
 
 class Fb:

@@ -39,9 +39,6 @@ class User(AbstractUser):
     def get_movie_ids(self):
         return Record.objects.filter(user=self).values_list('movie__pk')
 
-    def _get_vk_accounts(self):
-        return self.social_auth.filter(provider__in=['vk-app', 'vk-oauth2'])
-
     def _get_fb_accounts(self):
         return self.social_auth.filter(provider='facebook')
 
@@ -52,6 +49,13 @@ class User(AbstractUser):
         if self.is_fb_user():
             return self._get_fb_accounts()[0]
 
+    def _get_vk_accounts(self):
+        return self.social_auth.filter(provider__in=settings.VK_BACKENDS)
+
+    def get_vk_account(self):
+        if self.is_vk_user():
+            return self._get_vk_accounts()[0]
+
     def is_vk_user(self):
         """Shows if a user has a vk account. It doesn't necessarily mean that he is currently using the app.
         Note: currently it does because it is not possible to link a vk-app account and a website account.
@@ -61,9 +65,6 @@ class User(AbstractUser):
 
     def is_linked(self):
         return self.social_auth.exists()
-
-    def get_vk_uid(self):
-        return self._get_vk_accounts()[0].uid
 
     def __unicode__(self):
         return self.get_full_name()
