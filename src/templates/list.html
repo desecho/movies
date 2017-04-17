@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load bootstrap_pagination %}
 {% load set_var %}
+{% load avatar %}
 {% load i18n %}
 
 {% block content %}
@@ -9,7 +10,7 @@
   {{ movie_count|safe }}
   {% if anothers_account %}
     <br>
-    {{ anothers_account.get_avatar_big|safe }}
+    {% avatar_big anothers_account %}
   {% endif %}
 </div>
 
