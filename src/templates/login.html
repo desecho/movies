@@ -3,7 +3,8 @@
 <!DOCTYPE html>
 <head>
     <link href="/static/bower/bootstrap/dist/css/bootstrap.css" rel="stylesheet" media="screen">
-		<link href="/static/css/login.css" rel="stylesheet">
+    <link href="/static/bower/bootstrap-social/bootstrap-social.css" rel="stylesheet" media="screen">
+    <link href="/static/bower/font-awesome/css/font-awesome.min.css" rel="stylesheet">
 </head>
 <body>
 <br>
@@ -37,14 +38,15 @@
   {% endif %}
   <div class="form-group">
 	<div class="col-sm-offset-2 col-sm-2">
-		<div class="wauth_head">
-			<a class="wauth_logo" href="{% url 'social:begin' 'vk-oauth2' %}"></a>
-			<a class="text" href="{% url 'social:begin' 'vk-oauth2' %}">{% trans 'Login with' %}</a>
-		</div>
+    <a href="{% url 'social:begin' 'facebook' %}" class="btn btn-block btn-social btn-facebook">
+      <span class="fa fa-facebook"></span> {% trans 'Log in with Facebook' %}
+    </a>
+    <br>
+    <a href="{% url 'social:begin' 'vk-oauth2' %}" class="btn btn-block btn-social btn-vk">
+      <span class="fa fa-vk"></span> {% trans 'Log in with VK' %}
+    </a>
   </div>
   </div>
 </form>
-
-<a href="{% url 'social:begin' 'facebook' %}">FACEBOOK</a>
 </div>
 </body>
