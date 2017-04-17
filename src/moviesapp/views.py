@@ -23,24 +23,24 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from poster.encode import multipart_encode
 from poster.streaminghttp import register_openers
 
-import vkontakte
-
 from .models import (ActionRecord, List, Record, User,
                      activate_user_language_preference, get_poster_url)
 from .utils import (add_movie_to_list, add_to_list_from_db,
                     get_poster_from_tmdb, tmdb)
-
+from .social import Vk, Fb
 
 # logger = logging.getLogger('moviesapp.test')
 # logger.debug(options)
 
 
 def get_friends(user):
-    if user.is_vk_user():
-        vk = vkontakte.API(settings.SOCIAL_AUTH_VK_APP_KEY, settings.SOCIAL_AUTH_VK_APP_SECRET)
-        friends = vk.friends.get(uid=user.get_vk_uid())
-        friends = map(str, friends)
-        return User.objects.filter(username__in=friends)
+    if user.is_linked:
+        friends = User.objects.none()
+        if user.is_vk_user():
+            friends |= Vk(user).get_friends()
+        if user.is_fb_user():
+            friends |= Fb(user).get_friends()
+        return friends
 
 
 def filter_movies_for_recommendation(records, user):
