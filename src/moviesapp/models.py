@@ -35,6 +35,7 @@ class User(AbstractUser):
     only_for_friends = models.BooleanField(default=False)
     language = models.CharField(max_length=2, choices=settings.LANGUAGES, default='en')
     avatar = models.URLField(null=True, blank=True)
+    loaded_initial_data = models.BooleanField(default=False)
 
     def get_movie_ids(self):
         return Record.objects.filter(user=self).values_list('movie__pk')

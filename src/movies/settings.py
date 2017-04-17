@@ -279,6 +279,9 @@ SOCIAL_AUTH_PIPELINE = (
 
     # # Update the user record with any changed info from the auth service.
     # 'social_core.pipeline.user.user_details',
+
+    # We do this only if the user get's created for the first time.
+    'moviesapp.social.load_user_data',
 )
 
 LOGIN_ERROR_URL = '/login-error/'
