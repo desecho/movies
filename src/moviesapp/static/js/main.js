@@ -53,7 +53,7 @@ app.config(['$resourceProvider', function($resourceProvider) {
 }]);
 
 $(function(){
-  if (isVkUser) {
-    $('vk-app-hide').show();
+  if (!isVkUser) {
+    $('.vk-app-hide').show();
   }
 })
