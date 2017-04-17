@@ -8,7 +8,7 @@ django-modeltranslation==0.12.1
 django-rosetta==0.7.13
 social-auth-app-django==1.1.0
 raven==6.0.0
-
+facebook-sdk==2.0.0
 # tmdb3
 -e git+https://github.com/webtweakers/pytmdb3.git@add-missing-properties#egg=tmdb3
 

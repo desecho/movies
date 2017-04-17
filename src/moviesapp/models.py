@@ -42,8 +42,18 @@ class User(AbstractUser):
     def _get_vk_accounts(self):
         return self.social_auth.filter(provider__in=['vk-app', 'vk-oauth2'])
 
+    def _get_fb_accounts(self):
+        return self.social_auth.filter(provider='facebook')
+
+    def is_fb_user(self):
+        return self._get_fb_accounts().exists()
+
+    def get_fb_account(self):
+        if self.is_fb_user():
+            return self._get_fb_accounts()[0]
+
     def is_vk_user(self):
-        """Shows if a user has a vk-app account. It doesn't necessarily mean that he is currently using the app.
+        """Shows if a user has a vk account. It doesn't necessarily mean that he is currently using the app.
         Note: currently it does because it is not possible to link a vk-app account and a website account.
         But it is likely to change in the future.
         """
