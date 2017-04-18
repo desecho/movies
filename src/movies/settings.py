@@ -180,7 +180,8 @@ AUTH_USER_MODEL = 'moviesapp.User'
 TEMPLATE_CONTEXT_PROCESSORS = ('django.core.context_processors.request',
                                'django.contrib.auth.context_processors.auth',
                                'social_django.context_processors.backends',
-                               'social_django.context_processors.login_redirect')
+                               'social_django.context_processors.login_redirect',
+                               'moviesapp.context_processors.variables')
 LOGIN_REDIRECT_URL = '/'
 if IS_VK_DEV:
     LOGIN_REDIRECT_URL = 'https://{}'.format(local_settings.HOST_MOVIES_TEST)
@@ -285,6 +286,8 @@ SOCIAL_AUTH_PIPELINE = (
 )
 
 LOGIN_ERROR_URL = '/login-error/'
+
+GOOGLE_ANALYTICS_ID = local_settings.GOOGLE_ANALYTICS_ID
 
 SOCIAL_AUTH_VK_OAUTH2_KEY = local_settings.SOCIAL_AUTH_VK_OAUTH2_KEY
 SOCIAL_AUTH_VK_OAUTH2_SECRET = local_settings.SOCIAL_AUTH_VK_OAUTH2_SECRET
