@@ -55,14 +55,14 @@ def add_movie_to_list(movie_id, list_id, user):
                      movie_id=movie_id, list_id=list_id).save()
 
 
-def add_movie_to_db(tmdb_id, refresh=False):
+def add_movie_to_db(tmdb_id, update=False):
     """Return movie id or error codes -1 or -2."""
 
     def save_movie_to_db(movie_data):
-        if refresh:
+        if update:
             movie = Movie.objects.filter(tmdb_id=tmdb_id)
             movie.update(**movie_data)
-            movie = movie[0]
+            movie = movie.first()
         else:
             movie = Movie(**movie_data)
             movie.save()
