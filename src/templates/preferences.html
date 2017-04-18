@@ -47,8 +47,7 @@
 
 {% block js %}
 <script>
-  var urlSavePreferences = '{% url 'moviesapp.views.ajax_save_preferences' %}';
+  const urlSavePreferences = '{% url 'moviesapp.views.ajax_save_preferences' %}';
 </script>
-
-<script src="/static/js/preferences.js"></script>
+<script src="{% static 'js/preferences.js' %}"></script>
 {% endblock %}
