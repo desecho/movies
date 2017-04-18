@@ -1,16 +1,20 @@
 [
 {
     "fields": {
+        "name_ru": "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440\u0435\u043d\u043e",
         "key_name": "watched",
-        "name": "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440\u0435\u043d\u043e"
+        "name_en": "Watched",
+        "name": "Watched"
     },
     "model": "moviesapp.list",
     "pk": 1
 },
 {
     "fields": {
+        "name_ru": "\u041a \u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440\u0443",
         "key_name": "to-watch",
-        "name": "\u041a \u043f\u0440\u043e\u0441\u043c\u043e\u0442\u0440\u0443"
+        "name_en": "To Watch",
+        "name": "To Watch"
     },
     "model": "moviesapp.list",
     "pk": 2
