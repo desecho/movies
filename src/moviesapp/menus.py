@@ -12,6 +12,7 @@ def is_linked(request):
     if user.is_authenticated():
         return user.is_linked()
 
+
 Menu.add_item('main', MenuItem(_('Watched'), reverse('moviesapp.views.list_view', kwargs={'list_name': 'watched'})))
 
 Menu.add_item('main', MenuItem(_('To Watch'),

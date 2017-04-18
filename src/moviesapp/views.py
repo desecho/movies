@@ -25,9 +25,10 @@ from poster.streaminghttp import register_openers
 
 from .models import (ActionRecord, List, Record, User,
                      activate_user_language_preference, get_poster_url)
+from .social import Fb, Vk
 from .utils import (add_movie_to_list, add_to_list_from_db,
                     get_poster_from_tmdb, tmdb)
-from .social import Vk, Fb
+
 
 # logger = logging.getLogger('moviesapp.test')
 # logger.debug(options)

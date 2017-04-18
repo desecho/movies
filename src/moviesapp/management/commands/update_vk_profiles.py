@@ -1,9 +1,8 @@
 import time
 
+import vkontakte
 from django.conf import settings
 from django.core.management.base import BaseCommand
-
-import vkontakte
 
 from ...models import User
 
