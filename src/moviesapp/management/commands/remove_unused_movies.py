@@ -10,4 +10,4 @@ class Command(BaseCommand):
         for movie in Movie.objects.all():
             if not movie.records.exists():
                 movie.delete()
-                print movie.title
+                print '{} removed'.format(movie)
