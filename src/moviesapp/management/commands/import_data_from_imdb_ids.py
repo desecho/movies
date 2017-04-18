@@ -5,7 +5,7 @@ from ...utils import add_to_list_from_db, tmdb
 
 
 class Command(BaseCommand):
-    help = 'Import data from IMDB ids'
+    help = 'Imports data from IMDB ids'
 
     def handle(self, *args, **options):
         user_id = 0
