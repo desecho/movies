@@ -1,3 +1,4 @@
+from tqdm import tqdm
 from django.core.management.base import BaseCommand
 
 from ...models import Movie
@@ -7,7 +8,13 @@ class Command(BaseCommand):
     help = 'Removes unused movies'
 
     def handle(self, *args, **options):
-        for movie in Movie.objects.all():
+        movies = Movie.objects.all()
+        t = tqdm(total=movies.count())
+        format = '{0: < %d}' % len(str(movies.last().pk))
+        for movie in movies:
+            info = format.format(movie.pk)
+            t.set_description(info)
             if not movie.records.exists():
                 movie.delete()
-                print '{} removed'.format(movie)
+                t.write('{} removed'.format(movie))
+            t.update()
