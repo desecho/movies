@@ -1,3 +1,5 @@
+from tqdm import tqdm
+
 from django.core.management.base import BaseCommand
 
 from ...models import Movie
@@ -15,7 +17,7 @@ class Command(BaseCommand):
     """
 
     def handle(self, *args, **options):
-        def get_tmdb_ids():
+        def get_movies():
             def get_args():
                 if args:
                     movie_id = args[0]
@@ -36,11 +38,16 @@ class Command(BaseCommand):
                     movies = movies.filter(pk__gte=movie_id)
                 else:
                     movies = movies.filter(pk=movie_id)
-            return movies.values_list('tmdb_id', flat=True)
+            return movies
 
-        for tmdb_id in get_tmdb_ids():
-            id = add_movie_to_db(tmdb_id, True)
+        movies = get_movies()
+        t = tqdm(total=movies.count())
+        format = '{0: < %d}' % len(str(movies.last().pk))
+        for movie in movies:
+            id = add_movie_to_db(movie.tmdb_id, True)
+            info = format.format(movie.pk)
+            t.set_description(info)
+            id = add_movie_to_db(movie.tmdb_id, True)
             if id < 0:
-                print 'Error - %d' % Movie.objects.get(tmdb_id=tmdb_id).id
-            else:
-                print id
+                t.write('Error {} ({})'.format(id, movie.pk))
+            t.update()
