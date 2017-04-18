@@ -39,12 +39,12 @@
   <div class="col-sm-offset-2 col-sm-2">
     {% if DEBUG %}
     <a href="{% url 'social:begin' 'facebook' %}" class="btn btn-block btn-social btn-facebook">
-      <span class="fa fa-facebook"></span> {% trans 'Log in with' Facebook %}
+      <span class="fa fa-facebook"></span> {% trans 'Log in with' %} Facebook
     </a>
     <br>
     {% endif %}
     <a href="{% url 'social:begin' 'vk-oauth2' %}" class="btn btn-block btn-social btn-vk">
-      <span class="fa fa-vk"></span> {% trans 'Log in with' VK %}
+      <span class="fa fa-vk"></span> {% trans 'Log in with' %} VK
     </a>
   </div>
   </div>
