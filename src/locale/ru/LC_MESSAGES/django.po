@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-16 20:19-0400\n"
-"PO-Revision-Date: 2017-04-16 20:20-0400\n"
-"Last-Translator: Anton Samarchyan <desecho@gmail.com>\n"
+"POT-Creation-Date: 2017-04-18 01:50-0400\n"
+"PO-Revision-Date: 2017-04-18 01:52-0400\n"
+"Last-Translator: Anton Samarchyan0 <desecho@gmail.com1>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -19,37 +19,37 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Translated-Using: django-rosetta 0.7.13\n"
 
-#: movies/settings.py:299 templates/preferences.html:26
+#: movies/settings.py:316 templates/preferences.html:27
 msgid "English"
 msgstr "Английский"
 
-#: movies/settings.py:300 templates/preferences.html:29
+#: movies/settings.py:317 templates/preferences.html:30
 msgid "Russian"
 msgstr "Русский"
 
-#: moviesapp/menus.py:17 templates/list.html:19 templates/list.html.py:21
-#: templates/search.html:38
+#: moviesapp/menus.py:16 moviesapp/templatetags/movie_count.py:17
+#: templates/list.html:26 templates/list.html.py:28 templates/search.html:39
 msgid "Watched"
 msgstr "Просмотрено"
 
-#: moviesapp/menus.py:19 templates/list.html:23 templates/list.html.py:25
-#: templates/search.html:39
+#: moviesapp/menus.py:18 moviesapp/templatetags/movie_count.py:18
+#: templates/list.html:30 templates/list.html.py:32 templates/search.html:40
 msgid "To Watch"
 msgstr "К Просмотру"
 
-#: moviesapp/menus.py:22 templates/list.html:47
+#: moviesapp/menus.py:21 templates/list.html:54
 msgid "Recommendations"
 msgstr "Рекоммендации"
 
-#: moviesapp/menus.py:24 moviesapp/menus.py:31 moviesapp/views.py:306
+#: moviesapp/menus.py:23 moviesapp/menus.py:30 moviesapp/views.py:298
 msgid "Friends"
 msgstr "Друзья"
 
-#: moviesapp/menus.py:27 moviesapp/menus.py:34 moviesapp/views.py:305
+#: moviesapp/menus.py:26 moviesapp/menus.py:33 moviesapp/views.py:297
 msgid "People"
 msgstr "Люди"
 
-#: moviesapp/menus.py:40
+#: moviesapp/menus.py:39
 msgid "Feed"
 msgstr "Лента"
 
@@ -65,178 +65,187 @@ msgstr "Добавить в список \"К Просмотру\""
 msgid "Add to &quot;Watched&quot; list"
 msgstr "Добавить в список \"Просмотрено\""
 
-#: templates/list.html:34 templates/list.html.py:37 templates/list.html:40
+#: templates/list.html:41 templates/list.html.py:44 templates/list.html:47
 msgid "Mode"
 msgstr "Режим"
 
-#: templates/list.html:35
+#: templates/list.html:42
 msgid "Full"
 msgstr "Полный"
 
-#: templates/list.html:38
+#: templates/list.html:45
 msgid "Compact"
 msgstr "Компактный"
 
-#: templates/list.html:41
+#: templates/list.html:48
 msgid "Minimal"
 msgstr "Минимальный"
 
-#: templates/list.html:56
+#: templates/list.html:63
 msgid "Sort by release date"
 msgstr "Сортировать по дате выпуска"
 
-#: templates/list.html:57 templates/search.html:42
+#: templates/list.html:64 templates/search.html:43
 msgid "Release date"
 msgstr "Дата выпуска"
 
-#: templates/list.html:59
+#: templates/list.html:66
 msgid "Sort by rating"
 msgstr "Сортировать по рейтингу"
 
-#: templates/list.html:60
+#: templates/list.html:67
 msgid "Rating"
 msgstr "Рейтинг"
 
-#: templates/list.html:62
+#: templates/list.html:69
 msgid "Sort by date added"
 msgstr "Сортировать по дате добавления"
 
-#: templates/list.html:63
+#: templates/list.html:70
 msgid "Date added"
 msgstr "Дата добавления"
 
-#: templates/list.html:75 templates/search.html:12
+#: templates/list.html:82 templates/search.html:13
 msgid "Search"
 msgstr "Поиск"
 
-#: templates/list.html:91
+#: templates/list.html:98
 msgid "Delete"
 msgstr "Удалить"
 
-#: templates/list.html:92
+#: templates/list.html:99
 msgid "Post to the wall"
 msgstr "Отправить на стену"
 
-#: templates/list.html:109 templates/recommendation.html:21
+#: templates/list.html:116 templates/recommendation.html:22
 msgid "IMDb Rating"
 msgstr "IMDb Рейтинг"
 
-#: templates/list.html:110 templates/recommendation.html:22
+#: templates/list.html:117 templates/recommendation.html:23
 msgid "Release Date"
 msgstr "Дата Выпуска"
 
-#: templates/list.html:112 templates/recommendation.html:23
+#: templates/list.html:119 templates/recommendation.html:24
 msgid "Country"
 msgstr "Страна"
 
-#: templates/list.html:113 templates/recommendation.html:24
-#: templates/search.html:18
+#: templates/list.html:120 templates/recommendation.html:25
+#: templates/search.html:19
 msgid "Director"
 msgstr "Режиссёр"
 
-#: templates/list.html:114 templates/recommendation.html:25
+#: templates/list.html:121 templates/recommendation.html:26
 msgid "Writer"
 msgstr "Сценарист"
 
-#: templates/list.html:115 templates/recommendation.html:26
+#: templates/list.html:122 templates/recommendation.html:27
 msgid "Genre"
 msgstr "Жанр"
 
-#: templates/list.html:116 templates/recommendation.html:27
+#: templates/list.html:123 templates/recommendation.html:28
 msgid "Actors"
 msgstr "Актёры"
 
-#: templates/list.html:117 templates/recommendation.html:28
+#: templates/list.html:124 templates/recommendation.html:29
 msgid "Runtime"
 msgstr "Длительность"
 
-#: templates/list.html:118 templates/recommendation.html:29
+#: templates/list.html:125 templates/recommendation.html:30
 msgid "Description"
 msgstr "Описание"
 
-#: templates/list.html:119 templates/recommendation.html:30
+#: templates/list.html:126 templates/recommendation.html:31
 msgid "Trailers"
 msgstr "Трейлеры"
 
-#: templates/list.html:141
+#: templates/list.html:148
 msgid "Website"
 msgstr "Вебсайт"
 
-#: templates/list.html:150
+#: templates/list.html:157
 msgid "Comment"
 msgstr "Комментарий"
 
-#: templates/list.html:151
+#: templates/list.html:158
 msgid "Save"
 msgstr "Сохранить"
 
-#: templates/list.html:158
+#: templates/list.html:165
 msgid "Add comment"
 msgstr "Добавить комментарий"
 
-#: templates/list.html:174 templates/recommendation.html:61
+#: templates/list.html:181 templates/recommendation.html:62
 msgid "The list is empty"
 msgstr "Список пуст"
 
 #: templates/login.html:27
-msgid "Enter"
+msgid "Log in"
 msgstr "Войти"
 
 #: templates/login.html:34
 msgid "You entered incorrect login/password"
 msgstr "Вы ввели неправильный логин/пароль"
 
-#: templates/login.html:42
-msgid "Login with"
-msgstr "Авторизация через"
+#: templates/login.html:42 templates/login.html.py:47
+#| msgid "Login with"
+msgid "Log in with"
+msgstr "Войти через"
 
-#: templates/preferences.html:9
+#: templates/preferences.html:10
 msgid "Settings"
 msgstr "Настройки"
 
-#: templates/preferences.html:12
+#: templates/preferences.html:13
 msgid "Avatar"
 msgstr "Аватар"
 
-#: templates/preferences.html:17
+#: templates/preferences.html:18
 msgid "You can change your avatar on"
 msgstr "Вы можете изменить аватар на"
 
-#: templates/preferences.html:23
+#: templates/preferences.html:24
 msgid "Language"
 msgstr "Язык"
 
-#: templates/preferences.html:36
+#: templates/preferences.html:37
 msgid "Access"
 msgstr "Доступ"
 
-#: templates/preferences.html:39
-msgid "Show my profile only to friends"
-msgstr "Показывать мой профиль только друзьям"
+#: templates/preferences.html:40
+#| msgid "Show my profile only to friends"
+msgid "Show my lists only to friends"
+msgstr "Показывать мои списки только друзьям"
 
-#: templates/search.html:16
+#: templates/search.html:17
 msgid "Movie"
 msgstr "Фильм"
 
-#: templates/search.html:17
+#: templates/search.html:18
 msgid "Actor"
 msgstr "Актёр"
 
-#: templates/search.html:25
+#: templates/search.html:26
 msgid "show only popular"
 msgstr "показывать только популярные"
 
-#: templates/search.html:28
+#: templates/search.html:29
 msgid "sort by date"
 msgstr "сортировать по дате"
 
-#: templates/search.html:38 templates/search.html.py:39
+#: templates/search.html:39 templates/search.html.py:40
 msgid "Add to the list"
 msgstr "Добавить в список"
 
-#: templates/search.html:46
+#: templates/search.html:47
 msgid "Nothing has been found"
 msgstr "Ничего не найдено"
+
+#, fuzzy
+#~ msgid "Log in with Facebook"
+#~ msgstr "Авторизация через"
+
+#~ msgid "Enter"
+#~ msgstr "Войти"
 
 #~ msgid "Sorting"
 #~ msgstr "Сортировка"

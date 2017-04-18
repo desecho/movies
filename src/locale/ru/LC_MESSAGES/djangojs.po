@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-16 20:19-0400\n"
+"POT-Creation-Date: 2017-04-18 01:50-0400\n"
 "PO-Revision-Date: 2017-04-16 15:34-0400\n"
 "Last-Translator: Anton Samarchyan <desecho@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -32,47 +32,47 @@ msgstr "Ошибка удаления фильма"
 msgid "Error saving a comment"
 msgstr "Ошибка сохранения комментария"
 
-#: moviesapp/static/js/list.js:110
+#: moviesapp/static/js/list.js:112
 msgid "Error adding a rating"
 msgstr "Ошибка добавления рейтинга"
 
-#: moviesapp/static/js/list.js:140
+#: moviesapp/static/js/list.js:142
 msgid "Error applying the setting"
 msgstr "Ошибка применения настройки"
 
-#: moviesapp/static/js/list.js:183
+#: moviesapp/static/js/list.js:185
 msgid "I recommend watching"
 msgstr "Я рекомендую к просмотру"
 
-#: moviesapp/static/js/list.js:185
+#: moviesapp/static/js/list.js:187
 msgid "I don't recommend watching"
 msgstr "Я не рекомендую к просмотру"
 
-#: moviesapp/static/js/list.js:187
+#: moviesapp/static/js/list.js:189
 msgid "My rating"
 msgstr "Моя оценка"
 
-#: moviesapp/static/js/list.js:208
+#: moviesapp/static/js/list.js:210
 msgid "Error posting to the wall #"
 msgstr "Ошибка размещения на стену #"
 
-#: moviesapp/static/js/list.js:211
+#: moviesapp/static/js/list.js:213
 msgid "Your post has been posted"
 msgstr "Ваша запись была размещена"
 
-#: moviesapp/static/js/list.js:219
+#: moviesapp/static/js/list.js:221
 msgid "Error posting a poster to the wall #"
 msgstr "Ошибка размещения постера на стену #"
 
-#: moviesapp/static/js/list.js:233
+#: moviesapp/static/js/list.js:235
 msgid "Error loading a poster"
 msgstr "Ошибка загрузки постера"
 
-#: moviesapp/static/js/list.js:240
+#: moviesapp/static/js/list.js:242
 msgid "Error getting an upload server for wall posting #"
 msgstr "Ошибка получения сервера загрузки для размещения на стену #"
 
-#: moviesapp/static/js/list.js:260
+#: moviesapp/static/js/list.js:262
 msgid "Add a rating to the movie"
 msgstr "Добавить оценку фильму"
 
@@ -96,31 +96,31 @@ msgstr "Закрыть все уведомления"
 msgid "Error saving settings"
 msgstr "Ошибка сохранения настроек"
 
-#: moviesapp/static/js/raty.js:8
+#: moviesapp/static/js/raty.js:6
 msgid "Awful"
 msgstr "Ужасно"
 
-#: moviesapp/static/js/raty.js:9
+#: moviesapp/static/js/raty.js:7
 msgid "Bad"
 msgstr "Плохо"
 
-#: moviesapp/static/js/raty.js:10
+#: moviesapp/static/js/raty.js:8
 msgid "Regular"
 msgstr "Нормально"
 
-#: moviesapp/static/js/raty.js:11
+#: moviesapp/static/js/raty.js:9
 msgid "Good"
 msgstr "Хорошо"
 
-#: moviesapp/static/js/raty.js:12
+#: moviesapp/static/js/raty.js:10
 msgid "Awesome"
 msgstr "Отлично"
 
-#: moviesapp/static/js/raty.js:14
+#: moviesapp/static/js/raty.js:12
 msgid "Cancel rating"
 msgstr "Отменить оценку"
 
-#: moviesapp/static/js/raty.js:15
+#: moviesapp/static/js/raty.js:13
 msgid "No rating yet"
 msgstr "Пока нет оценки"
 
