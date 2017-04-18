@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% load i18n %}
+{% load static %}
 {% load set_var %}
 
 {% block content %}
@@ -50,7 +51,7 @@
               </div>
             {% endif %}
             {% if record.movie.homepage %} <a href="{{ record.movie.homepage }}" target="_blank">Сайт</a> / {% endif %}
-            <a href="{{ record.movie.imdb_url }}" target="_blank"><img src="/static/img/imdb.jpg" alt="IMDb" /></a><br>
+            <a href="{{ record.movie.imdb_url }}" target="_blank"><img src="{% static 'img/imdb.jpg' %}" alt="IMDb" /></a><br>
             <br>
           </div>
           <div class="clearfix"></div><br>
@@ -64,11 +65,12 @@
 {% endblock %}
 
 {% block js %}
-<script src="/static/bower/raty/lib/jquery.raty.js"></script>
-<script src="/static/js/raty.js"></script>
-<script src="/static/js/raty_readonly.js"></script>
 <script>
-  var urlAddToList = '{% url 'moviesapp.views.ajax_add_to_list' %}';
+  const urlAddToList = '{% url 'moviesapp.views.ajax_add_to_list' %}';
 </script>
-<script src="/static/js/list_general.js"></script>
+<script src="{% static 'bower/raty/lib/jquery.raty.js' %}"></script>
+<script src="{% static 'js/raty.js' %}"></script>
+<script src="{% static 'js/raty_readonly.js' %}"></script>
+
+<script src="{% static 'js/list_general.js' %}"></script>
 {% endblock %}

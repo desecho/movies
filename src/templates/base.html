@@ -1,4 +1,5 @@
 {% load i18n %}
+{% load static %}
 
 <!DOCTYPE html>
 <html ng-app="movies">
@@ -6,12 +7,12 @@
   <meta HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
   <meta HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE">
   <meta name="viewport"
-  			content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <link href="/static/bower/jgrowl/jquery.jgrowl.min.css" rel="stylesheet">
-  <link href="/static/bower/bootstrap/dist/css/bootstrap.css" rel="stylesheet" media="screen">
-  <link href="/static/bower/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-  <link href="/static/css/bootstrap_fix.css" rel="stylesheet" media="screen">
-  <link href="/static/css/style.css" rel="stylesheet">
+            content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <link href="{% static 'bower/jgrowl/jquery.jgrowl.min.css' %}" rel="stylesheet">
+  <link href="{% static 'bower/bootstrap/dist/css/bootstrap.css' %}" rel="stylesheet">
+  <link href="{% static 'bower/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet">
+  <link href="{% static 'css/bootstrap_fix.css' %}" rel="stylesheet">
+  <link href="{% static 'css/style.css' %}" rel="stylesheet">
   {% block head %}{% endblock %}
 
   <meta charset="utf-8">
@@ -24,39 +25,38 @@
       {% block content %}{% endblock %}
     </div>
   </div>
-  <script type="text/javascript" src="{% url 'javascript-catalog' %}"></script>
+  <script src="{% url 'javascript-catalog' %}"></script>
   {% get_current_language as LANGUAGE_CODE %}
   <script>
-    var language = '{{ LANGUAGE_CODE }}';
-    var isVkUser = {{ request.user.is_vk_user|yesno:'true,false' }}
+    const language = '{{ LANGUAGE_CODE }}';
+    const isVkUser = {{ request.user.is_vk_user|yesno:'true,false' }}
+    const ratyImagesPath = '{% static 'bower/raty/lib/images/' %}';
   </script>
 
-  <script src="/static/bower/jquery/dist/jquery.min.js"></script>
+  <script src="{% static 'bower/jquery/dist/jquery.min.js' %}"></script>
 
-  <script src="/static/bower/jgrowl/jquery.jgrowl.min.js"></script>
+  <script src="{% static 'bower/jgrowl/jquery.jgrowl.min.js' %}"></script>
+  <script src="{% static 'bower/bootstrap/dist/js/bootstrap.min.js' %}"></script>
+  <script src="{% static 'bower/angular/angular.js' %}"></script>
+  <script src="{% static 'bower/angular-resource/angular-resource.min.js' %}"></script>
+  <script src="{% static 'bower/angular-route/angular-route.min.js' %}"></script>
+  <script src="{% static 'bower/angular-bootstrap/ui-bootstrap-tpls.min.js' %}"></script>
 
-  <script src="/static/bower/bootstrap/dist/js/bootstrap.min.js"></script>
-  <script src="/static/bower/angular/angular.js"></script>
-  <script src="/static/bower/angular-resource/angular-resource.min.js"></script>
+  <script src="{% static 'bower/spin.js/spin.js' %}"></script>
+  <script src="{% static 'bower/spin.js/jquery.spin.js' %}"></script>
+  <script src="{% static 'bower/angular-spinner/angular-spinner.min.js' %}"></script>
+  <script src="{% static 'bower/angular-loading-spinner/angular-loading-spinner.js' %}"></script>
 
-  <script src="/static/js/ajax_loading.js"></script>
-  <script src="/static/bower/spin.js/spin.js"></script>
-  <script src="/static/bower/spin.js/jquery.spin.js"></script>
-
-  <script src="/static/bower/angular-spinner/angular-spinner.min.js"></script>
-  <script src="/static/bower/angular-loading-spinner/angular-loading-spinner.js"></script>
-
-  <script src="/static/bower/angular-route/angular-route.min.js"></script>
-  <script src="/static/bower/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
-
-  <script src="/static/js/main.js"></script>
-  <script src="/static/js/analytics.js"></script>
+  <script src="{% static 'js/ajax_loading.js' %}"></script>
+  <script src="{% static 'js/main.js' %}"></script>
+  <script src="{% static 'js/analytics.js' %}"></script>
 
   {% if request.user.is_vk_user %}
     <script src="//vk.com/js/api/xd_connection.js?2"></script>
-    <script src="/static/js/vk.js"></script>
+    <script src="{% static 'js/vk.js' %}"></script>
   {% endif %}
-  <script type="text/javascript" src="/static/bower/retinajs/dist/retina.min.js"></script>
+  <!-- Retina has to be in the bottom because it breaks other scripts -->
+  <script src="{% static 'bower/retinajs/dist/retina.min.js' %}"></script>
 {% block js %}{% endblock %}
 
 </body>

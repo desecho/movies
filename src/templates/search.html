@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% load i18n %}
+{% load static %}
 
 {% block content %}
 <div ng-controller="MoviesSearchController" id="search" style="display: none">
@@ -49,8 +50,8 @@
 
 {% block js %}
 <script>
-  var urlSearchMovie = '{% url 'moviesapp.views.ajax_search_movie' %}';
-  var urlAddToListFromDb = '{% url 'moviesapp.views.ajax_add_to_list_from_db' %}';
+  const urlSearchMovie = '{% url 'moviesapp.views.ajax_search_movie' %}';
+  const urlAddToListFromDb = '{% url 'moviesapp.views.ajax_add_to_list_from_db' %}';
 </script>
-<script src="/static/js/search.js"></script>
+<script src="{% static 'js/search.js' %}"></script>
 {% endblock %}

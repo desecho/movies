@@ -263,16 +263,6 @@ ${myRating} - ${ratingPost}.`
   }
 };
 
-ratyCustomSettings = {
-  readOnly: ratyReadonly,
-  click: function(score) {
-    if (!score) {
-      score = 0;
-    }
-    changeRating($(this).attr('data-record-id'), score, $(this));
-  }
-};
-
 $(function() {
   function setViewedIconsAndRemoveButtons() {
     if (anothersAccount) {
@@ -281,6 +271,17 @@ $(function() {
         const listId = listData[id];
         setViewedIconAndRemoveButtons(id, listId);
       });
+    }
+  };
+
+  let ratyReadonly = anothersAccount || listId == 2
+  window.ratyCustomSettings = {
+    readOnly: ratyReadonly,
+    click: function(score) {
+      if (!score) {
+        score = 0;
+      }
+      changeRating($(this).attr('data-record-id'), score, $(this));
     }
   };
 

@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load bootstrap_pagination %}
 {% load set_var %}
+{% load static %}
 {% load avatar %}
 {% load movie_count %}
 {% load i18n %}
@@ -145,7 +146,7 @@
                   </div>
                 {% endif %}
             {% if record.movie.homepage %} <a href="{{ record.movie.homepage }}" target="_blank">{% trans 'Website' %}</a> / {% endif %}
-            <a href="{{ record.movie.imdb_url }}" target="_blank"><img src="/static/img/imdb.jpg" alt="IMDb" /></a><br>
+            <a href="{{ record.movie.imdb_url }}" target="_blank"><img src="{% static 'img/imdb.jpg' %}" alt="IMDb" /></a><br>
             <br>
             </div>
             <div class="review {% ifequal request.session.mode 'full' %} full {% endifequal %}">
@@ -184,29 +185,23 @@
 {% endblock %}
 
 {% block js %}
-<script src="/static/bower/raty/lib/jquery.raty.js"></script>
-<script src="/static/bower/autosize/dist/autosize.min.js"></script>
 <script>
-  var mode = '{{ request.session.mode }}';
-  var listData = $.parseJSON('{{ list_data|safe }}');
-  var listId = {{ list_id }};
-
-  var recommendation = {{ request.session.recommendation|yesno:'true,false' }}
-  var anothersAccount = {{ anothers_account|yesno:'true,false' }}
-  var ratyReadonly = false;
-  if (anothersAccount || listId == 2) {
-    ratyReadonly = true;
-  }
-
-  var urlChangeRating = '{% url 'moviesapp.views.ajax_change_rating' %}';
-  var urlRemoveRecord = '{% url 'moviesapp.views.ajax_remove_record' %}';
-  var urlApplySettings = '{% url 'moviesapp.views.ajax_apply_settings' %}';
-  var urlAddToList   = '{% url 'moviesapp.views.ajax_add_to_list' %}';
-  var urlSaveComment  = '{% url 'moviesapp.views.ajax_save_comment' %}';
-  var urlAjaxUploadPhotoToWall = '{% url 'moviesapp.views.ajax_upload_photo_to_wall' %}';
+  const mode = '{{ request.session.mode }}';
+  const listData = $.parseJSON('{{ list_data|safe }}');
+  const listId = {{ list_id }};
+  const recommendation = {{ request.session.recommendation|yesno:'true,false' }}
+  const anothersAccount = {{ anothers_account|yesno:'true,false' }}
+  const urlChangeRating = '{% url 'moviesapp.views.ajax_change_rating' %}';
+  const urlRemoveRecord = '{% url 'moviesapp.views.ajax_remove_record' %}';
+  const urlApplySettings = '{% url 'moviesapp.views.ajax_apply_settings' %}';
+  const urlAddToList   = '{% url 'moviesapp.views.ajax_add_to_list' %}';
+  const urlSaveComment  = '{% url 'moviesapp.views.ajax_save_comment' %}';
+  const urlAjaxUploadPhotoToWall = '{% url 'moviesapp.views.ajax_upload_photo_to_wall' %}';
 </script>
-<script src="/static/js/list_general.js"></script>
-<script src="/static/js/raty.js"></script>
-<script src="/static/js/list.js"></script>
+<script src="{% static 'bower/raty/lib/jquery.raty.js' %}"></script>
+<script src="{% static 'bower/autosize/dist/autosize.min.js' %}"></script>
 
+<script src="{% static 'js/list_general.js' %}"></script>
+<script src="{% static 'js/list.js' %}"></script>
+<script src="{% static 'js/raty.js' %}"></script>
 {% endblock %}
