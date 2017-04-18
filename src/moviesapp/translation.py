@@ -2,7 +2,7 @@ from __future__ import unicode_literals
 
 from modeltranslation.translator import TranslationOptions, register
 
-from .models import Movie, Action, List
+from .models import Action, List, Movie
 
 
 @register(Movie)
@@ -12,8 +12,9 @@ class MovieTranslationOptions(TranslationOptions):
 
 @register(Action)
 class ActionTranslationOptions(TranslationOptions):
-    fields = ('name', )
+    fields = ('name',)
+
 
 @register(List)
 class ListTranslationOptions(TranslationOptions):
-    fields = ('name', )
+    fields = ('name',)

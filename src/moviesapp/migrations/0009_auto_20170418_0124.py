@@ -5,7 +5,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('moviesapp', '0008_user_loaded_initial_data'),
     ]

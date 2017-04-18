@@ -1,12 +1,12 @@
 # coding: utf-8
 
-from tabulate import tabulate
-
 from django.core.management.base import BaseCommand
+from tabulate import tabulate
 
 from ...models import Movie
 
 ALLOWED_CHARS = u'абвгдеёжзийклмнопрстуфхцчшщьыъэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЬЫЪЭЮЯ123456789 -:0,"«».?+/–º·№!()½⅓\''
+
 
 class Command(BaseCommand):
     help = 'Displays wrong russian titles'

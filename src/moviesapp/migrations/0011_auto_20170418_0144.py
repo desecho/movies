@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.db import migrations, models
 from django.core.management import call_command
+from django.db import migrations, models
 
 
 def load_fixtures(apps, schema_editor):
@@ -11,7 +11,6 @@ def load_fixtures(apps, schema_editor):
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('moviesapp', '0010_auto_20170418_0137'),
     ]
