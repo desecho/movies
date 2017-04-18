@@ -1,7 +1,6 @@
-from django.conf import settings
-
-import vkontakte
 import facebook
+import vkontakte
+from django.conf import settings
 
 from .models import User
 
