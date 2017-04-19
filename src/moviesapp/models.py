@@ -126,12 +126,17 @@ class Movie(models.Model):
     def poster_big(self):
         return self._get_poster('big')
 
+    @property
+    def id_title(self):
+        return '{} - {}'.format(self.pk, self)
+
     def cli_string(self, last_movie_id):
         """
         String version for CLI.
         We need last_movie_id because we want to know how big is the number (in characters) to be able to make
         perfect formatting.
-        We want to keep last_movie_id as a parameter because sometimes we need just a subset of movies.
+        We need to keep last_movie_id as a parameter because otherwise we hit the database every time we run the
+        function.
         """
         MAX_CHARS = 40
         ENDING = '..'
