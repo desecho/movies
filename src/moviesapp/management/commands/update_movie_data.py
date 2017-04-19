@@ -31,19 +31,21 @@ class Command(BaseCommand):
         )
 
     def handle(self, *args, **options):
-        def get_movies():
-            movie_id = options['movie_id']
-            movies = Movie.objects.all()
-            if movie_id is None:
-                return movies
-
+        def get_filtered_movies():
             if options['start_from_id']:
                 return movies.filter(pk__gte=movie_id)
             else:
                 return movies.filter(pk=movie_id)
 
-        movies = get_movies()
-        t = tqdm(total=movies.count())
+        movies = Movie.objects.all()
+        movies_total = movies.count()
+        movie_id = options['movie_id']
+        if movie_id is not None:
+            movies = get_filtered_movies()
+            movies_filtered_number = movies.count()
+
+        t = tqdm(total=movies_total, unit='movies')
+        t.update(movies_total - movies_filtered_number)
         last_movie_id = movies.last().pk
         for movie in movies:
             movie_info = movie.cli_string(last_movie_id)

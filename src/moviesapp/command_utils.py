@@ -11,7 +11,13 @@ from tqdm import tqdm as tqdm_original
 class tqdm(tqdm_original):
     def __init__(self, *args, **kwargs):
         self.isatty = sys.stdout.isatty()
-        kwargs['disable'] = not self.isatty
+        # We don't want a progress bar if we just have one movie
+        if kwargs['total'] == 1:
+            kwargs['disable'] = True
+        if 'disable' not in kwargs:
+            kwargs['disable'] = not self.isatty
+        if 'leave' not in kwargs:
+            kwargs['leave'] = False
         super(tqdm, self).__init__(*args, **kwargs)
 
     def print_(self, text, error=False):
