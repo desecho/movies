@@ -126,6 +126,24 @@ class Movie(models.Model):
     def poster_big(self):
         return self._get_poster('big')
 
+    def cli_string(self, last_movie_id):
+        """
+        String version for CLI.
+        We need last_movie_id because we want to know how big is the number (in characters) to be able to make
+        perfect formatting.
+        We want to keep last_movie_id as a parameter because sometimes we need just a subset of movies.
+        """
+        MAX_CHARS = 40
+        ENDING = '..'
+        id_format = '{0: < %d}' % (len(str(last_movie_id)) + 1)
+        title = unicode(self)
+        title = (title[:MAX_CHARS] + ENDING) if len(title) > MAX_CHARS else title
+        id = id_format.format(self.pk)
+        title_max_length = MAX_CHARS + len(ENDING)
+        title_format = '{:%ds}' % title_max_length
+        title = title_format.format(title)
+        return '{} - {}'.format(id, title)[1:].decode('utf8')
+
 
 class Record(models.Model):
     user = models.ForeignKey(User)
