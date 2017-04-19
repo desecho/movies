@@ -21,5 +21,5 @@ class Command(BaseCommand):
                     rows.append((movie.id, movie.title_ru, movie.title_original))
                     break
         headers = ('Id', 'Title (ru)', 'Title (eng)')
-        print tabulate(rows, headers, 'fancy_grid')
-        print 'Total: %d' % len(rows)
+        self.stdout.write(tabulate(rows, headers, 'fancy_grid'))
+        self.stdout.write('Total: %d' % len(rows))
