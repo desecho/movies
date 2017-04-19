@@ -3,10 +3,10 @@ from __future__ import unicode_literals
 
 import sys
 
-from tqdm import tqdm as tqdm_original
-
 from django.core.management.base import BaseCommand
 from django.core.management.color import color_style
+from tqdm import tqdm as tqdm_original
+
 
 class tqdm(tqdm_original):
     def __init__(self, *args, **kwargs):
