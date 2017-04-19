@@ -1,11 +1,12 @@
 # coding: utf-8
+from __future__ import unicode_literals
 
 from django.core.management.base import BaseCommand
 from tabulate import tabulate
 
 from ...models import Movie
 
-ALLOWED_CHARS = u'абвгдеёжзийклмнопрстуфхцчшщьыъэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЬЫЪЭЮЯ123456789 -:0,"«».?+/–º·№!()½⅓\''
+ALLOWED_CHARS = 'абвгдеёжзийклмнопрстуфхцчшщьыъэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЬЫЪЭЮЯ123456789 -:0,"«».?+/–º·№!()½⅓\''
 
 
 class Command(BaseCommand):
