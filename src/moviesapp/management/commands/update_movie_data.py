@@ -1,11 +1,16 @@
 # coding: utf-8
 from __future__ import unicode_literals
 
+import sys
+
 from django.core.management.base import BaseCommand
 
 from ...command_utils import tqdm
 from ...models import Movie
 from ...utils import add_movie_to_db
+
+reload(sys)
+sys.setdefaultencoding('utf8')
 
 
 class Command(BaseCommand):
@@ -33,9 +38,9 @@ class Command(BaseCommand):
                 return movies
 
             if options['start_from_id']:
-                movies = movies.filter(pk__gte=movie_id)
+                return movies.filter(pk__gte=movie_id)
             else:
-                movies = movies.filter(pk=movie_id)
+                return movies.filter(pk=movie_id)
 
         movies = get_movies()
         t = tqdm(total=movies.count())
