@@ -56,17 +56,23 @@ def add_movie_to_list(movie_id, list_id, user):
 
 
 def add_movie_to_db(tmdb_id, update=False):
-    """Return movie id or error codes -1 or -2."""
+    """
+    Return movie id or error code -1 or -2.
+    If update is True, return either error code or bool (updated or not)
+    """
 
-    def save_movie_to_db(movie_data):
-        if update:
-            movie = Movie.objects.filter(tmdb_id=tmdb_id)
-            movie.update(**movie_data)
-            movie = movie.first()
-        else:
-            movie = Movie(**movie_data)
-            movie.save()
+    def save_movie():
+        movie = Movie(**movie_data)
+        movie.save()
         return movie.id
+
+    def update_movie():
+        movie = Movie.objects.filter(tmdb_id=tmdb_id)
+        # Maybe use model_to_dict instead?
+        movie_initial_data = movie.values()[0]
+        movie.update(**movie_data)
+        movie_updated_data = Movie.objects.filter(tmdb_id=tmdb_id).values()[0]
+        return movie_initial_data != movie_updated_data
 
     def get_omdb_movie_data(imdb_id):
         def get_runtime(runtime):
@@ -153,7 +159,11 @@ def add_movie_to_db(tmdb_id, update=False):
     movie_data_omdb = get_omdb_movie_data(movie_data_tmdb['imdb_id'])
     if movie_data_omdb is None:
         return -2
-    return save_movie_to_db(dict(movie_data_tmdb.items() + movie_data_omdb.items()))
+    movie_data = dict(movie_data_tmdb.items() + movie_data_omdb.items())
+    if update:
+        return update_movie()
+    else:
+        return save_movie()
 
 
 def add_to_list_from_db(tmdb_id, list_id, user):
