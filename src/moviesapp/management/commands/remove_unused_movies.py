@@ -1,6 +1,8 @@
 # coding: utf-8
 from __future__ import unicode_literals
 
+import sys
+
 from django.core.management.base import BaseCommand
 from tqdm import tqdm as tqdm_original
 
@@ -8,9 +10,9 @@ from ...command_utils import tqdm
 # from tqdm import tqdm
 from ...models import Movie
 
-import sys
 reload(sys)
 sys.setdefaultencoding('utf8')
+
 
 class Command(BaseCommand):
     help = 'Removes unused movies'
