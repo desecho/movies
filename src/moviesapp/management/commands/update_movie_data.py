@@ -28,22 +28,21 @@ class Command(BaseCommand):
             help='Start running the script fom provided movie id',
         )
 
-    def handle(self, *args, **options):
+    def handle(self, movie_id, start_from_id, *args, **options):
         def get_filtered_movies():
-            if options['start_from_id']: # TODO try to move it to args!
+            if start_from_id:
                 return movies.filter(pk__gte=movie_id)
             else:
                 return movies.filter(pk=movie_id)
 
         movies = Movie.objects.all()
         movies_total = movies.count()
-        movie_id = options['movie_id']
         disable = None
         filtered = movie_id is not None
         if filtered:
             movies = get_filtered_movies()
             if not movies:  # In case the movie_id is too high and we don't get any movies
-                if options['start_from_id']:
+                if start_from_id:
                     self.error('There are no movies found with id > %d' % movie_id, fatal=True)
                 else:
                     self.error('There is no movie with id %d' % movie_id, fatal=True)

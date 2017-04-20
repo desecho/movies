@@ -21,7 +21,7 @@ FIELDS = (
     'photo_rec',
 )
 
-
+# TODO REDO
 class Command(BaseCommand):
     help = 'Updates VK profiles'
 
