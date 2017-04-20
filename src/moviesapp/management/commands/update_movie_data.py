@@ -3,9 +3,7 @@ from __future__ import unicode_literals
 
 import sys
 
-from django.core.management.base import BaseCommand
-
-from ...command_utils import tqdm
+from ...command_utils import tqdm, BaseCommand
 from ...models import Movie
 from ...utils import add_movie_to_db
 
@@ -32,7 +30,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         def get_filtered_movies():
-            if options['start_from_id']:
+            if options['start_from_id']: # TODO try to move it to args!
                 return movies.filter(pk__gte=movie_id)
             else:
                 return movies.filter(pk=movie_id)
@@ -40,12 +38,23 @@ class Command(BaseCommand):
         movies = Movie.objects.all()
         movies_total = movies.count()
         movie_id = options['movie_id']
-        if movie_id is not None:
+        disable = None
+        filtered = movie_id is not None
+        if filtered:
             movies = get_filtered_movies()
+            if not movies:  # In case the movie_id is too high and we don't get any movies
+                if options['start_from_id']:
+                    self.error('There are no movies found with id > %d' % movie_id, fatal=True)
+                else:
+                    self.error('There is no movie with id %d' % movie_id, fatal=True)
             movies_filtered_number = movies.count()
+            # We don't want a progress bar if we just have one movie to process
+            if movies_filtered_number == 1:
+                disable = True
 
-        t = tqdm(total=movies_total, unit='movies')
-        t.update(movies_total - movies_filtered_number)
+        t = tqdm(total=movies_total, unit='movies', disable=disable)
+        if filtered:
+            t.update(movies_total - movies_filtered_number)
         last_movie_id = movies.last().pk
         for movie in movies:
             movie_info = movie.cli_string(last_movie_id)
