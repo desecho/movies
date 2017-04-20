@@ -3,9 +3,8 @@ from __future__ import unicode_literals
 
 import sys
 
-from django.core.management.base import BaseCommand
+from django_tqdm import BaseCommand
 
-from ...command_utils import tqdm
 from ...models import Movie
 from ...utils import load_omdb_movie_data
 
@@ -18,7 +17,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         movies = Movie.objects.all()
-        t = tqdm(total=movies.count())
+        t = self.tqdm(total=movies.count())
         last_movie_id = movies.last().pk
         for movie in movies:
             movie_info = movie.cli_string(last_movie_id)
