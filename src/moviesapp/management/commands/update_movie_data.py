@@ -3,7 +3,8 @@ from __future__ import unicode_literals
 
 import sys
 
-from ...command_utils import tqdm, BaseCommand
+from django_tqdm import BaseCommand
+
 from ...models import Movie
 from ...utils import add_movie_to_db
 
@@ -51,7 +52,7 @@ class Command(BaseCommand):
             if movies_filtered_number == 1:
                 disable = True
 
-        t = tqdm(total=movies_total, unit='movies', disable=disable)
+        t = self.tqdm(total=movies_total, unit='movies', disable=disable)
         if filtered:
             t.update(movies_total - movies_filtered_number)
         last_movie_id = movies.last().pk
