@@ -1,7 +1,7 @@
 # coding: utf-8
 from __future__ import unicode_literals
 
-from django.core.management.base import BaseCommand
+from django_tqdm import BaseCommand
 from tabulate import tabulate
 
 from ...models import Movie
@@ -21,5 +21,5 @@ class Command(BaseCommand):
                     rows.append((movie.id, movie.title_ru, movie.title_original))
                     break
         headers = ('Id', 'Title (ru)', 'Title (eng)')
-        self.stdout.write(tabulate(rows, headers, 'fancy_grid'))
-        self.stdout.write('Total: %d' % len(rows))
+        self.info(tabulate(rows, headers, 'fancy_grid'))
+        self.info('Total: %d' % len(rows))
