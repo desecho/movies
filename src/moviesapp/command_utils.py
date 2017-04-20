@@ -8,7 +8,7 @@ from django.core.management.color import color_style
 from tqdm import tqdm as tqdm_original
 
 class BaseCommand(BaseCommandOriginal):
-    def print_(self, text, fatal, error=False): # TODO make it private
+    def output(self, text, fatal, error=False):
         text = unicode(text)
         if error:
             output = self.stderr
@@ -19,10 +19,10 @@ class BaseCommand(BaseCommandOriginal):
             sys.exit()
 
     def error(self, text, fatal=False):
-        self.print_(text, fatal, error=True)
+        self.output(text, fatal, error=True)
 
     def info(self, text, fatal=False):
-        self.print_(text, fatal)
+        self.output(text, fatal)
 
     # TODO add tqdm here
 
@@ -37,7 +37,7 @@ class tqdm(tqdm_original):
             kwargs['leave'] = False
         super(tqdm, self).__init__(*args, **kwargs)
 
-    def print_(self, text, fatal, error=False): # TODO make it private
+    def output(self, text, fatal, error=False):
         if error:
             text = unicode(text)
             text = color_style().ERROR(text)
@@ -53,7 +53,7 @@ class tqdm(tqdm_original):
                 command.info(text, fatal)
 
     def error(self, text, fatal=False):
-        self.print_(text, fatal, error=True)
+        self.output(text, fatal, error=True)
 
     def info(self, text, fatal=False):
-        self.print_(text, fatal)
+        self.output(text, fatal)
