@@ -21,3 +21,6 @@ tqdm==4.11.2
 
 # vkontakte==1.3.5
 -e git+https://github.com/desecho/vkontakte.git#egg=vkontakte
+
+# My custom module
+-e git+https://github.com/desecho/django-tqdm.git#egg=django-tqdm
