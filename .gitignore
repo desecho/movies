@@ -11,3 +11,4 @@ __pycache__
 local_settings.py
 .coverage
 .idea
+node_modules
