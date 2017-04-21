@@ -23,7 +23,7 @@ IS_VK_DEV = local_settings.IS_VK_DEV
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
-    # ('Your Name', 'your_email@example.com'),
+    (local_settings.ADMIN_NAME, local_settings.ADMIN_EMAIL),
 )
 
 MANAGERS = ADMINS
