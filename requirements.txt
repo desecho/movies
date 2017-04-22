@@ -1,7 +1,6 @@
 Django==1.8.18
 django-annoying==0.10.3
 django-simple-menu==1.2.1
-django-bootstrap-pagination==1.6.2
 poster==0.8.1
 python-dateutil==2.6.0
 django-modeltranslation==0.12.1
@@ -20,7 +19,10 @@ tqdm==4.11.2
 -e git+https://github.com/desecho/social-core.git@bugfix#egg=social-auth-core
 
 # vkontakte==1.3.5
--e git+https://github.com/desecho/vkontakte.git#egg=vkontakte
+-e git+https://github.com/desecho/vkontakte.git@dev#egg=vkontakte
 
 # My custom module
 -e git+https://github.com/desecho/django-tqdm.git#egg=django-tqdm
+
+django-bootstrap-pagination==1.6.2
+-e git+https://github.com/desecho/django-bootstrap-pagination.git@ru#egg=django-bootstrap-pagination
