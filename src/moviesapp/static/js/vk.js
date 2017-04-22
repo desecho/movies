@@ -20,4 +20,4 @@ $(function(){
   } else {
     $('.vk-app-hide').show();
   }
-})
+});
