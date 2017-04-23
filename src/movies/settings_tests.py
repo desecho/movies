@@ -1,4 +1,4 @@
-from .settings import *  # noqa
+from .settings import *  # noqa pylint: disable=unused-wildcard-import,wildcard-import
 
 
 class DisableMigrations(object):

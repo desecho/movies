@@ -11,7 +11,7 @@ try:
     import local_settings
 except ImportError:
     try:
-        import initial_settings as local_settings
+        from . import initial_settings as local_settings
     except ImportError:
         print('No initial settings!')
         sys.exit()
@@ -330,6 +330,6 @@ RAVEN_CONFIG = {
 
 # This is here to fix the problem with static files on dev
 try:
-    from local_settings2 import *  # noqa
+    from local_settings2 import *  # noqa pylint: disable=wildcard-import
 except ImportError:
     pass

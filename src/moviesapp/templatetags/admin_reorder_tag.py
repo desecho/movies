@@ -13,7 +13,7 @@ def register_render_tag(renderer):
     arguments - the template context and the tag token.
     """
 
-    def tag(parser, token):
+    def tag(parser, token):  # pylint: disable=unused-argument
         class TagNode(template.Node):
             def render(self, context):
                 return renderer(context, token)
@@ -26,7 +26,7 @@ def register_render_tag(renderer):
 
 
 @register_render_tag
-def admin_reorder(context, token):
+def admin_reorder(context, token):  # pylint: disable=unused-argument
     """
     Called in admin/base_site.html template override and applies custom ordering
     of apps/models defined by settings.ADMIN_REORDER.
@@ -36,8 +36,7 @@ def admin_reorder(context, token):
     def sort(order, item):
         if item in order:
             return (order.index(item), '')
-        else:
-            return (len(order), item)
+        return (len(order), item)
 
     if 'app_list' in context:
         # sort the app list
@@ -50,5 +49,6 @@ def admin_reorder(context, token):
                 app_name = context['request'].path.strip('/').split('/')[-1]
             model_order = [m.lower() for m in order.get(app_name, [])]
             context['app_list'][i]['models'].sort(
-                key=lambda model: sort(model_order, model['admin_url'].strip('/').split('/')[-1]))
+                key=lambda model: sort(
+                    model_order, model['admin_url'].strip('/').split('/')[-1]))  # pylint: disable=cell-var-from-loop
     return ''

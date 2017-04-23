@@ -1,4 +1,4 @@
-# coding: utf-8
+# -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
 import sys
@@ -33,8 +33,7 @@ class Command(BaseCommand):
         def get_filtered_movies():
             if start_from_id:
                 return movies.filter(pk__gte=movie_id)
-            else:
-                return movies.filter(pk=movie_id)
+            return movies.filter(pk=movie_id)
 
         movies = Movie.objects.all()
         movies_total = movies.count()
@@ -60,7 +59,7 @@ class Command(BaseCommand):
             movie_info = movie.cli_string(last_movie_id)
             t.set_description(movie_info)
             result = add_movie_to_db(movie.tmdb_id, update=True)
-            if type(result) == bool:
+            if isinstance(result, bool):
                 updated = result
                 if updated:
                     t.info('{} updated'.format(movie))

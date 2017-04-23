@@ -1,14 +1,7 @@
-# coding: utf-8
+# -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
 from django.test import TestCase
-
-"""
-This file demonstrates writing tests using the unittest module. These will pass
-when you run "manage.py test".
-
-Replace this with more appropriate tests for your application.
-"""
 
 
 class SimpleTest(TestCase):

@@ -1,4 +1,4 @@
-# coding: utf-8
+# -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
 import json
@@ -7,7 +7,6 @@ import tempfile
 # import logging
 import urllib2
 from datetime import datetime
-from operator import itemgetter
 
 from annoying.decorators import ajax_request, render_to
 from dateutil.relativedelta import relativedelta
@@ -24,10 +23,10 @@ from poster.encode import multipart_encode
 from poster.streaminghttp import register_openers
 
 from .models import (ActionRecord, List, Record, User,
-                     activate_user_language_preference, get_poster_url)
+                     activate_user_language_preference)
+from .search import get_movies_from_tmdb
 from .social import Fb, Vk
-from .utils import (add_movie_to_list, add_to_list_from_db,
-                    get_poster_from_tmdb, tmdb)
+from .utils import add_movie_to_list, add_to_list_from_db
 
 
 # logger = logging.getLogger('moviesapp.test')
@@ -57,13 +56,13 @@ def logout_view(request):
 @ensure_csrf_cookie  # for vk
 @render_to('search.html')
 @login_required
-def search(request):
+def search(request):  # pylint: disable=unused-argument
     return {}
 
 
 @render_to('preferences.html')
 @login_required
-def preferences(request):
+def preferences(request):  # pylint: disable=unused-argument
     return {}
 
 
@@ -364,8 +363,8 @@ def ajax_remove_record(request):
     if request.is_ajax() and request.method == 'POST':
         POST = request.POST
         if 'id' in POST:
-            id = POST.get('id')
-            Record.objects.get(pk=id, user_id=request.user.id).delete()
+            id_ = POST.get('id')
+            Record.objects.get(pk=id_, user_id=request.user.id).delete()
     return HttpResponse()
 
 
@@ -373,9 +372,9 @@ def ajax_save_comment(request):
     if request.is_ajax() and request.method == 'POST':
         POST = request.POST
         if 'id' in POST and 'comment' in POST:
-            id = POST.get('id')
+            id_ = POST.get('id')
             comment = POST.get('comment')
-            r = Record.objects.get(pk=id, user=request.user)
+            r = Record.objects.get(pk=id_, user=request.user)
             if r.comment != comment:
                 if not r.comment:
                     ActionRecord(action_id=4, user=request.user, movie=r.movie,
@@ -389,9 +388,9 @@ def ajax_change_rating(request):
     if request.is_ajax() and request.method == 'POST':
         POST = request.POST
         if 'id' in POST and 'rating' in POST:
-            id = POST.get('id')
+            id_ = POST.get('id')
             rating = POST.get('rating')
-            r = Record.objects.get(pk=id, user=request.user)
+            r = Record.objects.get(pk=id_, user=request.user)
             if r.rating != rating:
                 if not r.rating:
                     ActionRecord(action_id=3, user=request.user, movie=r.movie,
@@ -420,133 +419,13 @@ def ajax_change_rating(request):
 
 @ajax_request
 def ajax_search_movie(request):
-    def get_movies_from_tmdb(query, type, options, user):
-        STATUS_CODES = {
-            'error': -1,
-            'not found': 0,
-            'found': 1,
-        }
-
-        def set_proper_date(movies):
-            def format_date(date):
-                if date:
-                    return date.strftime('%d.%m.%y')
-
-            for movie in movies:
-                movie['releaseDate'] = format_date(movie['releaseDate'])
-            return movies
-
-        # def sortByPopularity(movies):
-        #     movies = sorted(movies, key=itemgetter('popularity'), reverse=True)
-        #     for movie in movies:
-        #         del movie['popularity']
-        #     return movies
-
-        def remove_not_popular_movies(movies):
-            movies_output = []
-            for movie in movies:
-                if movie['popularity'] > settings.MIN_POPULARITY:
-                    del movie['popularity']  # remove unnesessary data
-                    movies_output.append(movie)
-            if not movies_output:  # keep initial movie list if all are unpopular
-                movies_output = movies
-            return movies_output
-
-        def sort_by_date(movies):
-            movies_with_date = []
-            movies_without_date = []
-            for movie in movies:
-                if movie['releaseDate']:
-                    movies_with_date.append(movie)
-                else:
-                    movies_without_date.append(movie)
-            movies_with_date = sorted(movies_with_date,
-                                      key=itemgetter('releaseDate'), reverse=True)
-            movies = movies_with_date + movies_without_date
-            return movies
-
-        def get_data(query, type):
-            'For actor, director search - the first is used.'
-            tmdb.set_locale(*settings.LOCALES[user.language])
-            query = query.encode('utf-8')
-            SEARCH_TYPES_IDS = {
-                'movie': 1,
-                'actor': 2,
-                'director': 3,
-            }
-            if type == SEARCH_TYPES_IDS['movie']:
-                try:
-                    movies = tmdb.searchMovie(query)
-                except:
-                    return -1
-            else:
-                try:
-                    result = tmdb.searchPerson(query)
-                except:
-                    return -1
-                movies = []
-                if len(result):
-                    person = result[0]
-                    if type == SEARCH_TYPES_IDS['actor']:
-                        movies = person.roles
-                    else:
-                        for movie in person.crew:
-                            if movie.job == 'Director':
-                                movies.append(movie)
-            return movies
-
-        output = {}
-        movies_data = get_data(query, type)
-        if movies_data == STATUS_CODES['error']:
-            output['status'] = STATUS_CODES['error']
-            return output
-        movies = []
-        i = 0
-
-        if len(movies_data):
-            try:
-                for movie in movies_data:
-                    i += 1
-                    if i > settings.MAX_RESULTS:
-                        break
-                    # ignore movies if imdb not found
-                    if Record.objects.filter(movie__tmdb_id=movie.id,
-                                             user=user).exists() or not movie.imdb:
-                        continue
-
-                    movie = {
-                        'id': movie.id,
-                        'releaseDate': movie.releasedate,
-                        'popularity': movie.popularity,
-                        'title': movie.title,
-                        'poster': get_poster_url('small', get_poster_from_tmdb(movie.poster)),
-                    }
-                    movies.append(movie)
-            except IndexError:  # strange exception in 'matrix case'
-                pass
-            if options['popular_only']:
-                movies = remove_not_popular_movies(movies)
-            if options['sort_by_date']:
-                movies = sort_by_date(movies)
-            # movies = sortByPopularity(movies)
-
-            movies = set_proper_date(movies)
-            if len(movies):
-                output['status'] = STATUS_CODES['found']
-                output['movies'] = movies
-            else:
-                output['status'] = STATUS_CODES['not found']
-        else:
-            output['status'] = STATUS_CODES['not found']
-        return output
-
     if request.method == 'GET':
-        type = int(request.GET.get('type'))
+        type_ = int(request.GET.get('type'))
         query = request.GET.get('query')
         options = QueryDict(request.GET['options'])
         options = {'popular_only': json.loads(options['popularOnly']),
                    'sort_by_date': json.loads(options['sortByDate'])}
-        output = get_movies_from_tmdb(query, type, options, request.user)
+        output = get_movies_from_tmdb(query, type_, options, request.user)
         return output
 
 
@@ -554,7 +433,6 @@ def ajax_search_movie(request):
 def ajax_add_to_list_from_db(request):
     if request.is_ajax() and request.method == 'POST':
         POST = request.POST
-        print POST
         if 'movieId' in POST and 'listId' in POST:
             error_code = add_to_list_from_db(int(POST.get('movieId')),
                                              int(POST.get('listId')),
@@ -580,9 +458,8 @@ def ajax_upload_photo_to_wall(request):
         movie = Record.objects.get(pk=record_id).movie
         file_contents = urllib2.urlopen(movie.poster_big).read()
         path = tempfile.mkstemp()[1]
-        file = open(path, 'w')
-        file.write(file_contents)
-        file.close()
+        with open(path, 'w') as file_:
+            file_.write(file_contents)
         path_jpg = path + '.jpg'
         os.chmod(path, 0666)
         os.rename(path, path_jpg)

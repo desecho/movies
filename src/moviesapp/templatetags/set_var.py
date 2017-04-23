@@ -1,7 +1,11 @@
-# coding: utf-8
+# -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
 from django import template
+
+# credit: Nicolae Surdu
+# source: http://www.soyoucode.com/2011/set-variable-django-template
+
 
 register = template.Library()
 
@@ -20,7 +24,7 @@ class SetVarNode(template.Node):
         return ''
 
 
-def set_var(parser, token):
+def set_var(parser, token):  # pylint: disable=unused-argument
     """
         {% set <var_name>  = <var_value> %}
     """

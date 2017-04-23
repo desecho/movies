@@ -1,4 +1,4 @@
-# coding: utf-8
+# -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
 from django.core.management.base import BaseCommand
@@ -38,4 +38,4 @@ class Command(BaseCommand):
                     else:
                         print('%s - done' % imdb_id)
                 else:
-                    print('%s - movie not found in TMDB' % imdb_id)
+                    print('%s - movie not found.' % imdb_id)

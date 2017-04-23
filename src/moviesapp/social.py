@@ -1,4 +1,4 @@
-# coding: utf-8
+# -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
 import facebook
@@ -38,7 +38,7 @@ class Fb:
         return friends
 
 
-def load_user_data(backend, user, response, *args, **kwargs):
+def load_user_data(backend, user, **kwargs):  # pylint: disable=unused-argument
     if user.loaded_initial_data:
         return
 

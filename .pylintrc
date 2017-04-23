@@ -8,4 +8,8 @@ output-format=colorized
 
 [MESSAGES CONTROL]
 # Ignore import-error because it gives errors trying to import django. No idea why.
-disable=missing-docstring,unnecessary-lambda,invalid-name,no-init,redefined-outer-name,too-many-arguments,arguments-differ,import-error
+# Ignore no-member - looks like it is being detected improperly.
+
+# Temporarily ignored - bare-except, fixme - TODO
+# Temporarily ignored - R (refactoring) - TODO
+disable=missing-docstring,unnecessary-lambda,invalid-name,no-init,redefined-outer-name,too-many-arguments,arguments-differ,import-error,superfluous-parens,too-few-public-methods,no-member,old-style-class,bare-except,fixme,R

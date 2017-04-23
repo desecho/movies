@@ -1,4 +1,4 @@
-# coding: utf-8
+# -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
 from annoying.fields import JSONField
@@ -27,8 +27,7 @@ def get_poster_url(size, poster):
         no_image_url = None  # is not used anywhere
     if poster is not None:
         return settings.POSTER_BASE_URL + poster_size + '/' + poster
-    else:
-        return no_image_url
+    return no_image_url
 
 
 class User(AbstractUser):
@@ -108,8 +107,7 @@ class Movie(models.Model):
 
     def has_trailers(self):
         for trailer_type in self.trailers:
-            if len(self.trailers[trailer_type]) > 0:
-                return True
+            return bool(self.trailers[trailer_type])
 
     def _get_poster(self, size):
         return get_poster_url(size, self.poster)
@@ -143,11 +141,11 @@ class Movie(models.Model):
         id_format = '{0: < %d}' % (len(str(last_movie_id)) + 1)
         title = unicode(self)
         title = (title[:MAX_CHARS] + ENDING) if len(title) > MAX_CHARS else title
-        id = id_format.format(self.pk)
+        id_ = id_format.format(self.pk)
         title_max_length = MAX_CHARS + len(ENDING)
         title_format = '{:%ds}' % title_max_length
         title = title_format.format(title)
-        return '{} - {}'.format(id, title)[1:].decode('utf8')
+        return '{} - {}'.format(id_, title)[1:].decode('utf8')
 
 
 class Record(models.Model):
@@ -183,5 +181,5 @@ class ActionRecord(models.Model):
 
 
 @receiver(user_logged_in)
-def lang(sender, **kwargs):
+def lang(**kwargs):
     activate_user_language_preference(kwargs['request'], kwargs['user'].language)

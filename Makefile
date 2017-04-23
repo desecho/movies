@@ -18,5 +18,4 @@ coverage:
 pylint:
 	pylint src
 
-travis: install flake8 isort coverage
-#travis: install pylint flake8 isort coverage
+travis: install pylint flake8 isort coverage

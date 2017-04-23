@@ -1,32 +1,26 @@
-# coding: utf-8
+# -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
 import json
+import re
 import urllib2
 from datetime import datetime
 
-import tmdb3
 from django.conf import settings
+from raven.contrib.django.raven_compat.models import client
 
 from .models import ActionRecord, Movie, Record
-
-
-def init_tmdb():
-    tmdb3.set_key(settings.TMDB_KEY)
-    tmdb3.set_cache(filename=settings.TMDB_CACHE_PATH)
-    tmdb3.set_locale(*settings.LOCALES[settings.LANGUAGE_CODE])
-    return tmdb3
-
-
-def get_poster_from_tmdb(poster):
-    if poster:
-        return poster.filename
+from .search import get_poster_from_tmdb, tmdb
 
 
 def load_omdb_movie_data(imdb_id):
     try:
         response = urllib2.urlopen('http://www.omdbapi.com/?i=%s' % imdb_id)
     except:
+        if settings.DEBUG:
+            raise
+        else:
+            client.captureException()
         return
     movie_data = json.loads(response.read())
     if movie_data.get('Response') == 'True':
@@ -86,7 +80,16 @@ def add_movie_to_db(tmdb_id, update=False):
                         try:
                             runtime = datetime.strptime(runtime, '%M min')
                         except:
-                            return
+                            r = re.match(r'(\d+) min', '110 min')
+                            minutes = int(r.groups()[0])
+                            try:
+                                datetime.strptime('{:02d}:{:02d}'.format(*divmod(minutes, 60)), '%H:%M')
+                            except:
+                                if settings.DEBUG:
+                                    raise
+                                else:
+                                    client.captureException()
+                                return
                 return runtime
 
         movie_data = load_omdb_movie_data(imdb_id)
@@ -124,9 +127,12 @@ def add_movie_to_db(tmdb_id, update=False):
             tmdb.set_locale(*settings.LOCALES[lang])
             try:
                 movie_data = tmdb.Movie(tmdb_id)
-                movie_data.imdb  # any request to trigger a request
                 return movie_data
-            except Exception:
+            except:
+                if settings.DEBUG:
+                    raise
+                else:
+                    client.captureException()
                 return
 
         movie_data_en = get_movie_data(tmdb_id, 'en')
@@ -162,8 +168,7 @@ def add_movie_to_db(tmdb_id, update=False):
     movie_data = dict(movie_data_tmdb.items() + movie_data_omdb.items())
     if update:
         return update_movie()
-    else:
-        return save_movie()
+    return save_movie()
 
 
 def add_to_list_from_db(tmdb_id, list_id, user):
@@ -176,7 +181,7 @@ def add_to_list_from_db(tmdb_id, list_id, user):
         try:
             movie = Movie.objects.get(tmdb_id=tmdb_id)
             return movie.id
-        except:
+        except Movie.DoesNotExist:
             return
 
     movie_id = get_movie_id(tmdb_id)
@@ -187,6 +192,3 @@ def add_to_list_from_db(tmdb_id, list_id, user):
         add_movie_to_list(movie_id, list_id, user)
     else:
         return movie_id
-
-
-tmdb = init_tmdb()
