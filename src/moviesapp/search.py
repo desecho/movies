@@ -65,8 +65,7 @@ def get_movies_from_tmdb(query, type_, options, user):
                 movies_with_date.append(movie)
             else:
                 movies_without_date.append(movie)
-        movies_with_date = sorted(movies_with_date,
-                                  key=itemgetter('releaseDate'), reverse=True)
+        movies_with_date = sorted(movies_with_date, key=itemgetter('releaseDate'), reverse=True)
         movies = movies_with_date + movies_without_date
         return movies
 
@@ -122,9 +121,8 @@ def get_movies_from_tmdb(query, type_, options, user):
                 i += 1
                 if i > settings.MAX_RESULTS:
                     break
-                # ignore movies if imdb not found
-                if Record.objects.filter(movie__tmdb_id=movie.id,
-                                         user=user).exists() or not movie.imdb:
+                # ignore movie if imdb not found
+                if Record.objects.filter(movie__tmdb_id=movie.id, user=user).exists() or not movie.imdb:
                     continue
 
                 movie = {
@@ -135,7 +133,7 @@ def get_movies_from_tmdb(query, type_, options, user):
                     'poster': get_poster_url('small', get_poster_from_tmdb(movie.poster)),
                 }
                 movies.append(movie)
-        except IndexError:  # strange exception in 'matrix case'
+        except IndexError:  # strange exception in 'matrix case' TODO look into that
             pass
         if options['popular_only']:
             movies = remove_not_popular_movies(movies)

@@ -37,16 +37,14 @@ def add_movie_to_list(movie_id, list_id, user):
     if record.exists():
         record = record[0]
         if record.list_id != list_id:
-            ActionRecord(action_id=2, user=user,
-                         movie_id=movie_id, list_id=list_id).save()
+            ActionRecord(action_id=2, user=user, movie_id=movie_id, list_id=list_id).save()
             record.list_id = list_id
             record.date = datetime.today()
             record.save()
     else:
         record = Record(movie_id=movie_id, list_id=list_id, user=user)
         record.save()
-        ActionRecord(action_id=1, user=user,
-                     movie_id=movie_id, list_id=list_id).save()
+        ActionRecord(action_id=1, user=user, movie_id=movie_id, list_id=list_id).save()
 
 
 def add_movie_to_db(tmdb_id, update=False):

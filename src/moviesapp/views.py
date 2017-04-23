@@ -247,8 +247,7 @@ def list_view(request, list_name, username=None):
         list_data = None
 
     if not username and list_name == 'to-watch' and records:
-        comments_and_ratings = get_comments_and_ratings(
-            records.values_list('id', 'movie_id'), request.user)
+        comments_and_ratings = get_comments_and_ratings(records.values_list('id', 'movie_id'), request.user)
     else:
         comments_and_ratings = None
     records = paginate(records, request.GET.get('page'),
@@ -302,8 +301,7 @@ def feed(request, list_name):
     if list_name == 'friends':
         actions = actions.filter(user__in=get_friends(request.user))
     else:
-        actions = actions.filter(
-            user__in=get_available_users_and_friends(request.user))
+        actions = actions.filter(user__in=get_available_users_and_friends(request.user))
 
     posters = [action.movie.poster_small for action in actions]
     actions_output = []
@@ -337,16 +335,14 @@ def generic_people(request, users):
 # @cache_page(settings.CACHE_TIMEOUT)
 @login_required
 def people(request):
-    return generic_people(request,
-                          get_available_users_and_friends(user=request.user,
-                                                          sort=True))
+    return generic_people(request, get_available_users_and_friends(user=request.user,
+                                                                   sort=True))
 
 
 # @cache_page(settings.CACHE_TIMEOUT)
 @login_required
 def friends(request):
-    return generic_people(request,
-                          get_friends(request.user).order_by('first_name'))
+    return generic_people(request, get_friends(request.user).order_by('first_name'))
 
 
 def ajax_apply_settings(request):
