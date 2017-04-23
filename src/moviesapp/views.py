@@ -46,8 +46,7 @@ def get_friends(user):
 
 def filter_movies_for_recommendation(records, user):
     """Keep movies only with 3+ rating, removes watched movies."""
-    return records.filter(rating__gte=3) \
-        .exclude(movie__in=user.get_movie_ids())
+    return records.filter(rating__gte=3).exclude(movie__in=user.get_movie_ids())
 
 
 def logout_view(request):
@@ -123,8 +122,7 @@ def recommendation(request):
             return (records_output, record_ids_and_movies)
 
         # exclude own records and include only friends' records
-        records = Record.objects.exclude(user=request.user) \
-            .filter(user__in=friends).select_related()
+        records = Record.objects.exclude(user=request.user).filter(user__in=friends).select_related()
         # order records by user rating and by imdb rating
         records = records.order_by('-rating', '-movie__imdb_rating',
                                    '-movie__release_date')
@@ -168,8 +166,7 @@ def paginate(objects, page, objects_on_page):
 
 @login_required
 def list_username(request, list_name, username=None):
-    if User.objects.get(username=username) in \
-            get_available_users_and_friends(request.user):
+    if User.objects.get(username=username) in get_available_users_and_friends(request.user):
         return list_view(request, list_name, username)
 
 
@@ -187,7 +184,8 @@ def list_view(request, list_name, username=None):
     def get_list_data(records):
         movies, record_ids_and_movies_dict = get_record_movie_data(
             records.values_list('id', 'movie_id'))
-        movie_ids_and_list_ids = (Record.objects.filter(user=request.user, movie_id__in=movies)
+        movie_ids_and_list_ids = (Record.objects
+                                  .filter(user=request.user, movie_id__in=movies)
                                   .values_list('movie_id', 'list_id'))
 
         movie_id_and_list_id_dict = {}
