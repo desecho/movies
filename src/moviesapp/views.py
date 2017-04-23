@@ -228,7 +228,7 @@ def list_view(request, list_name, username=None):
         return anothers_account
 
     def search_records(query):
-        return records.filter(Q(movie__title_en__icontains=query) |  # TODO check if can be done better
+        return records.filter(Q(movie__title_en__icontains=query) |
                               Q(movie__title_ru__icontains=query))
 
     initialize_session_values()

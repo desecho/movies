@@ -10,7 +10,7 @@ from django.conf import settings
 from raven.contrib.django.raven_compat.models import client
 
 from .models import ActionRecord, Movie, Record
-from .search import get_poster_from_tmdb, tmdb
+from .search import get_poster_from_tmdb, get_tmdb
 
 
 def load_omdb_movie_data(imdb_id):
@@ -105,26 +105,26 @@ def add_movie_to_db(tmdb_id, update=False):
             if release_date:
                 return release_date
 
-        def get_trailers(movie_data):
-            youtube_trailers = []
-            for trailer in movie_data.youtube_trailers:
-                t = {'name': trailer.name, 'source': trailer.source}
-                youtube_trailers.append(t)
-            apple_trailers = []
-            for trailer in movie_data.apple_trailers:
-                trailers = []
-                i = 0
-                for size in trailer.sources:
-                    tr = {'size': size, 'source': trailer.sources[size].source}
-                    trailers.append(tr)
-                    i += 1
-                apple_trailers.append({'name': trailer.name, 'sizes': trailers})
-            return {'youtube': youtube_trailers, 'quicktime': apple_trailers}
+        # def get_trailers(movie_data):
+        #     youtube_trailers = []
+        #     for trailer in movie_data.youtube_trailers:
+        #         t = {'name': trailer.name, 'source': trailer.source}
+        #         youtube_trailers.append(t)
+        #     apple_trailers = []
+        #     for trailer in movie_data.apple_trailers:
+        #         trailers = []
+        #         i = 0
+        #         for size in trailer.sources:
+        #             tr = {'size': size, 'source': trailer.sources[size].source}
+        #             trailers.append(tr)
+        #             i += 1
+        #         apple_trailers.append({'name': trailer.name, 'sizes': trailers})
+        #     return {'youtube': youtube_trailers, 'quicktime': apple_trailers}
 
         def get_movie_data(tmdb_id, lang):
-            tmdb.set_locale(*settings.LOCALES[lang])
+            tmdb = get_tmdb(lang=lang)
             try:
-                movie_data = tmdb.Movie(tmdb_id)
+                movie_data = tmdb.Movies(tmdb_id).info()
                 return movie_data
             except:
                 if settings.DEBUG:
@@ -141,20 +141,22 @@ def add_movie_to_db(tmdb_id, update=False):
         if movie_data_ru is None:
             return None
 
-        if movie_data_en.imdb:
+        imdb_id = movie_data_en['imdb_id']
+        if imdb_id:
             return {
                 'tmdb_id': tmdb_id,
-                'imdb_id': movie_data_en.imdb,
-                'release_date': get_release_date(movie_data_en.releasedate),
-                'title_original': movie_data_en.originaltitle,
-                'poster_ru': get_poster_from_tmdb(movie_data_ru.poster),
-                'poster_en': get_poster_from_tmdb(movie_data_en.poster),
-                'homepage': movie_data_en.homepage,
-                'trailers': get_trailers(movie_data_en),
-                'title_en': movie_data_en.title,
-                'title_ru': movie_data_ru.title,
-                'description_en': movie_data_en.overview,
-                'description_ru': movie_data_ru.overview,
+                'imdb_id': imdb_id,
+                'release_date': get_release_date(movie_data_en['release_date']),
+                'title_original': movie_data_en['original_title'],
+                'poster_ru': get_poster_from_tmdb(movie_data_ru['poster_path']),
+                'poster_en': get_poster_from_tmdb(movie_data_en['poster_path']),
+                'homepage': movie_data_en['homepage'],
+                # 'trailers': get_trailers(movie_data_en), TODO Fix trailers
+                'trailers': {'youtube': [], 'quicktime': []},
+                'title_en': movie_data_en['title'],
+                'title_ru': movie_data_ru['title'],
+                'description_en': movie_data_en['overview'],
+                'description_ru': movie_data_ru['overview'],
             }
 
     movie_data_tmdb = get_tmdb_movie_data(tmdb_id)

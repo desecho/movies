@@ -199,9 +199,8 @@ MEDIA_ROOT = op.join(local_settings.PROJECT_ROOT, 'media')
 MEDIA_URL = '/media/'
 
 CACHE_DIR = op.join(local_settings.PROJECT_ROOT, 'cache')
-TMDB_CACHE_PATH = op.join(CACHE_DIR, 'tmdb3.cache')
 
-MAX_RESULTS = 100
+MAX_RESULTS = 50
 MIN_POPULARITY = 50
 
 NO_POSTER_SMALL_IMAGE_URL = STATIC_URL + 'img/no_poster_small.png'

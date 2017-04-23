@@ -39,7 +39,6 @@ function ($scope, RemoveRecord, SaveComment) {
 
   $scope.switchMode = function(newMode) {
     function deactivateModeMinimal() {
-      // TODO .comment, .comment-button fix display
       $('.poster, .comment, .release-date-label, .wall-post').show();
       $('.comment-button').hide();
       $('.details, .imdb-rating, .review, .release-date').css('display', '');

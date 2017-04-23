@@ -3,26 +3,25 @@ from __future__ import unicode_literals
 
 from operator import itemgetter
 
-import tmdb3
+import tmdbsimple
+from datetime import datetime
 from django.conf import settings
 from raven.contrib.django.raven_compat.models import client
 
 from .models import Record, get_poster_url
 
 
-def init_tmdb():
-    tmdb3.set_key(settings.TMDB_KEY)
-    tmdb3.set_cache(filename=settings.TMDB_CACHE_PATH)
-    tmdb3.set_locale(*settings.LOCALES[settings.LANGUAGE_CODE])
-    return tmdb3
-
-
-tmdb = init_tmdb()
+def get_tmdb(user=None, lang=None):
+    tmdbsimple.API_KEY = settings.TMDB_KEY
+    # TODO fix locale
+    if user is not None:
+        lang = user.language
+    return tmdbsimple
 
 
 def get_poster_from_tmdb(poster):
     if poster:
-        return poster.filename
+        return poster[1:]
 
 
 def get_movies_from_tmdb(query, type_, options, user):
@@ -34,8 +33,9 @@ def get_movies_from_tmdb(query, type_, options, user):
 
     def set_proper_date(movies):
         def format_date(date):
+            date = datetime.strptime(date, '%Y-%m-%d')
             if date:
-                return date.strftime('%d.%m.%y')
+                return date.strftime('%d.%m.%y')  # TODO fix date for locale
 
         for movie in movies:
             movie['releaseDate'] = format_date(movie['releaseDate'])
@@ -71,16 +71,17 @@ def get_movies_from_tmdb(query, type_, options, user):
 
     def get_data(query, type_):
         'For actor, director search - the first is used.'
-        tmdb.set_locale(*settings.LOCALES[user.language])
         query = query.encode('utf-8')
         SEARCH_TYPES_IDS = {
             'movie': 1,
             'actor': 2,
             'director': 3,
         }
+        tmdb = get_tmdb(user)
+        search = tmdb.Search()
         if type_ == SEARCH_TYPES_IDS['movie']:
             try:
-                movies = tmdb.searchMovie(query)
+                movies = search.movie(query=query)['results']
             except:
                 if settings.DEBUG:
                     raise
@@ -88,23 +89,25 @@ def get_movies_from_tmdb(query, type_, options, user):
                     client.captureException()
                 return -1
         else:
-            try:
-                result = tmdb.searchPerson(query)
-            except:
-                if settings.DEBUG:
-                    raise
-                else:
-                    client.captureException()
-                return -1
-            movies = []
-            if result:
-                person = result[0]
-                if type_ == SEARCH_TYPES_IDS['actor']:
-                    movies = person.roles
-                else:
-                    for movie in person.crew:
-                        if movie.job == 'Director':
-                            movies.append(movie)
+            pass
+            # TODO fix searches.
+            # try:
+            #     result = tmdb.searchPerson(query)
+            # except:
+            #     if settings.DEBUG:
+            #         raise
+            #     else:
+            #         client.captureException()
+            #     return -1
+            # movies = []
+            # if result:
+            #     person = result[0]
+            #     if type_ == SEARCH_TYPES_IDS['actor']:
+            #         movies = person.roles
+            #     else:
+            #         for movie in person.crew:
+            #             if movie.job == 'Director':
+            #                 movies.append(movie)
         return movies
 
     output = {}
@@ -114,23 +117,22 @@ def get_movies_from_tmdb(query, type_, options, user):
         return output
     movies = []
     i = 0
-
     if movies_data:
+        user_movies_tmdb_ids = Record.objects.filter(user=user).values_list('movie__tmdb_id', flat=True)
         try:
             for movie in movies_data:
+                tmdb_id = movie['id']
                 i += 1
                 if i > settings.MAX_RESULTS:
                     break
-                # ignore movie if imdb not found
-                if Record.objects.filter(movie__tmdb_id=movie.id, user=user).exists() or not movie.imdb:
+                if tmdb_id in user_movies_tmdb_ids:
                     continue
-
                 movie = {
-                    'id': movie.id,
-                    'releaseDate': movie.releasedate,
-                    'popularity': movie.popularity,
-                    'title': movie.title,
-                    'poster': get_poster_url('small', get_poster_from_tmdb(movie.poster)),
+                    'id': tmdb_id,
+                    'releaseDate': movie['release_date'],
+                    'popularity': movie['popularity'],
+                    'title': movie['title'],
+                    'poster': get_poster_url('small', get_poster_from_tmdb(movie['poster_path'])),
                 }
                 movies.append(movie)
         except IndexError:  # strange exception in 'matrix case' TODO look into that
@@ -140,7 +142,6 @@ def get_movies_from_tmdb(query, type_, options, user):
         if options['sort_by_date']:
             movies = sort_by_date(movies)
         # movies = sortByPopularity(movies)
-
         movies = set_proper_date(movies)
         if movies:
             output['status'] = STATUS_CODES['found']

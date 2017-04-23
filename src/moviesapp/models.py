@@ -87,7 +87,7 @@ class Movie(models.Model):
     writer = models.CharField(max_length=255, null=True, blank=True)
     genre = models.CharField(max_length=255, null=True, blank=True)
     actors = models.CharField(max_length=255, null=True, blank=True)
-    imdb_id = models.CharField(max_length=15, unique=True)
+    imdb_id = models.CharField(max_length=15, unique=True, db_index=True)
     tmdb_id = models.IntegerField(unique=True)
     imdb_rating = models.DecimalField(max_digits=2, decimal_places=1, null=True)
     poster = models.CharField(max_length=255, null=True)
