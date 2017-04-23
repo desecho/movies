@@ -9,7 +9,7 @@
 {% for user in users %}
     <div class="person">
       <a href="/people/{{ user.username }}/watched">{% avatar user %}</a>
-      <a href="/people/{{ user.username }}/watched">{{ user }}</a>
+      <a href="/people/{{ user.username }}/watched" class="people-user">{{ user }}</a>
       {% movie_count user %}
     </div>
 {% endfor %}
