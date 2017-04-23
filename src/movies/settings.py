@@ -10,7 +10,10 @@ from django.utils.translation import ugettext_lazy as _
 try:
     import local_settings
 except ImportError:
-    print("no local_settings!")
+    try:
+        import initial_settings
+    except ImportError:
+        print('No initial settings!')
     sys.exit()
 
 # SECURITY WARNING: keep the secret key used in production secret!
