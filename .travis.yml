@@ -1,0 +1,14 @@
+language: python
+
+python:
+  - "2.7"
+
+after_success:
+  - codecov
+
+branches:
+  only:
+    - master
+
+script:
+  - make travis
