@@ -1,0 +1,11 @@
+[MASTER]
+ignore=migrations
+[FORMAT]
+max-line-length: 119
+
+[REPORTS]
+output-format=colorized
+
+[MESSAGES CONTROL]
+# Ignore import-error because it gives errors trying to import django. No idea why.
+disable=missing-docstring,unnecessary-lambda,invalid-name,no-init,redefined-outer-name,too-many-arguments,arguments-differ,import-error

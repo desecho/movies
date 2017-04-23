@@ -1,4 +1,4 @@
-.PHONY: install upgrade flake8 coverage travis
+.PHONY: install upgrade flake8 coverage travis pylint
 
 install:
 	pip install -r requirements-dev.txt
@@ -15,4 +15,8 @@ isort:
 coverage:
 	py.test --cov-report term-missing --cov src
 
+pylint:
+	pylint src
+
 travis: install flake8 isort coverage
+#travis: install pylint flake8 isort coverage
