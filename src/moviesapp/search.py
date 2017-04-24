@@ -71,6 +71,7 @@ def get_movies_from_tmdb(query, type_, options, user):
 
     def get_data(query, type_):
         'For actor, director search - the first is used.'
+
         def process_person_entries(entries):
             movies = [e for e in entries if e['media_type'] == 'movie']
             for m in movies:
@@ -128,7 +129,7 @@ def get_movies_from_tmdb(query, type_, options, user):
                 'poster': get_poster_url('small', get_poster_from_tmdb(movie['poster_path'])),
             }
             movies.append(movie)
-        # except IndexError:  # strange exception in 'matrix case'? Don't believe it.
+            # except IndexError:  # strange exception in 'matrix case'? Don't believe it.
             # pass
         if options['popular_only']:
             movies = remove_not_popular_movies(movies)
