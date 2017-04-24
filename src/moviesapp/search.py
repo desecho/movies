@@ -12,9 +12,9 @@ from .models import Record, get_poster_url
 
 def get_tmdb(user=None, lang=None):
     tmdbsimple.API_KEY = settings.TMDB_KEY
-    # TODO fix locale
     if user is not None:
         lang = user.language
+    tmdbsimple.LANGUAGE = lang
     return tmdbsimple
 
 

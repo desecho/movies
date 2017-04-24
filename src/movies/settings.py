@@ -225,8 +225,6 @@ MAX_RECOMMENDATIONS = 50
 RECORDS_ON_PAGE = 50
 PEOPLE_ON_PAGE = 25
 FEED_DAYS = 7
-LOCALES = {'ru': ('ru', 'ru'),
-           'en': ('en', 'US')}
 
 # CACHE_TIMEOUT = 60 * 60 * 12
 # CACHES = {

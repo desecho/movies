@@ -21,5 +21,8 @@ tmdbsimple==1.6.1
 # My custom module
 -e git+https://github.com/desecho/django-tqdm.git#egg=django-tqdm
 
-#django-bootstrap-pagination==1.6.2
+# django-bootstrap-pagination==1.6.2
 -e git+https://github.com/desecho/django-bootstrap-pagination.git@ru#egg=django-bootstrap-pagination
+
+# tmdbsimple==1.6.1
+-e git+https://github.com/desecho/tmdbsimple.git@lang#egg=tmdbsimple
