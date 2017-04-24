@@ -105,66 +105,41 @@ def add_movie_to_db(tmdb_id, update=False):
             if release_date:
                 return release_date
 
-        # def get_trailers(movie_data):
-        #     youtube_trailers = []
-        #     for trailer in movie_data.youtube_trailers:
-        #         t = {'name': trailer.name, 'source': trailer.source}
-        #         youtube_trailers.append(t)
-        #     apple_trailers = []
-        #     for trailer in movie_data.apple_trailers:
-        #         trailers = []
-        #         i = 0
-        #         for size in trailer.sources:
-        #             tr = {'size': size, 'source': trailer.sources[size].source}
-        #             trailers.append(tr)
-        #             i += 1
-        #         apple_trailers.append({'name': trailer.name, 'sizes': trailers})
-        #     return {'youtube': youtube_trailers, 'quicktime': apple_trailers}
+        def get_trailers(movie_data):
+            youtube_trailers = []
+            trailers = movie_data.videos()['results']
+            for trailer in trailers:
+                if trailer['site'] == 'YouTube':
+                    t = {'name': trailer['name'], 'source': trailer['key']}
+                    youtube_trailers.append(t)
+            return {'youtube': youtube_trailers, 'quicktime': []}
 
         def get_movie_data(tmdb_id, lang):
             tmdb = get_tmdb(lang=lang)
-            try:
-                movie_data = tmdb.Movies(tmdb_id).info()
-                return movie_data
-            except:
-                if settings.DEBUG:
-                    raise
-                else:
-                    client.captureException()
-                return
+            return tmdb.Movies(tmdb_id)
 
         movie_data_en = get_movie_data(tmdb_id, 'en')
-        if movie_data_en is None:
-            return None
-
-        movie_data_ru = get_movie_data(tmdb_id, 'ru')
-        if movie_data_ru is None:
-            return None
-
-        imdb_id = movie_data_en['imdb_id']
+        movie_info_en = movie_data_en.info()
+        movie_info_ru = get_movie_data(tmdb_id, 'ru').info()
+        imdb_id = movie_info_en['imdb_id']
         if imdb_id:
             return {
                 'tmdb_id': tmdb_id,
                 'imdb_id': imdb_id,
-                'release_date': get_release_date(movie_data_en['release_date']),
-                'title_original': movie_data_en['original_title'],
-                'poster_ru': get_poster_from_tmdb(movie_data_ru['poster_path']),
-                'poster_en': get_poster_from_tmdb(movie_data_en['poster_path']),
-                'homepage': movie_data_en['homepage'],
-                # 'trailers': get_trailers(movie_data_en), TODO Fix trailers
-                'trailers': {'youtube': [], 'quicktime': []},
-                'title_en': movie_data_en['title'],
-                'title_ru': movie_data_ru['title'],
-                'description_en': movie_data_en['overview'],
-                'description_ru': movie_data_ru['overview'],
+                'release_date': get_release_date(movie_info_en['release_date']),
+                'title_original': movie_info_en['original_title'],
+                'poster_ru': get_poster_from_tmdb(movie_info_ru['poster_path']),
+                'poster_en': get_poster_from_tmdb(movie_info_en['poster_path']),
+                'homepage': movie_info_en['homepage'],
+                'trailers': get_trailers(movie_data_en),
+                'title_en': movie_info_en['title'],
+                'title_ru': movie_info_ru['title'],
+                'description_en': movie_info_en['overview'],
+                'description_ru': movie_info_ru['overview'],
             }
 
     movie_data_tmdb = get_tmdb_movie_data(tmdb_id)
-    if movie_data_tmdb is None:
-        return -1
     movie_data_omdb = get_omdb_movie_data(movie_data_tmdb['imdb_id'])
-    if movie_data_omdb is None:
-        return -2
     movie_data = dict(movie_data_tmdb.items() + movie_data_omdb.items())
     if update:
         return update_movie()
@@ -172,9 +147,7 @@ def add_movie_to_db(tmdb_id, update=False):
 
 
 def add_to_list_from_db(tmdb_id, list_id, user):
-    """Return error code on error or None on success'
-       Return -1 if there is a problem with obtaining data from TMDB
-       Return -2 if there is a problem with obtaining data from OMDB"""
+    """Return None on success"""
 
     def get_movie_id(tmdb_id):
         """Return movie id or None if movie is not found."""

@@ -161,13 +161,13 @@ legend {
 }
 
 label {
-    font-weight: normal;
+  font-weight: normal;
 }
 
 .search-panel-additional {
-    margin-left: 25px;
+  margin-left: 25px;
 }
 
-.people-user {
+.people-user, .trailers a {
   margin-left: 10px;
 }

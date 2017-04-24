@@ -106,8 +106,10 @@ class Movie(models.Model):
         return settings.IMDB_BASE_URL + self.imdb_id + '/'
 
     def has_trailers(self):
-        for trailer_type in self.trailers:
-            return bool(self.trailers[trailer_type])
+        trailers = self.trailers.values()
+        if not trailers[0]:
+            return bool(trailers[1])
+        return False
 
     def _get_poster(self, size):
         return get_poster_url(size, self.poster)
