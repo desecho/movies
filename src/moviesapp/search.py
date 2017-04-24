@@ -1,12 +1,11 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from datetime import datetime
 from operator import itemgetter
 
 import tmdbsimple
-from datetime import datetime
 from django.conf import settings
-from raven.contrib.django.raven_compat.models import client
 
 from .models import Record, get_poster_url
 
