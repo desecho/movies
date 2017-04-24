@@ -9,7 +9,6 @@ social-auth-app-django==1.1.0
 raven==6.0.0
 facebook-sdk==2.0.0
 tabulate==0.7.7
-tmdbsimple==1.6.1
 
 # social-auth-core==1.2.0
 # dependency of social-auth-app-django
