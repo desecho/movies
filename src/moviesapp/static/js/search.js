@@ -43,10 +43,8 @@ function ($scope, SearchMovie, AddToListFromDb) {
       movieId: movieId,
       listId: listId
     }), function(data) {
-      if (data.status === -1) {
-        return displayMessage(gettext('Error! Code #') + '1');
-      } else if (data.status === -2) {
-        return displayMessage(gettext('Error! Code #') + '2');
+      if (data.status === 'not_found') {
+        return displayMessage(gettext('Movie is not found in the database'));
       } else {
         return $('#movie' + movieId).fadeOut('fast', function() {
           return $(this).remove();

@@ -41,12 +41,6 @@ def get_movies_from_tmdb(query, type_, options, user):
             movie['releaseDate'] = format_date(movie['releaseDate'])
         return movies
 
-    # def sortByPopularity(movies):
-    #     movies = sorted(movies, key=itemgetter('popularity'), reverse=True)
-    #     for movie in movies:
-    #         del movie['popularity']
-    #     return movies
-
     def remove_not_popular_movies(movies):
         movies_output = []
         for movie in movies:
@@ -135,7 +129,6 @@ def get_movies_from_tmdb(query, type_, options, user):
             movies = remove_not_popular_movies(movies)
         if options['sort_by_date']:
             movies = sort_by_date(movies)
-        # movies = sortByPopularity(movies)
         movies = set_proper_date(movies)
         if movies:
             output['status'] = STATUS_CODES['found']

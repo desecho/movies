@@ -1,0 +1,2 @@
+class MovieNotInDb(Exception):
+    pass

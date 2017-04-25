@@ -4,7 +4,6 @@ from __future__ import unicode_literals
 import json
 import os
 import tempfile
-# import logging
 import urllib2
 from datetime import datetime
 
@@ -21,16 +20,14 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.csrf import ensure_csrf_cookie
 from poster.encode import multipart_encode
 from poster.streaminghttp import register_openers
+from raven.contrib.django.raven_compat.models import client
 
-from .models import (ActionRecord, List, Record, User,
+from .exceptions import MovieNotInDb
+from .models import (ActionRecord, List, Movie, Record, User,
                      activate_user_language_preference)
 from .search import get_movies_from_tmdb
 from .social import Fb, Vk
-from .utils import add_movie_to_list, add_to_list_from_db
-
-
-# logger = logging.getLogger('moviesapp.test')
-# logger.debug(options)
+from .utils import add_movie_to_db, add_movie_to_list
 
 
 def get_friends(user):
@@ -324,7 +321,6 @@ def feed(request, list_name):
             'actions': actions_output}
 
 
-# @cache_page(settings.CACHE_TIMEOUT)
 @render_to('people.html')
 @login_required
 def generic_people(request, users):
@@ -332,14 +328,12 @@ def generic_people(request, users):
                               settings.PEOPLE_ON_PAGE)}
 
 
-# @cache_page(settings.CACHE_TIMEOUT)
 @login_required
 def people(request):
     return generic_people(request, get_available_users_and_friends(user=request.user,
                                                                    sort=True))
 
 
-# @cache_page(settings.CACHE_TIMEOUT)
 @login_required
 def friends(request):
     return generic_people(request, get_friends(request.user).order_by('first_name'))
@@ -396,23 +390,6 @@ def ajax_change_rating(request):
     return HttpResponse()
 
 
-# @ajax_request
-# def ajax_download(request):
-#     def get_url(query):
-#         filter = urlquote(u'Íàéòè')
-#         query = urlquote(query)
-#         return 'http://2torrents.org/search/listjson?filters[title]=%s&filter=%s&sort=seeders&type=desc' % \
-#             (query, filter)
-
-#     if request.is_ajax() and request.method == 'POST':
-#         POST = request.POST
-#         if 'query' in POST:
-#             url = get_url(POST.get('query'))
-#             html = urllib2.urlopen(url).read()
-#             html = html.replace('"items": {"list":[,{', '"items": {"list":[{')
-#             return {'data': html}
-
-
 @ajax_request
 def ajax_search_movie(request):
     if request.method == 'GET':
@@ -427,14 +404,35 @@ def ajax_search_movie(request):
 
 @ajax_request
 def ajax_add_to_list_from_db(request):
+    def add_to_list_from_db(tmdb_id, list_id, user):
+        """Return True on success and None of failure"""
+
+        def get_movie_id(tmdb_id):
+            """Return movie id or None if movie is not found."""
+            try:
+                movie = Movie.objects.get(tmdb_id=tmdb_id)
+                return movie.id
+            except Movie.DoesNotExist:
+                return
+
+        movie_id = get_movie_id(tmdb_id)
+        if movie_id is None:
+            try:
+                movie_id = add_movie_to_db(tmdb_id)
+            except MovieNotInDb:
+                client.captureException()
+                return None
+        add_movie_to_list(movie_id, list_id, user)
+        return True
+
     if request.is_ajax() and request.method == 'POST':
         POST = request.POST
         if 'movieId' in POST and 'listId' in POST:
-            error_code = add_to_list_from_db(int(POST.get('movieId')),
-                                             int(POST.get('listId')),
-                                             request.user)
-            if error_code:
-                return {'status': error_code}
+            result = add_to_list_from_db(int(POST.get('movieId')),
+                                         int(POST.get('listId')),
+                                         request.user)
+            if not result:
+                return {'status': 'not_found'}
     return HttpResponse()
 
 

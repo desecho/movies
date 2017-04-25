@@ -9,6 +9,7 @@ from datetime import datetime
 from django.conf import settings
 from raven.contrib.django.raven_compat.models import client
 
+from .exceptions import MovieNotInDb
 from .models import ActionRecord, Movie, Record
 from .search import get_poster_from_tmdb, get_tmdb
 
@@ -49,8 +50,8 @@ def add_movie_to_list(movie_id, list_id, user):
 
 def add_movie_to_db(tmdb_id, update=False):
     """
-    Return movie id or error code -1 or -2.
-    If update is True, return either error code or bool (updated or not)
+    Return movie id.
+    If update is True, return bool (updated or not)
     """
 
     def save_movie():
@@ -137,6 +138,8 @@ def add_movie_to_db(tmdb_id, update=False):
                 'description_en': movie_info_en['overview'],
                 'description_ru': movie_info_ru['overview'],
             }
+        else:
+            raise MovieNotInDb(tmdb_id)
 
     movie_data_tmdb = get_tmdb_movie_data(tmdb_id)
     movie_data_omdb = get_omdb_movie_data(movie_data_tmdb['imdb_id'])
@@ -144,24 +147,3 @@ def add_movie_to_db(tmdb_id, update=False):
     if update:
         return update_movie()
     return save_movie()
-
-
-def add_to_list_from_db(tmdb_id, list_id, user):
-    """Return None on success"""
-
-    def get_movie_id(tmdb_id):
-        """Return movie id or None if movie is not found."""
-        try:
-            movie = Movie.objects.get(tmdb_id=tmdb_id)
-            return movie.id
-        except Movie.DoesNotExist:
-            return
-
-    movie_id = get_movie_id(tmdb_id)
-    if movie_id is None:
-        movie_id = add_movie_to_db(tmdb_id)
-    # movie_id can become negative and reflect the errors
-    if movie_id > 0:
-        add_movie_to_list(movie_id, list_id, user)
-    else:
-        return movie_id

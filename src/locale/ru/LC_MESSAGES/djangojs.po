@@ -8,16 +8,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-18 01:50-0400\n"
-"PO-Revision-Date: 2017-04-16 15:34-0400\n"
+"POT-Creation-Date: 2017-04-25 02:06-0400\n"
+"PO-Revision-Date: 2017-04-25 02:06-0400\n"
 "Last-Translator: Anton Samarchyan <desecho@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Translated-Using: django-rosetta 0.7.13\n"
 
 #: moviesapp/static/js/list.js:19
@@ -28,51 +27,51 @@ msgstr "Список пуст"
 msgid "Error removing the movie"
 msgstr "Ошибка удаления фильма"
 
-#: moviesapp/static/js/list.js:81
+#: moviesapp/static/js/list.js:80
 msgid "Error saving a comment"
 msgstr "Ошибка сохранения комментария"
 
-#: moviesapp/static/js/list.js:112
+#: moviesapp/static/js/list.js:111
 msgid "Error adding a rating"
 msgstr "Ошибка добавления рейтинга"
 
-#: moviesapp/static/js/list.js:142
+#: moviesapp/static/js/list.js:141
 msgid "Error applying the setting"
 msgstr "Ошибка применения настройки"
 
-#: moviesapp/static/js/list.js:185
+#: moviesapp/static/js/list.js:184
 msgid "I recommend watching"
 msgstr "Я рекомендую к просмотру"
 
-#: moviesapp/static/js/list.js:187
+#: moviesapp/static/js/list.js:186
 msgid "I don't recommend watching"
 msgstr "Я не рекомендую к просмотру"
 
-#: moviesapp/static/js/list.js:189
+#: moviesapp/static/js/list.js:188
 msgid "My rating"
 msgstr "Моя оценка"
 
-#: moviesapp/static/js/list.js:210
+#: moviesapp/static/js/list.js:209
 msgid "Error posting to the wall #"
 msgstr "Ошибка размещения на стену #"
 
-#: moviesapp/static/js/list.js:213
+#: moviesapp/static/js/list.js:212
 msgid "Your post has been posted"
 msgstr "Ваша запись была размещена"
 
-#: moviesapp/static/js/list.js:221
+#: moviesapp/static/js/list.js:220
 msgid "Error posting a poster to the wall #"
 msgstr "Ошибка размещения постера на стену #"
 
-#: moviesapp/static/js/list.js:235
+#: moviesapp/static/js/list.js:234
 msgid "Error loading a poster"
 msgstr "Ошибка загрузки постера"
 
-#: moviesapp/static/js/list.js:242
+#: moviesapp/static/js/list.js:241
 msgid "Error getting an upload server for wall posting #"
 msgstr "Ошибка получения сервера загрузки для размещения на стену #"
 
-#: moviesapp/static/js/list.js:262
+#: moviesapp/static/js/list.js:261
 msgid "Add a rating to the movie"
 msgstr "Добавить оценку фильму"
 
@@ -124,7 +123,7 @@ msgstr "Отменить оценку"
 msgid "No rating yet"
 msgstr "Пока нет оценки"
 
-#: moviesapp/static/js/search.js:16 moviesapp/static/js/search.js:62
+#: moviesapp/static/js/search.js:16 moviesapp/static/js/search.js:60
 msgid "Movie"
 msgstr "Фильм"
 
@@ -132,18 +131,21 @@ msgstr "Фильм"
 msgid "Search Error"
 msgstr "Ошибка Поиска"
 
-#: moviesapp/static/js/search.js:47 moviesapp/static/js/search.js:49
-msgid "Error! Code #"
-msgstr "Ошибка! Код #"
+#: moviesapp/static/js/search.js:47
+msgid "Movie is not found in the database"
+msgstr "Фильм не найден в базе данных"
 
-#: moviesapp/static/js/search.js:55
+#: moviesapp/static/js/search.js:53
 msgid "Error adding a movie"
 msgstr "Ошибка добавления фильма"
 
-#: moviesapp/static/js/search.js:65
+#: moviesapp/static/js/search.js:63
 msgid "Actor"
 msgstr "Актёр"
 
-#: moviesapp/static/js/search.js:68
+#: moviesapp/static/js/search.js:66
 msgid "Director"
 msgstr "Режиссёр"
+
+#~ msgid "Error! Code #"
+#~ msgstr "Ошибка! Код #"
