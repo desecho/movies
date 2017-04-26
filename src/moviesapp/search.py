@@ -73,14 +73,9 @@ def get_movies_from_tmdb(query, type_, options, user):
             return movies
 
         query = query.encode('utf-8')
-        SEARCH_TYPES_IDS = {
-            'movie': 1,
-            'actor': 2,
-            'director': 3,
-        }
         tmdb = get_tmdb(user.language)
         search = tmdb.Search()
-        if type_ == SEARCH_TYPES_IDS['movie']:
+        if type_ == 'movie':
             movies = search.movie(query=query)['results']
         else:
             persons = search.person(query=query)['results']
@@ -90,7 +85,7 @@ def get_movies_from_tmdb(query, type_, options, user):
                 return []
             person = tmdb.People(person_id)
             person.combined_credits()
-            if type_ == SEARCH_TYPES_IDS['actor']:
+            if type_ == 'actor':
                 movies = process_person_entries(person.cast)
             else:
                 movies = process_person_entries(person.crew)

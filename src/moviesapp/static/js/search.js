@@ -1,3 +1,7 @@
+String.prototype.toTitleCase = function () {
+    return this.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+};
+
 app.factory('SearchMovie', ['$resource', function($resource) {
   return $resource(urlSearchMovie, {}, {
     get: {method: 'GET'}
@@ -14,7 +18,7 @@ app.controller('MoviesSearchController', ['$scope', 'SearchMovie', 'AddToListFro
 
 function ($scope, SearchMovie, AddToListFromDb) {
   $scope.searchType = gettext('Movie');
-  $scope.searchTypeId = 1;
+  $scope.searchTypeCode = 'movie';
   $scope.submit = function(){
     $scope.nothingFound = false;
     $scope.searchResults = [];
@@ -24,7 +28,7 @@ function ($scope, SearchMovie, AddToListFromDb) {
     };
     SearchMovie.get({
       query: $scope.query,
-      type: $scope.searchTypeId.toString(),
+      type: $scope.searchTypeCode,
       options: $.param(options)
     }, function(data) {
       if (data.status === 1) {
@@ -55,17 +59,9 @@ function ($scope, SearchMovie, AddToListFromDb) {
     });
   };
 
-  $scope.changeSearchType = function(id) {
-    $scope.searchTypeId = id;
-    if (id === 1) {
-      $scope.searchType = gettext('Movie');
-    }
-    if (id === 2) {
-      $scope.searchType = gettext('Actor');
-    }
-    if (id === 3) {
-      $scope.searchType = gettext('Director');
-    }
+  $scope.changeSearchType = function(code) {
+    $scope.searchTypeCode = code;
+    $scope.searchType = gettext(code.toTitleCase());
   };
 }]);
 

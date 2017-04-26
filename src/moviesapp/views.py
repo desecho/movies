@@ -393,8 +393,8 @@ def ajax_change_rating(request):
 @ajax_request
 def ajax_search_movie(request):
     if request.method == 'GET':
-        type_ = int(request.GET.get('type'))
-        query = request.GET.get('query')
+        type_ = request.GET['type']
+        query = request.GET['query']
         options = QueryDict(request.GET['options'])
         options = {'popular_only': json.loads(options['popularOnly']),
                    'sort_by_date': json.loads(options['sortByDate'])}
