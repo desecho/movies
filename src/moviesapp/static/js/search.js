@@ -39,19 +39,19 @@ function ($scope, SearchMovie, AddToListFromDb) {
   }
 
   $scope.addToListFromDb = function(movieId, listId) {
+    $('#movie' + movieId).fadeOut('fast');
     AddToListFromDb.post($.param({
       movieId: movieId,
       listId: listId
     }), function(data) {
       if (data.status === 'not_found') {
+        $('#movie' + movieId).fadeIn('fast');
         return displayMessage(gettext('Movie is not found in the database'));
-      } else {
-        return $('#movie' + movieId).fadeOut('fast', function() {
-          return $(this).remove();
-        });
       }
-    }, function(){displayMessage(gettext('Error adding a movie'))}
-    );
+    }, function(){
+      $('#movie' + movieId).fadeIn('fast');
+      displayMessage(gettext('Error adding a movie'))
+    });
   };
 
   $scope.changeSearchType = function(id) {
