@@ -16,6 +16,7 @@ function ($scope, SearchMovie, AddToListFromDb) {
   $scope.searchType = gettext('Movie');
   $scope.searchTypeId = 1;
   $scope.submit = function(){
+    $scope.nothingFound = false;
     $scope.searchResults = [];
     const options = {
       popularOnly: $('#popular-only').prop('checked'),
@@ -26,7 +27,6 @@ function ($scope, SearchMovie, AddToListFromDb) {
       type: $scope.searchTypeId.toString(),
       options: $.param(options)
     }, function(data) {
-      $scope.nothingFound = false;
       if (data.status === 1) {
         $scope.searchResults = data.movies;
       } else if (data.status === 0) {
