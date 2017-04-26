@@ -114,7 +114,7 @@
           </div>
           <div class="details">
             {% if record.movie.imdb_rating %}<div class="imdb-rating"><span class="item-desc">{% trans 'IMDb Rating' %}:</span> {{ record.movie.imdb_rating }}</div> {% endif %}
-            {% if record.movie.release_date %}<div class="release-date"><span class="release-date-label item-desc">{% trans 'Release Date' %}:</span> {{ record.movie.release_date|date:'d.m.y' }}</div>{% endif %}
+            {% if record.movie.release_date %}<div class="release-date"><span class="release-date-label item-desc">{% trans 'Release Date' %}:</span> {{ record.movie.release_date }}</div>{% endif %}
             <div ng-show="mode == 'full'">
                 {% if record.movie.country %} <span class="item-desc">{% trans 'Country' %}:</span> {{ record.movie.country }}<br> {% endif %}
                 {% if record.movie.director %} <span class="item-desc">{% trans 'Director' %}:</span> {{ record.movie.director }}<br> {% endif %}

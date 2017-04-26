@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 from datetime import datetime
 from operator import itemgetter
 
+from babel.dates import format_date
 import tmdbsimple
 from django.conf import settings
 
@@ -29,14 +30,14 @@ def get_movies_from_tmdb(query, type_, options, user):
     }
 
     def set_proper_date(movies):
-        def format_date(date):
+        def get_date(date):
             if date:
                 date = datetime.strptime(date, '%Y-%m-%d')
                 if date:
-                    return date.strftime('%d.%m.%y')  # TODO fix date for locale
+                    return format_date(date, locale=user.language)
 
         for movie in movies:
-            movie['releaseDate'] = format_date(movie['releaseDate'])
+            movie['releaseDate'] = get_date(movie['releaseDate'])
         return movies
 
     def remove_not_popular_movies(movies):
