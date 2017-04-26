@@ -7,8 +7,10 @@ import tempfile
 import urllib2
 from datetime import datetime
 
+from braces.views import JsonRequestResponseMixin
 from annoying.decorators import ajax_request, render_to
 from dateutil.relativedelta import relativedelta
+from django.views.generic import View
 from django.conf import settings
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
@@ -390,16 +392,18 @@ def ajax_change_rating(request):
     return HttpResponse()
 
 
-@ajax_request
-def ajax_search_movie(request):
-    if request.method == 'GET':
-        type_ = request.GET['type']
-        query = request.GET['query']
-        options = QueryDict(request.GET['options'])
+class SearchMovieView(JsonRequestResponseMixin, View):
+    def get(self, request, *args, **kwargs):
+        try:
+            type_ = request.GET['type']
+            query = request.GET['query']
+            options = QueryDict(request.GET['options'])
+        except KeyError:
+            return self.render_bad_request_response()
         options = {'popular_only': json.loads(options['popularOnly']),
                    'sort_by_date': json.loads(options['sortByDate'])}
         output = get_movies_from_tmdb(query, type_, options, request.user)
-        return output
+        return self.render_json_response(output)
 
 
 @ajax_request

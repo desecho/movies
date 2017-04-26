@@ -2,6 +2,8 @@ from django.conf.urls import include, patterns, url
 from django.contrib import admin
 from django.views.i18n import javascript_catalog
 
+from moviesapp.views import SearchMovieView
+
 admin.autodiscover()
 
 urlpatterns = patterns(
@@ -18,7 +20,7 @@ urlpatterns = patterns(
     url(r'^recommendation/$', 'moviesapp.views.recommendation'),
     url(r'^preferences/$', 'moviesapp.views.preferences'),
     url(r'^remove-record/$', 'moviesapp.views.ajax_remove_record'),
-    url(r'^search-movie/$', 'moviesapp.views.ajax_search_movie'),
+    url(r'^search-movie/$', SearchMovieView.as_view(), name='search_movie'),
     url(r'^add-to-list/$', 'moviesapp.views.ajax_add_to_list'),
     url(r'^add-to-list-from-db$', 'moviesapp.views.ajax_add_to_list_from_db'),
     url(r'^save-comment/$', 'moviesapp.views.ajax_save_comment'),
