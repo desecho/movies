@@ -10,10 +10,8 @@ from django.conf import settings
 from .models import Record, get_poster_url
 
 
-def get_tmdb(user=None, lang=None):
+def get_tmdb(lang=None):
     tmdbsimple.API_KEY = settings.TMDB_KEY
-    if user is not None:
-        lang = user.language
     tmdbsimple.LANGUAGE = lang
     return tmdbsimple
 
@@ -79,7 +77,7 @@ def get_movies_from_tmdb(query, type_, options, user):
             'actor': 2,
             'director': 3,
         }
-        tmdb = get_tmdb(user)
+        tmdb = get_tmdb(user.language)
         search = tmdb.Search()
         if type_ == SEARCH_TYPES_IDS['movie']:
             movies = search.movie(query=query)['results']
