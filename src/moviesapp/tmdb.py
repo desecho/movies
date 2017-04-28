@@ -134,6 +134,8 @@ def get_tmdb_movie_data(tmdb_id):
             if trailer['site'] == 'YouTube':
                 t = {'name': trailer['name'], 'source': trailer['key']}
                 youtube_trailers.append(t)
+            else:
+                raise Exception(trailer['site'])
         return {'youtube': youtube_trailers, 'quicktime': []}
 
     def get_movie_data(tmdb_id, lang):
