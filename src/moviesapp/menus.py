@@ -13,25 +13,20 @@ def is_linked(request):
         return user.is_linked()
 
 
-Menu.add_item('main', MenuItem(_('Watched'), reverse('moviesapp.views.list_view', kwargs={'list_name': 'watched'})))
+Menu.add_item('main', MenuItem(_('Watched'), reverse('list', kwargs={'list_name': 'watched'})))
 
-Menu.add_item('main', MenuItem(_('To Watch'),
-                               reverse('moviesapp.views.list_view', kwargs={'list_name': 'to-watch'})))
+Menu.add_item('main', MenuItem(_('To Watch'), reverse('list', kwargs={'list_name': 'to-watch'})))
 
-Menu.add_item('main', MenuItem(_('Recommendations'), reverse('moviesapp.views.recommendation')))
+Menu.add_item('main', MenuItem(_('Recommendations'), reverse('recommendations')))
 
-Menu.add_item('main', MenuItem(_('Friends'),
-                               reverse('moviesapp.views.friends'), check=is_linked))
+Menu.add_item('main', MenuItem(_('Friends'), reverse('friends'), check=is_linked))
 
-Menu.add_item('main', MenuItem(_('People'),
-                               reverse('moviesapp.views.people')))
+Menu.add_item('main', MenuItem(_('People'), reverse('people')))
 
 feed_children = (
-    MenuItem(_('Friends'),
-             reverse('moviesapp.views.feed', kwargs={'list_name': 'friends'}), check=is_linked),
+    MenuItem(_('Friends'), reverse('feed', kwargs={'list_name': 'friends'}), check=is_linked),
 
-    MenuItem(_('People'),
-             reverse('moviesapp.views.feed', kwargs={'list_name': 'people'}))
+    MenuItem(_('People'), reverse('feed', kwargs={'list_name': 'people'}))
 )
 
 Menu.add_item(

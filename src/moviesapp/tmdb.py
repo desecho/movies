@@ -4,10 +4,11 @@ from __future__ import unicode_literals
 from datetime import datetime
 from operator import itemgetter
 
-from babel.dates import format_date
 import tmdbsimple
+from babel.dates import format_date
 from django.conf import settings
 
+from .exceptions import MovieNotInDb
 from .models import Record, get_poster_url
 
 
@@ -23,12 +24,6 @@ def get_poster_from_tmdb(poster):
 
 
 def get_movies_from_tmdb(query, type_, options, user):
-    STATUS_CODES = {
-        'error': -1,
-        'not found': 0,
-        'found': 1,
-    }
-
     def set_proper_date(movies):
         def get_date(date):
             if date:
@@ -63,7 +58,7 @@ def get_movies_from_tmdb(query, type_, options, user):
         return movies
 
     def get_data(query, type_):
-        'For actor, director search - the first is used.'
+        """For actor, director search - the first is used."""
 
         def process_person_entries(entries):
             movies = [e for e in entries if e['media_type'] == 'movie']
@@ -94,14 +89,10 @@ def get_movies_from_tmdb(query, type_, options, user):
 
     output = {}
     movies_data = get_data(query, type_)
-    if movies_data == STATUS_CODES['error']:
-        output['status'] = STATUS_CODES['error']
-        return output
     movies = []
     i = 0
     if movies_data:
         user_movies_tmdb_ids = Record.objects.filter(user=user).values_list('movie__tmdb_id', flat=True)
-        # try:
         for movie in movies_data:
             tmdb_id = movie['id']
             i += 1
@@ -117,18 +108,56 @@ def get_movies_from_tmdb(query, type_, options, user):
                 'poster': get_poster_url('small', get_poster_from_tmdb(movie['poster_path'])),
             }
             movies.append(movie)
-            # except IndexError:  # strange exception in 'matrix case'? Don't believe it.
-            # pass
         if options['popular_only']:
             movies = remove_not_popular_movies(movies)
         if options['sort_by_date']:
             movies = sort_by_date(movies)
         movies = set_proper_date(movies)
         if movies:
-            output['status'] = STATUS_CODES['found']
             output['movies'] = movies
         else:
-            output['status'] = STATUS_CODES['not found']
+            output['status'] = 'not_found'
     else:
-        output['status'] = STATUS_CODES['not found']
+        output['status'] = 'not_found'
     return output
+
+
+def get_tmdb_movie_data(tmdb_id):
+    def get_release_date(release_date):
+        if release_date:
+            return release_date
+
+    def get_trailers(movie_data):
+        youtube_trailers = []
+        trailers = movie_data.videos()['results']
+        for trailer in trailers:
+            if trailer['site'] == 'YouTube':
+                t = {'name': trailer['name'], 'source': trailer['key']}
+                youtube_trailers.append(t)
+        return {'youtube': youtube_trailers, 'quicktime': []}
+
+    def get_movie_data(tmdb_id, lang):
+        tmdb = get_tmdb(lang=lang)
+        return tmdb.Movies(tmdb_id)
+
+    movie_data_en = get_movie_data(tmdb_id, 'en')
+    movie_info_en = movie_data_en.info()
+    movie_info_ru = get_movie_data(tmdb_id, 'ru').info()
+    imdb_id = movie_info_en['imdb_id']
+    if imdb_id:
+        return {
+            'tmdb_id': tmdb_id,
+            'imdb_id': imdb_id,
+            'release_date': get_release_date(movie_info_en['release_date']),
+            'title_original': movie_info_en['original_title'],
+            'poster_ru': get_poster_from_tmdb(movie_info_ru['poster_path']),
+            'poster_en': get_poster_from_tmdb(movie_info_en['poster_path']),
+            'homepage': movie_info_en['homepage'],
+            'trailers': get_trailers(movie_data_en),
+            'title_en': movie_info_en['title'],
+            'title_ru': movie_info_ru['title'],
+            'description_en': movie_info_en['overview'],
+            'description_ru': movie_info_ru['overview'],
+        }
+    else:
+        raise MovieNotInDb(tmdb_id)

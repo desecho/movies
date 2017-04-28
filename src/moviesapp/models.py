@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+import facebook
+import vkontakte
 from annoying.fields import JSONField
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
@@ -8,6 +10,36 @@ from django.contrib.auth.signals import user_logged_in
 from django.db import models
 from django.dispatch import receiver
 from django.utils.translation import LANGUAGE_SESSION_KEY, activate
+
+
+class Vk:
+    def __init__(self, user):
+        vk_account = user.get_vk_account()
+        self.vk = vkontakte.API(*settings.VK_BACKENDS_CREDENTIALS[vk_account.provider])
+        self.vk_id = vk_account.uid
+        self.user = user
+
+    def get_friends(self):
+        friends = self.vk.friends.get(uid=self.vk_id)
+        friends_ids = map(str, friends)
+        friends = User.objects.filter(social_auth__provider__in=settings.VK_BACKENDS,
+                                      social_auth__uid__in=friends_ids)
+        return friends
+
+    def get_data(self, fields):
+        return self.vk.getProfiles(uids=self.vk_id, fields=','.join(fields))[0]
+
+
+class Fb:
+    def __init__(self, user):
+        access_token = user.get_fb_account().extra_data['access_token']
+        self.fb = facebook.GraphAPI(access_token=access_token, version='2.7')
+
+    def get_friends(self):
+        friends = self.fb.get_connections(id='me', connection_name='friends')['data']
+        friends_ids = [f['id'] for f in friends]
+        friends = User.objects.filter(social_auth__provider='facebook', social_auth__uid__in=friends_ids)
+        return friends
 
 
 def activate_user_language_preference(request, lang):
@@ -68,6 +100,43 @@ class User(AbstractUser):
 
     def __unicode__(self):
         return self.get_full_name()
+
+    def get_available_users_and_friends(self, sort=False):
+        def available_users():
+            return [u for u in User.objects.exclude(only_for_friends=True).exclude(pk=self.pk)]
+
+        def join(x, z):
+            # convert to list doesn't work for some reason.
+            # list(get_friends(request.user)) - error
+            output = []
+            for a in x:
+                output.append(a)
+            if z is not None:
+                for a in z:
+                    output.append(a)
+            return output
+
+        def sort_users(users):
+            def username(x):
+                return x.first_name
+
+            return sorted(users, key=username)
+
+        users = set(join(available_users(), self.get_friends()))
+        if sort:
+            users = sort_users(users)
+        return users
+
+    def get_friends(self, sort=False):
+        if self.is_linked:
+            friends = User.objects.none()
+            if self.is_vk_user():
+                friends |= Vk(self).get_friends()
+            if self.is_fb_user():
+                friends |= Fb(self).get_friends()
+            if sort:
+                friends = friends.order_by('first_name')
+            return friends
 
 
 class List(models.Model):
@@ -163,6 +232,11 @@ class Record(models.Model):
 
 
 class Action(models.Model):
+    # Here we have a list of available actions.
+    ADDED_MOVIE = 1
+    CHANGED_LIST = 2
+    ADDED_RATING = 3
+    ADDED_COMMENT = 4
     name = models.CharField(max_length=255)
 
     def __unicode__(self):

@@ -1,163 +1,162 @@
 #login-form {
-    margin-top: 20px;
+  margin-top: 20px;
 }
 
 .movie {
-    width: 730px;
-    clear: both;
-    min-height: 160px;
-    border-width: 1px;
-    border-style: solid;
-    border-color: #ddd;
-    border-radius: 4px;
-    padding: 10px;
-    margin-bottom: 10px;
+  width: 730px;
+  clear: both;
+  min-height: 160px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #ddd;
+  border-radius: 4px;
+  padding: 10px;
+  margin-bottom: 10px;
 }
 
 .poster {
-    float: left;
-    margin-right: 10px;
-    margin-bottom: 10px;
+  float: left;
+  margin-right: 10px;
+  margin-bottom: 10px;
 }
 
 .review {
-    padding-top: 10px;
+  padding-top: 10px;
 }
 
 .recommendation-review {
-    vertical-align: middle;
-    background-color: #f4f4f4;
-    border-radius: 5px;
-    margin-bottom: 10px;
-    padding: 10px;
+  vertical-align: middle;
+  background-color: #f4f4f4;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  padding: 10px;
 }
 
 .full {
-    clear: both;
+  clear: both;
 }
 
 .title {
-    display: inline;
-    /* copied mostly from bootstrap h4 */
-    font-size: 17.5px;
-    font-weight: bold;
-    line-height: 20px;
+  display: inline;
+  /* copied mostly from bootstrap h4 */
+  font-size: 17.5px;
+  font-weight: bold;
+  line-height: 20px;
 }
 
 .rating {
-    display: inline;
+  display: inline;
+  margin-right: 10px;
 }
 
 .search-panel {
-    width: 435px;
-    margin-left: auto;
-    margin-right: auto;
+  width: 435px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 label.error {
-    color: #b94a48;
+  color: #b94a48;
 }
 
 #loading {
-    margin: 48px 40px 0 0;
+  margin: 48px 40px 0 0;
 }
 
 #loading2 {
-    margin: 20px 20px 0 0;
+  margin: 20px 20px 0 0;
 }
 
 #movie-count {
-    font-size: 25px;
-    float: right;
-    text-align: right;
-    line-height: 27px;
-    color: #707070;
+  font-size: 25px;
+  float: right;
+  text-align: right;
+  line-height: 27px;
+  color: #707070;
 }
 
 #movie-count img {
-    margin-top: 10px;
+  margin-top: 10px;
 }
 /*
 .vk {
-    overflow-y: scroll;
-    height: 800px;
+  overflow-y: scroll;
+  height: 800px;
 }
 */
 
 .feed-action-data {
-    min-width: 125px;
+  min-width: 125px;
 }
 
 .person {
-    margin-bottom: 10px;
+  margin-bottom: 10px;
 }
 
 .small-poster {
-    width: 60px;
+  width: 60px;
 }
 
 .avatar-big {
-    border-radius: 15px;
+  border-radius: 15px;
 }
 
 .avatar-small {
-    border-radius: 5px;
+  border-radius: 5px;
 }
 
 textarea {
-    width: 400px;
-    max-width: 555px;
+  width: 400px;
+  max-width: 555px;
 }
 
 .comment {
-    margin-top: 10px;
+  margin-top: 10px;
 }
 
 .feed tbody tr:first-child td {
-    border-top:0;
+  border-top:0;
 }
 
 .item-desc {
-    color: grey;
+  color: grey;
 }
 
 form {margin: 0}
 
 legend {
-    margin-bottom: 0;
+  margin-bottom: 0;
 }
 
 .navbar .nav>li>a {
-    padding-right: 14px;
+  padding-right: 14px;
 }
 
 .add-to-list-buttons {
-    display: inline;
+  display: inline;
 }
 
-.toolbar
-{
+.toolbar {
   position: relative;
   display: table;
 }
 
-.toolbar > div
-{
+.toolbar > div {
   display: table-cell;
   padding-right: 8px;
   vertical-align: top;
 }
 
 .toolbar .btn-group, .btn-group-vertical {
-    vertical-align: inherit;
+  vertical-align: inherit;
 }
 
 .comment button {
-    margin-top: -26px;
+  margin-top: -26px;
 }
 
 .comment textarea {
-    display: inline;
+  display: inline;
 }
 
 label {

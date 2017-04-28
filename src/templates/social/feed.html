@@ -12,7 +12,7 @@
   {% for action in actions %}
       <tr>
           <td>
-            <a href="/people/{{ action.user.username }}/watched">{% avatar action.user %}</a>
+            <a href="{% url 'people' action.user.username 'watched' %}">{% avatar action.user %}</a>
           </td>
           <td>
             {{ action.date }}

@@ -27,18 +27,16 @@ function ($scope, SearchMovie, AddToListFromDb) {
       sortByDate: $('#sort-by-date').prop('checked')
     };
     SearchMovie.get({
-      query: $scope.query,
-      type: $scope.searchTypeCode,
-      options: $.param(options)
-    }, function(data) {
-      if (data.status === 1) {
-        $scope.searchResults = data.movies;
-      } else if (data.status === 0) {
-        $scope.nothingFound = true;
-      } else {
-        displayMessage(gettext('Search Error'));
-      }
-    }, function(){displayMessage(gettext('Search Error'))}
+        query: $scope.query,
+        type: $scope.searchTypeCode,
+        options: $.param(options)
+      }, function(data) {
+        if (data.status === 'not_found') {
+          $scope.nothingFound = true;
+        } else {
+          $scope.searchResults = data.movies;
+        }
+      }, function(){displayMessage(gettext('Search Error'))}
     );
   }
 

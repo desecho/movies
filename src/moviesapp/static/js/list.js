@@ -1,5 +1,5 @@
-app.factory('RemoveRecord', ['$resource', function($resource) {
-  return $resource(urlRemoveRecord, {}, {
+app.factory('RemoveMovie', ['$resource', function($resource) {
+  return $resource(urlRemoveMovie, {}, {
     post: {method: 'POST', headers: headers}
   });
 }]);
@@ -10,10 +10,10 @@ app.factory('SaveComment', ['$resource', function($resource) {
   });
 }]);
 
-app.controller('ListController', ['$scope', 'RemoveRecord', 'SaveComment',
+app.controller('ListController', ['$scope', 'RemoveMovie', 'SaveComment',
 
-function ($scope, RemoveRecord, SaveComment) {
-  function removeRecordFromPage(id) {
+function ($scope, RemoveMovie, SaveComment) {
+  function removeMovieFromPage(id) {
     function checkIfNoRecords() {
       if (!$('.movie').length) {
         $('#results').html(gettext('The list is empty') + '.');
@@ -29,9 +29,9 @@ function ($scope, RemoveRecord, SaveComment) {
     window.location.href = url;
   }
 
-  $scope.removeRecord = function(id) {
-    RemoveRecord.post($.param({id: id}), function(data) {
-      removeRecordFromPage(id);
+  $scope.removeMovie = function(id) {
+    RemoveMovie.post($.param({id: id}), function(data) {
+      removeMovieFromPage(id);
     }, function(){
       displayMessage(gettext('Error removing the movie'));
     });
@@ -138,7 +138,7 @@ function applySettings(settings, reload) {
       location.reload();
     }
   }).fail(function() {
-    displayMessage(gettext('Error applying the setting'));
+    displayMessage(gettext('Error applying the settings'));
   });
 };
 
@@ -225,7 +225,7 @@ ${myRating} - ${ratingPost}.`
   };
 
   function uploadPhotoToWall(url) {
-    return $.post(urlAjaxUploadPhotoToWall, {
+    return $.post(urlAjaxUploadPosterToWall, {
       url: url,
       recordId: id
     }, function(data) {

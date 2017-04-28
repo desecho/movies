@@ -10,13 +10,13 @@
 <div ng-controller="ListController">
 <div id="movie-count">
   {% if anothers_account %}
-   {% movie_count anothers_account %}
+    {% movie_count anothers_account %}
   {% else %}
-   {% movie_count user %}
+    {% movie_count user %}
   {% endif %}
 
   {% if anothers_account %}
-    <br>
+    <br>{{ anothers_account }}<br>
     {% avatar_big anothers_account %}
   {% endif %}
 </div>
@@ -74,10 +74,10 @@
   </div>
 
   <div>
-    <form action="" method="post" class="search">
+    <form action="" method="get" class="search">
       {% csrf_token %}
         <div class="input-group">
-          <input type="text" class="form-control" name="search">
+          <input type="text" class="form-control" name="query">
           <span class="input-group-btn">
             <button class="btn btn-default" type="submit">{% trans 'Search' %}</button>
           </span>
@@ -95,7 +95,7 @@
         <div class="title">
           <span title="{{ record.movie.title_original }}">{{ record.movie.title }}</span>
           {% if not anothers_account %}
-            <a href="javascript:void(0);" title="{% trans 'Delete' %}" ng-click="removeRecord({{ record.id }})"><i class="fa fa-trash-o"></i></a>
+            <a href="javascript:void(0);" title="{% trans 'Delete' %}" ng-click="removeMovie({{ record.id }})"><i class="fa fa-trash-o"></i></a>
             {% if user.is_vk_user %}<a ng-show="isVkApp" href="javascript:void(0);" class="wall-post" title="{% trans 'Post to the wall' %}" onclick="postToWall({{ record.id }})"><i class="fa fa-share"></i></a>{% endif %}
           {% endif %}
           <div class="add-to-list-buttons">
@@ -190,12 +190,12 @@
   const listId = {{ list_id }};
   const recommendation = {{ request.session.recommendation|yesno:'true,false' }}
   const anothersAccount = {{ anothers_account|yesno:'true,false' }}
-  const urlChangeRating = '{% url 'moviesapp.views.ajax_change_rating' %}';
-  const urlRemoveRecord = '{% url 'moviesapp.views.ajax_remove_record' %}';
-  const urlApplySettings = '{% url 'moviesapp.views.ajax_apply_settings' %}';
-  const urlAddToList   = '{% url 'moviesapp.views.ajax_add_to_list' %}';
-  const urlSaveComment  = '{% url 'moviesapp.views.ajax_save_comment' %}';
-  const urlAjaxUploadPhotoToWall = '{% url 'moviesapp.views.ajax_upload_photo_to_wall' %}';
+  const urlChangeRating = '{% url 'change_rating' %}';
+  const urlRemoveMovie = '{% url 'remove_movie' %}';
+  const urlApplySettings = '{% url 'apply_settings' %}';
+  const urlAddToList   = '{% url 'add_to_list' %}';
+  const urlSaveComment  = '{% url 'save_comment' %}';
+  const urlAjaxUploadPosterToWall = '{% url 'upload_poster_to_wall' %}';
 </script>
 <script src="{% static 'bower/raty/lib/jquery.raty.js' %}"></script>
 <script src="{% static 'bower/autosize/dist/autosize.min.js' %}"></script>
