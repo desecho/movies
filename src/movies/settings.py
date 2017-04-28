@@ -16,6 +16,8 @@ except ImportError:
         print('No initial settings!')
         sys.exit()
 
+INTERNAL_IPS = local_settings.SECRET_KEY
+
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = local_settings.SECRET_KEY
 
@@ -95,7 +97,7 @@ TEMPLATES = [
     },
 ]
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE_CLASSES = [
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -103,16 +105,18 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.locale.LocaleMiddleware',
     'django.middleware.gzip.GZipMiddleware',
     'social_django.middleware.SocialAuthExceptionMiddleware',
-    # Uncomment the next line for simple clickjacking protection:
-    # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
-)
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+]
+
+if DEBUG:
+    MIDDLEWARE_CLASSES.append('debug_toolbar.middleware.DebugToolbarMiddleware')
 
 ROOT_URLCONF = 'movies.urls'
 
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'movies.wsgi.application'
 
-INSTALLED_APPS = (
+INSTALLED_APPS = [
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -129,7 +133,10 @@ INSTALLED_APPS = (
     'modeltranslation',
     'social_django',
     'raven.contrib.django.raven_compat',
-)
+]
+
+if DEBUG:
+    INSTALLED_APPS.append('debug_toolbar')
 
 LOGGING = {
     'version': 1,
@@ -334,3 +341,4 @@ try:
     from local_settings2 import *  # noqa pylint: disable=wildcard-import
 except ImportError:
     pass
+
