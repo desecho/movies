@@ -90,13 +90,14 @@
 
 <div id="results" class="results" style="display: none;">
   {% if records %}
+    {% with user.is_vk_user as is_vk_user%}
     {% for record in records %}
       <div id="record{{ record.id }}" data-id="{{ record.id }}" data-title="{{ record.movie.title }}" class="movie">
         <div class="title">
           <span title="{{ record.movie.title_original }}">{{ record.movie.title }}</span>
           {% if not anothers_account %}
             <a href="javascript:void(0);" title="{% trans 'Delete' %}" ng-click="removeMovie({{ record.id }})"><i class="fa fa-trash-o"></i></a>
-            {% if user.is_vk_user %}<a ng-show="isVkApp" href="javascript:void(0);" class="wall-post" title="{% trans 'Post to the wall' %}" onclick="postToWall({{ record.id }})"><i class="fa fa-share"></i></a>{% endif %}
+            {% if is_vk_user %}<a ng-show="isVkApp" href="javascript:void(0);" class="wall-post" title="{% trans 'Post to the wall' %}" onclick="postToWall({{ record.id }})"><i class="fa fa-share"></i></a>{% endif %}
           {% endif %}
           <div class="add-to-list-buttons">
             {% if not anothers_account %}
@@ -173,6 +174,7 @@
           {% endif %}
         </div>
     {% endfor %}
+    {% endwith %}
   {% if records.has_other_pages %}
     {% bootstrap_paginate records range=10 show_prev_next="true" show_first_last="true" alignment="left" %}
   {% endif %}
