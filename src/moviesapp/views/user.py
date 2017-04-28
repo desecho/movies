@@ -14,7 +14,7 @@ def logout_view(request):
 
 
 class PreferencesView(TemplateView):
-    template_name = 'login/preferences.html'
+    template_name = 'user/preferences.html'
 
 
 class SavePreferencesView(AjaxView):
