@@ -142,7 +142,11 @@ def get_tmdb_movie_data(tmdb_id):
 
     movie_data_en = get_movie_data(tmdb_id, 'en')
     movie_info_en = movie_data_en.info()
-    movie_info_ru = get_movie_data(tmdb_id, 'ru').info()
+    # We have to get all info in english first before we switch to russian or everything breaks.
+    trailers_en = get_trailers(movie_data_en)
+    movie_data_ru = get_movie_data(tmdb_id, 'ru')
+    movie_info_ru = movie_data_ru.info()
+    trailers_ru = get_trailers(movie_data_ru)
     imdb_id = movie_info_en['imdb_id']
     if imdb_id:
         return {
@@ -153,7 +157,8 @@ def get_tmdb_movie_data(tmdb_id):
             'poster_ru': get_poster_from_tmdb(movie_info_ru['poster_path']),
             'poster_en': get_poster_from_tmdb(movie_info_en['poster_path']),
             'homepage': movie_info_en['homepage'],
-            'trailers': get_trailers(movie_data_en),
+            'trailers_en': trailers_en,
+            'trailers_ru': trailers_ru,
             'title_en': movie_info_en['title'],
             'title_ru': movie_info_ru['title'],
             'description_en': movie_info_en['overview'],

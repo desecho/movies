@@ -8,7 +8,7 @@ from .models import Action, List, Movie
 
 @register(Movie)
 class MovieTranslationOptions(TranslationOptions):
-    fields = ('title', 'poster', 'description')
+    fields = ('title', 'poster', 'description', 'trailers')
 
 
 @register(Action)
