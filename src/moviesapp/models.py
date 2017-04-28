@@ -155,8 +155,14 @@ class Movie(models.Model):
     def imdb_url(self):
         return settings.IMDB_BASE_URL + self.imdb_id + '/'
 
+    def get_trailers(self):
+        if self.trailers:
+            return self.trailers
+        else:
+            return {'youtube': [], 'quicktime': []}
+
     def has_trailers(self):
-        trailers = self.trailers.values()
+        trailers = self.get_trailers().values()
         if not trailers[0]:
             return bool(trailers[1])
         return False
