@@ -2,6 +2,7 @@ import hashlib
 import urllib
 
 from django import template
+from django.utils.safestring import mark_safe
 
 register = template.Library()
 
@@ -27,8 +28,8 @@ def avatar(user, size='small'):
     url = get_url()
     # Avatars will be always 2 times larger than the image shown to look good at retina displays
     avatar_size /= 2
-    return '<img class="avatar-{0}" src="{1}" width="{2}" height="{2}" alt="{3}" title="{3}"></img>'.format(
-        size, url, avatar_size, user)
+    return mark_safe('<img class="avatar-{0}" src="{1}" width="{2}" height="{2}" alt="{3}" title="{3}"></img>'.format(
+        size, url, avatar_size, user))
 
 
 @register.simple_tag

@@ -1,4 +1,4 @@
-Django==1.8.18
+Django==1.11
 django-annoying==0.10.3
 django-simple-menu==1.2.1
 poster==0.8.1

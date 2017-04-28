@@ -23,8 +23,6 @@ SECRET_KEY = local_settings.SECRET_KEY
 DEBUG = local_settings.DEBUG
 IS_VK_DEV = local_settings.IS_VK_DEV
 
-TEMPLATE_DEBUG = DEBUG
-
 ADMINS = (
     (local_settings.ADMIN_NAME, local_settings.ADMIN_EMAIL),
 )
@@ -64,7 +62,6 @@ USE_L10N = True
 USE_TZ = False
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
-
 # List of finder classes that know how to find static files in
 # various locations.
 STATICFILES_FINDERS = (
@@ -73,12 +70,30 @@ STATICFILES_FINDERS = (
     # 'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
-# List of callables that know how to import templates from various sources.
-TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.Loader',
-    'django.template.loaders.app_directories.Loader',
-    # 'django.template.loaders.eggs.Loader',
-)
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': (os.path.join(BASE_DIR, 'templates'),),
+        'OPTIONS': {
+            'context_processors': (
+                'django.contrib.auth.context_processors.auth',
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
+                'django.template.context_processors.debug',
+                'django.template.context_processors.i18n',
+                'django.template.context_processors.media',
+                'django.template.context_processors.static',
+                'django.template.context_processors.request',
+                'moviesapp.context_processors.variables',
+            ),
+            'loaders': (
+                'django.template.loaders.filesystem.Loader',
+                'django.template.loaders.app_directories.Loader',
+            ),
+            'debug': DEBUG
+        },
+    },
+]
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
@@ -96,10 +111,6 @@ ROOT_URLCONF = 'movies.urls'
 
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'movies.wsgi.application'
-
-TEMPLATE_DIRS = (
-    BASE_DIR + '/templates',
-)
 
 INSTALLED_APPS = (
     'django.contrib.auth',
@@ -178,11 +189,6 @@ ADMIN_REORDER = (
 APPEND_SLASH = False
 
 AUTH_USER_MODEL = 'moviesapp.User'
-TEMPLATE_CONTEXT_PROCESSORS = ('django.core.context_processors.request',
-                               'django.contrib.auth.context_processors.auth',
-                               'social_django.context_processors.backends',
-                               'social_django.context_processors.login_redirect',
-                               'moviesapp.context_processors.variables')
 LOGIN_REDIRECT_URL = '/'
 if IS_VK_DEV:
     LOGIN_REDIRECT_URL = 'https://{}'.format(local_settings.HOST_MOVIES_TEST)

@@ -1,4 +1,4 @@
-from django.conf.urls import include, patterns, url
+from django.conf.urls import include, url
 from django.contrib import admin
 from django.contrib.auth.views import login
 from django.views.i18n import javascript_catalog
@@ -15,8 +15,7 @@ from moviesapp.views.vk import UploadPosterToWallView
 
 admin.autodiscover()
 
-urlpatterns = patterns(
-    '',
+urlpatterns = [
     # Search
     url(r'^$', SearchView.as_view(), name='search'),
     url(r'^search-movie/$', SearchMovieView.as_view(), name='search_movie'),
@@ -59,4 +58,4 @@ urlpatterns = patterns(
 
     url('', include('social_django.urls', namespace='social')),
     url(r'^rosetta/', include('rosetta.urls')),
-)
+]

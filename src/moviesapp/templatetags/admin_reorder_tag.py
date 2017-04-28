@@ -1,6 +1,7 @@
 from django import template
 from django.conf import settings
-from django.utils.datastructures import SortedDict
+
+from collections import OrderedDict
 
 register = template.Library()
 
@@ -40,7 +41,7 @@ def admin_reorder(context, token):  # pylint: disable=unused-argument
 
     if 'app_list' in context:
         # sort the app list
-        order = SortedDict(settings.ADMIN_REORDER)
+        order = OrderedDict(settings.ADMIN_REORDER)
         context['app_list'].sort(key=lambda app: sort(order.keys(), app['app_url'][:-1]))
         for i, app in enumerate(context['app_list']):
             # sort the model list for each app
