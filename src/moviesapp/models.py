@@ -102,30 +102,11 @@ class User(AbstractUser):
         return self.get_full_name()
 
     def get_available_users_and_friends(self, sort=False):
-        def available_users():
-            return [u for u in User.objects.exclude(only_for_friends=True).exclude(pk=self.pk)]
-
-        def join(x, z):
-            # convert to list doesn't work for some reason.
-            # list(get_friends(request.user)) - error
-            output = []
-            for a in x:
-                output.append(a)
-            if z is not None:
-                for a in z:
-                    output.append(a)
-            return output
-
-        def sort_users(users):
-            def username(x):
-                return x.first_name
-
-            return sorted(users, key=username)
-
-        users = set(join(available_users(), self.get_friends()))
+        available_users = User.objects.exclude(only_for_friends=True).exclude(pk=self.pk)
+        users = available_users | self.get_friends()
         if sort:
-            users = sort_users(users)
-        return users
+            users = users.order_by('first_name')
+        return list(set(users))
 
     def get_friends(self, sort=False):
         if self.is_linked:
