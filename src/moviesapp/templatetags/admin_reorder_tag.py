@@ -1,7 +1,7 @@
+from collections import OrderedDict
+
 from django import template
 from django.conf import settings
-
-from collections import OrderedDict
 
 register = template.Library()
 

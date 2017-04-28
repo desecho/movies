@@ -5,9 +5,9 @@ import sys
 
 from django_tqdm import BaseCommand
 
+from ...exceptions import MovieNotInDb
 from ...models import Movie
 from ...utils import add_movie_to_db
-from ...exceptions import MovieNotInDb
 
 reload(sys)
 sys.setdefaultencoding('utf8')
