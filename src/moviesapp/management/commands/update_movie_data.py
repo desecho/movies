@@ -7,6 +7,7 @@ from django_tqdm import BaseCommand
 
 from ...models import Movie
 from ...utils import add_movie_to_db
+from ...exceptions import MovieNotInDb
 
 reload(sys)
 sys.setdefaultencoding('utf8')
@@ -58,12 +59,12 @@ class Command(BaseCommand):
         for movie in movies:
             movie_info = movie.cli_string(last_movie_id)
             t.set_description(movie_info)
-            result = add_movie_to_db(movie.tmdb_id, update=True)
-            if isinstance(result, bool):
+            try:
+                result = add_movie_to_db(movie.tmdb_id, update=True)
+            except MovieNotInDb:
+                t.error('Movie "{}" is not found in IMDB'.format(movie.id_title))
+            else:
                 updated = result
                 if updated:
                     t.info('{} updated'.format(movie))
-            else:  # int
-                error_id = result
-                t.error('Error #{} - {}'.format(error_id, movie.id_title))
             t.update()
