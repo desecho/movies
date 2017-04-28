@@ -27,4 +27,4 @@ requests==2.13.0
 -e git+https://github.com/desecho/django-bootstrap-pagination.git@ru#egg=django-bootstrap-pagination
 
 # tmdbsimple==1.6.1
--e git+https://github.com/desecho/tmdbsimple.git@lang#egg=tmdbsimple
+-e git+https://github.com/desecho/tmdbsimple.git@changes#egg=tmdbsimple
