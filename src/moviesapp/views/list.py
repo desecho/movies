@@ -202,9 +202,10 @@ class ListView(TemplateAnonymousView):
         records = self._get_records(list_name)
         request = self.request
         session = self.session
-
-        if request.GET.get('query', False):
-            records = self._filter_records(records, request.GET['query'])
+        query = request.GET.get('query', False)
+        if query:
+            query = query.strip()
+            records = self._filter_records(records, query)
         records = self._sort_records(records, session['sort'], username, list_name)
 
         if username and session['recommendation']:
@@ -225,7 +226,9 @@ class ListView(TemplateAnonymousView):
                 'reviews': comments_and_ratings,
                 'list_id': List.objects.get(key_name=list_name).id,
                 'anothers_account': self.anothers_account,
-                'list_data': json.dumps(list_data)}
+                'list_data': json.dumps(list_data),
+                'query': query,
+        }
 
     def get(self, *args, **kwargs):
         self._initialize_session_values()
