@@ -11,6 +11,7 @@ facebook-sdk==2.0.0
 tabulate==0.7.7
 Babel==2.4.0
 django-braces==1.11.0
+requests==2.13.0
 
 # social-auth-core==1.2.0
 # dependency of social-auth-app-django

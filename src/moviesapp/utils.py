@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 
 import json
 import re
-import urllib2
+import requests
 from datetime import datetime
 
 from django.conf import settings
@@ -15,14 +15,14 @@ from .tmdb import get_tmdb_movie_data
 
 def load_omdb_movie_data(imdb_id):
     try:
-        response = urllib2.urlopen('http://www.omdbapi.com/?i=%s' % imdb_id)
+        r = requests.get('http://www.omdbapi.com/?i=%s' % imdb_id)
     except:
         if settings.DEBUG:
             raise
         else:
             client.captureException()
         return
-    movie_data = json.loads(response.read())
+    movie_data = r.json()
     if movie_data.get('Response') == 'True':
         for key in movie_data:
             if len(movie_data[key]) > 255:
