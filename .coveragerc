@@ -1,7 +1,8 @@
 [run]
 branch = True
 omit =
-    moviesapp/tests.py
+    src/moviesapp/tests.py
+    src/moviesapp/migrations/*
 
 [report]
 
@@ -16,5 +17,5 @@ ignore_errors = True
 show_missing = True
 
 omit =
-    moviesapp/tests.py
-
+    src/moviesapp/tests.py
+    src/moviesapp/migrations/*
