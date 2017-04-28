@@ -13,7 +13,7 @@ isort:
 	isort --check-only --recursive --diff src
 
 coverage:
-	py.test --cov-report term-missing --cov src
+	py.test --cov-report term-missing --cov src --nomigrations
 
 pylint:
 	pylint src
