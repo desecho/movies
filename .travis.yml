@@ -10,5 +10,14 @@ branches:
   only:
     - master
 
+env:
+  - TOXENV=pylint
+  - TOXENV=flake8
+  - TOXENV=isort
+  - TOXENV=py27
+
+before_install:
+  pip install -r requirements-dev.txt
+
 script:
-  - make travis
+  - tox
