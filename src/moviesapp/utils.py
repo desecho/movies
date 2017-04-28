@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-import json
 import re
-import requests
 from datetime import datetime
 
+import requests
 from django.conf import settings
 from raven.contrib.django.raven_compat.models import client
 

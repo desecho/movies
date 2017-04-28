@@ -222,12 +222,13 @@ class ListView(TemplateAnonymousView):
             comments_and_ratings = None
         records = paginate(records, request.GET.get('page'),
                            settings.RECORDS_ON_PAGE)
-        return {'records': records,
-                'reviews': comments_and_ratings,
-                'list_id': List.objects.get(key_name=list_name).id,
-                'anothers_account': self.anothers_account,
-                'list_data': json.dumps(list_data),
-                'query': query,
+        return {
+            'records': records,
+            'reviews': comments_and_ratings,
+            'list_id': List.objects.get(key_name=list_name).id,
+            'anothers_account': self.anothers_account,
+            'list_data': json.dumps(list_data),
+            'query': query,
         }
 
     def get(self, *args, **kwargs):
