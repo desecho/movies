@@ -146,17 +146,16 @@ class ListView(TemplateAnonymousView):
     @staticmethod
     def _sort_records(records, sort, username, list_name):
         if sort == 'release_date':
-            records = records.order_by('-movie__release_date')
+            return records.order_by('-movie__release_date')
         elif sort == 'rating':
             if not username and list_name == 'to-watch':
                 # sorting is changing here because there is no user rating yet.
-                records = records.order_by('-movie__imdb_rating',
+                return records.order_by('-movie__imdb_rating',
                                            '-movie__release_date')
             else:
-                records = records.order_by('-rating', '-movie__release_date')
+                return records.order_by('-rating', '-movie__release_date')
         elif sort == 'addition_date':
-            records = records.order_by('-date')
-        return records
+            return records.order_by('-date')
 
     @staticmethod
     def _get_record_movie_data(record_ids_and_movies):
