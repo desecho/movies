@@ -4,7 +4,8 @@ from django.views.generic import View
 
 
 class AjaxAnonymousView(JsonRequestResponseMixin, View):
-    pass
+    def success(self):
+        return self.render_json_response({'status': 'success'})
 
 
 class AjaxView(LoginRequiredMixin, AjaxAnonymousView):

@@ -1,7 +1,6 @@
 import json
 
 from django.contrib.auth import logout
-from django.http import HttpResponse
 from django.shortcuts import redirect
 
 from ..models import activate_user_language_preference
@@ -31,4 +30,4 @@ class SavePreferencesView(AjaxView):
         user.only_for_friends = only_for_friends
         user.save()
         activate_user_language_preference(request, language)
-        return HttpResponse()
+        return self.success()

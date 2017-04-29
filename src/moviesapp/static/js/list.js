@@ -69,16 +69,23 @@ function ($scope, RemoveMovie, SaveComment) {
   };
 
   $scope.saveComment = function(id) {
+    function showError(){
+      displayMessage(gettext('Error saving a comment'));
+    }
     const comment = $('#comment' + id).val();
     SaveComment.post($.param({
       id: id,
       comment: comment
-    }), function(data) {
-      if (!comment) {
-        $scope.toggleCommentArea(id);
+    }), function(response) {
+      if (response.status == 'success') {
+        if (!comment) {
+          $scope.toggleCommentArea(id);
+        }
+      } else {
+        showError();
       }
     }, function() {
-      displayMessage(gettext('Error saving a comment'));
+      showError();
     });
   };
 
@@ -94,22 +101,29 @@ function ($scope, RemoveMovie, SaveComment) {
 }]);
 
 function changeRating(id, rating, element) {
-  function revertToPreviousRating(element) {
-    const scoreSettings = {
-      score: element.attr('data-rating')
+  function error(){
+    function revertToPreviousRating(element) {
+      const scoreSettings = {
+        score: element.attr('data-rating')
+      };
+      const settings = $.extend({}, ratySettings, ratyCustomSettings, scoreSettings);
+      element.raty(settings);
     };
-    const settings = $.extend({}, ratySettings, ratyCustomSettings, scoreSettings);
-    element.raty(settings);
-  };
+    revertToPreviousRating(element);
+    displayMessage(gettext('Error adding a rating'));
+  }
 
   $.post(urlChangeRating, {
     id: id,
     rating: rating
-  }, function(data, error, x) {
-    element.attr('data-rating', rating);
+  }, function(response) {
+    if (response.status == 'success') {
+      element.attr('data-rating', rating);
+    } else {
+      error();
+    }
   }).fail(function() {
-    revertToPreviousRating(element);
-    displayMessage(gettext('Error adding a rating'));
+    error();
   });
 };
 
@@ -129,17 +143,25 @@ function switchSort(value) {
 };
 
 function applySettings(settings, reload) {
+  function error(){
+    displayMessage(gettext('Error applying the settings'));
+  }
   if (reload == null) {
     reload = true;
   }
   $.post(urlApplySettings, {
     settings: JSON.stringify(settings)
-  }, function(data) {
-    if (reload) {
-      location.reload();
+  }, function(response) {
+    if (response.status == 'success') {
+      if (reload) {
+        location.reload();
+      }
+    } else {
+      error();
     }
+
   }).fail(function() {
-    displayMessage(gettext('Error applying the settings'));
+    error();
   });
 };
 

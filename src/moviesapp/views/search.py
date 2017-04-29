@@ -73,4 +73,4 @@ class AddToListFromDbView(AjaxView):
         if not result:
             output = {'status': 'not_found'}
             return self.render_json_response(output)
-        return self.render_json_response({'status': 'success'})
+        return self.success()

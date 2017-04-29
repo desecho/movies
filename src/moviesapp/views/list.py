@@ -28,7 +28,7 @@ class ChangeRatingView(AjaxView):
                              rating=rating).save()
             r.rating = rating
             r.save()
-        return HttpResponse()
+        return self.success()
 
 
 class AddToListView(AjaxView):
@@ -40,7 +40,7 @@ class AddToListView(AjaxView):
         except (KeyError, ValueError):
             return self.render_bad_request_response()
         add_movie_to_list(movie_id, list_id, request.user)
-        return self.render_json_response({'status': 'success'})
+        return self.success()
 
 
 class RecordMixin(AjaxView):
@@ -57,7 +57,7 @@ class RemoveMovieView(RecordMixin):
     def post(self, request):
         super(RemoveMovieView, self).post(request)
         self.record.delete()
-        return self.render_json_response({'status': 'success'})
+        return self.success()
 
 
 class ApplySettingsView(AjaxAnonymousView):
@@ -70,7 +70,7 @@ class ApplySettingsView(AjaxAnonymousView):
 
         for setting in session_settings:
             request.session[setting] = session_settings[setting]
-        return HttpResponse()
+        return self.success()
 
 
 class SaveCommentView(RecordMixin):
@@ -90,7 +90,7 @@ class SaveCommentView(RecordMixin):
                              comment=comment).save()
             r.comment = comment
             r.save()
-        return HttpResponse()
+        return self.success()
 
 
 class ListView(TemplateAnonymousView):
