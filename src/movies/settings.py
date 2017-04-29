@@ -17,7 +17,7 @@ except ImportError:
         print('No initial settings!')
         sys.exit()
 
-INTERNAL_IPS = local_settings.SECRET_KEY
+INTERNAL_IPS = local_settings.INTERNAL_IPS
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = local_settings.SECRET_KEY
@@ -114,7 +114,6 @@ if DEBUG:
 
 ROOT_URLCONF = 'movies.urls'
 
-# Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'movies.wsgi.application'
 
 INSTALLED_APPS = [
@@ -123,9 +122,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.staticfiles',
-    # Uncomment the next line to enable the admin:
     'django.contrib.admin',
-    # Uncomment the next line to enable admin documentation:
     'django.contrib.admindocs',
     'moviesapp',
     'menu',
