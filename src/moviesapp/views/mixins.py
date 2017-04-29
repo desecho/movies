@@ -8,7 +8,7 @@ class AjaxAnonymousView(JsonRequestResponseMixin, View):
 
 
 class AjaxView(LoginRequiredMixin, AjaxAnonymousView):
-    pass
+    raise_exception = True
 
 
 class VkAjaxView(AjaxView):

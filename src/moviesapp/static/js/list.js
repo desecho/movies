@@ -30,10 +30,18 @@ function ($scope, RemoveMovie, SaveComment) {
   }
 
   $scope.removeMovie = function(id) {
-    RemoveMovie.post($.param({id: id}), function(data) {
-      removeMovieFromPage(id);
-    }, function(){
+    function error(){
       displayMessage(gettext('Error removing the movie'));
+    }
+
+    RemoveMovie.post($.param({id: id}), function(response) {
+      if (response.status === 'success') {
+        removeMovieFromPage(id);
+      } else {
+        error();
+      }
+    }, function(){
+        error();
     });
   };
 

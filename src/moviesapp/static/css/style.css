@@ -1,3 +1,7 @@
+#language-form {
+  display: none;
+}
+
 #login-form {
   margin-top: 20px;
 }

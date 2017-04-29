@@ -5,11 +5,11 @@ import facebook
 import vkontakte
 from annoying.fields import JSONField
 from django.conf import settings
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, AnonymousUser
 from django.contrib.auth.signals import user_logged_in
 from django.db import models
 from django.dispatch import receiver
-from django.utils.translation import LANGUAGE_SESSION_KEY, activate
+from django.utils.translation import LANGUAGE_SESSION_KEY
 
 
 class Vk:
@@ -43,7 +43,6 @@ class Fb:
 
 
 def activate_user_language_preference(request, lang):
-    activate(lang)
     request.session[LANGUAGE_SESSION_KEY] = lang
 
 
@@ -62,20 +61,26 @@ def get_poster_url(size, poster):
     return no_image_url
 
 
-class User(AbstractUser):
-    only_for_friends = models.BooleanField(default=False)
-    language = models.CharField(max_length=2, choices=settings.LANGUAGES, default='en')
-    avatar = models.URLField(null=True, blank=True)
-    loaded_initial_data = models.BooleanField(default=False)
-
+class UserBase(object):
     def get_movie_ids(self):
-        return Record.objects.filter(user=self).values_list('movie__pk')
+        return self.get_records().values_list('movie__pk')
+
+    def get_records(self):
+        if self.is_authenticated():
+            return self.records.all()
+        else:
+            return Record.objects.none()
+
+    def get_record(self, id_):
+        return self.get_records().get(pk=id_)
 
     def _get_fb_accounts(self):
         return self.social_auth.filter(provider='facebook')
 
     def is_fb_user(self):
-        return self._get_fb_accounts().exists()
+        if self.is_authenticated():
+            return self._get_fb_accounts().exists()
+        return False
 
     def get_fb_account(self):
         if self.is_fb_user():
@@ -93,10 +98,14 @@ class User(AbstractUser):
         Note: currently it does because it is not possible to link a vk-app account and a website account.
         But it is likely to change in the future.
         """
-        return self._get_vk_accounts().exists()
+        if self.is_authenticated():
+            return self._get_vk_accounts().exists()
+        return False
 
     def is_linked(self):
-        return self.social_auth.exists()
+        if self.is_authenticated():
+            return self.social_auth.exists()
+        return False
 
     def __unicode__(self):
         return self.get_full_name()
@@ -109,15 +118,33 @@ class User(AbstractUser):
         return list(set(users))
 
     def get_friends(self, sort=False):
+        friends = User.objects.none()
         if self.is_linked:
-            friends = User.objects.none()
             if self.is_vk_user():
                 friends |= Vk(self).get_friends()
             if self.is_fb_user():
                 friends |= Fb(self).get_friends()
             if sort:
                 friends = friends.order_by('first_name')
-            return friends
+        return friends
+
+    def has_friends(self):
+        return self.get_friends().exists()
+
+
+class User(AbstractUser, UserBase):
+    only_for_friends = models.BooleanField(default=False)
+    language = models.CharField(max_length=2, choices=settings.LANGUAGES, default='en')
+    avatar = models.URLField(null=True, blank=True)
+    loaded_initial_data = models.BooleanField(default=False)
+
+
+class UserAnonymous(AnonymousUser, UserBase):
+    ip = None
+
+    def __init__(self, request):
+        self.ip = request.META.get('REMOTE_ADDR')
+        super(UserAnonymous, self).__init__()
 
 
 class List(models.Model):
@@ -207,7 +234,7 @@ class Movie(models.Model):
 
 
 class Record(models.Model):
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(User, related_name='records')
     movie = models.ForeignKey(Movie, related_name='records')
     list = models.ForeignKey(List)
     rating = models.IntegerField(default=0)

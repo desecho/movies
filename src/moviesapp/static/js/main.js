@@ -23,6 +23,14 @@ function displayMessage(message) {
   return $.jGrowl(message);
 };
 
+function handleError(error, error_func){
+  if (error.status == 403) {
+    displayMessage(gettext('You need to login to add a movie to your list.'))
+  } else {
+    error_func();
+  }
+}
+
 const csrftoken = getCookie('csrftoken');
 
 $.ajaxSetup({
@@ -57,3 +65,4 @@ $(function(){
     $('.vk-app-hide').show();
   }
 })
+

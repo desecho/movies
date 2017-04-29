@@ -12,4 +12,6 @@ output-format=colorized
 
 # Temporarily ignored - bare-except - TODO
 # Temporarily ignored - R (refactoring) - TODO
-disable=missing-docstring,unnecessary-lambda,invalid-name,no-init,redefined-outer-name,too-many-arguments,arguments-differ,import-error,superfluous-parens,too-few-public-methods,no-member,old-style-class,bare-except,fixme,R
+# Temporarily ignored - abstract-method - TODO?
+
+disable=missing-docstring,unnecessary-lambda,invalid-name,no-init,redefined-outer-name,too-many-arguments,arguments-differ,import-error,superfluous-parens,too-few-public-methods,no-member,old-style-class,bare-except,fixme,R,abstract-method

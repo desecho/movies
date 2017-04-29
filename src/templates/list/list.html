@@ -50,7 +50,7 @@
   {% endwith %}
 </div>
 
-{% if anothers_account %}
+{% if anothers_account and user.is_authenticated %}
   <button data-toggle="button" id="button-recommendation" type="button" class="btn btn-default" onclick="toggleRecommendation()">{% trans 'Recommendations' %}</button>
 {% endif %}
 <br><br>

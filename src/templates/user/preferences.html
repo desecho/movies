@@ -23,12 +23,12 @@
   <div class="form-group">
     <label class="control-label col-sm-2" for="lang">{% trans 'Language' %}:</label>
     <div class="col-sm-2">
+    {% get_available_languages as LANGUAGES %}
+    {% for code, language in LANGUAGES %}
     <label class="radio">
-      <input type="radio" ng-click="savePreferences(true)" name="lang" value="en" {% ifequal user.language 'en' %} checked {% endifequal %}> {% trans 'English' %}
+      <input type="radio" ng-click="savePreferences(true)" name="lang" value="{{ code }}" {% ifequal user.language code %} checked {% endifequal %}> {{ language }}
     </label>
-    <label class="radio">
-      <input type="radio" ng-click="savePreferences(true)" name="lang" value="ru" {% ifequal user.language 'ru' %} checked {% endifequal %}> {% trans 'Russian' %}<br>
-    </label>
+    {% endfor %}
     </div>
   </div>
 

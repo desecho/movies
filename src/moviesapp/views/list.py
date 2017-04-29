@@ -2,10 +2,11 @@ import json
 
 from django.conf import settings
 from django.db.models import Q
-from django.http import HttpResponse, HttpResponseForbidden
+from django.http import Http404, HttpResponse, HttpResponseForbidden
 
 from ..models import Action, ActionRecord, List, Record, User
-from .mixins import AjaxView, TemplateAnonymousView, TemplateView
+from .mixins import (AjaxAnonymousView, AjaxView, TemplateAnonymousView,
+                     TemplateView)
 from .utils import add_movie_to_list, paginate
 
 
@@ -18,7 +19,7 @@ class ChangeRatingView(AjaxView):
         except KeyError:
             return self.render_bad_request_response()
 
-        r = Record.objects.get(pk=id_, user=request.user)
+        r = request.user.get_record(id_)
         if r.rating != rating:
             if not r.rating:
                 ActionRecord(action_id=Action.ADDED_RATING,
@@ -42,19 +43,24 @@ class AddToListView(AjaxView):
         return HttpResponse()
 
 
-class RemoveMovieView(AjaxView):
+class RecordMixin(AjaxView):
     def post(self, request):
         try:
             POST = request.POST
-            id_ = int(POST['id'])
+            record_id = int(POST['id'])
         except (KeyError, ValueError):
             return self.render_bad_request_response()
-
-        Record.objects.get(pk=id_, user_id=request.user.id).delete()
-        return HttpResponse()
+        self.record = request.user.get_record(record_id)
 
 
-class ApplySettingsView(AjaxView):
+class RemoveMovieView(RecordMixin):
+    def post(self, request):
+        super(RemoveMovieView, self).post(request)
+        self.record.delete()
+        return self.render_json_response({'status': 'success'})
+
+
+class ApplySettingsView(AjaxAnonymousView):
     def post(self, request):
         try:
             POST = request.POST
@@ -67,16 +73,15 @@ class ApplySettingsView(AjaxView):
         return HttpResponse()
 
 
-class SaveCommentView(AjaxView):
+class SaveCommentView(RecordMixin):
     def post(self, request):
+        super(SaveCommentView, self).post(request)
         try:
-            POST = request.POST
-            id_ = int(POST['id'])
-            comment = POST['comment']
-        except (KeyError, ValueError):
+            comment = request.POST['comment']
+        except KeyError:
             return self.render_bad_request_response()
 
-        r = Record.objects.get(pk=id_, user=request.user)
+        r = self.record
         if r.comment != comment:
             if not r.comment:
                 ActionRecord(action_id=Action.ADDED_COMMENT,
@@ -161,10 +166,9 @@ class ListView(TemplateAnonymousView):
     def _get_list_data(self, records):
         movies, record_ids_and_movies_dict = self._get_record_movie_data(
             records.values_list('id', 'movie_id'))
-        movie_ids_and_list_ids = (Record.objects
-                                  .filter(user=self.request.user, movie_id__in=movies)
+        movie_ids_and_list_ids = (self.request.user.get_records()
+                                  .filter(movie_id__in=movies)
                                   .values_list('movie_id', 'list_id'))
-
         movie_id_and_list_id_dict = {}
         for x in movie_ids_and_list_ids:
             movie_id_and_list_id_dict[x[0]] = x[1]
@@ -190,10 +194,11 @@ class ListView(TemplateAnonymousView):
             user = self.anothers_account
         else:
             user = self.request.user
-        return Record.objects.select_related().filter(list__key_name=list_name,
-                                                      user=user)
+        return user.get_records().filter(list__key_name=list_name).select_related('movie')
 
     def get_context_data(self, list_name, username=None):
+        if username is None and self.request.user.is_anonymous():
+            raise Http404
         self.anothers_account = self._get_anothers_account(username)
         if self.anothers_account:
             if User.objects.get(username=username) not in self.request.user.get_available_users_and_friends():
@@ -263,11 +268,13 @@ class RecommendationsView(TemplateView, ListView):
 
     def get_context_data(self):
         friends = self.request.user.get_friends()
-        if friends:
-            records = self._get_recommendations_from_friends(friends)
-            records, record_ids_and_movies = self._filter_duplicated_movies_and_limit(records)
-            reviews = self._get_comments_and_ratings(record_ids_and_movies, self.request.user)
-        else:
-            records = None
-            reviews = None
+        records = self._get_recommendations_from_friends(friends)
+        records, record_ids_and_movies = self._filter_duplicated_movies_and_limit(records)
+        reviews = self._get_comments_and_ratings(record_ids_and_movies, self.request.user)
         return {'records': records, 'reviews': reviews}
+
+    def get(self, *args, **kwargs):
+        has_friends = self.request.user.has_friends()
+        if not has_friends:
+            raise Http404
+        return super(RecommendationsView, self).get(*args, **kwargs)

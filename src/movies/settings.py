@@ -1,11 +1,12 @@
-# Django settings for movies project.
+# -*- coding: utf-8 -*-
+
+from __future__ import unicode_literals
 
 import os
 import os.path as op
 import sys
 
 import raven
-from django.utils.translation import ugettext_lazy as _
 
 try:
     import local_settings
@@ -97,19 +98,20 @@ TEMPLATES = [
     },
 ]
 
-MIDDLEWARE_CLASSES = [
+MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django.middleware.gzip.GZipMiddleware',
-    'social_django.middleware.SocialAuthExceptionMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'social_django.middleware.SocialAuthExceptionMiddleware',
+    'custom_anonymous.middleware.AuthenticationMiddleware',
 ]
 
 if DEBUG:
-    MIDDLEWARE_CLASSES.append('debug_toolbar.middleware.DebugToolbarMiddleware')
+    MIDDLEWARE.append('debug_toolbar.middleware.DebugToolbarMiddleware')
 
 ROOT_URLCONF = 'movies.urls'
 
@@ -138,49 +140,50 @@ INSTALLED_APPS = [
 if DEBUG:
     INSTALLED_APPS.append('debug_toolbar')
 
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': True,
-    'root': {
-        'level': 'WARNING',
-        'handlers': ['sentry'],
-    },
-    'formatters': {
-        'verbose': {
-            'format': '%(levelname)s %(asctime)s %(module)s '
-                      '%(process)d %(thread)d %(message)s'
+if not DEBUG:
+    LOGGING = {
+        'version': 1,
+        'disable_existing_loggers': True,
+        'root': {
+            'level': 'WARNING',
+            'handlers': ['sentry'],
         },
-    },
-    'handlers': {
-        'sentry': {
-            'level': 'ERROR',  # To capture more than ERROR, change to WARNING, INFO, etc.
-            'class': 'raven.contrib.django.raven_compat.handlers.SentryHandler',
-            'tags': {'custom-tag': 'x'},
+        'formatters': {
+            'verbose': {
+                'format': '%(levelname)s %(asctime)s %(module)s '
+                          '%(process)d %(thread)d %(message)s'
+            },
         },
-        'console': {
-            'level': 'DEBUG',
-            'class': 'logging.StreamHandler',
-            'formatter': 'verbose'
-        }
-    },
-    'loggers': {
-        'django.db.backends': {
-            'level': 'ERROR',
-            'handlers': ['console'],
-            'propagate': False,
+        'handlers': {
+            'sentry': {
+                'level': 'ERROR',  # To capture more than ERROR, change to WARNING, INFO, etc.
+                'class': 'raven.contrib.django.raven_compat.handlers.SentryHandler',
+                'tags': {'custom-tag': 'x'},
+            },
+            'console': {
+                'level': 'DEBUG',
+                'class': 'logging.StreamHandler',
+                'formatter': 'verbose'
+            }
         },
-        'raven': {
-            'level': 'DEBUG',
-            'handlers': ['console'],
-            'propagate': False,
+        'loggers': {
+            'django.db.backends': {
+                'level': 'ERROR',
+                'handlers': ['console'],
+                'propagate': False,
+            },
+            'raven': {
+                'level': 'DEBUG',
+                'handlers': ['console'],
+                'propagate': False,
+            },
+            'sentry.errors': {
+                'level': 'DEBUG',
+                'handlers': ['console'],
+                'propagate': False,
+            },
         },
-        'sentry.errors': {
-            'level': 'DEBUG',
-            'handlers': ['console'],
-            'propagate': False,
-        },
-    },
-}
+    }
 
 AUTHENTICATION_BACKENDS = (
     'social_core.backends.vk.VKOAuth2',
@@ -196,6 +199,8 @@ ADMIN_REORDER = (
 APPEND_SLASH = False
 
 AUTH_USER_MODEL = 'moviesapp.User'
+AUTH_ANONYMOUS_MODEL = 'moviesapp.models.UserAnonymous'
+
 LOGIN_REDIRECT_URL = '/'
 if IS_VK_DEV:
     LOGIN_REDIRECT_URL = 'https://{}'.format(local_settings.HOST_MOVIES_TEST)
@@ -324,8 +329,8 @@ TMDB_KEY = local_settings.TMDB_KEY
 APPEND_SLASH = True
 
 LANGUAGES = (
-    ('en', _('English')),
-    ('ru', _('Russian')),
+    ('en', 'English'),
+    ('ru', 'Русский'),
 )
 
 LOCALE_PATHS = (

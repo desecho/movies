@@ -9,7 +9,7 @@ from babel.dates import format_date
 from django.conf import settings
 
 from .exceptions import MovieNotInDb
-from .models import Record, get_poster_url
+from .models import get_poster_url
 
 
 def get_tmdb(lang=None):
@@ -23,13 +23,13 @@ def get_poster_from_tmdb(poster):
         return poster[1:]
 
 
-def get_movies_from_tmdb(query, type_, options, user):
+def get_movies_from_tmdb(query, type_, options, user, lang):
     def set_proper_date(movies):
         def get_date(date):
             if date:
                 date = datetime.strptime(date, '%Y-%m-%d')
                 if date:
-                    return format_date(date, locale=user.language)
+                    return format_date(date, locale=lang)
 
         for movie in movies:
             movie['releaseDate'] = get_date(movie['releaseDate'])
@@ -68,7 +68,7 @@ def get_movies_from_tmdb(query, type_, options, user):
             return movies
 
         query = query.encode('utf-8')
-        tmdb = get_tmdb(user.language)
+        tmdb = get_tmdb(lang)
         search = tmdb.Search()
         if type_ == 'movie':
             movies = search.movie(query=query)['results']
@@ -92,7 +92,7 @@ def get_movies_from_tmdb(query, type_, options, user):
     movies = []
     i = 0
     if movies_data:
-        user_movies_tmdb_ids = Record.objects.filter(user=user).values_list('movie__tmdb_id', flat=True)
+        user_movies_tmdb_ids = user.get_records().values_list('movie__tmdb_id', flat=True)
         for movie in movies_data:
             tmdb_id = movie['id']
             i += 1
@@ -115,6 +115,7 @@ def get_movies_from_tmdb(query, type_, options, user):
         movies = set_proper_date(movies)
         if movies:
             output['movies'] = movies
+            output['status'] = 'success'
         else:
             output['status'] = 'not_found'
     else:

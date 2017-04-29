@@ -28,3 +28,5 @@ requests==2.13.0
 
 # tmdbsimple==1.6.1
 -e git+https://github.com/desecho/tmdbsimple.git@changes#egg=tmdbsimple
+
+-e git+https://github.com/bugov/django-custom-anonymous.git#egg=django-custom-anonymous

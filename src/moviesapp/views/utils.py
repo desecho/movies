@@ -19,7 +19,7 @@ def paginate(objects, page, objects_on_page):
 
 
 def add_movie_to_list(movie_id, list_id, user):
-    record = Record.objects.filter(movie_id=movie_id, user=user)
+    record = user.get_records().filter(movie_id=movie_id)
     if record.exists():
         record = record[0]
         if record.list_id != list_id:

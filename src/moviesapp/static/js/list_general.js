@@ -1,11 +1,18 @@
 function addToList(movieId, listId, recordId) {
+  function showError(){
+    return displayMessage(gettext('Error adding the movie to the list'));
+  }
   return $.post(urlAddToList, {
     movieId: movieId,
     listId: listId
-  }, function(data) {
-    return setViewedIconAndRemoveButtons(recordId, listId);
-  }).fail(function() {
-    return displayMessage(gettext('Error adding the movie to the list'));
+  }, function(response) {
+    if (response.status === 'success') {
+      return setViewedIconAndRemoveButtons(recordId, listId);
+    } else {
+      showError();
+    }
+  }).fail(function(error) {
+    handleError(error, showError);
   });
 };
 

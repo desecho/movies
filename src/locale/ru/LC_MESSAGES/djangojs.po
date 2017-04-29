@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-25 02:06-0400\n"
-"PO-Revision-Date: 2017-04-25 02:06-0400\n"
+"POT-Creation-Date: 2017-04-28 21:39-0400\n"
+"PO-Revision-Date: 2017-04-28 21:42-0456\n"
 "Last-Translator: Anton Samarchyan <desecho@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -23,71 +23,76 @@ msgstr ""
 msgid "The list is empty"
 msgstr "Список пуст"
 
-#: moviesapp/static/js/list.js:36
+#: moviesapp/static/js/list.js:34
 msgid "Error removing the movie"
 msgstr "Ошибка удаления фильма"
 
-#: moviesapp/static/js/list.js:80
+#: moviesapp/static/js/list.js:88
 msgid "Error saving a comment"
 msgstr "Ошибка сохранения комментария"
 
-#: moviesapp/static/js/list.js:111
+#: moviesapp/static/js/list.js:119
 msgid "Error adding a rating"
 msgstr "Ошибка добавления рейтинга"
 
-#: moviesapp/static/js/list.js:141
-msgid "Error applying the setting"
-msgstr "Ошибка применения настройки"
+#: moviesapp/static/js/list.js:149
+#| msgid "Error applying the setting"
+msgid "Error applying the settings"
+msgstr "Ошибка применения настроек"
 
-#: moviesapp/static/js/list.js:184
+#: moviesapp/static/js/list.js:192
 msgid "I recommend watching"
 msgstr "Я рекомендую к просмотру"
 
-#: moviesapp/static/js/list.js:186
+#: moviesapp/static/js/list.js:194
 msgid "I don't recommend watching"
 msgstr "Я не рекомендую к просмотру"
 
-#: moviesapp/static/js/list.js:188
+#: moviesapp/static/js/list.js:196
 msgid "My rating"
 msgstr "Моя оценка"
 
-#: moviesapp/static/js/list.js:209
+#: moviesapp/static/js/list.js:217
 msgid "Error posting to the wall #"
 msgstr "Ошибка размещения на стену #"
 
-#: moviesapp/static/js/list.js:212
+#: moviesapp/static/js/list.js:220
 msgid "Your post has been posted"
 msgstr "Ваша запись была размещена"
 
-#: moviesapp/static/js/list.js:220
+#: moviesapp/static/js/list.js:228
 msgid "Error posting a poster to the wall #"
 msgstr "Ошибка размещения постера на стену #"
 
-#: moviesapp/static/js/list.js:234
+#: moviesapp/static/js/list.js:242
 msgid "Error loading a poster"
 msgstr "Ошибка загрузки постера"
 
-#: moviesapp/static/js/list.js:241
+#: moviesapp/static/js/list.js:249
 msgid "Error getting an upload server for wall posting #"
 msgstr "Ошибка получения сервера загрузки для размещения на стену #"
 
-#: moviesapp/static/js/list.js:261
+#: moviesapp/static/js/list.js:269
 msgid "Add a rating to the movie"
 msgstr "Добавить оценку фильму"
 
-#: moviesapp/static/js/list_general.js:8
+#: moviesapp/static/js/list_general.js:3
 msgid "Error adding the movie to the list"
 msgstr "Ошибка добавления фильма в список"
 
-#: moviesapp/static/js/list_general.js:25
+#: moviesapp/static/js/list_general.js:32
 msgid "Watched"
 msgstr "Просмотрено"
 
-#: moviesapp/static/js/list_general.js:28
+#: moviesapp/static/js/list_general.js:35
 msgid "To Watch"
 msgstr "К Просмотру"
 
-#: moviesapp/static/js/main.js:37
+#: moviesapp/static/js/main.js:28
+msgid "You need to login to add a movie to your list."
+msgstr "Вам нужно авторизоваться для того чтобы добавить фильм в список."
+
+#: moviesapp/static/js/main.js:45
 msgid "Close all notifications"
 msgstr "Закрыть все уведомления"
 
@@ -123,29 +128,27 @@ msgstr "Отменить оценку"
 msgid "No rating yet"
 msgstr "Пока нет оценки"
 
-#: moviesapp/static/js/search.js:16 moviesapp/static/js/search.js:60
+#: moviesapp/static/js/search.js:20
 msgid "Movie"
 msgstr "Фильм"
 
-#: moviesapp/static/js/search.js:35 moviesapp/static/js/search.js:37
+#: moviesapp/static/js/search.js:24
 msgid "Search Error"
 msgstr "Ошибка Поиска"
 
-#: moviesapp/static/js/search.js:47
-msgid "Movie is not found in the database"
-msgstr "Фильм не найден в базе данных"
-
-#: moviesapp/static/js/search.js:53
+#: moviesapp/static/js/search.js:52
 msgid "Error adding a movie"
 msgstr "Ошибка добавления фильма"
 
-#: moviesapp/static/js/search.js:63
-msgid "Actor"
-msgstr "Актёр"
+#: moviesapp/static/js/search.js:65
+msgid "Movie is not found in the database"
+msgstr "Фильм не найден в базе данных"
 
-#: moviesapp/static/js/search.js:66
-msgid "Director"
-msgstr "Режиссёр"
+#~ msgid "Actor"
+#~ msgstr "Актёр"
+
+#~ msgid "Director"
+#~ msgstr "Режиссёр"
 
 #~ msgid "Error! Code #"
 #~ msgstr "Ошибка! Код #"

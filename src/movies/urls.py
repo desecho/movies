@@ -59,6 +59,7 @@ urlpatterns = [
 
     url('', include('social_django.urls', namespace='social')),
     url(r'^rosetta/', include('rosetta.urls')),
+    url(r'^i18n/', include('django.conf.urls.i18n')),
 ]
 
 if settings.DEBUG:

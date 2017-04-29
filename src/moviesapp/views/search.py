@@ -1,17 +1,17 @@
 import json
 
-from django.http import HttpResponse, QueryDict
+from django.http import QueryDict
 from raven.contrib.django.raven_compat.models import client
 
 from ..exceptions import MovieNotInDb, NotAvailableSearchType
 from ..models import Movie
 from ..tmdb import get_movies_from_tmdb
 from ..utils import add_movie_to_db
-from .mixins import AjaxAnonymousView, AjaxView, TemplateView
+from .mixins import AjaxAnonymousView, AjaxView, TemplateAnonymousView
 from .utils import add_movie_to_list
 
 
-class SearchView(TemplateView):
+class SearchView(TemplateAnonymousView):
     template_name = 'search.html'
 
 
@@ -33,7 +33,7 @@ class SearchMovieView(AjaxAnonymousView):
             return self.render_bad_request_response()
         options = {'popular_only': json.loads(options['popularOnly']),
                    'sort_by_date': json.loads(options['sortByDate'])}
-        output = get_movies_from_tmdb(query, type_, options, request.user)
+        output = get_movies_from_tmdb(query, type_, options, request.user, self.request.LANGUAGE_CODE)
         return self.render_json_response(output)
 
 
@@ -73,4 +73,4 @@ class AddToListFromDbView(AjaxView):
         if not result:
             output = {'status': 'not_found'}
             return self.render_json_response(output)
-        return HttpResponse()
+        return self.render_json_response({'status': 'success'})

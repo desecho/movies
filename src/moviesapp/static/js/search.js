@@ -20,6 +20,9 @@ function ($scope, SearchMovie, AddToListFromDb) {
   $scope.searchType = gettext('Movie');
   $scope.searchTypeCode = 'movie';
   $scope.submit = function(){
+    function showError(){
+      displayMessage(gettext('Search Error'));
+    }
     $scope.nothingFound = false;
     $scope.searchResults = [];
     const options = {
@@ -30,30 +33,42 @@ function ($scope, SearchMovie, AddToListFromDb) {
         query: $scope.query,
         type: $scope.searchTypeCode,
         options: $.param(options)
-      }, function(data) {
-        if (data.status === 'not_found') {
+      }, function(response) {
+        if (response.status === 'success') {
+          $scope.searchResults = response.movies;
+        } else if (response.status === 'not_found') {
           $scope.nothingFound = true;
         } else {
-          $scope.searchResults = data.movies;
+          showError();
         }
-      }, function(){displayMessage(gettext('Search Error'))}
+      }, function(){
+        showError();
+      }
     );
   }
 
   $scope.addToListFromDb = function(movieId, listId) {
+    function showError(){
+      displayMessage(gettext('Error adding a movie'));
+    }
+
     let movie = $('#movie' + movieId);
     movie.fadeOut('fast');
     AddToListFromDb.post($.param({
       movieId: movieId,
       listId: listId
-    }), function(data) {
-      if (data.status === 'not_found') {
+    }), function(response) {
+      if (response.status !== 'success') {
         movie.fadeIn('fast');
-        return displayMessage(gettext('Movie is not found in the database'));
       }
-    }, function(){
+      if (response.status === 'not_found') {
+        return displayMessage(gettext('Movie is not found in the database'));
+      } else {
+        showError();
+      }
+    }, function(error){
       movie.fadeIn('fast');
-      displayMessage(gettext('Error adding a movie'))
+      handleError(error, showError);
     });
   };
 
