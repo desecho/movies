@@ -40,7 +40,7 @@ class AddToListView(AjaxView):
         except (KeyError, ValueError):
             return self.render_bad_request_response()
         add_movie_to_list(movie_id, list_id, request.user)
-        return HttpResponse()
+        return self.render_json_response({'status': 'success'})
 
 
 class RecordMixin(AjaxView):
