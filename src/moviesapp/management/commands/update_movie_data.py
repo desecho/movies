@@ -62,9 +62,9 @@ class Command(BaseCommand):
             try:
                 result = add_movie_to_db(movie.tmdb_id, update=True)
             except MovieNotInDb:
-                t.error('Movie "{}" is not found in IMDB'.format(movie.id_title))
+                t.error('"{}" is not found in IMDB'.format(movie.id_title))
             else:
                 updated = result
                 if updated:
-                    t.info('{} updated'.format(movie))
+                    t.info('"{}" is updated'.format(movie))
             t.update()
