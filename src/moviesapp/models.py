@@ -150,11 +150,7 @@ class User(AbstractUser, UserBase):
 
 
 class UserAnonymous(AnonymousUser, UserBase):
-    ip = None
-
-    def __init__(self, request):
-        self.ip = request.META.get('REMOTE_ADDR')
-        super(UserAnonymous, self).__init__()
+    pass
 
 
 class List(models.Model):
