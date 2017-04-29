@@ -2,7 +2,7 @@ import json
 
 from django.conf import settings
 from django.db.models import Q
-from django.http import Http404, HttpResponse, HttpResponseForbidden
+from django.http import Http404, HttpResponseForbidden
 
 from ..models import Action, ActionRecord, List, Record, User
 from .mixins import (AjaxAnonymousView, AjaxView, TemplateAnonymousView,
