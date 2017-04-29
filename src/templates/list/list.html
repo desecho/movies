@@ -36,7 +36,7 @@
 {% endif %}
 
 <div class="btn-group" data-toggle="buttons">
-  {% with request.session.mode as mode %}
+  {% with mode=request.session.mode %}
   <!-- id values are being used as variable name combination to control the button statuses -->
   <label id="button-mode-full" class="btn btn-default {% if mode == 'full' %} active {% endif %}" title="{% trans 'Mode' %}" ng-click="switchMode('full')">
     <input type="radio">{% trans 'Full' %}
@@ -59,7 +59,7 @@
   <div>
     <div class="btn-group" data-toggle="buttons">
       <!-- id values are being used as variable name combination to control the button statuses -->
-      {% with request.session.sort as sort %}
+      {% with sort=request.session.sort %}
       <label class="btn btn-default {% if sort == 'release_date' %} active {% endif %}" title="{% trans 'Sort by release date' %}" onclick="switchSort('release_date')">
         <input type="radio">{% trans 'Release date' %}
       </label>
@@ -93,7 +93,7 @@
   <h3>{{ query }}: <a href="{{ request.path }}"><i class="fa fa-times" aria-hidden="true"></i></a></h3>
   {% endif %}
   {% if records %}
-    {% with user.is_vk_user as is_vk_user%}
+    {% with is_vk_user=user.is_vk_user %}
     {% for record in records %}
       <div id="record{{ record.id }}" data-id="{{ record.id }}" data-title="{{ record.movie.title }}" class="movie">
         <div class="title">
