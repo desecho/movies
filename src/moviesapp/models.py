@@ -179,7 +179,6 @@ class Movie(models.Model):
     homepage = models.URLField(null=True, blank=True)
     trailers = JSONField(null=True, blank=True)
 
-
     class Meta:
         ordering = ['pk']
 

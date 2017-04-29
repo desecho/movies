@@ -151,7 +151,7 @@ class ListView(TemplateAnonymousView):
             if not username and list_name == 'to-watch':
                 # sorting is changing here because there is no user rating yet.
                 return records.order_by('-movie__imdb_rating',
-                                           '-movie__release_date')
+                                        '-movie__release_date')
             else:
                 return records.order_by('-rating', '-movie__release_date')
         elif sort == 'addition_date':
