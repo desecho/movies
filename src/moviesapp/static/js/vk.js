@@ -57,7 +57,7 @@ ${myRating} - ${ratingPost}.`
         console.log(response.error);
         return displayMessage(gettext('Error posting a poster to the wall'));
       } else {
-        return post(response.data[0].id);
+        return post(response.response[0].id);
       }
     });
   };
