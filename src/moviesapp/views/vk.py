@@ -1,9 +1,8 @@
 import os
 import tempfile
-import urllib2
 
-from poster.encode import multipart_encode
-from poster.streaminghttp import register_openers
+import requests
+from requests_toolbelt import MultipartEncoder
 
 from ..models import Record
 from .mixins import VkAjaxView
@@ -13,7 +12,7 @@ class UploadPosterToWallView(VkAjaxView):
     @staticmethod
     def _get_filepath(record_id):
         movie = Record.objects.get(pk=record_id).movie
-        file_contents = urllib2.urlopen(movie.poster_big).read()
+        file_contents = requests.get(movie.poster_big).content
         path = tempfile.mkstemp()[1]
         with open(path, 'w') as file_:
             file_.write(file_contents)
@@ -24,11 +23,9 @@ class UploadPosterToWallView(VkAjaxView):
 
     @staticmethod
     def _upload_file(url, filepath):
-        register_openers()
-        datagen, headers = multipart_encode({'photo': open(filepath, 'rb')})
-        request = urllib2.Request(url, datagen, headers)
-        response = urllib2.urlopen(request).read()
-        return response
+        file_ = open(filepath, 'rb')
+        m = MultipartEncoder(fields={'photo': (file_.name, file_, 'image/jpg')})
+        return requests.post(url, data=m, headers={'Content-Type': m.content_type}).text
 
     def post(self, request):
         try:

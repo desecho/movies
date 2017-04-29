@@ -1,17 +1,18 @@
 Django==1.11
 django-annoying==0.10.3
 django-simple-menu==1.2.1
-poster==0.8.1
-python-dateutil==2.6.0
 django-modeltranslation==0.12.1
 django-rosetta==0.7.13
+django-braces==1.11.0
 social-auth-app-django==1.1.0
+
+python-dateutil==2.6.0
 raven==6.0.0
 facebook-sdk==2.0.0
 tabulate==0.7.7
 Babel==2.4.0
-django-braces==1.11.0
 requests==2.13.0
+requests-toolbelt==0.7.1
 
 # social-auth-core==1.2.0
 # dependency of social-auth-app-django
