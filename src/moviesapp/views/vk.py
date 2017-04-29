@@ -40,4 +40,4 @@ class UploadPosterToWallView(VkAjaxView):
 
         filepath = self._get_filepath(record_id)
         response = self._upload_file(url, filepath)
-        return self.render_json_response({'response': response})
+        return self.render_json_response({'data': response})
