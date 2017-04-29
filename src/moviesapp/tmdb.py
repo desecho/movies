@@ -129,15 +129,11 @@ def get_tmdb_movie_data(tmdb_id):
             return release_date
 
     def get_trailers(movie_data):
-        youtube_trailers = []
-        trailers = movie_data.videos()['results']
-        for trailer in trailers:
-            if trailer['site'] == 'YouTube':
-                t = {'name': trailer['name'], 'source': trailer['key']}
-                youtube_trailers.append(t)
-            else:
-                raise Exception(trailer['site'])
-        return {'youtube': youtube_trailers, 'quicktime': []}
+        trailers = []
+        for trailer in movie_data.videos()['results']:
+            t = {'name': trailer['name'], 'source': trailer['key']}
+            trailers.append(t)
+        return trailers
 
     def get_movie_data(tmdb_id, lang):
         tmdb = get_tmdb(lang=lang)

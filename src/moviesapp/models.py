@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 import facebook
 import vkontakte
+# Not using django-mysql instead because it's not supported by modeltranslation.
 from annoying.fields import JSONField
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser, AnonymousUser
@@ -178,6 +179,7 @@ class Movie(models.Model):
     homepage = models.URLField(null=True, blank=True)
     trailers = JSONField(null=True, blank=True)
 
+
     class Meta:
         ordering = ['pk']
 
@@ -191,13 +193,10 @@ class Movie(models.Model):
         if self.trailers:
             return self.trailers
         else:
-            return {'youtube': [], 'quicktime': []}
+            return self.trailers_en
 
     def has_trailers(self):
-        trailers = self.get_trailers().values()
-        if not trailers[0]:
-            return bool(trailers[1])
-        return False
+        return bool(self.get_trailers())
 
     def _get_poster(self, size):
         return get_poster_url(size, self.poster)
