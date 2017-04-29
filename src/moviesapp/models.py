@@ -142,7 +142,11 @@ class User(AbstractUser, UserBase):
     loaded_initial_data = models.BooleanField(default=False)
 
     def __unicode__(self):
-        return self.get_full_name()
+        name = self.get_full_name()
+        if name:
+            return name
+        else:
+            return self.username
 
 
 class UserAnonymous(AnonymousUser, UserBase):
