@@ -6,11 +6,14 @@
 <head>
   <meta HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
   <meta HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE">
-  <meta name="viewport"
-            content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
   <link href="{% static 'bower/jgrowl/jquery.jgrowl.min.css' %}" rel="stylesheet">
   <link href="{% static 'bower/bootstrap/dist/css/bootstrap.css' %}" rel="stylesheet">
+  <link href="{% static 'bower/tether/dist/css/tether.min.css' %}" rel="stylesheet">
   <link href="{% static 'bower/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet">
+  <link href="{% static 'bower/angular-loading-bar/build/loading-bar.min.css' %}" rel="stylesheet">
+  <link href="{% static 'bower/mprogress/build/css/mprogress.min.css' %}" rel="stylesheet">
   <link href="{% static 'css/bootstrap_fix.css' %}" rel="stylesheet">
   <link href="{% static 'css/style.css' %}" rel="stylesheet">
   {% block head %}{% endblock %}
@@ -21,7 +24,7 @@
 <body>
   <div>
     {% include 'includes/menu.html' %}
-    <div id="content" class="container-fluid">
+    <div id="content" class="container-fluid mt-3">
       {% block content %}{% endblock %}
     </div>
   </div>
@@ -37,18 +40,16 @@
   </script>
 
   <script src="{% static 'bower/jquery/dist/jquery.min.js' %}"></script>
-
+  <script src="{% static 'bower/mprogress/build/js/mprogress.min.js' %}"></script>
   <script src="{% static 'bower/jgrowl/jquery.jgrowl.min.js' %}"></script>
+  <script src="{% static 'bower/tether/dist/js/tether.min.js' %}"></script>
   <script src="{% static 'bower/bootstrap/dist/js/bootstrap.min.js' %}"></script>
+
   <script src="{% static 'bower/angular/angular.js' %}"></script>
+  <script src="{% static 'bower/angular-loading-bar/build/loading-bar.min.js' %}"></script>
   <script src="{% static 'bower/angular-resource/angular-resource.min.js' %}"></script>
   <script src="{% static 'bower/angular-route/angular-route.min.js' %}"></script>
   <script src="{% static 'bower/angular-bootstrap/ui-bootstrap-tpls.min.js' %}"></script>
-
-  <script src="{% static 'bower/spin.js/spin.js' %}"></script>
-  <script src="{% static 'bower/spin.js/jquery.spin.js' %}"></script>
-  <script src="{% static 'bower/angular-spinner/angular-spinner.min.js' %}"></script>
-  <script src="{% static 'bower/angular-loading-spinner/angular-loading-spinner.js' %}"></script>
 
   <script src="{% static 'js/ajax_loading.js' %}"></script>
   <script src="{% static 'js/main.js' %}"></script>

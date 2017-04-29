@@ -6,37 +6,35 @@
 {% block content %}
 <legend>{{ list_name }}</legend>
 <br>
-<div class="col-md-5">
-  <table class="table">
-  <tbody>
-  {% for action in actions %}
-      <tr>
-          <td>
-            <a href="{% url 'people' action.user.username 'watched' %}">{% avatar action.user %}</a>
-          </td>
-          <td>
-            {{ action.date }}
-          </td>
-          <td>
-            <img src="{{ action.movie_poster }}" alt="{{ action.movie }}" title="{{ action.movie }}" class="small-poster">
-          </td>
-          <td>
-            {{ action.movie }}
-          </td>
-          <td>
-            {{ action.action.action }}
-          </td>
-          <td class="feed-action-data">
-            {% if action.list %} {{ action.list }} {% endif %}
-            {% if action.rating %} <div class="rating" data-rating="{{ action.rating }}"></div> {% endif %}
-            {% if action.comment %} {{ action.comment }} {% endif %}
-          </td>
-      </tr>
-    </div>
-  {% endfor %}
-  </tbody>
-  </table>
-</div>
+<table class="table col-md-11 col-lg-10 col-xl-8 table-responsive">
+<tbody>
+{% for action in actions %}
+    <tr>
+        <td>
+          <a href="{% url 'people' action.user.username 'watched' %}">{% avatar action.user %}</a>
+        </td>
+        <td class="hidden-xs-down">
+          {{ action.date }}
+        </td>
+        <td>
+          <img src="{{ action.movie_poster }}" alt="{{ action.movie }}" title="{{ action.movie }}" class="small-poster">
+        </td>
+        <td class="hidden-xs-down">
+          {{ action.movie }}
+        </td>
+        <td>
+          {{ action.action.action }}
+        </td>
+        <td class="feed-action-data">
+          {% if action.list %} {{ action.list }} {% endif %}
+          {% if action.rating %} <div class="rating" data-rating="{{ action.rating }}"></div> {% endif %}
+          {% if action.comment %} {{ action.comment }} {% endif %}
+        </td>
+    </tr>
+  </div>
+{% endfor %}
+</tbody>
+</table>
 {% endblock %}
 
 {% block js %}

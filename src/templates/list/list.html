@@ -23,11 +23,11 @@
 
 {% if anothers_account %}
   <div class="btn-group" data-toggle="buttons">
-    <label class="btn btn-default {% ifequal list_id 1 %} active {% endifequal %}" title="{% trans 'Watched' %}"
+    <label class="btn btn-secondary {% ifequal list_id 1 %} active {% endifequal %}" title="{% trans 'Watched' %}"
            ng-click="openUrl('{% url 'people' anothers_account.username 'watched' %}')">
       <input type="radio">{% trans 'Watched' %}
     </label>
-    <label class="btn btn-default {% ifequal list_id 2 %} active {% endifequal %}" title="{% trans 'To Watch' %}"
+    <label class="btn btn-secondary {% ifequal list_id 2 %} active {% endifequal %}" title="{% trans 'To Watch' %}"
            ng-click="openUrl('{% url 'people' anothers_account.username 'to-watch' %}')">
       <input type="radio">{% trans 'To Watch' %}
     </label>
@@ -38,48 +38,48 @@
 <div class="btn-group" data-toggle="buttons">
   {% with mode=request.session.mode %}
   <!-- id values are being used as variable name combination to control the button statuses -->
-  <label id="button-mode-full" class="btn btn-default {% if mode == 'full' %} active {% endif %}" title="{% trans 'Mode' %}" ng-click="switchMode('full')">
+  <label id="button-mode-full" class="btn btn-secondary {% if mode == 'full' %} active {% endif %}" title="{% trans 'Mode' %}" ng-click="switchMode('full')">
     <input type="radio">{% trans 'Full' %}
   </label>
-  <label id="button-mode-compact" class="btn btn-default {% if mode == 'compact' %} active {% endif %}" title="{% trans 'Mode' %}" ng-click="switchMode('compact')">
+  <label id="button-mode-compact" class="btn btn-secondary {% if mode == 'compact' %} active {% endif %}" title="{% trans 'Mode' %}" ng-click="switchMode('compact')">
     <input type="radio">{% trans 'Compact' %}
   </label>
-  <label id="button-mode-minimal" class="btn btn-default {% if mode == 'minimal' %} active {% endif %}" title="{% trans 'Mode' %}" ng-click="switchMode('minimal')">
+  <label id="button-mode-minimal" class="btn btn-secondary {% if mode == 'minimal' %} active {% endif %}" title="{% trans 'Mode' %}" ng-click="switchMode('minimal')">
     <input type="radio">{% trans 'Minimal' %}
   </label>
   {% endwith %}
 </div>
 
 {% if anothers_account and user.is_authenticated %}
-  <button data-toggle="button" id="button-recommendation" type="button" class="btn btn-default" onclick="toggleRecommendation()">{% trans 'Recommendations' %}</button>
+  <button data-toggle="button" id="button-recommendation" type="button" class="btn btn-secondary" onclick="toggleRecommendation()">{% trans 'Recommendations' %}</button>
 {% endif %}
 <br><br>
 
-<div class="toolbar">
-  <div>
+<div class="row">
+  <div class="col-sm-9 col-md-7 col-lg-5 col-xl-5">
     <div class="btn-group" data-toggle="buttons">
       <!-- id values are being used as variable name combination to control the button statuses -->
       {% with sort=request.session.sort %}
-      <label class="btn btn-default {% if sort == 'release_date' %} active {% endif %}" title="{% trans 'Sort by release date' %}" onclick="switchSort('release_date')">
+      <label class="btn btn-secondary {% if sort == 'release_date' %} active {% endif %}" title="{% trans 'Sort by release date' %}" onclick="switchSort('release_date')">
         <input type="radio">{% trans 'Release date' %}
       </label>
-      <label class="btn btn-default {% if sort == 'rating' %} active {% endif %}" title="{% trans 'Sort by rating' %}" onclick="switchSort('rating')">
+      <label class="btn btn-secondary {% if sort == 'rating' %} active {% endif %}" title="{% trans 'Sort by rating' %}" onclick="switchSort('rating')">
         <input type="radio">{% trans 'Rating' %}
       </label>
-      <label class="btn btn-default {% if sort == 'addition_date' %} active {% endif %}" title="{% trans 'Sort by date added' %}" onclick="switchSort('addition_date')">
+      <label class="btn btn-secondary {% if sort == 'addition_date' %} active {% endif %}" title="{% trans 'Sort by date added' %}" onclick="switchSort('addition_date')">
         <input type="radio">{% trans 'Date added' %}
       </label>
       {% endwith %}
     </div>
   </div>
 
-  <div>
+  <div class="col-sm-6 col-md-4 col-lg-4 col-xl-3">
     <form action="" method="get" class="search">
       {% csrf_token %}
         <div class="input-group">
           <input type="text" class="form-control" name="query">
           <span class="input-group-btn">
-            <button class="btn btn-default" type="submit">{% trans 'Search' %}</button>
+            <button class="btn btn-secondary" type="submit">{% trans 'Search' %}</button>
           </span>
         </div>
     </form>
@@ -88,7 +88,7 @@
 
 <br>
 
-<div id="results" class="results" style="display: none;">
+<div id="results" class="results col-sm-12 col-md-10 col-lg-8" style="display: none;">
   {% if query %}
   <h3>{{ query }}: <a href="{{ request.path }}"><i class="fa fa-times" aria-hidden="true"></i></a></h3>
   {% endif %}
@@ -144,15 +144,15 @@
                 <div class="rating" data-record-id="{{ record.id }}" data-rating="{{ record.rating }}"></div>
                 <div class="comment" id="comment-area{{ record.id }}" style="display: {% if not record.comment %} none {% endif %}">
                   {% if not anothers_account %}
-                    <textarea class="form-control" title="{% trans 'Comment' %}" id="comment{{ record.id }}">{{ record.comment }}</textarea>
-                    <button type="button" title="{% trans 'Save' %}" class="btn btn-default" ng-click="saveComment({{ record.id }})"><i class="fa fa-save"></i></button>
+                    <textarea class="form-control" title="{% trans 'Comment' %}" id="comment{{ record.id }}">{{ record.comment }}</textarea><br><br>
+                    <button type="button" title="{% trans 'Save' %}" class="btn btn-secondary" ng-click="saveComment({{ record.id }})"><i class="fa fa-save"></i></button>
                     <br>
                   {% else %}
                     <p>{{ record.comment }}</p>
                   {% endif %}
                 </div>
                 {% if not anothers_account %}
-                  <button id="comment_area_button{{ record.id }}" type="button" title="{% trans 'Add comment' %}" class="btn btn-default comment-button" ng-click="toggleCommentArea({{ record.id }})" {% if record.comment %} style="display: none "{% endif %}><i class="fa fa-comment"></i></button>
+                  <button id="comment_area_button{{ record.id }}" type="button" title="{% trans 'Add comment' %}" class="btn btn-secondary comment-button" ng-click="toggleCommentArea({{ record.id }})" {% if record.comment %} style="display: none "{% endif %}><i class="fa fa-comment"></i></button>
                 {% endif %}
                   <br>
               {% endifequal %}

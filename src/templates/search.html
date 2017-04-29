@@ -5,32 +5,32 @@
 
 {% block content %}
 <div ng-controller="MoviesSearchController" id="search" style="display: none">
-    <div class="search-panel">
-      <form name="search" id="search" ng-submit="search.$valid && submit()" novalidate>
-        <div class="input-group">
-          <input class="span2 form-control" id="query" name="query" type="text" autofocus ng-model="query" required>
-          <span class="input-group-btn">
-            <button class="btn btn-default" type="submit">{% trans 'Search' %}</button>
-            <div class="btn-group">
-              <button id="search-type-button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">[[ searchType ]] <span class="caret"></span></button>
-              <ul class="dropdown-menu">
-                <li><a href="javascript:void(0)" ng-click="changeSearchType('movie');">{% trans 'Movie' %}</a></li>
-                <li><a href="javascript:void(0)" ng-click="changeSearchType('actor');">{% trans 'Actor' %}</a></li>
-                <li><a href="javascript:void(0)" ng-click="changeSearchType('director');">{% trans 'Director' %}</a></li>
-              </ul>
+    <form name="search" id="search" ng-submit="search.$valid && submit()" novalidate class="col-lg-7 col-md-8 col-sm-10 col-xl-5 mx-auto">
+      <div class="input-group">
+        <input class="span2 form-control" id="query" name="query" type="text" autofocus ng-model="query" required aria-label="{% trans 'Text input with dropdown button' %}">
+        <span class="input-group-btn">
+          <div class="btn-group">
+            <button class="btn btn-secondary" type="submit">{% trans 'Search' %}</button>
+            <button id="search-type-button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              [[ searchType ]] <span class="caret"></span>
+            </button>
+            <div class="dropdown-menu dropdown-menu-right">
+              <a class="dropdown-item" href="javascript:void(0)" ng-click="changeSearchType('movie');">{% trans 'Movie' %}</a>
+              <a class="dropdown-item" href="javascript:void(0)" ng-click="changeSearchType('actor');">{% trans 'Actor' %}</a>
+              <a class="dropdown-item" href="javascript:void(0)" ng-click="changeSearchType('director');">{% trans 'Director' %}</a>
             </div>
-          </span>
-        </div>
-        <div class="search-panel-additional">
-          <label class="checkbox">
-            <input type="checkbox" id="popular-only" checked> {% trans 'show only popular' %}<br>
-          </label>
-          <label class="checkbox">
-            <input type="checkbox" id="sort-by-date"> {% trans 'sort by date' %}
-          </label>
-        </div>
-      </form>
-    </div>
+          </div>
+        </span>
+      </div>
+      <div class="search-panel-additional">
+        <label class="checkbox">
+          <input type="checkbox" id="popular-only" checked> {% trans 'show only popular' %}<br>
+        </label>
+        <label class="checkbox">
+          <input type="checkbox" id="sort-by-date"> {% trans 'sort by date' %}
+        </label>
+      </div>
+    </form>
     <div id="results" class="results" ng-repeat="searchResult in searchResults">
         <div class="movie" id="movie[[searchResult.id]]">
             <div class="poster"><img ng-src="[[searchResult.poster]]" alt="[[searchResult.title]] poster"/></div>

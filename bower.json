@@ -7,15 +7,16 @@
     "jquery-validation": "1.16.0",
     "jgrowl": "1.4.6",
     "autosize": "3.0.20",
-    "bootstrap": "3.3.7",
+    "bootstrap": "v4.0.0-alpha.6",
     "font-awesome": "4.7.0",
     "bootstrap-social": "5.1.1",
     "angular": "1.6.4",
-    "angular-loading-spinner": "0.0.3",
     "angular-resource": "1.6.4",
     "angular-route": "1.6.4",
     "angular-bootstrap": "2.5.0",
-    "retinajs": "2.1.0"
+    "retinajs": "2.1.0",
+    "mprogress": "^0.1.1",
+    "angular-loading-bar": "^0.9.0"
   },
   "private": true
 }

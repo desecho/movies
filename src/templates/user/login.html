@@ -8,35 +8,35 @@
 {% endblock %}
 
 {% block content %}
-<form method="post" action="{% url 'login' %}" class="form-horizontal" id="login-form">
+<form method="post" action="{% url 'login' %}" class="form-horizontal col-sm-6 col-md-5 mx-auto" id="login-form">
   {% csrf_token %}
   <div class="form-group">
-    <label class="control-label col-sm-2" for="username">{{ form.username.label_tag }}</label>
-    <div class="col-sm-2">
+    <label class="control-label" for="username">{{ form.username.label_tag }}</label>
+    <div>
       <input type="text" class="form-control" name="username" required {% if form.username.value %} value="{{ form.username.value}}" {% endif %} autofocus>
     </div>
   </div>
   <div class="form-group">
-    <label class="control-label col-sm-2" for="password">{{ form.password.label_tag }}</label>
-    <div class="col-sm-2">
+    <label class="control-label" for="password">{{ form.password.label_tag }}</label>
+    <div>
       <input type="password" class="form-control" name="password" required {% if form.password.value %} value="{{ form.password.value}}" {% endif %}>
     </div>
   </div>
   <div class="form-group">
-    <div class="col-sm-offset-2 col-sm-2">
-      <input type="submit" class="btn btn-block btn-default" value="{% trans 'Log in' %}">
+    <div class="col-sm-offset-2">
+      <input type="submit" class="btn btn-block btn-primary" value="{% trans 'Log in' %}">
     </div>
   </div>
   <input type="hidden" name="next" value="{{ next }}">
   {% if form.errors %}
     <div class="form-group">
-      <div role="alert" class="col-sm-offset-2 col-sm-2 alert alert-danger">
+      <div role="alert" class="col-sm-offset-2 alert alert-danger">
         {% trans 'You entered incorrect login/password' %}.
       </div>
     </div>
   {% endif %}
   <div class="form-group">
-  <div class="col-sm-offset-2 col-sm-2">
+  <div class="col-sm-offset-2">
     {% if DEBUG %}
     <a href="{% url 'social:begin' 'facebook' %}" class="btn btn-block btn-social btn-facebook">
       <span class="fa fa-facebook"></span> {% trans 'Log in with' %} Facebook

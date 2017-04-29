@@ -5,7 +5,7 @@
 {% load set_var %}
 
 {% block content %}
-<div id="results" class="results">
+<div id="results" class="results col-sm-12 col-md-10 col-lg-8" style="display: none;">
   {% if records %}
     {% for record in records %}
       <div id="record{{ record.id }}" data-id="{{ record.id }}" class="movie">

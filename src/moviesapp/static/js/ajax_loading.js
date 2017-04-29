@@ -17,9 +17,11 @@ $(function(){
     left: 'auto'
   }
   $(document).ajaxStart(function(){
-    $('#loading2').spin(spinnerOptions);
+    mprogress.start();
   });
   $(document).ajaxStop(function(){
-    $('#loading2').spin(false);
+    mprogress.end();
   });
 });
+
+var mprogress = new Mprogress();

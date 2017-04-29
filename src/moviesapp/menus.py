@@ -20,6 +20,7 @@ feed_children = (
     MenuItem(_('People'), reverse('feed', kwargs={'list_name': 'people'}))
 )
 
+Menu.add_item('main', MenuItem(_('Search'), reverse('search')))
 Menu.add_item('main', MenuItem(_('Watched'), reverse('list', kwargs={'list_name': 'watched'}), check=is_authenticated))
 Menu.add_item('main', MenuItem(_('To Watch'), reverse('list', kwargs={'list_name': 'to-watch'}),
                                check=is_authenticated))
