@@ -201,7 +201,7 @@ class ListView(TemplateAnonymousView):
             raise Http404
         self.anothers_account = self._get_anothers_account(username)
         if self.anothers_account:
-            if User.objects.get(username=username) not in self.request.user.get_available_users_and_friends():
+            if User.objects.get(username=username) not in self.request.user.get_users():
                 return HttpResponseForbidden()
 
         records = self._get_records(list_name)

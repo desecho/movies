@@ -107,10 +107,15 @@ class UserBase(object):
             return self.social_auth.exists()
         return False
 
+    def get_users(self, friends=False, sort=False):
+        if friends:
+            return self.get_friends(sort=sort)
+        return self._get_available_users_and_friends(sort=sort)
+
     def __unicode__(self):
         return self.get_full_name()
 
-    def get_available_users_and_friends(self, sort=False):
+    def _get_available_users_and_friends(self, sort=False):
         available_users = User.objects.exclude(only_for_friends=True).exclude(pk=self.pk)
         users = available_users | self.get_friends()
         if sort:

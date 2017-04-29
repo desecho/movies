@@ -12,13 +12,6 @@ from .mixins import TemplateAnonymousView, TemplateView
 from .utils import paginate
 
 
-def get_users(user, friends=False, sort=False):
-    if friends:
-        return user.get_friends(sort=sort)
-    else:
-        return user.get_available_users_and_friends(sort=sort)
-
-
 class FeedView(TemplateAnonymousView):
     template_name = 'social/feed.html'
 
@@ -33,7 +26,7 @@ class FeedView(TemplateAnonymousView):
         actions = ActionRecord.objects.filter(
             date__range=(date_from, date_to)).order_by('-pk')
 
-        users = get_users(self.request.user, friends=list_name == 'friends')
+        users = self.request.user.get_users(friends=list_name == 'friends')
         actions = actions.filter(user__in=users)
         posters = [action.movie.poster_small for action in actions]
         actions_output = []
@@ -65,11 +58,11 @@ class PeopleView(TemplateAnonymousView):
                                   settings.PEOPLE_ON_PAGE)}
 
     def get(self, *args, **kwargs):
-        self.users = get_users(self.request.user, sort=True)
+        self.users = self.request.user.get_users(sort=True)
         return super(PeopleView, self).get(*args, **kwargs)
 
 
 class FriendsView(TemplateView, PeopleView):
     def get(self, *args, **kwargs):
-        self.users = get_users(self.request.user, friends=True, sort=True)
+        self.users = self.request.user.get_users(friends=True, sort=True)
         return TemplateAnonymousView.get(self, *args, **kwargs)
