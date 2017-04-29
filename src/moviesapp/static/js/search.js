@@ -34,6 +34,7 @@ function ($scope, SearchMovie, AddToListFromDb) {
         type: $scope.searchTypeCode,
         options: $.param(options)
       }, function(response) {
+        console.log(response);
         if (response.status === 'success') {
           $scope.searchResults = response.movies;
         } else if (response.status === 'not_found') {
@@ -58,9 +59,10 @@ function ($scope, SearchMovie, AddToListFromDb) {
       movieId: movieId,
       listId: listId
     }), function(response) {
-      if (response.status !== 'success') {
-        movie.fadeIn('fast');
+      if (response.status === 'success') {
+        return;
       }
+      movie.fadeIn('fast');
       if (response.status === 'not_found') {
         return displayMessage(gettext('Movie is not found in the database'));
       } else {
