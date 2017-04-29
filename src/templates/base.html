@@ -29,7 +29,7 @@
   {% get_current_language as LANGUAGE_CODE %}
   <script>
     const language = '{{ LANGUAGE_CODE }}';
-    const isVkUser = {{ request.user.is_vk_user|yesno:'true,false' }}
+    const isVkUser = {{ user.is_vk_user|yesno:'true,false' }}
     const ratyImagesPath = '{% static 'bower/raty/lib/images/' %}';
     {% if not DEBUG %}
       const googleAnalyticsId = '{{ GOOGLE_ANALYTICS_ID }}';
@@ -55,7 +55,7 @@
   {% if not DEBUG %}
     <script src="{% static 'js/analytics.js' %}"></script>
   {% endif %}
-  {% if request.user.is_vk_user %}
+  {% if user.is_vk_user %}
     <script src="//vk.com/js/api/xd_connection.js?2"></script>
     <script src="{% static 'js/vk.js' %}"></script>
   {% endif %}
