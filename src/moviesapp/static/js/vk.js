@@ -106,6 +106,7 @@ const isVkApp = inIframe();
 $(function(){
   if (isVkApp) {
     $('.vk-app-show').show();
+    $('#content').addClass('vk');
   } else {
     $('.vk-app-hide').show();
   }
