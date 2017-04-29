@@ -112,9 +112,6 @@ class UserBase(object):
             return self.get_friends(sort=sort)
         return self._get_available_users_and_friends(sort=sort)
 
-    def __unicode__(self):
-        return self.get_full_name()
-
     def _get_available_users_and_friends(self, sort=False):
         available_users = User.objects.exclude(only_for_friends=True).exclude(pk=self.pk)
         users = available_users | self.get_friends()
@@ -142,6 +139,9 @@ class User(AbstractUser, UserBase):
     language = models.CharField(max_length=2, choices=settings.LANGUAGES, default='en')
     avatar = models.URLField(null=True, blank=True)
     loaded_initial_data = models.BooleanField(default=False)
+
+    def __unicode__(self):
+        return self.get_full_name()
 
 
 class UserAnonymous(AnonymousUser, UserBase):
