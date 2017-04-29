@@ -24,9 +24,10 @@
     <label class="control-label col-sm-2" for="lang">{% trans 'Language' %}:</label>
     <div class="col-sm-2">
     {% get_available_languages as LANGUAGES %}
-    {% for code, language in LANGUAGES %}
+    {% get_language_info_list for LANGUAGES as languages %}
+    {% for language in languages %}
     <label class="radio">
-      <input type="radio" ng-click="savePreferences(true)" name="lang" value="{{ code }}" {% ifequal user.language code %} checked {% endifequal %}> {{ language }}
+      <input type="radio" ng-click="savePreferences(true)" name="lang" value="{{ language.code }}" {% ifequal user.language language.code %} checked {% endifequal %}> {{ language.name_local }}
     </label>
     {% endfor %}
     </div>
