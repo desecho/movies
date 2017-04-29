@@ -62,7 +62,7 @@ def add_movie_to_db(tmdb_id, update=False):
                         try:
                             runtime = datetime.strptime(runtime, '%M min')
                         except:
-                            r = re.match(r'(\d+) min', '110 min')
+                            r = re.match(r'(\d+) min', runtime)
                             minutes = int(r.groups()[0])
                             try:
                                 runtime = datetime.strptime('{:02d}:{:02d}'.format(*divmod(minutes, 60)), '%H:%M')
