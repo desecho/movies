@@ -150,7 +150,8 @@ class User(AbstractUser, UserBase):
 
 
 class UserAnonymous(AnonymousUser, UserBase):
-    pass
+    def __init__(self, request):
+        super(UserAnonymous, self).__init__()
 
 
 class List(models.Model):
