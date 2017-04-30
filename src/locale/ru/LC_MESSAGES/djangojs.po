@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-28 21:39-0400\n"
-"PO-Revision-Date: 2017-04-29 00:02-0456\n"
-"Last-Translator: Anton Samarchyan <desecho@gmail.com>\n"
+"POT-Creation-Date: 2017-04-30 14:55-0400\n"
+"PO-Revision-Date: 2017-04-30 14:57-0456\n"
+"Last-Translator:   <>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -27,54 +27,17 @@ msgstr "Список пуст"
 msgid "Error removing the movie"
 msgstr "Ошибка удаления фильма"
 
-#: moviesapp/static/js/list.js:88
+#: moviesapp/static/js/list.js:73
 msgid "Error saving a comment"
 msgstr "Ошибка сохранения комментария"
 
-#: moviesapp/static/js/list.js:119
+#: moviesapp/static/js/list.js:113
 msgid "Error adding a rating"
 msgstr "Ошибка добавления рейтинга"
 
-#: moviesapp/static/js/list.js:149
-#| msgid "Error applying the setting"
+#: moviesapp/static/js/list.js:147
 msgid "Error applying the settings"
 msgstr "Ошибка применения настроек"
-
-#: moviesapp/static/js/list.js:192
-msgid "I recommend watching"
-msgstr "Я рекомендую к просмотру"
-
-#: moviesapp/static/js/list.js:194
-msgid "I don't recommend watching"
-msgstr "Я не рекомендую к просмотру"
-
-#: moviesapp/static/js/list.js:196
-msgid "My rating"
-msgstr "Моя оценка"
-
-#: moviesapp/static/js/list.js:217
-msgid "Error posting to the wall #"
-msgstr "Ошибка размещения на стену #"
-
-#: moviesapp/static/js/list.js:220
-msgid "Your post has been posted"
-msgstr "Ваша запись была размещена"
-
-#: moviesapp/static/js/list.js:228
-msgid "Error posting a poster to the wall #"
-msgstr "Ошибка размещения постера на стену #"
-
-#: moviesapp/static/js/list.js:242
-msgid "Error loading a poster"
-msgstr "Ошибка загрузки постера"
-
-#: moviesapp/static/js/list.js:249
-msgid "Error getting an upload server for wall posting #"
-msgstr "Ошибка получения сервера загрузки для размещения на стену #"
-
-#: moviesapp/static/js/list.js:269
-msgid "Add a rating to the movie"
-msgstr "Добавьте оценку фильму"
 
 #: moviesapp/static/js/list_general.js:3
 msgid "Error adding the movie to the list"
@@ -136,13 +99,52 @@ msgstr "Фильм"
 msgid "Search Error"
 msgstr "Ошибка Поиска"
 
-#: moviesapp/static/js/search.js:52
+#: moviesapp/static/js/search.js:53
 msgid "Error adding a movie"
 msgstr "Ошибка добавления фильма"
 
-#: moviesapp/static/js/search.js:65
+#: moviesapp/static/js/search.js:67
 msgid "Movie is not found in the database"
 msgstr "Фильм не найден в базе данных"
+
+#: moviesapp/static/js/vk.js:23
+msgid "I recommend watching"
+msgstr "Я рекомендую к просмотру"
+
+#: moviesapp/static/js/vk.js:25
+msgid "I don't recommend watching"
+msgstr "Я не рекомендую к просмотру"
+
+#: moviesapp/static/js/vk.js:27
+msgid "My rating"
+msgstr "Моя оценка"
+
+#: moviesapp/static/js/vk.js:47
+#| msgid "Error posting to the wall #"
+msgid "Error posting to the wall"
+msgstr "Ошибка размещения на стену"
+
+#: moviesapp/static/js/vk.js:49
+msgid "Your post has been posted"
+msgstr "Ваша запись была размещена"
+
+#: moviesapp/static/js/vk.js:58
+#| msgid "Error posting a poster to the wall #"
+msgid "Error posting a poster to the wall"
+msgstr "Ошибка размещения постера на стену"
+
+#: moviesapp/static/js/vk.js:72
+msgid "Error loading a poster"
+msgstr "Ошибка загрузки постера"
+
+#: moviesapp/static/js/vk.js:80
+#| msgid "Error getting an upload server for wall posting #"
+msgid "Error getting an upload server for wall posting"
+msgstr "Ошибка получения сервера загрузки для размещения на стену"
+
+#: moviesapp/static/js/vk.js:100
+msgid "Add a rating to the movie"
+msgstr "Добавьте оценку фильму"
 
 #~ msgid "Actor"
 #~ msgstr "Актёр"

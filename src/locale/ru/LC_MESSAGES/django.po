@@ -8,43 +8,46 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-28 21:39-0400\n"
-"PO-Revision-Date: 2017-04-18 01:52-0400\n"
-"Last-Translator: Anton Samarchyan0 <desecho@gmail.com1>\n"
+"POT-Creation-Date: 2017-04-30 14:55-0400\n"
+"PO-Revision-Date: 2017-04-30 14:56-0456\n"
+"Last-Translator:   <>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Translated-Using: django-rosetta 0.7.13\n"
 
-#: moviesapp/menus.py:18 moviesapp/menus.py:26 moviesapp/views/social.py:28
+#: moviesapp/menus.py:19 moviesapp/menus.py:28 moviesapp/views/social.py:21
 msgid "Friends"
 msgstr "Друзья"
 
-#: moviesapp/menus.py:19 moviesapp/menus.py:27 moviesapp/views/social.py:27
+#: moviesapp/menus.py:20 moviesapp/menus.py:29 moviesapp/views/social.py:20
 msgid "People"
 msgstr "Люди"
 
-#: moviesapp/menus.py:22 moviesapp/templatetags/movie_count.py:16
+#: moviesapp/menus.py:23 templates/list/list.html:82 templates/search.html:13
+msgid "Search"
+msgstr "Поиск"
+
+#: moviesapp/menus.py:24 moviesapp/templatetags/movie_count.py:16
 #: templates/list/list.html:26 templates/list/list.html:28
 #: templates/search.html:39
 msgid "Watched"
 msgstr "Просмотрено"
 
-#: moviesapp/menus.py:23 moviesapp/templatetags/movie_count.py:17
+#: moviesapp/menus.py:25 moviesapp/templatetags/movie_count.py:17
 #: templates/list/list.html:30 templates/list/list.html:32
 #: templates/search.html:40
 msgid "To Watch"
 msgstr "К Просмотру"
 
-#: moviesapp/menus.py:25 templates/list/list.html:54
+#: moviesapp/menus.py:27 templates/list/list.html:54
 msgid "Recommendations"
 msgstr "Рекоммендации"
 
-#: moviesapp/menus.py:28
+#: moviesapp/menus.py:30
 msgid "Feed"
 msgstr "Лента"
 
@@ -59,6 +62,10 @@ msgstr "Добавить в список \"К Просмотру\""
 #: templates/includes/add_to_watched_list_button.html:3
 msgid "Add to &quot;Watched&quot; list"
 msgstr "Добавить в список \"Просмотрено\""
+
+#: templates/includes/menu.html:7
+msgid "Toggle navigation"
+msgstr "Переключить навигацию"
 
 #: templates/list/list.html:41 templates/list/list.html:44
 #: templates/list/list.html:47
@@ -101,92 +108,92 @@ msgstr "Сортировать по дате добавления"
 msgid "Date added"
 msgstr "Дата добавления"
 
-#: templates/list/list.html:82 templates/search.html:13
-msgid "Search"
-msgstr "Поиск"
-
-#: templates/list/list.html:102
+#: templates/list/list.html:103
 msgid "Delete"
 msgstr "Удалить"
 
-#: templates/list/list.html:103
+#: templates/list/list.html:104
 msgid "Post to the wall"
 msgstr "Отправить на стену"
 
-#: templates/list/list.html:120 templates/list/recommendations.html:22
+#: templates/list/list.html:121 templates/list/recommendations.html:22
 msgid "IMDb Rating"
 msgstr "IMDb Рейтинг"
 
-#: templates/list/list.html:121 templates/list/recommendations.html:23
+#: templates/list/list.html:122 templates/list/recommendations.html:23
 msgid "Release Date"
 msgstr "Дата Выпуска"
 
-#: templates/list/list.html:123 templates/list/recommendations.html:24
+#: templates/list/list.html:124 templates/list/recommendations.html:24
 msgid "Country"
 msgstr "Страна"
 
-#: templates/list/list.html:124 templates/list/recommendations.html:25
-#: templates/search.html:19
+#: templates/list/list.html:125 templates/list/recommendations.html:25
+#: templates/search.html:20
 msgid "Director"
 msgstr "Режиссёр"
 
-#: templates/list/list.html:125 templates/list/recommendations.html:26
+#: templates/list/list.html:126 templates/list/recommendations.html:26
 msgid "Writer"
 msgstr "Сценарист"
 
-#: templates/list/list.html:126 templates/list/recommendations.html:27
+#: templates/list/list.html:127 templates/list/recommendations.html:27
 msgid "Genre"
 msgstr "Жанр"
 
-#: templates/list/list.html:127 templates/list/recommendations.html:28
+#: templates/list/list.html:128 templates/list/recommendations.html:28
 msgid "Actors"
 msgstr "Актёры"
 
-#: templates/list/list.html:128 templates/list/recommendations.html:29
+#: templates/list/list.html:129 templates/list/recommendations.html:29
 msgid "Runtime"
 msgstr "Длительность"
 
-#: templates/list/list.html:129 templates/list/recommendations.html:30
+#: templates/list/list.html:130 templates/list/recommendations.html:30
 msgid "Description"
 msgstr "Описание"
 
-#: templates/list/list.html:130 templates/list/recommendations.html:31
+#: templates/list/list.html:131 templates/list/recommendations.html:31
 msgid "Website"
 msgstr "Вебсайт"
 
-#: templates/list/list.html:132 templates/list/recommendations.html:33
+#: templates/list/list.html:134 templates/list/recommendations.html:34
 msgid "Trailers"
 msgstr "Трейлеры"
 
-#: templates/list/list.html:160
+#: templates/list/list.html:148
 msgid "Comment"
 msgstr "Комментарий"
 
-#: templates/list/list.html:161
+#: templates/list/list.html:149
 msgid "Save"
 msgstr "Сохранить"
 
-#: templates/list/list.html:168
+#: templates/list/list.html:156
 msgid "Add comment"
 msgstr "Добавить комментарий"
 
-#: templates/list/list.html:185 templates/list/recommendations.html:62
+#: templates/list/list.html:173 templates/list/recommendations.html:48
 msgid "The list is empty"
 msgstr "Список пуст"
 
-#: templates/search.html:17
+#: templates/search.html:10
+msgid "Text input with dropdown button"
+msgstr "Поле текста с выпадающей кнопкой"
+
+#: templates/search.html:18
 msgid "Movie"
 msgstr "Фильм"
 
-#: templates/search.html:18
+#: templates/search.html:19
 msgid "Actor"
 msgstr "Актёр"
 
-#: templates/search.html:26
+#: templates/search.html:27
 msgid "show only popular"
 msgstr "показывать только популярные"
 
-#: templates/search.html:29
+#: templates/search.html:30
 msgid "sort by date"
 msgstr "сортировать по дате"
 
@@ -226,11 +233,11 @@ msgstr "Вы можете изменить аватар на"
 msgid "Language"
 msgstr "Язык"
 
-#: templates/user/preferences.html:37
+#: templates/user/preferences.html:38
 msgid "Access"
 msgstr "Доступ"
 
-#: templates/user/preferences.html:40
+#: templates/user/preferences.html:41
 msgid "Show my lists only to friends"
 msgstr "Показывать мои списки только друзьям"
 
