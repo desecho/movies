@@ -88,10 +88,11 @@
 
 <br>
 
+{% if query %}
+<h3>{{ query }}: <a href="{{ request.path }}"><i class="fa fa-times" aria-hidden="true"></i></a></h3>
+{% endif %}
+
 <div id="results" class="results col-sm-12 col-md-10 col-lg-8" style="display: none;">
-  {% if query %}
-  <h3>{{ query }}: <a href="{{ request.path }}"><i class="fa fa-times" aria-hidden="true"></i></a></h3>
-  {% endif %}
   {% if records %}
     {% with is_vk_user=user.is_vk_user %}
     {% for record in records %}
