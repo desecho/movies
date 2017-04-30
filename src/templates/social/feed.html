@@ -9,8 +9,8 @@
 <table class="table col-md-11 col-lg-10 col-xl-8 table-responsive">
 <tbody>
 {% for action in actions %}
-    <tr>
-        <td>
+    <tr class="feed-record">
+        <td class="feed-user">
           <a href="{% url 'people' action.user.username 'watched' %}">{% avatar action.user %}</a>
         </td>
         <td class="hidden-xs-down">
@@ -19,7 +19,7 @@
         <td>
           <img src="{{ action.movie_poster }}" alt="{{ action.movie }}" title="{{ action.movie }}" class="small-poster">
         </td>
-        <td class="hidden-xs-down">
+        <td class="hidden-xs-down feed-movie">
           {{ action.movie }}
         </td>
         <td>

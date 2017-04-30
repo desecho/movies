@@ -16,7 +16,6 @@ class BaseTestCase(TestCase):
         'users.json',
     ]
 
-    USER_NAME = 'neo'
     USER_PWD = 'password'
     # Superuser - admin/adminpassword
     # Another user - fox/password
@@ -31,10 +30,10 @@ class BaseTestCase(TestCase):
         User = get_user_model()
         self.user = User.objects.get(username='neo')
 
-    def login(self):
+    def login(self, username='neo'):
         self.client.logout()
         self.client.login(
-            username=self.USER_NAME,
+            username=username,
             password=self.USER_PWD
         )
 
