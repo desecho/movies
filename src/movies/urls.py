@@ -33,8 +33,8 @@ urlpatterns = [
     url(r'^save-preferences/$', SavePreferencesView.as_view(), name='save_preferences'),
 
     # List
-    url(r'^list/(?P<list_name>[\w-]+)/$', ListView.as_view(), name='list'),
-    url(r'^people/(?P<username>[\w\d]+)/(?P<list_name>[\w-]+)$', ListView.as_view(), name='people'),
+    url(r'^list/(?P<list_name>watched|to-watch)/$', ListView.as_view(), name='list'),
+    url(r'^people/(?P<username>[\w\d]+)/(?P<list_name>watched|to-watch)$', ListView.as_view(), name='people'),
     url(r'^recommendations/$', RecommendationsView.as_view(), name='recommendations'),
     url(r'^apply-setting/$', ApplySettingsView.as_view(), name='apply_settings'),
     url(r'^remove-movie/$', RemoveMovieView.as_view(), name='remove_movie'),
@@ -43,7 +43,7 @@ urlpatterns = [
     url(r'^save-comment/$', SaveCommentView.as_view(), name='save_comment'),
 
     # Social
-    url(r'^feed/(?P<list_name>[\w-]+)/$', FeedView.as_view(), name='feed'),
+    url(r'^feed/(?P<list_name>people|friends)/$', FeedView.as_view(), name='feed'),
     url(r'^people/$', PeopleView.as_view(), name='people'),
     url(r'^friends/$', FriendsView.as_view(), name='friends'),
 
