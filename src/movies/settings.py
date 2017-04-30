@@ -242,7 +242,7 @@ MEDIA_URL = '/media/'
 CACHE_DIR = op.join(local_settings.PROJECT_ROOT, 'cache')
 
 MAX_RESULTS = 50
-MIN_POPULARITY = 50
+MIN_POPULARITY = 3
 
 NO_POSTER_SMALL_IMAGE_URL = STATIC_URL + 'img/no_poster_small.png'
 NO_POSTER_NORMAL_IMAGE_URL = STATIC_URL + 'img/no_poster_normal.png'

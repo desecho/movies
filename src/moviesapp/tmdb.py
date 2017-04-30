@@ -41,8 +41,6 @@ def get_movies_from_tmdb(query, type_, options, user, lang):
             if movie['popularity'] >= settings.MIN_POPULARITY:
                 del movie['popularity']  # remove unnesessary data
                 movies_output.append(movie)
-        if not movies_output:  # keep initial movie list if all are unpopular
-            movies_output = movies
         return movies_output
 
     def sort_by_date(movies):
