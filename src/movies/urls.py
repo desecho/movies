@@ -33,15 +33,14 @@ urlpatterns = [
     url(r'^save-preferences/$', SavePreferencesView.as_view(), name='save_preferences'),
 
     # List
+    url(r'^list/(?P<list_name>[\w-]+)/$', ListView.as_view(), name='list'),
+    url(r'^people/(?P<username>[\w\d]+)/(?P<list_name>[\w-]+)$', ListView.as_view(), name='people'),
+    url(r'^recommendations/$', RecommendationsView.as_view(), name='recommendations'),
     url(r'^apply-setting/$', ApplySettingsView.as_view(), name='apply_settings'),
     url(r'^remove-movie/$', RemoveMovieView.as_view(), name='remove_movie'),
     url(r'^add-to-list/$', AddToListView.as_view(), name='add_to_list'),
     url(r'^change-rating/$', ChangeRatingView.as_view(), name='change_rating'),
     url(r'^save-comment/$', SaveCommentView.as_view(), name='save_comment'),
-    url(r'^list/(?P<list_name>[\w-]+)/$', ListView.as_view(), name='list'),
-    url(r'^recommendations/$', RecommendationsView.as_view(), name='recommendations'),
-    url(r'^people/(?P<username>[\w\d]+)/(?P<list_name>[\w-]+)$',
-        ListView.as_view(), name='people'),
 
     # Social
     url(r'^feed/(?P<list_name>[\w-]+)/$', FeedView.as_view(), name='feed'),

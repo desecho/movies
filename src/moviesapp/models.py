@@ -262,7 +262,7 @@ class Action(models.Model):
 
 
 class ActionRecord(models.Model):
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(User, related_name='actions')
     action = models.ForeignKey(Action)
     movie = models.ForeignKey(Movie)
     list = models.ForeignKey(List, blank=True, null=True)
