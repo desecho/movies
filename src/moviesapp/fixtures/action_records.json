@@ -50,5 +50,57 @@
         "rating": null,
         "date": "2017-04-30T13:40:10.753"
     }
+},
+{
+    "model": "moviesapp.actionrecord",
+    "pk": 5,
+    "fields": {
+        "user": 2,
+        "action": 1,
+        "movie": 5,
+        "list": 1,
+        "comment": null,
+        "rating": null,
+        "date": "2017-04-30T19:26:42.607"
+    }
+},
+{
+    "model": "moviesapp.actionrecord",
+    "pk": 6,
+    "fields": {
+        "user": 2,
+        "action": 3,
+        "movie": 2,
+        "list": null,
+        "comment": null,
+        "rating": 5,
+        "date": "2017-04-30T19:27:31.467"
+    }
+},
+{
+    "model": "moviesapp.actionrecord",
+    "pk": 7,
+    "fields": {
+        "user": 2,
+        "action": 3,
+        "movie": 1,
+        "list": null,
+        "comment": null,
+        "rating": 4,
+        "date": "2017-04-30T19:27:34.097"
+    }
+},
+{
+    "model": "moviesapp.actionrecord",
+    "pk": 8,
+    "fields": {
+        "user": 2,
+        "action": 3,
+        "movie": 5,
+        "list": null,
+        "comment": null,
+        "rating": 3,
+        "date": "2017-04-30T19:27:43.015"
+    }
 }
 ]

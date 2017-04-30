@@ -36,7 +36,7 @@ class PeopleTestCase(BaseTestLoginCase):
         response = self.client.get(url)
         soup = self.get_soup(response)
         records = soup.findAll('tr', {'class': 'feed-record'})
-        self.assertEqual(len(records), 3)
+        self.assertEqual(len(records), 7)
         records_data = []
         for record in records:
             user = record.find('td', {'class': 'feed-user'}).find('a').find('img').attrs['title'].strip()
@@ -47,18 +47,23 @@ class PeopleTestCase(BaseTestLoginCase):
                 'movie': movie,
                 'action': action
             })
-        self.assertEqual(records_data[0], {
+        self.assertIn({
+            'user': 'Thomas Anderson',
+            'movie': 'The X Files',
+            'action': 'Watched'
+        }, records_data)
+        self.assertIn({
             'user': 'Thomas Anderson',
             'movie': 'Pulp Fiction',
             'action': 'To Watch'
-        })
-        self.assertEqual(records_data[1], {
+        }, records_data)
+        self.assertIn({
             'user': 'Thomas Anderson',
             'movie': 'Dogma',
             'action': 'Watched'
-        })
-        self.assertEqual(records_data[2], {
+        }, records_data)
+        self.assertIn({
             'user': 'Thomas Anderson',
             'movie': 'The Matrix',
             'action': 'Watched'
-        })
+        }, records_data)

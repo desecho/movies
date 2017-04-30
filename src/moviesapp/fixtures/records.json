@@ -6,7 +6,7 @@
         "user": 2,
         "movie": 1,
         "list": 1,
-        "rating": 0,
+        "rating": 5,
         "comment": "",
         "date": "2017-04-30T13:39:38.243"
     }
@@ -18,7 +18,7 @@
         "user": 2,
         "movie": 2,
         "list": 1,
-        "rating": 0,
+        "rating": 4,
         "comment": "",
         "date": "2017-04-30T13:39:46.296"
     }
@@ -45,6 +45,18 @@
         "rating": 0,
         "comment": "",
         "date": "2017-04-30T13:40:10.751"
+    }
+},
+{
+    "model": "moviesapp.record",
+    "pk": 5,
+    "fields": {
+        "user": 2,
+        "movie": 5,
+        "list": 1,
+        "rating": 3,
+        "comment": "",
+        "date": "2017-04-30T19:26:42.605"
     }
 }
 ]
