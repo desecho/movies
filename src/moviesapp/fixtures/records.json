@@ -1,0 +1,50 @@
+[
+{
+    "model": "moviesapp.record",
+    "pk": 1,
+    "fields": {
+        "user": 2,
+        "movie": 1,
+        "list": 1,
+        "rating": 0,
+        "comment": "",
+        "date": "2017-04-30T13:39:38.243"
+    }
+},
+{
+    "model": "moviesapp.record",
+    "pk": 2,
+    "fields": {
+        "user": 2,
+        "movie": 2,
+        "list": 1,
+        "rating": 0,
+        "comment": "",
+        "date": "2017-04-30T13:39:46.296"
+    }
+},
+{
+    "model": "moviesapp.record",
+    "pk": 3,
+    "fields": {
+        "user": 2,
+        "movie": 3,
+        "list": 2,
+        "rating": 0,
+        "comment": "",
+        "date": "2017-04-30T13:39:56.106"
+    }
+},
+{
+    "model": "moviesapp.record",
+    "pk": 4,
+    "fields": {
+        "user": 3,
+        "movie": 4,
+        "list": 1,
+        "rating": 0,
+        "comment": "",
+        "date": "2017-04-30T13:40:10.751"
+    }
+}
+]

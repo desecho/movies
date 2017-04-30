@@ -12,3 +12,6 @@ def get_so_env(name):
 tmdb_key = os.environ.get('TMDB_KEY')  # noqa
 if tmdb_key:
     TMDB_KEY = tmdb_key
+
+# Make sure we still have the same MIN_POPULARITY we used for testing.
+MIN_POPULARITY = 3

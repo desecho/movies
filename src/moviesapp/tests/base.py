@@ -13,11 +13,13 @@ class BaseTestCase(TestCase):
     fixtures = [
         'lists.json',
         'actions.json',
+        'users.json',
     ]
 
-    USER_NAME = 'user'
-    USER_EMAIL = 'user@test.com'
-    USER_PWD = USER_NAME
+    USER_NAME = 'neo'
+    USER_PWD = 'password'
+    # Superuser - admin/adminpassword
+    # Another user - fox/password
 
     def get_soup(self, response):
         return BeautifulSoup(response.content)
@@ -27,10 +29,7 @@ class BaseTestCase(TestCase):
 
     def setUp(self):
         User = get_user_model()
-        self.user = User.objects.create_user(
-            self.USER_NAME, email=self.USER_EMAIL,
-            password=self.USER_PWD
-        )
+        self.user = User.objects.get(username='neo')
 
     def login(self):
         self.client.logout()
@@ -46,3 +45,9 @@ class BaseTestCase(TestCase):
 
     def dump_instance(self, instance):
         return json.dumps(model_to_dict(instance), cls=DjangoJSONEncoder)
+
+
+class BaseTestLoginCase(BaseTestCase):
+    def setUp(self):
+        super(BaseTestLoginCase, self).setUp()
+        self.login()
