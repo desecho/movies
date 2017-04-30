@@ -10,10 +10,6 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='user',
-            name='preferences',
-        ),
         migrations.AddField(
             model_name='user',
             name='only_for_friends',

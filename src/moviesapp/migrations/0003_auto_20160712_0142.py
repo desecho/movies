@@ -256,12 +256,6 @@ class Migration(migrations.Migration):
         ),
         migrations.AlterField(
             model_name='user',
-            name='preferences',
-            field=annoying.fields.JSONField(default='{"lang": "en"}',
-                                            verbose_name='\u043d\u0430\u0441\u0442\u0440\u043e\u0439\u043a\u0438'),
-        ),
-        migrations.AlterField(
-            model_name='user',
             name='username',
             field=models.CharField(error_messages={'unique': 'A user with that username already exists.'},
                                    max_length=30, validators=[django.core.validators.RegexValidator('^[\\w.@+-]+$',
