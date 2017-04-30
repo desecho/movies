@@ -21,6 +21,16 @@ class PeopleTestCase(BaseTestLoginCase):
         BaseTestLoginCase.setUp(self)
         self.login('fox')
 
+    def test_people(self):
+        url = reverse('people')
+        response = self.client.get(url)
+        soup = self.get_soup(response)
+        records = soup.findAll('div', {'class': 'person'})
+        users = []
+        for record in records:
+            users.append(record.find('a', {'class': 'people-user'}).get_text())
+        self.assertListEqual(users, ['admin', 'Thomas Anderson'])
+
     def test_feed_people(self):
         url = reverse('feed', args=('people',))
         response = self.client.get(url)
