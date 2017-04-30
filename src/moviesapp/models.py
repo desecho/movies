@@ -150,7 +150,7 @@ class User(AbstractUser, UserBase):
 
 
 class UserAnonymous(AnonymousUser, UserBase):
-    def __init__(self, request):
+    def __init__(self, request):  # pylint: disable=unused-argument
         super(UserAnonymous, self).__init__()
 
 
