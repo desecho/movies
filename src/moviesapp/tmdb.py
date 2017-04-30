@@ -72,6 +72,7 @@ def get_movies_from_tmdb(query, type_, options, user, lang):
             movies = search.movie(query=query)['results']
         else:
             persons = search.person(query=query)['results']
+            # We only select the first found actor/director.
             if persons:
                 person_id = persons[0]['id']
             else:
