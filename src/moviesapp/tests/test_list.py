@@ -3,6 +3,7 @@
 from __future__ import unicode_literals
 
 from django.core.urlresolvers import reverse
+from moviesapp.models import Movie
 
 from .base import BaseTestLoginCase
 
@@ -53,3 +54,12 @@ class AddMoviesTestCase(BaseTestLoginCase):
         self.assertEqual(len(titles), 1)
         title = titles[0].span.attrs['title']
         self.assertEqual(title, 'The Matrix')
+
+    def test_add_to_list(self):
+        LIST_ID = 1
+        url = reverse('add_to_list')
+        movie_id = Movie.objects.get(title='The Avengers').pk
+        response = self.client.post(url, {'movieId': movie_id, 'listId': LIST_ID})
+        response = self.get_json(response)
+        self.assertEqual(response['status'], 'success')
+        self.assertTrue(self.user.records.filter(list_id=LIST_ID, movie_id=movie_id).exists())
