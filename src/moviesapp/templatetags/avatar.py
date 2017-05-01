@@ -1,5 +1,5 @@
 import hashlib
-import urllib
+from urllib import parse  # pylint: disable=no-name-in-module
 
 from django import template
 from django.utils.safestring import mark_safe
@@ -21,8 +21,9 @@ def avatar(user, size='small'):
             elif size == 'big':
                 return user.avatar_big
 
-        params = urllib.urlencode({'s': str(avatar_size)})
-        return 'https://www.gravatar.com/avatar/%s?%s' % (hashlib.md5(user.email.lower()).hexdigest(), params)
+        params = parse.urlencode({'s': str(avatar_size)})
+        hash_ = hashlib.md5(user.email.lower().encode('utf-8')).hexdigest()
+        return 'https://www.gravatar.com/avatar/%s?%s' % (hash_, params)
 
     avatar_size = AVATAR_SIZES[size]
     url = get_url()

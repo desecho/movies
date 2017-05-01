@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
 
 from django_tqdm import BaseCommand
 from tabulate import tabulate

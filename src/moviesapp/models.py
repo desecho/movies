@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
 
 import facebook
 import vkontakte
@@ -141,7 +140,7 @@ class User(AbstractUser, UserBase):
     avatar = models.URLField(null=True, blank=True)
     loaded_initial_data = models.BooleanField(default=False)
 
-    def __unicode__(self):
+    def __str__(self):
         name = self.get_full_name()
         if name:
             return name
@@ -158,7 +157,7 @@ class List(models.Model):
     name = models.CharField(max_length=255)
     key_name = models.CharField(max_length=255)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
 
@@ -183,7 +182,7 @@ class Movie(models.Model):
     class Meta:
         ordering = ['pk']
 
-    def __unicode__(self):
+    def __str__(self):
         return self.title
 
     def imdb_url(self):
@@ -228,7 +227,7 @@ class Movie(models.Model):
         MAX_CHARS = 40
         ENDING = '..'
         id_format = '{0: < %d}' % (len(str(last_movie_id)) + 1)
-        title = unicode(self)
+        title = str(self)
         title = (title[:MAX_CHARS] + ENDING) if len(title) > MAX_CHARS else title
         id_ = id_format.format(self.pk)
         title_max_length = MAX_CHARS + len(ENDING)
@@ -245,7 +244,7 @@ class Record(models.Model):
     comment = models.CharField(max_length=255, default='')
     date = models.DateTimeField(auto_now_add=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.movie.title
 
 
@@ -257,7 +256,7 @@ class Action(models.Model):
     ADDED_COMMENT = 4
     name = models.CharField(max_length=255)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
 
@@ -270,7 +269,7 @@ class ActionRecord(models.Model):
     rating = models.IntegerField(blank=True, null=True)
     date = models.DateTimeField(auto_now_add=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return '{} {}'.format(self.movie.title, self.action.name)
 
 

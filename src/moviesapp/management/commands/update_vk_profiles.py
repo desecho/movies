@@ -56,5 +56,4 @@ class Command(BaseCommand):
                             pass
                 vk_profile.save()
                 user.save()
-                print user.get_full_name()
                 time.sleep(0.34)

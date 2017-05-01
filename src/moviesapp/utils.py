@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
 
 import re
 from datetime import datetime
@@ -29,6 +28,12 @@ def load_omdb_movie_data(imdb_id):
             if movie_data[key] == 'N/A':
                 movie_data[key] = None
         return movie_data
+
+
+def join_dicts(dict1, dict2):
+    result = dict1.copy()
+    result.update(dict2)
+    return result
 
 
 def add_movie_to_db(tmdb_id, update=False):
@@ -86,7 +91,7 @@ def add_movie_to_db(tmdb_id, update=False):
 
     movie_data_tmdb = get_tmdb_movie_data(tmdb_id)
     movie_data_omdb = get_omdb_movie_data(movie_data_tmdb['imdb_id'])
-    movie_data = dict(movie_data_tmdb.items() + movie_data_omdb.items())
+    movie_data = join_dicts(movie_data_tmdb, movie_data_omdb)
     if update:
         return update_movie()
     return save_movie()

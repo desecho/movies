@@ -24,7 +24,7 @@ class BaseTestCase(TestCase):
         return BeautifulSoup(response.content)
 
     def get_json(self, response):
-        return json.loads(response.content)
+        return json.loads(response.content.decode('utf-8'))
 
     def setUp(self):
         User = get_user_model()
@@ -40,7 +40,8 @@ class BaseTestCase(TestCase):
     def load_json(self, filename):
         base_path = os.path.join(settings.BASE_DIR, 'moviesapp', 'tests', 'files')
         path = os.path.join(base_path, filename)
-        return json.loads(open(path).read())
+        with open(path) as f:
+            return json.load(f)
 
     def dump_instance(self, instance):
         return json.dumps(model_to_dict(instance), cls=DjangoJSONEncoder)

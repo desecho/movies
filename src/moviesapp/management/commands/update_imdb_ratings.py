@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
 
 import sys
+from importlib import reload
 
 from django_tqdm import BaseCommand
 
