@@ -5,6 +5,7 @@ django-modeltranslation==0.12.1
 django-rosetta==0.7.13
 django-braces==1.11.0
 social-auth-app-django==1.1.0
+django-tqdm==0.0.3
 
 python-dateutil==2.6.0
 raven==6.0.0
@@ -20,9 +21,6 @@ requests-toolbelt==0.7.1
 
 # vkontakte==1.3.5
 -e git+https://github.com/desecho/vkontakte.git@dev#egg=vkontakte
-
-# My custom module
--e git+https://github.com/desecho/django-tqdm.git#egg=django-tqdm
 
 # django-bootstrap-pagination==1.6.2
 -e git+https://github.com/desecho/django-bootstrap-pagination.git@ru#egg=django-bootstrap-pagination
