@@ -141,6 +141,7 @@ legend {
 
 label {
   font-weight: normal;
+  margin-bottom: 0;
 }
 
 .search-panel-additional {
