@@ -17,7 +17,7 @@ class UploadPosterToWallView(VkAjaxView):
         with open(path, 'w') as file_:
             file_.write(file_contents)
         path_jpg = path + '.jpg'
-        os.chmod(path, 0o666)
+        os.chmod(path, 0o666)  # nosec
         os.rename(path, path_jpg)
         return path_jpg
 
