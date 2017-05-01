@@ -129,7 +129,7 @@
               {% if record.movie.runtime %} <span class="item-desc">{% trans 'Runtime' %}:</span> {{ record.movie.runtime|date:'H:i' }}<br> {% endif %}
               {% if record.movie.description %} <span class="item-desc">{% trans 'Description' %}:</span> {{ record.movie.description }}<br> {% endif %}
               {% if record.movie.homepage %} <a href="{{ record.movie.homepage }}" target="_blank">{% trans 'Website' %}</a> / {% endif %}
-              <a href="{{ record.movie.imdb_url }}" target="_blank"><img src="{% static 'img/imdb.jpg' %}" alt="IMDb" /></a><br>
+              <a href="{{ record.movie.imdb_url }}" target="_blank"><img src="{% static 'img/imdb.png' %}" alt="IMDb" width="60" /></a><br>
               {% if record.movie.has_trailers %}
                 <span class="item-desc">{% trans 'Trailers' %}:</span><br>
                 <div class="trailers">
