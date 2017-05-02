@@ -23,7 +23,7 @@
       </li>
       {% endfor %}
     </ul>
-    <ul class="navbar-nav">
+    <ul id="right-nav-bar" class="navbar-nav" style="display: none;">
       {% if user.is_vk_user %}
         <li class="nav-item vk-app-show" style="display: none;"><a id="invite" href="javascript:void(0)" class="nav-link" onclick="VK.callMethod('showInviteBox')"><i class="fa fa-envelope-o"></i></a></li>
       {% endif %}
