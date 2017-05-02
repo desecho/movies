@@ -145,7 +145,8 @@ label {
 }
 
 .search-panel-additional {
-  margin-left: 25px;
+    margin-right: 9px;
+    float: right;
 }
 
 .search-panel-additional label, #preferences label {display: block;}
