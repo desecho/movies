@@ -58,7 +58,7 @@ class PeopleView(TemplateAnonymousView):
 
     def get(self, *args, **kwargs):
         self.users = self.request.user.get_users(sort=True)
-        return super(PeopleView, self).get(*args, **kwargs)
+        return super().get(*args, **kwargs)
 
 
 class FriendsView(TemplateView, PeopleView):

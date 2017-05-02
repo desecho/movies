@@ -51,5 +51,5 @@ class BaseTestCase(TestCase):
 
 class BaseTestLoginCase(BaseTestCase):
     def setUp(self):
-        super(BaseTestLoginCase, self).setUp()
+        super().setUp()
         self.login()

@@ -16,7 +16,7 @@ class VkAjaxView(AjaxView):
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_vk_user:
             return self.no_permissions_fail(request)
-        return super(VkAjaxView, self).dispatch(request, *args, **kwargs)
+        return super().dispatch(request, *args, **kwargs)
 
 
 class TemplateView(LoginRequiredMixin, TemplateViewOriginal):

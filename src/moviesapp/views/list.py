@@ -55,7 +55,7 @@ class RecordMixin(AjaxView):
 
 class RemoveMovieView(RecordMixin):
     def post(self, request):
-        super(RemoveMovieView, self).post(request)
+        super().post(request)
         self.record.delete()
         return self.success()
 
@@ -75,7 +75,7 @@ class ApplySettingsView(AjaxAnonymousView):
 
 class SaveCommentView(RecordMixin):
     def post(self, request):
-        super(SaveCommentView, self).post(request)
+        super().post(request)
         try:
             comment = request.POST['comment']
         except KeyError:
@@ -237,7 +237,7 @@ class ListView(TemplateAnonymousView):
 
     def get(self, *args, **kwargs):
         self._initialize_session_values()
-        return super(ListView, self).get(*args, **kwargs)
+        return super().get(*args, **kwargs)
 
 
 class RecommendationsView(TemplateView, ListView):
@@ -276,4 +276,4 @@ class RecommendationsView(TemplateView, ListView):
         has_friends = self.request.user.has_friends()
         if not has_friends:
             raise Http404
-        return super(RecommendationsView, self).get(*args, **kwargs)
+        return super().get(*args, **kwargs)
