@@ -20,10 +20,12 @@ class BaseTestCase(TestCase):
     # Superuser - admin/adminpassword
     # Another user - fox/password
 
-    def get_soup(self, response):
+    @staticmethod
+    def get_soup(response):
         return BeautifulSoup(response.content)
 
-    def get_json(self, response):
+    @staticmethod
+    def get_json(response):
         return json.loads(response.content.decode('utf-8'))
 
     def setUp(self):
