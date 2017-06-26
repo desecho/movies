@@ -18,7 +18,9 @@ Used APIs
 Installation instructions
 ----------------------------
 
-Use ansible-playbook-server_ to deploy.
+1. Use ansible-playbook-server_ to deploy.
+2. Do github clone
+3. Run bower install
 
 
 .. |Requirements Status| image:: https://requires.io/github/desecho/movies/requirements.svg?branch=master
