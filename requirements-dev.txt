@@ -13,6 +13,6 @@ django-debug-toolbar>=1.7
 django-debug-toolbar-template-timings>=0.7
 django-test-without-migrations>=0.6
 beautifulsoup4>=4.5.1
-isort>=4.2
+isort==4.2.15
 flake8>=2.2.5
 bandit>=1.4.0

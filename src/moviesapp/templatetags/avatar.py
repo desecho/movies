@@ -23,7 +23,7 @@ def avatar(user, size='small'):
 
         params = parse.urlencode({'s': str(avatar_size)})
         hash_ = hashlib.md5(user.email.lower().encode('utf-8')).hexdigest()  # nosec
-        return 'https://www.gravatar.com/avatar/%s?%s' % (hash_, params)
+        return f'https://www.gravatar.com/avatar/{hash_}?{params}'
 
     avatar_size = AVATAR_SIZES[size]
     url = get_url()

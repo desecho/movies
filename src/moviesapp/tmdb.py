@@ -60,7 +60,7 @@ def get_movies_from_tmdb(query, type_, options, user, lang):
         def process_person_entries(entries):
             movies = [e for e in entries if e['media_type'] == 'movie']
             for m in movies:
-                # popularity is not being provided so we set it the min popularity to be sure it is always shown.
+                # Popularity is not being provided so we set it the min popularity to be sure it is always shown.
                 m['popularity'] = settings.MIN_POPULARITY
             return movies
 

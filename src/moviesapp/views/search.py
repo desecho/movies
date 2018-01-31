@@ -45,7 +45,7 @@ class AddToListFromDbView(AjaxView):
             movie = Movie.objects.get(tmdb_id=tmdb_id)
             return movie.id
         except Movie.DoesNotExist:
-            return
+            return None
 
     @staticmethod
     def _add_to_list_from_db(movie_id, tmdb_id, list_id, user):

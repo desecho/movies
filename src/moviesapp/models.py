@@ -233,7 +233,7 @@ class Movie(models.Model):
         title_max_length = MAX_CHARS + len(ENDING)
         title_format = '{:%ds}' % title_max_length
         title = title_format.format(title)
-        return '{} - {}'.format(id_, title)[1:].decode('utf8')
+        return f'{id_} - {title}'[1:].decode('utf8')
 
 
 class Record(models.Model):
@@ -270,7 +270,7 @@ class ActionRecord(models.Model):
     date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return '{} {}'.format(self.movie.title, self.action.name)
+        return f'{self.movie.title} {self.action.name}'
 
 
 @receiver(user_logged_in)

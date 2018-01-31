@@ -13,8 +13,8 @@ from .tmdb import get_tmdb_movie_data
 
 def load_omdb_movie_data(imdb_id):
     try:
-        r = requests.get('http://www.omdbapi.com/?i=%s&apikey=%s' % (imdb_id, settings.OMDB_KEY))
-    except:
+        r = requests.get(f'http://www.omdbapi.com/?i={imdb_id}&apikey={settings.OMDB_KEY}')
+    except:  # noqa
         if settings.DEBUG:
             raise
         else:
@@ -60,18 +60,18 @@ def add_movie_to_db(tmdb_id, update=False):
             if runtime is not None:
                 try:
                     runtime = datetime.strptime(runtime, '%H h %M min')
-                except:
+                except:  # noqa
                     try:
                         runtime = datetime.strptime(runtime, '%H h')
-                    except:
+                    except:  # noqa
                         try:
                             runtime = datetime.strptime(runtime, '%M min')
-                        except:
+                        except:  # noqa
                             r = re.match(r'(\d+) min', runtime)
                             minutes = int(r.groups()[0])
                             try:
                                 runtime = datetime.strptime('{:02d}:{:02d}'.format(*divmod(minutes, 60)), '%H:%M')
-                            except:
+                            except:  # noqa
                                 if settings.DEBUG:
                                     raise
                                 else:

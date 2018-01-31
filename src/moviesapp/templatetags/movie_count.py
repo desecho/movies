@@ -11,8 +11,8 @@ def movie_count(user):
 
     def create_span_tag(title, list_id):
         number_of_movies = user.get_records().filter(list_id=list_id).count()
-        return '<span title="{}">{}</span>'.format(title, number_of_movies)
+        return f'<span title="{title}">{number_of_movies}</span>'
 
     watched = create_span_tag(_('Watched'), LIST_IDS['watched'])
     to_watch = create_span_tag(_('To Watch'), LIST_IDS['to_watch'])
-    return mark_safe('%s / %s' % (watched, to_watch))  # nosec
+    return mark_safe(f'{watched} / {to_watch}')  # nosec
