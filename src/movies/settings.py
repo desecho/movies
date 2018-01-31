@@ -358,6 +358,7 @@ SOCIAL_AUTH_FACEBOOK_SECRET = local_settings.SOCIAL_AUTH_FACEBOOK_SECRET
 SOCIAL_AUTH_FACEBOOK_SCOPE = ['email', 'user_friends', 'public_profile', 'user_location']
 
 TMDB_KEY = local_settings.TMDB_KEY
+OMDB_KEY = local_settings.OMDB_KEY
 
 LANGUAGES = (
     ('en', 'English'),

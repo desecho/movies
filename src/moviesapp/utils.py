@@ -13,7 +13,7 @@ from .tmdb import get_tmdb_movie_data
 
 def load_omdb_movie_data(imdb_id):
     try:
-        r = requests.get('http://www.omdbapi.com/?i=%s' % imdb_id)
+        r = requests.get('http://www.omdbapi.com/?i=%s&apikey=%s' % (imdb_id, settings.OMDB_KEY))
     except:
         if settings.DEBUG:
             raise
