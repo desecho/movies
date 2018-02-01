@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from django.core.urlresolvers import reverse
+
 from moviesapp.models import Movie
 
 from .base import BaseTestLoginCase

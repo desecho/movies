@@ -4,6 +4,7 @@ import json
 
 import pytest
 from django.core.urlresolvers import reverse
+
 from moviesapp.models import Action
 
 from .base import BaseTestCase, BaseTestLoginCase

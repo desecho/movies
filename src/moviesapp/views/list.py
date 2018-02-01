@@ -5,8 +5,9 @@ from django.db.models import Q
 from django.http import Http404, HttpResponseForbidden
 
 from ..models import Action, ActionRecord, List, Record, User
-from .mixins import (AjaxAnonymousView, AjaxView, TemplateAnonymousView,
-                     TemplateView)
+from .mixins import (
+    AjaxAnonymousView, AjaxView, TemplateAnonymousView, TemplateView,
+)
 from .utils import add_movie_to_list, paginate
 
 

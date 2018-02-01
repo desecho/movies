@@ -19,15 +19,18 @@ from django.conf.urls import include, url
 from django.contrib import admin
 from django.contrib.auth.views import login
 from django.views.i18n import javascript_catalog
-from moviesapp.views.list import (AddToListView, ApplySettingsView,
-                                  ChangeRatingView, ListView,
-                                  RecommendationsView, RemoveMovieView,
-                                  SaveCommentView)
-from moviesapp.views.search import (AddToListFromDbView, SearchMovieView,
-                                    SearchView)
+
+from moviesapp.views.list import (
+    AddToListView, ApplySettingsView, ChangeRatingView, ListView,
+    RecommendationsView, RemoveMovieView, SaveCommentView,
+)
+from moviesapp.views.search import (
+    AddToListFromDbView, SearchMovieView, SearchView,
+)
 from moviesapp.views.social import FeedView, FriendsView, PeopleView
-from moviesapp.views.user import (PreferencesView, SavePreferencesView,
-                                  logout_view)
+from moviesapp.views.user import (
+    PreferencesView, SavePreferencesView, logout_view,
+)
 from moviesapp.views.vk import UploadPosterToWallView
 
 admin.autodiscover()

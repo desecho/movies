@@ -1,6 +1,5 @@
 from braces.views import JsonRequestResponseMixin, LoginRequiredMixin
-from django.views.generic import TemplateView as TemplateViewOriginal
-from django.views.generic import View
+from django.views.generic import TemplateView as TemplateViewOriginal, View
 
 
 class AjaxAnonymousView(JsonRequestResponseMixin, View):
