@@ -7,6 +7,7 @@ django-braces==1.11.0
 social-auth-app-django==1.1.0
 django-tqdm==0.0.3
 
+mysqlclient==1.3.12
 python-dateutil==2.6.0
 raven==6.0.0
 facebook-sdk==2.0.0
