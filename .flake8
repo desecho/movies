@@ -1,5 +1,5 @@
 [flake8]
-exclude = .tox/*,src/moviesapp/migrations/*,node_modules,.git
+exclude = src/moviesapp/migrations/*,node_modules,.git
 max-line-length = 119
 # max-complexity = 10  TODO: add
 statistics = True
