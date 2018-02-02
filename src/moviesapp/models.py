@@ -61,7 +61,7 @@ def get_poster_url(size, poster):
     return no_image_url
 
 
-class UserBase(object):
+class UserBase:
     def get_movie_ids(self):
         return self.get_records().values_list('movie__pk')
 
@@ -214,7 +214,7 @@ class Movie(models.Model):
 
     @property
     def id_title(self):
-        return '{} - {}'.format(self.pk, self)
+        return f'{self.pk} - {self}'
 
     def cli_string(self, last_movie_id):
         """

@@ -23,6 +23,6 @@ class Command(BaseCommand):
             t.set_description(movie_info)
             if not movie.records.exists():
                 movie.delete()
-                message = '{} removed'.format(movie)
+                message = f'{movie} removed'
                 t.error(message)
             t.update()

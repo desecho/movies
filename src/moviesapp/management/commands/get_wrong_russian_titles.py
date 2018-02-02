@@ -24,4 +24,5 @@ class Command(BaseCommand):
                     break
         headers = ('Id', 'TMDB Id', 'Title (ru)', 'Title (eng)')
         self.info(tabulate(rows, headers, 'fancy_grid'))
-        self.info('Total: %d' % len(rows))
+        number_of_rows = len(rows)
+        self.info(f'Total: {number_of_rows}')

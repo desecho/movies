@@ -44,9 +44,9 @@ class Command(BaseCommand):
             movies = get_filtered_movies()
             if not movies:  # In case the movie_id is too high and we don't get any movies
                 if start_from_id:
-                    self.error('There are no movies found with id > %d' % movie_id, fatal=True)
+                    self.error(f'There are no movies found with id > {movie_id}', fatal=True)
                 else:
-                    self.error('There is no movie with id %d' % movie_id, fatal=True)
+                    self.error(f'There is no movie with id {movie_id}', fatal=True)
             movies_filtered_number = movies.count()
             # We don't want a progress bar if we just have one movie to process
             if movies_filtered_number == 1:
@@ -62,9 +62,9 @@ class Command(BaseCommand):
             try:
                 result = add_movie_to_db(movie.tmdb_id, update=True)
             except MovieNotInDb:
-                t.error('"{}" is not found in IMDB'.format(movie.id_title))
+                t.error(f'"{movie.id_title}" is not found in IMDB')
             else:
                 updated = result
                 if updated:
-                    t.info('"{}" is updated'.format(movie))
+                    t.info(f'"{movie}" is updated')
             t.update()

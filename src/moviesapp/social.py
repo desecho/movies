@@ -7,7 +7,7 @@ from .models import Vk
 
 def load_user_data(backend, user, **kwargs):  # pylint: disable=unused-argument
     if user.loaded_initial_data:
-        return
+        return None
 
     if backend.name in settings.VK_BACKENDS:
         # We don't need the username and email because they are already loaded
