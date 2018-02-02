@@ -66,7 +66,7 @@ class UserBase:
         return self.get_records().values_list('movie__pk')
 
     def get_records(self):
-        if self.is_authenticated():
+        if self.is_authenticated:
             return self.records.all()
         else:
             return Record.objects.none()
@@ -78,7 +78,7 @@ class UserBase:
         return self.social_auth.filter(provider='facebook')
 
     def is_fb_user(self):
-        if self.is_authenticated():
+        if self.is_authenticated:
             return self._get_fb_accounts().exists()
         return False
 
@@ -98,12 +98,12 @@ class UserBase:
         Note: currently it does because it is not possible to link a vk-app account and a website account.
         But it is likely to change in the future.
         """
-        if self.is_authenticated():
+        if self.is_authenticated:
             return self._get_vk_accounts().exists()
         return False
 
     def is_linked(self):
-        if self.is_authenticated():
+        if self.is_authenticated:
             return self.social_auth.exists()
         return False
 
@@ -237,9 +237,9 @@ class Movie(models.Model):
 
 
 class Record(models.Model):
-    user = models.ForeignKey(User, related_name='records')
-    movie = models.ForeignKey(Movie, related_name='records')
-    list = models.ForeignKey(List)
+    user = models.ForeignKey(User, models.CASCADE, related_name='records')
+    movie = models.ForeignKey(Movie, models.CASCADE, related_name='records')
+    list = models.ForeignKey(List, models.CASCADE)
     rating = models.IntegerField(default=0)
     comment = models.CharField(max_length=255, default='')
     date = models.DateTimeField(auto_now_add=True)
@@ -261,10 +261,10 @@ class Action(models.Model):
 
 
 class ActionRecord(models.Model):
-    user = models.ForeignKey(User, related_name='actions')
-    action = models.ForeignKey(Action)
-    movie = models.ForeignKey(Movie)
-    list = models.ForeignKey(List, blank=True, null=True)
+    user = models.ForeignKey(User, models.CASCADE, related_name='actions')
+    action = models.ForeignKey(Action, models.CASCADE)
+    movie = models.ForeignKey(Movie, models.CASCADE)
+    list = models.ForeignKey(List, models.CASCADE, blank=True, null=True)
     comment = models.CharField(max_length=255, blank=True, null=True)
     rating = models.IntegerField(blank=True, null=True)
     date = models.DateTimeField(auto_now_add=True)

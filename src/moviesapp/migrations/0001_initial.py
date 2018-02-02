@@ -78,7 +78,7 @@ class Migration(migrations.Migration):
                 ('date', models.DateTimeField(auto_now_add=True, verbose_name=b'\xd0\xb4\xd0\xb0\xd1\x82\xd0\xb0')),
                 ('action', models.ForeignKey(
                     verbose_name=b'\xd1\x82\xd0\xb8\xd0\xbf \xd0\xb4\xd0\xb5\xd0\xb9\xd1\x81\xd1\x82\xd0\xb2\xd0\xb8\xd1\x8f',
-                    to='moviesapp.Action')),
+                    to='moviesapp.Action', on_delete=models.CASCADE)),
             ],
             options={
                 'verbose_name': '\u0437\u0430\u043f\u0438\u0441\u044c \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044f',
@@ -161,13 +161,13 @@ class Migration(migrations.Migration):
                 ('date', models.DateTimeField(auto_now_add=True,
                                               verbose_name=b'\xd0\xb4\xd0\xb0\xd1\x82\xd0\xb0 \xd0\xb4\xd0\xbe\xd0\xb1\xd0\xb0\xd0\xb2\xd0\xbb\xd0\xb5\xd0\xbd\xd0\xb8\xd1\x8f')),
                 ('list', models.ForeignKey(verbose_name=b'\xd1\x81\xd0\xbf\xd0\xb8\xd1\x81\xd0\xbe\xd0\xba',
-                                           to='moviesapp.List')),
+                                           to='moviesapp.List', on_delete=models.CASCADE)),
                 ('movie',
                  models.ForeignKey(related_name=b'records', verbose_name=b'\xd1\x84\xd0\xb8\xd0\xbb\xd1\x8c\xd0\xbc',
-                                   to='moviesapp.Movie')),
+                                   to='moviesapp.Movie', on_delete=models.CASCADE)),
                 ('user', models.ForeignKey(
                     verbose_name=b'\xd0\xbf\xd0\xbe\xd0\xbb\xd1\x8c\xd0\xb7\xd0\xbe\xd0\xb2\xd0\xb0\xd1\x82\xd0\xb5\xd0\xbb\xd1\x8c',
-                    to=settings.AUTH_USER_MODEL)),
+                    to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)),
             ],
             options={
                 'verbose_name': '\u0437\u0430\u043f\u0438\u0441\u044c',
@@ -179,13 +179,13 @@ class Migration(migrations.Migration):
             model_name='actionrecord',
             name='list',
             field=models.ForeignKey(verbose_name=b'\xd1\x81\xd0\xbf\xd0\xb8\xd1\x81\xd0\xbe\xd0\xba', blank=True,
-                                    to='moviesapp.List', null=True),
+                                    to='moviesapp.List', null=True, on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='actionrecord',
             name='movie',
-            field=models.ForeignKey(verbose_name=b'\xd1\x84\xd0\xb8\xd0\xbb\xd1\x8c\xd0\xbc', to='moviesapp.Movie'),
+            field=models.ForeignKey(verbose_name=b'\xd1\x84\xd0\xb8\xd0\xbb\xd1\x8c\xd0\xbc', to='moviesapp.Movie', on_delete=models.CASCADE),
             preserve_default=True,
         ),
         migrations.AddField(
@@ -193,7 +193,7 @@ class Migration(migrations.Migration):
             name='user',
             field=models.ForeignKey(
                 verbose_name=b'\xd0\xbf\xd0\xbe\xd0\xbb\xd1\x8c\xd0\xb7\xd0\xbe\xd0\xb2\xd0\xb0\xd1\x82\xd0\xb5\xd0\xbb\xd1\x8c',
-                to=settings.AUTH_USER_MODEL),
+                to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE),
             preserve_default=True,
         ),
     ]

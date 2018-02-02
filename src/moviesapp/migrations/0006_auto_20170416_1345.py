@@ -39,7 +39,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='actionrecord',
             name='action',
-            field=models.ForeignKey(to='moviesapp.Action'),
+            field=models.ForeignKey(to='moviesapp.Action', on_delete=models.CASCADE),
         ),
         migrations.AlterField(
             model_name='actionrecord',
@@ -54,12 +54,12 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='actionrecord',
             name='list',
-            field=models.ForeignKey(blank=True, to='moviesapp.List', null=True),
+            field=models.ForeignKey(blank=True, to='moviesapp.List', null=True, on_delete=models.CASCADE),
         ),
         migrations.AlterField(
             model_name='actionrecord',
             name='movie',
-            field=models.ForeignKey(to='moviesapp.Movie'),
+            field=models.ForeignKey(to='moviesapp.Movie', on_delete=models.CASCADE),
         ),
         migrations.AlterField(
             model_name='actionrecord',
@@ -69,7 +69,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='actionrecord',
             name='user',
-            field=models.ForeignKey(to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE),
         ),
         migrations.AlterField(
             model_name='list',
@@ -204,12 +204,12 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='record',
             name='list',
-            field=models.ForeignKey(to='moviesapp.List'),
+            field=models.ForeignKey(to='moviesapp.List', on_delete=models.CASCADE),
         ),
         migrations.AlterField(
             model_name='record',
             name='movie',
-            field=models.ForeignKey(related_name='records', to='moviesapp.Movie'),
+            field=models.ForeignKey(related_name='records', to='moviesapp.Movie', on_delete=models.CASCADE),
         ),
         migrations.AlterField(
             model_name='record',
@@ -219,7 +219,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='record',
             name='user',
-            field=models.ForeignKey(to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE),
         ),
         migrations.AlterField(
             model_name='user',

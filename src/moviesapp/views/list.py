@@ -197,7 +197,7 @@ class ListView(TemplateAnonymousView):
         return user.get_records().filter(list__key_name=list_name).select_related('movie')
 
     def get_context_data(self, list_name, username=None):
-        if username is None and self.request.user.is_anonymous():
+        if username is None and self.request.user.is_anonymous:
             raise Http404
         self.anothers_account = self._get_anothers_account(username)
         if self.anothers_account:

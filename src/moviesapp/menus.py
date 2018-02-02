@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from menu import Menu, MenuItem
 
@@ -10,7 +10,7 @@ def has_friends(request):
 
 
 def is_authenticated(request):
-    return request.user.is_authenticated()
+    return request.user.is_authenticated
 
 
 feed_children = (

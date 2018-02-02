@@ -1,10 +1,9 @@
-Django==1.11.10
+Django==2.0.2
 django-annoying==0.10.4
 django-simple-menu==1.2.1
-django-modeltranslation==0.12.2
 django-rosetta==0.8.1
 django-braces==1.12.0
-social-auth-app-django==1.1.0
+social-auth-app-django==2.1.0
 django-tqdm==0.0.3
 
 mysqlclient==1.3.12
@@ -24,9 +23,14 @@ requests-toolbelt==0.8.0
 -e git+https://github.com/desecho/vkontakte.git@dev#egg=vkontakte
 
 # django-bootstrap-pagination==1.6.2
--e git+https://github.com/desecho/django-bootstrap-pagination.git@ru#egg=django-bootstrap-pagination
+-e git+https://github.com/desecho/django-bootstrap-pagination.git@fixes#egg=django-bootstrap-pagination
 
 # tmdbsimple==1.6.1
 -e git+https://github.com/desecho/tmdbsimple.git@changes#egg=tmdbsimple
 
--e git+https://github.com/bugov/django-custom-anonymous.git#egg=django-custom-anonymous
+-e git+https://github.com/desecho/django-custom-anonymous.git@django2#egg=django-custom-anonymous
+
+# django-modeltranslation==0.12.2
+# See https://github.com/deschler/django-modeltranslation/issues/436
+# 0.13 will be compatible with Django 1.11 and Django 2.0.
+-e git+https://github.com/deschler/django-modeltranslation.git#egg=django-modeltranslation

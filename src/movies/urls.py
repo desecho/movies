@@ -1,24 +1,10 @@
-"""movies_project URL Configuration
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/1.11/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  url(r'^$', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  url(r'^$', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.conf.urls import url, include
-    2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
-"""
+"""URL Configuration"""
 
 from django.conf import settings
 from django.conf.urls import include, url
 from django.contrib import admin
 from django.contrib.auth.views import login
-from django.views.i18n import javascript_catalog
+from django.views.i18n import JavaScriptCatalog
 
 from moviesapp.views.list import (
     AddToListView, ApplySettingsView, ChangeRatingView, ListView,
@@ -47,7 +33,7 @@ urlpatterns = [
     # User
     url(r'^login/$', login, {'template_name': 'user/login.html'}, name='login'),
     url(r'^logout/$', logout_view, name='logout'),
-    # -= Preferences =-
+    # Preferences
     url(r'^preferences/$', PreferencesView.as_view(), name='preferences'),
     url(r'^save-preferences/$', SavePreferencesView.as_view(), name='save_preferences'),
 
@@ -68,12 +54,12 @@ urlpatterns = [
 
     # Admin
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
-    url(r'^admin/', include(admin.site.urls)),
+    url(r'^admin/', admin.site.urls),
 
     # Services
-    url(r'^jsi18n/$', javascript_catalog, {
-        'domain': 'djangojs',
-        'packages': ('movies',)}, name='javascript-catalog'),
+    url(r'^jsi18n/$', JavaScriptCatalog.as_view(packages=('moviesapp',),
+                                                domain='djangojs'),
+        name='javascript-catalog'),
 
     url('', include('social_django.urls', namespace='social')),
     url(r'^rosetta/', include('rosetta.urls')),

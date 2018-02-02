@@ -78,7 +78,7 @@ class Migration(migrations.Migration):
             model_name='actionrecord',
             name='action',
             field=models.ForeignKey(verbose_name='\u0442\u0438\u043f \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u044f',
-                                    to='moviesapp.Action'),
+                                    to='moviesapp.Action', on_delete=models.CASCADE),
         ),
         migrations.AlterField(
             model_name='actionrecord',
@@ -96,12 +96,12 @@ class Migration(migrations.Migration):
             model_name='actionrecord',
             name='list',
             field=models.ForeignKey(verbose_name='\u0441\u043f\u0438\u0441\u043e\u043a', blank=True,
-                                    to='moviesapp.List', null=True),
+                                    to='moviesapp.List', null=True, on_delete=models.CASCADE),
         ),
         migrations.AlterField(
             model_name='actionrecord',
             name='movie',
-            field=models.ForeignKey(verbose_name='\u0444\u0438\u043b\u044c\u043c', to='moviesapp.Movie'),
+            field=models.ForeignKey(verbose_name='\u0444\u0438\u043b\u044c\u043c', to='moviesapp.Movie', on_delete=models.CASCADE),
         ),
         migrations.AlterField(
             model_name='actionrecord',
@@ -113,7 +113,7 @@ class Migration(migrations.Migration):
             name='user',
             field=models.ForeignKey(
                 verbose_name='\u043f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u044c',
-                to=settings.AUTH_USER_MODEL),
+                to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE),
         ),
         migrations.AlterField(
             model_name='list',
@@ -215,13 +215,13 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='record',
             name='list',
-            field=models.ForeignKey(verbose_name='\u0441\u043f\u0438\u0441\u043e\u043a', to='moviesapp.List'),
+            field=models.ForeignKey(verbose_name='\u0441\u043f\u0438\u0441\u043e\u043a', to='moviesapp.List', on_delete=models.CASCADE),
         ),
         migrations.AlterField(
             model_name='record',
             name='movie',
             field=models.ForeignKey(related_name='records', verbose_name='\u0444\u0438\u043b\u044c\u043c',
-                                    to='moviesapp.Movie'),
+                                    to='moviesapp.Movie', on_delete=models.CASCADE),
         ),
         migrations.AlterField(
             model_name='record',
@@ -233,7 +233,7 @@ class Migration(migrations.Migration):
             name='user',
             field=models.ForeignKey(
                 verbose_name='\u043f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u044c',
-                to=settings.AUTH_USER_MODEL),
+                to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE),
         ),
         migrations.AlterField(
             model_name='user',
