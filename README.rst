@@ -8,7 +8,7 @@ Movies
 The website is live here - https://movies.desecho.org.
 The interface is available in Russian and English.
 
-Share your lists with VK and Facebook friends, get recommendations from friends. It is also available as a  `VK app <http://vk.com/app3504693_2912142>`_.
+.. Share your lists with VK and Facebook friends, get recommendations from friends. It is also available as a `VK app <http://vk.com/app3504693_2912142>`_.
 
 Used APIs
 --------------
@@ -20,7 +20,6 @@ Installation instructions
 
 1. Use ansible-playbook-server_ to deploy.
 2. Do github clone
-3. Run bower install
 
 
 .. |Requirements Status| image:: https://requires.io/github/desecho/movies/requirements.svg?branch=master
