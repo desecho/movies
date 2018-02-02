@@ -1,7 +1,7 @@
 Movies
 ==============
 
-|Build Status| |Codacy Badge| |Requirements Status| |Codecov|
+|Build Status| |Requirements Status| |Codecov|
 
 *The web application on Python/Django, jQuery, AngularJS, Bootstrap. Create movie lists ("watched" and "to watch"), rate movies and add comments.*
 
@@ -30,9 +30,6 @@ Installation instructions
 
 .. |Build Status| image:: https://travis-ci.org/desecho/movies.svg?branch=master
    :target: https://travis-ci.org/desecho/movies
-
-.. |Codacy Badge| image:: https://api.codacy.com/project/badge/Grade/3402f63f3b2f4f88ad7c2f3353444bc3
-   :target: https://www.codacy.com/app/desecho/movies?utm_source=github.com&utm_medium=referral&utm_content=desecho/movies&utm_campaign=badger
 
 .. _TMDb: https://www.djangoproject.com
 .. _OMDb: http://www.omdbapi.com/
