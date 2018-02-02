@@ -1,18 +1,26 @@
 -r requirements.txt
 
-# Testing
+# Tests
+beautifulsoup4>=4.5.1
+
+# Coverage
 codecov>=1.6
-pytest-mock>=1.6.0
+
+# Pytest
 pytest>=3.0
 pytest-cov>=1.8
 pytest-sugar>=0.7.0
+pytest-mock>=1.6.0
 pytest-django>=3.1.2
-tox>=2.7.0
-pylint>=1.7.1
+
+# Django
 django-debug-toolbar>=1.7
 django-debug-toolbar-template-timings>=0.7
 django-test-without-migrations>=0.6
-beautifulsoup4>=4.5.1
-isort>=4.3.0
+
+# Linting
+pylint>=1.7.1
+tox>=2.7.0
+isort>=4.2
 flake8>=2.2.5
 bandit>=1.4.0
