@@ -16,6 +16,9 @@ env:
   - TOXENV=isort
   - TOXENV=bandit
   - TOXENV=rstlint
+  - TOXENV=pydiatra
+  - TOXENV=pydocstyle
+  - TOXENV=safety
   - TOXENV=py36
 
 before_install:
