@@ -25,7 +25,10 @@ class SetVarNode(template.Node):
 
 def set_var(parser, token):  # pylint: disable=unused-argument
     """
-        {% set <var_name>  = <var_value> %}
+    Set variable.
+
+    Usage:
+    {% set <var_name>  = <var_value> %}
     """
     parts = token.split_contents()
     if len(parts) < 4:

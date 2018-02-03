@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Django settings"""
+"""Django settings."""
 
 
 import os

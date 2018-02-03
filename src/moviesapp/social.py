@@ -10,7 +10,7 @@ def load_user_data(backend, user, **kwargs):  # pylint: disable=unused-argument
         return None
 
     if backend.name in settings.VK_BACKENDS:
-        # We don't need the username and email because they are already loaded
+        # We don't need the username and email because they are already loaded.
         FIELDS = ('first_name', 'last_name')
         data = Vk(user).get_data(FIELDS)
         user.first_name = data['first_name']

@@ -9,11 +9,12 @@ register = template.Library()
 # from http://www.djangosnippets.org/snippets/1937/
 def register_render_tag(renderer):
     """
+    Register render tag.
+
     Decorator that creates a template tag using the given renderer as the
     render function for the template tag node - the render function takes two
     arguments - the template context and the tag token.
     """
-
     def tag(parser, token):  # pylint: disable=unused-argument
         class TagNode(template.Node):
             def render(self, context):
@@ -29,10 +30,11 @@ def register_render_tag(renderer):
 @register_render_tag
 def admin_reorder(context, token):  # pylint: disable=unused-argument
     """
+    Admin reorder.
+
     Called in admin/base_site.html template override and applies custom ordering
     of apps/models defined by settings.ADMIN_REORDER.
     """
-
     # sort key function - use index of item in order if exists, otherwise item
     def sort(order, item):
         if item in order:

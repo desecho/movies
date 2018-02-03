@@ -14,7 +14,7 @@ class UploadPosterToWallView(VkAjaxView):
     def _get_filepath(self, record_id):
         movie = Record.objects.get(pk=record_id).movie
         file_contents = requests.get(movie.poster_big).content
-        # We need to make sure that file is not deleted that is why we use `self`
+        # We need to make sure that file is not deleted that is why we use `self`.
         self.tmp_file = tempfile.NamedTemporaryFile(suffix='.jpg')
         self.tmp_file.write(file_contents)
         os.chmod(self.tmp_file.name, 0o666)  # nosec

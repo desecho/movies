@@ -94,7 +94,10 @@ class UserBase:
             return self._get_vk_accounts()[0]
 
     def is_vk_user(self):
-        """Shows if a user has a vk account. It doesn't necessarily mean that he is currently using the app.
+        """
+        Show if a user has a vk account.
+
+        It doesn't necessarily mean that he is currently using the app.
         Note: currently it does because it is not possible to link a vk-app account and a website account.
         But it is likely to change in the future.
         """
@@ -218,7 +221,8 @@ class Movie(models.Model):
 
     def cli_string(self, last_movie_id):
         """
-        String version for CLI.
+        Return string version for CLI.
+
         We need last_movie_id because we want to know how big is the number (in characters) to be able to make
         perfect formatting.
         We need to keep last_movie_id as a parameter because otherwise we hit the database every time we run the
@@ -249,7 +253,6 @@ class Record(models.Model):
 
 
 class Action(models.Model):
-    # Here we have a list of available actions.
     ADDED_MOVIE = 1
     CHANGED_LIST = 2
     ADDED_RATING = 3

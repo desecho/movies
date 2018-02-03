@@ -39,9 +39,9 @@ def join_dicts(dict1, dict2):
 def add_movie_to_db(tmdb_id, update=False):
     """
     Return movie id.
-    If update is True, return bool (updated or not)
-    """
 
+    If update is True, return bool (updated or not).
+    """
     def save_movie():
         movie = Movie(**movie_data)
         movie.save()

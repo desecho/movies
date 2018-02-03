@@ -55,8 +55,11 @@ def get_movies_from_tmdb(query, type_, options, user, lang):
         return movies
 
     def get_data(query, type_):
-        """For actor, director search - the first is used."""
+        """
+        Get data.
 
+        For actor, director search - the first is used.
+        """
         def process_person_entries(entries):
             movies = [e for e in entries if e['media_type'] == 'movie']
             for m in movies:
