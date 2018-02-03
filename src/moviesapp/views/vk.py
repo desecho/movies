@@ -9,17 +9,13 @@ from .mixins import VkAjaxView
 
 
 class UploadPosterToWallView(VkAjaxView):
-    @staticmethod
-    def _get_filepath(record_id):
+    def _get_filepath(self, record_id):
         movie = Record.objects.get(pk=record_id).movie
         file_contents = requests.get(movie.poster_big).content
-        path = tempfile.mkstemp()[1]
-        with open(path, 'w') as file_:
-            file_.write(file_contents)
-        path_jpg = path + '.jpg'
-        os.chmod(path, 0o666)  # nosec
-        os.rename(path, path_jpg)
-        return path_jpg
+        # We need to make sure that file is not deleted that is why we use `self`
+        self.tmp_file = tempfile.NamedTemporaryFile(suffix='.jpg')
+        self.tmp_file.write(file_contents)
+        os.chmod(self.tmp_file.name, 0o666)  # nosec
 
     @staticmethod
     def _upload_file(url, filepath):
@@ -35,6 +31,6 @@ class UploadPosterToWallView(VkAjaxView):
         except (KeyError, ValueError):
             return self.render_bad_request_response()
 
-        filepath = self._get_filepath(record_id)
-        response = self._upload_file(url, filepath)
+        self._get_filepath(record_id)
+        response = self._upload_file(url, self.tmp_file.name)
         return self.render_json_response({'data': response})
