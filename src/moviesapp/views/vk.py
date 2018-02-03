@@ -9,6 +9,8 @@ from .mixins import VkAjaxView
 
 
 class UploadPosterToWallView(VkAjaxView):
+    tmp_file = None
+
     def _get_filepath(self, record_id):
         movie = Record.objects.get(pk=record_id).movie
         file_contents = requests.get(movie.poster_big).content
