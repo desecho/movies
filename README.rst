@@ -5,10 +5,10 @@ Movies
 
 The web application on Python/Django, jQuery, AngularJS, Bootstrap. Create movie lists ("watched" and "to watch"), rate movies and add comments.
 
+| It is also available as a `VK app <http://vk.com/app3504693_2912142>`_.
+| Share your lists with VK and Facebook friends, get recommendations from friends.
 | The website is live here - https://movies.desecho.org.
 | The interface is available in English and Russian.
-
-.. Share your lists with VK and Facebook friends, get recommendations from friends. It is also available as a `VK app <http://vk.com/app3504693_2912142>`_.
 
 Used APIs
 --------------
