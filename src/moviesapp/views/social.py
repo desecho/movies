@@ -22,8 +22,7 @@ class FeedView(TemplateAnonymousView):
 
         date_to = datetime.today()
         date_from = date_to - relativedelta(days=settings.FEED_DAYS)
-        actions = ActionRecord.objects.filter(
-            date__range=(date_from, date_to)).order_by('-pk')
+        actions = ActionRecord.objects.filter(date__range=(date_from, date_to)).order_by('-pk')
 
         users = self.request.user.get_users(friends=list_name == 'friends')
         actions = actions.filter(user__in=users)
@@ -44,8 +43,7 @@ class FeedView(TemplateAnonymousView):
             }
             actions_output.append(a)
             i += 1
-        return {'list_name': FEED_TITLE[list_name],
-                'actions': actions_output}
+        return {'list_name': FEED_TITLE[list_name], 'actions': actions_output}
 
 
 class PeopleView(TemplateAnonymousView):
@@ -53,8 +51,7 @@ class PeopleView(TemplateAnonymousView):
     users = None
 
     def get_context_data(self):
-        return {'users': paginate(self.users, self.request.GET.get('page'),
-                                  settings.PEOPLE_ON_PAGE)}
+        return {'users': paginate(self.users, self.request.GET.get('page'), settings.PEOPLE_ON_PAGE)}
 
     def get(self, *args, **kwargs):
         self.users = self.request.user.get_users(sort=True)

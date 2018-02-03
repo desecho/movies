@@ -12,9 +12,9 @@ class MovieTranslationOptions(TranslationOptions):
 
 @register(Action)
 class ActionTranslationOptions(TranslationOptions):
-    fields = ('name',)
+    fields = ('name', )
 
 
 @register(List)
 class ListTranslationOptions(TranslationOptions):
-    fields = ('name',)
+    fields = ('name', )

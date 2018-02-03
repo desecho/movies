@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 """Django settings."""
 
-
 import os
 import os.path as op
 import sys
@@ -43,9 +42,7 @@ SECRET_KEY = local_settings.SECRET_KEY
 DEBUG = local_settings.DEBUG
 IS_VK_DEV = local_settings.IS_VK_DEV
 
-ADMINS = (
-    (local_settings.ADMIN_NAME, local_settings.ADMIN_EMAIL),
-)
+ADMINS = ((local_settings.ADMIN_NAME, local_settings.ADMIN_EMAIL), )
 
 MANAGERS = ADMINS
 
@@ -93,7 +90,7 @@ STATICFILES_FINDERS = (
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': (os.path.join(BASE_DIR, 'templates'),),
+        'DIRS': (os.path.join(BASE_DIR, 'templates'), ),
         'OPTIONS': {
             'context_processors': (
                 'django.contrib.auth.context_processors.auth',
@@ -112,7 +109,8 @@ TEMPLATES = [
                     'django.template.loaders.app_directories.Loader',
                 ]),
             ],
-            'debug': DEBUG
+            'debug':
+            DEBUG
         },
     },
 ]
@@ -175,15 +173,17 @@ if not DEBUG:
         },
         'formatters': {
             'verbose': {
-                'format': '%(levelname)s %(asctime)s %(module)s '
-                          '%(process)d %(thread)d %(message)s'
+                'format': ('%(levelname)s %(asctime)s %(module)s '
+                           '%(process)d %(thread)d %(message)s')
             },
         },
         'handlers': {
             'sentry': {
                 'level': 'ERROR',  # To capture more than ERROR, change to WARNING, INFO, etc.
                 'class': 'raven.contrib.django.raven_compat.handlers.SentryHandler',
-                'tags': {'custom-tag': 'x'},
+                'tags': {
+                    'custom-tag': 'x'
+                },
             },
             'console': {
                 'level': 'DEBUG',
@@ -217,9 +217,7 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
 
-ADMIN_REORDER = (
-    ('moviesapp', ('User', 'Movie', 'Record', 'List', 'Action', 'ActionRecord')),
-)
+ADMIN_REORDER = (('moviesapp', ('User', 'Movie', 'Record', 'List', 'Action', 'ActionRecord')), )
 
 AUTH_USER_MODEL = 'moviesapp.User'
 AUTH_ANONYMOUS_MODEL = 'moviesapp.models.UserAnonymous'
@@ -355,9 +353,7 @@ LANGUAGES = (
     ('ru', 'Русский'),
 )
 
-LOCALE_PATHS = (
-    op.join(local_settings.PROJECT_ROOT, 'project', 'src', 'locale'),
-)
+LOCALE_PATHS = (op.join(local_settings.PROJECT_ROOT, 'project', 'src', 'locale'), )
 RAVEN_CONFIG = {
     'dsn': local_settings.RAVEN_DSN,
     'release': raven.fetch_git_sha(local_settings.GIT_ROOT),

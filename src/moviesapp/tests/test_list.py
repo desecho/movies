@@ -33,7 +33,7 @@ class AddMoviesTestCase(BaseTestLoginCase):
     ]
 
     def test_list_watched(self):
-        url = reverse('list', args=('watched',))
+        url = reverse('list', args=('watched', ))
         response = self.client.get(url)
         soup = self.get_soup(response)
         titles = soup.findAll('div', {'class': 'title'})
@@ -46,7 +46,7 @@ class AddMoviesTestCase(BaseTestLoginCase):
         self.assertEqual(conter_to_watch, '1')
 
     def test_list_search(self):
-        url = reverse('list', args=('watched',))
+        url = reverse('list', args=('watched', ))
         response = self.client.get(url, {'query': 'Matrix'})
         soup = self.get_soup(response)
         titles = soup.findAll('div', {'class': 'title'})

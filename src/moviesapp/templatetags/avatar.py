@@ -9,10 +9,7 @@ register = template.Library()
 
 @register.simple_tag
 def avatar(user, size='small'):
-    AVATAR_SIZES = {
-        'small': 100,
-        'big': 200
-    }
+    AVATAR_SIZES = {'small': 100, 'big': 200}
 
     def get_url():
         if user.avatar:

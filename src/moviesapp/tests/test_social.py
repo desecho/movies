@@ -30,7 +30,7 @@ class PeopleTestCase(BaseTestLoginCase):
         self.assertListEqual(users, ['admin', 'Thomas Anderson'])
 
     def test_feed_people(self):
-        url = reverse('feed', args=('people',))
+        url = reverse('feed', args=('people', ))
         response = self.client.get(url)
         soup = self.get_soup(response)
         records = soup.findAll('tr', {'class': 'feed-record'})
@@ -40,28 +40,8 @@ class PeopleTestCase(BaseTestLoginCase):
             user = record.find('td', {'class': 'feed-user'}).find('a').find('img').attrs['title'].strip()
             movie = record.find('td', {'class': 'feed-movie'}).get_text().strip()
             action = record.find('td', {'class': 'feed-action-data'}).get_text().strip()
-            records_data.append({
-                'user': user,
-                'movie': movie,
-                'action': action
-            })
-        self.assertIn({
-            'user': 'Thomas Anderson',
-            'movie': 'The X Files',
-            'action': 'Watched'
-        }, records_data)
-        self.assertIn({
-            'user': 'Thomas Anderson',
-            'movie': 'Pulp Fiction',
-            'action': 'To Watch'
-        }, records_data)
-        self.assertIn({
-            'user': 'Thomas Anderson',
-            'movie': 'Dogma',
-            'action': 'Watched'
-        }, records_data)
-        self.assertIn({
-            'user': 'Thomas Anderson',
-            'movie': 'The Matrix',
-            'action': 'Watched'
-        }, records_data)
+            records_data.append({'user': user, 'movie': movie, 'action': action})
+        self.assertIn({'user': 'Thomas Anderson', 'movie': 'The X Files', 'action': 'Watched'}, records_data)
+        self.assertIn({'user': 'Thomas Anderson', 'movie': 'Pulp Fiction', 'action': 'To Watch'}, records_data)
+        self.assertIn({'user': 'Thomas Anderson', 'movie': 'Dogma', 'action': 'Watched'}, records_data)
+        self.assertIn({'user': 'Thomas Anderson', 'movie': 'The Matrix', 'action': 'Watched'}, records_data)

@@ -60,6 +60,7 @@ def get_movies_from_tmdb(query, type_, options, user, lang):
 
         For actor, director search - the first is used.
         """
+
         def process_person_entries(entries):
             movies = [e for e in entries if e['media_type'] == 'movie']
             for m in movies:

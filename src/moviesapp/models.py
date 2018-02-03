@@ -22,8 +22,7 @@ class Vk:
     def get_friends(self):
         friends = self.vk.friends.get(uid=self.vk_id)
         friends_ids = map(str, friends)
-        friends = User.objects.filter(social_auth__provider__in=settings.VK_BACKENDS,
-                                      social_auth__uid__in=friends_ids)
+        friends = User.objects.filter(social_auth__provider__in=settings.VK_BACKENDS, social_auth__uid__in=friends_ids)
         return friends
 
     def get_data(self, fields):
@@ -237,7 +236,7 @@ class Movie(models.Model):
         title_max_length = MAX_CHARS + len(ENDING)
         title_format = '{:%ds}' % title_max_length
         title = title_format.format(title)
-        return f'{id_} - {title}'[1:].decode('utf8')
+        return f'{id_} - {title}' [1:].decode('utf8')
 
 
 class Record(models.Model):

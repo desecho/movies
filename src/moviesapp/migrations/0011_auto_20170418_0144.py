@@ -14,6 +14,4 @@ class Migration(migrations.Migration):
         ('moviesapp', '0010_auto_20170418_0137'),
     ]
 
-    operations = [
-        migrations.RunPython(load_fixtures)
-    ]
+    operations = [migrations.RunPython(load_fixtures)]

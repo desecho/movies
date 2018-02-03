@@ -40,10 +40,7 @@ class BaseTestCase(TestCase):
         if username is None:
             username = self.USER_USERNAME
         self.client.logout()
-        self.client.login(
-            username=username,
-            password=self.USER_PWD
-        )
+        self.client.login(username=username, password=self.USER_PWD)
 
     def load_json(self, filename):
         base_path = os.path.join(settings.BASE_DIR, 'moviesapp', 'tests', 'files')

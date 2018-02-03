@@ -42,6 +42,7 @@ def add_movie_to_db(tmdb_id, update=False):
 
     If update is True, return bool (updated or not).
     """
+
     def save_movie():
         movie = Movie(**movie_data)
         movie.save()
@@ -87,7 +88,8 @@ def add_movie_to_db(tmdb_id, update=False):
             'genre': movie_data.get('Genre'),
             'country': movie_data.get('Country'),
             'imdb_rating': movie_data.get('imdbRating'),
-            'runtime': get_runtime(movie_data.get('Runtime'))}
+            'runtime': get_runtime(movie_data.get('Runtime'))
+        }
 
     movie_data_tmdb = get_tmdb_movie_data(tmdb_id)
     movie_data_omdb = get_omdb_movie_data(movie_data_tmdb['imdb_id'])

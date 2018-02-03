@@ -7,15 +7,24 @@ from django.contrib.auth.views import login
 from django.views.i18n import JavaScriptCatalog
 
 from moviesapp.views.list import (
-    AddToListView, ApplySettingsView, ChangeRatingView, ListView,
-    RecommendationsView, RemoveMovieView, SaveCommentView,
+    AddToListView,
+    ApplySettingsView,
+    ChangeRatingView,
+    ListView,
+    RecommendationsView,
+    RemoveMovieView,
+    SaveCommentView,
 )
 from moviesapp.views.search import (
-    AddToListFromDbView, SearchMovieView, SearchView,
+    AddToListFromDbView,
+    SearchMovieView,
+    SearchView,
 )
 from moviesapp.views.social import FeedView, FriendsView, PeopleView
 from moviesapp.views.user import (
-    PreferencesView, SavePreferencesView, logout_view,
+    PreferencesView,
+    SavePreferencesView,
+    logout_view,
 )
 from moviesapp.views.vk import UploadPosterToWallView
 
@@ -57,10 +66,9 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
 
     # Services
-    url(r'^jsi18n/$', JavaScriptCatalog.as_view(packages=('moviesapp',),
-                                                domain='djangojs'),
+    url(r'^jsi18n/$',
+        JavaScriptCatalog.as_view(packages=('moviesapp', ), domain='djangojs'),
         name='javascript-catalog'),
-
     url('', include('social_django.urls', namespace='social')),
     url(r'^rosetta/', include('rosetta.urls')),
     url(r'^i18n/', include('django.conf.urls.i18n')),

@@ -6,7 +6,10 @@ from django.http import Http404, HttpResponseForbidden
 
 from ..models import Action, ActionRecord, List, Record, User
 from .mixins import (
-    AjaxAnonymousView, AjaxView, TemplateAnonymousView, TemplateView,
+    AjaxAnonymousView,
+    AjaxView,
+    TemplateAnonymousView,
+    TemplateView,
 )
 from .utils import add_movie_to_list, paginate
 
@@ -23,10 +26,7 @@ class ChangeRatingView(AjaxView):
         r = request.user.get_record(id_)
         if r.rating != rating:
             if not r.rating:
-                ActionRecord(action_id=Action.ADDED_RATING,
-                             user=request.user,
-                             movie=r.movie,
-                             rating=rating).save()
+                ActionRecord(action_id=Action.ADDED_RATING, user=request.user, movie=r.movie, rating=rating).save()
             r.rating = rating
             r.save()
         return self.success()
@@ -85,10 +85,7 @@ class SaveCommentView(RecordMixin):
         r = self.record
         if r.comment != comment:
             if not r.comment:
-                ActionRecord(action_id=Action.ADDED_COMMENT,
-                             user=request.user,
-                             movie=r.movie,
-                             comment=comment).save()
+                ActionRecord(action_id=Action.ADDED_COMMENT, user=request.user, movie=r.movie, comment=comment).save()
             r.comment = comment
             r.save()
         return self.success()
@@ -105,12 +102,8 @@ class ListView(TemplateAnonymousView):
         return records.filter(rating__gte=3).exclude(movie__in=user.get_movie_ids())
 
     def _get_comments_and_ratings(self, record_ids_and_movies, user):
-        movies, record_ids_and_movies_dict = self._get_record_movie_data(
-            record_ids_and_movies)
-        comments_and_ratings = Record.objects.filter(
-            list_id=1,
-            movie_id__in=movies
-        )
+        movies, record_ids_and_movies_dict = self._get_record_movie_data(record_ids_and_movies)
+        comments_and_ratings = Record.objects.filter(list_id=1, movie_id__in=movies)
         friends = user.get_friends()
         if friends is None:
             comments_and_ratings = []
@@ -141,8 +134,7 @@ class ListView(TemplateAnonymousView):
 
     @staticmethod
     def _filter_records(records, query):
-        return records.filter(Q(movie__title_en__icontains=query) |
-                              Q(movie__title_ru__icontains=query))
+        return records.filter(Q(movie__title_en__icontains=query) | Q(movie__title_ru__icontains=query))
 
     @staticmethod
     def _sort_records(records, sort, username, list_name):
@@ -151,8 +143,7 @@ class ListView(TemplateAnonymousView):
         elif sort == 'rating':
             if not username and list_name == 'to-watch':
                 # Sorting is changing here because there is no user rating yet.
-                return records.order_by('-movie__imdb_rating',
-                                        '-movie__release_date')
+                return records.order_by('-movie__imdb_rating', '-movie__release_date')
             else:
                 return records.order_by('-rating', '-movie__release_date')
         elif sort == 'addition_date':
@@ -164,11 +155,9 @@ class ListView(TemplateAnonymousView):
         return (movies, {x[0]: x[1] for x in record_ids_and_movies})
 
     def _get_list_data(self, records):
-        movies, record_ids_and_movies_dict = self._get_record_movie_data(
-            records.values_list('id', 'movie_id'))
-        movie_ids_and_list_ids = (self.request.user.get_records()
-                                  .filter(movie_id__in=movies)
-                                  .values_list('movie_id', 'list_id'))
+        movies, record_ids_and_movies_dict = self._get_record_movie_data(records.values_list('id', 'movie_id'))
+        movie_ids_and_list_ids = (self.request.user.get_records().filter(movie_id__in=movies).values_list(
+            'movie_id', 'list_id'))
         movie_id_and_list_id_dict = {}
         for x in movie_ids_and_list_ids:
             movie_id_and_list_id_dict[x[0]] = x[1]
@@ -225,8 +214,7 @@ class ListView(TemplateAnonymousView):
             comments_and_ratings = self._get_comments_and_ratings(records.values_list('id', 'movie_id'), request.user)
         else:
             comments_and_ratings = None
-        records = paginate(records, request.GET.get('page'),
-                           settings.RECORDS_ON_PAGE)
+        records = paginate(records, request.GET.get('page'), settings.RECORDS_ON_PAGE)
         return {
             'records': records,
             'reviews': comments_and_ratings,
@@ -262,8 +250,7 @@ class RecommendationsView(TemplateView, ListView):
         # Exclude own records and include only friends' records.
         records = Record.objects.exclude(user=self.request.user).filter(user__in=friends).select_related('movie')
         # Order records by user rating and by imdb rating.
-        records = records.order_by('-rating', '-movie__imdb_rating',
-                                   '-movie__release_date')
+        records = records.order_by('-rating', '-movie__imdb_rating', '-movie__release_date')
         return self._filter_records_for_recommendation(records, self.request.user)
 
     def get_context_data(self):
