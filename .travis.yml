@@ -16,8 +16,10 @@ env:
   - TOXENV=isort
   - TOXENV=bandit
   - TOXENV=rstlint
-  - TOXENV=pydiatra
   - TOXENV=py36
+
+before_install:
+  pip install tox
 
 script:
   - tox
