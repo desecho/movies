@@ -154,3 +154,9 @@ label {
 .people-user, .trailers a {
   margin-left: 10px;
 }
+
+.btn-secondary {
+  color: #000;
+  background-color: #fff;
+  border-color: lightgray;
+}

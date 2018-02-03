@@ -22,7 +22,7 @@
 </div>
 
 {% if anothers_account %}
-  <div class="btn-group" data-toggle="buttons">
+  <div class="btn-group btn-group-toggle" data-toggle="buttons">
     <label class="btn btn-secondary {% ifequal list_id 1 %} active {% endifequal %}" title="{% trans 'Watched' %}"
            ng-click="openUrl('{% url 'people' anothers_account.username 'watched' %}')">
       <input type="radio">{% trans 'Watched' %}
@@ -35,7 +35,7 @@
   <br><br>
 {% endif %}
 
-<div class="btn-group" data-toggle="buttons">
+<div class="btn-group btn-group-toggle" data-toggle="buttons">
   {% with mode=request.session.mode %}
   <!-- id values are being used as variable name combination to control the button statuses -->
   <label id="button-mode-full" class="btn btn-secondary {% if mode == 'full' %} active {% endif %}" title="{% trans 'Mode' %}" ng-click="switchMode('full')">
@@ -57,7 +57,7 @@
 
 <div class="row">
   <div class="col-sm-9 col-md-7 col-lg-5 col-xl-5">
-    <div class="btn-group" data-toggle="buttons">
+    <div class="btn-group btn-group-toggle" data-toggle="buttons">
       <!-- id values are being used as variable name combination to control the button statuses -->
       {% with sort=request.session.sort %}
       <label class="btn btn-secondary {% if sort == 'release_date' %} active {% endif %}" title="{% trans 'Sort by release date' %}" onclick="switchSort('release_date')">
@@ -78,9 +78,9 @@
       {% csrf_token %}
         <div class="input-group">
           <input type="text" class="form-control" name="query">
-          <span class="input-group-btn">
+          <div class="input-group-append">
             <button class="btn btn-secondary" type="submit">{% trans 'Search' %}</button>
-          </span>
+          </div>
         </div>
     </form>
   </div>

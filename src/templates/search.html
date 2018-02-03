@@ -8,8 +8,7 @@
     <form name="search" id="search" ng-submit="search.$valid && submit()" novalidate class="col-lg-7 col-md-8 col-sm-10 col-xl-5 mx-auto">
       <div class="input-group">
         <input class="span2 form-control" id="query" name="query" type="text" autofocus ng-model="query" required aria-label="{% trans 'Text input with dropdown button' %}">
-        <span class="input-group-btn">
-          <div class="btn-group">
+          <div class="input-group-append">
             <button class="btn btn-secondary" type="submit">{% trans 'Search' %}</button>
             <button id="search-type-button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               [[ searchType ]] <span class="caret"></span>
@@ -20,7 +19,6 @@
               <a class="dropdown-item" href="javascript:void(0)" ng-click="changeSearchType('director');">{% trans 'Director' %}</a>
             </div>
           </div>
-        </span>
       </div>
       <div class="search-panel-additional">
         <label class="checkbox">
