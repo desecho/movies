@@ -3,23 +3,31 @@ Movies
 
 |Build Status| |Requirements Status| |Codecov|
 
-*The web application on Python/Django, jQuery, AngularJS, Bootstrap. Create movie lists ("watched" and "to watch"), rate movies and add comments.*
+The web application on Python/Django, jQuery, AngularJS, Bootstrap. Create movie lists ("watched" and "to watch"), rate movies and add comments.
 
-The website is live here - https://movies.desecho.org.
-The interface is available in Russian and English.
+| The website is live here - https://movies.desecho.org.
+| The interface is available in English and Russian.
 
 .. Share your lists with VK and Facebook friends, get recommendations from friends. It is also available as a `VK app <http://vk.com/app3504693_2912142>`_.
 
 Used APIs
 --------------
-* TMDb_ (Requires API Key)
+* TMDb_
 * OMDb_
+
+APIs require keys.
 
 Installation instructions
 ----------------------------
 
 1. Use ansible-playbook-server_ to deploy.
-2. Do github clone
+2. Do git clone.
+
+Development
+--------------
+
+| Use `clean.sh` to automatically prettify your code.
+| Use `tox` for testing and linting.
 
 
 .. |Requirements Status| image:: https://requires.io/github/desecho/movies/requirements.svg?branch=master
