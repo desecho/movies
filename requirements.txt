@@ -11,8 +11,6 @@ django-tqdm==0.0.3
 -e git+https://github.com/bugov/django-custom-anonymous.git@e2a208dfe3240f42d3a2e1400bc9021a28e1ca15#egg=django-custom-anonymous
 
 social-auth-app-django==2.1.0
-# dependency of social-auth-app-django
-social-auth-core==1.6.0
 
 # django-bootstrap-pagination==1.6.2
 # Contains open PRs:
