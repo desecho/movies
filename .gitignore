@@ -13,3 +13,4 @@ local_settings.py
 node_modules
 env
 .cache
+.pytest_cache/
