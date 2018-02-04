@@ -1,5 +1,5 @@
 [MASTER]
-ignore=migrations
+ignore=migrations,fixtures
 
 [FORMAT]
 max-line-length: 119

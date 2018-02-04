@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import annoying.fields
 from django.db import migrations, models
 
 
