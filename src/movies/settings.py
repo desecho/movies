@@ -16,76 +16,51 @@ except ImportError:
         print('No initial settings!')
         sys.exit()
 
-INTERNAL_IPS = local_settings.INTERNAL_IPS
+BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
+# Development
+IS_VK_DEV = local_settings.IS_VK_DEV
+
+# Debug
+DEBUG = local_settings.DEBUG
+INTERNAL_IPS = local_settings.INTERNAL_IPS
 DEBUG_TOOLBAR_PANELS = [
-    # 'debug_toolbar.panels.versions.VersionsPanel',
     'debug_toolbar.panels.timer.TimerPanel',
-    # 'debug_toolbar.panels.settings.SettingsPanel',
-    # 'debug_toolbar.panels.headers.HeadersPanel',
-    # 'debug_toolbar.panels.request.RequestPanel',
     'debug_toolbar.panels.sql.SQLPanel',
-    # 'debug_toolbar.panels.staticfiles.StaticFilesPanel',
-    # 'debug_toolbar.panels.templates.TemplatesPanel',
-    # 'debug_toolbar.panels.cache.CachePanel',
     'debug_toolbar.panels.signals.SignalsPanel',
-    # 'debug_toolbar.panels.logging.LoggingPanel',
-    # 'debug_toolbar.panels.redirects.RedirectsPanel',
     'template_timings_panel.panels.TemplateTimings.TemplateTimings',
     'debug_toolbar.panels.profiling.ProfilingPanel',
 ]
 
-# SECURITY WARNING: keep the secret key used in production secret!
+MENU_SELECT_PARENTS = True
 SECRET_KEY = local_settings.SECRET_KEY
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = local_settings.DEBUG
-IS_VK_DEV = local_settings.IS_VK_DEV
-
 ADMINS = ((local_settings.ADMIN_NAME, local_settings.ADMIN_EMAIL), )
-
 MANAGERS = ADMINS
-
 DATABASES = local_settings.DATABASES
+CACHE_DIR = op.join(local_settings.PROJECT_ROOT, 'cache')
+SITE_ID = 1
+ROOT_URLCONF = 'movies.urls'
+WSGI_APPLICATION = 'movies.wsgi.application'
+SESSION_SAVE_EVERY_REQUEST = True
 
-# Hosts/domain names that are valid for this site; required if DEBUG is False
-# See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
+# Allowed hosts
 ALLOWED_HOSTS = [local_settings.PROJECT_DOMAIN]
-
 if IS_VK_DEV:
     ALLOWED_HOSTS.append(local_settings.HOST_MOVIES_TEST)
 
-# Local time zone for this installation. Choices can be found here:
-# http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
-# although not all choices may be available on all operating systems.
-# In a Windows environment this must be set to your system time zone.
-TIME_ZONE = 'US/Eastern'
-
-# Language code for this installation. All choices can be found here:
-# http://www.i18nguy.com/unicode/language-identifiers.html
+# Internationalization
 LANGUAGE_CODE = 'en'
-
-SITE_ID = 1
-
-# If you set this to False, Django will make some optimizations so as not
-# to load the internationalization machinery.
 USE_I18N = True
-
-# If you set this to False, Django will not format dates, numbers and
-# calendars according to the current locale.
 USE_L10N = True
-
-# If you set this to False, Django will not use timezone-aware datetimes.
-USE_TZ = False
-
-BASE_DIR = os.path.dirname(os.path.dirname(__file__))
-# List of finder classes that know how to find static files in
-# various locations.
-STATICFILES_FINDERS = (
-    'django.contrib.staticfiles.finders.FileSystemFinder',
-    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-    # 'django.contrib.staticfiles.finders.DefaultStorageFinder',
+LANGUAGES = (
+    ('en', 'English'),
+    ('ru', 'Русский'),
 )
+LOCALE_PATHS = (op.join(local_settings.PROJECT_ROOT, 'project', 'src', 'locale'), )
+
+# Timezone
+TIME_ZONE = 'US/Eastern'
+USE_TZ = False
 
 TEMPLATES = [
     {
@@ -114,7 +89,6 @@ TEMPLATES = [
         },
     },
 ]
-
 if DEBUG:
     TEMPLATES[0]['OPTIONS']['loaders'] = [
         'django.template.loaders.filesystem.Loader',
@@ -132,13 +106,8 @@ MIDDLEWARE = [
     'social_django.middleware.SocialAuthExceptionMiddleware',
     'custom_anonymous.middleware.AuthenticationMiddleware',
 ]
-
 if DEBUG:
     MIDDLEWARE.append('debug_toolbar.middleware.DebugToolbarMiddleware')
-
-ROOT_URLCONF = 'movies.urls'
-
-WSGI_APPLICATION = 'movies.wsgi.application'
 
 INSTALLED_APPS = [
     'django.contrib.auth',
@@ -156,13 +125,17 @@ INSTALLED_APPS = [
     'social_django',
     'raven.contrib.django.raven_compat',
 ]
-
 if DEBUG:
     INSTALLED_APPS += [
         'debug_toolbar',
         'template_timings_panel',
     ]
 
+# Logging
+RAVEN_CONFIG = {
+    'dsn': local_settings.RAVEN_DSN,
+    'release': raven.fetch_git_sha(local_settings.GIT_ROOT),
+}
 if not DEBUG:
     LOGGING = {
         'version': 1,
@@ -210,69 +183,18 @@ if not DEBUG:
         },
     }
 
+# Admin
+ADMIN_REORDER = (('moviesapp', ('User', 'Movie', 'Record', 'List', 'Action', 'ActionRecord')), )
+
+# Authentication
+AUTH_USER_MODEL = 'moviesapp.User'
+AUTH_ANONYMOUS_MODEL = 'moviesapp.models.UserAnonymous'
 AUTHENTICATION_BACKENDS = (
     'social_core.backends.vk.VKOAuth2',
     'social_core.backends.vk.VKAppOAuth2',
     'social_core.backends.facebook.FacebookOAuth2',
     'django.contrib.auth.backends.ModelBackend',
 )
-
-ADMIN_REORDER = (('moviesapp', ('User', 'Movie', 'Record', 'List', 'Action', 'ActionRecord')), )
-
-AUTH_USER_MODEL = 'moviesapp.User'
-AUTH_ANONYMOUS_MODEL = 'moviesapp.models.UserAnonymous'
-
-LOGIN_REDIRECT_URL = '/'
-if IS_VK_DEV:
-    LOGIN_REDIRECT_URL = 'https://{}'.format(local_settings.HOST_MOVIES_TEST)
-LOGIN_URL = '/login/'
-
-SESSION_SAVE_EVERY_REQUEST = True
-
-STATIC_ROOT = op.join(local_settings.PROJECT_ROOT, 'static')
-STATIC_URL = '/static/'
-
-MEDIA_ROOT = op.join(local_settings.PROJECT_ROOT, 'media')
-MEDIA_URL = '/media/'
-
-CACHE_DIR = op.join(local_settings.PROJECT_ROOT, 'cache')
-
-MAX_RESULTS = 50
-MIN_POPULARITY = 1.5
-
-NO_POSTER_SMALL_IMAGE_URL = STATIC_URL + 'img/no_poster_small.png'
-NO_POSTER_NORMAL_IMAGE_URL = STATIC_URL + 'img/no_poster_normal.png'
-
-# Available sizes:
-# "w92",
-# "w154",
-# "w185",
-# "w342",
-# "w500",
-# "w780",
-# "original"
-
-POSTER_SIZE_SMALL = 'w92'
-POSTER_SIZE_NORMAL = 'w185'
-POSTER_SIZE_BIG = 'w500'
-POSTER_BASE_URL = 'http://image.tmdb.org/t/p/'
-
-IMDB_BASE_URL = 'http://www.imdb.com/title/'
-MAX_RECOMMENDATIONS = 50
-RECORDS_ON_PAGE = 50
-PEOPLE_ON_PAGE = 25
-FEED_DAYS = 7
-
-# CACHE_TIMEOUT = 60 * 60 * 12
-# CACHES = {
-#     'default': {
-#         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-#         'LOCATION': 'movies_dev'
-#     }
-# }
-
-MENU_SELECT_PARENTS = True
-
 SOCIAL_AUTH_USER_MODEL = AUTH_USER_MODEL
 SOCIAL_AUTH_PIPELINE = (
     # Get the information we can about the user and return it in a simple
@@ -297,10 +219,6 @@ SOCIAL_AUTH_PIPELINE = (
     # there's any collision.
     'social_core.pipeline.user.get_username',
 
-    # Send a validation email to the user to verify its email address.
-    # Disabled by default.
-    # 'social_core.pipeline.mail.mail_validation',
-
     # Associates the current social details with another user account with
     # a similar email address. Disabled by default.
     'social_core.pipeline.social_auth.associate_by_email',
@@ -315,49 +233,97 @@ SOCIAL_AUTH_PIPELINE = (
     # specified by settings (and the default ones like access_token, etc).
     'social_core.pipeline.social_auth.load_extra_data',
 
+    # We might want to enable it
     # # Update the user record with any changed info from the auth service.
     # 'social_core.pipeline.user.user_details',
 
     # We do this only if the user get's created for the first time.
     'moviesapp.social.load_user_data',
 )
-
+# Login
+LOGIN_REDIRECT_URL = '/'
+if IS_VK_DEV:
+    LOGIN_REDIRECT_URL = 'https://{}'.format(local_settings.HOST_MOVIES_TEST)
+LOGIN_URL = '/login/'
 LOGIN_ERROR_URL = '/login-error/'
 
+# Static files
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+)
+STATIC_ROOT = op.join(local_settings.PROJECT_ROOT, 'static')
+STATIC_URL = '/static/'
+
+# Media files
+MEDIA_ROOT = op.join(local_settings.PROJECT_ROOT, 'media')
+MEDIA_URL = '/media/'
+
+# Internationalization
+LANGUAGE_CODE = 'en'
+USE_I18N = True
+USE_L10N = True
+LANGUAGES = (
+    ('en', 'English'),
+    ('ru', 'Русский'),
+)
+LOCALE_PATHS = (op.join(local_settings.PROJECT_ROOT, 'project', 'locale'), )
+
+# Timezone
+TIME_ZONE = 'US/Eastern'
+USE_TZ = True
+
+# --== Project settings ==--
+
+# Search settings
+MAX_RESULTS = 50
+MIN_POPULARITY = 1.5
+
+# Posters
+NO_POSTER_SMALL_IMAGE_URL = STATIC_URL + 'img/no_poster_small.png'
+NO_POSTER_NORMAL_IMAGE_URL = STATIC_URL + 'img/no_poster_normal.png'
+# Available sizes:
+# "w92",
+# "w154",
+# "w185",
+# "w342",
+# "w500",
+# "w780",
+# "original"
+POSTER_SIZE_SMALL = 'w92'
+POSTER_SIZE_NORMAL = 'w185'
+POSTER_SIZE_BIG = 'w500'
+POSTER_BASE_URL = 'http://image.tmdb.org/t/p/'
+
+IMDB_BASE_URL = 'http://www.imdb.com/title/'
+MAX_RECOMMENDATIONS = 50
+RECORDS_ON_PAGE = 50
+PEOPLE_ON_PAGE = 25
+FEED_DAYS = 7
 GOOGLE_ANALYTICS_ID = local_settings.GOOGLE_ANALYTICS_ID
 
+# Secrets
 SOCIAL_AUTH_VK_OAUTH2_KEY = local_settings.SOCIAL_AUTH_VK_OAUTH2_KEY
 SOCIAL_AUTH_VK_OAUTH2_SECRET = local_settings.SOCIAL_AUTH_VK_OAUTH2_SECRET
-SOCIAL_AUTH_VK_OAUTH2_SCOPE = ['friends', 'email']
-
 SOCIAL_AUTH_VK_APP_KEY = local_settings.SOCIAL_AUTH_VK_APP_KEY
 SOCIAL_AUTH_VK_APP_SECRET = local_settings.SOCIAL_AUTH_VK_APP_SECRET
+SOCIAL_AUTH_FACEBOOK_KEY = local_settings.SOCIAL_AUTH_FACEBOOK_KEY
+SOCIAL_AUTH_FACEBOOK_SECRET = local_settings.SOCIAL_AUTH_FACEBOOK_SECRET
+
+# Social
 SOCIAL_AUTH_VK_APP_USER_MODE = 2
+SOCIAL_AUTH_VK_OAUTH2_SCOPE = ['friends', 'email']
+SOCIAL_AUTH_FACEBOOK_SCOPE = ['email', 'user_friends', 'public_profile', 'user_location']
 
 VK_BACKENDS_CREDENTIALS = {
     'vk-app': (SOCIAL_AUTH_VK_APP_KEY, SOCIAL_AUTH_VK_APP_SECRET),
     'vk-oauth2': (SOCIAL_AUTH_VK_OAUTH2_KEY, SOCIAL_AUTH_VK_OAUTH2_SECRET)
 }
-
 VK_BACKENDS = VK_BACKENDS_CREDENTIALS.keys()
 
-SOCIAL_AUTH_FACEBOOK_KEY = local_settings.SOCIAL_AUTH_FACEBOOK_KEY
-SOCIAL_AUTH_FACEBOOK_SECRET = local_settings.SOCIAL_AUTH_FACEBOOK_SECRET
-SOCIAL_AUTH_FACEBOOK_SCOPE = ['email', 'user_friends', 'public_profile', 'user_location']
-
+# API Keys
 TMDB_KEY = local_settings.TMDB_KEY
 OMDB_KEY = local_settings.OMDB_KEY
-
-LANGUAGES = (
-    ('en', 'English'),
-    ('ru', 'Русский'),
-)
-
-LOCALE_PATHS = (op.join(local_settings.PROJECT_ROOT, 'project', 'src', 'locale'), )
-RAVEN_CONFIG = {
-    'dsn': local_settings.RAVEN_DSN,
-    'release': raven.fetch_git_sha(local_settings.GIT_ROOT),
-}
 
 # This is here to fix the problem with static files on dev
 try:

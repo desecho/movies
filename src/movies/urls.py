@@ -42,6 +42,7 @@ urlpatterns = [
     # User
     url(r'^login/$', login, {'template_name': 'user/login.html'}, name='login'),
     url(r'^logout/$', logout_view, name='logout'),
+
     # Preferences
     url(r'^preferences/$', PreferencesView.as_view(), name='preferences'),
     url(r'^save-preferences/$', SavePreferencesView.as_view(), name='save_preferences'),
@@ -62,7 +63,6 @@ urlpatterns = [
     url(r'^friends/$', FriendsView.as_view(), name='friends'),
 
     # Admin
-    url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
     url(r'^admin/', admin.site.urls),
 
     # Services

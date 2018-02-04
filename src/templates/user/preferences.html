@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 
 {% load i18n %}
 {% load avatar %}
@@ -7,7 +7,7 @@
 {% block content %}
 <div ng-controller="PreferencesController">
 <form class="form-horizontal" id="preferences">
-	<legend>{% trans 'Settings' %}</legend>
+  <legend>{% trans 'Settings' %}</legend>
   <br>
   <div class="form-group row vk-app-hide" style="display: none;">
     <label class="col-form-label col-sm-2" for="lang">{% trans 'Avatar' %}:</label>
