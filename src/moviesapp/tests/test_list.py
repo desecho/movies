@@ -37,7 +37,7 @@ class AddMoviesTestCase(BaseTestLoginCase):
         response = self.client.get(url)
         soup = self.get_soup(response)
         titles = soup.findAll('div', {'class': 'title'})
-        titles = [t.span.attrs['title'] for t in titles]
+        titles = [title.span.attrs['title'] for title in titles]
         self.assertListEqual(titles, ['The X Files', 'Dogma', 'The Matrix'])
         counters = soup.find('div', id='movie-count').findAll('span')
         conter_watched = counters[0].get_text()
