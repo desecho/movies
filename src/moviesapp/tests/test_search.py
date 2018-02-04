@@ -5,7 +5,7 @@ import json
 import pytest
 from django.urls import reverse
 
-from moviesapp.models import Action
+from moviesapp.models import Action, List
 
 from .base import BaseTestCase, BaseTestLoginCase
 
@@ -97,22 +97,22 @@ class SearchMoviesAnonymousTestCase(BaseTestCase):
 
 class AddMoviesTestCase(BaseTestLoginCase):
     def test_add_movie(self):
-        LIST_ID = 1
-        MOVIE_ID = 603
+        list_id = List.WATCHED
+        movie_id = 603
         url = reverse('add_to_list_from_db')
         params = {
-            'movieId': MOVIE_ID,
-            'listId': LIST_ID,
+            'movieId': movie_id,
+            'listId': list_id,
         }
         # TODO Mock tmdbsimple
         response = self.client.post(url, params)
         response = self.get_json(response)
         self.assertEqual(response['status'], 'success')
         record = self.user.get_records().first()
-        self.assertEqual(record.list.pk, LIST_ID)
+        self.assertEqual(record.list.pk, list_id)
         movie = record.movie
         self.assertEqual(json.loads(self.dump_instance(movie)), self.load_json('add_movies_matrix.json'))
         action = self.user.actions.first()
         self.assertEqual(movie, action.movie)
         self.assertEqual(Action.ADDED_MOVIE, action.action_id)
-        self.assertEqual(LIST_ID, action.list_id)
+        self.assertEqual(list_id, action.list_id)

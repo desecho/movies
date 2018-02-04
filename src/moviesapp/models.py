@@ -156,6 +156,8 @@ class UserAnonymous(AnonymousUser, UserBase):
 
 
 class List(models.Model):
+    WATCHED = 1
+    TO_WATCH = 2
     name = models.CharField(max_length=255)
     key_name = models.CharField(max_length=255)
 

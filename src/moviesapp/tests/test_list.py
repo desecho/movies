@@ -2,7 +2,7 @@
 
 from django.urls import reverse
 
-from moviesapp.models import Movie
+from moviesapp.models import Movie, List
 
 from .base import BaseTestLoginCase
 
@@ -55,7 +55,7 @@ class AddMoviesTestCase(BaseTestLoginCase):
         self.assertEqual(title, 'The Matrix')
 
     def test_add_to_list(self):
-        LIST_ID = 1
+        LIST_ID = List.WATCHED
         url = reverse('add_to_list')
         movie_id = Movie.objects.get(title='The Avengers').pk
         response = self.client.post(url, {'movieId': movie_id, 'listId': LIST_ID})

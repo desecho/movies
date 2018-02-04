@@ -16,7 +16,7 @@ class PeopleTestCase(BaseTestLoginCase):
     ]
 
     def setUp(self):
-        BaseTestLoginCase.setUp(self)
+        super().setUp(self)
         self.login('fox')
 
     def test_people(self):

@@ -17,7 +17,7 @@ class BaseTestCase(TestCase):
     ]
 
     USER_USERNAME = 'neo'
-    USER_PWD = 'password'
+    USER_PASSWORD = 'password'
     # Superuser - admin/adminpassword
     # Another user - fox/password
 
@@ -40,7 +40,7 @@ class BaseTestCase(TestCase):
         if username is None:
             username = self.USER_USERNAME
         self.client.logout()
-        self.client.login(username=username, password=self.USER_PWD)
+        self.client.login(username=username, password=self.USER_PASSWORD)
 
     def load_json(self, filename):
         base_path = os.path.join(settings.BASE_DIR, 'moviesapp', 'tests', 'files')
