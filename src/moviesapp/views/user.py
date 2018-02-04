@@ -9,7 +9,7 @@ from .mixins import AjaxView, TemplateView
 
 def logout_view(request):
     logout(request)
-    return redirect('/login/')
+    return redirect('/')
 
 
 class PreferencesView(TemplateView):
