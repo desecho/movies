@@ -18,13 +18,15 @@ social-auth-app-django==2.1.0
 # - https://github.com/jmcclell/django-bootstrap-pagination/pull/61 - Added Russian locale
 -e git+https://github.com/desecho/django-bootstrap-pagination.git@fixes#egg=django-bootstrap-pagination
 
-
 # django-modeltranslation==0.12.2
 # See https://github.com/deschler/django-modeltranslation/issues/436
 # > 0.13 will be compatible with Django 1.11 and Django 2.0.
 # Current version seems to work
 -e git+https://github.com/deschler/django-modeltranslation.git@e2b4cada97018dd7662c685b2410e553e3ec9477#egg=django-modeltranslation
 
+# django-modeladmin-reorder==0.2
+# Django 2 support is only available in master
+-e git+https://github.com/mishbahr/django-modeladmin-reorder.git@fb40efa6d3d0668f3323aaca8e5c4486c0ffdd7b#egg=django-modeladmin-reorder
 
 # Requests
 requests==2.18.4

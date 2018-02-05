@@ -100,6 +100,7 @@ MIDDLEWARE = [
     'django.middleware.gzip.GZipMiddleware',
     'social_django.middleware.SocialAuthExceptionMiddleware',
     'custom_anonymous.middleware.AuthenticationMiddleware',
+    'admin_reorder.middleware.ModelAdminReorder',
 ]
 if DEBUG:
     MIDDLEWARE.append('debug_toolbar.middleware.DebugToolbarMiddleware')
@@ -113,6 +114,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # Custom
     'menu',
+    'admin_reorder',
     'bootstrap_pagination',
     'rosetta',
     'modeltranslation',
@@ -309,9 +311,21 @@ RAVEN_CONFIG = {
     'release': raven.fetch_git_sha(local_settings.GIT_ROOT),
 }
 
-# --== Project settings ==--
+#django-modeladmin-reorder
+ADMIN_REORDER = (
+    {
+        'app':
+        'moviesapp',
+        'models': ('moviesapp.User', 'moviesapp.Movie', 'moviesapp.Record', 'moviesapp.List', 'moviesapp.Action',
+                   'moviesapp.ActionRecord')
+    },
+    {
+        'app': 'social_django',
+        'models': ('social_django.UserSocialAuth', )
+    },
+)
 
-ADMIN_REORDER = (('moviesapp', ('User', 'Movie', 'Record', 'List', 'Action', 'ActionRecord')), )
+# --== Project settings ==--
 
 # Social
 VK_BACKENDS_CREDENTIALS = {
@@ -350,6 +364,7 @@ GOOGLE_ANALYTICS_ID = local_settings.GOOGLE_ANALYTICS_ID
 # API Keys
 TMDB_KEY = local_settings.TMDB_KEY
 OMDB_KEY = local_settings.OMDB_KEY
+
 
 # This is here to fix the problem with static files on dev
 try:
