@@ -312,7 +312,7 @@ RAVEN_CONFIG = {
     'release': raven.fetch_git_sha(local_settings.GIT_ROOT),
 }
 
-#django-modeladmin-reorder
+# django-modeladmin-reorder
 ADMIN_REORDER = (
     {
         'app':
@@ -326,7 +326,7 @@ ADMIN_REORDER = (
     },
 )
 
-#django-google-analytics-app
+# django-google-analytics-app
 GOOGLE_ANALYTICS = {
     'google_analytics_id': local_settings.GOOGLE_ANALYTICS_ID,
 }
