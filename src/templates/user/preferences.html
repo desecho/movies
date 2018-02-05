@@ -33,16 +33,14 @@
     </div>
   </div>
 
-  {% if user.is_linked %}
-    <div class="form-group row">
-      <label class="col-form-label col-sm-2" for="only-for-friends">{% trans 'Access' %}:</label>
-      <div class="col-sm-10">
-        <label class="checkbox">
-          <input type="checkbox" ng-click="savePreferences()" id="only-for-friends" name="only_for_friends" {% if user.only_for_friends %} checked {% endif %}> {% trans 'Show my lists only to friends' %}<br>
-        </label>
-      </div>
+  <div class="form-group row">
+    <label class="col-form-label col-sm-2" for="only-for-friends">{% trans 'Access' %}:</label>
+    <div class="col-sm-10">
+      <label class="checkbox">
+        <input type="checkbox" ng-click="savePreferences()" id="only-for-friends" name="only_for_friends" {% if user.only_for_friends %} checked {% endif %}> {% trans 'Show my lists only to friends' %}<br>
+      </label>
     </div>
-  {% endif %}
+  </div>
 </form>
 </div>
 {% endblock %}
