@@ -18,27 +18,15 @@ except ImportError:
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
-# Development
+# Custom
 IS_VK_DEV = local_settings.IS_VK_DEV
 
 # Debug
 DEBUG = local_settings.DEBUG
 INTERNAL_IPS = local_settings.INTERNAL_IPS
-DEBUG_TOOLBAR_PANELS = [
-    'debug_toolbar.panels.timer.TimerPanel',
-    'debug_toolbar.panels.sql.SQLPanel',
-    'debug_toolbar.panels.signals.SignalsPanel',
-    'template_timings_panel.panels.TemplateTimings.TemplateTimings',
-    'debug_toolbar.panels.profiling.ProfilingPanel',
-]
 
-MENU_SELECT_PARENTS = True
 SECRET_KEY = local_settings.SECRET_KEY
-ADMINS = ((local_settings.ADMIN_NAME, local_settings.ADMIN_EMAIL), )
-MANAGERS = ADMINS
 DATABASES = local_settings.DATABASES
-CACHE_DIR = op.join(local_settings.PROJECT_ROOT, 'cache')
-SITE_ID = 1
 ROOT_URLCONF = 'movies.urls'
 WSGI_APPLICATION = 'movies.wsgi.application'
 SESSION_SAVE_EVERY_REQUEST = True
@@ -68,14 +56,18 @@ TEMPLATES = [
         'DIRS': (os.path.join(BASE_DIR, 'templates'), ),
         'OPTIONS': {
             'context_processors': (
-                'django.contrib.auth.context_processors.auth',
-                'social_django.context_processors.backends',
-                'social_django.context_processors.login_redirect',
                 'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+                # Custom
                 'django.template.context_processors.i18n',
                 'django.template.context_processors.media',
                 'django.template.context_processors.static',
-                'django.template.context_processors.request',
+                # social_django
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
+                # Movies
                 'moviesapp.context_processors.variables',
             ),
             'loaders': [
@@ -96,13 +88,16 @@ if DEBUG:
     ]
 
 MIDDLEWARE = [
-    'django.middleware.common.CommonMiddleware',
+    'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # Custom
     'django.middleware.locale.LocaleMiddleware',
     'django.middleware.gzip.GZipMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
     'social_django.middleware.SocialAuthExceptionMiddleware',
     'custom_anonymous.middleware.AuthenticationMiddleware',
 ]
@@ -110,20 +105,20 @@ if DEBUG:
     MIDDLEWARE.append('debug_toolbar.middleware.DebugToolbarMiddleware')
 
 INSTALLED_APPS = [
+    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
-    'django.contrib.sites',
+    'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django.contrib.admin',
-    'django.contrib.admindocs',
-    'moviesapp',
+    # Custom
     'menu',
     'bootstrap_pagination',
     'rosetta',
     'modeltranslation',
     'social_django',
     'raven.contrib.django.raven_compat',
+    'moviesapp',
 ]
 if DEBUG:
     INSTALLED_APPS += [
@@ -132,10 +127,6 @@ if DEBUG:
     ]
 
 # Logging
-RAVEN_CONFIG = {
-    'dsn': local_settings.RAVEN_DSN,
-    'release': raven.fetch_git_sha(local_settings.GIT_ROOT),
-}
 if not DEBUG:
     LOGGING = {
         'version': 1,
@@ -183,18 +174,75 @@ if not DEBUG:
         },
     }
 
-# Admin
-ADMIN_REORDER = (('moviesapp', ('User', 'Movie', 'Record', 'List', 'Action', 'ActionRecord')), )
-
 # Authentication
 AUTH_USER_MODEL = 'moviesapp.User'
 AUTH_ANONYMOUS_MODEL = 'moviesapp.models.UserAnonymous'
 AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    # social_core
     'social_core.backends.vk.VKOAuth2',
     'social_core.backends.vk.VKAppOAuth2',
     'social_core.backends.facebook.FacebookOAuth2',
-    'django.contrib.auth.backends.ModelBackend',
 )
+AUTH_PASSWORD_VALIDATORS = [
+    {
+        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+    },
+]
+
+# Login
+LOGIN_REDIRECT_URL = '/'
+if IS_VK_DEV:
+    LOGIN_REDIRECT_URL = 'https://{}'.format(local_settings.HOST_MOVIES_TEST)
+LOGIN_URL = '/login/'
+LOGIN_ERROR_URL = '/login-error/'
+
+# Static files
+STATIC_ROOT = op.join(local_settings.PROJECT_ROOT, 'static')
+STATIC_URL = '/static/'
+
+# Media files
+MEDIA_ROOT = op.join(local_settings.PROJECT_ROOT, 'media')
+MEDIA_URL = '/media/'
+
+# Internationalization
+LANGUAGE_CODE = 'en'
+USE_I18N = True
+USE_L10N = True
+LANGUAGES = (
+    ('en', 'English'),
+    ('ru', 'Русский'),
+)
+LOCALE_PATHS = (op.join(local_settings.PROJECT_ROOT, 'project', 'locale'), )
+
+# Timezone
+TIME_ZONE = 'US/Eastern'
+USE_TZ = True
+
+# --== Modules settings ==--
+
+# social-auth-app-django
+SOCIAL_AUTH_VK_OAUTH2_KEY = local_settings.SOCIAL_AUTH_VK_OAUTH2_KEY
+SOCIAL_AUTH_VK_OAUTH2_SECRET = local_settings.SOCIAL_AUTH_VK_OAUTH2_SECRET
+SOCIAL_AUTH_VK_OAUTH2_SCOPE = ['friends', 'email']
+
+SOCIAL_AUTH_VK_APP_KEY = local_settings.SOCIAL_AUTH_VK_APP_KEY
+SOCIAL_AUTH_VK_APP_SECRET = local_settings.SOCIAL_AUTH_VK_APP_SECRET
+SOCIAL_AUTH_VK_APP_USER_MODE = 2
+
+SOCIAL_AUTH_FACEBOOK_KEY = local_settings.SOCIAL_AUTH_FACEBOOK_KEY
+SOCIAL_AUTH_FACEBOOK_SECRET = local_settings.SOCIAL_AUTH_FACEBOOK_SECRET
+SOCIAL_AUTH_FACEBOOK_SCOPE = ['email', 'user_friends', 'public_profile', 'user_location']
+
 SOCIAL_AUTH_USER_MODEL = AUTH_USER_MODEL
 SOCIAL_AUTH_PIPELINE = (
     # Get the information we can about the user and return it in a simple
@@ -237,43 +285,40 @@ SOCIAL_AUTH_PIPELINE = (
     # # Update the user record with any changed info from the auth service.
     # 'social_core.pipeline.user.user_details',
 
+    # Custom
     # We do this only if the user get's created for the first time.
     'moviesapp.social.load_user_data',
 )
-# Login
-LOGIN_REDIRECT_URL = '/'
-if IS_VK_DEV:
-    LOGIN_REDIRECT_URL = 'https://{}'.format(local_settings.HOST_MOVIES_TEST)
-LOGIN_URL = '/login/'
-LOGIN_ERROR_URL = '/login-error/'
 
-# Static files
-STATICFILES_FINDERS = (
-    'django.contrib.staticfiles.finders.FileSystemFinder',
-    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-)
-STATIC_ROOT = op.join(local_settings.PROJECT_ROOT, 'static')
-STATIC_URL = '/static/'
+# django-simple-menu
+MENU_SELECT_PARENTS = True
 
-# Media files
-MEDIA_ROOT = op.join(local_settings.PROJECT_ROOT, 'media')
-MEDIA_URL = '/media/'
+# django-debug-toolbar
+DEBUG_TOOLBAR_PANELS = [
+    'debug_toolbar.panels.timer.TimerPanel',
+    'debug_toolbar.panels.sql.SQLPanel',
+    'debug_toolbar.panels.signals.SignalsPanel',
+    'debug_toolbar.panels.profiling.ProfilingPanel',
+    # django-debug-toolbar-template-timings
+    'template_timings_panel.panels.TemplateTimings.TemplateTimings',
+]
 
-# Internationalization
-LANGUAGE_CODE = 'en'
-USE_I18N = True
-USE_L10N = True
-LANGUAGES = (
-    ('en', 'English'),
-    ('ru', 'Русский'),
-)
-LOCALE_PATHS = (op.join(local_settings.PROJECT_ROOT, 'project', 'locale'), )
-
-# Timezone
-TIME_ZONE = 'US/Eastern'
-USE_TZ = True
+# raven
+RAVEN_CONFIG = {
+    'dsn': local_settings.RAVEN_DSN,
+    'release': raven.fetch_git_sha(local_settings.GIT_ROOT),
+}
 
 # --== Project settings ==--
+
+ADMIN_REORDER = (('moviesapp', ('User', 'Movie', 'Record', 'List', 'Action', 'ActionRecord')), )
+
+# Social
+VK_BACKENDS_CREDENTIALS = {
+    'vk-app': (SOCIAL_AUTH_VK_APP_KEY, SOCIAL_AUTH_VK_APP_SECRET),
+    'vk-oauth2': (SOCIAL_AUTH_VK_OAUTH2_KEY, SOCIAL_AUTH_VK_OAUTH2_SECRET)
+}
+VK_BACKENDS = VK_BACKENDS_CREDENTIALS.keys()
 
 # Search settings
 MAX_RESULTS = 50
@@ -301,25 +346,6 @@ RECORDS_ON_PAGE = 50
 PEOPLE_ON_PAGE = 25
 FEED_DAYS = 7
 GOOGLE_ANALYTICS_ID = local_settings.GOOGLE_ANALYTICS_ID
-
-# Secrets
-SOCIAL_AUTH_VK_OAUTH2_KEY = local_settings.SOCIAL_AUTH_VK_OAUTH2_KEY
-SOCIAL_AUTH_VK_OAUTH2_SECRET = local_settings.SOCIAL_AUTH_VK_OAUTH2_SECRET
-SOCIAL_AUTH_VK_APP_KEY = local_settings.SOCIAL_AUTH_VK_APP_KEY
-SOCIAL_AUTH_VK_APP_SECRET = local_settings.SOCIAL_AUTH_VK_APP_SECRET
-SOCIAL_AUTH_FACEBOOK_KEY = local_settings.SOCIAL_AUTH_FACEBOOK_KEY
-SOCIAL_AUTH_FACEBOOK_SECRET = local_settings.SOCIAL_AUTH_FACEBOOK_SECRET
-
-# Social
-SOCIAL_AUTH_VK_APP_USER_MODE = 2
-SOCIAL_AUTH_VK_OAUTH2_SCOPE = ['friends', 'email']
-SOCIAL_AUTH_FACEBOOK_SCOPE = ['email', 'user_friends', 'public_profile', 'user_location']
-
-VK_BACKENDS_CREDENTIALS = {
-    'vk-app': (SOCIAL_AUTH_VK_APP_KEY, SOCIAL_AUTH_VK_APP_SECRET),
-    'vk-oauth2': (SOCIAL_AUTH_VK_OAUTH2_KEY, SOCIAL_AUTH_VK_OAUTH2_SECRET)
-}
-VK_BACKENDS = VK_BACKENDS_CREDENTIALS.keys()
 
 # API Keys
 TMDB_KEY = local_settings.TMDB_KEY
