@@ -113,6 +113,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # Custom
+    'google_analytics',
     'menu',
     'admin_reorder',
     'bootstrap_pagination',
@@ -325,6 +326,11 @@ ADMIN_REORDER = (
     },
 )
 
+#django-google-analytics-app
+GOOGLE_ANALYTICS = {
+    'google_analytics_id': local_settings.GOOGLE_ANALYTICS_ID,
+}
+
 # --== Project settings ==--
 
 # Social
@@ -359,7 +365,6 @@ MAX_RECOMMENDATIONS = 50
 RECORDS_ON_PAGE = 50
 PEOPLE_ON_PAGE = 25
 FEED_DAYS = 7
-GOOGLE_ANALYTICS_ID = local_settings.GOOGLE_ANALYTICS_ID
 
 # API Keys
 TMDB_KEY = local_settings.TMDB_KEY

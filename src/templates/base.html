@@ -34,9 +34,7 @@
     const language = '{{ LANGUAGE_CODE }}';
     const isVkUser = {{ user.is_vk_user|yesno:'true,false' }}
     const ratyImagesPath = '{% static 'bower/raty/lib/images/' %}';
-    {% if not DEBUG %}
-      const googleAnalyticsId = '{{ GOOGLE_ANALYTICS_ID }}';
-    {% endif %}
+    {% include 'includes/google_analytics.html' %}
   </script>
 
   <script src="{% static 'bower/jquery/dist/jquery.min.js' %}"></script>
@@ -55,9 +53,6 @@
 
   <script src="{% static 'js/ajax_loading.js' %}"></script>
   <script src="{% static 'js/main.js' %}"></script>
-  {% if not DEBUG %}
-    <script src="{% static 'js/analytics.js' %}"></script>
-  {% endif %}
   {% if user.is_vk_user %}
     <script src="//vk.com/js/api/xd_connection.js?2"></script>
     <script src="{% static 'js/vk.js' %}"></script>
