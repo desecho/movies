@@ -217,20 +217,6 @@ STATIC_URL = '/static/'
 MEDIA_ROOT = op.join(local_settings.PROJECT_ROOT, 'media')
 MEDIA_URL = '/media/'
 
-# Internationalization
-LANGUAGE_CODE = 'en'
-USE_I18N = True
-USE_L10N = True
-LANGUAGES = (
-    ('en', 'English'),
-    ('ru', 'Русский'),
-)
-LOCALE_PATHS = (op.join(local_settings.PROJECT_ROOT, 'project', 'locale'), )
-
-# Timezone
-TIME_ZONE = 'US/Eastern'
-USE_TZ = True
-
 # --== Modules settings ==--
 
 # social-auth-app-django
