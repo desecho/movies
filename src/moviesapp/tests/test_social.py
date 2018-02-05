@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 from django.urls import reverse
 
 from .base import BaseTestLoginCase
@@ -16,7 +15,7 @@ class PeopleTestCase(BaseTestLoginCase):
     ]
 
     def setUp(self):
-        super().setUp(self)
+        super().setUp()
         self.login('fox')
 
     def test_people(self):

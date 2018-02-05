@@ -1,12 +1,16 @@
 import json
 import os
+from datetime import datetime
 
+import pytz
 from bs4 import BeautifulSoup
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core.serializers.json import DjangoJSONEncoder
 from django.forms.models import model_to_dict
 from django.test import TestCase
+
+from moviesapp.models import ActionRecord
 
 
 class BaseTestCase(TestCase):
@@ -35,6 +39,12 @@ class BaseTestCase(TestCase):
     def setUp(self):
         User = get_user_model()
         self.user = User.objects.get(username=self.USER_USERNAME)
+
+        # Make sure we have current dates in action
+        action_records = ActionRecord.objects.all()
+        for action_record in action_records:
+            action_record.date = datetime.now(pytz.utc)
+            action_record.save()
 
     def login(self, username=None):
         if username is None:

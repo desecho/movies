@@ -9,7 +9,7 @@
         "list": 1,
         "comment": null,
         "rating": null,
-        "date": "2017-04-30T13:39:38.246"
+        "date": "2017-04-30T13:39:38Z"
     }
 },
 {
@@ -22,7 +22,7 @@
         "list": 1,
         "comment": null,
         "rating": null,
-        "date": "2017-04-30T13:39:46.298"
+        "date": "2017-04-30T13:39:46Z"
     }
 },
 {
@@ -35,7 +35,7 @@
         "list": 2,
         "comment": null,
         "rating": null,
-        "date": "2017-04-30T13:39:56.108"
+        "date": "2017-04-30T13:39:56Z"
     }
 },
 {
@@ -48,7 +48,7 @@
         "list": 1,
         "comment": null,
         "rating": null,
-        "date": "2017-04-30T13:40:10.753"
+        "date": "2017-04-30T13:40:10Z"
     }
 },
 {
@@ -61,7 +61,7 @@
         "list": 1,
         "comment": null,
         "rating": null,
-        "date": "2017-04-30T19:26:42.607"
+        "date": "2017-04-30T19:26:42Z"
     }
 },
 {
@@ -74,7 +74,7 @@
         "list": null,
         "comment": null,
         "rating": 5,
-        "date": "2017-04-30T19:27:31.467"
+        "date": "2017-04-30T19:27:31Z"
     }
 },
 {
@@ -87,7 +87,7 @@
         "list": null,
         "comment": null,
         "rating": 4,
-        "date": "2017-04-30T19:27:34.097"
+        "date": "2017-04-30T19:27:34Z"
     }
 },
 {
@@ -100,7 +100,7 @@
         "list": null,
         "comment": null,
         "rating": 3,
-        "date": "2017-04-30T19:27:43.015"
+        "date": "2017-04-30T19:27:43Z"
     }
 }
 ]

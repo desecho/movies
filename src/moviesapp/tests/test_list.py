@@ -35,10 +35,10 @@ class AddMoviesTestCase(BaseTestLoginCase):
     def test_list_watched(self):
         url = reverse('list', args=('watched', ))
         response = self.client.get(url)
-        soup = self.get_soup(response)
-        titles = soup.findAll('div', {'class': 'title'})
-        titles = [title.span.attrs['title'] for title in titles]
+        records = response.context_data['records']
+        titles = [record.movie.title for record in records]
         self.assertListEqual(titles, ['The X Files', 'Dogma', 'The Matrix'])
+        soup = self.get_soup(response)
         counters = soup.find('div', id='movie-count').findAll('span')
         conter_watched = counters[0].get_text()
         conter_to_watch = counters[1].get_text()
