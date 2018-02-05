@@ -1,6 +1,7 @@
 -r requirements.txt
 
 # Tests
+flexmock>=0.10.2
 beautifulsoup4>=4.5.1
 
 # Coverage
