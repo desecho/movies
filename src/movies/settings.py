@@ -370,7 +370,6 @@ FEED_DAYS = 7
 TMDB_KEY = local_settings.TMDB_KEY
 OMDB_KEY = local_settings.OMDB_KEY
 
-
 # This is here to fix the problem with static files on dev
 try:
     from local_settings2 import *  # noqa pylint: disable=wildcard-import
