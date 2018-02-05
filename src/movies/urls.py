@@ -4,6 +4,7 @@ from django.conf import settings
 from django.conf.urls import include, url
 from django.contrib import admin
 from django.contrib.auth.views import login
+from django.urls import path
 from django.views.i18n import JavaScriptCatalog
 
 from moviesapp.views.list import (
@@ -63,7 +64,7 @@ urlpatterns = [
     url(r'^friends/$', FriendsView.as_view(), name='friends'),
 
     # Admin
-    url(r'^admin/', admin.site.urls),
+    path('admin/', admin.site.urls),
 
     # Services
     url(r'^jsi18n/$',
