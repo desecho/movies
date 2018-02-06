@@ -33,7 +33,6 @@
   <script>
     const language = '{{ LANGUAGE_CODE }}';
     const isVkUser = {{ user.is_vk_user|yesno:'true,false' }}
-    const ratyImagesPath = '{% static 'bower/raty/lib/images/' %}';
   </script>
   {% include 'includes/google_analytics.html' %}
   <script src="{% static 'bower/jquery/dist/jquery.min.js' %}"></script>

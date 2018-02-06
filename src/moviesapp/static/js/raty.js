@@ -12,7 +12,7 @@ $(function() {
     cancelHint: gettext('Cancel rating'),
     noRatedMsg: gettext('No rating yet'),
     cancel: true,
-    path: ratyImagesPath,
+    starType : 'i'
   }
 
   const scoreSettings = {

@@ -5,7 +5,9 @@
 {% load avatar %}
 {% load movie_count %}
 {% load i18n %}
-
+{% block head %}
+  <link href="{% static 'bower/raty/lib/jquery.raty.css' %}" rel="stylesheet">
+{% endblock %}
 {% block content %}
 <div ng-controller="ListController">
 <div id="movie-count">

@@ -38,6 +38,9 @@
 .review {
   padding-top: 10px;
 }
+.review button {
+  margin-bottom: 15px;
+}
 
 .recommendation-review {
   vertical-align: middle;
