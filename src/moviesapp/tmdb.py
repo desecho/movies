@@ -102,12 +102,14 @@ def get_movies_from_tmdb(query, type_, options, user, lang):
                 break
             if tmdb_id in user_movies_tmdb_ids:
                 continue
+            poster = get_poster_from_tmdb(movie['poster_path'])
             movie = {
                 'id': tmdb_id,
                 'releaseDate': movie['release_date'],
                 'popularity': movie['popularity'],
                 'title': movie['title'],
-                'poster': get_poster_url('small', get_poster_from_tmdb(movie['poster_path'])),
+                'poster': get_poster_url('small', poster),
+                'poster2x': get_poster_url('normal', poster),
             }
             movies.append(movie)
         if options['popular_only']:

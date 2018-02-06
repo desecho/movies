@@ -37,6 +37,11 @@ function ($scope, SearchMovie, AddToListFromDb) {
         console.log(response);
         if (response.status === 'success') {
           $scope.searchResults = response.movies;
+          // It is not working without the timeout.
+          setTimeout(function(){
+            $('.poster img').removeAttr('data-rjs-processed');
+            retinajs();
+          }, 500);
         } else if (response.status === 'not_found') {
           $scope.nothingFound = true;
         } else {

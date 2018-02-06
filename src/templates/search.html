@@ -31,7 +31,7 @@
     </form>
     <div id="results" class="results" ng-repeat="searchResult in searchResults">
         <div class="movie" id="movie[[searchResult.id]]">
-            <div class="poster"><img ng-src="[[searchResult.poster]]" alt="[[searchResult.title]] poster"/></div>
+            <div class="poster"><img ng-src="[[searchResult.poster]]" alt="[[searchResult.title]] poster" data-rjs="[[searchResult.poster2x]]" /></div>
             <div class="title">"[[searchResult.title]]"
             <div class="add-to-list-buttons">
             <a href="javascript:void(0)" title="{% trans 'Add to the list' %} {% trans 'Watched' %}" ng-click="addToListFromDb(searchResult.id, 1)"><i class="fa fa-eye"></i></a>

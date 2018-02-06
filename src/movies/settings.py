@@ -343,6 +343,7 @@ NO_POSTER_NORMAL_IMAGE_URL = STATIC_URL + 'img/no_poster_normal.png'
 # "original"
 POSTER_SIZE_SMALL = 'w92'
 POSTER_SIZE_NORMAL = 'w185'
+# This one is only used for vk.
 POSTER_SIZE_BIG = 'w500'
 POSTER_BASE_URL = 'http://image.tmdb.org/t/p/'
 

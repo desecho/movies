@@ -114,8 +114,8 @@
           </div>
         </div>
           <div class="poster">
-              <img src="{{ record.movie.poster_normal }}" data-rjs="2" alt="{{ record.movie.title }} poster" ng-show="mode == 'full'"/>
-              <img src="{{ record.movie.poster_small }}" data-rjs="2" alt="{{ record.movie.title }} poster" ng-show="mode != 'full'"/>
+              <img src="{{ record.movie.poster_normal }}" data-rjs="{{ record.movie.poster_big }}" alt="{{ record.movie.title }} poster" ng-show="mode == 'full'"/>
+              <img src="{{ record.movie.poster_small }}" data-rjs="{{ record.movie.poster_normal }}" alt="{{ record.movie.title }} poster" ng-show="mode != 'full'"/>
           </div>
           <div class="details">
             {% if record.movie.imdb_rating %}<div class="imdb-rating"><span class="item-desc">{% trans 'IMDb Rating' %}:</span> {{ record.movie.imdb_rating }}</div> {% endif %}

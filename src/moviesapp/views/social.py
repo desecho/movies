@@ -27,6 +27,7 @@ class FeedView(TemplateAnonymousView):
         users = self.request.user.get_users(friends=list_name == 'friends')
         actions = actions.filter(user__in=users)
         posters = [action.movie.poster_small for action in actions]
+        posters_2x = [action.movie.poster_normal for action in actions]
         actions_output = []
 
         i = 0
@@ -36,6 +37,7 @@ class FeedView(TemplateAnonymousView):
                 'action': action,
                 'movie': action.movie,
                 'movie_poster': posters[i],
+                'movie_poster_2x': posters_2x[i],
                 'list': action.list,
                 'comment': action.comment,
                 'rating': action.rating,
