@@ -18,8 +18,8 @@ social-auth-app-django==2.1.0
 
 # django-bootstrap-pagination==1.6.2
 # Contains open PRs:
-# - https://github.com/jmcclell/django-bootstrap-pagination/pull/69 - Add Django 2 support
 # - https://github.com/jmcclell/django-bootstrap-pagination/pull/61 - Added Russian locale
+# - Branch bootstrap4. No PR because the realization is not the best and there is already a WIP PR for this.
 -e git+https://github.com/desecho/django-bootstrap-pagination.git@fixes#egg=django-bootstrap-pagination
 
 # django-modeltranslation==0.12.2
@@ -31,6 +31,7 @@ social-auth-app-django==2.1.0
 # django-modeladmin-reorder==0.2
 # Django 2 support is only available in master
 -e git+https://github.com/mishbahr/django-modeladmin-reorder.git@fb40efa6d3d0668f3323aaca8e5c4486c0ffdd7b#egg=django-modeladmin-reorder
+
 
 # Requests
 requests==2.18.4
