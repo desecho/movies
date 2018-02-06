@@ -4,9 +4,6 @@
 flexmock>=0.10.2
 beautifulsoup4>=4.5.1
 
-# Coverage
-codecov>=1.6
-
 # Pytest
 pytest>=3.0
 pytest-cov>=1.8
