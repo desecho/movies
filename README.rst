@@ -26,8 +26,8 @@ Installation instructions
 Development
 --------------
 
-| Use `clean.sh` to automatically prettify your code.
-| Use `tox` for testing and linting.
+| Use ``clean.sh`` to automatically prettify your code.
+| Use ``tox`` for testing and linting.
 
 
 .. |Requirements Status| image:: https://requires.io/github/desecho/movies/requirements.svg?branch=master
