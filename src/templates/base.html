@@ -28,6 +28,9 @@
       {% block content %}{% endblock %}
     </div>
   </div>
+  <footer class="container-fluid py-3">
+    Copyright © {% now 'Y' %} <a href="mailto:{{ ADMIN_EMAIL }}">{{ ADMIN_EMAIL }}</a>.
+  </footer>
   <script src="{% url 'javascript-catalog' %}"></script>
   {% get_current_language as LANGUAGE_CODE %}
   <script>
@@ -58,5 +61,4 @@
   <!-- Retina has to be in the bottom because it breaks other scripts -->
   <script src="{% static 'bower/retinajs/dist/retina.min.js' %}"></script>
 {% block js %}{% endblock %}
-
 </body>
