@@ -39,6 +39,6 @@ Development
 .. |Build Status| image:: https://travis-ci.org/desecho/movies.svg?branch=master
    :target: https://travis-ci.org/desecho/movies
 
-.. _TMDb: https://www.djangoproject.com
+.. _TMDb: https://www.themoviedb.org/
 .. _OMDb: http://www.omdbapi.com/
 .. _ansible-playbook-server: https://github.com/desecho/ansible-playbook-server
