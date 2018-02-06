@@ -48,7 +48,7 @@ LOCALE_PATHS = (op.join(local_settings.PROJECT_ROOT, 'project', 'src', 'locale')
 
 # Timezone
 TIME_ZONE = 'US/Eastern'
-USE_TZ = False
+USE_TZ = True
 
 TEMPLATES = [
     {
