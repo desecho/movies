@@ -230,6 +230,7 @@ MEDIA_URL = '/media/'
 
 # django-registration-redux
 ACCOUNT_ACTIVATION_DAYS = 7
+REGISTRATION_FORM = 'registration.forms.RegistrationFormUniqueEmail'
 
 # social-auth-app-django
 SOCIAL_AUTH_VK_OAUTH2_KEY = local_settings.SOCIAL_AUTH_VK_OAUTH2_KEY
@@ -359,6 +360,7 @@ POSTER_SIZE_NORMAL = 'w185'
 POSTER_SIZE_BIG = 'w500'
 POSTER_BASE_URL = 'http://image.tmdb.org/t/p/'
 
+AVATAR_SIZES = {'small': 100, 'big': 200}
 IMDB_BASE_URL = 'http://www.imdb.com/title/'
 MAX_RECOMMENDATIONS = 50
 RECORDS_ON_PAGE = 50
