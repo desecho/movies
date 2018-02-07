@@ -40,9 +40,10 @@ urlpatterns = [
     # Vk
     url(r'^upload-poster-to-wall/$', UploadPosterToWallView.as_view(), name='upload_poster_to_wall'),
 
-    # User
-    url(r'^login/$', login, {'template_name': 'user/login.html'}, name='login'),
-    url(r'^logout/$', logout_view, name='logout'),
+    # Accounts
+    url(r'^accounts/login/', login, {'template_name': 'user/login.html'}, name='login'),
+    url(r'^accounts/logout/', logout_view, name='logout'),
+    url(r'^accounts/', include('registration.backends.default.urls')),
 
     # Preferences
     url(r'^preferences/$', PreferencesView.as_view(), name='preferences'),

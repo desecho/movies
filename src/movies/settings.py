@@ -31,6 +31,13 @@ ROOT_URLCONF = 'movies.urls'
 WSGI_APPLICATION = 'movies.wsgi.application'
 SESSION_SAVE_EVERY_REQUEST = True
 
+# Email
+EMAIL_USE_TLS = local_settings.EMAIL_USE_TLS
+EMAIL_HOST = local_settings.EMAIL_HOST
+EMAIL_HOST_USER = local_settings.EMAIL_HOST_USER
+EMAIL_HOST_PASSWORD = local_settings.EMAIL_HOST_PASSWORD
+EMAIL_PORT = local_settings.EMAIL_PORT
+
 # Allowed hosts
 ALLOWED_HOSTS = [local_settings.PROJECT_DOMAIN]
 if IS_VK_DEV:
@@ -115,6 +122,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # Custom
     'google_analytics',
+    'registration',
     'menu',
     'admin_reorder',
     'bootstrap_pagination',
@@ -207,7 +215,7 @@ AUTH_PASSWORD_VALIDATORS = [
 LOGIN_REDIRECT_URL = '/'
 if IS_VK_DEV:
     LOGIN_REDIRECT_URL = 'https://{}'.format(local_settings.HOST_MOVIES_TEST)
-LOGIN_URL = '/login/'
+LOGIN_URL = '/accounts/login/'
 LOGIN_ERROR_URL = '/login-error/'
 
 # Static files
@@ -219,6 +227,9 @@ MEDIA_ROOT = op.join(local_settings.PROJECT_ROOT, 'media')
 MEDIA_URL = '/media/'
 
 # --== Modules settings ==--
+
+# django-registration-redux
+ACCOUNT_ACTIVATION_DAYS = 7
 
 # social-auth-app-django
 SOCIAL_AUTH_VK_OAUTH2_KEY = local_settings.SOCIAL_AUTH_VK_OAUTH2_KEY

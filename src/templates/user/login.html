@@ -15,7 +15,7 @@
     <input type="text" class="form-control" name="username" required {% if form.username.value %} value="{{ form.username.value}}" {% endif %} autofocus placeholder="{% trans 'Username' %}">
   </div>
   <div class="form-group">
-    <input type="password" class="form-control" name="password" required {% if form.password.value %} value="{{ form.password.value}}" {% endif %} placeholder="{% trans 'Password' %}">
+    <input type="password" class="form-control" name="password" required placeholder="{% trans 'Password' %}">
   </div>
   <div class="form-group">
     <div class="col-sm-offset-2">
@@ -23,17 +23,26 @@
     </div>
   </div>
   <input type="hidden" name="next" value="{{ next }}">
+  {% if DEBUG %}
   <div class="form-group">
-  <div class="col-sm-offset-2">
-    {% if DEBUG %}
-    <a href="{% url 'social:begin' 'facebook' %}" class="btn btn-block btn-social btn-facebook">
-      <span class="fa fa-facebook"></span> {% trans 'Log in with' %} Facebook
-    </a>
-    <br>
-    {% endif %}
-    <a href="{% url 'social:begin' 'vk-oauth2' %}" class="btn btn-block btn-social btn-vk">
-      <span class="fa fa-vk"></span> {% trans 'Log in with' %} VK
-    </a>
+    <div class="col-sm-offset-2">
+      <a href="{% url 'social:begin' 'facebook' %}" class="btn btn-block btn-social btn-facebook">
+        <span class="fa fa-facebook"></span> {% trans 'Log in with' %} Facebook
+      </a>
+    </div>
+  </div>
+  {% endif %}
+  <div class="form-group">
+    <div class="col-sm-offset-2">
+      <a href="{% url 'social:begin' 'vk-oauth2' %}" class="btn btn-block btn-social btn-vk">
+        <span class="fa fa-vk"></span> {% trans 'Log in with' %} VK
+      </a>
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-sm-offset-2">
+      <a href="{% url 'registration_register' %}" class="btn btn-block btn-primary">{% trans 'Register' %}</a>
+    </div>
   </div>
   </div>
 </form>
