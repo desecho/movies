@@ -26,7 +26,7 @@
     {% get_available_languages as LANGUAGES %}
     {% get_language_info_list for LANGUAGES as languages %}
     {% for language in languages %}
-    <label class="radio">
+    <label class="radio mr-2">
       <input type="radio" ng-click="savePreferences(true)" name="lang" value="{{ language.code }}" {% ifequal user.language language.code %} checked {% endifequal %}> {{ language.name_local }}
     </label>
     {% endfor %}

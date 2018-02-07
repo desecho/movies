@@ -152,7 +152,9 @@ label {
     float: right;
 }
 
-.search-panel-additional label, #preferences label {display: block;}
+.search-panel-additional label {
+  display: block;
+}
 
 .people-user, .trailers a {
   margin-left: 10px;
@@ -178,4 +180,9 @@ footer {
   grid-row-start: 2;
   grid-row-end: 3;
   text-align: right;
+}
+
+.col-form-label {
+  padding-top: 0;
+  padding-bottom: 0;
 }
