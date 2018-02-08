@@ -15,105 +15,114 @@
 
 app.factory('RemoveMovie', ['$resource', function($resource) {
   return $resource(urlRemoveMovie, {}, {
-    post: {method: 'POST', headers: headers},
+    post: {
+      method: 'POST',
+      headers: headers
+    },
   });
 }]);
 
 app.factory('SaveComment', ['$resource', function($resource) {
   return $resource(urlSaveComment, {}, {
-    post: {method: 'POST', headers: headers},
+    post: {
+      method: 'POST',
+      headers: headers
+    },
   });
 }]);
 
 app.controller('ListController', ['$scope', 'RemoveMovie', 'SaveComment',
 
-function($scope, RemoveMovie, SaveComment) {
-  function removeMovieFromPage(id) {
-    function checkIfNoRecords() {
-      if (!$('.movie').length) {
-        $('#results')[0].innerHTML = gettext('The list is empty') + '.';
-      }
-    }
-    $('#record' + id).fadeOut('fast', function() {
-      $(this).remove();
-      checkIfNoRecords();
-    });
-  }
-
-  $scope.openUrl = function(url) {
-    window.location.href = url;
-  };
-
-  $scope.removeMovie = function(id) {
-    function error() {
-      displayMessage(gettext('Error removing the movie'));
-    }
-
-    RemoveMovie.post($.param({id: id}), function(response) {
-      if (response.status === 'success') {
-        removeMovieFromPage(id);
-      } else {
-        error();
-      }
-    }, function() {
-        error();
-    });
-  };
-
-  $scope.switchMode = function(newMode) {
-    function deactivateModeMinimal() {
-      $('.poster, .comment, .release-date-label, .wall-post').show();
-      $('.comment-button').hide();
-      $('.details, .imdb-rating, .review, .release-date').css('display', '');
-      $('.review').css('padding-top', '10px');
-      $('.release-date, .imdb-rating').css({
-        'float': '',
-        'margin-right': '0',
-      });
-      $('.movie').removeClass('movie-minimal');
-    }
-    if (newMode === 'minimal') {
-      activateModeMinimal();
-    } else {
-      deactivateModeMinimal();
-    }
-    applySettings({
-      mode: newMode,
-    }, false);
-    $scope.mode = newMode;
-  };
-
-  $scope.saveComment = function(id) {
-    function showError() {
-      displayMessage(gettext('Error saving a comment'));
-    }
-    const comment = $('#comment' + id).val();
-    SaveComment.post($.param({
-      id: id,
-      comment: comment,
-    }), function(response) {
-      if (response.status == 'success') {
-        if (!comment) {
-          $scope.toggleCommentArea(id);
+  function($scope, RemoveMovie, SaveComment) {
+    function removeMovieFromPage(id) {
+      function checkIfNoRecords() {
+        if (!$('.movie').length) {
+          $('#results')[0].innerHTML = gettext('The list is empty') + '.';
         }
-      } else {
-        showError();
       }
-    }, function() {
-      showError();
-    });
-  };
+      $('#record' + id).fadeOut('fast', function() {
+        $(this).remove();
+        checkIfNoRecords();
+      });
+    }
 
-  $scope.toggleCommentArea = function(id) {
-    $('#comment-area' + id).toggle();
-    $('#comment-area-button' + id).toggle();
-    $('#comment' + id).focus();
-  };
-  $scope.mode = mode;
-  if (isVkUser) {
-    $scope.isVkApp = isVkApp;
+    $scope.openUrl = function(url) {
+      window.location.href = url;
+    };
+
+    $scope.removeMovie = function(id) {
+      function error() {
+        displayMessage(gettext('Error removing the movie'));
+      }
+
+      RemoveMovie.post($.param({
+        id: id
+      }), function(response) {
+        if (response.status === 'success') {
+          removeMovieFromPage(id);
+        } else {
+          error();
+        }
+      }, function() {
+        error();
+      });
+    };
+
+    $scope.switchMode = function(newMode) {
+      function deactivateModeMinimal() {
+        $('.poster, .comment, .release-date-label, .wall-post').show();
+        $('.comment-button').hide();
+        $('.details, .imdb-rating, .review, .release-date').css('display', '');
+        $('.review').css('padding-top', '10px');
+        $('.release-date, .imdb-rating').css({
+          'float': '',
+          'margin-right': '0',
+        });
+        $('.movie').removeClass('movie-minimal');
+      }
+      if (newMode === 'minimal') {
+        activateModeMinimal();
+      } else {
+        deactivateModeMinimal();
+      }
+      applySettings({
+        mode: newMode,
+      }, false);
+      $scope.mode = newMode;
+    };
+
+    $scope.saveComment = function(id) {
+      function showError() {
+        displayMessage(gettext('Error saving a comment'));
+      }
+      const comment = $('#comment' + id).val();
+      SaveComment.post($.param({
+        id: id,
+        comment: comment,
+      }), function(response) {
+        if (response.status == 'success') {
+          if (!comment) {
+            $scope.toggleCommentArea(id);
+          }
+        } else {
+          showError();
+        }
+      }, function() {
+        showError();
+      });
+    };
+
+    $scope.toggleCommentArea = function(id) {
+      $('#comment-area' + id).toggle();
+      $('#comment-area-button' + id).toggle();
+      $('#comment' + id).focus();
+    };
+    $scope.mode = mode;
+    if (isVkUser) {
+      $scope.isVkApp = isVkApp;
+    }
   }
-}]);
+]);
 
 function changeRating(id, rating, element) {
   function error() {
@@ -237,4 +246,3 @@ function toggleRecommendation() { // eslint-disable-line no-unused-vars
   retinajs();
   $('#results').show();
 })();
-

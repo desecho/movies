@@ -5,7 +5,9 @@
   ],
   "rules": {
     "require-jsdoc": 0,
-    "max-len": ["error", { "code": 119 }],
+    "max-len": ["error", {
+      "code": 119
+    }],
     "jquery/no-ajax": 2,
     "jquery/no-ajax-events": 2,
     "jquery/no-animate": 2,

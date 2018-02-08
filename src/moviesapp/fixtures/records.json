@@ -1,62 +1,61 @@
-[
-{
+[{
     "model": "moviesapp.record",
     "pk": 1,
     "fields": {
-        "user": 2,
-        "movie": 1,
-        "list": 1,
-        "rating": 5,
-        "comment": "",
-        "date": "2017-04-30T13:39:38Z"
+      "user": 2,
+      "movie": 1,
+      "list": 1,
+      "rating": 5,
+      "comment": "",
+      "date": "2017-04-30T13:39:38Z"
     }
-},
-{
+  },
+  {
     "model": "moviesapp.record",
     "pk": 2,
     "fields": {
-        "user": 2,
-        "movie": 2,
-        "list": 1,
-        "rating": 4,
-        "comment": "",
-        "date": "2017-04-30T13:39:46Z"
+      "user": 2,
+      "movie": 2,
+      "list": 1,
+      "rating": 4,
+      "comment": "",
+      "date": "2017-04-30T13:39:46Z"
     }
-},
-{
+  },
+  {
     "model": "moviesapp.record",
     "pk": 3,
     "fields": {
-        "user": 2,
-        "movie": 3,
-        "list": 2,
-        "rating": 0,
-        "comment": "",
-        "date": "2017-04-30T13:39:56Z"
+      "user": 2,
+      "movie": 3,
+      "list": 2,
+      "rating": 0,
+      "comment": "",
+      "date": "2017-04-30T13:39:56Z"
     }
-},
-{
+  },
+  {
     "model": "moviesapp.record",
     "pk": 4,
     "fields": {
-        "user": 3,
-        "movie": 4,
-        "list": 1,
-        "rating": 0,
-        "comment": "",
-        "date": "2017-04-30T13:40:10Z"
+      "user": 3,
+      "movie": 4,
+      "list": 1,
+      "rating": 0,
+      "comment": "",
+      "date": "2017-04-30T13:40:10Z"
     }
-},
-{
+  },
+  {
     "model": "moviesapp.record",
     "pk": 5,
     "fields": {
-        "user": 2,
-        "movie": 5,
-        "list": 1,
-        "rating": 3,
-        "comment": "",
-        "date": "2017-04-30T19:26:42Z"
+      "user": 2,
+      "movie": 5,
+      "list": 1,
+      "rating": 3,
+      "comment": "",
+      "date": "2017-04-30T19:26:42Z"
     }
-}
+  }
 ]

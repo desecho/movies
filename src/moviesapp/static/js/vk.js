@@ -39,7 +39,9 @@ ${myRating} - ${ratingPost}.`;
     }
 
     function createWallPost() {
-      const post = {message: createWallPostMessage()};
+      const post = {
+        message: createWallPostMessage()
+      };
       if (photo) {
         post.attachments = photo;
       }

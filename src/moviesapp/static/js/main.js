@@ -64,4 +64,3 @@ if (!isVkUser) {
   $('.vk-app-hide').show();
 }
 $('#right-nav-bar').show();
-
