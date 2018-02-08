@@ -28,7 +28,8 @@
     "eslint-plugin-jquery": "latest"
   },
   "scripts": {
-    "lint": "eslint"
+    "jslint": "eslint",
+    "csslint": "csscomb-linter"
   },
   "private": true
 }
