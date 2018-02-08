@@ -10,12 +10,6 @@ register = template.Library()
 @register.simple_tag
 def avatar(user, size='small'):
     def get_url():
-        if user.avatar:
-            if size == 'small':
-                return user.avatar
-            elif size == 'big':
-                return user.avatar_big
-
         params = parse.urlencode({'s': str(avatar_size)})
         hash_ = hashlib.md5(user.email.lower().encode('utf-8')).hexdigest()  # nosec
         return f'https://www.gravatar.com/avatar/{hash_}?{params}'
