@@ -21,43 +21,43 @@
   <title>{% block title %}Movies{% endblock %}</title>
 </head>
 <body>
-  <div>
-    {% include 'includes/menu.html' %}
-    <div id="content" class="container-fluid mt-3">
-      {% block content %}{% endblock %}
-    </div>
+<div>
+  {% include 'includes/menu.html' %}
+  <div id="content" class="container-fluid mt-3">
+    {% block content %}{% endblock %}
   </div>
-  <footer class="container-fluid py-3">
-    Copyright © {% now 'Y' %} <a href="mailto:{{ ADMIN_EMAIL }}">{{ ADMIN_EMAIL }}</a>.
-  </footer>
-  <script src="{% url 'javascript-catalog' %}"></script>
-  {% get_current_language as LANGUAGE_CODE %}
-  <script>
-    const language = '{{ LANGUAGE_CODE }}';
-    const isVkUser = {{ user.is_vk_user|yesno:'true,false' }}
-  </script>
-  {% include 'includes/google_analytics.html' %}
-  <script src="{% static 'bower/jquery/dist/jquery.min.js' %}"></script>
-  <script src="{% static 'bower/mprogress/build/js/mprogress.min.js' %}"></script>
-  <script src="{% static 'bower/jgrowl/jquery.jgrowl.min.js' %}"></script>
-  <script src="{% static 'bower/tether/dist/js/tether.min.js' %}"></script>
-  <script src="{% static 'bower/bootstrap/js/dist/button.js' %}"></script>
-  <script src="{% static 'bower/popper.js/dist/umd/popper.min.js' %}"></script>
-  <script src="{% static 'bower/bootstrap/dist/js/bootstrap.min.js' %}"></script>
+</div>
+<footer class="container-fluid py-3">
+  Copyright © {% now 'Y' %} <a href="mailto:{{ ADMIN_EMAIL }}">{{ ADMIN_EMAIL }}</a>.
+</footer>
+<script src="{% url 'javascript-catalog' %}"></script>
+{% get_current_language as LANGUAGE_CODE %}
+<script>
+  const language = '{{ LANGUAGE_CODE }}';
+  const isVkUser = {{ user.is_vk_user|yesno:'true,false' }};
+</script>
+{% include 'includes/google_analytics.html' %}
+<script src="{% static 'bower/jquery/dist/jquery.min.js' %}"></script>
+<script src="{% static 'bower/mprogress/build/js/mprogress.min.js' %}"></script>
+<script src="{% static 'bower/jgrowl/jquery.jgrowl.min.js' %}"></script>
+<script src="{% static 'bower/tether/dist/js/tether.min.js' %}"></script>
+<script src="{% static 'bower/bootstrap/js/dist/button.js' %}"></script>
+<script src="{% static 'bower/popper.js/dist/umd/popper.min.js' %}"></script>
+<script src="{% static 'bower/bootstrap/dist/js/bootstrap.min.js' %}"></script>
 
-  <script src="{% static 'bower/angular/angular.js' %}"></script>
-  <script src="{% static 'bower/angular-loading-bar/build/loading-bar.min.js' %}"></script>
-  <script src="{% static 'bower/angular-resource/angular-resource.min.js' %}"></script>
-  <script src="{% static 'bower/angular-route/angular-route.min.js' %}"></script>
-  <script src="{% static 'bower/angular-bootstrap/ui-bootstrap-tpls.min.js' %}"></script>
+<script src="{% static 'bower/angular/angular.js' %}"></script>
+<script src="{% static 'bower/angular-loading-bar/build/loading-bar.min.js' %}"></script>
+<script src="{% static 'bower/angular-resource/angular-resource.min.js' %}"></script>
+<script src="{% static 'bower/angular-route/angular-route.min.js' %}"></script>
+<script src="{% static 'bower/angular-bootstrap/ui-bootstrap-tpls.min.js' %}"></script>
 
-  <script src="{% static 'js/ajax_loading.js' %}"></script>
-  <script src="{% static 'js/main.js' %}"></script>
-  {% if user.is_vk_user %}
-    <script src="//vk.com/js/api/xd_connection.js?2"></script>
-    <script src="{% static 'js/vk.js' %}"></script>
-  {% endif %}
-  <!-- Retina has to be in the bottom because it breaks other scripts -->
-  <script src="{% static 'bower/retinajs/dist/retina.min.js' %}"></script>
+<script src="{% static 'js/ajax_loading.js' %}"></script>
+<script src="{% static 'js/main.js' %}"></script>
+{% if user.is_vk_user %}
+  <script src="//vk.com/js/api/xd_connection.js?2"></script>
+  <script src="{% static 'js/vk.js' %}"></script>
+{% endif %}
+<!-- Retina has to be in the bottom because it breaks other scripts -->
+<script src="{% static 'bower/retinajs/dist/retina.min.js' %}"></script>
 {% block js %}{% endblock %}
 </body>

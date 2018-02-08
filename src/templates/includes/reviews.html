@@ -2,11 +2,12 @@
 {% load get %}
 
 {% if reviews|get:record.id %}
-{% for review in reviews|get:record.id %}
-  <div class="recommendation-review">
-    <a href="{% url 'people' review.user.username 'watched' %}">{% avatar review.user %}</a>
-    {% if review.rating %}<div class="rating" data-rating="{{ review.rating }}"></div>{% endif %}
-    {% if review.comment %}{{ review.comment }}{% endif %}
-  </div>
-{% endfor %}
+  {% for review in reviews|get:record.id %}
+    <div class="recommendation-review">
+      <a href="{% url 'people' review.user.username 'watched' %}">{% avatar review.user %}</a>
+      {% if review.rating %}
+        <div class="rating" data-rating="{{ review.rating }}"></div>{% endif %}
+      {% if review.comment %}{{ review.comment }}{% endif %}
+    </div>
+  {% endfor %}
 {% endif %}

@@ -9,193 +9,227 @@
   <link href="{% static 'bower/raty/lib/jquery.raty.css' %}" rel="stylesheet">
 {% endblock %}
 {% block content %}
-<div ng-controller="ListController">
-<div id="movie-count">
-  {% if anothers_account %}
-    {% movie_count anothers_account %}
-  {% else %}
-    {% movie_count user %}
-  {% endif %}
+  <div ng-controller="ListController">
+    <div id="movie-count">
+      {% if anothers_account %}
+        {% movie_count anothers_account %}
+      {% else %}
+        {% movie_count user %}
+      {% endif %}
 
-  {% if anothers_account %}
-    <br>{{ anothers_account }}<br>
-    {% avatar_big anothers_account %}
-  {% endif %}
-</div>
+      {% if anothers_account %}
+        <br>{{ anothers_account }}<br>
+        {% avatar_big anothers_account %}
+      {% endif %}
+    </div>
 
-{% if anothers_account %}
-  <div class="btn-group btn-group-toggle" data-toggle="buttons">
-    <label class="btn btn-secondary {% ifequal list_id 1 %} active {% endifequal %}" title="{% trans 'Watched' %}"
-           ng-click="openUrl('{% url 'people' anothers_account.username 'watched' %}')">
-      <input type="radio">{% trans 'Watched' %}
-    </label>
-    <label class="btn btn-secondary {% ifequal list_id 2 %} active {% endifequal %}" title="{% trans 'To Watch' %}"
-           ng-click="openUrl('{% url 'people' anothers_account.username 'to-watch' %}')">
-      <input type="radio">{% trans 'To Watch' %}
-    </label>
-  </div>
-  <br><br>
-{% endif %}
+    {% if anothers_account %}
+      <div class="btn-group btn-group-toggle" data-toggle="buttons">
+        <label class="btn btn-secondary {% ifequal list_id 1 %} active {% endifequal %}" title="{% trans 'Watched' %}"
+               ng-click="openUrl('{% url 'people' anothers_account.username 'watched' %}')">
+          <input type="radio">{% trans 'Watched' %}
+        </label>
+        <label class="btn btn-secondary {% ifequal list_id 2 %} active {% endifequal %}" title="{% trans 'To Watch' %}"
+               ng-click="openUrl('{% url 'people' anothers_account.username 'to-watch' %}')">
+          <input type="radio">{% trans 'To Watch' %}
+        </label>
+      </div>
+      <br><br>
+    {% endif %}
 
-<div class="btn-group btn-group-toggle" data-toggle="buttons">
-  {% with mode=request.session.mode %}
-  <!-- id values are being used as variable name combination to control the button statuses -->
-  <label id="button-mode-full" class="btn btn-secondary {% if mode == 'full' %} active {% endif %}" title="{% trans 'Mode' %}" ng-click="switchMode('full')">
-    <input type="radio">{% trans 'Full' %}
-  </label>
-  <label id="button-mode-compact" class="btn btn-secondary {% if mode == 'compact' %} active {% endif %}" title="{% trans 'Mode' %}" ng-click="switchMode('compact')">
-    <input type="radio">{% trans 'Compact' %}
-  </label>
-  <label id="button-mode-minimal" class="btn btn-secondary {% if mode == 'minimal' %} active {% endif %}" title="{% trans 'Mode' %}" ng-click="switchMode('minimal')">
-    <input type="radio">{% trans 'Minimal' %}
-  </label>
-  {% endwith %}
-</div>
-
-{% if anothers_account and user.is_authenticated %}
-  <button data-toggle="button" id="button-recommendation" type="button" class="btn btn-secondary ml-2" onclick="toggleRecommendation()">{% trans 'Recommendations' %}</button>
-{% endif %}
-<br><br>
-
-<div class="row">
-  <div class="col-sm-9 col-md-7 col-lg-5 col-xl-5">
     <div class="btn-group btn-group-toggle" data-toggle="buttons">
-      <!-- id values are being used as variable name combination to control the button statuses -->
-      {% with sort=request.session.sort %}
-      <label class="btn btn-secondary {% if sort == 'release_date' %} active {% endif %}" title="{% trans 'Sort by release date' %}" onclick="switchSort('release_date')">
-        <input type="radio">{% trans 'Release date' %}
-      </label>
-      <label class="btn btn-secondary {% if sort == 'rating' %} active {% endif %}" title="{% trans 'Sort by rating' %}" onclick="switchSort('rating')">
-        <input type="radio">{% trans 'Rating' %}
-      </label>
-      <label class="btn btn-secondary {% if sort == 'addition_date' %} active {% endif %}" title="{% trans 'Sort by date added' %}" onclick="switchSort('addition_date')">
-        <input type="radio">{% trans 'Date added' %}
-      </label>
+      {% with mode=request.session.mode %}
+        <!-- id values are being used as variable name combination to control the button statuses -->
+        <label id="button-mode-full" class="btn btn-secondary {% if mode == 'full' %} active {% endif %}"
+               title="{% trans 'Mode' %}" ng-click="switchMode('full')">
+          <input type="radio">{% trans 'Full' %}
+        </label>
+        <label id="button-mode-compact" class="btn btn-secondary {% if mode == 'compact' %} active {% endif %}"
+               title="{% trans 'Mode' %}" ng-click="switchMode('compact')">
+          <input type="radio">{% trans 'Compact' %}
+        </label>
+        <label id="button-mode-minimal" class="btn btn-secondary {% if mode == 'minimal' %} active {% endif %}"
+               title="{% trans 'Mode' %}" ng-click="switchMode('minimal')">
+          <input type="radio">{% trans 'Minimal' %}
+        </label>
       {% endwith %}
     </div>
-  </div>
 
-  <div class="col-sm-6 col-md-4 col-lg-4 col-xl-3">
-    <form action="" method="get" class="search">
-      {% csrf_token %}
-        <div class="input-group">
-          <input type="text" class="form-control" name="query">
-          <div class="input-group-append">
-            <button class="btn btn-secondary" type="submit">{% trans 'Search' %}</button>
-          </div>
+    {% if anothers_account and user.is_authenticated %}
+      <button data-toggle="button" id="button-recommendation" type="button" class="btn btn-secondary ml-2"
+              onclick="toggleRecommendation()">{% trans 'Recommendations' %}</button>
+    {% endif %}
+    <br><br>
+
+    <div class="row">
+      <div class="col-sm-9 col-md-7 col-lg-5 col-xl-5">
+        <div class="btn-group btn-group-toggle" data-toggle="buttons">
+          <!-- id values are being used as variable name combination to control the button statuses -->
+          {% with sort=request.session.sort %}
+            <label class="btn btn-secondary {% if sort == 'release_date' %} active {% endif %}"
+                   title="{% trans 'Sort by release date' %}" onclick="switchSort('release_date')">
+              <input type="radio">{% trans 'Release date' %}
+            </label>
+            <label class="btn btn-secondary {% if sort == 'rating' %} active {% endif %}"
+                   title="{% trans 'Sort by rating' %}" onclick="switchSort('rating')">
+              <input type="radio">{% trans 'Rating' %}
+            </label>
+            <label class="btn btn-secondary {% if sort == 'addition_date' %} active {% endif %}"
+                   title="{% trans 'Sort by date added' %}" onclick="switchSort('addition_date')">
+              <input type="radio">{% trans 'Date added' %}
+            </label>
+          {% endwith %}
         </div>
-    </form>
-  </div>
-</div>
+      </div>
 
-<br>
-
-{% if query %}
-<h3>{{ query }}: <a href="{{ request.path }}"><i class="fa fa-times" aria-hidden="true"></i></a></h3>
-{% endif %}
-
-<div id="results" class="results col-sm-12 col-md-10 col-lg-8" style="display: none;">
-  {% if records %}
-    {% with is_vk_user=user.is_vk_user %}
-    {% for record in records %}
-      <div id="record{{ record.id }}" data-id="{{ record.id }}" data-title="{{ record.movie.title }}" class="movie">
-        <div class="title">
-          <span title="{{ record.movie.title_original }}">{{ record.movie.title }}</span>
-          {% if not anothers_account %}
-            <a href="javascript:void(0);" title="{% trans 'Delete' %}" ng-click="removeMovie({{ record.id }})"><i class="fa fa-trash-o"></i></a>
-            {% if is_vk_user %}<a ng-show="isVkApp" href="javascript:void(0);" class="wall-post" title="{% trans 'Post to the wall' %}" onclick="postToWall({{ record.id }})"><i class="fa fa-share"></i></a>{% endif %}
-          {% endif %}
-          <div class="add-to-list-buttons">
-            {% if not anothers_account %}
-              {% ifequal list_id 2 %}
-                {% include 'includes/add_to_watched_list_button.html' %}
-              {% endifequal %}
-            {% else %}
-              {% include 'includes/add_to_list_buttons.html' %}
-            {% endif %}
-          </div>
-        </div>
-          <div class="poster">
-              <img src="{{ record.movie.poster_normal }}" data-rjs="{{ record.movie.poster_big }}" alt="{{ record.movie.title }} poster" ng-show="mode == 'full'"/>
-              <img src="{{ record.movie.poster_small }}" data-rjs="{{ record.movie.poster_normal }}" alt="{{ record.movie.title }} poster" ng-show="mode != 'full'"/>
-          </div>
-          <div class="details">
-            {% if record.movie.imdb_rating %}<div class="imdb-rating"><span class="item-desc">{% trans 'IMDb Rating' %}:</span> {{ record.movie.imdb_rating }}</div> {% endif %}
-            {% if record.movie.release_date %}<div class="release-date"><span class="release-date-label item-desc">{% trans 'Release Date' %}:</span> {{ record.movie.release_date }}</div>{% endif %}
-            <div ng-show="mode == 'full'">
-              {% if record.movie.country %} <span class="item-desc">{% trans 'Country' %}:</span> {{ record.movie.country }}<br> {% endif %}
-              {% if record.movie.director %} <span class="item-desc">{% trans 'Director' %}:</span> {{ record.movie.director }}<br> {% endif %}
-              {% if record.movie.writer %} <span class="item-desc">{% trans 'Writer' %}:</span> {{ record.movie.writer }}<br> {% endif %}
-              {% if record.movie.genre %} <span class="item-desc">{% trans 'Genre' %}:</span> {{ record.movie.genre }}<br> {% endif %}
-              {% if record.movie.actors %} <span class="item-desc">{% trans 'Actors' %}:</span> {{ record.movie.actors }}<br> {% endif %}
-              {% if record.movie.runtime %} <span class="item-desc">{% trans 'Runtime' %}:</span> {{ record.movie.runtime|date:'H:i' }}<br> {% endif %}
-              {% if record.movie.description %} <span class="item-desc">{% trans 'Description' %}:</span> {{ record.movie.description }}<br> {% endif %}
-              {% if record.movie.homepage %} <a href="{{ record.movie.homepage }}" target="_blank">{% trans 'Website' %}</a> &nbsp;{% endif %}
-              <a href="{{ record.movie.imdb_url }}" target="_blank">IMDb</a><br>
-              {% if record.movie.has_trailers %}
-                <span class="item-desc">{% trans 'Trailers' %}:</span><br>
-                <div class="trailers">
-                  {% for trailer in record.movie.get_trailers %}
-                    <a href="http://www.youtube.com/watch?v={{ trailer.source }}" target="_blank">{{ trailer.name }}</a>
-                  {% endfor %}
-                </div>
-              {% endif %}
-              <br>
+      <div class="col-sm-6 col-md-4 col-lg-4 col-xl-3">
+        <form action="" method="get" class="search">
+          {% csrf_token %}
+          <div class="input-group">
+            <input type="text" class="form-control" name="query">
+            <div class="input-group-append">
+              <button class="btn btn-secondary" type="submit">{% trans 'Search' %}</button>
             </div>
-            <div class="review {% ifequal request.session.mode 'full' %} full {% endifequal %}">
-              {% ifequal list_id 1 %}
-                <div class="rating" data-record-id="{{ record.id }}" data-rating="{{ record.rating }}"></div>
-                <div class="comment" id="comment-area{{ record.id }}" style="display: {% if not record.comment %} none {% endif %}">
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <br>
+
+    {% if query %}
+      <h3>{{ query }}: <a href="{{ request.path }}"><i class="fa fa-times" aria-hidden="true"></i></a></h3>
+    {% endif %}
+
+    <div id="results" class="results col-sm-12 col-md-10 col-lg-8" style="display: none;">
+      {% if records %}
+        {% with is_vk_user=user.is_vk_user %}
+          {% for record in records %}
+            <div id="record{{ record.id }}" data-id="{{ record.id }}" data-title="{{ record.movie.title }}"
+                 class="movie">
+              <div class="title">
+                <span title="{{ record.movie.title_original }}">{{ record.movie.title }}</span>
+                {% if not anothers_account %}
+                  <a href="javascript:void(0);" title="{% trans 'Delete' %}" ng-click="removeMovie({{ record.id }})"><i
+                    class="fa fa-trash-o"></i></a>
+                  {% if is_vk_user %}<a ng-show="isVkApp" href="javascript:void(0);" class="wall-post"
+                                        title="{% trans 'Post to the wall' %}" onclick="postToWall({{ record.id }})"><i
+                    class="fa fa-share"></i></a>{% endif %}
+                {% endif %}
+                <div class="add-to-list-buttons">
                   {% if not anothers_account %}
-                    <textarea class="form-control" title="{% trans 'Comment' %}" id="comment{{ record.id }}">{{ record.comment }}</textarea><br><br>
-                    <button type="button" title="{% trans 'Save' %}" class="btn btn-secondary" ng-click="saveComment({{ record.id }})"><i class="fa fa-save"></i></button>
-                    <br>
+                    {% ifequal list_id 2 %}
+                      {% include 'includes/add_to_watched_list_button.html' %}
+                    {% endifequal %}
                   {% else %}
-                    <p>{{ record.comment }}</p>
+                    {% include 'includes/add_to_list_buttons.html' %}
                   {% endif %}
                 </div>
-                {% if not anothers_account %}
-                  <button id="comment_area_button{{ record.id }}" type="button" title="{% trans 'Add comment' %}" class="btn btn-secondary comment-button" ng-click="toggleCommentArea({{ record.id }})" {% if record.comment %} style="display: none "{% endif %}><i class="fa fa-comment"></i></button>
-                {% endif %}
+              </div>
+              <div class="poster">
+                <img src="{{ record.movie.poster_normal }}" data-rjs="{{ record.movie.poster_big }}"
+                     alt="{{ record.movie.title }} poster" ng-show="mode == 'full'"/>
+                <img src="{{ record.movie.poster_small }}" data-rjs="{{ record.movie.poster_normal }}"
+                     alt="{{ record.movie.title }} poster" ng-show="mode != 'full'"/>
+              </div>
+              <div class="details">
+                {% if record.movie.imdb_rating %}
+                  <div class="imdb-rating"><span
+                    class="item-desc">{% trans 'IMDb Rating' %}:</span> {{ record.movie.imdb_rating }}</div> {% endif %}
+                {% if record.movie.release_date %}
+                  <div class="release-date"><span
+                    class="release-date-label item-desc">{% trans 'Release Date' %}:</span> {{ record.movie.release_date }}
+                  </div>{% endif %}
+                <div ng-show="mode == 'full'">
+                  {% if record.movie.country %} <span class="item-desc">{% trans 'Country' %}:</span>
+                    {{ record.movie.country }}<br> {% endif %}
+                  {% if record.movie.director %} <span class="item-desc">{% trans 'Director' %}:</span>
+                    {{ record.movie.director }}<br> {% endif %}
+                  {% if record.movie.writer %} <span class="item-desc">{% trans 'Writer' %}:</span>
+                    {{ record.movie.writer }}<br> {% endif %}
+                  {% if record.movie.genre %} <span class="item-desc">{% trans 'Genre' %}:</span>
+                    {{ record.movie.genre }}<br> {% endif %}
+                  {% if record.movie.actors %} <span class="item-desc">{% trans 'Actors' %}:</span>
+                    {{ record.movie.actors }}<br> {% endif %}
+                  {% if record.movie.runtime %} <span class="item-desc">{% trans 'Runtime' %}:</span>
+                    {{ record.movie.runtime|date:'H:i' }}<br> {% endif %}
+                  {% if record.movie.description %} <span class="item-desc">{% trans 'Description' %}:</span>
+                    {{ record.movie.description }}<br> {% endif %}
+                  {% if record.movie.homepage %}
+                    <a href="{{ record.movie.homepage }}" target="_blank">{% trans 'Website' %}</a> &nbsp;{% endif %}
+                  <a href="{{ record.movie.imdb_url }}" target="_blank">IMDb</a><br>
+                  {% if record.movie.has_trailers %}
+                    <span class="item-desc">{% trans 'Trailers' %}:</span><br>
+                    <div class="trailers">
+                      {% for trailer in record.movie.get_trailers %}
+                        <a href="http://www.youtube.com/watch?v={{ trailer.source }}"
+                           target="_blank">{{ trailer.name }}</a>
+                      {% endfor %}
+                    </div>
+                  {% endif %}
                   <br>
-              {% endifequal %}
+                </div>
+                <div class="review {% ifequal request.session.mode 'full' %} full {% endifequal %}">
+                  {% ifequal list_id 1 %}
+                    <div class="rating" data-record-id="{{ record.id }}" data-rating="{{ record.rating }}"></div>
+                    <div class="comment" id="comment-area{{ record.id }}"
+                         style="display: {% if not record.comment %} none {% endif %}">
+                      {% if not anothers_account %}
+                        <textarea class="form-control" title="{% trans 'Comment' %}"
+                                  id="comment{{ record.id }}">{{ record.comment }}</textarea><br><br>
+                        <button type="button" title="{% trans 'Save' %}" class="btn btn-secondary"
+                                ng-click="saveComment({{ record.id }})"><i class="fa fa-save"></i></button>
+                        <br>
+                      {% else %}
+                        <p>{{ record.comment }}</p>
+                      {% endif %}
+                    </div>
+                    {% if not anothers_account %}
+                      <button id="comment_area_button{{ record.id }}" type="button" title="{% trans 'Add comment' %}"
+                              class="btn btn-secondary comment-button" ng-click="toggleCommentArea({{ record.id }})"
+                        {% if record.comment %} style="display: none "{% endif %}><i class="fa fa-comment"></i></button>
+                    {% endif %}
+                    <br>
+                  {% endifequal %}
+                </div>
+              </div>
+              <div class="clearfix"></div>
+              {% if list_id == 2 and not anothers_account %}
+                {% include 'includes/reviews.html' %}
+              {% endif %}
             </div>
-          </div>
-          <div class="clearfix"></div>
-          {% if list_id == 2 and not anothers_account %}
-            {% include 'includes/reviews.html' %}
-          {% endif %}
-        </div>
-    {% endfor %}
-    {% endwith %}
-  {% if records.has_other_pages %}
-    {% bootstrap_paginate records range=10 show_prev_next='true' show_first_last='true' alignment='left' %}
-  {% endif %}
-  {% else %}
-    <p>{% trans 'The list is empty' %}.</p>
-  {% endif %}
-</div>
-</div>
+          {% endfor %}
+        {% endwith %}
+        {% if records.has_other_pages %}
+          {% bootstrap_paginate records range=10 show_prev_next='true' show_first_last='true' alignment='left' %}
+        {% endif %}
+      {% else %}
+        <p>{% trans 'The list is empty' %}.</p>
+      {% endif %}
+    </div>
+  </div>
 {% endblock %}
 
 {% block js %}
-<script>
-  const mode = '{{ request.session.mode }}';
-  const listData = $.parseJSON('{{ list_data|safe }}');
-  const listId = {{ list_id }};
-  const recommendation = {{ request.session.recommendation|yesno:'true,false' }}
-  const anothersAccount = {{ anothers_account|yesno:'true,false' }}
-  const urlChangeRating = '{% url 'change_rating' %}';
-  const urlRemoveMovie = '{% url 'remove_movie' %}';
-  const urlApplySettings = '{% url 'apply_settings' %}';
-  const urlAddToList   = '{% url 'add_to_list' %}';
-  const urlSaveComment  = '{% url 'save_comment' %}';
-  const urlAjaxUploadPosterToWall = '{% url 'upload_poster_to_wall' %}';
-</script>
-<script src="{% static 'bower/raty/lib/jquery.raty.js' %}"></script>
-<script src="{% static 'bower/autosize/dist/autosize.min.js' %}"></script>
+  <script>
+    const mode = '{{ request.session.mode }}';
+    const listData = $.parseJSON('{{ list_data|safe }}');
+    const listId = {{ list_id }};
+    const recommendation =
+    {{ request.session.recommendation|yesno:'true,false' }}
+    const anothersAccount =
+    {{ anothers_account|yesno:'true,false' }}
+    const urlChangeRating = '{% url 'change_rating' %}';
+    const urlRemoveMovie = '{% url 'remove_movie' %}';
+    const urlApplySettings = '{% url 'apply_settings' %}';
+    const urlAddToList = '{% url 'add_to_list' %}';
+    const urlSaveComment = '{% url 'save_comment' %}';
+    const urlAjaxUploadPosterToWall = '{% url 'upload_poster_to_wall' %}';
+  </script>
+  <script src="{% static 'bower/raty/lib/jquery.raty.js' %}"></script>
+  <script src="{% static 'bower/autosize/dist/autosize.min.js' %}"></script>
 
-<script src="{% static 'js/list_general.js' %}"></script>
-<script src="{% static 'js/list.js' %}"></script>
-<script src="{% static 'js/raty.js' %}"></script>
+  <script src="{% static 'js/list_general.js' %}"></script>
+  <script src="{% static 'js/list.js' %}"></script>
+  <script src="{% static 'js/raty.js' %}"></script>
 {% endblock %}

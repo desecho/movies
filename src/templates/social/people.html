@@ -6,16 +6,16 @@
 
 {% block content %}
 
-{% for user in users %}
+  {% for user in users %}
     <div class="person">
       <a href="{% url 'people' user.username 'watched' %}">{% avatar user %}</a>
       <a href="{% url 'people' user.username 'watched' %}" class="people-user">{{ user }}</a>
       {% movie_count user %}
     </div>
-{% endfor %}
+  {% endfor %}
 
-{% if users.has_other_pages %}
+  {% if users.has_other_pages %}
     {% bootstrap_paginate users range=10 show_prev_next="true" show_first_last="true" alignment="left" %}
-{% endif %}
+  {% endif %}
 
 {% endblock %}

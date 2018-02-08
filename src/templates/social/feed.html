@@ -4,12 +4,12 @@
 {% load static %}
 
 {% block content %}
-<legend>{{ list_name }}</legend>
-<br>
-<table class="table col-md-11 col-lg-10 col-xl-8 table-responsive">
-<tbody>
-{% for action in actions %}
-    <tr class="feed-record">
+  <legend>{{ list_name }}</legend>
+  <br>
+  <table class="table col-md-11 col-lg-10 col-xl-8 table-responsive">
+    <tbody>
+    {% for action in actions %}
+      <tr class="feed-record">
         <td class="feed-user">
           <a href="{% url 'people' action.user.username 'watched' %}">{% avatar action.user %}</a>
         </td>
@@ -17,7 +17,8 @@
           {{ action.date }}
         </td>
         <td>
-          <img src="{{ action.movie_poster }}" data-rjs="{{ action.movie_poster_2x }}" alt="{{ action.movie }}" title="{{ action.movie }}" class="small-poster">
+          <img src="{{ action.movie_poster }}" data-rjs="{{ action.movie_poster_2x }}" alt="{{ action.movie }}"
+               title="{{ action.movie }}" class="small-poster">
         </td>
         <td class="hidden-xs-down feed-movie">
           {{ action.movie }}
@@ -27,18 +28,19 @@
         </td>
         <td class="feed-action-data">
           {% if action.list %} {{ action.list }} {% endif %}
-          {% if action.rating %} <div class="rating" data-rating="{{ action.rating }}"></div> {% endif %}
+          {% if action.rating %}
+            <div class="rating" data-rating="{{ action.rating }}"></div> {% endif %}
           {% if action.comment %} {{ action.comment }} {% endif %}
         </td>
-    </tr>
-  </div>
-{% endfor %}
-</tbody>
-</table>
+      </tr>
+      </div>
+    {% endfor %}
+    </tbody>
+  </table>
 {% endblock %}
 
 {% block js %}
-<script src="{% static 'bower/raty/lib/jquery.raty.js' %}"></script>
-<script src="{% static 'js/raty.js' %}"></script>
-<script src="{% static 'js/raty_readonly.js' %}"></script>
+  <script src="{% static 'bower/raty/lib/jquery.raty.js' %}"></script>
+  <script src="{% static 'js/raty.js' %}"></script>
+  <script src="{% static 'js/raty_readonly.js' %}"></script>
 {% endblock %}

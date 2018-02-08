@@ -8,42 +8,44 @@
 {% endblock %}
 
 {% block content %}
-<form method="post" action="{% url 'login' %}" class="form-horizontal col-sm-6 col-md-4 col-lg-4 col-xl-3 mx-auto" id="login-form">
-  {% csrf_token %}
-  {% include 'includes/form_errors.html' %}
-  <div class="form-group">
-    <input type="text" class="form-control" name="username" required {% if form.username.value %} value="{{ form.username.value}}" {% endif %} autofocus placeholder="{% trans 'Username' %}">
-  </div>
-  <div class="form-group">
-    <input type="password" class="form-control" name="password" required placeholder="{% trans 'Password' %}">
-  </div>
-  <div class="form-group">
-    <div class="col-sm-offset-2">
-      <input type="submit" class="btn btn-block btn-primary" value="{% trans 'Log in' %}">
+  <form method="post" action="{% url 'login' %}" class="form-horizontal col-sm-6 col-md-4 col-lg-4 col-xl-3 mx-auto"
+        id="login-form">
+    {% csrf_token %}
+    {% include 'includes/form_errors.html' %}
+    <div class="form-group">
+      <input type="text" class="form-control" name="username" required {% if form.username.value %}
+             value="{{ form.username.value }}" {% endif %} autofocus placeholder="{% trans 'Username' %}">
     </div>
-  </div>
-  <input type="hidden" name="next" value="{{ next }}">
-  {% if DEBUG %}
-  <div class="form-group">
-    <div class="col-sm-offset-2">
-      <a href="{% url 'social:begin' 'facebook' %}" class="btn btn-block btn-social btn-facebook">
-        <span class="fa fa-facebook"></span> {% trans 'Log in with' %} Facebook
-      </a>
+    <div class="form-group">
+      <input type="password" class="form-control" name="password" required placeholder="{% trans 'Password' %}">
     </div>
-  </div>
-  {% endif %}
-  <div class="form-group">
-    <div class="col-sm-offset-2">
-      <a href="{% url 'social:begin' 'vk-oauth2' %}" class="btn btn-block btn-social btn-vk">
-        <span class="fa fa-vk"></span> {% trans 'Log in with' %} VK
-      </a>
+    <div class="form-group">
+      <div class="col-sm-offset-2">
+        <input type="submit" class="btn btn-block btn-primary" value="{% trans 'Log in' %}">
+      </div>
     </div>
-  </div>
-  <div class="form-group">
-    <div class="col-sm-offset-2">
-      <a href="{% url 'registration_register' %}" class="btn btn-block btn-primary">{% trans 'Register' %}</a>
+    <input type="hidden" name="next" value="{{ next }}">
+    {% if DEBUG %}
+      <div class="form-group">
+        <div class="col-sm-offset-2">
+          <a href="{% url 'social:begin' 'facebook' %}" class="btn btn-block btn-social btn-facebook">
+            <span class="fa fa-facebook"></span> {% trans 'Log in with' %} Facebook
+          </a>
+        </div>
+      </div>
+    {% endif %}
+    <div class="form-group">
+      <div class="col-sm-offset-2">
+        <a href="{% url 'social:begin' 'vk-oauth2' %}" class="btn btn-block btn-social btn-vk">
+          <span class="fa fa-vk"></span> {% trans 'Log in with' %} VK
+        </a>
+      </div>
     </div>
-  </div>
-  </div>
-</form>
+    <div class="form-group">
+      <div class="col-sm-offset-2">
+        <a href="{% url 'registration_register' %}" class="btn btn-block btn-primary">{% trans 'Register' %}</a>
+      </div>
+    </div>
+    </div>
+  </form>
 {% endblock %}
