@@ -1,44 +1,48 @@
-String.prototype.toTitleCase = function () {
-    return this.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+/* global urlSearchMovie:false */
+/* global urlAddToListFromDb:false */
+
+String.prototype.toTitleCase = function() { // eslint-disable-line no-extend-native
+  return this.replace(/\w\S*/g, function(txt) {
+            return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+      });
 };
 
 app.factory('SearchMovie', ['$resource', function($resource) {
-  return $resource(urlSearchMovie, {}, {
-    get: {method: 'GET'}
-  });
+return $resource(urlSearchMovie, {}, {
+  get: {method: 'GET'},
+});
 }]);
 
 app.factory('AddToListFromDb', ['$resource', function($resource) {
   return $resource(urlAddToListFromDb, {}, {
-    post: {method: 'POST', headers: headers}
+    post: {method: 'POST', headers: headers},
   });
 }]);
 
 app.controller('MoviesSearchController', ['$scope', 'SearchMovie', 'AddToListFromDb',
 
-function ($scope, SearchMovie, AddToListFromDb) {
+function($scope, SearchMovie, AddToListFromDb) {
   $scope.searchType = gettext('Movie');
   $scope.searchTypeCode = 'movie';
-  $scope.submit = function(){
-    function showError(){
+  $scope.submit = function() {
+    function showError() {
       displayMessage(gettext('Search Error'));
     }
     $scope.nothingFound = false;
     $scope.searchResults = [];
     const options = {
       popularOnly: $('#popular-only').prop('checked'),
-      sortByDate: $('#sort-by-date').prop('checked')
+      sortByDate: $('#sort-by-date').prop('checked'),
     };
     SearchMovie.get({
         query: $scope.query,
         type: $scope.searchTypeCode,
-        options: $.param(options)
+        options: $.param(options),
       }, function(response) {
-        console.log(response);
         if (response.status === 'success') {
           $scope.searchResults = response.movies;
           // It is not working without the timeout.
-          setTimeout(function(){
+          setTimeout(function() {
             $('.poster img').removeAttr('data-rjs-processed');
             retinajs();
           }, 500);
@@ -47,14 +51,14 @@ function ($scope, SearchMovie, AddToListFromDb) {
         } else {
           showError();
         }
-      }, function(){
+      }, function() {
         showError();
       }
     );
-  }
+  };
 
   $scope.addToListFromDb = function(movieId, listId) {
-    function showError(){
+    function showError() {
       displayMessage(gettext('Error adding a movie'));
     }
 
@@ -62,7 +66,7 @@ function ($scope, SearchMovie, AddToListFromDb) {
     movie.fadeOut('fast');
     AddToListFromDb.post($.param({
       movieId: movieId,
-      listId: listId
+      listId: listId,
     }), function(response) {
       if (response.status === 'success') {
         return;
@@ -73,7 +77,7 @@ function ($scope, SearchMovie, AddToListFromDb) {
       } else {
         showError();
       }
-    }, function(error){
+    }, function(error) {
       movie.fadeIn('fast');
       handleError(error, showError);
     });
@@ -85,6 +89,4 @@ function ($scope, SearchMovie, AddToListFromDb) {
   };
 }]);
 
-$(function(){
-  $('#search').show();
-});
+$('#search').show();

@@ -1,3 +1,3 @@
-const ratyCustomSettings = {
-  readOnly: true
+const ratyCustomSettings = { // eslint-disable-line no-unused-vars
+  readOnly: true,
 };

@@ -1,10 +1,12 @@
-function addToList(movieId, listId, recordId) {
-  function showError(){
+/* global urlAddToList:false */
+
+function addToList(movieId, listId, recordId) { // eslint-disable-line no-unused-vars
+  function showError() {
     return displayMessage(gettext('Error adding the movie to the list'));
   }
   return $.post(urlAddToList, {
     movieId: movieId,
-    listId: listId
+    listId: listId,
   }, function(response) {
     if (response.status === 'success') {
       return setViewedIconAndRemoveButtons(recordId, listId);
@@ -14,12 +16,12 @@ function addToList(movieId, listId, recordId) {
   }).fail(function(error) {
     handleError(error, showError);
   });
-};
+}
 
 function setViewedIconAndRemoveButtons(recordId, listId) {
   function removeButtons() {
-    return $('#record' + recordId).children('.title').children('.add-to-list-buttons').html('');
-  };
+    return $('#record' + recordId).children('.title').children('.add-to-list-buttons').remove();
+  }
 
   function setViewedIcon(recordId, listId) {
     let icon;
@@ -36,10 +38,10 @@ function setViewedIconAndRemoveButtons(recordId, listId) {
     }
     const html = ` <i class="fa fa-eye${icon}" title=${title}></i> `;
     return $('#record' + recordId).children('.title').prepend(html);
-  };
+  }
 
   setViewedIcon(recordId, listId);
   if (listId !== 0) {
     return removeButtons();
   }
-};
+}

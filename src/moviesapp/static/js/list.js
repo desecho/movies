@@ -1,36 +1,51 @@
+/* global urlSaveComment:false */
+/* global urlChangeRating:false */
+/* global urlApplySettings:false */
+/* global urlRemoveMovie:false */
+/* global ratySettings:false */
+/* global mode:false */
+/* global recommendation:false */
+/* global anothersAccount:false */
+/* global listData:false */
+/* global setViewedIconAndRemoveButtons:false */
+/* global listId:false */
+/* global isVkApp:false */
+/* global ratyCustomSettings:false */
+
+
 app.factory('RemoveMovie', ['$resource', function($resource) {
   return $resource(urlRemoveMovie, {}, {
-    post: {method: 'POST', headers: headers}
+    post: {method: 'POST', headers: headers},
   });
 }]);
 
 app.factory('SaveComment', ['$resource', function($resource) {
   return $resource(urlSaveComment, {}, {
-    post: {method: 'POST', headers: headers}
+    post: {method: 'POST', headers: headers},
   });
 }]);
 
 app.controller('ListController', ['$scope', 'RemoveMovie', 'SaveComment',
 
-function ($scope, RemoveMovie, SaveComment) {
+function($scope, RemoveMovie, SaveComment) {
   function removeMovieFromPage(id) {
     function checkIfNoRecords() {
       if (!$('.movie').length) {
-        $('#results').html(gettext('The list is empty') + '.');
+        $('#results')[0].innerHTML = gettext('The list is empty') + '.';
       }
-    };
+    }
     $('#record' + id).fadeOut('fast', function() {
       $(this).remove();
       checkIfNoRecords();
     });
-  };
+  }
 
   $scope.openUrl = function(url) {
     window.location.href = url;
-  }
+  };
 
   $scope.removeMovie = function(id) {
-    function error(){
+    function error() {
       displayMessage(gettext('Error removing the movie'));
     }
 
@@ -40,7 +55,7 @@ function ($scope, RemoveMovie, SaveComment) {
       } else {
         error();
       }
-    }, function(){
+    }, function() {
         error();
     });
   };
@@ -52,30 +67,30 @@ function ($scope, RemoveMovie, SaveComment) {
       $('.details, .imdb-rating, .review, .release-date').css('display', '');
       $('.review').css('padding-top', '10px');
       $('.release-date, .imdb-rating').css({
-        float: '',
-        'margin-right': '0'
+        'float': '',
+        'margin-right': '0',
       });
       $('.movie').removeClass('movie-minimal');
-    };
+    }
     if (newMode === 'minimal') {
       activateModeMinimal();
     } else {
       deactivateModeMinimal();
     }
     applySettings({
-      mode: newMode
+      mode: newMode,
     }, false);
     $scope.mode = newMode;
   };
 
   $scope.saveComment = function(id) {
-    function showError(){
+    function showError() {
       displayMessage(gettext('Error saving a comment'));
     }
     const comment = $('#comment' + id).val();
     SaveComment.post($.param({
       id: id,
-      comment: comment
+      comment: comment,
     }), function(response) {
       if (response.status == 'success') {
         if (!comment) {
@@ -101,21 +116,21 @@ function ($scope, RemoveMovie, SaveComment) {
 }]);
 
 function changeRating(id, rating, element) {
-  function error(){
+  function error() {
     function revertToPreviousRating(element) {
       const scoreSettings = {
-        score: element.attr('data-rating')
+        score: element.attr('data-rating'),
       };
       const settings = $.extend({}, ratySettings, ratyCustomSettings, scoreSettings);
       element.raty(settings);
-    };
+    }
     revertToPreviousRating(element);
     displayMessage(gettext('Error adding a rating'));
   }
 
   $.post(urlChangeRating, {
     id: id,
-    rating: rating
+    rating: rating,
   }, function(response) {
     if (response.status == 'success') {
       element.attr('data-rating', rating);
@@ -125,32 +140,32 @@ function changeRating(id, rating, element) {
   }).fail(function() {
     error();
   });
-};
+}
 
-function switchSort(value) {
+function switchSort(value) { // eslint-disable-line no-unused-vars
   let additionalSetting;
   if (value !== 'rating') {
     additionalSetting = {
-      recommendation: false
+      recommendation: false,
     };
   } else {
     additionalSetting = {};
   }
   const settings = jQuery.extend({
-    sort: value
+    sort: value,
   }, additionalSetting);
   applySettings(settings);
-};
+}
 
 function applySettings(settings, reload) {
-  function error(){
+  function error() {
     displayMessage(gettext('Error applying the settings'));
   }
   if (reload == null) {
     reload = true;
   }
   $.post(urlApplySettings, {
-    settings: JSON.stringify(settings)
+    settings: JSON.stringify(settings),
   }, function(response) {
     if (response.status == 'success') {
       if (reload) {
@@ -159,37 +174,36 @@ function applySettings(settings, reload) {
     } else {
       error();
     }
-
   }).fail(function() {
     error();
   });
-};
+}
 
 function activateModeMinimal() {
   $('.poster, .comment, .comment-button, .release-date-label, .wall-post').hide();
   $('.details, .review').css('display', 'inline');
   $('.review').css('padding-top', '0');
   $('.release-date, .imdb-rating').css({
-    float: 'right',
-    'margin-right': '10px'
+    'float': 'right',
+    'margin-right': '10px',
   });
   $('.movie').addClass('movie-minimal');
-};
+}
 
-function toggleRecommendation(){
+function toggleRecommendation() { // eslint-disable-line no-unused-vars
   if (recommendation) {
     applySettings({
-      recommendation: false
+      recommendation: false,
     });
   } else {
     applySettings({
       sort: 'rating',
-      recommendation: true
+      recommendation: true,
     });
   }
-};
+}
 
-$(function() {
+(function() {
   function setViewedIconsAndRemoveButtons() {
     if (anothersAccount) {
       $('.movie').each(function() {
@@ -198,9 +212,9 @@ $(function() {
         setViewedIconAndRemoveButtons(id, listId);
       });
     }
-  };
+  }
 
-  let ratyReadonly = anothersAccount || listId == 2
+  const ratyReadonly = anothersAccount || listId == 2;
   window.ratyCustomSettings = {
     readOnly: ratyReadonly,
     click: function(score) {
@@ -208,7 +222,7 @@ $(function() {
         score = 0;
       }
       changeRating($(this).attr('data-record-id'), score, $(this));
-    }
+    },
   };
 
   if (mode === 'minimal') {
@@ -222,4 +236,5 @@ $(function() {
   autosize($('textarea'));
   retinajs();
   $('#results').show();
-});
+})();
+
