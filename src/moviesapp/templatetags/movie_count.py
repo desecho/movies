@@ -7,12 +7,10 @@ register = template.Library()
 
 @register.simple_tag
 def movie_count(user):
-    LIST_IDS = {'watched': 1, 'to_watch': 2}
-
-    def create_span_tag(title, list_id):
-        number_of_movies = user.get_records().filter(list_id=list_id).count()
-        return f'<span title="{title}">{number_of_movies}</span>'
-
-    watched = create_span_tag(_('Watched'), LIST_IDS['watched'])
-    to_watch = create_span_tag(_('To Watch'), LIST_IDS['to_watch'])
-    return mark_safe(f'<i class="fa fa-eye"></i> {watched} &nbsp;<i class="fa fa-eye-slash"></i> {to_watch}')  # nosec
+    watched = _('Watched')
+    to_watch = _('To Watch')
+    watched_number = user.movies_watched_number
+    to_watch_number = user.movies_to_watch_number
+    return mark_safe(  # nosec
+        f'<span title="{watched}" class="mr-2"><i class="fa fa-eye"></i> {watched_number}</span> '
+        f'<span title="{to_watch}"><i class="fa fa-eye-slash"></i> {to_watch_number}</span>')

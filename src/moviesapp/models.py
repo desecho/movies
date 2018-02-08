@@ -149,6 +149,17 @@ class User(AbstractUser, UserBase):
         else:
             return self.username
 
+    def _get_movies_number(self, list_id):
+        return self.get_records().filter(list_id=list_id).count()
+
+    @property
+    def movies_watched_number(self):
+        return self._get_movies_number(List.WATCHED)
+
+    @property
+    def movies_to_watch_number(self):
+        return self._get_movies_number(List.TO_WATCH)
+
 
 class UserAnonymous(AnonymousUser, UserBase):
     def __init__(self, request):  # pylint: disable=unused-argument
