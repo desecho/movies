@@ -6,7 +6,7 @@
 {% load movie_count %}
 {% load i18n %}
 {% block head %}
-  <link href="{% static 'bower/raty/lib/jquery.raty.css' %}" rel="stylesheet">
+  <link href="{% static 'vendor/raty-js/lib/jquery.raty.css' %}" rel="stylesheet">
 {% endblock %}
 {% block content %}
   <div ng-controller="ListController">
@@ -226,8 +226,8 @@
     const urlSaveComment = '{% url 'save_comment' %}';
     const urlAjaxUploadPosterToWall = '{% url 'upload_poster_to_wall' %}';
   </script>
-  <script src="{% static 'bower/raty/lib/jquery.raty.js' %}"></script>
-  <script src="{% static 'bower/autosize/dist/autosize.min.js' %}"></script>
+  <script src="{% static 'vendor/raty-js/lib/jquery.raty.js' %}"></script>
+  <script src="{% static 'vendor/autosize/dist/autosize.min.js' %}"></script>
 
   <script src="{% static 'js/list_general.js' %}"></script>
   <script src="{% static 'js/list.js' %}"></script>

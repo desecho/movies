@@ -8,4 +8,4 @@ isort -rc src
 csscomb src/moviesapp/static/css/style.css
 eslint src/moviesapp/static/js/*  --fix
 find src/moviesapp/static/js -type f -name "*.js" -exec js-beautify -r --editorconfig {} \;
-find . -type f -name "*.json" -not -path "./node_modules/*" -not -path "./src/moviesapp/static/bower/*" -exec js-beautify -r --editorconfig {} \;
+find . -type f -name "*.json" -not -path "./node_modules/*" -not -path "./src/moviesapp/static/vendor/*" -exec js-beautify -r --editorconfig {} \;

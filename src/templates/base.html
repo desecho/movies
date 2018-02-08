@@ -8,12 +8,12 @@
   <meta HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <link href="{% static 'bower/jgrowl/jquery.jgrowl.min.css' %}" rel="stylesheet">
-  <link href="{% static 'bower/bootstrap/dist/css/bootstrap.css' %}" rel="stylesheet">
-  <link href="{% static 'bower/tether/dist/css/tether.min.css' %}" rel="stylesheet">
-  <link href="{% static 'bower/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet">
-  <link href="{% static 'bower/angular-loading-bar/build/loading-bar.min.css' %}" rel="stylesheet">
-  <link href="{% static 'bower/mprogress/build/css/mprogress.min.css' %}" rel="stylesheet">
+  <link href="{% static 'vendor/jgrowl/jquery.jgrowl.min.css' %}" rel="stylesheet">
+  <link href="{% static 'vendor/bootstrap/dist/css/bootstrap.css' %}" rel="stylesheet">
+  <link href="{% static 'vendor/tether/dist/css/tether.min.css' %}" rel="stylesheet">
+  <link href="{% static 'vendor/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet">
+  <link href="{% static 'vendor/angular-loading-bar/build/loading-bar.min.css' %}" rel="stylesheet">
+  <link href="{% static 'vendor/mprogress/build/css/mprogress.min.css' %}" rel="stylesheet">
   <link href="{% static 'css/style.css' %}" rel="stylesheet">
   {% block head %}{% endblock %}
 
@@ -37,19 +37,19 @@
   const language = '{{ LANGUAGE_CODE }}';
   const isVkUser = {{ user.is_vk_user|yesno:'true,false' }};
 </script>
-<script src="{% static 'bower/jquery/dist/jquery.min.js' %}"></script>
-<script src="{% static 'bower/mprogress/build/js/mprogress.min.js' %}"></script>
-<script src="{% static 'bower/jgrowl/jquery.jgrowl.min.js' %}"></script>
-<script src="{% static 'bower/tether/dist/js/tether.min.js' %}"></script>
-<script src="{% static 'bower/bootstrap/js/dist/button.js' %}"></script>
-<script src="{% static 'bower/popper.js/dist/umd/popper.min.js' %}"></script>
-<script src="{% static 'bower/bootstrap/dist/js/bootstrap.min.js' %}"></script>
+<script src="{% static 'vendor/jquery/dist/jquery.min.js' %}"></script>
+<script src="{% static 'vendor/mprogress/build/js/mprogress.min.js' %}"></script>
+<script src="{% static 'vendor/jgrowl/jquery.jgrowl.min.js' %}"></script>
+<script src="{% static 'vendor/tether/dist/js/tether.min.js' %}"></script>
+<script src="{% static 'vendor/bootstrap/js/dist/button.js' %}"></script>
+<script src="{% static 'vendor/popper.js/dist/umd/popper.min.js' %}"></script>
+<script src="{% static 'vendor/bootstrap/dist/js/bootstrap.min.js' %}"></script>
 
-<script src="{% static 'bower/angular/angular.js' %}"></script>
-<script src="{% static 'bower/angular-loading-bar/build/loading-bar.min.js' %}"></script>
-<script src="{% static 'bower/angular-resource/angular-resource.min.js' %}"></script>
-<script src="{% static 'bower/angular-route/angular-route.min.js' %}"></script>
-<script src="{% static 'bower/angular-bootstrap/ui-bootstrap-tpls.min.js' %}"></script>
+<script src="{% static 'vendor/angular/angular.js' %}"></script>
+<script src="{% static 'vendor/angular-loading-bar/build/loading-bar.min.js' %}"></script>
+<script src="{% static 'vendor/angular-resource/angular-resource.min.js' %}"></script>
+<script src="{% static 'vendor/angular-route/angular-route.min.js' %}"></script>
+<script src="{% static 'vendor/angular-bootstrap/ui-bootstrap-tpls.min.js' %}"></script>
 
 <script src="{% static 'js/ajax_loading.js' %}"></script>
 <script src="{% static 'js/main.js' %}"></script>
@@ -58,6 +58,6 @@
   <script src="{% static 'js/vk.js' %}"></script>
 {% endif %}
 <!-- Retina has to be in the bottom because it breaks other scripts -->
-<script src="{% static 'bower/retinajs/dist/retina.min.js' %}"></script>
+<script src="{% static 'vendor/retinajs/dist/retina.min.js' %}"></script>
 {% block js %}{% endblock %}
 </body>

@@ -1,5 +1,5 @@
 installation_settings.sh
-src/moviesapp/static/bower/
+src/moviesapp/static/vendor/
 __pycache__
 .tox
 *.pyc
