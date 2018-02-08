@@ -1,0 +1,16 @@
+{
+  "name": "movies",
+  "version": "0.1.0",
+  "dependencies": {},
+  "devDependencies": {
+    "eslint": "latest",
+    "eslint-config-google": "latest",
+    "eslint-plugin-jquery": "latest",
+    "eslint-plugin-angular": "latest",
+    "eslint-config-angular": "latest"
+  },
+  "scripts": {
+    "lint": "eslint"
+  },
+  "private": true
+}

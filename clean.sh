@@ -6,3 +6,4 @@ yapf -ri src
 # We want to run isort after yapf to make sure isort lint pass.
 isort -rc src
 csscomb src/moviesapp/static/css/style.css
+eslint src/moviesapp/static/js/*  --fix
