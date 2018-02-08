@@ -30,13 +30,13 @@
 <footer class="container-fluid py-3">
   Copyright © {% now 'Y' %} <a href="mailto:{{ ADMIN_EMAIL }}">{{ ADMIN_EMAIL }}</a>.
 </footer>
+{% include 'includes/google_analytics.html' %}
 <script src="{% url 'javascript-catalog' %}"></script>
 {% get_current_language as LANGUAGE_CODE %}
 <script>
   const language = '{{ LANGUAGE_CODE }}';
   const isVkUser = {{ user.is_vk_user|yesno:'true,false' }};
 </script>
-{% include 'includes/google_analytics.html' %}
 <script src="{% static 'bower/jquery/dist/jquery.min.js' %}"></script>
 <script src="{% static 'bower/mprogress/build/js/mprogress.min.js' %}"></script>
 <script src="{% static 'bower/jgrowl/jquery.jgrowl.min.js' %}"></script>
