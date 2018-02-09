@@ -17,7 +17,7 @@ app.factory('RemoveMovie', ['$resource', function($resource) {
   return $resource(urlRemoveMovie, {}, {
     post: {
       method: 'POST',
-      headers: headers
+      headers: headers,
     },
   });
 }]);
@@ -26,7 +26,7 @@ app.factory('SaveComment', ['$resource', function($resource) {
   return $resource(urlSaveComment, {}, {
     post: {
       method: 'POST',
-      headers: headers
+      headers: headers,
     },
   });
 }]);
@@ -56,7 +56,7 @@ app.controller('ListController', ['$scope', 'RemoveMovie', 'SaveComment',
       }
 
       RemoveMovie.post($.param({
-        id: id
+        id: id,
       }), function(response) {
         if (response.status === 'success') {
           removeMovieFromPage(id);
@@ -121,7 +121,7 @@ app.controller('ListController', ['$scope', 'RemoveMovie', 'SaveComment',
     if (isVkUser) {
       $scope.isVkApp = isVkApp;
     }
-  }
+  },
 ]);
 
 function changeRating(id, rating, element) {

@@ -4,7 +4,7 @@ app.factory('SavePreferences', ['$resource', function($resource) {
   return $resource(urlSavePreferences, {}, {
     post: {
       method: 'POST',
-      headers: headers
+      headers: headers,
     },
   });
 }]);
@@ -13,7 +13,7 @@ app.controller('PreferencesController', ['$scope', 'SavePreferences',
   function($scope, SavePreferences) {
     $scope.savePreferences = function(reload) {
       const preferences = {
-        language: $('input:radio[name=lang]:checked').val()
+        language: $('input:radio[name=lang]:checked').val(),
       };
       let field = $('input[name=only_for_friends]');
       if (field.length !== 0) {
@@ -27,5 +27,5 @@ app.controller('PreferencesController', ['$scope', 'SavePreferences',
         displayMessage(gettext('Error saving settings'));
       });
     };
-  }
+  },
 ]);

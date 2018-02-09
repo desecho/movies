@@ -10,7 +10,7 @@ String.prototype.toTitleCase = function() { // eslint-disable-line no-extend-nat
 app.factory('SearchMovie', ['$resource', function($resource) {
   return $resource(urlSearchMovie, {}, {
     get: {
-      method: 'GET'
+      method: 'GET',
     },
   });
 }]);
@@ -19,7 +19,7 @@ app.factory('AddToListFromDb', ['$resource', function($resource) {
   return $resource(urlAddToListFromDb, {}, {
     post: {
       method: 'POST',
-      headers: headers
+      headers: headers,
     },
   });
 }]);
@@ -91,7 +91,7 @@ app.controller('MoviesSearchController', ['$scope', 'SearchMovie', 'AddToListFro
       $scope.searchTypeCode = code;
       $scope.searchType = gettext(code.toTitleCase());
     };
-  }
+  },
 ]);
 
 $('#search').show();
