@@ -11,7 +11,7 @@ ALLOWED_CHARS = 'абвгдеёжзийклмнопрстуфхцчшщьыъэ�
 class Command(BaseCommand):
     help = 'Displays wrong russian titles'
 
-    def handle(self, *args, **options):
+    def handle(self, *args, **options):  # pylint: disable=unused-argument
         ids_to_ignore = [
             1989,
             1873,

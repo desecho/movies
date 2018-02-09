@@ -30,7 +30,7 @@ class Command(BaseCommand):
             help='Start running the script fom provided movie id',
         )
 
-    def handle(self, movie_id, start_from_id, *args, **options):
+    def handle(self, movie_id, start_from_id, *args, **options):   # pylint: disable=unused-argument
         def get_filtered_movies():
             if start_from_id:
                 return movies.filter(pk__gte=movie_id)
