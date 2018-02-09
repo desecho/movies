@@ -41,10 +41,6 @@ angular-resource@^1.6.9:
   version "1.6.9"
   resolved "https://registry.yarnpkg.com/angular-resource/-/angular-resource-1.6.9.tgz#d02334b7cb96353e245966ad044c0c673df7b685"
 
-angular-route@^1.6.9:
-  version "1.6.9"
-  resolved "https://registry.yarnpkg.com/angular-route/-/angular-route-1.6.9.tgz#73c63cec6a8a6b924698aec635eac32aa41f5e2b"
-
 angular@^1.6.9:
   version "1.6.9"
   resolved "https://registry.yarnpkg.com/angular/-/angular-1.6.9.tgz#bc812932e18909038412d594a5990f4bb66c0619"
