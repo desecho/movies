@@ -5,7 +5,7 @@
 {% load static %}
 
 {% block content %}
-  <div ng-controller="PreferencesController">
+  <div ng-controller="PreferencesController as preferences">
     <form class="form-horizontal" id="preferences">
       <legend>{% trans 'Settings' %}</legend>
       <br>
@@ -27,7 +27,7 @@
           {% get_language_info_list for LANGUAGES as languages %}
           {% for language in languages %}
             <label class="radio mr-2">
-              <input type="radio" ng-click="savePreferences(true)" name="lang" value="{{ language.code }}"
+              <input type="radio" ng-model="preferences.language" ng-change="preferences.save(true)" name="lang" value="{{ language.code }}"
                 {% ifequal user.language language.code %} checked {% endifequal %}> {{ language.name_local }}
             </label>
           {% endfor %}
@@ -38,7 +38,7 @@
         <label class="col-form-label col-sm-2" for="only-for-friends">{% trans 'Privacy' %}:</label>
         <div class="col-sm-10">
           <label class="checkbox">
-            <input type="checkbox" ng-click="savePreferences()" id="only-for-friends" name="only_for_friends"
+            <input type="checkbox" ng-model="preferences.onlyForFriends" ng-change="preferences.save(true)" id="only-for-friends" name="only_for_friends"
               {% if user.only_for_friends %} checked {% endif %}> {% trans 'Show my lists only to friends' %}<br>
           </label>
         </div>
@@ -52,10 +52,13 @@
     </form>
   </div>
 {% endblock %}
-
+{% get_current_language as LANGUAGE_CODE %}
 {% block js %}
   <script>
-    const urlSavePreferences = '{% url 'save_preferences' %}';
+    'use strict';
+    urls.urlSavePreferences = '{% url 'save_preferences' %}';
+    vars.language = '{{ user.language }}';
+    vars.onlyForFriends = {{ user.only_for_friends|yesno:'true,false' }};
   </script>
   <script src="{% static 'js/preferences.js' %}"></script>
 {% endblock %}

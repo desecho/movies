@@ -2,7 +2,7 @@
 {% load static %}
 
 <!DOCTYPE html>
-<html ng-app="movies">
+<html ng-app="app">
 <head>
   <meta HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
   <meta HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE">
@@ -32,9 +32,7 @@
 </footer>
 {% include 'includes/google_analytics.html' %}
 <script src="{% url 'javascript-catalog' %}"></script>
-{% get_current_language as LANGUAGE_CODE %}
 <script>
-  const language = '{{ LANGUAGE_CODE }}';
   const isVkUser = {{ user.is_vk_user|yesno:'true,false' }};
 </script>
 <script src="{% static 'vendor/jquery/dist/jquery.min.js' %}"></script>
@@ -49,7 +47,7 @@
 <script src="{% static 'vendor/angular-loading-bar/build/loading-bar.min.js' %}"></script>
 <script src="{% static 'vendor/angular-resource/angular-resource.min.js' %}"></script>
 <script src="{% static 'vendor/angular-bootstrap/ui-bootstrap-tpls.min.js' %}"></script>
-
+<script src="{% static 'vendor/angular-cookies/angular-cookies.min.js' %}"></script>
 <script src="{% static 'js/ajax_loading.js' %}"></script>
 <script src="{% static 'js/main.js' %}"></script>
 {% if user.is_vk_user %}

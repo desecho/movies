@@ -3,7 +3,7 @@
 
 {% generate_menu %}
 
-<nav class="navbar navbar-toggleable-sm navbar-light bg-faded navbar-expand-sm">
+<nav class="navbar navbar-toggleable-sm navbar-light bg-faded navbar-expand-sm" ng-controller="MenuController as menu">
   <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
           data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false"
           aria-label="{% trans 'Toggle navigation' %}">
@@ -44,7 +44,7 @@
       {% else %}
         {% get_current_language as LANGUAGE_CODE %}
         <li class="nav-item">
-          <a class="nav-link" href="#" onclick="$('#language-form').submit()">{% if LANGUAGE_CODE == 'en' %}
+          <a class="nav-link" href="javascript:void(0)" ng-click="menu.changeLanguage()">{% if LANGUAGE_CODE == 'en' %}
             Русский{% else %}English{% endif %}</a>
         </li>
         <form id="language-form" action="{% url 'set_language' %}" method="post">

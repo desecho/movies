@@ -7,7 +7,7 @@ String.prototype.toTitleCase = function() { // eslint-disable-line no-extend-nat
   });
 };
 
-app.factory('SearchMovie', ['$resource', function($resource) {
+angular.module('app').factory('SearchMovie', ['$resource', function($resource) {
   return $resource(urlSearchMovie, {}, {
     get: {
       method: 'GET',
@@ -15,7 +15,7 @@ app.factory('SearchMovie', ['$resource', function($resource) {
   });
 }]);
 
-app.factory('AddToListFromDb', ['$resource', function($resource) {
+angular.module('app').factory('AddToListFromDb', ['$resource', function($resource) {
   return $resource(urlAddToListFromDb, {}, {
     post: {
       method: 'POST',
@@ -24,7 +24,7 @@ app.factory('AddToListFromDb', ['$resource', function($resource) {
   });
 }]);
 
-app.controller('MoviesSearchController', ['$scope', 'SearchMovie', 'AddToListFromDb',
+angular.module('app').controller('MoviesSearchController', ['$scope', 'SearchMovie', 'AddToListFromDb',
 
   function($scope, SearchMovie, AddToListFromDb) {
     $scope.searchType = gettext('Movie');

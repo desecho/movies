@@ -65,9 +65,9 @@
     "handleError": false,
     "rating": false,
     "headers": false,
-    "app": false,
     "retinajs": false,
     "isVkUser": false,
-    "autosize": false
+    "autosize": false,
+    "createPostResource": false
   }
 }

@@ -1,31 +1,28 @@
-/* global urlSavePreferences:false */
+'use strict';
 
-app.factory('SavePreferences', ['$resource', function($resource) {
-  return $resource(urlSavePreferences, {}, {
-    post: {
-      method: 'POST',
-      headers: headers,
-    },
-  });
-}]);
+(function() {
+  createPostResource('savePreferences', urls.urlSavePreferences);
+  angular.module('app').controller('PreferencesController', PreferencesController);
+  PreferencesController.$inject = ['savePreferences'];
 
-app.controller('PreferencesController', ['$scope', 'SavePreferences',
-  function($scope, SavePreferences) {
-    $scope.savePreferences = function(reload) {
+  function PreferencesController(savePreferences) {
+    let vm = this;
+    vm.save = save;
+    vm.language = vars.language;
+    vm.onlyForFriends = vars.onlyForFriends;
+
+    function save(reload) {
       const preferences = {
-        language: $('input:radio[name=lang]:checked').val(),
+        language: vm.language,
+        onlyForFriends: vm.onlyForFriends
       };
-      let field = $('input[name=only_for_friends]');
-      if (field.length !== 0) {
-        preferences.onlyForFriends = field.prop('checked');
-      }
-      SavePreferences.post($.param(preferences), function() {
+      savePreferences.post(angular.element.param(preferences), function() {
         if (reload) {
           location.reload();
         }
       }, function() {
         displayMessage(gettext('Error saving settings'));
       });
-    };
-  },
-]);
+    }
+  }
+})();

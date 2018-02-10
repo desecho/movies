@@ -13,7 +13,7 @@
 /* global ratyCustomSettings:false */
 
 
-app.factory('RemoveMovie', ['$resource', function($resource) {
+angular.module('app').factory('RemoveMovie', ['$resource', function($resource) {
   return $resource(urlRemoveMovie, {}, {
     post: {
       method: 'POST',
@@ -22,7 +22,7 @@ app.factory('RemoveMovie', ['$resource', function($resource) {
   });
 }]);
 
-app.factory('SaveComment', ['$resource', function($resource) {
+angular.module('app').factory('SaveComment', ['$resource', function($resource) {
   return $resource(urlSaveComment, {}, {
     post: {
       method: 'POST',
@@ -31,7 +31,7 @@ app.factory('SaveComment', ['$resource', function($resource) {
   });
 }]);
 
-app.controller('ListController', ['$scope', 'RemoveMovie', 'SaveComment',
+angular.module('app').controller('ListController', ['$scope', 'RemoveMovie', 'SaveComment',
 
   function($scope, RemoveMovie, SaveComment) {
     function removeMovieFromPage(id) {
