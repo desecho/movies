@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from django.utils.translation import ugettext_lazy as _
 
 import facebook
 import vkontakte
@@ -137,7 +138,7 @@ class UserBase:
 
 
 class User(AbstractUser, UserBase):
-    only_for_friends = models.BooleanField(default=False)
+    only_for_friends = models.BooleanField(default=False, help_text=_('Privacy setting. It indicates whether only your friends have access to your movie lists.'))
     language = models.CharField(max_length=2, choices=settings.LANGUAGES, default='en')
     avatar = models.URLField(null=True, blank=True)
     loaded_initial_data = models.BooleanField(default=False)
