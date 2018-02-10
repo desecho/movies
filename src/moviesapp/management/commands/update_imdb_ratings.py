@@ -15,7 +15,7 @@ sys.setdefaultencoding('utf8')
 class Command(BaseCommand):
     help = 'Updates the IMDB ratings'
 
-    def handle(self, *args, **options):   # pylint: disable=unused-argument
+    def handle(self, *args, **options):  # pylint: disable=unused-argument
         movies = Movie.objects.all()
         t = self.tqdm(total=movies.count())
         last_movie_id = movies.last().pk
