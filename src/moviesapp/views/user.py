@@ -4,7 +4,7 @@ from django.contrib.auth import logout
 from django.shortcuts import redirect
 
 from ..models import activate_user_language_preference
-from .mixins import AjaxView, TemplateView
+from .mixins import AjaxView, TemplateView, TemplateAnonymousView
 
 
 def logout_view(request):
@@ -14,6 +14,9 @@ def logout_view(request):
 
 class PreferencesView(TemplateView):
     template_name = 'user/preferences.html'
+
+class LoginErrorView(TemplateAnonymousView):
+    template_name = 'user/login_error.html'
 
 
 class SavePreferencesView(AjaxView):

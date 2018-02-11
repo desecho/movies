@@ -28,6 +28,7 @@ from moviesapp.views.user import (
     PreferencesView,
     SavePreferencesView,
     logout_view,
+    LoginErrorView,
 )
 from moviesapp.views.vk import UploadPosterToWallView
 
@@ -46,6 +47,7 @@ urlpatterns = [
     # Accounts
     path('accounts/login/', login, {'template_name': 'user/login.html'}, name='login'),
     path('accounts/logout/', logout_view, name='logout'),
+    path('accounts/login-error/', LoginErrorView.as_view(), name='login_error'),
     path('accounts/', include('registration.backends.default.urls')),
 
     # Preferences

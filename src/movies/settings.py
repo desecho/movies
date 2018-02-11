@@ -216,7 +216,7 @@ LOGIN_REDIRECT_URL = '/'
 if IS_VK_DEV:
     LOGIN_REDIRECT_URL = 'https://{}'.format(local_settings.HOST_MOVIES_TEST)
 LOGIN_URL = '/accounts/login/'
-LOGIN_ERROR_URL = '/login-error/'
+LOGIN_ERROR_URL = '/accounts/login-error/'
 
 # Static files
 STATIC_ROOT = op.join(local_settings.PROJECT_ROOT, 'static')
