@@ -3,6 +3,7 @@
 from django.conf import settings
 
 from moviesapp.vk import get_vk_avatar
+
 from .models import Vk
 
 

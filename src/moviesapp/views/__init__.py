@@ -1,4 +1,4 @@
-from .mixins import  TemplateAnonymousView
+from .mixins import TemplateAnonymousView
 
 
 class AboutView(TemplateAnonymousView):
