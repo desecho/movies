@@ -368,6 +368,8 @@ RECORDS_ON_PAGE = 50
 PEOPLE_ON_PAGE = 25
 FEED_DAYS = 7
 ADMIN_EMAIL = local_settings.ADMIN_EMAIL
+VK_EN = 3
+VK_NO_AVATAR = ['https://vk.com/images/camera_100.png', 'https://vk.com/images/camera_200.png']
 
 # API Keys
 TMDB_KEY = local_settings.TMDB_KEY

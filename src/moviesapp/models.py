@@ -147,7 +147,9 @@ class User(AbstractUser, UserBase):
         default=False,
         help_text=_('Privacy setting. It indicates whether only your friends have access to your movie lists.'))
     language = models.CharField(max_length=2, choices=settings.LANGUAGES, default='en')
-    avatar = models.URLField(null=True, blank=True)
+    location = models.CharField(max_length=100, null=True, blank=True)
+    avatar_small = models.URLField(null=True, blank=True)
+    avatar_big = models.URLField(null=True, blank=True)
     loaded_initial_data = models.BooleanField(default=False)
 
     def __str__(self):

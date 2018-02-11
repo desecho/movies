@@ -9,6 +9,7 @@ The web application on Python/Django, jQuery, AngularJS, Bootstrap. Create movie
 | Share your lists with VK and Facebook friends, get recommendations from friends.
 | The website is live here - https://movies.desecho.org.
 | The interface is available in English and Russian.
+| See more documentation_.
 
 Used APIs
 --------------
@@ -42,3 +43,4 @@ Development
 .. _TMDb: https://www.themoviedb.org/
 .. _OMDb: http://www.omdbapi.com/
 .. _ansible-playbook-server: https://github.com/desecho/ansible-playbook-server
+.. _documentation: https://github.com/desecho/movies/blob/master/doc.rst
