@@ -1,6 +1,10 @@
 {% extends 'base.html' %}
 {% load static avatar %}
 
+{% block head %}
+  <link href="{% static 'vendor/raty-js/lib/jquery.raty.css' %}" rel="stylesheet">
+{% endblock %}
+
 {% block content %}
   <legend>{{ list_name }}</legend>
   <br>

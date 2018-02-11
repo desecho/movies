@@ -1,6 +1,10 @@
 {% extends 'base.html' %}
 {% load i18n static set_var %}
 
+{% block head %}
+  <link href="{% static 'vendor/raty-js/lib/jquery.raty.css' %}" rel="stylesheet">
+{% endblock %}
+
 {% block content %}
   <div id="results" class="results col-sm-12 col-md-10 col-lg-8">
     {% if records %}
