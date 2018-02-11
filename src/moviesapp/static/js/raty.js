@@ -23,5 +23,5 @@ let ratySettings = {
     },
   };
   const settings = angular.extend({}, ratySettings, ratyCustomSettings, scoreSettings);
-  return angular.element('.rating').raty(settings);
+  angular.element('.rating').raty(settings);
 })();
