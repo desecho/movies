@@ -4,8 +4,6 @@ from django.conf import settings
 
 from moviesapp.vk import get_vk_avatar
 
-from .models import Vk
-
 
 def load_user_data(backend, user, **kwargs):  # pylint: disable=unused-argument
     def get_vk_country(id_):
@@ -20,8 +18,8 @@ def load_user_data(backend, user, **kwargs):  # pylint: disable=unused-argument
             return city[0]['name']
         return None
 
-    if user.loaded_initial_data:
-        return None
+    # if user.loaded_initial_data:
+    #     return None
 
     if backend.name in settings.VK_BACKENDS:
         # We don't need the username and email because they are already loaded.
@@ -33,10 +31,14 @@ def load_user_data(backend, user, **kwargs):  # pylint: disable=unused-argument
             'photo_medium',
             'photo_big',
         )
-        vk = Vk(user)
+        vk = user.get_vk()
         data = vk.get_data(FIELDS)
-        user.avatar_small = get_vk_avatar(data['photo_medium'])
-        user.avatar_big = get_vk_avatar(data['photo_big'])
+        avatar_small = get_vk_avatar(data['photo_medium'])
+        if avatar_small:
+            user.avatar_small = avatar_small
+        avatar_big = get_vk_avatar(data['photo_big'])
+        if avatar_big:
+            user.avatar_big = avatar_big
         user.first_name = data['first_name']
         user.last_name = data['last_name']
         user.language = 'ru'

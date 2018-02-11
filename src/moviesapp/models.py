@@ -127,11 +127,15 @@ class UserBase:
             users = users.order_by('first_name')
         return list(set(users))
 
+    def get_vk(self):
+        if self.is_vk_user():
+            return Vk(self)
+
     def get_friends(self, sort=False):
         friends = User.objects.none()
         if self.is_linked:
             if self.is_vk_user():
-                friends |= Vk(self).get_friends()
+                friends |= self.get_vk().get_friends()
             if self.is_fb_user():
                 friends |= Fb(self).get_friends()
             if sort:
