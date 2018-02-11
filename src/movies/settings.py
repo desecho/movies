@@ -323,6 +323,7 @@ ADMIN_REORDER = (
         'app': 'social_django',
         'models': ('social_django.UserSocialAuth', )
     },
+    'registration',
 )
 
 # django-google-analytics-app
