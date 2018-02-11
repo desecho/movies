@@ -1,5 +1,4 @@
-{% load avatar %}
-{% load get %}
+{% load avatar get %}
 
 {% if reviews|get:record.id %}
   {% for review in reviews|get:record.id %}

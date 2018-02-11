@@ -1,12 +1,9 @@
 {% extends 'base.html' %}
-
-{% load i18n %}
-{% load avatar %}
-{% load static %}
+{% load i18n static avatar %}
 
 {% block content %}
   <div ng-controller="PreferencesController as preferences">
-    <form class="form-horizontal" id="preferences">
+    <form class="form-horizontal">
       <legend>{% trans 'Settings' %}</legend>
       <br>
       <div class="form-group row vk-app-hide" style="display: none;">
@@ -20,31 +17,29 @@
         </div>
       </div>
 
-      <div class="form-group row">
+      <div class="form-group row" ng-cloak>
         <label class="col-form-label col-sm-2" for="lang">{% trans 'Language' %}:</label>
         <div class="col-sm-10">
           {% get_available_languages as LANGUAGES %}
           {% get_language_info_list for LANGUAGES as languages %}
           {% for language in languages %}
             <label class="radio mr-2">
-              <input type="radio" ng-model="preferences.language" ng-change="preferences.save(true)" name="lang" value="{{ language.code }}"
-                {% ifequal user.language language.code %} checked {% endifequal %}> {{ language.name_local }}
+              <input type="radio" ng-model="preferences.language" ng-change="preferences.save(true)" name="lang" value="{{ language.code }}" > {{ language.name_local }}
             </label>
           {% endfor %}
         </div>
       </div>
 
-      <div class="form-group row">
+      <div class="form-group row" ng-cloak>
         <label class="col-form-label col-sm-2" for="only-for-friends">{% trans 'Privacy' %}:</label>
         <div class="col-sm-10">
           <label class="checkbox">
-            <input type="checkbox" ng-model="preferences.onlyForFriends" ng-change="preferences.save(true)" id="only-for-friends" name="only_for_friends"
-              {% if user.only_for_friends %} checked {% endif %}> {% trans 'Show my lists only to friends' %}<br>
+            <input type="checkbox" ng-model="preferences.onlyForFriends" ng-change="preferences.save()" id="only-for-friends"> {% trans 'Show my lists only to friends' %}<br>
           </label>
         </div>
       </div>
       <div class="form-group row">
-        <label class="col-form-label col-sm-2" for="only-for-friends">{% trans 'User' %}:</label>
+        <label class="col-form-label col-sm-2">{% trans 'User' %}:</label>
         <div class="col-sm-10">
           <a href="{% url 'admin:password_change' %}">{% trans 'Change password' %}</a>
         </div>
@@ -52,10 +47,11 @@
     </form>
   </div>
 {% endblock %}
-{% get_current_language as LANGUAGE_CODE %}
+
 {% block js %}
   <script>
     'use strict';
+
     urls.urlSavePreferences = '{% url 'save_preferences' %}';
     vars.language = '{{ user.language }}';
     vars.onlyForFriends = {{ user.only_for_friends|yesno:'true,false' }};

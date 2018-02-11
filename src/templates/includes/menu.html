@@ -1,5 +1,4 @@
-{% load i18n %}
-{% load menu %}
+{% load i18n menu %}
 
 {% generate_menu %}
 
@@ -30,7 +29,7 @@
         </li>
       {% endfor %}
     </ul>
-    <ul id="right-nav-bar" class="navbar-nav" style="display: none;">
+    <ul class="navbar-nav">
       {% if user.is_vk_user %}
         <li class="nav-item vk-app-show" style="display: none;"><a id="invite" href="javascript:void(0)"
                                                                    class="nav-link"

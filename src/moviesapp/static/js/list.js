@@ -1,7 +1,4 @@
-/* global urlSaveComment:false */
-/* global urlChangeRating:false */
-/* global urlApplySettings:false */
-/* global urlRemoveMovie:false */
+/* global autosize:false */
 /* global ratySettings:false */
 /* global mode:false */
 /* global recommendation:false */
@@ -9,66 +6,126 @@
 /* global listData:false */
 /* global setViewedIconAndRemoveButtons:false */
 /* global listId:false */
-/* global isVkApp:false */
 /* global ratyCustomSettings:false */
 
+'use strict';
 
-angular.module('app').factory('RemoveMovie', ['$resource', function($resource) {
-  return $resource(urlRemoveMovie, {}, {
-    post: {
-      method: 'POST',
-      headers: headers,
-    },
-  });
-}]);
+(function() {
+  angular.module('app').factory('movieService', factory);
+  factory.$inject = ['$resource'];
 
-angular.module('app').factory('SaveComment', ['$resource', function($resource) {
-  return $resource(urlSaveComment, {}, {
-    post: {
-      method: 'POST',
-      headers: headers,
-    },
-  });
-}]);
+  function factory($resource) {
+    return $resource(urls.urlRemoveMovie + ':id/', {
+      id: '@id',
+    }, {
+      delete: {
+        method: 'DELETE',
+      },
+    });
+  }
+})();
 
-angular.module('app').controller('ListController', ['$scope', 'RemoveMovie', 'SaveComment',
+(function() {
+  angular.module('app').factory('movieDataservice', factory);
+  factory.$inject = ['movieService', 'growl'];
 
-  function($scope, RemoveMovie, SaveComment) {
-    function removeMovieFromPage(id) {
-      function checkIfNoRecords() {
-        if (!$('.movie').length) {
-          $('#results')[0].innerHTML = gettext('The list is empty') + '.';
-        }
-      }
-      $('#record' + id).fadeOut('fast', function() {
-        $(this).remove();
-        checkIfNoRecords();
-      });
-    }
-
-    $scope.openUrl = function(url) {
-      window.location.href = url;
+  function factory(movieService, growl) {
+    return {
+      delete: deleteMovie,
     };
 
-    $scope.removeMovie = function(id) {
-      function error() {
-        displayMessage(gettext('Error removing the movie'));
+    function deleteMovie(id) {
+      return movieService.delete({
+        id: id,
+      }, success, fail);
+
+      function removeMovieFromPage(id) {
+        function checkIfNoRecords() {
+          if (!angular.element('.movie').length) {
+            angular.element('#results')[0].innerHTML = gettext('The list is empty') + '.';
+          }
+        }
+        angular.element('#record' + id).fadeOut('fast', function(el) {
+          console.log(el);
+          angular.element(this).remove(); // eslint-disable-line no-invalid-this
+          checkIfNoRecords();
+        });
       }
 
-      RemoveMovie.post($.param({
-        id: id,
-      }), function(response) {
+      function success(response) {
         if (response.status === 'success') {
           removeMovieFromPage(id);
         } else {
-          error();
+          fail();
         }
-      }, function() {
-        error();
-      });
+      }
+
+      function fail() {
+        growl.error(gettext('Error removing the movie'));
+      }
+    }
+  }
+})();
+
+
+(function() {
+  angular.module('app').factory('movieCommentService', ['$resource', function($resource) {
+    return $resource(urls.urlSaveComment, {}, {
+      save: {
+        method: 'POST',
+      },
+    });
+  }]);
+})();
+
+(function() {
+  angular.module('app').factory('movieCommentDataservice', factory);
+  factory.$inject = ['movieCommentService', 'growl'];
+
+  function factory(movieCommentService, growl) {
+    return {
+      save: save,
     };
 
-    $scope.switchMode = function(newMode) {
+    function save(data) {
+      return movieCommentService.save(angular.element.param(data), success, fail);
+
+      function success(response) {
+        if (response.status !== 'success') {
+          fail();
+        }
+      }
+
+      function fail() {
+        growl.error(gettext('Error saving a comment'));
+      }
+    }
+  }
+})();
+
+(function() {
+  angular.module('app').controller('ListController', ListController);
+  ListController.$inject = ['movieDataservice', 'movieCommentDataservice', 'isVkApp'];
+
+  function ListController(movieDataservice, movieCommentDataservice, isVkApp) {
+    const vm = this;
+    vm.openUrl = openUrl;
+    vm.removeMovie = removeMovie;
+    vm.switchMode = switchMode;
+    vm.saveComment = saveComment;
+    vm.toggleCommentArea = toggleCommentArea;
+    vm.mode = mode;
+    vm.isVkApp = isVkApp;
+
+    function openUrl(url) {
+      window.location.href = url;
+    }
+
+    function removeMovie(id) {
+      movieDataservice.delete(id);
+    }
+
+    function switchMode(newMode) {
       function deactivateModeMinimal() {
         $('.poster, .comment, .release-date-label, .wall-post').show();
         $('.comment-button').hide();
@@ -88,41 +145,30 @@ angular.module('app').controller('ListController', ['$scope', 'RemoveMovie', 'Sa
       applySettings({
         mode: newMode,
       }, false);
-      $scope.mode = newMode;
-    };
+      vm.mode = newMode;
+    }
 
-    $scope.saveComment = function(id) {
-      function showError() {
-        displayMessage(gettext('Error saving a comment'));
-      }
-      const comment = $('#comment' + id).val();
-      SaveComment.post($.param({
+    function saveComment(id) {
+      const comment = angular.element('#comment' + id)[0].value;
+      movieCommentDataservice.save({
         id: id,
         comment: comment,
-      }), function(response) {
-        if (response.status == 'success') {
+      }).$promise.then(
+        function() {
           if (!comment) {
-            $scope.toggleCommentArea(id);
+            vm.toggleCommentArea(id);
           }
-        } else {
-          showError();
         }
-      }, function() {
-        showError();
-      });
-    };
+      ).catch(function() {});
+    }
 
-    $scope.toggleCommentArea = function(id) {
+    function toggleCommentArea(id) {
       $('#comment-area' + id).toggle();
       $('#comment-area-button' + id).toggle();
       $('#comment' + id).focus();
-    };
-    $scope.mode = mode;
-    if (isVkUser) {
-      $scope.isVkApp = isVkApp;
     }
-  },
-]);
+  }
+})();
 
 function changeRating(id, rating, element) {
   function error() {
@@ -137,7 +183,7 @@ function changeRating(id, rating, element) {
     displayMessage(gettext('Error adding a rating'));
   }
 
-  $.post(urlChangeRating, {
+  $.post(urls.urlChangeRating, {
     id: id,
     rating: rating,
   }, function(response) {
@@ -173,7 +219,7 @@ function applySettings(settings, reload) {
   if (reload == null) {
     reload = true;
   }
-  $.post(urlApplySettings, {
+  $.post(urls.urlApplySettings, {
     settings: JSON.stringify(settings),
   }, function(response) {
     if (response.status == 'success') {
@@ -217,7 +263,7 @@ function toggleRecommendation() { // eslint-disable-line no-unused-vars
     if (anothersAccount) {
       $('.movie').each(function() {
         const id = $(this).attr('data-id');
-        const listId = listData[id];
+        const listId = listData[id]; // eslint-disable-line no-invalid-this
         setViewedIconAndRemoveButtons(id, listId);
       });
     }
@@ -242,7 +288,6 @@ function toggleRecommendation() { // eslint-disable-line no-unused-vars
     $('#button-recommendation').button('toggle');
   }
   setViewedIconsAndRemoveButtons();
-  autosize($('textarea'));
+  autosize(angular.element('textarea'));
   retinajs();
-  $('#results').show();
 })();

@@ -1,7 +1,5 @@
 {% extends 'base.html' %}
-
-{% load avatar %}
-{% load static %}
+{% load static avatar %}
 
 {% block content %}
   <legend>{{ list_name }}</legend>
@@ -41,6 +39,7 @@
 
 {% block js %}
   <script src="{% static 'vendor/raty-js/lib/jquery.raty.js' %}"></script>
+
   <script src="{% static 'js/raty.js' %}"></script>
   <script src="{% static 'js/raty_readonly.js' %}"></script>
 {% endblock %}

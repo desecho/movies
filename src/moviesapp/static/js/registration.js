@@ -1,5 +1,8 @@
-$('#registration').submit(function(e) {
+'use strict';
+
+angular.element('#registration').submit(function(e) {
   e.preventDefault();
-  $('#password2').val($('#password1').val());
-  $('#registration')[0].submit();
+  const password = angular.element('#password1')[0].value;
+  angular.element('#password2')[0].value = password;
+  angular.element('#registration')[0].submit();
 });

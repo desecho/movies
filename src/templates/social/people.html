@@ -1,11 +1,7 @@
 {% extends 'base.html' %}
-
-{% load bootstrap_pagination %}
-{% load avatar %}
-{% load movie_count %}
+{% load bootstrap_pagination avatar movie_count %}
 
 {% block content %}
-
   {% for user in users %}
     <div class="person">
       <a href="{% url 'people' user.username 'watched' %}">{% avatar user %}</a>
@@ -17,5 +13,4 @@
   {% if users.has_other_pages %}
     {% bootstrap_paginate users range=10 show_prev_next="true" show_first_last="true" alignment="left" %}
   {% endif %}
-
 {% endblock %}

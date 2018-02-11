@@ -3,8 +3,10 @@ from django.views.generic import TemplateView as TemplateViewOriginal, View
 
 
 class AjaxAnonymousView(JsonRequestResponseMixin, View):
-    def success(self):
-        return self.render_json_response({'status': 'success'})
+    def success(self, **kwargs):
+        response = {'status': 'success'}
+        response.update(kwargs)
+        return self.render_json_response(response)
 
 
 class AjaxView(LoginRequiredMixin, AjaxAnonymousView):

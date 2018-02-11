@@ -1,10 +1,11 @@
 """URL Configuration."""
 
+import django
 from django.conf import settings
 from django.conf.urls import include, url
 from django.contrib import admin
 from django.contrib.auth.views import login
-from django.urls import path
+from django.urls import path, re_path
 from django.views.i18n import JavaScriptCatalog
 
 from moviesapp.views.list import (
@@ -54,7 +55,8 @@ urlpatterns = [
     url(r'^people/(?P<username>[\w\d]+)/(?P<list_name>watched|to-watch)$', ListView.as_view(), name='people'),
     url(r'^recommendations/$', RecommendationsView.as_view(), name='recommendations'),
     url(r'^apply-setting/$', ApplySettingsView.as_view(), name='apply_settings'),
-    url(r'^remove-movie/$', RemoveMovieView.as_view(), name='remove_movie'),
+    url(r'^remove-movie/$', django.views.defaults.page_not_found, name='remove_movie'),
+    re_path(r'^remove-movie/(?P<id>\d+)/$', RemoveMovieView.as_view(), name='remove_movie'),
     url(r'^add-to-list/$', AddToListView.as_view(), name='add_to_list'),
     url(r'^change-rating/$', ChangeRatingView.as_view(), name='change_rating'),
     url(r'^save-comment/$', SaveCommentView.as_view(), name='save_comment'),

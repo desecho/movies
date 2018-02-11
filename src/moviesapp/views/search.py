@@ -35,8 +35,8 @@ class SearchMovieView(AjaxAnonymousView):
             'popular_only': json.loads(options['popularOnly']),
             'sort_by_date': json.loads(options['sortByDate'])
         }
-        output = get_movies_from_tmdb(query, type_, options, request.user, self.request.LANGUAGE_CODE)
-        return self.render_json_response(output)
+        movies = get_movies_from_tmdb(query, type_, options, request.user, self.request.LANGUAGE_CODE)
+        return self.success(movies=movies)
 
 
 class AddToListFromDbView(AjaxView):

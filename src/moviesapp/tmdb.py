@@ -89,7 +89,6 @@ def get_movies_from_tmdb(query, type_, options, user, lang):
                 movies = [m for m in movies if m['job'] == 'Director']
         return movies
 
-    output = {}
     movies_data = get_data(query, type_)
     movies = []
     i = 0
@@ -117,14 +116,9 @@ def get_movies_from_tmdb(query, type_, options, user, lang):
         if options['sort_by_date']:
             movies = sort_by_date(movies)
         movies = set_proper_date(movies)
-        if movies:
-            output['movies'] = movies
-            output['status'] = 'success'
-        else:
-            output['status'] = 'not_found'
+        return movies
     else:
-        output['status'] = 'not_found'
-    return output
+        return []
 
 
 def get_tmdb_movie_data(tmdb_id):

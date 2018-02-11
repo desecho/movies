@@ -1,28 +1,14 @@
 /* global ratySettings:false */
-/* global urlAjaxUploadPosterToWall:false */
 /* global VK:false */
-// Put VK to globals because we don't want it to be used in other files.
 
-// function initVk() {
-//   return VK.callMethod('resizeWindow', 807, $('body').height() + 80);
-// };
-
-// setInterval('initVk()', 200);
-
-function inIframe() {
-  try {
-    return window.self !== window.top;
-  } catch (e) {
-    return true;
-  }
-}
+'use strict';
 
 function postToWall(id) { // eslint-disable-line no-unused-vars
   function post(photo) {
     function createWallPostMessage() {
       let text;
-      const title = $('#record' + id).attr('data-title');
-      const comment = $('#comment' + id).val();
+      const title = angular.element('#record' + id).attr('data-title');
+      const comment = angular.element('#comment' + id)[0].value;
       const ratingPost = ratySettings['hints'][rating - 1];
       if (rating > 2) {
         text = gettext('I recommend watching');
@@ -68,11 +54,11 @@ ${myRating} - ${ratingPost}.`;
   }
 
   function uploadPhotoToWall(url) {
-    return $.post(urlAjaxUploadPosterToWall, {
+    return $.post(urls.urlAjaxUploadPosterToWall, {
       url: url,
       recordId: id,
     }, function(response) {
-      return saveWallPhoto($.parseJSON(response.data));
+      return saveWallPhoto(angular.fromJson(response.data));
     }).fail(function() {
       return displayMessage(gettext('Error loading a poster'));
     });
@@ -89,11 +75,11 @@ ${myRating} - ${ratingPost}.`;
   }
 
   function hasPoster() {
-    return $('#record' + id).children('.poster').children('img').attr('src').indexOf('no_poster') === -1;
+    return angular.element('#record' + id).children('.poster').children('img').attr('src').indexOf('no_poster') === -1;
   }
 
   const rating = parseInt(
-    $('#record' + id).children('.details').children('.review').children('.rating').attr('data-rating'));
+    angular.element('#record' + id).children('.details').children('.review').children('.rating').attr('data-rating'));
 
   if (rating) {
     if (hasPoster()) {
@@ -104,13 +90,4 @@ ${myRating} - ${ratingPost}.`;
   } else {
     return displayMessage(gettext('Add a rating to the movie'));
   }
-}
-
-const isVkApp = inIframe();
-
-if (isVkApp) {
-  $('.vk-app-show').show();
-  $('#content').addClass('vk');
-} else {
-  $('.vk-app-hide').show();
 }

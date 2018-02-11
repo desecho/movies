@@ -1,5 +1,4 @@
-/* global urlSearchMovie:false */
-/* global urlAddToListFromDb:false */
+'use strict';
 
 String.prototype.toTitleCase = function() { // eslint-disable-line no-extend-native
   return this.replace(/\w\S*/g, function(txt) {
@@ -7,91 +6,133 @@ String.prototype.toTitleCase = function() { // eslint-disable-line no-extend-nat
   });
 };
 
-angular.module('app').factory('SearchMovie', ['$resource', function($resource) {
-  return $resource(urlSearchMovie, {}, {
-    get: {
-      method: 'GET',
-    },
-  });
-}]);
+(function() {
+  angular.module('app').factory('moviesService', factory);
+  factory.$inject = ['$resource'];
 
-angular.module('app').factory('AddToListFromDb', ['$resource', function($resource) {
-  return $resource(urlAddToListFromDb, {}, {
-    post: {
-      method: 'POST',
-      headers: headers,
-    },
-  });
-}]);
+  function factory($resource) {
+    return $resource(urls.urlSearchMovie, {}, {
+      search: {
+        method: 'GET',
+      },
+    });
+  }
+})();
 
-angular.module('app').controller('MoviesSearchController', ['$scope', 'SearchMovie', 'AddToListFromDb',
+(function() {
+  angular.module('app').factory('moviesDataservice', factory);
+  factory.$inject = ['moviesService', 'growl'];
 
-  function($scope, SearchMovie, AddToListFromDb) {
-    $scope.searchType = gettext('Movie');
-    $scope.searchTypeCode = 'movie';
-    $scope.submit = function() {
-      function showError() {
-        displayMessage(gettext('Search Error'));
+  function factory(moviesService, growl) {
+    return {
+      search: search,
+    };
+
+    function search(data) {
+      return moviesService.search(data, success, fail);
+
+      function success(response) {
+        if (response.movies.length === 0) {
+          growl.info(gettext('Nothing has been found'));
+        }
       }
-      $scope.nothingFound = false;
-      $scope.searchResults = [];
+
+      function fail() {
+        growl.error(gettext('Search Error'));
+      }
+    }
+  }
+})();
+
+(function() {
+  angular.module('app').factory('addToListFromDbService', factory);
+  factory.$inject = ['$resource'];
+
+  function factory($resource) {
+    return $resource(urls.urlAddToListFromDb, {}, {
+      add: {
+        method: 'POST',
+      },
+    });
+  }
+})();
+
+(function() {
+  angular.module('app').factory('addToListFromDbDataservice', factory);
+  factory.$inject = ['addToListFromDbService', 'growl'];
+
+  function factory(addToListFromDbService, growl) {
+    return {
+      add: add,
+    };
+
+    function add(data) {
+      return addToListFromDbService.add(angular.element.param(data), success, fail);
+
+      function success(response) {
+        if (response.status === 'not_found') {
+          return growl.error(gettext('Movie is not found in the database'));
+        }
+      }
+
+      function error() {
+        growl.error(gettext('Error adding a movie'));
+      }
+
+      function fail(response) {
+        handleError(response, error);
+      }
+    }
+  }
+})();
+
+(function() {
+  angular.module('app').controller('MoviesSearchController', MoviesSearchController);
+  MoviesSearchController.$inject = ['moviesDataservice', 'addToListFromDbDataservice'];
+
+  function MoviesSearchController(moviesDataservice, addToListFromDbDataservice) {
+    const vm = this;
+    vm.searchType = gettext('Movie');
+    vm.searchTypeCode = 'movie';
+    vm.search = search;
+    vm.addToListFromDb = addToListFromDb;
+    vm.changeSearchType = changeSearchType;
+
+    function search() {
+      vm.nothingFound = false;
+      vm.movies = [];
       const options = {
-        popularOnly: $('#popular-only').prop('checked'),
-        sortByDate: $('#sort-by-date').prop('checked'),
+        popularOnly: angular.element('#popular-only').prop('checked'),
+        sortByDate: angular.element('#sort-by-date').prop('checked'),
       };
-      SearchMovie.get({
-        query: $scope.query,
-        type: $scope.searchTypeCode,
-        options: $.param(options),
-      }, function(response) {
+      moviesDataservice.search({
+        query: vm.query,
+        type: vm.searchTypeCode,
+        options: angular.element.param(options),
+      }).$promise.then(function(response) {
         if (response.status === 'success') {
-          $scope.searchResults = response.movies;
+          vm.movies = response.movies;
           // It is not working without the timeout.
           setTimeout(function() {
-            $('.poster img').removeAttr('data-rjs-processed');
+            angular.element('.poster img').removeAttr('data-rjs-processed');
             retinajs();
           }, 500);
-        } else if (response.status === 'not_found') {
-          $scope.nothingFound = true;
-        } else {
-          showError();
         }
-      }, function() {
-        showError();
-      });
-    };
+      }).catch(function() {});
+    }
 
-    $scope.addToListFromDb = function(movieId, listId) {
-      function showError() {
-        displayMessage(gettext('Error adding a movie'));
-      }
-
-      let movie = $('#movie' + movieId);
+    function addToListFromDb(movieId, listId) {
+      let movie = angular.element('#movie' + movieId);
       movie.fadeOut('fast');
-      AddToListFromDb.post($.param({
+      addToListFromDbDataservice.add({
         movieId: movieId,
         listId: listId,
-      }), function(response) {
-        if (response.status === 'success') {
-          return;
-        }
-        movie.fadeIn('fast');
-        if (response.status === 'not_found') {
-          return displayMessage(gettext('Movie is not found in the database'));
-        } else {
-          showError();
-        }
-      }, function(error) {
-        movie.fadeIn('fast');
-        handleError(error, showError);
-      });
-    };
+      }).$promise.catch(function() {});
+    }
 
-    $scope.changeSearchType = function(code) {
-      $scope.searchTypeCode = code;
-      $scope.searchType = gettext(code.toTitleCase());
-    };
-  },
-]);
-
-$('#search').show();
+    function changeSearchType(code) {
+      vm.searchTypeCode = code;
+      vm.searchType = gettext(code.toTitleCase());
+    }
+  }
+})();

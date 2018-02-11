@@ -44,20 +44,16 @@ class AddToListView(AjaxView):
         return self.success()
 
 
-class RecordMixin(AjaxView):
-    def post(self, request):
+class RemoveMovieView(AjaxView):
+    def delete(self, request, **kwargs):
         try:
-            POST = request.POST
-            record_id = int(POST['id'])
+            record_id = int(kwargs['id'])
         except (KeyError, ValueError):
             return self.render_bad_request_response()
-        self.record = request.user.get_record(record_id)
-
-
-class RemoveMovieView(RecordMixin):
-    def post(self, request):
-        super().post(request)
-        self.record.delete()
+        try:
+            request.user.get_record(record_id).delete()
+        except Record.DoesNotExist:
+            raise Http404
         return self.success()
 
 
@@ -74,9 +70,14 @@ class ApplySettingsView(AjaxAnonymousView):
         return self.success()
 
 
-class SaveCommentView(RecordMixin):
+class SaveCommentView(AjaxView):
     def post(self, request):
-        super().post(request)
+        try:
+            POST = request.POST
+            record_id = int(POST['id'])
+        except (KeyError, ValueError):
+            return self.render_bad_request_response()
+        self.record = request.user.get_record(record_id)
         try:
             comment = request.POST['comment']
         except KeyError:

@@ -1,28 +1,26 @@
 {% extends 'base.html' %}
-
-{% load i18n %}
-{% load static %}
+{% load i18n static %}
 
 {% block content %}
-  <div ng-controller="MoviesSearchController" id="search" style="display: none">
-    <form name="search" id="search" ng-submit="search.$valid && submit()" novalidate
+  <div ng-controller="MoviesSearchController as moviesSearch" ng-cloak>
+    <form name="form" ng-submit="moviesSearch.search()"
           class="col-lg-7 col-md-8 col-sm-10 col-xl-5 mx-auto">
       <div class="input-group">
-        <input class="span2 form-control" id="query" name="query" type="text" autofocus ng-model="query" required
+        <input class="span2 form-control" id="query" name="query" type="text" autofocus ng-model="moviesSearch.query" required
                aria-label="{% trans 'Text input with dropdown button' %}">
         <div class="input-group-append">
           <button class="btn btn-secondary" type="submit">{% trans 'Search' %}</button>
           <button id="search-type-button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown"
                   aria-haspopup="true" aria-expanded="false">
-            [[ searchType ]] <span class="caret"></span>
+            [[ moviesSearch.searchType ]] <span class="caret"></span>
           </button>
           <div class="dropdown-menu dropdown-menu-right">
             <a class="dropdown-item" href="javascript:void(0)"
-               ng-click="changeSearchType('movie');">{% trans 'Movie' %}</a>
+               ng-click="moviesSearch.changeSearchType('movie');">{% trans 'Movie' %}</a>
             <a class="dropdown-item" href="javascript:void(0)"
-               ng-click="changeSearchType('actor');">{% trans 'Actor' %}</a>
+               ng-click="moviesSearch.changeSearchType('actor');">{% trans 'Actor' %}</a>
             <a class="dropdown-item" href="javascript:void(0)"
-               ng-click="changeSearchType('director');">{% trans 'Director' %}</a>
+               ng-click="moviesSearch.changeSearchType('director');">{% trans 'Director' %}</a>
           </div>
         </div>
       </div>
@@ -35,31 +33,32 @@
         </label>
       </div>
     </form>
-    <div id="results" class="results" ng-repeat="searchResult in searchResults">
-      <div class="movie" id="movie[[searchResult.id]]">
-        <div class="poster"><img ng-src="[[searchResult.poster]]" alt="[[searchResult.title]] poster"
-                                 data-rjs="[[searchResult.poster2x]]"/></div>
-        <div class="title">"[[searchResult.title]]"
+    <div id="results" class="results" ng-repeat="movie in moviesSearch.movies" ng-cloak>
+      <div class="movie" id="movie[[movie.id]]">
+        <div class="poster"><img ng-src="[[movie.poster]]" alt="[[movie.title]] poster"
+                                 data-rjs="[[movie.poster2x]]"/></div>
+        <div class="title">"[[movie.title]]"
           <div class="add-to-list-buttons">
             <a href="javascript:void(0)" title="{% trans 'Add to the list' %} {% trans 'Watched' %}"
-               ng-click="addToListFromDb(searchResult.id, 1)"><i class="fa fa-eye"></i></a>
+               ng-click="moviesSearch.addToListFromDb(movie.id, 1)"><i class="fa fa-eye"></i></a>
             <a href="javascript:void(0)" title="{% trans 'Add to the list' %} {% trans 'To Watch' %}"
-               ng-click="addToListFromDb(searchResult.id, 2)"><i class="fa fa-eye-slash"></i></a>
+               ng-click="moviesSearch.addToListFromDb(movie.id, 2)"><i class="fa fa-eye-slash"></i></a>
           </div>
         </div>
-        <div class="details" ng-show="searchResult.releaseDate">
-          <strong>{% trans 'Release date' %}:</strong> [[searchResult.releaseDate]]
+        <div class="details" ng-show="movie.releaseDate">
+          <strong>{% trans 'Release date' %}:</strong> [[movie.releaseDate]]
         </div>
       </div>
     </div>
-    <div ng-show="nothingFound">{% trans 'Nothing has been found' %}.</div>
   </div>
 {% endblock %}
 
 {% block js %}
   <script>
-    const urlSearchMovie = '{% url 'search_movie' %}';
-    const urlAddToListFromDb = '{% url 'add_to_list_from_db' %}';
+    'use strict';
+
+    urls.urlSearchMovie = '{% url 'search_movie' %}';
+    urls.urlAddToListFromDb = '{% url 'add_to_list_from_db' %}';
   </script>
   <script src="{% static 'js/search.js' %}"></script>
 {% endblock %}

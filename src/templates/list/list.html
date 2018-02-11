@@ -1,15 +1,11 @@
 {% extends 'base.html' %}
-{% load bootstrap_pagination %}
-{% load set_var %}
-{% load static %}
-{% load avatar %}
-{% load movie_count %}
-{% load i18n %}
+{% load i18n static bootstrap_pagination set_var avatar movie_count %}
+
 {% block head %}
   <link href="{% static 'vendor/raty-js/lib/jquery.raty.css' %}" rel="stylesheet">
 {% endblock %}
 {% block content %}
-  <div ng-controller="ListController">
+  <div ng-controller="ListController as list">
     <div id="movie-count">
       {% if anothers_account %}
         {% movie_count anothers_account %}
@@ -26,11 +22,11 @@
     {% if anothers_account %}
       <div class="btn-group btn-group-toggle" data-toggle="buttons">
         <label class="btn btn-secondary {% ifequal list_id 1 %} active {% endifequal %}" title="{% trans 'Watched' %}"
-               ng-click="openUrl('{% url 'people' anothers_account.username 'watched' %}')">
+               ng-click="list.openUrl('{% url 'people' anothers_account.username 'watched' %}')">
           <input type="radio">{% trans 'Watched' %}
         </label>
         <label class="btn btn-secondary {% ifequal list_id 2 %} active {% endifequal %}" title="{% trans 'To Watch' %}"
-               ng-click="openUrl('{% url 'people' anothers_account.username 'to-watch' %}')">
+               ng-click="list.openUrl('{% url 'people' anothers_account.username 'to-watch' %}')">
           <input type="radio">{% trans 'To Watch' %}
         </label>
       </div>
@@ -41,15 +37,15 @@
       {% with mode=request.session.mode %}
         <!-- id values are being used as variable name combination to control the button statuses -->
         <label id="button-mode-full" class="btn btn-secondary {% if mode == 'full' %} active {% endif %}"
-               title="{% trans 'Mode' %}" ng-click="switchMode('full')">
+               title="{% trans 'Mode' %}" ng-click="list.switchMode('full')">
           <input type="radio">{% trans 'Full' %}
         </label>
         <label id="button-mode-compact" class="btn btn-secondary {% if mode == 'compact' %} active {% endif %}"
-               title="{% trans 'Mode' %}" ng-click="switchMode('compact')">
+               title="{% trans 'Mode' %}" ng-click="list.switchMode('compact')">
           <input type="radio">{% trans 'Compact' %}
         </label>
         <label id="button-mode-minimal" class="btn btn-secondary {% if mode == 'minimal' %} active {% endif %}"
-               title="{% trans 'Mode' %}" ng-click="switchMode('minimal')">
+               title="{% trans 'Mode' %}" ng-click="list.switchMode('minimal')">
           <input type="radio">{% trans 'Minimal' %}
         </label>
       {% endwith %}
@@ -57,7 +53,7 @@
 
     {% if anothers_account and user.is_authenticated %}
       <button data-toggle="button" id="button-recommendation" type="button" class="btn btn-secondary ml-2"
-              onclick="toggleRecommendation()">{% trans 'Recommendations' %}</button>
+              ng-click="list.toggleRecommendation()">{% trans 'Recommendations' %}</button>
     {% endif %}
     <br><br>
 
@@ -101,7 +97,7 @@
       <h3>{{ query }}: <a href="{{ request.path }}"><i class="fa fa-times" aria-hidden="true"></i></a></h3>
     {% endif %}
 
-    <div id="results" class="results col-sm-12 col-md-10 col-lg-8" style="display: none;">
+    <div id="results" class="results col-sm-12 col-md-10 col-lg-8" ng-cloak>
       {% if records %}
         {% with is_vk_user=user.is_vk_user %}
           {% for record in records %}
@@ -110,9 +106,9 @@
               <div class="title">
                 <span title="{{ record.movie.title_original }}">{{ record.movie.title }}</span>
                 {% if not anothers_account %}
-                  <a href="javascript:void(0);" title="{% trans 'Delete' %}" ng-click="removeMovie({{ record.id }})"><i
+                  <a href="javascript:void(0)" title="{% trans 'Delete' %}" ng-click="list.removeMovie({{ record.id }})"><i
                     class="fa fa-trash-o"></i></a>
-                  {% if is_vk_user %}<a ng-show="isVkApp" href="javascript:void(0);" class="wall-post"
+                  {% if is_vk_user %}<a ng-show="list.isVkApp" href="javascript:void(0)" class="wall-post"
                                         title="{% trans 'Post to the wall' %}" onclick="postToWall({{ record.id }})"><i
                     class="fa fa-share"></i></a>{% endif %}
                 {% endif %}
@@ -128,9 +124,9 @@
               </div>
               <div class="poster">
                 <img src="{{ record.movie.poster_normal }}" data-rjs="{{ record.movie.poster_big }}"
-                     alt="{{ record.movie.title }} poster" ng-show="mode == 'full'"/>
+                     alt="{{ record.movie.title }} poster" ng-show="list.mode == 'full'"/>
                 <img src="{{ record.movie.poster_small }}" data-rjs="{{ record.movie.poster_normal }}"
-                     alt="{{ record.movie.title }} poster" ng-show="mode != 'full'"/>
+                     alt="{{ record.movie.title }} poster" ng-show="list.mode != 'full'"/>
               </div>
               <div class="details">
                 {% if record.movie.imdb_rating %}
@@ -140,7 +136,7 @@
                   <div class="release-date"><span
                     class="release-date-label item-desc">{% trans 'Release Date' %}:</span> {{ record.movie.release_date }}
                   </div>{% endif %}
-                <div ng-show="mode == 'full'">
+                <div ng-show="list.mode == 'full'">
                   {% if record.movie.country %} <span class="item-desc">{% trans 'Country' %}:</span>
                     {{ record.movie.country }}<br> {% endif %}
                   {% if record.movie.director %} <span class="item-desc">{% trans 'Director' %}:</span>
@@ -178,7 +174,7 @@
                         <textarea class="form-control" title="{% trans 'Comment' %}"
                                   id="comment{{ record.id }}">{{ record.comment }}</textarea><br><br>
                         <button type="button" title="{% trans 'Save' %}" class="btn btn-secondary"
-                                ng-click="saveComment({{ record.id }})"><i class="fa fa-save"></i></button>
+                                ng-click="list.saveComment({{ record.id }})"><i class="fa fa-save"></i></button>
                         <br>
                       {% else %}
                         <p>{{ record.comment }}</p>
@@ -186,7 +182,7 @@
                     </div>
                     {% if not anothers_account %}
                       <button id="comment_area_button{{ record.id }}" type="button" title="{% trans 'Add comment' %}"
-                              class="btn btn-secondary comment-button" ng-click="toggleCommentArea({{ record.id }})"
+                              class="btn btn-secondary comment-button" ng-click="list.toggleCommentArea({{ record.id }})"
                         {% if record.comment %} style="display: none "{% endif %}><i class="fa fa-comment"></i></button>
                     {% endif %}
                     <br>
@@ -212,24 +208,25 @@
 
 {% block js %}
   <script>
+    'use strict';
+
     const mode = '{{ request.session.mode }}';
     const listData = $.parseJSON('{{ list_data|safe }}');
     const listId = {{ list_id }};
-    const recommendation =
-    {{ request.session.recommendation|yesno:'true,false' }}
-    const anothersAccount =
-    {{ anothers_account|yesno:'true,false' }}
-    const urlChangeRating = '{% url 'change_rating' %}';
-    const urlRemoveMovie = '{% url 'remove_movie' %}';
-    const urlApplySettings = '{% url 'apply_settings' %}';
-    const urlAddToList = '{% url 'add_to_list' %}';
-    const urlSaveComment = '{% url 'save_comment' %}';
-    const urlAjaxUploadPosterToWall = '{% url 'upload_poster_to_wall' %}';
+    const recommendation = {{ request.session.recommendation|yesno:'true,false' }}
+    const anothersAccount = {{ anothers_account|yesno:'true,false' }}
+    urls.urlChangeRating = '{% url 'change_rating' %}';
+    urls.urlRemoveMovie = '{% url 'remove_movie' %}';
+    urls.urlApplySettings = '{% url 'apply_settings' %}';
+    urls.urlAddToList = '{% url 'add_to_list' %}';
+    urls.urlSaveComment = '{% url 'save_comment' %}';
+    urls.urlAjaxUploadPosterToWall = '{% url 'upload_poster_to_wall' %}';
   </script>
   <script src="{% static 'vendor/raty-js/lib/jquery.raty.js' %}"></script>
   <script src="{% static 'vendor/autosize/dist/autosize.min.js' %}"></script>
 
   <script src="{% static 'js/list_general.js' %}"></script>
   <script src="{% static 'js/list.js' %}"></script>
+
   <script src="{% static 'js/raty.js' %}"></script>
 {% endblock %}

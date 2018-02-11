@@ -66,8 +66,7 @@
     "rating": false,
     "headers": false,
     "retinajs": false,
-    "isVkUser": false,
-    "autosize": false,
-    "createPostResource": false
+    "urls": false,
+    "vars": false
   }
 }

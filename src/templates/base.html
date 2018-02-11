@@ -1,5 +1,4 @@
-{% load i18n %}
-{% load static %}
+{% load i18n static %}
 
 <!DOCTYPE html>
 <html ng-app="app">
@@ -7,13 +6,14 @@
   <meta HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
   <meta HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-  <link href="{% static 'vendor/jgrowl/jquery.jgrowl.min.css' %}" rel="stylesheet">
   <link href="{% static 'vendor/bootstrap/dist/css/bootstrap.css' %}" rel="stylesheet">
   <link href="{% static 'vendor/tether/dist/css/tether.min.css' %}" rel="stylesheet">
-  <link href="{% static 'vendor/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet">
+
   <link href="{% static 'vendor/angular-loading-bar/build/loading-bar.min.css' %}" rel="stylesheet">
+  <link href="{% static 'vendor/angular-growl-v2/build/angular-growl.min.css' %}" rel="stylesheet">
+
   <link href="{% static 'vendor/mprogress/build/css/mprogress.min.css' %}" rel="stylesheet">
+  <link href="{% static 'vendor/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet">
   <link href="{% static 'css/style.css' %}" rel="stylesheet">
   {% block head %}{% endblock %}
 
@@ -32,12 +32,8 @@
 </footer>
 {% include 'includes/google_analytics.html' %}
 <script src="{% url 'javascript-catalog' %}"></script>
-<script>
-  const isVkUser = {{ user.is_vk_user|yesno:'true,false' }};
-</script>
 <script src="{% static 'vendor/jquery/dist/jquery.min.js' %}"></script>
 <script src="{% static 'vendor/mprogress/build/js/mprogress.min.js' %}"></script>
-<script src="{% static 'vendor/jgrowl/jquery.jgrowl.min.js' %}"></script>
 <script src="{% static 'vendor/tether/dist/js/tether.min.js' %}"></script>
 <script src="{% static 'vendor/bootstrap/js/dist/button.js' %}"></script>
 <script src="{% static 'vendor/popper.js/dist/umd/popper.min.js' %}"></script>
@@ -48,13 +44,22 @@
 <script src="{% static 'vendor/angular-resource/angular-resource.min.js' %}"></script>
 <script src="{% static 'vendor/angular-bootstrap/ui-bootstrap-tpls.min.js' %}"></script>
 <script src="{% static 'vendor/angular-cookies/angular-cookies.min.js' %}"></script>
+<script src="{% static 'vendor/angular-growl-v2/build/angular-growl.min.js' %}"></script>
+
 <script src="{% static 'js/ajax_loading.js' %}"></script>
+<script>
+  'use strict';
+  // It has to be before main.js
+  const vars = {isVkUser: {{ user.is_vk_user|yesno:'true,false' }}};
+</script>
 <script src="{% static 'js/main.js' %}"></script>
 {% if user.is_vk_user %}
   <script src="//vk.com/js/api/xd_connection.js?2"></script>
+
   <script src="{% static 'js/vk.js' %}"></script>
 {% endif %}
-<!-- Retina has to be in the bottom because it breaks other scripts -->
+<!-- Retinajs has to be in the bottom because it breaks other scripts -->
 <script src="{% static 'vendor/retinajs/dist/retina.min.js' %}"></script>
 {% block js %}{% endblock %}
+<div growl></div>
 </body>

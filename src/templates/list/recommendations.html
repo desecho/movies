@@ -1,11 +1,8 @@
 {% extends 'base.html' %}
-
-{% load i18n %}
-{% load static %}
-{% load set_var %}
+{% load i18n static set_var %}
 
 {% block content %}
-  <div id="results" class="results col-sm-12 col-md-10 col-lg-8" style="display: none;">
+  <div id="results" class="results col-sm-12 col-md-10 col-lg-8">
     {% if records %}
       {% for record in records %}
         <div id="record{{ record.id }}" data-id="{{ record.id }}" class="movie">
@@ -67,9 +64,13 @@
 
 {% block js %}
   <script>
-    const urlAddToList = '{% url 'add_to_list' %}';
+    'use strict';
+
+    urls.urlAddToList = '{% url 'add_to_list' %}';
   </script>
+
   <script src="{% static 'vendor/raty-js/lib/jquery.raty.js' %}"></script>
+
   <script src="{% static 'js/raty.js' %}"></script>
   <script src="{% static 'js/raty_readonly.js' %}"></script>
 

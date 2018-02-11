@@ -1,5 +1,7 @@
 /* global ratyCustomSettings:false */
 
+'use strict';
+
 let ratySettings = {
   hints: [
     gettext('Awful'),
@@ -17,9 +19,9 @@ let ratySettings = {
 (function() {
   const scoreSettings = {
     score: function() {
-      return $(this).attr('data-rating');
+      return angular.element(this).attr('data-rating');
     },
   };
-  const settings = $.extend({}, ratySettings, ratyCustomSettings, scoreSettings);
-  return $('.rating').raty(settings);
+  const settings = angular.extend({}, ratySettings, ratyCustomSettings, scoreSettings);
+  return angular.element('.rating').raty(settings);
 })();

@@ -1,10 +1,10 @@
-/* global urlAddToList:false */
+'use strict';
 
 function addToList(movieId, listId, recordId) { // eslint-disable-line no-unused-vars
   function showError() {
     return displayMessage(gettext('Error adding the movie to the list'));
   }
-  return $.post(urlAddToList, {
+  return $.post(urls.urlAddToList, {
     movieId: movieId,
     listId: listId,
   }, function(response) {
@@ -20,7 +20,7 @@ function addToList(movieId, listId, recordId) { // eslint-disable-line no-unused
 
 function setViewedIconAndRemoveButtons(recordId, listId) {
   function removeButtons() {
-    return $('#record' + recordId).children('.title').children('.add-to-list-buttons').remove();
+    return angular.element('#record' + recordId).children('.title').children('.add-to-list-buttons').remove();
   }
 
   function setViewedIcon(recordId, listId) {
@@ -37,7 +37,7 @@ function setViewedIconAndRemoveButtons(recordId, listId) {
       title = gettext('To Watch');
     }
     const html = ` <i class="fa fa-eye${icon}" title=${title}></i> `;
-    return $('#record' + recordId).children('.title').prepend(html);
+    return angular.element('#record' + recordId).children('.title').prepend(html);
   }
 
   setViewedIcon(recordId, listId);

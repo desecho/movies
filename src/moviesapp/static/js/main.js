@@ -1,20 +1,6 @@
 'use strict';
 
-$.jGrowl.defaults.closerTemplate = '<div>' + gettext('Close all notifications') + '</div>';
-
-angular.module('app', ['ngResource', 'angular-loading-bar', 'ngCookies']);
-angular.module('app').directive('ngEnter', function() {
-  return function(scope, element, attrs) {
-    element.bind('keydown keypress', function(event) {
-      if (event.which === 13) {
-        scope.$apply(function() {
-          scope.$eval(attrs.ngEnter);
-        });
-        event.preventDefault();
-      }
-    });
-  };
-});
+angular.module('app', ['ngResource', 'angular-loading-bar', 'ngCookies', 'angular-growl']);
 
 (function() {
   angular.module('app').factory('appResourceInterceptor', appResourceInterceptor);
@@ -35,42 +21,56 @@ angular.module('app').directive('ngEnter', function() {
   }
 
   angular.module('app').config(config);
-  config.$inject = ['$httpProvider', '$interpolateProvider', '$resourceProvider'];
 
-  function config($httpProvider, $interpolateProvider, $resourceProvider) {
+  config.$inject = ['$httpProvider', '$interpolateProvider', '$resourceProvider', 'growlProvider'];
+
+  function config($httpProvider, $interpolateProvider, $resourceProvider, growlProvider) {
     $httpProvider.interceptors.push('appResourceInterceptor');
     $interpolateProvider.startSymbol('[[');
     $interpolateProvider.endSymbol(']]');
+
     // Don't strip trailing slashes from calculated URLs
     $resourceProvider.defaults.stripTrailingSlashes = false;
+
+    growlProvider.globalTimeToLive(2000);
+    growlProvider.globalDisableCountDown(true);
+    growlProvider.globalDisableIcons(true);
   }
 
+  function inIframe() {
+    try {
+      return window.self !== window.top;
+    } catch (e) {
+      return true;
+    }
+  }
+  let isVkApp = {};
+  if (vars.isVkUser) {
+    isVkApp = inIframe();
+  } else {
+    isVkApp = false;
+  }
+  if (isVkApp) {
+    angular.element('.vk-app-show').show();
+    angular.element('#content').addClass('vk');
+  } else {
+    angular.element('.vk-app-hide').show();
+  }
+
+  angular.module('app').constant('isVkApp', isVkApp);
   angular.module('app').controller('MenuController', MenuController);
 
   function MenuController() {
-    let vm = this;
+    const vm = this;
     vm.changeLanguage = changeLanguage;
+
     function changeLanguage() {
       angular.element('#language-form').submit();
     }
   }
 })();
 
-let vars = {}; // eslint-disable-line no-unused-vars
-let urls = {}; // eslint-disable-line no-unused-vars
-
-function createPostResource(name, url) { // eslint-disable-line no-unused-vars
-  angular.module('app').factory(name, factory);
-  factory.$inject = ['$resource'];
-
-  function factory($resource) {
-    return $resource(url, {}, {
-      post: {
-        method: 'POST',
-      },
-    });
-  }
-}
+const urls = {}; // eslint-disable-line no-unused-vars
 
 function getCookie(name) {
   let cookieValue = null;
@@ -93,15 +93,15 @@ function csrfSafeMethod(method) {
   return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
 }
 
-function displayMessage(message) {
-  return $.jGrowl(message);
+function displayMessage(x) {
+  alert(x);
 }
 
-function handleError(error, errorFunc) { // eslint-disable-line no-unused-vars
-  if (error.status == 403) {
+function handleError(response, error) { // eslint-disable-line no-unused-vars
+  if (response.status == 403) {
     displayMessage(gettext('You need to login to add a movie to your list.'));
   } else {
-    errorFunc();
+    error();
   }
 }
 
@@ -121,8 +121,3 @@ const headers = { // eslint-disable-line no-unused-vars
   'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
   'X-Requested-With': 'XMLHttpRequest',
 };
-
-if (!isVkUser) {
-  $('.vk-app-hide').show();
-}
-$('#right-nav-bar').show();
