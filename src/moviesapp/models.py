@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-from django.utils.translation import ugettext_lazy as _
-
 import facebook
 import vkontakte
 # Not using django-mysql instead because it's not supported by modeltranslation.
@@ -8,9 +6,10 @@ from annoying.fields import JSONField
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser, AnonymousUser
 from django.contrib.auth.signals import user_logged_in
+from django.core.cache import cache
 from django.db import models
 from django.dispatch import receiver
-from django.utils.translation import LANGUAGE_SESSION_KEY
+from django.utils.translation import LANGUAGE_SESSION_KEY, ugettext_lazy as _
 
 
 class Vk:
@@ -21,7 +20,10 @@ class Vk:
         self.user = user
 
     def get_friends(self):
-        friends = self.vk.friends.get(uid=self.vk_id)
+        friends = cache.get('vk_friends')
+        if friends is None:
+            friends = self.vk.friends.get(uid=self.vk_id)
+            cache.set('vk_friends', friends)
         friends_ids = map(str, friends)
         friends = User.objects.filter(social_auth__provider__in=settings.VK_BACKENDS, social_auth__uid__in=friends_ids)
         return friends
@@ -138,7 +140,9 @@ class UserBase:
 
 
 class User(AbstractUser, UserBase):
-    only_for_friends = models.BooleanField(default=False, help_text=_('Privacy setting. It indicates whether only your friends have access to your movie lists.'))
+    only_for_friends = models.BooleanField(
+        default=False,
+        help_text=_('Privacy setting. It indicates whether only your friends have access to your movie lists.'))
     language = models.CharField(max_length=2, choices=settings.LANGUAGES, default='en')
     avatar = models.URLField(null=True, blank=True)
     loaded_initial_data = models.BooleanField(default=False)
