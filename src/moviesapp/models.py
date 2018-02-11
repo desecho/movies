@@ -38,7 +38,10 @@ class Fb:
         self.fb = facebook.GraphAPI(access_token=access_token, version='2.7')
 
     def get_friends(self):
-        friends = self.fb.get_connections(id='me', connection_name='friends')['data']
+        friends = cache.get('fb_friends')
+        if friends is None:
+            friends = self.fb.get_connections(id='me', connection_name='friends')['data']
+            cache.set('fb_friends', friends)
         friends_ids = [f['id'] for f in friends]
         friends = User.objects.filter(social_auth__provider='facebook', social_auth__uid__in=friends_ids)
         return friends
