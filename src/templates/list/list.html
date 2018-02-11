@@ -53,7 +53,7 @@
 
     {% if anothers_account and user.is_authenticated %}
       <button data-toggle="button" id="button-recommendation" type="button" class="btn btn-secondary ml-2"
-              ng-click="list.toggleRecommendation()">{% trans 'Recommendations' %}</button>
+              onclick="toggleRecommendation()">{% trans 'Recommendations' %}</button>
     {% endif %}
     <br><br>
 
