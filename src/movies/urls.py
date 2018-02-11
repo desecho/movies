@@ -17,6 +17,9 @@ from moviesapp.views.list import (
     RemoveMovieView,
     SaveCommentView,
 )
+
+from moviesapp.views import AboutView
+
 from moviesapp.views.search import (
     AddToListFromDbView,
     SearchMovieView,
@@ -33,6 +36,7 @@ from moviesapp.views.vk import UploadPosterToWallView
 admin.autodiscover()
 
 urlpatterns = [
+    path('about/', AboutView.as_view(), name='about'),
     # Search
     path('', SearchView.as_view(), name='search'),
     path('search-movie/', SearchMovieView.as_view(), name='search_movie'),

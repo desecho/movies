@@ -1,0 +1,5 @@
+{% load i18n %}
+
+<footer class="container-fluid py-3">
+  <a href="{% url 'about' %}">{% trans 'About Movies' %}</a>. | Copyright © {% now 'Y' %} <a href="mailto:{{ ADMIN_EMAIL }}">{{ ADMIN_EMAIL }}</a>.
+</footer>

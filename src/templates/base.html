@@ -27,9 +27,7 @@
     {% block content %}{% endblock %}
   </div>
 </div>
-<footer class="container-fluid py-3">
-  Copyright © {% now 'Y' %} <a href="mailto:{{ ADMIN_EMAIL }}">{{ ADMIN_EMAIL }}</a>.
-</footer>
+{% include 'includes/footer.html' %}
 {% include 'includes/google_analytics.html' %}
 <script src="{% url 'javascript-catalog' %}"></script>
 <script src="{% static 'vendor/jquery/dist/jquery.min.js' %}"></script>

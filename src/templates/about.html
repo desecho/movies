@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans 'About Movies' %}{% endblock %}
+
+{% block content %}
+  <legend>{% trans 'About Movies' %}</legend>
+  {% blocktrans %}
+  <p>Create movie lists ("Watched" and "To watch"), rate movies and add comments.</p>
+  <p>The website is <a href="http://movies.desecho.org" target="_blank">http://movies.desecho.org</a>.</p>
+  <p>There is a "Movies" <a href="https://vk.com/app3504693_2912142" target="_blank">VK app</a> available.</p>
+  <p>To use the app in Chrome, open Cookies settings (<a href="chrome://settings/content/cookies">chrome://settings/content/cookies</a>) and disable "Block third-party cookies".</p>
+  <p>The APIs used in "Movies" are: </p>
+  <ul>
+    <li><a href="https://www.themoviedb.org/" target="_blank">TMDb</a>
+    <li><a href="https://www.omdbapi.com/" target="_blank">OMDb</a>
+  </ul>
+  <p>Rating system:</p>
+  <ul>
+    <li>1 - Awful
+    <li>2 - Bad
+    <li>3 - Ok
+    <li>4 - Good
+    <li>5 - Excellent
+  </ul>
+  <p>If you have problems with account activation or other issues, questions or feedback email me at <a href="mailto:desecho@gmail.com">desecho@gmail.com</a>.</p>
+  {% endblocktrans %}
+{% endblock %}
