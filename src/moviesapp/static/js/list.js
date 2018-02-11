@@ -258,6 +258,8 @@ function toggleRecommendation() { // eslint-disable-line no-unused-vars
   }
 }
 
+let ratyCustomSettings;
+
 (function() {
   function setViewedIconsAndRemoveButtons() {
     if (anothersAccount) {
@@ -270,7 +272,7 @@ function toggleRecommendation() { // eslint-disable-line no-unused-vars
   }
 
   const ratyReadonly = anothersAccount || listId == 2;
-  window.ratyCustomSettings = {
+  ratyCustomSettings = {
     readOnly: ratyReadonly,
     click: function(score) {
       if (!score) {
