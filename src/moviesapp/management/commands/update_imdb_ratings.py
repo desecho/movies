@@ -21,6 +21,7 @@ class Command(BaseCommand):
             movie_data = load_omdb_movie_data(movie.imdb_id)
             new_rating = movie_data.get('imdbRating')
             if new_rating != str(movie.imdb_rating):
+                movie.imdb_rating = new_rating
                 movie.save()
                 message = f'{movie} - rating updated. {movie.imdb_rating} -> {new_rating}'
                 t.info(message)
