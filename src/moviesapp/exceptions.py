@@ -8,3 +8,6 @@ class MovieNotInDb(Exception):
 
 class NotAvailableSearchType(Exception):
     """Not availabe search type."""
+
+class OmdbLimitReached(Exception):
+    """OMDb limit reached."""
