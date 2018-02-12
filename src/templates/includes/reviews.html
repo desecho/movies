@@ -10,6 +10,8 @@
             {% if review.rating %}
               <div class="rating" data-rating="{{ review.rating }}"></div>
             {% endif %}
+          </td>
+          <td>
             {% if review.comment %}{{ review.comment }}{% endif %}
           </td>
         </tr>
