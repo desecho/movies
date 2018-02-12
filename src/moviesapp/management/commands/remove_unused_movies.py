@@ -20,5 +20,5 @@ class Command(BaseCommand):
             if not movie.records.exists():
                 movie.delete()
                 message = f'{movie} removed'
-                t.error(message)
+                t.info(message)
             t.update()
