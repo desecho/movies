@@ -1,8 +1,9 @@
 import json
 
 from django.conf import settings
+from django.core.exceptions import PermissionDenied
 from django.db.models import Q
-from django.http import Http404, HttpResponseForbidden
+from django.http import Http404
 
 from ..models import Action, ActionRecord, List, Record, User
 from .mixins import (
@@ -192,7 +193,7 @@ class ListView(TemplateAnonymousView):
         self.anothers_account = self._get_anothers_account(username)
         if self.anothers_account:
             if User.objects.get(username=username) not in self.request.user.get_users():
-                return HttpResponseForbidden()
+                raise PermissionDenied
 
         records = self._get_records(list_name)
         request = self.request
