@@ -31,7 +31,8 @@
         <td class="feed-action-data">
           {% if action.list %} {{ action.list }} {% endif %}
           {% if action.rating %}
-            <div class="rating" data-rating="{{ action.rating }}"></div> {% endif %}
+            <div class="rating" data-rating="{{ action.rating }}"></div>
+          {% endif %}
           {% if action.comment %} {{ action.comment }} {% endif %}
         </td>
       </tr>

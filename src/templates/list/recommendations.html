@@ -23,11 +23,14 @@
           <div class="details">
             {% if record.movie.imdb_rating %}
               <div class="imdb-rating"><span
-                class="item-desc">{% trans 'IMDb Rating' %}:</span> {{ record.movie.imdb_rating }}</div> {% endif %}
+                class="item-desc">{% trans 'IMDb Rating' %}:</span> {{ record.movie.imdb_rating }}
+              </div>
+            {% endif %}
             {% if record.movie.release_date %}
               <div class="release-date"><span
                 class="release-date-label item-desc">{% trans 'Release Date' %}:</span> {{ record.movie.release_date }}
-              </div>{% endif %}
+              </div>
+            {% endif %}
             {% if record.movie.country %} <span class="item-desc">{% trans 'Country' %}:</span>
               {{ record.movie.country }}<br> {% endif %}
             {% if record.movie.director %} <span class="item-desc">{% trans 'Director' %}:</span>
@@ -71,6 +74,8 @@
     'use strict';
 
     urls.urlAddToList = '{% url 'add_to_list' %}';
+
+
   </script>
 
   <script src="{% static 'vendor/raty-js/lib/jquery.raty.js' %}"></script>

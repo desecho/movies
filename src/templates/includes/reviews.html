@@ -8,7 +8,8 @@
           <td><a href="{% url 'people' review.user.username 'watched' %}">{% avatar review.user %}</a></td>
           <td>
             {% if review.rating %}
-              <div class="rating" data-rating="{{ review.rating }}"></div>{% endif %}
+              <div class="rating" data-rating="{{ review.rating }}"></div>
+            {% endif %}
             {% if review.comment %}{{ review.comment }}{% endif %}
           </td>
         </tr>

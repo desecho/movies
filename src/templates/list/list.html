@@ -53,7 +53,8 @@
 
     {% if anothers_account and user.is_authenticated %}
       <button data-toggle="button" id="button-recommendation" type="button" class="btn btn-secondary ml-2"
-              onclick="toggleRecommendation()">{% trans 'Recommendations' %}</button>
+              onclick="toggleRecommendation()">{% trans 'Recommendations' %}
+      </button>
     {% endif %}
     <br><br>
 
@@ -106,7 +107,8 @@
               <div class="title">
                 <span title="{{ record.movie.title_original }}">{{ record.movie.title }}</span>
                 {% if not anothers_account %}
-                  <a href="javascript:void(0)" title="{% trans 'Delete' %}" ng-click="list.removeMovie({{ record.id }})"><i
+                  <a href="javascript:void(0)" title="{% trans 'Delete' %}"
+                     ng-click="list.removeMovie({{ record.id }})"><i
                     class="fa fa-trash-o"></i></a>
                   {% if is_vk_user %}<a ng-show="list.isVkApp" href="javascript:void(0)" class="wall-post"
                                         title="{% trans 'Post to the wall' %}" onclick="postToWall({{ record.id }})"><i
@@ -131,11 +133,14 @@
               <div class="details">
                 {% if record.movie.imdb_rating %}
                   <div class="imdb-rating"><span
-                    class="item-desc">{% trans 'IMDb Rating' %}:</span> {{ record.movie.imdb_rating }}</div> {% endif %}
+                    class="item-desc">{% trans 'IMDb Rating' %}:</span> {{ record.movie.imdb_rating }}
+                  </div>
+                {% endif %}
                 {% if record.movie.release_date %}
                   <div class="release-date"><span
                     class="release-date-label item-desc">{% trans 'Release Date' %}:</span> {{ record.movie.release_date }}
-                  </div>{% endif %}
+                  </div>
+                {% endif %}
                 <div ng-show="list.mode == 'full'">
                   {% if record.movie.country %} <span class="item-desc">{% trans 'Country' %}:</span>
                     {{ record.movie.country }}<br> {% endif %}
@@ -182,8 +187,10 @@
                     </div>
                     {% if not anothers_account %}
                       <button id="comment_area_button{{ record.id }}" type="button" title="{% trans 'Add comment' %}"
-                              class="btn btn-secondary comment-button" ng-click="list.toggleCommentArea({{ record.id }})"
-                        {% if record.comment %} style="display: none "{% endif %}><i class="fa fa-comment"></i></button>
+                              class="btn btn-secondary comment-button"
+                              ng-click="list.toggleCommentArea({{ record.id }})"
+                        {% if record.comment %} style="display: none " {% endif %}><i class="fa fa-comment"></i>
+                      </button>
                     {% endif %}
                     <br>
                   {% endifequal %}
@@ -213,14 +220,16 @@
     const mode = '{{ request.session.mode }}';
     const listData = $.parseJSON('{{ list_data|safe }}');
     const listId = {{ list_id }};
-    const recommendation = {{ request.session.recommendation|yesno:'true,false' }}
-    const anothersAccount = {{ anothers_account|yesno:'true,false' }}
+    const recommendation = {{ request.session.recommendation|yesno:'true,false' }};
+    const anothersAccount = {{ anothers_account|yesno:'true,false' }};
     urls.urlChangeRating = '{% url 'change_rating' %}';
     urls.urlRemoveMovie = '{% url 'remove_movie' %}';
     urls.urlApplySettings = '{% url 'apply_settings' %}';
     urls.urlAddToList = '{% url 'add_to_list' %}';
     urls.urlSaveComment = '{% url 'save_comment' %}';
     urls.urlAjaxUploadPosterToWall = '{% url 'upload_poster_to_wall' %}';
+
+
   </script>
   <script src="{% static 'vendor/raty-js/lib/jquery.raty.js' %}"></script>
   <script src="{% static 'vendor/autosize/dist/autosize.min.js' %}"></script>
