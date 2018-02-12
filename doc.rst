@@ -17,8 +17,12 @@ Priority:
 Cron jobs
 ------------
 
-There are several scripts which run as cron jobs:
 - Remove unused movies
 - Update vk avatars
 - Update movie data
 - Update IMDB ratings
+
+Additional commands
+---------------------
+
+- Get wrong Russian titles
