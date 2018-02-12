@@ -23,6 +23,6 @@ class Command(BaseCommand):
             if new_rating != str(movie.imdb_rating):
                 movie.imdb_rating = new_rating
                 movie.save()
-                message = f'{movie} - rating updated. {movie.imdb_rating} -> {new_rating}'
+                message = f'{movie} - rating updated'
                 t.info(message)
             t.update()
