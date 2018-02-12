@@ -262,7 +262,7 @@ class Movie(models.Model):
         title_max_length = MAX_CHARS + len(ENDING)
         title_format = '{:%ds}' % title_max_length
         title = title_format.format(title)
-        return f'{id_} - {title}' [1:].decode('utf8')
+        return f'{id_} - {title}' [1:]
 
 
 class Record(models.Model):

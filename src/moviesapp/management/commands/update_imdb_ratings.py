@@ -1,15 +1,11 @@
 # -*- coding: utf-8 -*-
 
-import sys
 from importlib import reload
 
 from django_tqdm import BaseCommand
 
 from ...models import Movie
 from ...utils import load_omdb_movie_data
-
-reload(sys)
-sys.setdefaultencoding('utf8')
 
 
 class Command(BaseCommand):

@@ -1,14 +1,10 @@
 # -*- coding: utf-8 -*-
 
-import sys
 from importlib import reload
 
 from django_tqdm import BaseCommand
 
 from ...models import Movie
-
-reload(sys)
-sys.setdefaultencoding('utf8')
 
 
 class Command(BaseCommand):

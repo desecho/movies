@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import sys
 from importlib import reload
 
 from django_tqdm import BaseCommand
@@ -8,9 +7,6 @@ from django_tqdm import BaseCommand
 from ...exceptions import MovieNotInDb
 from ...models import Movie
 from ...utils import add_movie_to_db
-
-reload(sys)
-sys.setdefaultencoding('utf8')
 
 
 class Command(BaseCommand):
