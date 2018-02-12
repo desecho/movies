@@ -1,10 +1,12 @@
-import json
-
 from django.contrib.auth import logout
 from django.shortcuts import redirect
+from django.urls import reverse
+from django.views.generic.edit import FormView
+
+from moviesapp.forms import UserForm
 
 from ..models import activate_user_language_preference
-from .mixins import AjaxView, TemplateView, TemplateAnonymousView
+from .mixins import TemplateAnonymousView
 
 
 def logout_view(request):
@@ -12,25 +14,24 @@ def logout_view(request):
     return redirect('/')
 
 
-class PreferencesView(TemplateView):
+class PreferencesView(FormView):
     template_name = 'user/preferences.html'
+    form_class = UserForm
+
+    def get_form_kwargs(self):
+        result = super().get_form_kwargs()
+        result['instance'] = self.request.user
+        return result
+
+    def get_success_url(self):
+        return reverse('preferences')
+
+    def form_valid(self, form):
+        if 'language' in form.changed_data:
+            activate_user_language_preference(self.request, form.cleaned_data['language'])
+        form.save()
+        return super().form_valid(form)
+
 
 class LoginErrorView(TemplateAnonymousView):
     template_name = 'user/login_error.html'
-
-
-class SavePreferencesView(AjaxView):
-    def post(self, request):
-        try:
-            POST = request.POST
-            language = POST['language']
-            only_for_friends = json.loads(POST.get('onlyForFriends', 'false'))
-        except KeyError:
-            return self.render_bad_request_response()
-
-        user = request.user
-        user.language = language
-        user.only_for_friends = only_for_friends
-        user.save()
-        activate_user_language_preference(request, language)
-        return self.success()

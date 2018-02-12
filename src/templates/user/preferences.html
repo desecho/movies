@@ -2,59 +2,47 @@
 {% load i18n static avatar %}
 
 {% block content %}
-  <div ng-controller="PreferencesController as preferences">
-    <form class="form-horizontal">
-      <legend>{% trans 'Settings' %}</legend>
-      <br>
-      <div class="form-group row vk-app-hide" style="display: none;">
-        <label class="col-form-label col-sm-2" for="lang">{% trans 'Avatar' %}:</label>
-        <div class="col-sm-10">
-          {% avatar_big user %}
-          {% if not user.is_linked %}
-            <br>
-            {% trans 'You can change your avatar on' %} <a href="http://gravatar.com" target="_blank">Gravatar</a>
+  <form class="form-horizontal" method="post" action="">
+    {% csrf_token %}
+    <legend>{% trans 'Settings' %}</legend>
+    <br>
+    <div class="col-sm-7 col-md-5">
+      {% include 'includes/form_errors.html' %}
+    </div>
+    <div class="form-group row vk-app-hide" style="display: none;">
+      <label class="col-form-label col-sm-2" for="lang">{% trans 'Avatar' %}:</label>
+      <div class="col-sm-10">
+        {% avatar_big user %}
+        {% if not user.is_linked %}
+          <br>
+          {% trans 'You can change your avatar on' %} <a href="http://gravatar.com" target="_blank">Gravatar</a>
+        {% endif %}
+      </div>
+    </div>
+    {% for field in form %}
+      <div class="form-group row">
+        <label class="col-form-label col-sm-2 preference-label"
+               for="{{ field.id_for_label }}">{{ field.label }}:</label>
+        <div class="col-sm-5 col-md-3">
+          {{ field }}
+          {% if field.name == 'only_for_friends' %}
+            <label class="small" for="id_only_for_friends">{{ field.help_text }}</label>
           {% endif %}
         </div>
       </div>
-
-      <div class="form-group row" ng-cloak>
-        <label class="col-form-label col-sm-2" for="lang">{% trans 'Language' %}:</label>
-        <div class="col-sm-10">
-          {% get_available_languages as LANGUAGES %}
-          {% get_language_info_list for LANGUAGES as languages %}
-          {% for language in languages %}
-            <label class="radio mr-2">
-              <input type="radio" ng-model="preferences.language" ng-change="preferences.save(true)" name="lang" value="{{ language.code }}" > {{ language.name_local }}
-            </label>
-          {% endfor %}
-        </div>
+    {% endfor %}
+    <div class="form-group row">
+      <label class="col-form-label col-sm-2">{% trans 'Password' %}:</label>
+      <div class="col-sm-5 col-md-3">
+        <a href="{% url 'admin:password_change' %}">{% trans 'Change password' %}</a>
       </div>
+    </div>
 
-      <div class="form-group row" ng-cloak>
-        <label class="col-form-label col-sm-2" for="only-for-friends">{% trans 'Privacy' %}:</label>
-        <div class="col-sm-10">
-          <label class="checkbox">
-            <input type="checkbox" ng-model="preferences.onlyForFriends" ng-change="preferences.save()" id="only-for-friends"> {% trans 'Show my lists only to friends' %}<br>
-          </label>
-        </div>
+    <div class="form-group row">
+      <label class="col-form-label col-sm-2"></label>
+      <div class="col-sm-5 col-md-3">
+        <input type="submit" class="btn btn-block btn-primary" value="{% trans 'Save' %}">
       </div>
-      <div class="form-group row">
-        <label class="col-form-label col-sm-2">{% trans 'User' %}:</label>
-        <div class="col-sm-10">
-          <a href="{% url 'admin:password_change' %}">{% trans 'Change password' %}</a>
-        </div>
-      </div>
-    </form>
-  </div>
-{% endblock %}
-
-{% block js %}
-  <script>
-    'use strict';
-
-    urls.urlSavePreferences = '{% url 'save_preferences' %}';
-    vars.language = '{{ user.language }}';
-    vars.onlyForFriends = {{ user.only_for_friends|yesno:'true,false' }};
-  </script>
-  <script src="{% static 'js/preferences.js' %}"></script>
+    </div>
+  </form>
 {% endblock %}

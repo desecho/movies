@@ -24,12 +24,7 @@ from moviesapp.views.search import (
     SearchView,
 )
 from moviesapp.views.social import FeedView, FriendsView, PeopleView
-from moviesapp.views.user import (
-    PreferencesView,
-    SavePreferencesView,
-    logout_view,
-    LoginErrorView,
-)
+from moviesapp.views.user import LoginErrorView, PreferencesView, logout_view
 from moviesapp.views.vk import UploadPosterToWallView
 
 admin.autodiscover()
@@ -48,11 +43,8 @@ urlpatterns = [
     path('accounts/login/', login, {'template_name': 'user/login.html'}, name='login'),
     path('accounts/logout/', logout_view, name='logout'),
     path('accounts/login-error/', LoginErrorView.as_view(), name='login_error'),
+    path('accounts/preferences/', PreferencesView.as_view(), name='preferences'),
     path('accounts/', include('registration.backends.default.urls')),
-
-    # Preferences
-    path('preferences/', PreferencesView.as_view(), name='preferences'),
-    path('save-preferences/', SavePreferencesView.as_view(), name='save_preferences'),
 
     # List
     re_path('list/(?P<list_name>watched|to-watch)/', ListView.as_view(), name='list'),

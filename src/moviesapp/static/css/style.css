@@ -196,3 +196,11 @@ footer {
 [ng\:cloak], [ng-cloak], .ng-cloak {
   display: none !important;
 }
+
+.preference-label {
+  line-height: 36px;
+}
+
+.only-for-friends {
+  margin-top: 11px;
+}

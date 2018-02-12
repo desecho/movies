@@ -148,10 +148,9 @@ class UserBase:
 
 class User(AbstractUser, UserBase):
     only_for_friends = models.BooleanField(
-        default=False,
-        help_text=_('Privacy setting. It indicates whether only your friends have access to your movie lists.'))
-    language = models.CharField(max_length=2, choices=settings.LANGUAGES, default='en')
-    location = models.CharField(max_length=100, null=True, blank=True)
+        verbose_name=_('Privacy'), default=False, help_text=_('Show my lists only to friends'))
+    language = models.CharField(max_length=2, choices=settings.LANGUAGES, default='en', verbose_name=_('Language'))
+    location = models.CharField(max_length=100, null=True, blank=True, verbose_name=_('Location'))
     avatar_small = models.URLField(null=True, blank=True)
     avatar_big = models.URLField(null=True, blank=True)
     loaded_initial_data = models.BooleanField(default=False)
