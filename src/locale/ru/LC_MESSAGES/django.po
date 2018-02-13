@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-02-11 17:34-0500\n"
-"PO-Revision-Date: 2018-02-11 17:35-0456\n"
+"POT-Creation-Date: 2018-02-12 20:58-0500\n"
+"PO-Revision-Date: 2018-02-12 21:00-0456\n"
 "Last-Translator: b'Anton Samarchyan <desecho@gmail.com>'\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -27,19 +27,19 @@ msgstr "Друзья"
 msgid "People"
 msgstr "Люди"
 
-#: moviesapp/menus.py:22 templates/list/list.html:87 templates/search.html:12
+#: moviesapp/menus.py:22 templates/list/list.html:88 templates/search.html:13
 msgid "Search"
 msgstr "Поиск"
 
 #: moviesapp/menus.py:23 moviesapp/templatetags/movie_count.py:10
 #: templates/list/list.html:24 templates/list/list.html:26
-#: templates/search.html:42
+#: templates/search.html:43
 msgid "Watched"
 msgstr "Просмотрено"
 
 #: moviesapp/menus.py:25 moviesapp/templatetags/movie_count.py:11
 #: templates/list/list.html:28 templates/list/list.html:30
-#: templates/search.html:44
+#: templates/search.html:45
 msgid "To Watch"
 msgstr "К Просмотру"
 
@@ -51,13 +51,21 @@ msgstr "Рекоммендации"
 msgid "Feed"
 msgstr "Лента"
 
+#: moviesapp/models.py:151
+msgid "Privacy"
+msgstr "Конфиденциальность"
+
+#: moviesapp/models.py:151
+msgid "Show my lists only to friends"
+msgstr "Показывать мои списки только друзьям"
+
 #: moviesapp/models.py:152
-msgid ""
-"Privacy setting. It indicates whether only your friends have access to your "
-"movie lists."
-msgstr ""
-"Настройка конфиденциальности. Она указывает имеют ли только друзья доступ к "
-"спискам фильмов."
+msgid "Language"
+msgstr "Язык"
+
+#: moviesapp/models.py:153
+msgid "Location"
+msgstr "Местонахождение"
 
 #: templates/about.html:4 templates/about.html:7
 #: templates/includes/footer.html:4
@@ -65,26 +73,51 @@ msgid "About Movies"
 msgstr "О Movies"
 
 #: templates/about.html:8
+#| msgid ""
+#| "\n"
+#| "  <p>Create movie lists (\"Watched\" and \"To watch\"), rate movies and add comments.</p>\n"
+#| "  <p>The website is <a href=\"http://movies.desecho.org\" target=\"_blank\">http://movies.desecho.org</a>.</p>\n"
+#| "  <p>There is a \"Movies\" <a href=\"https://vk.com/app3504693_2912142\" target=\"_blank\">VK app</a> available.</p>\n"
+#| "  <p>To use the app in Chrome, open Cookies settings (<a href=\"chrome://settings/content/cookies\">chrome://settings/content/cookies</a>) and disable \"Block third-party cookies\".</p>\n"
+#| "  <p>The APIs used in \"Movies\" are: </p>\n"
+#| "  <ul>\n"
+#| "    <li><a href=\"https://www.themoviedb.org/\" target=\"_blank\">TMDb</a>\n"
+#| "    <li><a href=\"https://www.omdbapi.com/\" target=\"_blank\">OMDb</a>\n"
+#| "  </ul>\n"
+#| "  <p>Rating system:</p>\n"
+#| "  <ul>\n"
+#| "    <li>1 - Awful\n"
+#| "    <li>2 - Bad\n"
+#| "    <li>3 - Ok\n"
+#| "    <li>4 - Good\n"
+#| "    <li>5 - Excellent\n"
+#| "  </ul>\n"
+#| "  <p>If you have problems with account activation or other issues, questions or feedback email me at <a href=\"mailto:desecho@gmail.com\">desecho@gmail.com</a>.</p>\n"
+#| "  "
 msgid ""
 "\n"
-"  <p>Create movie lists (\"Watched\" and \"To watch\"), rate movies and add comments.</p>\n"
-"  <p>The website is <a href=\"http://movies.desecho.org\" target=\"_blank\">http://movies.desecho.org</a>.</p>\n"
-"  <p>There is a \"Movies\" <a href=\"https://vk.com/app3504693_2912142\" target=\"_blank\">VK app</a> available.</p>\n"
-"  <p>To use the app in Chrome, open Cookies settings (<a href=\"chrome://settings/content/cookies\">chrome://settings/content/cookies</a>) and disable \"Block third-party cookies\".</p>\n"
-"  <p>The APIs used in \"Movies\" are: </p>\n"
-"  <ul>\n"
-"    <li><a href=\"https://www.themoviedb.org/\" target=\"_blank\">TMDb</a>\n"
-"    <li><a href=\"https://www.omdbapi.com/\" target=\"_blank\">OMDb</a>\n"
-"  </ul>\n"
-"  <p>Rating system:</p>\n"
-"  <ul>\n"
-"    <li>1 - Awful\n"
-"    <li>2 - Bad\n"
-"    <li>3 - Ok\n"
-"    <li>4 - Good\n"
-"    <li>5 - Excellent\n"
-"  </ul>\n"
-"  <p>If you have problems with account activation or other issues, questions or feedback email me at <a href=\"mailto:desecho@gmail.com\">desecho@gmail.com</a>.</p>\n"
+"    <p>Create movie lists (\"Watched\" and \"To watch\"), rate movies and add comments.</p>\n"
+"    <p>The website is <a href=\"http://movies.desecho.org\" target=\"_blank\">http://movies.desecho.org</a>.</p>\n"
+"    <p>There is a \"Movies\" <a href=\"https://vk.com/app3504693_2912142\" target=\"_blank\">VK app</a> available.</p>\n"
+"    <p>To use the app in Chrome, open Cookies settings (<a href=\"chrome://settings/content/cookies\">chrome://settings/content/cookies</a>)\n"
+"      and disable \"Block third-party cookies\".</p>\n"
+"    <p>Rating system:</p>\n"
+"    <ul>\n"
+"      <li>1 - Awful\n"
+"      <li>2 - Bad\n"
+"      <li>3 - Ok\n"
+"      <li>4 - Good\n"
+"      <li>5 - Excellent\n"
+"    </ul>\n"
+"    <p>If you have problems with account activation or other issues, questions or feedback email me at <a\n"
+"      href=\"mailto:desecho@gmail.com\">desecho@gmail.com</a>.</p>\n"
+"    <p>Development:</p>\n"
+"    <p>The APIs used in \"Movies\" are: </p>\n"
+"    <ul>\n"
+"      <li><a href=\"https://www.themoviedb.org/\" target=\"_blank\">TMDb</a>\n"
+"      <li><a href=\"https://www.omdbapi.com/\" target=\"_blank\">OMDb</a>\n"
+"    </ul>\n"
+"    <p>The source code is available on GitHub - <a href=\"https://github.com/desecho/movies\" target=\"_blank\">Movies Project</a>.\n"
 "  "
 msgstr ""
 "\n"
@@ -92,11 +125,6 @@ msgstr ""
 "<p>Сайт - <a href=\"http://movies.desecho.org\" target=\"_blank\">http://movies.desecho.org</a>.</p>\n"
 "<p>Доступно <a href=\"https://vk.com/app3504693_2912142\" target=\"_blank\">приложение \"Movies\" в VK</a>.</p>\n"
 "<p>Для того чтобы использовать приложение в Chrome, откройте найстройки Cookies (<a href=\"chrome://settings/content/cookies\">chrome://settings/content/cookies</a>) и отключите \"Block third-party cookies\".</p>\n"
-"<p>API используемые в \"Movies\": </p>\n"
-"<ul>\n"
-"<li><a href=\"https://www.themoviedb.org/\" target=\"_blank\">TMDb</a>\n"
-"<li><a href=\"https://www.omdbapi.com/\" target=\"_blank\">OMDb</a>\n"
-"</ul>\n"
 "<p>Система оценок:</p>\n"
 "<ul>\n"
 "<li>1 - Ужасно\n"
@@ -105,7 +133,15 @@ msgstr ""
 "<li>4 - Хорошо\n"
 "<li>5 - Отлично\n"
 "</ul>\n"
-"<p>Если у вас есть проблемы с активацией аккаунта или другие проблемы, вопросы или обратная связь отправьте email по адресу <a href=\"mailto:desecho@gmail.com\">desecho@gmail.com</a>.</p>"
+"<p>Если у вас есть проблемы с активацией аккаунта или другие проблемы, вопросы или обратная связь отправьте email по адресу <a href=\"mailto:desecho@gmail.com\">desecho@gmail.com</a>.</p>\n"
+"\n"
+"<p>Разработка:</p>\n"
+"<p>API используемые в \"Movies\": </p>\n"
+"<ul>\n"
+"<li><a href=\"https://www.themoviedb.org/\" target=\"_blank\">TMDb</a>\n"
+"<li><a href=\"https://www.omdbapi.com/\" target=\"_blank\">OMDb</a>\n"
+"</ul>\n"
+"<p>Исходный код доступен на GitHub - <a href=\"https://github.com/desecho/movies\" target=\"_blank\">Movies Project</a>."
 
 #: templates/includes/add_to_list_buttons.html:4
 msgid "Add to &quot;To Watch&quot; list"
@@ -136,96 +172,96 @@ msgstr "Компактный"
 msgid "Minimal"
 msgstr "Минимальный"
 
-#: templates/list/list.html:66
+#: templates/list/list.html:67
 msgid "Sort by release date"
 msgstr "Сортировать по дате выпуска"
 
-#: templates/list/list.html:67 templates/search.html:49
+#: templates/list/list.html:68 templates/search.html:50
 msgid "Release date"
 msgstr "Дата выпуска"
 
-#: templates/list/list.html:70
+#: templates/list/list.html:71
 msgid "Sort by rating"
 msgstr "Сортировать по рейтингу"
 
-#: templates/list/list.html:71
+#: templates/list/list.html:72
 msgid "Rating"
 msgstr "Рейтинг"
 
-#: templates/list/list.html:74
+#: templates/list/list.html:75
 msgid "Sort by date added"
 msgstr "Сортировать по дате добавления"
 
-#: templates/list/list.html:75
+#: templates/list/list.html:76
 msgid "Date added"
 msgstr "Дата добавления"
 
-#: templates/list/list.html:109
+#: templates/list/list.html:110
 msgid "Delete"
 msgstr "Удалить"
 
-#: templates/list/list.html:112
+#: templates/list/list.html:114
 msgid "Post to the wall"
 msgstr "Отправить на стену"
 
-#: templates/list/list.html:134 templates/list/recommendations.html:26
+#: templates/list/list.html:136 templates/list/recommendations.html:26
 msgid "IMDb Rating"
 msgstr "IMDb Рейтинг"
 
-#: templates/list/list.html:137 templates/list/recommendations.html:29
+#: templates/list/list.html:141 templates/list/recommendations.html:31
 msgid "Release Date"
 msgstr "Дата Выпуска"
 
-#: templates/list/list.html:140 templates/list/recommendations.html:31
+#: templates/list/list.html:145 templates/list/recommendations.html:34
 msgid "Country"
 msgstr "Страна"
 
-#: templates/list/list.html:142 templates/list/recommendations.html:33
-#: templates/search.html:23
+#: templates/list/list.html:147 templates/list/recommendations.html:36
+#: templates/search.html:24
 msgid "Director"
 msgstr "Режиссёр"
 
-#: templates/list/list.html:144 templates/list/recommendations.html:35
+#: templates/list/list.html:149 templates/list/recommendations.html:38
 msgid "Writer"
 msgstr "Сценарист"
 
-#: templates/list/list.html:146 templates/list/recommendations.html:37
+#: templates/list/list.html:151 templates/list/recommendations.html:40
 msgid "Genre"
 msgstr "Жанр"
 
-#: templates/list/list.html:148 templates/list/recommendations.html:39
+#: templates/list/list.html:153 templates/list/recommendations.html:42
 msgid "Actors"
 msgstr "Актёры"
 
-#: templates/list/list.html:150 templates/list/recommendations.html:41
+#: templates/list/list.html:155 templates/list/recommendations.html:44
 msgid "Runtime"
 msgstr "Длительность"
 
-#: templates/list/list.html:152 templates/list/recommendations.html:43
+#: templates/list/list.html:157 templates/list/recommendations.html:46
 msgid "Description"
 msgstr "Описание"
 
-#: templates/list/list.html:155 templates/list/recommendations.html:46
+#: templates/list/list.html:160 templates/list/recommendations.html:49
 msgid "Website"
 msgstr "Вебсайт"
 
-#: templates/list/list.html:158 templates/list/recommendations.html:49
+#: templates/list/list.html:163 templates/list/recommendations.html:52
 msgid "Trailers"
 msgstr "Трейлеры"
 
-#: templates/list/list.html:174
+#: templates/list/list.html:179
 msgid "Comment"
 msgstr "Комментарий"
 
-#: templates/list/list.html:176
+#: templates/list/list.html:181 templates/user/preferences.html:44
 msgid "Save"
 msgstr "Сохранить"
 
-#: templates/list/list.html:184
+#: templates/list/list.html:189
 msgid "Add comment"
 msgstr "Добавить комментарий"
 
-#: templates/list/list.html:203 templates/list/recommendations.html:64
+#: templates/list/list.html:210 templates/list/recommendations.html:67
 msgid "The list is empty"
 msgstr "Список пуст"
 
@@ -259,7 +295,7 @@ msgid "Email"
 msgstr "Email"
 
 #: templates/registration/registration_form.html:20
-#: templates/user/login.html:18
+#: templates/user/login.html:18 templates/user/preferences.html:35
 msgid "Password"
 msgstr "Пароль"
 
@@ -268,27 +304,27 @@ msgstr "Пароль"
 msgid "Register"
 msgstr "Регистрация"
 
-#: templates/search.html:10
+#: templates/search.html:11
 msgid "Text input with dropdown button"
 msgstr "Поле текста с выпадающей кнопкой"
 
-#: templates/search.html:19
+#: templates/search.html:20
 msgid "Movie"
 msgstr "Фильм"
 
-#: templates/search.html:21
+#: templates/search.html:22
 msgid "Actor"
 msgstr "Актёр"
 
-#: templates/search.html:29
+#: templates/search.html:30
 msgid "show only popular"
 msgstr "показывать только популярные"
 
-#: templates/search.html:32
+#: templates/search.html:33
 msgid "sort by date"
 msgstr "сортировать по дате"
 
-#: templates/search.html:42 templates/search.html:44
+#: templates/search.html:43 templates/search.html:45
 msgid "Add to the list"
 msgstr "Добавить в список"
 
@@ -308,33 +344,27 @@ msgstr "Ошибка авторизации"
 msgid "Settings"
 msgstr "Настройки"
 
-#: templates/user/preferences.html:10
+#: templates/user/preferences.html:13
 msgid "Avatar"
 msgstr "Аватар"
 
-#: templates/user/preferences.html:15
+#: templates/user/preferences.html:18
 msgid "You can change your avatar on"
 msgstr "Вы можете изменить аватар на"
 
-#: templates/user/preferences.html:21
-msgid "Language"
-msgstr "Язык"
-
-#: templates/user/preferences.html:34
-msgid "Privacy"
-msgstr "Конфиденциальность"
-
 #: templates/user/preferences.html:37
-msgid "Show my lists only to friends"
-msgstr "Показывать мои списки только друзьям"
-
-#: templates/user/preferences.html:42
-msgid "User"
-msgstr "Пользователь"
-
-#: templates/user/preferences.html:44
 msgid "Change password"
 msgstr "Изменить пароль"
+
+#~ msgid ""
+#~ "Privacy setting. It indicates whether only your friends have access to your "
+#~ "movie lists."
+#~ msgstr ""
+#~ "Настройка конфиденциальности. Она указывает имеют ли только друзья доступ к "
+#~ "спискам фильмов."
+
+#~ msgid "User"
+#~ msgstr "Пользователь"
 
 #~ msgid "Nothing has been found"
 #~ msgstr "Ничего не найдено"

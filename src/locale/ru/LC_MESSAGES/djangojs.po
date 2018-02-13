@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-02-11 17:35-0500\n"
+"POT-Creation-Date: 2018-02-12 20:59-0500\n"
 "PO-Revision-Date: 2018-02-10 20:47-0456\n"
 "Last-Translator: b'  <someemail@asd.com>'\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -55,10 +55,6 @@ msgstr "К Просмотру"
 #: moviesapp/static/js/main.js:102
 msgid "You need to login to add a movie to your list."
 msgstr "Вам нужно авторизоваться для того чтобы добавить фильм в список."
-
-#: moviesapp/static/js/preferences.js:29
-msgid "Error saving settings"
-msgstr "Ошибка сохранения настроек"
 
 #: moviesapp/static/js/raty.js:7
 msgid "Awful"
@@ -143,6 +139,9 @@ msgstr "Ошибка получения сервера загрузки для �
 #: moviesapp/static/js/vk.js:91
 msgid "Add a rating to the movie"
 msgstr "Добавьте оценку фильму"
+
+#~ msgid "Error saving settings"
+#~ msgstr "Ошибка сохранения настроек"
 
 #~ msgid "Close all notifications"
 #~ msgstr "Закрыть все уведомления"
