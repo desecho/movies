@@ -8,7 +8,7 @@ from django.conf import settings
 from raven.contrib.django.raven_compat.models import client
 
 from .models import Movie
-from .exceptions import OmdbLimitReached
+from .exceptions import OmdbLimitReached, OmdbRequestError
 from .tmdb import get_tmdb_movie_data
 
 
@@ -18,9 +18,8 @@ def load_omdb_movie_data(imdb_id):
     except:  # noqa
         if settings.DEBUG:
             raise
-        else:
-            client.captureException()
-        return
+        client.captureException()
+        raise OmdbRequestError
     movie_data = r.json()
     response = movie_data.get('Response')
     if response == 'True':
