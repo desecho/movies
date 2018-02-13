@@ -1,12 +1,30 @@
-#loading-bar-spinner {
+html {
+  height: 100%;
+}
+
+body {
+  display: grid;
+  min-height: 100%;
+  grid-template-rows: 1fr auto;
+}
+
+footer {
+  text-align: right;
+  grid-row-start: 2;
+  grid-row-end: 3;
+}
+
+/* for angular */
+[ng\:cloak], [ng-cloak], .ng-cloak {
+  display: none !important;
+}
+
+/* #loading-bar-spinner - for angular-loading-bar */
+#loading-bar-spinner, .hidden, #language-form {
   display: none;
 }
 
-#language-form {
-  display: none;
-}
-
-#login-form {
+.login-form {
   margin-top: 20px;
 }
 
@@ -67,10 +85,6 @@
   margin-right: 10px;
 }
 
-label.error {
-  color: #b94a48;
-}
-
 #movie-count {
   font-size: 25px;
   line-height: 27px;
@@ -117,7 +131,7 @@ label.error {
 }
 
 .item-desc {
-  color: grey;
+  color: #808080;
 }
 
 form {
@@ -149,6 +163,10 @@ label {
   margin-bottom: 0;
 }
 
+label.error {
+  color: #b94a48;
+}
+
 .search-panel-additional {
   float: right;
   margin-right: 9px;
@@ -168,22 +186,6 @@ label {
   background-color: #fff;
 }
 
-html {
-  height: 100%;
-}
-
-body {
-  display: grid;
-  min-height: 100%;
-  grid-template-rows: 1fr auto;
-}
-
-footer {
-  text-align: right;
-  grid-row-start: 2;
-  grid-row-end: 3;
-}
-
 .col-form-label {
   padding-top: 0;
   padding-bottom: 0;
@@ -191,10 +193,6 @@ footer {
 
 #results {
   margin-top: 60px;
-}
-
-[ng\:cloak], [ng-cloak], .ng-cloak {
-  display: none !important;
 }
 
 .preference-label {
