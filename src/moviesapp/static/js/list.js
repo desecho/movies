@@ -212,6 +212,17 @@
       ratingDataservice.save(id,rating, element, ratyCustomSettings)
     }
 
+    function activateModeMinimal() {
+      angular.element('.poster, .comment, .comment-button, .release-date-label, .wall-post').hide();
+      angular.element('.details, .review').css('display', 'inline');
+      angular.element('.review').css('padding-top', '0');
+      angular.element('.release-date, .imdb-rating').css({
+        'float': 'right',
+        'margin-right': '10px',
+      });
+      angular.element('.movie').addClass('movie-minimal');
+    }
+
     const ratyCustomSettings = {
       readOnly: vars.anothersAccount || vars.listId == 2,
       click: function(score) {
@@ -223,6 +234,10 @@
     };
     const settings = angular.extend({}, ratySettings, ratyCustomSettings);
     angular.element('.rating').raty(settings);
+
+    if (vars.mode === 'minimal') {
+      activateModeMinimal();
+    }
   }
 })();
 
@@ -263,17 +278,6 @@ function applySettings(settings, reload) {
   });
 }
 
-function activateModeMinimal() {
-  angular.element('.poster, .comment, .comment-button, .release-date-label, .wall-post').hide();
-  angular.element('.details, .review').css('display', 'inline');
-  angular.element('.review').css('padding-top', '0');
-  angular.element('.release-date, .imdb-rating').css({
-    'float': 'right',
-    'margin-right': '10px',
-  });
-  angular.element('.movie').addClass('movie-minimal');
-}
-
 function toggleRecommendation() { // eslint-disable-line no-unused-vars
   if (vars.recommendation) {
     applySettings({
@@ -298,10 +302,6 @@ function toggleRecommendation() { // eslint-disable-line no-unused-vars
         }
       );
     }
-  }
-
-  if (vars.mode === 'minimal') {
-    activateModeMinimal();
   }
 
   if (vars.recommendation) {
