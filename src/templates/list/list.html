@@ -52,8 +52,8 @@
     </div>
 
     {% if anothers_account and user.is_authenticated %}
-      <button data-toggle="button" id="button-recommendation" type="button" class="btn btn-secondary ml-2"
-              onclick="toggleRecommendation()">{% trans 'Recommendations' %}
+      <button ng-cloak data-toggle="button" id="button-recommendation" type="button" class="btn btn-secondary ml-2"
+              ng-click="list.toggleRecommendation()">{% trans 'Recommendations' %}
       </button>
     {% endif %}
     <br><br>
@@ -64,15 +64,15 @@
           <!-- id values are being used as variable name combination to control the button statuses -->
           {% with sort=request.session.sort %}
             <label class="btn btn-secondary {% if sort == 'release_date' %} active {% endif %}"
-                   title="{% trans 'Sort by release date' %}" onclick="switchSort('release_date')">
+                   title="{% trans 'Sort by release date' %}" ng-click="list.switchSort('release_date')">
               <input type="radio">{% trans 'Release date' %}
             </label>
             <label class="btn btn-secondary {% if sort == 'rating' %} active {% endif %}"
-                   title="{% trans 'Sort by rating' %}" onclick="switchSort('rating')">
+                   title="{% trans 'Sort by rating' %}" ng-click="list.switchSort('rating')">
               <input type="radio">{% trans 'Rating' %}
             </label>
             <label class="btn btn-secondary {% if sort == 'addition_date' %} active {% endif %}"
-                   title="{% trans 'Sort by date added' %}" onclick="switchSort('addition_date')">
+                   title="{% trans 'Sort by date added' %}" ng-click="list.switchSort('addition_date')">
               <input type="radio">{% trans 'Date added' %}
             </label>
           {% endwith %}

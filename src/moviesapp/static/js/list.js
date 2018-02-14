@@ -156,6 +156,8 @@
     vm.toggleCommentArea = toggleCommentArea;
     vm.mode = vars.mode;
     vm.isVkApp = isVkApp;
+    vm.toggleRecommendation = toggleRecommendation
+    vm.switchSort = switchSort
 
     function openUrl(url) {
       window.location.href = url;
@@ -208,6 +210,56 @@
       $('#comment' + id).focus();
     }
 
+    function switchSort(value) { // eslint-disable-line no-unused-vars
+      let settings = {};
+      if (value === 'rating') {
+        settings = {
+          sort: value,
+        };
+      } else {
+        settings = {
+          recommendation: false,
+          sort: value,
+        };
+      }
+      applySettings(settings);
+    }
+
+    function applySettings(settings, reload) {
+      function error() {
+        displayMessage(gettext('Error applying the settings'));
+      }
+      if (reload == null) {
+        reload = true;
+      }
+      $.post(urls.urlApplySettings, {
+        settings: JSON.stringify(settings),
+      }, function(response) {
+        if (response.status == 'success') {
+          if (reload) {
+            location.reload();
+          }
+        } else {
+          error();
+        }
+      }).fail(function() {
+        error();
+      });
+    }
+
+    function toggleRecommendation() { // eslint-disable-line no-unused-vars
+      if (vars.recommendation) {
+        applySettings({
+          recommendation: false,
+        });
+      } else {
+        applySettings({
+          sort: 'rating',
+          recommendation: true,
+        });
+      }
+    }
+
     function changeRating(id, rating, element) {
       ratingDataservice.save(id,rating, element, ratyCustomSettings)
     }
@@ -232,64 +284,17 @@
         changeRating(angular.element(this).data('record-id'), score, angular.element(this));
       },
     };
-    const settings = angular.extend({}, ratySettings, ratyCustomSettings);
-    angular.element('.rating').raty(settings);
 
     if (vars.mode === 'minimal') {
       activateModeMinimal();
     }
+
+    (function() {
+      const settings = angular.extend({}, ratySettings, ratyCustomSettings);
+      angular.element('.rating').raty(settings);
+    })();
   }
 })();
-
-function switchSort(value) { // eslint-disable-line no-unused-vars
-  let additionalSetting;
-  if (value !== 'rating') {
-    additionalSetting = {
-      recommendation: false,
-    };
-  } else {
-    additionalSetting = {};
-  }
-  const settings = jQuery.extend({
-    sort: value,
-  }, additionalSetting);
-  applySettings(settings);
-}
-
-function applySettings(settings, reload) {
-  function error() {
-    displayMessage(gettext('Error applying the settings'));
-  }
-  if (reload == null) {
-    reload = true;
-  }
-  $.post(urls.urlApplySettings, {
-    settings: JSON.stringify(settings),
-  }, function(response) {
-    if (response.status == 'success') {
-      if (reload) {
-        location.reload();
-      }
-    } else {
-      error();
-    }
-  }).fail(function() {
-    error();
-  });
-}
-
-function toggleRecommendation() { // eslint-disable-line no-unused-vars
-  if (vars.recommendation) {
-    applySettings({
-      recommendation: false,
-    });
-  } else {
-    applySettings({
-      sort: 'rating',
-      recommendation: true,
-    });
-  }
-}
 
 (function() {
   function setViewedIconsAndRemoveButtons() {
