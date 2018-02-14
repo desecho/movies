@@ -7,7 +7,7 @@ function postToWall(id) { // eslint-disable-line no-unused-vars
   function post(photo) {
     function createWallPostMessage() {
       let text;
-      const title = angular.element('#record' + id).attr('data-title');
+      const title = angular.element('#record' + id).data('title');
       const comment = angular.element('#comment' + id)[0].value;
       const ratingPost = ratySettings['hints'][rating - 1];
       if (rating > 2) {
@@ -79,7 +79,7 @@ ${myRating} - ${ratingPost}.`;
   }
 
   const rating = parseInt(
-    angular.element('#record' + id).children('.details').children('.review').children('.rating').attr('data-rating'));
+    angular.element('#record' + id).children('.details').children('.review').children('.rating').data('rating'));
 
   if (rating) {
     if (hasPoster()) {

@@ -1,11 +1,6 @@
 /* global autosize:false */
 /* global ratySettings:false */
-/* global mode:false */
-/* global recommendation:false */
-/* global anothersAccount:false */
-/* global listData:false */
 /* global setViewedIconAndRemoveButtons:false */
-/* global listId:false */
 /* global ratyCustomSettings:false */
 
 'use strict';
@@ -114,7 +109,7 @@
     vm.switchMode = switchMode;
     vm.saveComment = saveComment;
     vm.toggleCommentArea = toggleCommentArea;
-    vm.mode = mode;
+    vm.mode = vars.mode;
     vm.isVkApp = isVkApp;
 
     function openUrl(url) {
@@ -174,7 +169,7 @@ function changeRating(id, rating, element) {
   function error() {
     function revertToPreviousRating(element) {
       const scoreSettings = {
-        score: element.attr('data-rating'),
+        score: element.data('rating'),
       };
       const settings = $.extend({}, ratySettings, ratyCustomSettings, scoreSettings);
       element.raty(settings);
@@ -187,8 +182,8 @@ function changeRating(id, rating, element) {
     id: id,
     rating: rating,
   }, function(response) {
-    if (response.status == 'success') {
-      element.attr('data-rating', rating);
+    if (response.status === 'success') {
+      element.data('rating', rating);
     } else {
       error();
     }
@@ -235,18 +230,18 @@ function applySettings(settings, reload) {
 }
 
 function activateModeMinimal() {
-  $('.poster, .comment, .comment-button, .release-date-label, .wall-post').hide();
-  $('.details, .review').css('display', 'inline');
-  $('.review').css('padding-top', '0');
-  $('.release-date, .imdb-rating').css({
+  angular.element('.poster, .comment, .comment-button, .release-date-label, .wall-post').hide();
+  angular.element('.details, .review').css('display', 'inline');
+  angular.element('.review').css('padding-top', '0');
+  angular.element('.release-date, .imdb-rating').css({
     'float': 'right',
     'margin-right': '10px',
   });
-  $('.movie').addClass('movie-minimal');
+  angular.element('.movie').addClass('movie-minimal');
 }
 
 function toggleRecommendation() { // eslint-disable-line no-unused-vars
-  if (recommendation) {
+  if (vars.recommendation) {
     applySettings({
       recommendation: false,
     });
@@ -262,32 +257,33 @@ let ratyCustomSettings;
 
 (function() {
   function setViewedIconsAndRemoveButtons() {
-    if (anothersAccount) {
-      $('.movie').each(function() {
-        const id = $(this).attr('data-id');
-        const listId = listData[id]; // eslint-disable-line no-invalid-this
-        setViewedIconAndRemoveButtons(id, listId);
-      });
+    if (vars.anothersAccount) {
+      angular.forEach(angular.element('.movie'),
+        function(movie){
+          const id = angular.element(movie).data('id')
+          const listId = vars.listData[id]; // eslint-disable-line no-invalid-this
+          setViewedIconAndRemoveButtons(id, listId);
+        }
+      );
     }
   }
 
-  const ratyReadonly = anothersAccount || listId == 2;
   ratyCustomSettings = {
-    readOnly: ratyReadonly,
+    readOnly: ratyReadonly = vars.anothersAccount || vars.listId == 2;,
     click: function(score) {
       if (!score) {
         score = 0;
       }
-      changeRating($(this).attr('data-record-id'), score, $(this));
+      changeRating(angular.element(this).data('record-id'), score, angular.element(this));
     },
   };
 
-  if (mode === 'minimal') {
+  if (vars.mode === 'minimal') {
     activateModeMinimal();
   }
 
-  if (recommendation) {
-    $('#button-recommendation').button('toggle');
+  if (vars.recommendation) {
+    angular.element('#button-recommendation').button('toggle');
   }
   setViewedIconsAndRemoveButtons();
   autosize(angular.element('textarea'));

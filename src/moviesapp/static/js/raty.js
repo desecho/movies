@@ -19,7 +19,7 @@ let ratySettings = {
 (function() {
   const scoreSettings = {
     score: function() {
-      return angular.element(this).attr('data-rating');
+      return angular.element(this).data('rating');
     },
   };
   const settings = angular.extend({}, ratySettings, ratyCustomSettings, scoreSettings);
