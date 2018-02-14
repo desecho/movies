@@ -11,7 +11,7 @@ from django.views.i18n import JavaScriptCatalog
 from moviesapp.views import AboutView
 from moviesapp.views.list import (
     AddToListView,
-    ApplySettingsView,
+    SaveSettingsView,
     ChangeRatingView,
     ListView,
     RecommendationsView,
@@ -50,7 +50,7 @@ urlpatterns = [
     re_path('list/(?P<list_name>watched|to-watch)/', ListView.as_view(), name='list'),
     re_path(r'people/(?P<username>[\w\d]+)/(?P<list_name>watched|to-watch)', ListView.as_view(), name='people'),
     path('recommendations/', RecommendationsView.as_view(), name='recommendations'),
-    path('apply-setting/', ApplySettingsView.as_view(), name='apply_settings'),
+    path('save-settings/', SaveSettingsView.as_view(), name='save_settings'),
     path('remove-movie/', django.views.defaults.page_not_found, name='remove_movie'),
     re_path(r'remove-movie/(?P<id>\d+)/', RemoveMovieView.as_view(), name='remove_movie'),
     path('add-to-list/', AddToListView.as_view(), name='add_to_list'),

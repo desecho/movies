@@ -59,11 +59,10 @@ class RemoveMovieView(AjaxView):
         return self.success()
 
 
-class ApplySettingsView(AjaxAnonymousView):
-    def post(self, request):
+class SaveSettingsView(AjaxAnonymousView):
+    def put(self, request):
         try:
-            POST = request.POST
-            session_settings = json.loads(POST['settings'])
+            session_settings = json.loads(request.PUT['settings'])
         except KeyError:
             return self.render_bad_request_response()
 

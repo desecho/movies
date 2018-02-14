@@ -143,11 +143,45 @@
   }
 })();
 
+
+(function() {
+  angular.module('app').factory('settingsService', ['$resource', function($resource) {
+    return $resource(urls.urlSaveSettings, {}, {
+      save: {
+        method: 'PUT',
+      },
+    });
+  }]);
+})();
+
+
+(function() {
+  angular.module('app').factory('settingsDataservice', factory);
+  factory.$inject = ['settingsService', 'growl'];
+
+  function factory(settingsService, growl) {
+    return {
+      save: save,
+    };
+
+    function save(settings) {
+      return settingsService.save(angular.element.param({
+        settings: JSON.stringify(settings),
+      }), function(){}, fail);
+
+      function fail() {
+        growl.error(gettext('Error applying the settings'));
+      }
+    }
+  }
+})();
+
 (function() {
   angular.module('app').controller('ListController', ListController);
-  ListController.$inject = ['movieDataservice', 'movieCommentDataservice', 'ratingDataservice','isVkApp', 'ratySettings',];
+  ListController.$inject = ['movieDataservice', 'movieCommentDataservice', 'ratingDataservice', 'settingsDataservice',
+                            'isVkApp', 'ratySettings',];
 
-  function ListController(movieDataservice, movieCommentDataservice, ratingDataservice, isVkApp, ratySettings) {
+  function ListController(movieDataservice, movieCommentDataservice, ratingDataservice, settingsDataservice, isVkApp, ratySettings) {
     const vm = this;
     vm.openUrl = openUrl;
     vm.removeMovie = removeMovie;
@@ -225,26 +259,14 @@
       applySettings(settings);
     }
 
-    function applySettings(settings, reload) {
-      function error() {
-        displayMessage(gettext('Error applying the settings'));
-      }
-      if (reload == null) {
-        reload = true;
-      }
-      $.post(urls.urlApplySettings, {
-        settings: JSON.stringify(settings),
-      }, function(response) {
-        if (response.status == 'success') {
+    function applySettings(settings, reload=true) {
+      settingsDataservice.save(settings).$promise.then(
+        function() {
           if (reload) {
             location.reload();
           }
-        } else {
-          error();
         }
-      }).fail(function() {
-        error();
-      });
+      ).catch(function() {});
     }
 
     function toggleRecommendation() { // eslint-disable-line no-unused-vars
