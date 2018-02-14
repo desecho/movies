@@ -338,5 +338,4 @@
   }
   setViewedIconsAndRemoveButtons();
   autosize(angular.element('textarea'));
-  retinajs();
 })();

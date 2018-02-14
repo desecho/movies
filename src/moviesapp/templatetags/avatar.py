@@ -34,8 +34,8 @@ def avatar(user, size='small'):
         url, url_2x = get_gravatar_urls()
     else:
         url, url_2x = social_avatars_urls
-    return mark_safe('<img class="avatar-{0}" src="{1}" data-rjs="{2}" width="{3}" height="{3}"'  # nosec
-                     'alt="{4}" title="{4}"></img>'.format(size, url, url_2x, avatar_size, user))
+    return mark_safe('<img class="avatar-{0}" src="{1}" data-rjs="{2}" width="{3}"'  # nosec
+                     'alt="{4}" title="{4}" instant-retina></img>'.format(size, url, url_2x, avatar_size, user))
 
 
 @register.simple_tag

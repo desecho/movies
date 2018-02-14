@@ -112,11 +112,6 @@ String.prototype.toTitleCase = function() { // eslint-disable-line no-extend-nat
       }).$promise.then(function(response) {
         if (response.status === 'success') {
           vm.movies = response.movies;
-          // It is not working without the timeout.
-          setTimeout(function() {
-            angular.element('.poster img').removeAttr('data-rjs-processed');
-            retinajs();
-          }, 500);
         }
       }).catch(function() {});
     }

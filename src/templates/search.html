@@ -37,7 +37,7 @@
     <div id="results" class="results" ng-repeat="movie in moviesSearch.movies" ng-cloak>
       <div class="movie" id="movie[[movie.id]]">
         <div class="poster"><img ng-src="[[movie.poster]]" alt="[[movie.title]] poster"
-                                 data-rjs="[[movie.poster2x]]"/></div>
+                                 data-rjs="[[movie.poster2x]]" instant-retina /></div>
         <div class="title">"[[movie.title]]"
           <div class="add-to-list-buttons">
             <a href="javascript:void(0)" title="{% trans 'Add to the list' %} {% trans 'Watched' %}"
