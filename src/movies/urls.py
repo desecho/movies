@@ -11,12 +11,12 @@ from django.views.i18n import JavaScriptCatalog
 from moviesapp.views import AboutView
 from moviesapp.views.list import (
     AddToListView,
-    SaveSettingsView,
     ChangeRatingView,
     ListView,
     RecommendationsView,
     RemoveMovieView,
     SaveCommentView,
+    SaveSettingsView,
 )
 from moviesapp.views.search import (
     AddToListFromDbView,

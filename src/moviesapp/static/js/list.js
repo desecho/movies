@@ -121,7 +121,8 @@
       return ratingService.save({
         id: id,
       }, angular.element.param({
-        rating: rating,}), success, fail);
+        rating: rating
+      }), success, fail);
 
       function success(response) {
         element.data('rating', rating);
@@ -167,7 +168,7 @@
     function save(settings) {
       return settingsService.save(angular.element.param({
         settings: JSON.stringify(settings),
-      }), function(){}, fail);
+      }), function() {}, fail);
 
       function fail() {
         growl.error(gettext('Error applying the settings'));
@@ -179,7 +180,8 @@
 (function() {
   angular.module('app').controller('ListController', ListController);
   ListController.$inject = ['movieDataservice', 'movieCommentDataservice', 'ratingDataservice', 'settingsDataservice',
-                            'isVkApp', 'ratySettings',];
+    'isVkApp', 'ratySettings'
+  ];
 
   function ListController(movieDataservice, movieCommentDataservice, ratingDataservice, settingsDataservice, isVkApp, ratySettings) {
     const vm = this;
@@ -190,8 +192,8 @@
     vm.toggleCommentArea = toggleCommentArea;
     vm.mode = vars.mode;
     vm.isVkApp = isVkApp;
-    vm.toggleRecommendation = toggleRecommendation
-    vm.switchSort = switchSort
+    vm.toggleRecommendation = toggleRecommendation;
+    vm.switchSort = switchSort;
 
     function openUrl(url) {
       window.location.href = url;
@@ -259,7 +261,7 @@
       applySettings(settings);
     }
 
-    function applySettings(settings, reload=true) {
+    function applySettings(settings, reload = true) {
       settingsDataservice.save(settings).$promise.then(
         function() {
           if (reload) {
@@ -283,7 +285,7 @@
     }
 
     function changeRating(id, rating, element) {
-      ratingDataservice.save(id,rating, element, ratyCustomSettings)
+      ratingDataservice.save(id, rating, element, ratyCustomSettings);
     }
 
     function activateModeMinimal() {
@@ -322,8 +324,8 @@
   function setViewedIconsAndRemoveButtons() {
     if (vars.anothersAccount) {
       angular.forEach(angular.element('.movie'),
-        function(movie){
-          const id = angular.element(movie).data('id')
+        function(movie) {
+          const id = angular.element(movie).data('id');
           const listId = vars.listData[id]; // eslint-disable-line no-invalid-this
           setViewedIconAndRemoveButtons(id, listId);
         }

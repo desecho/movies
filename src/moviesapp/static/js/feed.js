@@ -5,7 +5,9 @@
   FeedController.$inject = ['ratySettings'];
 
   function FeedController(ratySettings) {
-    const settings = angular.extend({readOnly: true}, ratySettings);
+    const settings = angular.extend({
+      readOnly: true
+    }, ratySettings);
     angular.element('.rating').raty(settings);
   }
 })();
