@@ -1,7 +1,5 @@
 /* global autosize:false */
-/* global ratySettings:false */
 /* global setViewedIconAndRemoveButtons:false */
-/* global ratyCustomSettings:false */
 
 'use strict';
 
@@ -62,12 +60,11 @@
   }
 })();
 
-
 (function() {
   angular.module('app').factory('movieCommentService', ['$resource', function($resource) {
     return $resource(urls.urlSaveComment, {}, {
       save: {
-        method: 'POST',
+        method: 'PUT',
       },
     });
   }]);
@@ -99,10 +96,58 @@
 })();
 
 (function() {
-  angular.module('app').controller('ListController', ListController);
-  ListController.$inject = ['movieDataservice', 'movieCommentDataservice', 'isVkApp'];
+  angular.module('app').factory('ratingService', ['$resource', function($resource) {
+    return $resource(urls.urlChangeRating + ':id/', {
+      id: '@id',
+    }, {
+      save: {
+        method: 'PUT',
+      },
+    });
+  }]);
+})();
 
-  function ListController(movieDataservice, movieCommentDataservice, isVkApp) {
+
+(function() {
+  angular.module('app').factory('ratingDataservice', factory);
+  factory.$inject = ['ratingService', 'growl', 'ratySettings'];
+
+  function factory(ratingService, growl, ratySettings) {
+    return {
+      save: save,
+    };
+
+    function save(id, rating, element, ratyCustomSettings) {
+      return ratingService.save({
+        id: id,
+      }, angular.element.param({
+        rating: rating,}), success, fail);
+
+      function success(response) {
+        element.data('rating', rating);
+      }
+
+      function fail() {
+        function revertToPreviousRating(element) {
+          const scoreSettings = {
+            score: element.data('rating'),
+          };
+          const settings = angular.extend({}, ratySettings, ratyCustomSettings, scoreSettings);
+          element.raty(settings);
+        }
+
+        revertToPreviousRating(element);
+        growl.error(gettext('Error adding a rating'));
+      }
+    }
+  }
+})();
+
+(function() {
+  angular.module('app').controller('ListController', ListController);
+  ListController.$inject = ['movieDataservice', 'movieCommentDataservice', 'ratingDataservice','isVkApp', 'ratySettings',];
+
+  function ListController(movieDataservice, movieCommentDataservice, ratingDataservice, isVkApp, ratySettings) {
     const vm = this;
     vm.openUrl = openUrl;
     vm.removeMovie = removeMovie;
@@ -162,35 +207,24 @@
       $('#comment-area-button' + id).toggle();
       $('#comment' + id).focus();
     }
+
+    function changeRating(id, rating, element) {
+      ratingDataservice.save(id,rating, element, ratyCustomSettings)
+    }
+
+    const ratyCustomSettings = {
+      readOnly: vars.anothersAccount || vars.listId == 2,
+      click: function(score) {
+        if (!score) {
+          score = 0;
+        }
+        changeRating(angular.element(this).data('record-id'), score, angular.element(this));
+      },
+    };
+    const settings = angular.extend({}, ratySettings, ratyCustomSettings);
+    angular.element('.rating').raty(settings);
   }
 })();
-
-function changeRating(id, rating, element) {
-  function error() {
-    function revertToPreviousRating(element) {
-      const scoreSettings = {
-        score: element.data('rating'),
-      };
-      const settings = $.extend({}, ratySettings, ratyCustomSettings, scoreSettings);
-      element.raty(settings);
-    }
-    revertToPreviousRating(element);
-    displayMessage(gettext('Error adding a rating'));
-  }
-
-  $.post(urls.urlChangeRating, {
-    id: id,
-    rating: rating,
-  }, function(response) {
-    if (response.status === 'success') {
-      element.data('rating', rating);
-    } else {
-      error();
-    }
-  }).fail(function() {
-    error();
-  });
-}
 
 function switchSort(value) { // eslint-disable-line no-unused-vars
   let additionalSetting;
@@ -253,8 +287,6 @@ function toggleRecommendation() { // eslint-disable-line no-unused-vars
   }
 }
 
-let ratyCustomSettings;
-
 (function() {
   function setViewedIconsAndRemoveButtons() {
     if (vars.anothersAccount) {
@@ -267,16 +299,6 @@ let ratyCustomSettings;
       );
     }
   }
-
-  ratyCustomSettings = {
-    readOnly: ratyReadonly = vars.anothersAccount || vars.listId == 2;,
-    click: function(score) {
-      if (!score) {
-        score = 0;
-      }
-      changeRating(angular.element(this).data('record-id'), score, angular.element(this));
-    },
-  };
 
   if (vars.mode === 'minimal') {
     activateModeMinimal();

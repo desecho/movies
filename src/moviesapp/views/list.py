@@ -16,11 +16,12 @@ from .utils import add_movie_to_list, paginate
 
 
 class ChangeRatingView(AjaxView):
-    def post(self, request):
+    def put(self, request, **kwargs):
         try:
-            POST = request.POST
-            id_ = POST['id']
-            rating = POST['rating']
+            PUT = request.PUT
+            print(PUT)
+            id_ = kwargs['id']
+            rating = PUT['rating']
         except KeyError:
             return self.render_bad_request_response()
 
@@ -72,15 +73,15 @@ class ApplySettingsView(AjaxAnonymousView):
 
 
 class SaveCommentView(AjaxView):
-    def post(self, request):
+    def put(self, request):
+        PUT = request.PUT
         try:
-            POST = request.POST
-            record_id = int(POST['id'])
+            record_id = int(PUT['id'])
         except (KeyError, ValueError):
             return self.render_bad_request_response()
         self.record = request.user.get_record(record_id)
         try:
-            comment = request.POST['comment']
+            comment = PUT['comment']
         except KeyError:
             return self.render_bad_request_response()
 

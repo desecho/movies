@@ -54,7 +54,8 @@ urlpatterns = [
     path('remove-movie/', django.views.defaults.page_not_found, name='remove_movie'),
     re_path(r'remove-movie/(?P<id>\d+)/', RemoveMovieView.as_view(), name='remove_movie'),
     path('add-to-list/', AddToListView.as_view(), name='add_to_list'),
-    path('change-rating/', ChangeRatingView.as_view(), name='change_rating'),
+    re_path(r'change-rating/(?P<id>\d+)/', ChangeRatingView.as_view(), name='change_rating'),
+    path('change-rating/', django.views.defaults.page_not_found, name='change_rating'),
     path('save-comment/', SaveCommentView.as_view(), name='save_comment'),
 
     # Social

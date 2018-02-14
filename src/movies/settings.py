@@ -109,6 +109,7 @@ MIDDLEWARE = [
     'social_django.middleware.SocialAuthExceptionMiddleware',
     'custom_anonymous.middleware.AuthenticationMiddleware',
     'admin_reorder.middleware.ModelAdminReorder',
+    'moviesapp.middleware.PutHandlerMiddleware',
 ]
 if DEBUG:
     MIDDLEWARE.append('debug_toolbar.middleware.DebugToolbarMiddleware')

@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block content %}
-  <div id="results" class="results col-sm-12 col-md-10 col-lg-8">
+  <div id="results" class="results col-sm-12 col-md-10 col-lg-8" ng-controller="RecommendationsController as recommendations">
     {% if records %}
       {% for record in records %}
         <div id="record{{ record.id }}" data-id="{{ record.id }}" class="movie">
@@ -80,8 +80,6 @@
 
   <script src="{% static 'vendor/raty-js/lib/jquery.raty.js' %}"></script>
 
-  <script src="{% static 'js/raty_readonly.js' %}"></script>
-  <script src="{% static 'js/raty.js' %}"></script>
-
+  <script src="{% static 'js/recommendations.js' %}"></script>
   <script src="{% static 'js/list_general.js' %}"></script>
 {% endblock %}

@@ -8,7 +8,7 @@
 {% block content %}
   <legend>{{ list_name }}</legend>
   <br>
-  <table class="table col-md-11 col-lg-10 col-xl-8 table-responsive">
+  <table class="table col-md-11 col-lg-10 col-xl-8 table-responsive" ng-controller="FeedController as feed">
     <tbody>
     {% for action in actions %}
       <tr class="feed-record">
@@ -45,6 +45,5 @@
 {% block js %}
   <script src="{% static 'vendor/raty-js/lib/jquery.raty.js' %}"></script>
 
-  <script src="{% static 'js/raty_readonly.js' %}"></script>
-  <script src="{% static 'js/raty.js' %}"></script>
+  <script src="{% static 'js/feed.js' %}"></script>
 {% endblock %}

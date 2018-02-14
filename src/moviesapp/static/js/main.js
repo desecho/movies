@@ -2,6 +2,14 @@
 
 angular.module('app', ['ngResource', 'angular-loading-bar', 'ngCookies', 'angular-growl']);
 
+const hints = [
+  gettext('Awful'),
+  gettext('Bad'),
+  gettext('Regular'),
+  gettext('Good'),
+  gettext('Awesome'),
+];
+
 (function() {
   angular.module('app').factory('appResourceInterceptor', appResourceInterceptor);
   appResourceInterceptor.$inject = ['$cookies'];
@@ -57,7 +65,19 @@ angular.module('app', ['ngResource', 'angular-loading-bar', 'ngCookies', 'angula
     angular.element('.vk-app-hide').show();
   }
 
+  const ratySettings = {
+    hints: hints,
+    cancelHint: gettext('Cancel rating'),
+    noRatedMsg: gettext('No rating yet'),
+    cancel: true,
+    starType: 'i',
+    score: function() {
+      return angular.element(this).data('rating');
+    },
+  };
+
   angular.module('app').constant('isVkApp', isVkApp);
+  angular.module('app').constant('ratySettings', ratySettings);
   angular.module('app').controller('MenuController', MenuController);
 
   function MenuController() {

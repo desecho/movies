@@ -1,4 +1,4 @@
-/* global ratySettings:false */
+/* global hints:false */
 /* global VK:false */
 
 'use strict';
@@ -9,7 +9,7 @@ function postToWall(id) { // eslint-disable-line no-unused-vars
       let text;
       const title = angular.element('#record' + id).data('title');
       const comment = angular.element('#comment' + id)[0].value;
-      const ratingPost = ratySettings['hints'][rating - 1];
+      const ratingPost = hints[rating - 1];
       if (rating > 2) {
         text = gettext('I recommend watching');
       } else {
