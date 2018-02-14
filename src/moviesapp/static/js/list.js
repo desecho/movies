@@ -39,7 +39,6 @@
           }
         }
         angular.element('#record' + id).fadeOut('fast', function(el) {
-          console.log(el);
           angular.element(this).remove(); // eslint-disable-line no-invalid-this
           checkIfNoRecords();
         });
@@ -61,13 +60,16 @@
 })();
 
 (function() {
-  angular.module('app').factory('movieCommentService', ['$resource', function($resource) {
+  angular.module('app').factory('movieCommentService', factory);
+  factory.$inject = ['$resource'];
+
+  function factory($resource) {
     return $resource(urls.urlSaveComment, {}, {
       save: {
         method: 'PUT',
       },
     });
-  }]);
+  }
 })();
 
 (function() {
@@ -95,8 +97,12 @@
   }
 })();
 
+
 (function() {
-  angular.module('app').factory('ratingService', ['$resource', function($resource) {
+  angular.module('app').factory('ratingService', factory);
+  factory.$inject = ['$resource'];
+
+  function factory($resource) {
     return $resource(urls.urlChangeRating + ':id/', {
       id: '@id',
     }, {
@@ -104,7 +110,7 @@
         method: 'PUT',
       },
     });
-  }]);
+  }
 })();
 
 
@@ -121,7 +127,7 @@
       return ratingService.save({
         id: id,
       }, angular.element.param({
-        rating: rating
+        rating: rating,
       }), success, fail);
 
       function success(response) {
@@ -144,17 +150,18 @@
   }
 })();
 
-
 (function() {
-  angular.module('app').factory('settingsService', ['$resource', function($resource) {
+  angular.module('app').factory('settingsService', factory);
+  factory.$inject = ['$resource'];
+
+  function factory($resource) {
     return $resource(urls.urlSaveSettings, {}, {
       save: {
         method: 'PUT',
       },
     });
-  }]);
+  }
 })();
-
 
 (function() {
   angular.module('app').factory('settingsDataservice', factory);
@@ -167,7 +174,7 @@
 
     function save(settings) {
       return settingsService.save(angular.element.param({
-        settings: JSON.stringify(settings),
+        settings: angular.toJson(settings),
       }), function() {}, fail);
 
       function fail() {
@@ -180,10 +187,11 @@
 (function() {
   angular.module('app').controller('ListController', ListController);
   ListController.$inject = ['movieDataservice', 'movieCommentDataservice', 'ratingDataservice', 'settingsDataservice',
-    'isVkApp', 'ratySettings'
+    'isVkApp', 'ratySettings',
   ];
 
-  function ListController(movieDataservice, movieCommentDataservice, ratingDataservice, settingsDataservice, isVkApp, ratySettings) {
+  function ListController(movieDataservice, movieCommentDataservice, ratingDataservice, settingsDataservice, isVkApp,
+    ratySettings) {
     const vm = this;
     vm.openUrl = openUrl;
     vm.removeMovie = removeMovie;
@@ -196,7 +204,7 @@
     vm.switchSort = switchSort;
 
     function openUrl(url) {
-      window.location.href = url;
+      location.href = url;
     }
 
     function removeMovie(id) {
@@ -205,15 +213,15 @@
 
     function switchMode(newMode) {
       function deactivateModeMinimal() {
-        $('.poster, .comment, .release-date-label, .wall-post').show();
-        $('.comment-button').hide();
-        $('.details, .imdb-rating, .review, .release-date').css('display', '');
-        $('.review').css('padding-top', '10px');
-        $('.release-date, .imdb-rating').css({
+        angular.element('.poster, .comment, .release-date-label, .wall-post').show();
+        angular.element('.comment-button').hide();
+        angular.element('.details, .imdb-rating, .review, .release-date').css('display', '');
+        angular.element('.review').css('padding-top', '10px');
+        angular.element('.release-date, .imdb-rating').css({
           'float': '',
           'margin-right': '0',
         });
-        $('.movie').removeClass('movie-minimal');
+        angular.element('.movie').removeClass('movie-minimal');
       }
       if (newMode === 'minimal') {
         activateModeMinimal();
@@ -241,9 +249,9 @@
     }
 
     function toggleCommentArea(id) {
-      $('#comment-area' + id).toggle();
-      $('#comment-area-button' + id).toggle();
-      $('#comment' + id).focus();
+      angular.element('#comment-area' + id).toggle();
+      angular.element('#comment-area-button' + id).toggle();
+      angular.element('#comment' + id).focus();
     }
 
     function switchSort(value) { // eslint-disable-line no-unused-vars
@@ -305,6 +313,7 @@
         if (!score) {
           score = 0;
         }
+        // eslint-disable-next-line angular/controller-as-vm
         changeRating(angular.element(this).data('record-id'), score, angular.element(this));
       },
     };

@@ -202,3 +202,7 @@ label.error {
 .only-for-friends {
   margin-top: 11px;
 }
+
+.pagination {
+  padding-top: 10px;
+}

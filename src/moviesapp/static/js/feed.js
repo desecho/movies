@@ -6,7 +6,7 @@
 
   function FeedController(ratySettings) {
     const settings = angular.extend({
-      readOnly: true
+      readOnly: true,
     }, ratySettings);
     angular.element('.rating').raty(settings);
   }
