@@ -111,7 +111,7 @@
                      ng-click="list.removeRecord({{ record.id }})"><i
                     class="fa fa-trash-o"></i></a>
                   {% if is_vk_user %}<a ng-show="list.isVkApp" href="javascript:void(0)" class="wall-post"
-                                        title="{% trans 'Post to the wall' %}" onclick="list.postToWall({{ record.id }})"><i
+                                        title="{% trans 'Post to the wall' %}" ng-click="list.postToWall({{ record.id }})"><i
                     class="fa fa-share"></i></a>{% endif %}
                 {% endif %}
                 <div class="add-to-list-buttons">
