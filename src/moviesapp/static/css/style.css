@@ -206,3 +206,7 @@ label.error {
 .pagination {
   padding-top: 10px;
 }
+
+.search-btn-group .btn-secondary:focus, .search-btn-group .btn-secondary.focus, .search-btn-group .btn:focus, .search-btn-group .btn.focus {
+  box-shadow: none !important;
+}
