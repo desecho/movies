@@ -7,6 +7,7 @@ from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 
 from moviesapp.models import ActionRecord
+
 from .mixins import TemplateAnonymousView, TemplateView
 from .utils import paginate
 

@@ -6,6 +6,7 @@ from django.db.models import Q
 from django.http import Http404
 
 from moviesapp.models import Action, ActionRecord, List, Record, User
+
 from .mixins import (
     AjaxAnonymousView,
     AjaxView,

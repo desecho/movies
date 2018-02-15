@@ -4,7 +4,7 @@
 {% block content %}
   <div ng-controller="MoviesSearchController as moviesSearch" ng-cloak>
     <form name="form" ng-submit="moviesSearch.search()"
-          class="col-lg-7 col-md-8 col-sm-10 col-xl-5 mx-auto">
+          class="mt-1 col-lg-7 col-md-8 col-sm-10 col-xl-5 mx-auto">
       <div class="input-group">
         <input class="span2 form-control" id="query" name="query" type="text" autofocus ng-model="moviesSearch.query"
                required

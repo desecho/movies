@@ -5,6 +5,7 @@ from django.views.generic.edit import FormView
 
 from moviesapp.forms import UserForm
 from moviesapp.models import activate_user_language_preference
+
 from .mixins import TemplateAnonymousView
 
 

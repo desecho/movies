@@ -185,7 +185,9 @@
   factory.$inject = ['$resource'];
 
   function factory($resource) {
-    return $resource(urls.urlUploadPosterToWall, {id: '@id'}, {
+    return $resource(urls.urlUploadPosterToWall, {
+      id: '@id'
+    }, {
       upload: {
         method: 'POST',
       },
@@ -203,7 +205,9 @@
     };
 
     function upload(id, url) {
-      return photoService.upload({id: id}, angular.element.param({
+      return photoService.upload({
+        id: id
+      }, angular.element.param({
         url: url,
       }), success, fail);
 
@@ -296,8 +300,8 @@
       }
 
       function hasPoster() {
-        return (angular.element('#record' + id).children('.poster').children('img').attr('src').indexOf('no_poster')
-                === -1);
+        return (angular.element('#record' + id).children('.poster').children('img').attr('src').indexOf('no_poster') ===
+          -1);
       }
 
       const rating = parseInt(

@@ -7,6 +7,7 @@ from moviesapp.exceptions import MovieNotInDb, NotAvailableSearchType
 from moviesapp.models import Movie
 from moviesapp.tmdb import get_movies_from_tmdb
 from moviesapp.utils import add_movie_to_db
+
 from .mixins import AjaxAnonymousView, AjaxView, TemplateAnonymousView
 from .utils import add_movie_to_list
 
