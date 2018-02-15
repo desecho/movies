@@ -185,7 +185,7 @@
   factory.$inject = ['$resource'];
 
   function factory($resource) {
-    return $resource(urls.urlUploadPosterToWall, {
+    return $resource(urls.urlUploadPosterToWall + ':id/', {
       id: '@id'
     }, {
       upload: {
