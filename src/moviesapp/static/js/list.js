@@ -4,11 +4,11 @@
 'use strict';
 
 (function() {
-  angular.module('app').factory('movieService', factory);
+  angular.module('app').factory('recordService', factory);
   factory.$inject = ['$resource'];
 
   function factory($resource) {
-    return $resource(urls.urlRemoveMovie + ':id/', {
+    return $resource(urls.urlRemoveRecord + ':id/', {
       id: '@id',
     }, {
       delete: {
@@ -19,20 +19,20 @@
 })();
 
 (function() {
-  angular.module('app').factory('movieDataservice', factory);
-  factory.$inject = ['movieService', 'growl'];
+  angular.module('app').factory('recordDataservice', factory);
+  factory.$inject = ['recordService', 'growl'];
 
-  function factory(movieService, growl) {
+  function factory(recordService, growl) {
     return {
       delete: deleteMovie,
     };
 
     function deleteMovie(id) {
-      return movieService.delete({
+      return recordService.delete({
         id: id,
       }, success, fail);
 
-      function removeMovieFromPage(id) {
+      function removeRecordFromPage(id) {
         function checkIfNoRecords() {
           if (!angular.element('.movie').length) {
             angular.element('#results')[0].innerHTML = gettext('The list is empty') + '.';
@@ -44,16 +44,60 @@
         });
       }
 
-      function success(response) {
-        if (response.status === 'success') {
-          removeMovieFromPage(id);
-        } else {
-          fail();
-        }
+      function success() {
+        removeRecordFromPage(id);
       }
 
       function fail() {
         growl.error(gettext('Error removing the movie'));
+      }
+    }
+  }
+})();
+
+
+(function() {
+  angular.module('app').factory('movieService', factory);
+  factory.$inject = ['$resource'];
+
+  function factory($resource) {
+    return $resource(urls.urlAddToList + ':movieId/', {
+      movieId: '@movieId',
+    }, {
+      add: {
+        method: 'POST',
+      },
+    });
+  }
+})();
+
+
+(function() {
+  angular.module('app').factory('movieDataservice', factory);
+  factory.$inject = ['movieService', 'growl'];
+
+  function factory(movieService, growl) {
+    return {
+      add: addMovie,
+    };
+
+    function addMovie(movieId, listId, recordId) {
+      return movieService.add({
+        movieId: movieId,
+      }, angular.element.param({
+        listId: listId,
+      }), success, fail);
+
+      function success() {
+        setViewedIconAndRemoveButtons(recordId, listId);
+      }
+
+      function error() {
+        growl.error(gettext('Error adding the movie to the list'));
+      }
+
+      function fail(response) {
+        handleError(response, error);
       }
     }
   }
@@ -186,15 +230,15 @@
 
 (function() {
   angular.module('app').controller('ListController', ListController);
-  ListController.$inject = ['movieDataservice', 'movieCommentDataservice', 'ratingDataservice', 'settingsDataservice',
-    'isVkApp', 'ratySettings',
+  ListController.$inject = ['recordDataservice', 'movieCommentDataservice', 'ratingDataservice', 'settingsDataservice',
+    'movieDataservice', 'isVkApp', 'ratySettings',
   ];
 
-  function ListController(movieDataservice, movieCommentDataservice, ratingDataservice, settingsDataservice, isVkApp,
-    ratySettings) {
+  function ListController(recordDataservice, movieCommentDataservice, ratingDataservice, settingsDataservice,
+    movieDataservice, isVkApp, ratySettings) {
     const vm = this;
     vm.openUrl = openUrl;
-    vm.removeMovie = removeMovie;
+    vm.removeRecord = removeRecord;
     vm.switchMode = switchMode;
     vm.saveComment = saveComment;
     vm.toggleCommentArea = toggleCommentArea;
@@ -202,13 +246,18 @@
     vm.isVkApp = isVkApp;
     vm.toggleRecommendation = toggleRecommendation;
     vm.switchSort = switchSort;
+    vm.addToList = addToList;
+
+    function addToList(movieId, listId, recordId) {
+      movieDataservice.add(movieId, listId, recordId);
+    }
 
     function openUrl(url) {
       location.href = url;
     }
 
-    function removeMovie(id) {
-      movieDataservice.delete(id);
+    function removeRecord(id) {
+      recordDataservice.delete(id);
     }
 
     function switchMode(newMode) {
@@ -326,25 +375,25 @@
       const settings = angular.extend({}, ratySettings, ratyCustomSettings);
       angular.element('.rating').raty(settings);
     })();
-  }
-})();
 
-(function() {
-  function setViewedIconsAndRemoveButtons() {
-    if (vars.anothersAccount) {
-      angular.forEach(angular.element('.movie'),
-        function(movie) {
-          const id = angular.element(movie).data('id');
-          const listId = vars.listData[id]; // eslint-disable-line no-invalid-this
-          setViewedIconAndRemoveButtons(id, listId);
+    (function() {
+      function setViewedIconsAndRemoveButtons() {
+        if (vars.anothersAccount) {
+          angular.forEach(angular.element('.movie'),
+            function(movie) {
+              const id = angular.element(movie).data('id');
+              const listId = vars.listData[id]; // eslint-disable-line no-invalid-this
+              setViewedIconAndRemoveButtons(id, listId);
+            }
+          );
         }
-      );
-    }
-  }
+      }
 
-  if (vars.recommendation) {
-    angular.element('#button-recommendation').button('toggle');
+      if (vars.recommendation) {
+        angular.element('#button-recommendation').button('toggle');
+      }
+      setViewedIconsAndRemoveButtons();
+      autosize(angular.element('textarea'));
+    })();
   }
-  setViewedIconsAndRemoveButtons();
-  autosize(angular.element('textarea'));
 })();

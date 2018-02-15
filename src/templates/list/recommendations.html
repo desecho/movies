@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block content %}
-  <div id="results" class="results col-sm-12 col-md-10 col-lg-8" ng-controller="RecommendationsController as recommendations">
+  <div id="results" class="results col-sm-12 col-md-10 col-lg-8" ng-controller="RecommendationsController as list">
     {% if records %}
       {% for record in records %}
         <div id="record{{ record.id }}" data-id="{{ record.id }}" class="movie">
@@ -82,4 +82,5 @@
 
   <script src="{% static 'js/recommendations.js' %}"></script>
   <script src="{% static 'js/list_general.js' %}"></script>
+  <script src="{% static 'js/list.js' %}"></script>
 {% endblock %}

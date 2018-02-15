@@ -33,18 +33,17 @@ class ChangeRatingView(AjaxView):
 
 
 class AddToListView(AjaxView):
-    def post(self, request):
+    def post(self, request, **kwargs):
         try:
-            POST = request.POST
-            movie_id = int(POST['movieId'])
-            list_id = int(POST['listId'])
+            movie_id = int(kwargs['id'])
+            list_id = int(request.POST['listId'])
         except (KeyError, ValueError):
             return self.render_bad_request_response()
         add_movie_to_list(movie_id, list_id, request.user)
         return self.success()
 
 
-class RemoveMovieView(AjaxView):
+class RemoveRecordView(AjaxView):
     def delete(self, request, **kwargs):
         try:
             record_id = int(kwargs['id'])

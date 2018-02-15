@@ -1,23 +1,5 @@
 'use strict';
 
-function addToList(movieId, listId, recordId) { // eslint-disable-line no-unused-vars
-  function showError() {
-    return displayMessage(gettext('Error adding the movie to the list'));
-  }
-  return $.post(urls.urlAddToList, {
-    movieId: movieId,
-    listId: listId,
-  }, function(response) {
-    if (response.status === 'success') {
-      return setViewedIconAndRemoveButtons(recordId, listId);
-    } else {
-      showError();
-    }
-  }).fail(function(error) {
-    handleError(error, showError);
-  });
-}
-
 function setViewedIconAndRemoveButtons(recordId, listId) {
   function removeButtons() {
     return angular.element('#record' + recordId).children('.title').children('.add-to-list-buttons').remove();
