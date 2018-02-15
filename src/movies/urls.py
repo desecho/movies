@@ -37,7 +37,8 @@ urlpatterns = [
     path('add-to-list-from-db/', AddToListFromDbView.as_view(), name='add_to_list_from_db'),
 
     # Vk
-    path('upload-poster-to-wall/', UploadPosterToWallView.as_view(), name='upload_poster_to_wall'),
+    path('upload-poster-to-wall/', django.views.defaults.page_not_found, name='upload_poster_to_wall'),
+    re_path(r'upload-poster-to-wall/(?P<id>\d+)/', UploadPosterToWallView.as_view(), name='upload_poster_to_wall'),
 
     # Accounts
     path('accounts/login/', login, {'template_name': 'user/login.html'}, name='login'),

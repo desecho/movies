@@ -1,14 +1,11 @@
+/* global VK:false */
+/* global retinajs:false */
+
 'use strict';
 
 angular.module('app', ['ngResource', 'angular-loading-bar', 'ngCookies', 'angular-growl']);
 
-const hints = [
-  gettext('Awful'),
-  gettext('Bad'),
-  gettext('Regular'),
-  gettext('Good'),
-  gettext('Awesome'),
-];
+const urls = {}; // eslint-disable-line no-unused-vars
 
 (function() {
   angular.module('app').directive('instantRetina', function() {
@@ -87,7 +84,13 @@ const hints = [
   }
 
   const ratySettings = {
-    hints: hints,
+    hints: [
+      gettext('Awful'),
+      gettext('Bad'),
+      gettext('Regular'),
+      gettext('Good'),
+      gettext('Awesome'),
+    ],
     cancelHint: gettext('Cancel rating'),
     noRatedMsg: gettext('No rating yet'),
     cancel: true,
@@ -104,61 +107,33 @@ const hints = [
   function MenuController() {
     const vm = this;
     vm.changeLanguage = changeLanguage;
+    vm.invite = invite;
 
     function changeLanguage() {
       angular.element('#language-form').submit();
     }
+
+    function invite() {
+      VK.callMethod('showInviteBox');
+    }
   }
 })();
 
-const urls = {}; // eslint-disable-line no-unused-vars
+(function() {
+  angular.module('app').factory('errorService', factory);
+  factory.$inject = ['growl'];
 
-function getCookie(name) {
-  let cookieValue = null;
-  if (document.cookie && document.cookie != '') {
-    const cookies = document.cookie.split(';');
-    for (let i = 0; i < cookies.length; i++) {
-      const cookie = jQuery.trim(cookies[i]);
-      // Does this cookie string begin with the name we want?
-      if (cookie.substring(0, name.length + 1) == (name + '=')) {
-        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-        break;
+  function factory(growl) {
+    return {
+      handleError: handleError,
+    };
+
+    function handleError(response, error) {
+      if (response.status == 403) {
+        growl.error(gettext('You need to login to add a movie to your list.'));
+      } else {
+        error();
       }
     }
   }
-  return cookieValue;
-}
-
-function csrfSafeMethod(method) {
-  // these HTTP methods do not require CSRF protection
-  return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-}
-
-function displayMessage(x) {
-  alert(x);
-}
-
-function handleError(response, error) { // eslint-disable-line no-unused-vars
-  if (response.status == 403) {
-    displayMessage(gettext('You need to login to add a movie to your list.'));
-  } else {
-    error();
-  }
-}
-
-const csrftoken = getCookie('csrftoken');
-
-$.ajaxSetup({
-  crossDomain: false, // obviate need for sameOrigin test
-  beforeSend: function(xhr, settings) {
-    if (!csrfSafeMethod(settings.type)) {
-      xhr.setRequestHeader('X-CSRFToken', csrftoken);
-    }
-  },
-});
-
-const headers = { // eslint-disable-line no-unused-vars
-  'X-CSRFToken': csrftoken,
-  'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-  'X-Requested-With': 'XMLHttpRequest',
-};
+})();

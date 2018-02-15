@@ -17,6 +17,6 @@
         readOnly: true,
       }, ratySettings);
       angular.element('.rating').raty(settings);
-    })()
+    })();
   }
 })();

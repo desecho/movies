@@ -4,7 +4,6 @@ Documentation
 Js module dependencies
 -----------------------
 ``tether`` and ``popper.js`` ``jquery`` are ``bootstrap``'s dependencies.
-``jquery`` is also used by Movies however.
 
 Avatars
 ------------

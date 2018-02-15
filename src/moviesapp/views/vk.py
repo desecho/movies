@@ -22,15 +22,17 @@ class UploadPosterToWallView(VkAjaxView):
     @staticmethod
     def _upload_file(url, filepath):
         file_ = open(filepath, 'rb')
-        m = MultipartEncoder(fields={'photo': (file_.name, file_, 'image/jpg')})
-        return requests.post(url, data=m, headers={'Content-Type': m.content_type}).text
+        data = MultipartEncoder(fields={'photo': (file_.name, file_, 'image/jpg')})
+        return requests.post(url, data=data, headers={'Content-Type': data.content_type}).text
 
-    def post(self, request):
+    def post(self, request, **kwargs):
         try:
-            POST = request.POST
-            record_id = int(POST['recordId'])
-            url = POST.get('url')
-        except (KeyError, ValueError):
+            record_id = int(kwargs['id'])
+        except ValueError:
+            return self.render_bad_request_response()
+        try:
+            url = request.POST['url']
+        except KeyError:
             return self.render_bad_request_response()
 
         self._get_filepath(record_id)

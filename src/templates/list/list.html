@@ -111,7 +111,7 @@
                      ng-click="list.removeRecord({{ record.id }})"><i
                     class="fa fa-trash-o"></i></a>
                   {% if is_vk_user %}<a ng-show="list.isVkApp" href="javascript:void(0)" class="wall-post"
-                                        title="{% trans 'Post to the wall' %}" onclick="postToWall({{ record.id }})"><i
+                                        title="{% trans 'Post to the wall' %}" onclick="list.postToWall({{ record.id }})"><i
                     class="fa fa-share"></i></a>{% endif %}
                 {% endif %}
                 <div class="add-to-list-buttons">
@@ -218,7 +218,7 @@
     'use strict';
 
     vars.mode = '{{ request.session.mode }}';
-    vars.listData = $.parseJSON('{{ list_data|safe }}');
+    vars.listData = angular.fromJson('{{ list_data|safe }}');
     vars.listId = {{ list_id }};
     vars.recommendation = {{ request.session.recommendation|yesno:'true,false' }};
     vars.anothersAccount = {{ anothers_account|yesno:'true,false' }};
@@ -227,11 +227,11 @@
     urls.urlSaveSettings = '{% url 'save_settings' %}';
     urls.urlAddToList = '{% url 'add_to_list' %}';
     urls.urlSaveComment = '{% url 'save_comment' %}';
-    urls.urlAjaxUploadPosterToWall = '{% url 'upload_poster_to_wall' %}';
+    urls.urlUploadPosterToWall = '{% url 'upload_poster_to_wall' %}';
   </script>
   <script src="{% static 'vendor/raty-js/lib/jquery.raty.js' %}"></script>
   <script src="{% static 'vendor/autosize/dist/autosize.min.js' %}"></script>
 
-  <script src="{% static 'js/list_general.js' %}"></script>
+  <script src="{% static 'js/list_services.js' %}"></script>
   <script src="{% static 'js/list.js' %}"></script>
 {% endblock %}

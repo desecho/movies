@@ -33,7 +33,7 @@
       {% if user.is_vk_user %}
         <li class="nav-item vk-app-show" style="display: none;"><a id="invite" href="javascript:void(0)"
                                                                    class="nav-link"
-                                                                   onclick="VK.callMethod('showInviteBox')"><i
+                                                                   ng-click="menu.invite()"><i
           class="fa fa-envelope-o"></i></a></li>
       {% endif %}
       {% if user.is_authenticated %}

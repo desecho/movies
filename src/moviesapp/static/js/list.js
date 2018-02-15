@@ -1,5 +1,5 @@
 /* global autosize:false */
-/* global setViewedIconAndRemoveButtons:false */
+/* global VK:false */
 
 'use strict';
 
@@ -50,54 +50,6 @@
 
       function fail() {
         growl.error(gettext('Error removing the movie'));
-      }
-    }
-  }
-})();
-
-
-(function() {
-  angular.module('app').factory('movieService', factory);
-  factory.$inject = ['$resource'];
-
-  function factory($resource) {
-    return $resource(urls.urlAddToList + ':movieId/', {
-      movieId: '@movieId',
-    }, {
-      add: {
-        method: 'POST',
-      },
-    });
-  }
-})();
-
-
-(function() {
-  angular.module('app').factory('movieDataservice', factory);
-  factory.$inject = ['movieService', 'growl'];
-
-  function factory(movieService, growl) {
-    return {
-      add: addMovie,
-    };
-
-    function addMovie(movieId, listId, recordId) {
-      return movieService.add({
-        movieId: movieId,
-      }, angular.element.param({
-        listId: listId,
-      }), success, fail);
-
-      function success() {
-        setViewedIconAndRemoveButtons(recordId, listId);
-      }
-
-      function error() {
-        growl.error(gettext('Error adding the movie to the list'));
-      }
-
-      function fail(response) {
-        handleError(response, error);
       }
     }
   }
@@ -229,13 +181,149 @@
 })();
 
 (function() {
+  angular.module('app').factory('photoService', factory);
+  factory.$inject = ['$resource'];
+
+  function factory($resource) {
+    return $resource(urls.urlUploadPosterToWall, {id: '@id'}, {
+      upload: {
+        method: 'POST',
+      },
+    });
+  }
+})();
+
+(function() {
+  angular.module('app').factory('photoDataservice', factory);
+  factory.$inject = ['photoService', 'growl'];
+
+  function factory(photoService, growl) {
+    return {
+      upload: upload,
+    };
+
+    function upload(id, url) {
+      return photoService.upload({id: id}, angular.element.param({
+        url: url,
+      }), success, fail);
+
+      function success(response) {
+        response.data = angular.fromJson(response.data);
+      }
+
+      function fail() {
+        growl.error(gettext('Error loading a poster'));
+      }
+    }
+  }
+})();
+
+(function() {
+  angular.module('app').factory('vkService', factory);
+  factory.$inject = ['growl', 'photoDataservice', 'ratySettings'];
+
+  function factory(growl, photoDataservice, ratySettings) {
+    return {
+      postToWall: postToWall,
+    };
+
+    function postToWall(id) {
+      function post(photo) {
+        function createWallPostMessage() {
+          let text;
+          const title = angular.element('#record' + id).data('title');
+          const comment = angular.element('#comment' + id)[0].value;
+          const ratingTexts = ratySettings.hints;
+          const ratingPost = ratingTexts[rating - 1];
+          if (rating > 2) {
+            text = gettext('I recommend watching');
+          } else {
+            text = gettext('I don\'t recommend watching');
+          }
+          const myRating = gettext('My rating');
+          text += ` "${title}".\n${myRating} - ${ratingPost}.`;
+          if (comment) {
+            text += '\n' + comment;
+          }
+          return text;
+        }
+
+        function createWallPost() {
+          const post = {
+            message: createWallPostMessage(),
+          };
+          if (photo) {
+            post.attachments = photo;
+          }
+          return post;
+        }
+
+        VK.api('wall.post', createWallPost(), function(response) {
+          if (response.error) {
+            growl.error(gettext('Error posting to the wall'));
+          } else {
+            growl.success(gettext('Your post has been posted'));
+          }
+        });
+      }
+
+      function saveWallPhoto(data) {
+        VK.api('photos.saveWallPhoto', data, function(response) {
+          if (response.error) {
+            growl.error(gettext('Error posting a poster to the wall'));
+          } else {
+            post(response.response[0].id);
+          }
+        });
+      }
+
+      function uploadPhotoToWall(url) {
+        photoDataservice.upload(id, url).$promise.then(
+          function(response) {
+            saveWallPhoto(response.data);
+          }
+        ).catch(function() {});
+      }
+
+      function getWallUploadServerAndUploadPhotoAndPostToWall() {
+        VK.api('photos.getWallUploadServer', function(response) {
+          if (response.error) {
+            growl.error(gettext('Error getting an upload server for wall posting'));
+          } else {
+            uploadPhotoToWall(response.response.upload_url);
+          }
+        });
+      }
+
+      function hasPoster() {
+        return (angular.element('#record' + id).children('.poster').children('img').attr('src').indexOf('no_poster')
+                === -1);
+      }
+
+      const rating = parseInt(
+        angular.element('#record' + id).children('.details').children('.review').children('.rating').data('rating'));
+
+      if (rating) {
+        if (hasPoster()) {
+          getWallUploadServerAndUploadPhotoAndPostToWall();
+        } else {
+          post();
+        }
+      } else {
+        growl.info(gettext('Add a rating to the movie'));
+      }
+    }
+  }
+})();
+
+(function() {
   angular.module('app').controller('ListController', ListController);
   ListController.$inject = ['recordDataservice', 'movieCommentDataservice', 'ratingDataservice', 'settingsDataservice',
-    'movieDataservice', 'isVkApp', 'ratySettings',
+    'movieDataservice', 'isVkApp', 'ratySettings', 'iconService', 'vkService',
   ];
 
   function ListController(recordDataservice, movieCommentDataservice, ratingDataservice, settingsDataservice,
-    movieDataservice, isVkApp, ratySettings) {
+    movieDataservice, isVkApp, ratySettings, iconService, vkService) {
     const vm = this;
     vm.openUrl = openUrl;
     vm.removeRecord = removeRecord;
@@ -247,6 +335,11 @@
     vm.toggleRecommendation = toggleRecommendation;
     vm.switchSort = switchSort;
     vm.addToList = addToList;
+    vm.postToWall = postToWall;
+
+    function postToWall(id) {
+      vkService.postToWall(id);
+    }
 
     function addToList(movieId, listId, recordId) {
       movieDataservice.add(movieId, listId, recordId);
@@ -383,7 +476,7 @@
             function(movie) {
               const id = angular.element(movie).data('id');
               const listId = vars.listData[id]; // eslint-disable-line no-invalid-this
-              setViewedIconAndRemoveButtons(id, listId);
+              iconService.setViewedIconAndRemoveButtons(id, listId);
             }
           );
         }

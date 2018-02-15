@@ -59,9 +59,9 @@ String.prototype.toTitleCase = function() { // eslint-disable-line no-extend-nat
 
 (function() {
   angular.module('app').factory('addToListFromDbDataservice', factory);
-  factory.$inject = ['addToListFromDbService', 'growl'];
+  factory.$inject = ['addToListFromDbService', 'growl', 'errorService'];
 
-  function factory(addToListFromDbService, growl) {
+  function factory(addToListFromDbService, growl, errorService) {
     return {
       add: add,
     };
@@ -80,7 +80,7 @@ String.prototype.toTitleCase = function() { // eslint-disable-line no-extend-nat
       }
 
       function fail(response) {
-        handleError(response, error);
+        errorService.handleError(response, error);
       }
     }
   }
