@@ -16,10 +16,9 @@ function postToWall(id) { // eslint-disable-line no-unused-vars
         text = gettext('I don\'t recommend watching');
       }
       const myRating = gettext('My rating');
-      text += ` "${title}".
-${myRating} - ${ratingPost}.`;
+      text += ` "${title}".\n${myRating} - ${ratingPost}.`;
       if (comment) {
-        text += '\n ' + comment;
+        text += '\n' + comment;
       }
       return text;
     }

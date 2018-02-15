@@ -63,7 +63,6 @@
     "gettext": false,
     "displayMessage": false,
     "handleError": false,
-    "rating": false,
     "headers": false,
     "retinajs": false,
     "urls": false,

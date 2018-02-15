@@ -18,10 +18,8 @@ from .utils import add_movie_to_list, paginate
 class ChangeRatingView(AjaxView):
     def put(self, request, **kwargs):
         try:
-            PUT = request.PUT
-            print(PUT)
             id_ = kwargs['id']
-            rating = PUT['rating']
+            rating = request.PUT['rating']
         except KeyError:
             return self.render_bad_request_response()
 
