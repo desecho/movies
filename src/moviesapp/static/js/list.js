@@ -264,6 +264,10 @@
 
         VK.api('wall.post', createWallPost(), function(response) {
           if (response.error) {
+            // error_msg: "Operation denied by user"
+            if (response.error.error_code === 10007) {
+              return;
+            }
             growl.error(gettext('Error posting to the wall'));
           } else {
             growl.success(gettext('Your post has been posted'));
