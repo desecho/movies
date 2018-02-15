@@ -4,8 +4,8 @@ from importlib import reload
 
 from django_tqdm import BaseCommand
 
-from ...models import Movie
-from ...utils import load_omdb_movie_data
+from moviesapp.models import Movie
+from moviesapp.utils import load_omdb_movie_data
 
 
 class Command(BaseCommand):

@@ -4,9 +4,9 @@ from importlib import reload
 
 from django_tqdm import BaseCommand
 
-from ...exceptions import MovieNotInDb
-from ...models import Movie
-from ...utils import add_movie_to_db
+from moviesapp.exceptions import MovieNotInDb
+from moviesapp.models import Movie
+from moviesapp.utils import add_movie_to_db
 
 
 class Command(BaseCommand):

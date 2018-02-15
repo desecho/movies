@@ -4,7 +4,7 @@ from importlib import reload
 
 from django_tqdm import BaseCommand
 
-from ...models import Movie
+from moviesapp.models import Movie
 
 
 class Command(BaseCommand):

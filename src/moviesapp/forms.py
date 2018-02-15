@@ -1,6 +1,6 @@
 from django.forms import ModelForm
 
-from moviesapp.models import User
+from .models import User
 
 
 class UserForm(ModelForm):

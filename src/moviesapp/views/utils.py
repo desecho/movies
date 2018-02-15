@@ -2,7 +2,7 @@ from datetime import datetime
 
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 
-from ..models import ActionRecord, Record
+from moviesapp.models import ActionRecord, Record
 
 
 def paginate(objects, page, objects_on_page):

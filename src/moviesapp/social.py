@@ -2,7 +2,7 @@
 
 from django.conf import settings
 
-from moviesapp.vk import get_vk_avatar
+from .vk import get_vk_avatar
 
 
 def load_user_data(backend, user, **kwargs):  # pylint: disable=unused-argument

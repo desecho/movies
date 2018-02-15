@@ -3,10 +3,10 @@ import json
 from django.http import QueryDict
 from raven.contrib.django.raven_compat.models import client
 
-from ..exceptions import MovieNotInDb, NotAvailableSearchType
-from ..models import Movie
-from ..tmdb import get_movies_from_tmdb
-from ..utils import add_movie_to_db
+from moviesapp.exceptions import MovieNotInDb, NotAvailableSearchType
+from moviesapp.models import Movie
+from moviesapp.tmdb import get_movies_from_tmdb
+from moviesapp.utils import add_movie_to_db
 from .mixins import AjaxAnonymousView, AjaxView, TemplateAnonymousView
 from .utils import add_movie_to_list
 

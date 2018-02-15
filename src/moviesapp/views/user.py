@@ -4,8 +4,7 @@ from django.urls import reverse
 from django.views.generic.edit import FormView
 
 from moviesapp.forms import UserForm
-
-from ..models import activate_user_language_preference
+from moviesapp.models import activate_user_language_preference
 from .mixins import TemplateAnonymousView
 
 

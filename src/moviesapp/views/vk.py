@@ -4,7 +4,7 @@ import tempfile
 import requests
 from requests_toolbelt import MultipartEncoder
 
-from ..models import Record
+from moviesapp.models import Record
 from .mixins import VkAjaxView
 
 

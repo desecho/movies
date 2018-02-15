@@ -6,7 +6,7 @@ from dateutil.relativedelta import relativedelta
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 
-from ..models import ActionRecord
+from moviesapp.models import ActionRecord
 from .mixins import TemplateAnonymousView, TemplateView
 from .utils import paginate
 

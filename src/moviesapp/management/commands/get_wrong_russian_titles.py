@@ -3,7 +3,7 @@
 from django_tqdm import BaseCommand
 from tabulate import tabulate
 
-from ...models import Movie
+from moviesapp.models import Movie
 
 ALLOWED_CHARS = 'абвгдеёжзийклмнопрстуфхцчшщьыъэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЬЫЪЭЮЯ123456789 -:0,"«».?+/–º·№!()½⅓\''
 
