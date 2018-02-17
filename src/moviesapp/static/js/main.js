@@ -130,7 +130,7 @@ const urls = {}; // eslint-disable-line no-unused-vars
 
     function handleError(response, error) {
       if (response.status == 403) {
-        growl.error(gettext('You need to login to add a movie to your list.'));
+        growl.info(gettext('You need to login to add a movie to your list.'));
       } else {
         error();
       }
