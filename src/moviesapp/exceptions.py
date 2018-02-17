@@ -16,3 +16,7 @@ class OmdbLimitReached(Exception):
 
 class OmdbRequestError(Exception):
     """OMDb request error."""
+
+
+class OmdbError(Exception):
+    """OMDb error."""

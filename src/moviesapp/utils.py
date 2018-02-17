@@ -7,7 +7,7 @@ import requests
 from django.conf import settings
 from raven.contrib.django.raven_compat.models import client
 
-from .exceptions import OmdbLimitReached, OmdbRequestError
+from .exceptions import OmdbLimitReached, OmdbRequestError, OmdbError
 from .models import Movie
 from .tmdb import get_tmdb_movie_data
 
@@ -21,7 +21,7 @@ def load_omdb_movie_data(imdb_id):
         client.captureException()
         raise OmdbRequestError
     movie_data = r.json()
-    response = movie_data.get('Response')
+    response = movie_data['Response']
     if response == 'True':
         for key in movie_data:
             if len(movie_data[key]) > 255:
@@ -29,8 +29,10 @@ def load_omdb_movie_data(imdb_id):
             if movie_data[key] == 'N/A':
                 movie_data[key] = None
         return movie_data
-    elif response == 'False' and movie_data.get('Error') == 'Request limit reached!':
+    elif response == 'False' and movie_data['Error'] == 'Request limit reached!':
         raise OmdbLimitReached
+    else:
+        raise OmdbError(movie_data['Error'], imdb_id)
 
 
 def join_dicts(dict1, dict2):
