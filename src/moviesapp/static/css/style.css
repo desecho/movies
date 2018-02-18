@@ -205,8 +205,29 @@ label.error {
 
 .pagination {
   padding-top: 10px;
+  max-width: 490px;
 }
 
 .search-btn-group .btn-secondary:focus, .search-btn-group .btn-secondary.focus, .search-btn-group .btn:focus, .search-btn-group .btn.focus {
   box-shadow: none !important;
+}
+
+@media (min-width: 320px) and (max-width: 475px) {
+  .feed-record {
+    display: grid;
+    padding-bottom: 50px;
+  }
+}
+@media (max-width: 767.98px) {
+  .search {
+    margin-top: 10px;
+  }
+}
+
+
+@media (min-width: 320px) and (max-width: 475px) {
+  .feed-record {
+    display: grid;
+    padding-bottom: 50px;
+  }
 }
