@@ -1,11 +1,8 @@
 {% extends 'base.html' %}
 {% load i18n static bootstrap_pagination set_var avatar movie_count %}
 
-{% block head %}
-  <link href="{% static 'vendor/raty-js/lib/jquery.raty.css' %}" rel="stylesheet">
-{% endblock %}
 {% block content %}
-  <div ng-controller="ListController as list">
+  <div>
     <div id="movie-count">
       {% if anothers_account %}
         {% movie_count anothers_account %}
@@ -22,11 +19,11 @@
     {% if anothers_account %}
       <div class="btn-group btn-group-toggle" data-toggle="buttons">
         <label class="btn btn-secondary {% ifequal list_id 1 %} active {% endifequal %}" title="{% trans 'Watched' %}"
-               ng-click="list.openUrl('{% url 'people' anothers_account.username 'watched' %}')">
+               @click="openUrl('{% url 'people' anothers_account.username 'watched' %}')">
           <input type="radio">{% trans 'Watched' %}
         </label>
         <label class="btn btn-secondary {% ifequal list_id 2 %} active {% endifequal %}" title="{% trans 'To Watch' %}"
-               ng-click="list.openUrl('{% url 'people' anothers_account.username 'to-watch' %}')">
+               @click="openUrl('{% url 'people' anothers_account.username 'to-watch' %}')">
           <input type="radio">{% trans 'To Watch' %}
         </label>
       </div>
@@ -37,23 +34,23 @@
       {% with mode=request.session.mode %}
         <!-- id values are being used as variable name combination to control the button statuses -->
         <label id="button-mode-full" class="btn btn-secondary {% if mode == 'full' %} active {% endif %}"
-               title="{% trans 'Mode' %}" ng-click="list.switchMode('full')">
+               title="{% trans 'Mode' %}" @click="switchMode('full')">
           <input type="radio">{% trans 'Full' %}
         </label>
         <label id="button-mode-compact" class="btn btn-secondary {% if mode == 'compact' %} active {% endif %}"
-               title="{% trans 'Mode' %}" ng-click="list.switchMode('compact')">
+               title="{% trans 'Mode' %}" @click="switchMode('compact')">
           <input type="radio">{% trans 'Compact' %}
         </label>
         <label id="button-mode-minimal" class="btn btn-secondary {% if mode == 'minimal' %} active {% endif %}"
-               title="{% trans 'Mode' %}" ng-click="list.switchMode('minimal')">
+               title="{% trans 'Mode' %}" @click="switchMode('minimal')">
           <input type="radio">{% trans 'Minimal' %}
         </label>
       {% endwith %}
     </div>
 
     {% if anothers_account and user.is_authenticated %}
-      <button ng-cloak data-toggle="button" id="button-recommendation" type="button" class="btn btn-secondary ml-2"
-              ng-click="list.toggleRecommendation()">{% trans 'Recommendations' %}
+      <button v-cloak data-toggle="button" id="button-recommendation" type="button" class="btn btn-secondary ml-2"
+              @click="toggleRecommendation">{% trans 'Recommendations' %}
       </button>
     {% endif %}
     <br><br>
@@ -64,15 +61,15 @@
           <!-- id values are being used as variable name combination to control the button statuses -->
           {% with sort=request.session.sort %}
             <label class="btn btn-secondary {% if sort == 'release_date' %} active {% endif %}"
-                   title="{% trans 'Sort by release date' %}" ng-click="list.switchSort('release_date')">
+                   title="{% trans 'Sort by release date' %}" @click="switchSort('release_date')">
               <input type="radio">{% trans 'Release date' %}
             </label>
             <label class="btn btn-secondary {% if sort == 'rating' %} active {% endif %}"
-                   title="{% trans 'Sort by rating' %}" ng-click="list.switchSort('rating')">
+                   title="{% trans 'Sort by rating' %}" @click="switchSort('rating')">
               <input type="radio">{% trans 'Rating' %}
             </label>
             <label class="btn btn-secondary {% if sort == 'addition_date' %} active {% endif %}"
-                   title="{% trans 'Sort by date added' %}" ng-click="list.switchSort('addition_date')">
+                   title="{% trans 'Sort by date added' %}" @click="switchSort('addition_date')">
               <input type="radio">{% trans 'Date added' %}
             </label>
           {% endwith %}
@@ -98,8 +95,7 @@
       <h3>{{ query }}: <a href="{{ request.path }}"><i class="fa fa-times" aria-hidden="true"></i></a></h3>
     {% endif %}
 
-    <div id="results" class="results col-sm-12 col-md-10 col-lg-8" ng-cloak>
-      {% if records %}
+    <div class="results col-sm-12 col-md-10 col-lg-8" v-cloak>
         {% with is_vk_user=user.is_vk_user %}
           {% for record in records %}
             <div id="record{{ record.id }}" data-id="{{ record.id }}" data-title="{{ record.movie.title }}"
@@ -108,10 +104,10 @@
                 <span title="{{ record.movie.title_original }}">{{ record.movie.title }}</span>
                 {% if not anothers_account %}
                   <a href="javascript:void(0)" title="{% trans 'Delete' %}"
-                     ng-click="list.removeRecord({{ record.id }})"><i
+                     @click="removeRecord({{ record.id }})"><i
                     class="fa fa-trash-o"></i></a>
-                  {% if is_vk_user %}<a ng-show="list.isVkApp" href="javascript:void(0)" class="wall-post"
-                                        title="{% trans 'Post to the wall' %}" ng-click="list.postToWall({{ record.id }})"><i
+                  {% if is_vk_user %}<a v-show="isVkApp" href="javascript:void(0)" class="wall-post"
+                                        title="{% trans 'Post to the wall' %}" @click="postToWall({{ record.id }})"><i
                     class="fa fa-share"></i></a>{% endif %}
                 {% endif %}
                 <div class="add-to-list-buttons">
@@ -126,9 +122,9 @@
               </div>
               <div class="poster">
                 <img src="{{ record.movie.poster_normal }}" data-rjs="{{ record.movie.poster_big }}"
-                     alt="{{ record.movie.title }} poster" instant-retina ng-show="list.mode == 'full'"/>
+                     alt="{{ record.movie.title }}" v-show="mode == 'full'"/>
                 <img src="{{ record.movie.poster_small }}" data-rjs="{{ record.movie.poster_normal }}"
-                     alt="{{ record.movie.title }} poster" instant-retina ng-show="list.mode != 'full'"/>
+                     alt="{{ record.movie.title }}" v-show="mode != 'full'"/>
               </div>
               <div class="details">
                 {% if record.movie.imdb_rating %}
@@ -141,7 +137,7 @@
                     class="release-date-label item-desc">{% trans 'Release Date' %}:</span> {{ record.movie.release_date }}
                   </div>
                 {% endif %}
-                <div ng-show="list.mode == 'full'">
+                <div v-show="mode == 'full'">
                   {% if record.movie.country %} <span class="item-desc">{% trans 'Country' %}:</span>
                     {{ record.movie.country }}<br> {% endif %}
                   {% if record.movie.director %} <span class="item-desc">{% trans 'Director' %}:</span>
@@ -179,7 +175,7 @@
                         <textarea class="form-control" title="{% trans 'Comment' %}"
                                   id="comment{{ record.id }}">{{ record.comment }}</textarea><br><br>
                         <button type="button" title="{% trans 'Save' %}" class="btn btn-secondary"
-                                ng-click="list.saveComment({{ record.id }})"><i class="fa fa-save"></i></button>
+                                @click="saveComment({{ record.id }})"><i class="fa fa-save"></i></button>
                         <br>
                       {% else %}
                         <p>{{ record.comment }}</p>
@@ -188,7 +184,7 @@
                     {% if not anothers_account %}
                       <button id="comment_area_button{{ record.id }}" type="button" title="{% trans 'Add comment' %}"
                               class="btn btn-secondary comment-button"
-                              ng-click="list.toggleCommentArea({{ record.id }})"
+                              @click="toggleCommentArea({{ record.id }})"
                         {% if record.comment %} style="display: none;" {% endif %}><i class="fa fa-comment"></i>
                       </button>
                     {% endif %}
@@ -206,9 +202,6 @@
         {% if records.has_other_pages %}
           {% bootstrap_paginate records range=10 show_prev_next='true' show_first_last='true' alignment='left' %}
         {% endif %}
-      {% else %}
-        <p>{% trans 'The list is empty' %}.</p>
-      {% endif %}
     </div>
   </div>
 {% endblock %}
@@ -218,7 +211,7 @@
     'use strict';
 
     vars.mode = '{{ request.session.mode }}';
-    vars.listData = angular.fromJson('{{ list_data|safe }}');
+    vars.listData = JSON.parse('{{ list_data|safe }}');
     vars.listId = {{ list_id }};
     vars.recommendation = {{ request.session.recommendation|yesno:'true,false' }};
     vars.anothersAccount = {{ anothers_account|yesno:'true,false' }};
@@ -229,9 +222,5 @@
     urls.urlSaveComment = '{% url 'save_comment' %}';
     urls.urlUploadPosterToWall = '{% url 'upload_poster_to_wall' %}';
   </script>
-  <script src="{% static 'vendor/raty-js/lib/jquery.raty.js' %}"></script>
-  <script src="{% static 'vendor/autosize/dist/autosize.min.js' %}"></script>
-
-  <script src="{% static 'js/list_services.js' %}"></script>
   <script src="{% static 'js/list.js' %}"></script>
 {% endblock %}

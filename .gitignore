@@ -1,5 +1,3 @@
-installation_settings.sh
-src/moviesapp/static/vendor/
 __pycache__
 .tox
 *.pyc
@@ -14,3 +12,7 @@ node_modules
 env
 .cache
 .pytest_cache/
+yarn-error.log
+src/moviesapp/static/js/*
+src/moviesapp/static/css/*
+src/moviesapp/static/font/*

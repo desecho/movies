@@ -1,0 +1,45 @@
+@media (max-width: 767.98px) {
+  .search {
+    margin-top: 10px;
+  }
+}
+
+.full {
+  clear: both;
+}
+
+#movie-count {
+  font-size: 25px;
+  line-height: 27px;
+  float: right;
+  text-align: right;
+  color: #707070;
+
+  img {
+    margin-top: 10px;
+  }
+}
+
+.recommendation-review {
+  margin-bottom: 10px;
+  padding: 10px;
+  vertical-align: middle;
+  border-radius: 5px;
+  background-color: #f4f4f4;
+}
+
+.item-desc {
+  color: #808080;
+}
+
+
+.comment {
+  margin-top: 10px;
+button {
+  margin-top: -26px;
+}
+
+textarea {
+  display: inline;
+}
+}

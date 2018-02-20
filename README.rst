@@ -3,7 +3,7 @@ Movies
 
 |Build Status| |Requirements Status| |Codecov|
 
-The web application on Python/Django, AngularJS, Bootstrap. Create movie lists ("Watched" and "To watch"), rate movies and add comments.
+The web application on Django_ 2, Vue.js_ 2, Bootstrap_ 4. Create movie lists ("Watched" and "To watch"), rate movies and add comments.
 
 | It is also available as a `VK app <http://vk.com/app3504693_2912142>`_.
 | Share your lists with VK and Facebook friends, get recommendations from friends.
@@ -44,3 +44,6 @@ Development
 .. _OMDb: http://www.omdbapi.com/
 .. _ansible-playbook-server: https://github.com/desecho/ansible-playbook-server
 .. _documentation: https://github.com/desecho/movies/blob/master/doc.rst
+.. _Vue.js: https://vuejs.org/
+.. _Bootstrap: https://getbootstrap.com/
+.. _Django: https://www.djangoproject.com/

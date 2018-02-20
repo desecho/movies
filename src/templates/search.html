@@ -2,52 +2,51 @@
 {% load i18n static %}
 
 {% block content %}
-  <div ng-controller="MoviesSearchController as moviesSearch" ng-cloak>
-    <form name="form" ng-submit="moviesSearch.search()"
+  <div v-cloak>
+    <form @submit.prevent="search"
           class="mt-1 col-lg-7 col-md-8 col-sm-10 col-xl-5 mx-auto">
       <div class="input-group">
-        <input class="span2 form-control" id="query" name="query" type="text" autofocus ng-model="moviesSearch.query"
-               required
-               aria-label="{% trans 'Text input with dropdown button' %}">
+        <input class="form-control" type="text" autofocus v-model="query"
+               required>
         <div class="input-group-append search-btn-group">
           <button class="btn btn-secondary" type="submit">{% trans 'Search' %}</button>
-          <button id="search-type-button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown"
+          <button class="search-type-button btn btn-secondary dropdown-toggle" data-toggle="dropdown"
                   aria-haspopup="true" aria-expanded="false">
-            [[ moviesSearch.searchType ]] <span class="caret"></span>
+            [[ searchType ]] <span class="caret"></span>
           </button>
           <div class="dropdown-menu dropdown-menu-right">
             <a class="dropdown-item" href="javascript:void(0)"
-               ng-click="moviesSearch.changeSearchType('movie');">{% trans 'Movie' %}</a>
+               @click="changeSearchType('movie');">{% trans 'Movie' %}</a>
             <a class="dropdown-item" href="javascript:void(0)"
-               ng-click="moviesSearch.changeSearchType('actor');">{% trans 'Actor' %}</a>
+               @click="changeSearchType('actor');">{% trans 'Actor' %}</a>
             <a class="dropdown-item" href="javascript:void(0)"
-               ng-click="moviesSearch.changeSearchType('director');">{% trans 'Director' %}</a>
+               @click="changeSearchType('director');">{% trans 'Director' %}</a>
           </div>
         </div>
       </div>
       <div class="search-panel-additional">
         <label class="checkbox">
-          <input type="checkbox" id="popular-only" checked> {% trans 'show only popular' %}<br>
+          <input type="checkbox" v-model="popularOnly"> {% trans 'show only popular' %}<br>
         </label>
         <label class="checkbox">
-          <input type="checkbox" id="sort-by-date"> {% trans 'sort by date' %}
+          <input type="checkbox" v-model="sortByDate"> {% trans 'sort by date' %}
         </label>
       </div>
     </form>
-    <div id="results" class="results" ng-repeat="movie in moviesSearch.movies" ng-cloak>
-      <div class="movie" id="movie[[movie.id]]">
-        <div class="poster"><img ng-src="[[movie.poster]]" alt="[[movie.title]] poster"
-                                 data-rjs="[[movie.poster2x]]" instant-retina /></div>
-        <div class="title">"[[movie.title]]"
+    <div class="results" v-cloak>
+      <div class="movie" :id="[[ movie.elementId ]]" v-for="movie in movies">
+        <div class="poster"><img :src="movie.poster" :alt="movie.title"
+                                 :data-rjs="movie.poster2x" @load="retinajs" /></div>
+        <div class="title">"[[ movie.title ]]"
           <div class="add-to-list-buttons">
             <a href="javascript:void(0)" title="{% trans 'Add to the list' %} {% trans 'Watched' %}"
-               ng-click="moviesSearch.addToListFromDb(movie.id, 1)"><i class="fa fa-eye"></i></a>
+               @click="addToListFromDb(movie.id, 1)"><i class="fa fa-eye"></i></a>
             <a href="javascript:void(0)" title="{% trans 'Add to the list' %} {% trans 'To Watch' %}"
-               ng-click="moviesSearch.addToListFromDb(movie.id, 2)"><i class="fa fa-eye-slash"></i></a>
+               @click="addToListFromDb(movie.id, 2)"><i class="fa fa-eye-slash"></i></a>
           </div>
         </div>
-        <div class="details" ng-show="movie.releaseDate">
-          <strong>{% trans 'Release date' %}:</strong> [[movie.releaseDate]]
+        <div class="details" v-show="movie.releaseDate">
+          <strong>{% trans 'Release date' %}:</strong> [[ movie.releaseDate ]]
         </div>
       </div>
     </div>
@@ -60,8 +59,6 @@
 
     urls.urlSearchMovie = '{% url 'search_movie' %}';
     urls.urlAddToListFromDb = '{% url 'add_to_list_from_db' %}';
-
-
   </script>
   <script src="{% static 'js/search.js' %}"></script>
 {% endblock %}

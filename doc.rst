@@ -1,9 +1,12 @@
 Documentation
 ==============
 
-Js module dependencies
+Npm module dependencies
 -----------------------
-``tether`` and ``popper.js`` ``jquery`` are ``bootstrap``'s dependencies.
+``tether``, ``jquery`` and ``popper.js`` are ``bootstrap`` dependencies.
+``node-sass`` is  a dependency of ``sass-loader``.
+``less`` is a dependency of ``less-loader`` which is a dependency of ``font-awesome-webpack``.
+
 
 Avatars
 ------------

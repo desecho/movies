@@ -104,6 +104,7 @@ def get_movies_from_tmdb(query, type_, options, user, lang):
             poster = get_poster_from_tmdb(movie['poster_path'])
             movie = {
                 'id': tmdb_id,
+                'elementId': f'movie{tmdb_id}',
                 'releaseDate': movie['release_date'],
                 'popularity': movie['popularity'],
                 'title': movie['title'],

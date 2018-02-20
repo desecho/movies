@@ -1,0 +1,133 @@
+@import 'utils';
+@import 'main';
+@import 'feed';
+@import 'list';
+@import 'search';
+@import 'avatar';
+@import 'vk';
+@import 'people';
+
+/* Feed & List */
+.rating {
+  display: inline;
+  margin-right: 10px;
+}
+
+/* Search & List */
+.results {
+  margin-top: 60px;
+}
+
+.movie {
+  clear: both;
+  min-height: 160px;
+  margin-bottom: 10px;
+  padding: 10px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #ddd;
+  border-radius: 4px;
+
+  &-minimal {
+    min-height: 0;
+    margin: 10px 0 0 0;
+    padding: 0;
+    border-width: 0 0 1px 0;
+    border-radius: 0;
+  }
+
+}
+
+.poster {
+  float: left;
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+
+.title {
+  /* copied mostly from bootstrap h4 */
+  font-size: 17.5px;
+  font-weight: bold;
+  line-height: 20px;
+  display: inline;
+}
+
+.add-to-list-buttons {
+  display: inline;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+.login-form {
+  margin-top: 20px;
+}
+
+
+.review {
+  padding-top: 10px;
+button {
+  margin-bottom: 15px;
+}
+
+}
+
+form {
+  margin: 0;
+}
+
+legend {
+  margin-bottom: 0;
+}
+
+.navbar .nav > li > a {
+  padding-right: 14px;
+}
+
+
+
+label {
+  font-weight: normal;
+  margin-bottom: 0;
+
+  &.error {
+    color: #b94a48;
+  }
+}
+
+.people-user, .trailers a {
+  margin-left: 10px;
+}
+
+.btn-secondary {
+  color: #000;
+  border-color: #d3d3d3;
+  background-color: #fff;
+}
+
+.col-form-label {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.preference-label {
+  line-height: 36px;
+}
+
+.only-for-friends {
+  margin-top: 11px;
+}
+
+.pagination {
+  padding-top: 10px;
+  max-width: 490px;
+}
+

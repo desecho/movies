@@ -1,8 +1,20 @@
-'use strict';
+webpackJsonp([5],{
 
-angular.element('#registration').submit(function(e) {
+/***/ 41:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function($) {
+
+$('#registration').submit(function(e) {
   e.preventDefault();
-  const password = angular.element('#password1')[0].value;
-  angular.element('#password2')[0].value = password;
-  angular.element('#registration')[0].submit();
+  const password = $('#password1')[0].value;
+  $('#password2')[0].value = password;
+  $('#registration')[0].submit();
 });
+
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
+
+/***/ })
+
+},[41]);

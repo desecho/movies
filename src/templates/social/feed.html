@@ -1,18 +1,14 @@
 {% extends 'base.html' %}
 {% load static avatar %}
 
-{% block head %}
-  <link href="{% static 'vendor/raty-js/lib/jquery.raty.css' %}" rel="stylesheet">
-{% endblock %}
-
 {% block content %}
   <legend>{{ list_name }}</legend>
   <br>
-  <table class="table col-md-11 col-lg-10 col-xl-8 table-responsive" ng-controller="FeedController as feed">
+  <table id="feed" class="table col-md-11 col-lg-10 col-xl-8 table-responsive">
     <tbody>
     {% for action in actions %}
       <tr class="feed-record">
-        <td class="feed-user">
+        <td class="test-feed-user">
           <a href="{% url 'people' action.user.username 'watched' %}">{% avatar action.user %}</a>
         </td>
         <td class="d-none d-sm-table-cell">
@@ -20,9 +16,9 @@
         </td>
         <td>
           <img src="{{ action.movie_poster }}" data-rjs="{{ action.movie_poster_2x }}" alt="{{ action.movie }}"
-               title="{{ action.movie }}" class="small-poster" instant-retina>
+               title="{{ action.movie }}" class="small-poster">
         </td>
-        <td class="d-none d-sm-table-cell feed-movie">
+        <td class="d-none d-sm-table-cell test-feed-movie">
           {{ action.movie }}
         </td>
         <td>
@@ -43,7 +39,5 @@
 {% endblock %}
 
 {% block js %}
-  <script src="{% static 'vendor/raty-js/lib/jquery.raty.js' %}"></script>
-
   <script src="{% static 'js/feed.js' %}"></script>
 {% endblock %}

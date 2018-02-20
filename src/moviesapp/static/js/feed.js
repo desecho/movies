@@ -1,13 +1,18 @@
-'use strict';
+webpackJsonp([8],{
 
-(function() {
-  angular.module('app').controller('FeedController', FeedController);
-  FeedController.$inject = ['ratySettings'];
+/***/ 43:
+/***/ (function(module, exports, __webpack_require__) {
 
-  function FeedController(ratySettings) {
-    const settings = angular.extend({
-      readOnly: true,
-    }, ratySettings);
-    angular.element('.rating').raty(settings);
-  }
-})();
+"use strict";
+/* WEBPACK VAR INJECTION */(function($) {
+
+const settings = $.extend({
+  readOnly: true,
+}, vars.ratySettings);
+$('.rating').raty(settings);
+
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
+
+/***/ })
+
+},[43]);

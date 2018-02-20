@@ -1,0 +1,18 @@
+.search-type-button {
+  width: 105px;
+}
+
+.search-panel-additional {
+  float: right;
+  margin-right: 9px;
+
+  label {
+    display: block;
+  }
+}
+
+.search-btn-group {
+  .btn-secondary:focus, .btn-secondary.focus, .btn:focus, .btn.focus {
+    box-shadow: none !important;
+  }
+}

@@ -1,32 +1,134 @@
+[v-cloak] {
+  display: none !important; }
+
+#nprogress .spinner {
+  display: none; }
+
+.flashpool {
+  position: fixed;
+  top: 5px;
+  right: 5px;
+  max-height: 400px;
+  width: 260px;
+  -webkit-perspective: 400px;
+  perspective: 400px;
+  z-index: 1; }
+  .flashpool .flash__message {
+    width: 260px;
+    transition: all 0.5s;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    font-family: Oxygen,sans-serif;
+    font-size: 13px;
+    line-height: 130%; }
+
+.flash-enter, .flash-leave-to {
+  opacity: 0;
+  -webkit-transform: rotateX(-30deg) scale(0.88) translateY(-30px);
+  transform: rotateX(-30deg) scale(0.88) translateY(-30px); }
+
 html {
-  height: 100%;
-}
+  height: 100%; }
 
 body {
   display: grid;
   min-height: 100%;
-  grid-template-rows: 1fr auto;
-}
+  grid-template-rows: 1fr auto; }
 
 footer {
   text-align: right;
   grid-row-start: 2;
-  grid-row-end: 3;
-}
+  grid-row-end: 3; }
 
-/* for angular */
-[ng\:cloak], [ng-cloak], .ng-cloak {
-  display: none !important;
-}
+.hidden {
+  display: none; }
 
-/* #loading-bar-spinner - for angular-loading-bar */
-#loading-bar-spinner, .hidden, #language-form {
-  display: none;
-}
+@media (min-width: 320px) and (max-width: 475px) {
+  .feed-record {
+    display: grid;
+    padding-bottom: 50px; } }
 
-.login-form {
-  margin-top: 20px;
-}
+@media (min-width: 320px) and (max-width: 475px) {
+  .feed-record {
+    display: grid;
+    padding-bottom: 50px; } }
+
+.feed-action-data {
+  min-width: 125px; }
+
+.small-poster {
+  width: 60px; }
+
+#feed tbody tr:first-child td {
+  border-top: 0; }
+
+@media (max-width: 767.98px) {
+  .search {
+    margin-top: 10px; } }
+
+.full {
+  clear: both; }
+
+#movie-count {
+  font-size: 25px;
+  line-height: 27px;
+  float: right;
+  text-align: right;
+  color: #707070; }
+  #movie-count img {
+    margin-top: 10px; }
+
+.recommendation-review {
+  margin-bottom: 10px;
+  padding: 10px;
+  vertical-align: middle;
+  border-radius: 5px;
+  background-color: #f4f4f4; }
+
+.item-desc {
+  color: #808080; }
+
+.comment {
+  margin-top: 10px; }
+  .comment button {
+    margin-top: -26px; }
+  .comment textarea {
+    display: inline; }
+
+.search-type-button {
+  width: 105px; }
+
+.search-panel-additional {
+  float: right;
+  margin-right: 9px; }
+  .search-panel-additional label {
+    display: block; }
+
+.search-btn-group .btn-secondary:focus, .search-btn-group .btn-secondary.focus, .search-btn-group .btn:focus, .search-btn-group .btn.focus {
+  box-shadow: none !important; }
+
+.avatar-big {
+  border-radius: 15px; }
+
+.avatar-small {
+  border-radius: 5px; }
+
+.vk {
+  overflow-y: scroll;
+  height: 740px; }
+
+.person {
+  margin-bottom: 10px; }
+
+/* Feed & List */
+.rating {
+  display: inline;
+  margin-right: 10px; }
+
+/* Search & List */
+.results {
+  margin-top: 60px; }
 
 .movie {
   clear: both;
@@ -36,198 +138,70 @@ footer {
   border-width: 1px;
   border-style: solid;
   border-color: #ddd;
-  border-radius: 4px;
-}
-
-.movie-minimal {
-  min-height: 0;
-  margin: 10px 0 0 0;
-  padding: 0;
-  border-width: 0 0 1px 0;
-  border-radius: 0;
-}
+  border-radius: 4px; }
+  .movie-minimal {
+    min-height: 0;
+    margin: 10px 0 0 0;
+    padding: 0;
+    border-width: 0 0 1px 0;
+    border-radius: 0; }
 
 .poster {
   float: left;
   margin-right: 10px;
-  margin-bottom: 10px;
-}
-
-.review {
-  padding-top: 10px;
-}
-.review button {
-  margin-bottom: 15px;
-}
-
-.recommendation-review {
-  margin-bottom: 10px;
-  padding: 10px;
-  vertical-align: middle;
-  border-radius: 5px;
-  background-color: #f4f4f4;
-}
-
-.full {
-  clear: both;
-}
+  margin-bottom: 10px; }
 
 .title {
   /* copied mostly from bootstrap h4 */
   font-size: 17.5px;
   font-weight: bold;
   line-height: 20px;
-  display: inline;
-}
-
-.rating {
-  display: inline;
-  margin-right: 10px;
-}
-
-#movie-count {
-  font-size: 25px;
-  line-height: 27px;
-  float: right;
-  text-align: right;
-  color: #707070;
-}
-
-#movie-count img {
-  margin-top: 10px;
-}
-
-.vk {
-  overflow-y: scroll;
-  height: 740px;
-}
-
-.feed-action-data {
-  min-width: 125px;
-}
-
-.person {
-  margin-bottom: 10px;
-}
-
-.small-poster {
-  width: 60px;
-}
-
-.avatar-big {
-  border-radius: 15px;
-}
-
-.avatar-small {
-  border-radius: 5px;
-}
-
-.comment {
-  margin-top: 10px;
-}
-
-.feed tbody tr:first-child td {
-  border-top: 0;
-}
-
-.item-desc {
-  color: #808080;
-}
-
-form {
-  margin: 0;
-}
-
-legend {
-  margin-bottom: 0;
-}
-
-.navbar .nav > li > a {
-  padding-right: 14px;
-}
+  display: inline; }
 
 .add-to-list-buttons {
-  display: inline;
-}
+  display: inline; }
 
-.comment button {
-  margin-top: -26px;
-}
+.login-form {
+  margin-top: 20px; }
 
-.comment textarea {
-  display: inline;
-}
+.review {
+  padding-top: 10px; }
+  .review button {
+    margin-bottom: 15px; }
+
+form {
+  margin: 0; }
+
+legend {
+  margin-bottom: 0; }
+
+.navbar .nav > li > a {
+  padding-right: 14px; }
 
 label {
   font-weight: normal;
-  margin-bottom: 0;
-}
-
-label.error {
-  color: #b94a48;
-}
-
-.search-panel-additional {
-  float: right;
-  margin-right: 9px;
-}
-
-.search-panel-additional label {
-  display: block;
-}
+  margin-bottom: 0; }
+  label.error {
+    color: #b94a48; }
 
 .people-user, .trailers a {
-  margin-left: 10px;
-}
+  margin-left: 10px; }
 
 .btn-secondary {
   color: #000;
   border-color: #d3d3d3;
-  background-color: #fff;
-}
+  background-color: #fff; }
 
 .col-form-label {
   padding-top: 0;
-  padding-bottom: 0;
-}
-
-#results {
-  margin-top: 60px;
-}
+  padding-bottom: 0; }
 
 .preference-label {
-  line-height: 36px;
-}
+  line-height: 36px; }
 
 .only-for-friends {
-  margin-top: 11px;
-}
+  margin-top: 11px; }
 
 .pagination {
   padding-top: 10px;
-  max-width: 490px;
-}
-
-.search-btn-group .btn-secondary:focus, .search-btn-group .btn-secondary.focus, .search-btn-group .btn:focus, .search-btn-group .btn.focus {
-  box-shadow: none !important;
-}
-
-@media (min-width: 320px) and (max-width: 475px) {
-  .feed-record {
-    display: grid;
-    padding-bottom: 50px;
-  }
-}
-@media (max-width: 767.98px) {
-  .search {
-    margin-top: 10px;
-  }
-}
-
-
-@media (min-width: 320px) and (max-width: 475px) {
-  .feed-record {
-    display: grid;
-    padding-bottom: 50px;
-  }
-}
+  max-width: 490px; }

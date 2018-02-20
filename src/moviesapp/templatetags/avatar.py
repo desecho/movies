@@ -35,7 +35,7 @@ def avatar(user, size='small'):
     else:
         url, url_2x = social_avatars_urls
     return mark_safe('<img class="avatar-{0}" src="{1}" data-rjs="{2}" width="{3}"'  # nosec
-                     'alt="{4}" title="{4}" instant-retina></img>'.format(size, url, url_2x, avatar_size, user))
+                     'alt="{4}" title="{4}" @load="retinajs"></img>'.format(size, url, url_2x, avatar_size, user))
 
 
 @register.simple_tag

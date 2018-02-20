@@ -2,7 +2,7 @@
 
 {% generate_menu %}
 
-<nav class="navbar navbar-toggleable-md navbar-light bg-faded navbar-expand-md" ng-controller="MenuController as menu">
+<nav id="menu" class="navbar navbar-toggleable-md navbar-light bg-faded navbar-expand-md">
   <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
           data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false"
           aria-label="{% trans 'Toggle navigation' %}">
@@ -33,7 +33,7 @@
       {% if user.is_vk_user %}
         <li class="nav-item vk-app-show" style="display: none;"><a id="invite" href="javascript:void(0)"
                                                                    class="nav-link"
-                                                                   ng-click="menu.invite()"><i
+                                                                   @click="invite"><i
           class="fa fa-envelope-o"></i></a></li>
       {% endif %}
       {% if user.is_authenticated %}
@@ -43,7 +43,7 @@
       {% else %}
         {% get_current_language as LANGUAGE_CODE %}
         <li class="nav-item">
-          <a class="nav-link" href="javascript:void(0)" ng-click="menu.changeLanguage()">{% if LANGUAGE_CODE == 'en' %}
+          <a class="nav-link" href="javascript:void(0)" @click="changeLanguage">{% if LANGUAGE_CODE == 'en' %}
             Русский{% else %}English{% endif %}</a>
         </li>
         <form id="language-form" action="{% url 'set_language' %}" method="post">
