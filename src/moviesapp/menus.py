@@ -13,18 +13,13 @@ def is_authenticated(request):
     return request.user.is_authenticated
 
 
-feed_children = (MenuItem(_('Friends'), reverse('feed', kwargs={
-    'list_name': 'friends'
-}), check=has_friends), MenuItem(_('People'), reverse('feed', kwargs={
-    'list_name': 'people'
-})))
+feed_children = (MenuItem(_('Friends'), reverse('feed', kwargs={'list_name': 'friends'}), check=has_friends),
+                 MenuItem(_('People'), reverse('feed', kwargs={'list_name': 'people'})))
 
 Menu.add_item('main', MenuItem(_('Search'), reverse('search')))
 Menu.add_item('main', MenuItem(_('Watched'), reverse('list', kwargs={'list_name': 'watched'}), check=is_authenticated))
 Menu.add_item('main', MenuItem(
-    _('To Watch'), reverse('list', kwargs={
-        'list_name': 'to-watch'
-    }), check=is_authenticated))
+    _('To Watch'), reverse('list', kwargs={'list_name': 'to-watch'}), check=is_authenticated))
 Menu.add_item('main', MenuItem(_('Recommendations'), reverse('recommendations'), check=has_friends))
 Menu.add_item('main', MenuItem(_('Friends'), reverse('friends'), check=has_friends))
 Menu.add_item('main', MenuItem(_('People'), reverse('people')))

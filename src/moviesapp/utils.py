@@ -7,7 +7,7 @@ import requests
 from django.conf import settings
 from raven.contrib.django.raven_compat.models import client
 
-from .exceptions import OmdbLimitReached, OmdbRequestError, OmdbError
+from .exceptions import OmdbError, OmdbLimitReached, OmdbRequestError
 from .models import Movie
 from .tmdb import get_tmdb_movie_data
 
