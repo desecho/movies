@@ -14,3 +14,6 @@ env
 .pytest_cache/
 yarn-error.log
 package-lock.json
+src/moviesapp/static/js/*
+src/moviesapp/static/css/*
+src/moviesapp/static/font/*
