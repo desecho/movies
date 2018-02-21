@@ -17,3 +17,36 @@ footer {
 .hidden {
   display: none;
 }
+
+form {
+  margin: 0;
+}
+
+legend {
+  margin-bottom: 0;
+}
+
+.pagination {
+  padding-top: 10px;
+  max-width: 490px;
+}
+
+label {
+  font-weight: normal;
+  margin-bottom: 0;
+
+  &.error {
+    color: #b94a48;
+  }
+}
+
+.btn-secondary {
+  color: #000;
+  border-color: #d3d3d3;
+  background-color: #fff;
+}
+
+.col-form-label {
+  padding-top: 0;
+  padding-bottom: 0;
+}

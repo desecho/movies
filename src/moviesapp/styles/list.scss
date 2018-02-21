@@ -35,11 +35,23 @@
 
 .comment {
   margin-top: 10px;
-button {
-  margin-top: -26px;
+  button {
+    margin-top: -26px;
+  }
+
+  textarea {
+    display: inline;
+  }
 }
 
-textarea {
-  display: inline;
+.review {
+  padding-top: 10px;
+  button {
+    margin-bottom: 15px;
+  }
 }
+
+
+.trailers a {
+  margin-left: 10px;
 }
