@@ -5,8 +5,7 @@ from django.db import migrations
 
 
 def load_fixtures(apps, schema_editor):
-    call_command('loaddata', 'lists', app_label='moviesapp')
-    call_command('loaddata', 'actions', app_label='moviesapp')
+    pass
 
 
 class Migration(migrations.Migration):
