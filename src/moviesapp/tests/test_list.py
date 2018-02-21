@@ -10,9 +10,9 @@ from .base import BaseTestLoginCase
 class AddMoviesTestCase(BaseTestLoginCase):
     """
     Dumpdata commands:
-    manage dumpdata moviesapp.Movie --indent 4 > moviesapp/fixtures/movies.json
-    manage dumpdata moviesapp.Record --indent 4 > moviesapp/fixtures/records.json
-    manage dumpdata moviesapp.ActionRecord --indent 4 > moviesapp/fixtures/action_records.json
+    manage dumpdata moviesapp.Movie --indent 2 > moviesapp/fixtures/movies.json
+    manage dumpdata moviesapp.Record --indent 2 > moviesapp/fixtures/records.json
+    manage dumpdata moviesapp.ActionRecord --indent 2 > moviesapp/fixtures/action_records.json
 
     User actions in fixtures:
     neo:
@@ -31,6 +31,11 @@ class AddMoviesTestCase(BaseTestLoginCase):
         'records.json',
         'action_records.json',
     ]
+
+    def test_people_watched_404(self):
+        url = reverse('people', args=('user', 'watched', ))
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 404)
 
     def test_list_watched(self):
         url = reverse('list', args=('watched', ))
