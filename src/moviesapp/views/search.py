@@ -26,15 +26,15 @@ class SearchMovieView(AjaxAnonymousView):
         try:
             GET = request.GET
             query = GET['query']
-            options = QueryDict(GET['options'])
+            options = json.loads(GET['options'])
             type_ = GET['type']
             if type_ not in AVAILABLE_SEARCH_TYPES:
                 raise NotAvailableSearchType
         except (KeyError, NotAvailableSearchType):
             return self.render_bad_request_response()
         options = {
-            'popular_only': json.loads(options['popularOnly']),
-            'sort_by_date': json.loads(options['sortByDate'])
+            'popular_only': options['popularOnly'],
+            'sort_by_date': options['sortByDate']
         }
         movies = get_movies_from_tmdb(query, type_, options, request.user, self.request.LANGUAGE_CODE)
         return self.success(movies=movies)

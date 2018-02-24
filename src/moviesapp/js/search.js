@@ -33,7 +33,7 @@ window.vm = new Vue({
       const data = {
         query: vm.query,
         type: vm.searchTypeCode,
-        options: $.param(options),
+        options: JSON.stringify(options),
       };
       const url = urls.urlSearchMovie + '?' + $.param(data);
       axios.get(url).then(function(response) {
