@@ -88,8 +88,18 @@ window.vm = new Vue({
     retinajs: retina,
     switchMode: function switchMode(newMode) {
       function deactivateModeMinimal() {
-        $('.poster, .comment, .release-date-label').show();
-        $('.comment-button').hide();
+        $('.comment').each(function(){
+          const el = $(this);
+          const commentAreaToggle = $('#comment_area_button' + el.data('id'));
+          const comment = el.find('textarea')[0].value;
+          if (comment) {
+            el.show();
+            commentAreaToggle.hide();
+          } else {
+            commentAreaToggle.show();
+          }
+        });
+        $('.poster, .release-date-label').show();
         $('.details, .imdb-rating, .review, .release-date').css('display', '');
         $('.review').css('padding-top', '10px');
         $('.release-date, .imdb-rating').css({
@@ -259,8 +269,13 @@ window.vm = new Vue({
         comment: comment,
       });
       axios.put(urls.urlSaveComment, data).then(function() {
+        const commentAreaToggle = $('#comment_area_button' + id);
+        if (comment) {
+          commentAreaToggle.hide();
+        }
         if (!comment) {
           vm.toggleCommentArea(id);
+          commentAreaToggle.show();
         }
       }).catch(function() {
         vm.flash(gettext('Error saving a comment'), 'error', vars.flashOptions);
