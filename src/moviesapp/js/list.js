@@ -97,6 +97,10 @@ window.vm = new Vue({
         });
         $('.movie').removeClass('movie-minimal');
       }
+
+      if (newMode == this.mode) {
+        return;
+      }
       if (newMode === 'minimal') {
         activateModeMinimal();
       } else {
@@ -105,7 +109,7 @@ window.vm = new Vue({
       applySettings({
         mode: newMode,
       }, false);
-      vm.mode = newMode;
+      this.mode = newMode;
     },
     toggleRecommendation: function() {
       const newRecommendationSetting = !vars.recommendation;
