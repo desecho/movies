@@ -79,6 +79,7 @@ window.vm = new Vue({
     sortByDate: false,
     mode: vars.mode,
     isVkApp: vars.isVkApp,
+    sort: vars.sort,
   },
   methods: {
     openUrl: function(url) {
@@ -121,11 +122,14 @@ window.vm = new Vue({
       }
       applySettings(settings);
     },
-    switchSort: function(value) {
+    switchSort: function(newSort) {
+      if (this.sort == newSort) {
+        return;
+      }
       const settings = {
-        sort: value,
+        sort: newSort,
       };
-      if (value !== 'rating') {
+      if (newSort !== 'rating') {
         settings.recommendation = false;
       }
       applySettings(settings);

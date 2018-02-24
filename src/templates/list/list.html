@@ -213,6 +213,7 @@
     vars.mode = '{{ request.session.mode }}';
     vars.listData = JSON.parse('{{ list_data|safe }}');
     vars.listId = {{ list_id }};
+    vars.sort = '{{ sort }}';
     vars.recommendation = {{ request.session.recommendation|yesno:'true,false' }};
     vars.anothersAccount = {{ anothers_account|yesno:'true,false' }};
     urls.urlChangeRating = '{% url 'change_rating' %}';

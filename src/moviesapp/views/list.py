@@ -222,6 +222,7 @@ class ListView(TemplateAnonymousView):
             'list_id': List.objects.get(key_name=list_name).id,
             'anothers_account': self.anothers_account,
             'list_data': json.dumps(list_data),
+            'sort': session['sort'],
             'query': query,
         }
 
