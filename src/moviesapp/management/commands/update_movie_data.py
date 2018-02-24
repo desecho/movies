@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from importlib import reload
-
 from django_tqdm import BaseCommand
 
 from moviesapp.exceptions import MovieNotInDb

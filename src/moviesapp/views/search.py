@@ -1,6 +1,5 @@
 import json
 
-from django.http import QueryDict
 from raven.contrib.django.raven_compat.models import client
 
 from moviesapp.exceptions import MovieNotInDb, NotAvailableSearchType

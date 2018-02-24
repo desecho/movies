@@ -33,7 +33,11 @@ class AddMoviesTestCase(BaseTestLoginCase):
     ]
 
     def test_people_watched_404(self):
-        url = reverse('people', args=('user', 'watched', ))
+        url = reverse(
+            'people', args=(
+                'user',
+                'watched',
+            ))
         response = self.client.get(url)
         self.assertEqual(response.status_code, 404)
 

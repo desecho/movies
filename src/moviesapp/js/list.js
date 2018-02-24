@@ -88,8 +88,8 @@ window.vm = new Vue({
     retinajs: retina,
     switchMode: function switchMode(newMode) {
       function deactivateModeMinimal() {
-        $('.comment').each(function(){
-          const el = $(this);
+        $('.comment').each(function() {
+          const el = $(this); // eslint-disable-line no-invalid-this
           const commentAreaToggle = $('#comment_area_button' + el.data('id'));
           const comment = el.find('textarea')[0].value;
           if (comment) {
