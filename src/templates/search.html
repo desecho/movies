@@ -25,7 +25,7 @@
         </div>
       </div>
       <div class="search-panel-additional">
-        <label class="checkbox">
+        <label class="checkbox" v-show="searchTypeCode == 'movie'">
           <input type="checkbox" v-model="popularOnly"> {% trans 'show only popular' %}<br>
         </label>
         <label class="checkbox">
