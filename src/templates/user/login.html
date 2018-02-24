@@ -44,6 +44,11 @@
         <a href="{% url 'registration_register' %}" class="btn btn-block btn-primary">{% trans 'Register' %}</a>
       </div>
     </div>
+    <div class="form-group">
+      <div class="col-sm-offset-2">
+        <a href="{% url 'auth_password_reset' %}" class="btn btn-block btn-primary">{% trans 'Reset password' %}</a>
+      </div>
+    </div>
     </div>
   </form>
 {% endblock %}

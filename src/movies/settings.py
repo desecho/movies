@@ -30,6 +30,7 @@ DATABASES = local_settings.DATABASES
 ROOT_URLCONF = 'movies.urls'
 WSGI_APPLICATION = 'movies.wsgi.application'
 SESSION_SAVE_EVERY_REQUEST = True
+SITE_ID = 1
 
 # Email
 EMAIL_USE_TLS = local_settings.EMAIL_USE_TLS
@@ -122,6 +123,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # Custom
+    'django.contrib.sites',
     'google_analytics',
     'registration',
     'menu',
@@ -216,8 +218,8 @@ AUTH_PASSWORD_VALIDATORS = [
 LOGIN_REDIRECT_URL = '/'
 if IS_VK_DEV:
     LOGIN_REDIRECT_URL = 'https://{}'.format(local_settings.HOST_MOVIES_TEST)
-LOGIN_URL = '/accounts/login/'
-LOGIN_ERROR_URL = '/accounts/login-error/'
+LOGIN_URL = '/login/'
+LOGIN_ERROR_URL = '/login-error/'
 
 # Static files
 STATIC_ROOT = op.join(local_settings.PROJECT_ROOT, 'static')
@@ -323,6 +325,10 @@ ADMIN_REORDER = (
     {
         'app': 'social_django',
         'models': ('social_django.UserSocialAuth', )
+    },
+    {
+        'app': 'sites',
+        'models': ('sites.models.Site', )
     },
     'registration',
 )

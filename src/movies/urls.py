@@ -31,21 +31,21 @@ admin.autodiscover()
 
 urlpatterns = [
     path('about/', AboutView.as_view(), name='about'),
+    path('preferences/', PreferencesView.as_view(), name='preferences'),
+
     # Search
     path('', SearchView.as_view(), name='search'),
     path('search-movie/', SearchMovieView.as_view(), name='search_movie'),
     path('add-to-list-from-db/', AddToListFromDbView.as_view(), name='add_to_list_from_db'),
 
+    # Login
+    path('login/', login, {'template_name': 'user/login.html'}, name='login'),
+    path('logout/', logout_view, name='logout'),
+    path('login-error/', LoginErrorView.as_view(), name='login_error'),
+
     # Vk
     path('upload-poster-to-wall/', django.views.defaults.page_not_found, name='upload_poster_to_wall'),
     re_path(r'upload-poster-to-wall/(?P<id>\d+)/', UploadPosterToWallView.as_view(), name='upload_poster_to_wall'),
-
-    # Accounts
-    path('accounts/login/', login, {'template_name': 'user/login.html'}, name='login'),
-    path('accounts/logout/', logout_view, name='logout'),
-    path('accounts/login-error/', LoginErrorView.as_view(), name='login_error'),
-    path('accounts/preferences/', PreferencesView.as_view(), name='preferences'),
-    path('accounts/', include('registration.backends.default.urls')),
 
     # List
     re_path('list/(?P<list_name>watched|to-watch)/', ListView.as_view(), name='list'),
@@ -69,8 +69,10 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 
     # Services
+    path('accounts/', include('registration.backends.default.urls')),
     path('jsi18n/', JavaScriptCatalog.as_view(packages=('moviesapp', ), domain='djangojs'), name='javascript-catalog'),
     path('', include('social_django.urls', namespace='social')),
+    path('', include('django.contrib.auth.urls')),
     path('rosetta/', include('rosetta.urls')),
     path('i18n/', include('django.conf.urls.i18n')),
     path('djga/', include('google_analytics.urls')),
