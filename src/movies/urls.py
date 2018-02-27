@@ -44,7 +44,11 @@ urlpatterns = [
     path('login-error/', LoginErrorView.as_view(), name='login_error'),
 
     # Vk
-    path('upload-poster-to-wall/', django.views.defaults.page_not_found, name='upload_poster_to_wall'),
+    path(
+        'upload-poster-to-wall/',
+        django.views.defaults.page_not_found,
+        name='upload_poster_to_wall',
+        kwargs={'exception': Exception('Page not Found')}),
     re_path(r'upload-poster-to-wall/(?P<id>\d+)/', UploadPosterToWallView.as_view(), name='upload_poster_to_wall'),
 
     # List
@@ -52,11 +56,23 @@ urlpatterns = [
     re_path(r'people/(?P<username>[\w\d]+)/(?P<list_name>watched|to-watch)', ListView.as_view(), name='people'),
     path('recommendations/', RecommendationsView.as_view(), name='recommendations'),
     path('save-settings/', SaveSettingsView.as_view(), name='save_settings'),
-    path('remove-record/', django.views.defaults.page_not_found, name='remove_record'),
+    path(
+        'remove-record/',
+        django.views.defaults.page_not_found,
+        name='remove_record',
+        kwargs={'exception': Exception('Page not Found')}),
     re_path(r'remove-record/(?P<id>\d+)/', RemoveRecordView.as_view(), name='remove_record'),
-    path('add-to-list/', django.views.defaults.page_not_found, name='add_to_list'),
+    path(
+        'add-to-list/',
+        django.views.defaults.page_not_found,
+        name='add_to_list',
+        kwargs={'exception': Exception('Page not Found')}),
     re_path(r'add-to-list/(?P<id>\d+)/', AddToListView.as_view(), name='add_to_list'),
-    path('change-rating/', django.views.defaults.page_not_found, name='change_rating'),
+    path(
+        'change-rating/',
+        django.views.defaults.page_not_found,
+        name='change_rating',
+        kwargs={'exception': Exception('Page not Found')}),
     re_path(r'change-rating/(?P<id>\d+)/', ChangeRatingView.as_view(), name='change_rating'),
     path('save-comment/', SaveCommentView.as_view(), name='save_comment'),
 
