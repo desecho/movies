@@ -49,8 +49,8 @@ class AddMoviesTestCase(BaseTestLoginCase):
         self.assertListEqual(titles, ['The X Files', 'Dogma', 'The Matrix'])
         soup = self.get_soup(response)
         counters = soup.find('div', id='movie-count').findAll('span')
-        conter_watched = counters[0].get_text()
-        conter_to_watch = counters[1].get_text()
+        conter_watched = counters[0].get_text().strip()
+        conter_to_watch = counters[1].get_text().strip()
         self.assertEqual(conter_watched, '3')
         self.assertEqual(conter_to_watch, '1')
 
@@ -65,9 +65,9 @@ class AddMoviesTestCase(BaseTestLoginCase):
 
     def test_add_to_list(self):
         LIST_ID = List.WATCHED
-        url = reverse('add_to_list')
         movie_id = Movie.objects.get(title='The Avengers').pk
-        response = self.client.post(url, {'movieId': movie_id, 'listId': LIST_ID})
+        url = reverse('add_to_list', args=(movie_id, ))
+        response = self.client.post(url, {'listId': LIST_ID})
         response = self.get_json(response)
         self.assertEqual(response['status'], 'success')
         self.assertTrue(self.user.records.filter(list_id=LIST_ID, movie_id=movie_id).exists())
