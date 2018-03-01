@@ -1,6 +1,6 @@
 {% load i18n %}
 
 <footer class="container-fluid py-3">
-  <a href="{% url 'about' %}">{% trans 'About Movies' %}</a>. | Copyright © {% now 'Y' %} <a
+  <a href="{% url 'about' %}">{% trans 'About Movies' %}</a>. | <a href="https://www.themoviedb.org" target="_blank"><span class="powered-by-tmdb"></span></a> | Copyright © {% now 'Y' %} <a
   href="mailto:{{ ADMIN_EMAIL }}">{{ ADMIN_EMAIL }}</a>.
 </footer>
