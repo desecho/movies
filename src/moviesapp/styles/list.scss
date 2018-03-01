@@ -51,7 +51,15 @@
   }
 }
 
-
 .trailers a {
   margin-left: 10px;
+}
+
+.imdb {
+  background: url('../images/imdb.svg');
+  background-repeat: no-repeat;
+  width: 100px;
+  height: 49px;
+  display: inline-block;
+  background-size: contain;
 }

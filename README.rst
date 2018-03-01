@@ -16,8 +16,6 @@ Used APIs
 * TMDb_
 * OMDb_
 
-APIs require keys.
-
 Installation instructions
 ----------------------------
 
@@ -30,6 +28,12 @@ Development
 | Use ``clean.sh`` to automatically prettify your code.
 | Use ``tox`` for testing and linting.
 
+
+Images
+-----------
+* [IMDb logo](https://commons.wikimedia.org/wiki/File:IMDB_Logo_2016.svg)
+* [Down arrow icon](https://www.iconfinder.com/icons/211614/arrow_b_down_icon)
+* [TMDb Logos](https://www.themoviedb.org/about/logos-attribution)
 
 .. |Requirements Status| image:: https://requires.io/github/desecho/movies/requirements.svg?branch=master
    :target: https://requires.io/github/desecho/movies/requirements/?branch=master

@@ -46,8 +46,9 @@
           </div>
         </div>
         <div class="details" v-show="movie.releaseDate">
-          <strong>{% trans 'Release date' %}:</strong> [[ movie.releaseDate ]]
+          [[ movie.releaseDate ]]
         </div>
+        <div><a :href="movie.imdbLink" target="_blank"><span class="tmdb"></span></a></div>
       </div>
     </div>
   </div>

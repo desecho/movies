@@ -368,6 +368,7 @@ POSTER_SIZE_NORMAL = 'w185'
 POSTER_SIZE_BIG = 'w500'
 POSTER_BASE_URL = 'http://image.tmdb.org/t/p/'
 
+TMDB_MOVIE_BASE_URL = 'https://www.themoviedb.org/movie/'
 AVATAR_SIZES = {'small': 100, 'big': 200}
 IMDB_BASE_URL = 'http://www.imdb.com/title/'
 MAX_RECOMMENDATIONS = 50
