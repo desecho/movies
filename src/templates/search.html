@@ -37,7 +37,7 @@
       <div class="movie" :id="[[ movie.elementId ]]" v-for="movie in movies">
         <div class="poster"><img :src="movie.poster" :alt="movie.title"
                                  :data-rjs="movie.poster2x" @load="retinajs" /></div>
-        <div class="title">"[[ movie.title ]]"
+        <div class="title">[[ movie.title ]]
           <div class="add-to-list-buttons">
             <a href="javascript:void(0)" title="{% trans 'Add to the list' %} {% trans 'Watched' %}"
                @click="addToListFromDb(movie.id, 1)"><i class="fa fa-eye"></i></a>
