@@ -9,7 +9,7 @@
     {% for action in actions %}
       <tr class="feed-record">
         <td class="test-feed-user">
-          <a href="{% url 'people' action.user.username 'watched' %}">{% avatar action.user %}</a>
+          <a href="{% url 'list' action.user.username 'watched' %}">{% avatar action.user %}</a>
         </td>
         <td class="d-none d-sm-table-cell">
           {{ action.date }}

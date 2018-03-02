@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block content %}
+{% if anothers_account %}
+  <a class="btn btn-secondary ml-2" href="{% url 'list' anothers_account list %}">{% trans 'List' %}</a>
+{% else %}
+  <a class="btn btn-secondary ml-2" href="{% url 'list' list %}">{% trans 'List' %}</a>
+{% endif %}
+
+
+<br>
+<br>
+<div>
+{% for record in records %}
+  <img src="{{ record.movie.poster_normal }}" data-rjs="{{ record.movie.poster_big }}" alt="{{ record.movie.title }}" class="gallery-poster" />
+{% endfor %}
+</div>
+{% endblock %}

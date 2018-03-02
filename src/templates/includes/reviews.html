@@ -5,7 +5,7 @@
     <div class="recommendation-review">
       <table>
         <tr>
-          <td><a href="{% url 'people' review.user.username 'watched' %}">{% avatar review.user %}</a></td>
+          <td><a href="{% url 'list' review.user.username 'watched' %}">{% avatar review.user %}</a></td>
           <td>
             {% if review.rating %}
               <div class="rating" data-rating="{{ review.rating }}"></div>

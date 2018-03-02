@@ -8,7 +8,7 @@ from django.contrib.auth.views import login
 from django.urls import path, re_path
 from django.views.i18n import JavaScriptCatalog
 
-from moviesapp.views import AboutView
+from moviesapp.views import AboutView, GalleryView
 from moviesapp.views.list import (
     AddToListView,
     ChangeRatingView,
@@ -51,9 +51,13 @@ urlpatterns = [
         kwargs={'exception': Exception('Page not Found')}),
     re_path(r'upload-poster-to-wall/(?P<id>\d+)/', UploadPosterToWallView.as_view(), name='upload_poster_to_wall'),
 
+    # Gallery
+    re_path('gallery/(?P<list_name>watched|to-watch)/', GalleryView.as_view(), name='gallery'),
+    re_path(r'(?P<username>[\w\d]+)/gallery/(?P<list_name>watched|to-watch)', GalleryView.as_view(), name='gallery'),
+
     # List
     re_path('list/(?P<list_name>watched|to-watch)/', ListView.as_view(), name='list'),
-    re_path(r'people/(?P<username>[\w\d]+)/(?P<list_name>watched|to-watch)', ListView.as_view(), name='people'),
+    re_path(r'(?P<username>[\w\d]+)/list/(?P<list_name>watched|to-watch)', ListView.as_view(), name='list'),
     path('recommendations/', RecommendationsView.as_view(), name='recommendations'),
     path('save-settings/', SaveSettingsView.as_view(), name='save_settings'),
     path(

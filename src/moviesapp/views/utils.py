@@ -1,8 +1,9 @@
 from datetime import datetime
 
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
+from django.shortcuts import get_object_or_404
 
-from moviesapp.models import ActionRecord, Record
+from moviesapp.models import ActionRecord, Record, User
 
 
 def paginate(objects, page, objects_on_page):
@@ -31,3 +32,16 @@ def add_movie_to_list(movie_id, list_id, user):
         record = Record(movie_id=movie_id, list_id=list_id, user=user)
         record.save()
         ActionRecord(action_id=1, user=user, movie_id=movie_id, list_id=list_id).save()
+
+
+def get_anothers_account(username):
+    if username:
+        return get_object_or_404(User, username=username)
+    return False
+
+
+def get_records(list_name, user, anothers_account):
+    """Get records for certain user and list."""
+    if anothers_account:
+        user = anothers_account
+    return user.get_records().filter(list__key_name=list_name).select_related('movie')

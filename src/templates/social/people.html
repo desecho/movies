@@ -4,8 +4,8 @@
 {% block content %}
   {% for user in users %}
     <div class="person">
-      <a href="{% url 'people' user.username 'watched' %}">{% avatar user %}</a>
-      <a href="{% url 'people' user.username 'watched' %}" class="people-user">{{ user }}</a>
+      <a href="{% url 'list' user.username 'watched' %}">{% avatar user %}</a>
+      <a href="{% url 'list' user.username 'watched' %}" class="people-user">{{ user }}</a>
       {% movie_count user %}
     </div>
   {% endfor %}

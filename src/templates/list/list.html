@@ -16,44 +16,59 @@
       {% endif %}
     </div>
 
-    {% if anothers_account %}
+
+      {% if anothers_account %}
+    <div class="row">
+    <div class="col-sm-12">
       <div class="btn-group btn-group-toggle" data-toggle="buttons">
         <label class="btn btn-secondary {% ifequal list_id 1 %} active {% endifequal %}" title="{% trans 'Watched' %}"
-               @click="openUrl('{% url 'people' anothers_account.username 'watched' %}')">
+               @click="openUrl('{% url 'list' anothers_account.username 'watched' %}')">
           <input type="radio">{% trans 'Watched' %}
         </label>
         <label class="btn btn-secondary {% ifequal list_id 2 %} active {% endifequal %}" title="{% trans 'To Watch' %}"
-               @click="openUrl('{% url 'people' anothers_account.username 'to-watch' %}')">
+               @click="openUrl('{% url 'list' anothers_account.username 'to-watch' %}')">
           <input type="radio">{% trans 'To Watch' %}
         </label>
       </div>
-      <br><br>
+
+      </div>
+      </div>
+      <br>
     {% endif %}
 
-    <div class="btn-group btn-group-toggle" data-toggle="buttons">
-      {% with mode=request.session.mode %}
-        <!-- id values are being used as variable name combination to control the button statuses -->
-        <label id="button-mode-full" class="btn btn-secondary {% if mode == 'full' %} active {% endif %}"
-               title="{% trans 'Mode' %}" @click="switchMode('full')">
-          <input type="radio">{% trans 'Full' %}
-        </label>
-        <label id="button-mode-compact" class="btn btn-secondary {% if mode == 'compact' %} active {% endif %}"
-               title="{% trans 'Mode' %}" @click="switchMode('compact')">
-          <input type="radio">{% trans 'Compact' %}
-        </label>
-        <label id="button-mode-minimal" class="btn btn-secondary {% if mode == 'minimal' %} active {% endif %}"
-               title="{% trans 'Mode' %}" @click="switchMode('minimal')">
-          <input type="radio">{% trans 'Minimal' %}
-        </label>
-      {% endwith %}
-    </div>
+    <div class="row">
+      <div class="col-sm-12">
+      <div class="btn-group btn-group-toggle" data-toggle="buttons">
+        {% with mode=request.session.mode %}
+          <!-- id values are being used as variable name combination to control the button statuses -->
+          <label id="button-mode-full" class="btn btn-secondary {% if mode == 'full' %} active {% endif %}"
+                 title="{% trans 'Mode' %}" @click="switchMode('full')">
+            <input type="radio">{% trans 'Full' %}
+          </label>
+          <label id="button-mode-compact" class="btn btn-secondary {% if mode == 'compact' %} active {% endif %}"
+                 title="{% trans 'Mode' %}" @click="switchMode('compact')">
+            <input type="radio">{% trans 'Compact' %}
+          </label>
+          <label id="button-mode-minimal" class="btn btn-secondary {% if mode == 'minimal' %} active {% endif %}"
+                 title="{% trans 'Mode' %}" @click="switchMode('minimal')">
+            <input type="radio">{% trans 'Minimal' %}
+          </label>
+        {% endwith %}
+      </div>
+    {% if anothers_account %}
+      <a class="btn btn-secondary ml-2" href="{% url 'gallery' anothers_account list %}">{% trans 'Gallery' %}</a>
+    {% else %}
+      <a class="btn btn-secondary ml-2" href="{% url 'gallery' list %}">{% trans 'Gallery' %}</a>
+    {% endif %}
 
     {% if anothers_account and user.is_authenticated %}
       <button v-cloak data-toggle="button" id="button-recommendation" type="button" class="btn btn-secondary ml-2"
               @click="toggleRecommendation">{% trans 'Recommendations' %}
       </button>
     {% endif %}
-    <br><br>
+      </div>
+    </div>
+    <br>
 
     <div class="row">
       <div class="col-sm-9 col-md-7 col-lg-5 col-xl-5">

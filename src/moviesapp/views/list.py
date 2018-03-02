@@ -4,7 +4,6 @@ from django.conf import settings
 from django.core.exceptions import PermissionDenied
 from django.db.models import Q
 from django.http import Http404
-from django.shortcuts import get_object_or_404
 
 from moviesapp.models import Action, ActionRecord, List, Record, User
 
@@ -14,7 +13,12 @@ from .mixins import (
     TemplateAnonymousView,
     TemplateView,
 )
-from .utils import add_movie_to_list, paginate
+from .utils import (
+    add_movie_to_list,
+    get_anothers_account,
+    get_records,
+    paginate,
+)
 
 
 class ChangeRatingView(AjaxView):
@@ -95,7 +99,6 @@ class SaveCommentView(AjaxView):
 class ListView(TemplateAnonymousView):
     template_name = 'list/list.html'
     session = None
-    anothers_account = None
 
     @staticmethod
     def _filter_records_for_recommendation(records, user):
@@ -126,12 +129,6 @@ class ListView(TemplateAnonymousView):
         for record_id, value in record_ids_and_movies_dict.items():
             data[record_id] = comments_and_ratings_dict.get(value, None)
         return data
-
-    @staticmethod
-    def _get_anothers_account(username):
-        if username:
-            return get_object_or_404(User, username=username)
-        return False
 
     @staticmethod
     def _filter_records(records, query):
@@ -178,23 +175,15 @@ class ListView(TemplateAnonymousView):
             session['mode'] = 'full'
         self.session = session
 
-    def _get_records(self, list_name):
-        """Get records for certain user and list."""
-        if self.anothers_account:
-            user = self.anothers_account
-        else:
-            user = self.request.user
-        return user.get_records().filter(list__key_name=list_name).select_related('movie')
-
     def get_context_data(self, list_name, username=None):
         if username is None and self.request.user.is_anonymous:
             raise Http404
-        self.anothers_account = self._get_anothers_account(username)
-        if self.anothers_account:
+        anothers_account = get_anothers_account(username)
+        if anothers_account:
             if User.objects.get(username=username) not in self.request.user.get_users():
                 raise PermissionDenied
 
-        records = self._get_records(list_name)
+        records = get_records(list_name, self.request.user, anothers_account)
         request = self.request
         session = self.session
         query = request.GET.get('query', False)
@@ -220,7 +209,8 @@ class ListView(TemplateAnonymousView):
             'records': records,
             'reviews': comments_and_ratings,
             'list_id': List.objects.get(key_name=list_name).id,
-            'anothers_account': self.anothers_account,
+            'list': list_name,
+            'anothers_account': anothers_account,
             'list_data': json.dumps(list_data),
             'sort': session['sort'],
             'query': query,
