@@ -1,19 +1,8 @@
 {% extends 'base.html' %}
-{% load i18n static avatar movie_count %}
+{% load i18n static %}
 
 {% block content %}
-  <div id="movie-count">
-    {% if anothers_account %}
-      {% movie_count anothers_account %}
-    {% else %}
-      {% movie_count user %}
-    {% endif %}
-
-    {% if anothers_account %}
-      <br>{{ anothers_account }}<br>
-      {% avatar_big anothers_account %}
-    {% endif %}
-  </div>
+  {% include 'includes/movie_count.html' %}
 
   <div class="row">
     <div class="col-sm-12">
