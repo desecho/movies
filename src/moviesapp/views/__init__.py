@@ -4,7 +4,7 @@ from django.http import Http404
 from moviesapp.models import User
 
 from .mixins import TemplateAnonymousView
-from .utils import get_anothers_account, get_records
+from .utils import get_anothers_account, get_records, sort_by_rating
 
 
 class AboutView(TemplateAnonymousView):
@@ -23,6 +23,7 @@ class GalleryView(TemplateAnonymousView):
                 raise PermissionDenied
 
         records = get_records(list_name, self.request.user, anothers_account)
+        records = sort_by_rating(records, username, list_name)
 
         return {
             'records': records,

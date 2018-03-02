@@ -45,3 +45,10 @@ def get_records(list_name, user, anothers_account):
     if anothers_account:
         user = anothers_account
     return user.get_records().filter(list__key_name=list_name).select_related('movie')
+
+
+def sort_by_rating(records, username, list_name):
+    if not username and list_name == 'to-watch':
+        # Sorting is changing here because there is no user rating yet.
+        return records.order_by('-movie__imdb_rating', '-movie__release_date')
+    return records.order_by('-rating', '-movie__release_date')

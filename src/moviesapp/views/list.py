@@ -18,6 +18,7 @@ from .utils import (
     get_anothers_account,
     get_records,
     paginate,
+    sort_by_rating,
 )
 
 
@@ -139,11 +140,7 @@ class ListView(TemplateAnonymousView):
         if sort == 'release_date':
             return records.order_by('-movie__release_date')
         elif sort == 'rating':
-            if not username and list_name == 'to-watch':
-                # Sorting is changing here because there is no user rating yet.
-                return records.order_by('-movie__imdb_rating', '-movie__release_date')
-            else:
-                return records.order_by('-rating', '-movie__release_date')
+            return sort_by_rating(records, username, list_name)
         elif sort == 'addition_date':
             return records.order_by('-date')
 
