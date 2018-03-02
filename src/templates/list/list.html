@@ -17,55 +17,57 @@
     </div>
 
 
-      {% if anothers_account %}
-    <div class="row">
-    <div class="col-sm-12">
-      <div class="btn-group btn-group-toggle" data-toggle="buttons">
-        <label class="btn btn-secondary {% ifequal list_id 1 %} active {% endifequal %}" title="{% trans 'Watched' %}"
-               @click="openUrl('{% url 'list' anothers_account.username 'watched' %}')">
-          <input type="radio">{% trans 'Watched' %}
-        </label>
-        <label class="btn btn-secondary {% ifequal list_id 2 %} active {% endifequal %}" title="{% trans 'To Watch' %}"
-               @click="openUrl('{% url 'list' anothers_account.username 'to-watch' %}')">
-          <input type="radio">{% trans 'To Watch' %}
-        </label>
-      </div>
+    {% if anothers_account %}
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="btn-group btn-group-toggle" data-toggle="buttons">
+            <label class="btn btn-secondary {% ifequal list_id 1 %} active {% endifequal %}"
+                   title="{% trans 'Watched' %}"
+                   @click="openUrl('{% url 'list' anothers_account.username 'watched' %}')">
+              <input type="radio">{% trans 'Watched' %}
+            </label>
+            <label class="btn btn-secondary {% ifequal list_id 2 %} active {% endifequal %}"
+                   title="{% trans 'To Watch' %}"
+                   @click="openUrl('{% url 'list' anothers_account.username 'to-watch' %}')">
+              <input type="radio">{% trans 'To Watch' %}
+            </label>
+          </div>
 
-      </div>
+        </div>
       </div>
       <br>
     {% endif %}
 
     <div class="row">
       <div class="col-sm-12">
-      <div class="btn-group btn-group-toggle" data-toggle="buttons">
-        {% with mode=request.session.mode %}
-          <!-- id values are being used as variable name combination to control the button statuses -->
-          <label id="button-mode-full" class="btn btn-secondary {% if mode == 'full' %} active {% endif %}"
-                 title="{% trans 'Mode' %}" @click="switchMode('full')">
-            <input type="radio">{% trans 'Full' %}
-          </label>
-          <label id="button-mode-compact" class="btn btn-secondary {% if mode == 'compact' %} active {% endif %}"
-                 title="{% trans 'Mode' %}" @click="switchMode('compact')">
-            <input type="radio">{% trans 'Compact' %}
-          </label>
-          <label id="button-mode-minimal" class="btn btn-secondary {% if mode == 'minimal' %} active {% endif %}"
-                 title="{% trans 'Mode' %}" @click="switchMode('minimal')">
-            <input type="radio">{% trans 'Minimal' %}
-          </label>
-        {% endwith %}
-      </div>
-    {% if anothers_account %}
-      <a class="btn btn-secondary ml-2" href="{% url 'gallery' anothers_account list %}">{% trans 'Gallery' %}</a>
-    {% else %}
-      <a class="btn btn-secondary ml-2" href="{% url 'gallery' list %}">{% trans 'Gallery' %}</a>
-    {% endif %}
+        <div class="btn-group btn-group-toggle" data-toggle="buttons">
+          {% with mode=request.session.mode %}
+            <!-- id values are being used as variable name combination to control the button statuses -->
+            <label id="button-mode-full" class="btn btn-secondary {% if mode == 'full' %} active {% endif %}"
+                   title="{% trans 'Mode' %}" @click="switchMode('full')">
+              <input type="radio">{% trans 'Full' %}
+            </label>
+            <label id="button-mode-compact" class="btn btn-secondary {% if mode == 'compact' %} active {% endif %}"
+                   title="{% trans 'Mode' %}" @click="switchMode('compact')">
+              <input type="radio">{% trans 'Compact' %}
+            </label>
+            <label id="button-mode-minimal" class="btn btn-secondary {% if mode == 'minimal' %} active {% endif %}"
+                   title="{% trans 'Mode' %}" @click="switchMode('minimal')">
+              <input type="radio">{% trans 'Minimal' %}
+            </label>
+          {% endwith %}
+        </div>
+        {% if anothers_account %}
+          <a class="btn btn-secondary ml-2" href="{% url 'gallery' anothers_account list %}">{% trans 'Gallery' %}</a>
+        {% else %}
+          <a class="btn btn-secondary ml-2" href="{% url 'gallery' list %}">{% trans 'Gallery' %}</a>
+        {% endif %}
 
-    {% if anothers_account and user.is_authenticated %}
-      <button v-cloak data-toggle="button" id="button-recommendation" type="button" class="btn btn-secondary ml-2"
-              @click="toggleRecommendation">{% trans 'Recommendations' %}
-      </button>
-    {% endif %}
+        {% if anothers_account and user.is_authenticated %}
+          <button v-cloak data-toggle="button" id="button-recommendation" type="button" class="btn btn-secondary ml-2"
+                  @click="toggleRecommendation">{% trans 'Recommendations' %}
+          </button>
+        {% endif %}
       </div>
     </div>
     <br>
@@ -111,113 +113,113 @@
     {% endif %}
 
     <div class="results col-sm-12 col-md-10 col-lg-8" v-cloak>
-        {% with is_vk_user=user.is_vk_user %}
-          {% for record in records %}
-            <div id="record{{ record.id }}" data-id="{{ record.id }}" data-title="{{ record.movie.title }}"
-                 class="movie">
-              <div class="title">
-                <span title="{{ record.movie.title_original }}">{{ record.movie.title }}</span>
+      {% with is_vk_user=user.is_vk_user %}
+        {% for record in records %}
+          <div id="record{{ record.id }}" data-id="{{ record.id }}" data-title="{{ record.movie.title }}"
+               class="movie">
+            <div class="title">
+              <span title="{{ record.movie.title_original }}">{{ record.movie.title }}</span>
+              {% if not anothers_account %}
+                <a href="javascript:void(0)" title="{% trans 'Delete' %}"
+                   @click="removeRecord({{ record.id }})"><i
+                  class="fa fa-trash-o"></i></a>
+                {% if is_vk_user %}<a v-show="isVkApp" href="javascript:void(0)" class="wall-post"
+                                      title="{% trans 'Post to the wall' %}" @click="postToWall({{ record.id }})"><i
+                  class="fa fa-share"></i></a>{% endif %}
+              {% endif %}
+              <div class="add-to-list-buttons">
                 {% if not anothers_account %}
-                  <a href="javascript:void(0)" title="{% trans 'Delete' %}"
-                     @click="removeRecord({{ record.id }})"><i
-                    class="fa fa-trash-o"></i></a>
-                  {% if is_vk_user %}<a v-show="isVkApp" href="javascript:void(0)" class="wall-post"
-                                        title="{% trans 'Post to the wall' %}" @click="postToWall({{ record.id }})"><i
-                    class="fa fa-share"></i></a>{% endif %}
+                  {% ifequal list_id 2 %}
+                    {% include 'includes/add_to_watched_list_button.html' %}
+                  {% endifequal %}
+                {% else %}
+                  {% include 'includes/add_to_list_buttons.html' %}
                 {% endif %}
-                <div class="add-to-list-buttons">
-                  {% if not anothers_account %}
-                    {% ifequal list_id 2 %}
-                      {% include 'includes/add_to_watched_list_button.html' %}
-                    {% endifequal %}
-                  {% else %}
-                    {% include 'includes/add_to_list_buttons.html' %}
-                  {% endif %}
+              </div>
+            </div>
+            <div class="poster">
+              <img src="{{ record.movie.poster_normal }}" data-rjs="{{ record.movie.poster_big }}"
+                   alt="{{ record.movie.title }}" v-show="mode == 'full'"/>
+              <img src="{{ record.movie.poster_small }}" data-rjs="{{ record.movie.poster_normal }}"
+                   alt="{{ record.movie.title }}" v-show="mode != 'full'"/>
+            </div>
+            <div class="details">
+              {% if record.movie.imdb_rating %}
+                <div class="imdb-rating"><span
+                  class="item-desc">{% trans 'IMDb Rating' %}:</span> {{ record.movie.imdb_rating }}
                 </div>
-              </div>
-              <div class="poster">
-                <img src="{{ record.movie.poster_normal }}" data-rjs="{{ record.movie.poster_big }}"
-                     alt="{{ record.movie.title }}" v-show="mode == 'full'"/>
-                <img src="{{ record.movie.poster_small }}" data-rjs="{{ record.movie.poster_normal }}"
-                     alt="{{ record.movie.title }}" v-show="mode != 'full'"/>
-              </div>
-              <div class="details">
-                {% if record.movie.imdb_rating %}
-                  <div class="imdb-rating"><span
-                    class="item-desc">{% trans 'IMDb Rating' %}:</span> {{ record.movie.imdb_rating }}
+              {% endif %}
+              {% if record.movie.release_date %}
+                <div class="release-date"><span
+                  class="release-date-label item-desc">{% trans 'Release Date' %}:</span> {{ record.movie.release_date }}
+                </div>
+              {% endif %}
+              <div v-show="mode == 'full'">
+                {% if record.movie.country %} <span class="item-desc">{% trans 'Country' %}:</span>
+                  {{ record.movie.country }}<br> {% endif %}
+                {% if record.movie.director %} <span class="item-desc">{% trans 'Director' %}:</span>
+                  {{ record.movie.director }}<br> {% endif %}
+                {% if record.movie.writer %} <span class="item-desc">{% trans 'Writer' %}:</span>
+                  {{ record.movie.writer }}<br> {% endif %}
+                {% if record.movie.genre %} <span class="item-desc">{% trans 'Genre' %}:</span>
+                  {{ record.movie.genre }}<br> {% endif %}
+                {% if record.movie.actors %} <span class="item-desc">{% trans 'Actors' %}:</span>
+                  {{ record.movie.actors }}<br> {% endif %}
+                {% if record.movie.runtime %} <span class="item-desc">{% trans 'Runtime' %}:</span>
+                  {{ record.movie.runtime|date:'H:i' }}<br> {% endif %}
+                {% if record.movie.description %} <span class="item-desc">{% trans 'Description' %}:</span>
+                  {{ record.movie.description }}<br> {% endif %}
+                {% if record.movie.homepage %}
+                  <a href="{{ record.movie.homepage }}" target="_blank">{% trans 'Website' %}</a><br>
+                {% endif %}
+                <a href="{{ record.movie.imdb_url }}" target="_blank"><span class="imdb"></span></a><br>
+                {% if record.movie.has_trailers %}
+                  <span class="item-desc">{% trans 'Trailers' %}:</span><br>
+                  <div class="trailers">
+                    {% for trailer in record.movie.get_trailers %}
+                      <a href="http://www.youtube.com/watch?v={{ trailer.source }}"
+                         target="_blank">{{ trailer.name }}</a>
+                    {% endfor %}
                   </div>
                 {% endif %}
-                {% if record.movie.release_date %}
-                  <div class="release-date"><span
-                    class="release-date-label item-desc">{% trans 'Release Date' %}:</span> {{ record.movie.release_date }}
+                <br>
+              </div>
+              <div class="review {% ifequal request.session.mode 'full' %} full {% endifequal %}">
+                {% ifequal list_id 1 %}
+                  <div class="rating" data-record-id="{{ record.id }}" data-rating="{{ record.rating }}"></div>
+                  <div class="comment" id="comment-area{{ record.id }}"
+                       style="display: {% if not record.comment %} none {% endif %}" data-id="{{ record.id }}">
+                    {% if not anothers_account %}
+                      <textarea class="form-control" title="{% trans 'Comment' %}"
+                                id="comment{{ record.id }}">{{ record.comment }}</textarea><br><br>
+                      <button type="button" title="{% trans 'Save' %}" class="btn btn-secondary"
+                              @click="saveComment({{ record.id }})"><i class="fa fa-save"></i></button>
+                      <br>
+                    {% else %}
+                      <p>{{ record.comment }}</p>
+                    {% endif %}
                   </div>
-                {% endif %}
-                <div v-show="mode == 'full'">
-                  {% if record.movie.country %} <span class="item-desc">{% trans 'Country' %}:</span>
-                    {{ record.movie.country }}<br> {% endif %}
-                  {% if record.movie.director %} <span class="item-desc">{% trans 'Director' %}:</span>
-                    {{ record.movie.director }}<br> {% endif %}
-                  {% if record.movie.writer %} <span class="item-desc">{% trans 'Writer' %}:</span>
-                    {{ record.movie.writer }}<br> {% endif %}
-                  {% if record.movie.genre %} <span class="item-desc">{% trans 'Genre' %}:</span>
-                    {{ record.movie.genre }}<br> {% endif %}
-                  {% if record.movie.actors %} <span class="item-desc">{% trans 'Actors' %}:</span>
-                    {{ record.movie.actors }}<br> {% endif %}
-                  {% if record.movie.runtime %} <span class="item-desc">{% trans 'Runtime' %}:</span>
-                    {{ record.movie.runtime|date:'H:i' }}<br> {% endif %}
-                  {% if record.movie.description %} <span class="item-desc">{% trans 'Description' %}:</span>
-                    {{ record.movie.description }}<br> {% endif %}
-                  {% if record.movie.homepage %}
-                    <a href="{{ record.movie.homepage }}" target="_blank">{% trans 'Website' %}</a><br>
-                  {% endif %}
-                  <a href="{{ record.movie.imdb_url }}" target="_blank"><span class="imdb"></span></a><br>
-                  {% if record.movie.has_trailers %}
-                    <span class="item-desc">{% trans 'Trailers' %}:</span><br>
-                    <div class="trailers">
-                      {% for trailer in record.movie.get_trailers %}
-                        <a href="http://www.youtube.com/watch?v={{ trailer.source }}"
-                           target="_blank">{{ trailer.name }}</a>
-                      {% endfor %}
-                    </div>
+                  {% if not anothers_account %}
+                    <button id="comment_area_button{{ record.id }}" type="button" title="{% trans 'Add comment' %}"
+                            class="btn btn-secondary comment-button"
+                            @click="toggleCommentArea({{ record.id }})"
+                      {% if record.comment %} style="display: none;" {% endif %}><i class="fa fa-comment"></i>
+                    </button>
                   {% endif %}
                   <br>
-                </div>
-                <div class="review {% ifequal request.session.mode 'full' %} full {% endifequal %}">
-                  {% ifequal list_id 1 %}
-                    <div class="rating" data-record-id="{{ record.id }}" data-rating="{{ record.rating }}"></div>
-                    <div class="comment" id="comment-area{{ record.id }}"
-                         style="display: {% if not record.comment %} none {% endif %}" data-id="{{ record.id }}">
-                      {% if not anothers_account %}
-                        <textarea class="form-control" title="{% trans 'Comment' %}"
-                                  id="comment{{ record.id }}">{{ record.comment }}</textarea><br><br>
-                        <button type="button" title="{% trans 'Save' %}" class="btn btn-secondary"
-                                @click="saveComment({{ record.id }})"><i class="fa fa-save"></i></button>
-                        <br>
-                      {% else %}
-                        <p>{{ record.comment }}</p>
-                      {% endif %}
-                    </div>
-                    {% if not anothers_account %}
-                      <button id="comment_area_button{{ record.id }}" type="button" title="{% trans 'Add comment' %}"
-                              class="btn btn-secondary comment-button"
-                              @click="toggleCommentArea({{ record.id }})"
-                        {% if record.comment %} style="display: none;" {% endif %}><i class="fa fa-comment"></i>
-                      </button>
-                    {% endif %}
-                    <br>
-                  {% endifequal %}
-                </div>
+                {% endifequal %}
               </div>
-              <div class="clearfix"></div>
-              {% if list_id == 2 and not anothers_account %}
-                {% include 'includes/reviews.html' %}
-              {% endif %}
             </div>
-          {% endfor %}
-        {% endwith %}
-        {% if records.has_other_pages %}
-          {% bootstrap_paginate records range=10 show_prev_next='true' show_first_last='true' alignment='left' %}
-        {% endif %}
+            <div class="clearfix"></div>
+            {% if list_id == 2 and not anothers_account %}
+              {% include 'includes/reviews.html' %}
+            {% endif %}
+          </div>
+        {% endfor %}
+      {% endwith %}
+      {% if records.has_other_pages %}
+        {% bootstrap_paginate records range=10 show_prev_next='true' show_first_last='true' alignment='left' %}
+      {% endif %}
     </div>
   </div>
 {% endblock %}
