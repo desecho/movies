@@ -1,14 +1,59 @@
 {% extends 'base.html' %}
-{% load i18n %}
+{% load i18n static avatar movie_count %}
 
 {% block content %}
-  {% if anothers_account %}
-    <a class="btn btn-secondary ml-2" href="{% url 'list' anothers_account list %}">{% trans 'List' %}</a>
-  {% else %}
-    <a class="btn btn-secondary ml-2" href="{% url 'list' list %}">{% trans 'List' %}</a>
-  {% endif %}
+  <div id="movie-count">
+    {% if anothers_account %}
+      {% movie_count anothers_account %}
+    {% else %}
+      {% movie_count user %}
+    {% endif %}
 
+    {% if anothers_account %}
+      <br>{{ anothers_account }}<br>
+      {% avatar_big anothers_account %}
+    {% endif %}
+  </div>
 
+  <div class="row">
+    <div class="col-sm-12">
+      {% if anothers_account %}
+        <a class="btn btn-secondary" href="{% url 'list' anothers_account list %}">{% trans 'List' %}</a>
+      {% else %}
+        <a class="btn btn-secondary" href="{% url 'list' list %}">{% trans 'List' %}</a>
+      {% endif %}
+    </div>
+  </div>
+  <br>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="btn-group btn-group-toggle" data-toggle="buttons">
+        <label class="btn btn-secondary {% ifequal list 'watched' %} active {% endifequal %}"
+               title="{% trans 'Watched' %}"
+          {% if anothers_account %}
+               @click="openUrl('{% url 'gallery' anothers_account.username 'watched' %}')"
+          {% else %}
+               @click="openUrl('{% url 'gallery' 'watched' %}')"
+          {% endif %}
+        >
+          <input type="radio">{% trans 'Watched' %}
+        </label>
+        <label class="btn btn-secondary {% ifequal list 'to-watch' %} active {% endifequal %}"
+               title="{% trans 'To Watch' %}"
+          {% if anothers_account %}
+               @click="openUrl('{% url 'gallery' anothers_account.username 'to-watch' %}')"
+          {% else %}
+               @click="openUrl('{% url 'gallery' 'to-watch' %}')"
+          {% endif %}
+        >
+          <input type="radio">{% trans 'To Watch' %}
+        </label>
+      </div>
+
+    </div>
+  </div>
+  <br>
   <br>
   <br>
   <div>
@@ -17,4 +62,8 @@
            alt="{{ record.movie.title }}" class="gallery-poster"/>
     {% endfor %}
   </div>
+{% endblock %}
+
+{% block js %}
+  <script src="{% static 'js/gallery.js' %}"></script>
 {% endblock %}

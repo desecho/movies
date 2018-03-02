@@ -21,6 +21,7 @@ module.exports = {
     init: path.join(jsPath, 'init.js'),
     search: path.join(jsPath, 'search.js'),
     list: path.join(jsPath, 'list.js'),
+    gallery: path.join(jsPath, 'gallery.js'),
     recommendations: path.join(jsPath, 'recommendations.js'),
     registration: path.join(jsPath, 'registration.js'),
     passwordChange: path.join(jsPath, 'password_change.js'),
