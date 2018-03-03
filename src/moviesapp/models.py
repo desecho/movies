@@ -278,6 +278,7 @@ class Record(models.Model):
     watched_original = models.BooleanField(default=False)
     watched_extended = models.BooleanField(default=False)
     watched_in_theatre = models.BooleanField(default=False)
+    watched_in_4k = models.BooleanField(default=False)
 
     def __str__(self):
         return self.movie.title

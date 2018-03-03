@@ -205,6 +205,9 @@
                       <br>
                       <label for="theatre_{{ record.id }}">Watched in theatre</label>
                       <input @change="saveOptions({{ record.id }})" id="theatre_{{ record.id }}" type="checkbox" {% if record.watched_in_theatre %} checked {% endif %}>
+                      <br>
+                      <label for="4k_{{ record.id }}">Watched in 4K</label>
+                      <input @change="saveOptions({{ record.id }})" id="4k_{{ record.id }}" type="checkbox" {% if record.watched_in_4k %} checked {% endif %}>
                     </div>
                   {% endif %}
                 {% endifequal %}
