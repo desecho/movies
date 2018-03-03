@@ -12,5 +12,5 @@ window.vm = new Vue({
       location.href = url;
     },
     retinajs: retina,
-  }
+  },
 });
