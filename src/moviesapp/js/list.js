@@ -91,7 +91,7 @@ window.vm = new Vue({
         $('.comment').each(function() {
           const el = $(this); // eslint-disable-line no-invalid-this
           const commentAreaToggle = $('#comment_area_button' + el.data('id'));
-          const comment = el.find('textarea')[0].value;
+          const comment = el.find('textarea').val();
           if (comment) {
             el.show();
             commentAreaToggle.hide();
