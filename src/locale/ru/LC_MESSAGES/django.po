@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-02-12 20:58-0500\n"
-"PO-Revision-Date: 2018-02-12 21:00-0456\n"
-"Last-Translator: b'Anton Samarchyan <desecho@gmail.com>'\n"
+"POT-Creation-Date: 2018-03-03 02:03-0500\n"
+"PO-Revision-Date: 2018-03-03 02:03-0456\n"
+"Last-Translator: b'  <desecho@gmail.com>'\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -19,35 +19,37 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Translated-Using: django-rosetta 0.8.1\n"
 
-#: moviesapp/menus.py:16 moviesapp/menus.py:29 moviesapp/views/social.py:20
+#: moviesapp/menus.py:16 moviesapp/menus.py:24 moviesapp/views/social.py:21
 msgid "Friends"
 msgstr "Друзья"
 
-#: moviesapp/menus.py:18 moviesapp/menus.py:30 moviesapp/views/social.py:19
+#: moviesapp/menus.py:17 moviesapp/menus.py:25 moviesapp/views/social.py:20
 msgid "People"
 msgstr "Люди"
 
-#: moviesapp/menus.py:22 templates/list/list.html:88 templates/search.html:13
+#: moviesapp/menus.py:19 templates/list/list.html:90 templates/search.html:12
 msgid "Search"
 msgstr "Поиск"
 
-#: moviesapp/menus.py:23 moviesapp/templatetags/movie_count.py:10
-#: templates/list/list.html:24 templates/list/list.html:26
-#: templates/search.html:43
+#: moviesapp/menus.py:20 moviesapp/templatetags/movie_count.py:10
+#: templates/gallery.html:22 templates/gallery.html:29
+#: templates/list/list.html:13 templates/list/list.html:15
+#: templates/search.html:42
 msgid "Watched"
 msgstr "Просмотрено"
 
-#: moviesapp/menus.py:25 moviesapp/templatetags/movie_count.py:11
-#: templates/list/list.html:28 templates/list/list.html:30
-#: templates/search.html:45
+#: moviesapp/menus.py:22 moviesapp/templatetags/movie_count.py:11
+#: templates/gallery.html:32 templates/gallery.html:39
+#: templates/list/list.html:18 templates/list/list.html:20
+#: templates/search.html:44
 msgid "To Watch"
 msgstr "К Просмотру"
 
-#: moviesapp/menus.py:28 templates/list/list.html:56
+#: moviesapp/menus.py:23 templates/list/list.html:56
 msgid "Recommendations"
 msgstr "Рекоммендации"
 
-#: moviesapp/menus.py:31
+#: moviesapp/menus.py:26
 msgid "Feed"
 msgstr "Лента"
 
@@ -75,24 +77,28 @@ msgstr "О Movies"
 #: templates/about.html:8
 #| msgid ""
 #| "\n"
-#| "  <p>Create movie lists (\"Watched\" and \"To watch\"), rate movies and add comments.</p>\n"
-#| "  <p>The website is <a href=\"http://movies.desecho.org\" target=\"_blank\">http://movies.desecho.org</a>.</p>\n"
-#| "  <p>There is a \"Movies\" <a href=\"https://vk.com/app3504693_2912142\" target=\"_blank\">VK app</a> available.</p>\n"
-#| "  <p>To use the app in Chrome, open Cookies settings (<a href=\"chrome://settings/content/cookies\">chrome://settings/content/cookies</a>) and disable \"Block third-party cookies\".</p>\n"
-#| "  <p>The APIs used in \"Movies\" are: </p>\n"
-#| "  <ul>\n"
-#| "    <li><a href=\"https://www.themoviedb.org/\" target=\"_blank\">TMDb</a>\n"
-#| "    <li><a href=\"https://www.omdbapi.com/\" target=\"_blank\">OMDb</a>\n"
-#| "  </ul>\n"
-#| "  <p>Rating system:</p>\n"
-#| "  <ul>\n"
-#| "    <li>1 - Awful\n"
-#| "    <li>2 - Bad\n"
-#| "    <li>3 - Ok\n"
-#| "    <li>4 - Good\n"
-#| "    <li>5 - Excellent\n"
-#| "  </ul>\n"
-#| "  <p>If you have problems with account activation or other issues, questions or feedback email me at <a href=\"mailto:desecho@gmail.com\">desecho@gmail.com</a>.</p>\n"
+#| "    <p>Create movie lists (\"Watched\" and \"To watch\"), rate movies and add comments.</p>\n"
+#| "    <p>The website is <a href=\"http://movies.desecho.org\" target=\"_blank\">http://movies.desecho.org</a>.</p>\n"
+#| "    <p>There is a \"Movies\" <a href=\"https://vk.com/app3504693_2912142\" target=\"_blank\">VK app</a> available.</p>\n"
+#| "    <p>To use the app in Chrome, open Cookies settings (<a href=\"chrome://settings/content/cookies\">chrome://settings/content/cookies</a>)\n"
+#| "      and disable \"Block third-party cookies\".</p>\n"
+#| "    <p>Rating system:</p>\n"
+#| "    <ul>\n"
+#| "      <li>1 - Awful\n"
+#| "      <li>2 - Bad\n"
+#| "      <li>3 - Ok\n"
+#| "      <li>4 - Good\n"
+#| "      <li>5 - Excellent\n"
+#| "    </ul>\n"
+#| "    <p>If you have problems with account activation or other issues, questions or feedback email me at <a\n"
+#| "      href=\"mailto:desecho@gmail.com\">desecho@gmail.com</a>.</p>\n"
+#| "    <p>Development:</p>\n"
+#| "    <p>The APIs used in \"Movies\" are: </p>\n"
+#| "    <ul>\n"
+#| "      <li><a href=\"https://www.themoviedb.org/\" target=\"_blank\">TMDb</a>\n"
+#| "      <li><a href=\"https://www.omdbapi.com/\" target=\"_blank\">OMDb</a>\n"
+#| "    </ul>\n"
+#| "    <p>The source code is available on GitHub - <a href=\"https://github.com/desecho/movies\" target=\"_blank\">Movies Project</a>.\n"
 #| "  "
 msgid ""
 "\n"
@@ -117,14 +123,15 @@ msgid ""
 "      <li><a href=\"https://www.themoviedb.org/\" target=\"_blank\">TMDb</a>\n"
 "      <li><a href=\"https://www.omdbapi.com/\" target=\"_blank\">OMDb</a>\n"
 "    </ul>\n"
-"    <p>The source code is available on GitHub - <a href=\"https://github.com/desecho/movies\" target=\"_blank\">Movies Project</a>.\n"
+"    <p>The source code is available on GitHub -\n"
+"    <a href=\"https://github.com/desecho/movies\" target=\"_blank\">Movies</a>.\n"
 "  "
 msgstr ""
 "\n"
-"<p>Создавайте списки фильмов (\"Просмотрено\" and \"К просмотру\"), ставьте оценки фильмам и добавляйте комментарии.</p>\n"
+"<p>Создавайте списки фильмов (\"Просмотрено\" и \"К просмотру\"), ставьте оценки фильмам и добавляйте комментарии.</p>\n"
 "<p>Сайт - <a href=\"http://movies.desecho.org\" target=\"_blank\">http://movies.desecho.org</a>.</p>\n"
-"<p>Доступно <a href=\"https://vk.com/app3504693_2912142\" target=\"_blank\">приложение \"Movies\" в VK</a>.</p>\n"
-"<p>Для того чтобы использовать приложение в Chrome, откройте найстройки Cookies (<a href=\"chrome://settings/content/cookies\">chrome://settings/content/cookies</a>) и отключите \"Block third-party cookies\".</p>\n"
+"<p>В VK доступно <a href=\"https://vk.com/app3504693_2912142\" target=\"_blank\">приложение \"Movies\"</a>.</p>\n"
+"<p>Для того чтобы использовать это приложение в Chrome, откройте найстройки Cookies (<a href=\"chrome://settings/content/cookies\">chrome://settings/content/cookies</a>) и отключите \"Block third-party cookies\".</p>\n"
 "<p>Система оценок:</p>\n"
 "<ul>\n"
 "<li>1 - Ужасно\n"
@@ -141,7 +148,11 @@ msgstr ""
 "<li><a href=\"https://www.themoviedb.org/\" target=\"_blank\">TMDb</a>\n"
 "<li><a href=\"https://www.omdbapi.com/\" target=\"_blank\">OMDb</a>\n"
 "</ul>\n"
-"<p>Исходный код доступен на GitHub - <a href=\"https://github.com/desecho/movies\" target=\"_blank\">Movies Project</a>."
+"<p>Исходный код доступен на GitHub - <a href=\"https://github.com/desecho/movies\" target=\"_blank\">Movies</a>."
+
+#: templates/gallery.html:10 templates/gallery.html:12
+msgid "List"
+msgstr "Список"
 
 #: templates/includes/add_to_list_buttons.html:4
 msgid "Add to &quot;To Watch&quot; list"
@@ -155,115 +166,115 @@ msgstr "Добавить в список \"Просмотрено\""
 msgid "Toggle navigation"
 msgstr "Переключить навигацию"
 
-#: templates/list/list.html:40 templates/list/list.html:44
-#: templates/list/list.html:48
+#: templates/list/list.html:35 templates/list/list.html:39
+#: templates/list/list.html:43
 msgid "Mode"
 msgstr "Режим"
 
-#: templates/list/list.html:41
+#: templates/list/list.html:36
 msgid "Full"
 msgstr "Полный"
 
-#: templates/list/list.html:45
+#: templates/list/list.html:40
 msgid "Compact"
 msgstr "Компактный"
 
-#: templates/list/list.html:49
+#: templates/list/list.html:44
 msgid "Minimal"
 msgstr "Минимальный"
 
-#: templates/list/list.html:67
+#: templates/list/list.html:49 templates/list/list.html:51
+msgid "Gallery"
+msgstr "Галерея"
+
+#: templates/list/list.html:69
 msgid "Sort by release date"
 msgstr "Сортировать по дате выпуска"
 
-#: templates/list/list.html:68 templates/search.html:50
+#: templates/list/list.html:70
 msgid "Release date"
 msgstr "Дата выпуска"
 
-#: templates/list/list.html:71
+#: templates/list/list.html:73
 msgid "Sort by rating"
 msgstr "Сортировать по рейтингу"
 
-#: templates/list/list.html:72
+#: templates/list/list.html:74
 msgid "Rating"
 msgstr "Рейтинг"
 
-#: templates/list/list.html:75
+#: templates/list/list.html:77
 msgid "Sort by date added"
 msgstr "Сортировать по дате добавления"
 
-#: templates/list/list.html:76
+#: templates/list/list.html:78
 msgid "Date added"
 msgstr "Дата добавления"
 
-#: templates/list/list.html:110
+#: templates/list/list.html:111
 msgid "Delete"
 msgstr "Удалить"
 
-#: templates/list/list.html:114
+#: templates/list/list.html:115
 msgid "Post to the wall"
 msgstr "Отправить на стену"
 
-#: templates/list/list.html:136 templates/list/recommendations.html:26
+#: templates/list/list.html:137 templates/list/recommendations.html:21
 msgid "IMDb Rating"
 msgstr "IMDb Рейтинг"
 
-#: templates/list/list.html:141 templates/list/recommendations.html:31
+#: templates/list/list.html:142 templates/list/recommendations.html:26
 msgid "Release Date"
 msgstr "Дата Выпуска"
 
-#: templates/list/list.html:145 templates/list/recommendations.html:34
+#: templates/list/list.html:146 templates/list/recommendations.html:29
 msgid "Country"
 msgstr "Страна"
 
-#: templates/list/list.html:147 templates/list/recommendations.html:36
-#: templates/search.html:24
+#: templates/list/list.html:148 templates/list/recommendations.html:31
+#: templates/search.html:23
 msgid "Director"
 msgstr "Режиссёр"
 
-#: templates/list/list.html:149 templates/list/recommendations.html:38
+#: templates/list/list.html:150 templates/list/recommendations.html:33
 msgid "Writer"
 msgstr "Сценарист"
 
-#: templates/list/list.html:151 templates/list/recommendations.html:40
+#: templates/list/list.html:152 templates/list/recommendations.html:35
 msgid "Genre"
 msgstr "Жанр"
 
-#: templates/list/list.html:153 templates/list/recommendations.html:42
+#: templates/list/list.html:154 templates/list/recommendations.html:37
 msgid "Actors"
 msgstr "Актёры"
 
-#: templates/list/list.html:155 templates/list/recommendations.html:44
+#: templates/list/list.html:156 templates/list/recommendations.html:39
 msgid "Runtime"
 msgstr "Длительность"
 
-#: templates/list/list.html:157 templates/list/recommendations.html:46
+#: templates/list/list.html:158 templates/list/recommendations.html:41
 msgid "Description"
 msgstr "Описание"
 
-#: templates/list/list.html:160 templates/list/recommendations.html:49
+#: templates/list/list.html:161 templates/list/recommendations.html:44
 msgid "Website"
 msgstr "Вебсайт"
 
-#: templates/list/list.html:163 templates/list/recommendations.html:52
+#: templates/list/list.html:165 templates/list/recommendations.html:48
 msgid "Trailers"
 msgstr "Трейлеры"
 
-#: templates/list/list.html:179
+#: templates/list/list.html:181
 msgid "Comment"
 msgstr "Комментарий"
 
-#: templates/list/list.html:181 templates/user/preferences.html:44
+#: templates/list/list.html:183 templates/user/preferences.html:44
 msgid "Save"
 msgstr "Сохранить"
 
-#: templates/list/list.html:189
+#: templates/list/list.html:191
 msgid "Add comment"
 msgstr "Добавить комментарий"
-
-#: templates/list/list.html:210 templates/list/recommendations.html:67
-msgid "The list is empty"
-msgstr "Список пуст"
 
 #: templates/registration/password_change_done.html:7
 msgid "Your password was changed."
@@ -274,12 +285,90 @@ msgid "Old password"
 msgstr "Старый пароль"
 
 #: templates/registration/password_change_form.html:16
+#: templates/registration/password_reset_confirm.html:14
 msgid "New password"
 msgstr "Новый пароль"
 
 #: templates/registration/password_change_form.html:20
+#: templates/registration/password_reset_confirm.html:18
 msgid "Change my password"
 msgstr "Изменить мой пароль"
+
+#: templates/registration/password_reset_complete.html:8
+msgid "Your password has been set.  You may go ahead and log in now."
+msgstr "Ваш пароль был установлен. Вы можете выполнить вход сейчас."
+
+#: templates/registration/password_reset_complete.html:10
+#: templates/user/login.html:22
+msgid "Log in"
+msgstr "Войти"
+
+#: templates/registration/password_reset_confirm.html:26
+msgid ""
+"The password reset link was invalid, possibly because it has already been "
+"used.  Please request a new password reset."
+msgstr ""
+"Ссылка на сброс пароля была невалидная, возможно потому что она уже была "
+"использована. Пожалуйста, запросите новый сброс пароля."
+
+#: templates/registration/password_reset_done.html:7
+msgid ""
+"We've emailed you instructions for setting your password, if an account "
+"exists with the email you entered. You should receive them shortly."
+msgstr ""
+"Мы выслали Вам по email инструкции по установке Вашего пароля, если аккаунт "
+"существует с email который вы ввели. Вы должны вскоре их получить."
+
+#: templates/registration/password_reset_done.html:9
+msgid ""
+"If you don't receive an email, please make sure you've entered the address "
+"you registered with, and check your spam folder."
+msgstr ""
+"Если вы не получите email, пожалуйста, убедитесь что вы ввели тот адрес на "
+"который вы зарегестрированы и проверьте Вашу папку со спамом."
+
+#: templates/registration/password_reset_email.html:2
+#, python-format
+msgid ""
+"You're receiving this email because you requested a password reset for your user account at\n"
+"  %(site_name)s."
+msgstr ""
+"Вы получаете этот email потому что вы запросили сброс пароля для вашего "
+"аккаунта на %(site_name)s."
+
+#: templates/registration/password_reset_email.html:5
+msgid "Please go to the following page and choose a new password:"
+msgstr "Пожалуйста, перейдите по следующей странице и выберите новый пароль:"
+
+#: templates/registration/password_reset_email.html:9
+msgid "Your username, in case you've forgotten:"
+msgstr "Ваше имя пользователя на тот случай если вы его забыли:"
+
+#: templates/registration/password_reset_email.html:11
+msgid "Thanks for using our site!"
+msgstr "Спасибо за использование нашего сайта!"
+
+#: templates/registration/password_reset_email.html:13
+#, python-format
+msgid "The %(site_name)s team"
+msgstr "Команда %(site_name)s"
+
+#: templates/registration/password_reset_form.html:7
+msgid ""
+"Forgotten your password? Enter your email address below, and we'll email "
+"instructions for setting a new one."
+msgstr ""
+"Забыли пароль? Введите Ваш email ниже и мы отправим Вам инструкции по "
+"установке нового на email."
+
+#: templates/registration/password_reset_form.html:14
+#: templates/registration/registration_form.html:16
+msgid "Email"
+msgstr "Email"
+
+#: templates/registration/password_reset_form.html:18
+msgid "Reset my password"
+msgstr "Сбросить мой пароль"
 
 #: templates/registration/registration_form.html:4
 msgid "Registration"
@@ -289,10 +378,6 @@ msgstr "Регистрация"
 #: templates/user/login.html:15
 msgid "Username"
 msgstr "Имя пользователя"
-
-#: templates/registration/registration_form.html:16
-msgid "Email"
-msgstr "Email"
 
 #: templates/registration/registration_form.html:20
 #: templates/user/login.html:18 templates/user/preferences.html:35
@@ -304,37 +389,33 @@ msgstr "Пароль"
 msgid "Register"
 msgstr "Регистрация"
 
-#: templates/search.html:11
-msgid "Text input with dropdown button"
-msgstr "Поле текста с выпадающей кнопкой"
-
-#: templates/search.html:20
+#: templates/search.html:19
 msgid "Movie"
 msgstr "Фильм"
 
-#: templates/search.html:22
+#: templates/search.html:21
 msgid "Actor"
 msgstr "Актёр"
 
-#: templates/search.html:30
+#: templates/search.html:29
 msgid "show only popular"
 msgstr "показывать только популярные"
 
-#: templates/search.html:33
+#: templates/search.html:32
 msgid "sort by date"
 msgstr "сортировать по дате"
 
-#: templates/search.html:43 templates/search.html:45
+#: templates/search.html:42 templates/search.html:44
 msgid "Add to the list"
 msgstr "Добавить в список"
-
-#: templates/user/login.html:22
-msgid "Log in"
-msgstr "Войти"
 
 #: templates/user/login.html:30 templates/user/login.html:38
 msgid "Log in with"
 msgstr "Войти через"
+
+#: templates/user/login.html:49
+msgid "Reset password"
+msgstr "Сбросить пароль"
 
 #: templates/user/login_error.html:6
 msgid "Login error"
@@ -355,6 +436,12 @@ msgstr "Вы можете изменить аватар на"
 #: templates/user/preferences.html:37
 msgid "Change password"
 msgstr "Изменить пароль"
+
+#~ msgid "The list is empty"
+#~ msgstr "Список пуст"
+
+#~ msgid "Text input with dropdown button"
+#~ msgstr "Поле текста с выпадающей кнопкой"
 
 #~ msgid ""
 #~ "Privacy setting. It indicates whether only your friends have access to your "
