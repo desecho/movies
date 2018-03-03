@@ -57,7 +57,7 @@ facebook-sdk==2.0.0
 
 
 mysqlclient==1.3.12
-raven==6.5.0
+raven==6.6.0
 tabulate==0.8.2
 
 # tmdbsimple==2.1.0
