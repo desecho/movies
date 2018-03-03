@@ -46,7 +46,7 @@
           {% endwith %}
         </div>
         {% if anothers_account %}
-          <a class="btn btn-secondary ml-2" href="{% url 'gallery' anothers_account list %}">{% trans 'Gallery' %}</a>
+          <a class="btn btn-secondary ml-2" href="{% url 'gallery' anothers_account.username list %}">{% trans 'Gallery' %}</a>
         {% else %}
           <a class="btn btn-secondary ml-2" href="{% url 'gallery' list %}">{% trans 'Gallery' %}</a>
         {% endif %}
