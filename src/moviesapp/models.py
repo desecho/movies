@@ -25,7 +25,10 @@ class Vk:
             friends = self.vk.friends.get(uid=self.vk_id)
             cache.set('vk_friends', friends)
         friends_ids = map(str, friends)
-        friends = User.objects.filter(social_auth__provider__in=settings.VK_BACKENDS, social_auth__uid__in=friends_ids)
+
+        # We need to use distinct here because the same user can have several VK backends (both app and oauth)
+        friends = User.objects.filter(social_auth__provider__in=settings.VK_BACKENDS,
+                                      social_auth__uid__in=friends_ids).distinct()
         return friends
 
     def get_data(self, fields):
