@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-03 02:03-0500\n"
-"PO-Revision-Date: 2018-03-03 02:04-0456\n"
+"POT-Creation-Date: 2018-03-03 02:19-0500\n"
+"PO-Revision-Date: 2018-03-03 02:19-0456\n"
 "Last-Translator: b'  <desecho@gmail.com>'\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -132,9 +132,16 @@ msgid "Error adding a movie"
 msgstr "Ошибка добавления фильма"
 
 #: moviesapp/js/set_axios_settings.js:20
-#| msgid "You need to login to add a movie to your list."
 msgid "You need to login to add a movie to your list"
 msgstr "Вам необходимо авторизоваться для того чтобы добавить фильм в список"
+
+#: moviesapp/js/translations.js:5
+msgid "Actor"
+msgstr "Актёр"
+
+#: moviesapp/js/translations.js:6
+msgid "Director"
+msgstr "Режиссёр"
 
 #~ msgid "The list is empty"
 #~ msgstr "Список пуст"
@@ -144,12 +151,6 @@ msgstr "Вам необходимо авторизоваться для того
 
 #~ msgid "Close all notifications"
 #~ msgstr "Закрыть все уведомления"
-
-#~ msgid "Actor"
-#~ msgstr "Актёр"
-
-#~ msgid "Director"
-#~ msgstr "Режиссёр"
 
 #~ msgid "Error! Code #"
 #~ msgstr "Ошибка! Код #"
