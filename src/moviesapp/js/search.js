@@ -48,7 +48,6 @@ window.vm = new Vue({
     retinajs: retina,
     addToListFromDb: function(movieId, listId) {
       const movie = $('#movie' + movieId);
-      movie.fadeOut('fast');
       const data = {
         movieId: movieId,
         listId: listId,
@@ -56,7 +55,9 @@ window.vm = new Vue({
       axios.post(urls.urlAddToListFromDb, $.param(data)).then(function(response) {
         if (response.data.status === 'not_found') {
           vm.flash(gettext('Movie is not found in the database'), 'error', vars.flashOptions);
+          return;
         }
+        movie.fadeOut('fast');
       }).catch(function() {
         vm.flash(gettext('Error adding a movie'), 'error', vars.flashOptions);
       });
