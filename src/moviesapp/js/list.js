@@ -85,8 +85,23 @@ window.vm = new Vue({
     openUrl: function(url) {
       location.href = url;
     },
+    saveOptions: function(recordId) {
+      const options = {
+        original: $('#original_' + recordId).prop('checked'),
+        extended: $('#extended_' + recordId).prop('checked'),
+        theatre: $('#theatre_' + recordId).prop('checked'),
+      };
+
+      const data = $.param({
+        options: JSON.stringify(options),
+      });
+
+      axios.put(urls.urlRecord + recordId + '/options/', data).then(function() {}).catch(function() {
+        vm.flash(gettext('Error saving options'), 'error', vars.flashOptions);
+      });
+    },
     retinajs: retina,
-    switchMode: function switchMode(newMode) {
+    switchMode: function(newMode) {
       function deactivateModeMinimal() {
         $('.comment').each(function() {
           const el = $(this); // eslint-disable-line no-invalid-this

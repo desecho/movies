@@ -75,6 +75,22 @@ class SaveSettingsView(AjaxAnonymousView):
         return self.success()
 
 
+class SaveOptionsView(AjaxAnonymousView):
+    def put(self, request, **kwargs):
+        try:
+            record_id = kwargs['id']
+            options = json.loads(request.PUT['options'])
+        except KeyError:
+            return self.render_bad_request_response()
+
+        r = request.user.get_record(record_id)
+        r.watched_original = options['original']
+        r.watched_extended = options['extended']
+        r.watched_in_theatre = options['theatre']
+        r.save()
+        return self.success()
+
+
 class SaveCommentView(AjaxView):
     def put(self, request):
         PUT = request.PUT

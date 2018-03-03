@@ -9,12 +9,12 @@
       <div class="row">
         <div class="col-sm-12">
           <div class="btn-group btn-group-toggle" data-toggle="buttons">
-            <label class="btn btn-secondary {% ifequal list_id 1 %} active {% endifequal %}"
+            <label class="btn btn-secondary {% ifequal list 'watched' %} active {% endifequal %}"
                    title="{% trans 'Watched' %}"
                    @click="openUrl('{% url 'list' anothers_account.username 'watched' %}')">
               <input type="radio">{% trans 'Watched' %}
             </label>
-            <label class="btn btn-secondary {% ifequal list_id 2 %} active {% endifequal %}"
+            <label class="btn btn-secondary {% ifequal list 'to-watch' %} active {% endifequal %}"
                    title="{% trans 'To Watch' %}"
                    @click="openUrl('{% url 'list' anothers_account.username 'to-watch' %}')">
               <input type="radio">{% trans 'To Watch' %}
@@ -117,7 +117,7 @@
               {% endif %}
               <div class="add-to-list-buttons">
                 {% if not anothers_account %}
-                  {% ifequal list_id 2 %}
+                  {% ifequal list 'to-watch' %}
                     {% include 'includes/add_to_watched_list_button.html' %}
                   {% endifequal %}
                 {% else %}
@@ -173,7 +173,7 @@
                 <br>
               </div>
               <div class="review {% ifequal request.session.mode 'full' %} full {% endifequal %}">
-                {% ifequal list_id 1 %}
+                {% ifequal list 'watched' %}
                   <div class="rating" data-record-id="{{ record.id }}" data-rating="{{ record.rating }}"></div>
                   <div class="comment" id="comment-area{{ record.id }}"
                        style="display: {% if not record.comment %} none {% endif %}" data-id="{{ record.id }}">
@@ -195,11 +195,23 @@
                     </button>
                   {% endif %}
                   <br>
+                  {% if not anothers_account %}
+                    <div v-show="mode == 'full'">
+                      <label for="original_{{ record.id }}">Watched original version</label>
+                      <input @change="saveOptions({{ record.id }})" id="original_{{ record.id }}" type="checkbox" {% if record.watched_original %} checked {% endif %}>
+                      <br>
+                      <label for="extended_{{ record.id }}">Watched extended version</label>
+                      <input @change="saveOptions({{ record.id }})" id="extended_{{ record.id }}" type="checkbox" {% if record.watched_extended %} checked {% endif %}>
+                      <br>
+                      <label for="theatre_{{ record.id }}">Watched in theatre</label>
+                      <input @change="saveOptions({{ record.id }})" id="theatre_{{ record.id }}" type="checkbox" {% if record.watched_in_theatre %} checked {% endif %}>
+                    </div>
+                  {% endif %}
                 {% endifequal %}
               </div>
             </div>
             <div class="clearfix"></div>
-            {% if list_id == 2 and not anothers_account %}
+            {% if list == 'to-watch' and not anothers_account %}
               {% include 'includes/reviews.html' %}
             {% endif %}
           </div>
@@ -225,6 +237,7 @@
     urls.urlChangeRating = '{% url 'change_rating' %}';
     urls.urlRemoveRecord = '{% url 'remove_record' %}';
     urls.urlSaveSettings = '{% url 'save_settings' %}';
+    urls.urlRecord = '{% url 'record' %}';
     urls.urlAddToList = '{% url 'add_to_list' %}';
     urls.urlSaveComment = '{% url 'save_comment' %}';
     urls.urlUploadPosterToWall = '{% url 'upload_poster_to_wall' %}';

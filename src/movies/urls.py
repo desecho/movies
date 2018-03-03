@@ -16,6 +16,7 @@ from moviesapp.views.list import (
     RecommendationsView,
     RemoveRecordView,
     SaveCommentView,
+    SaveOptionsView,
     SaveSettingsView,
 )
 from moviesapp.views.search import (
@@ -66,6 +67,12 @@ urlpatterns = [
         name='remove_record',
         kwargs={'exception': Exception('Page not Found')}),
     re_path(r'remove-record/(?P<id>\d+)/', RemoveRecordView.as_view(), name='remove_record'),
+    path(
+        'record/',
+        django.views.defaults.page_not_found,
+        name='record',
+        kwargs={'exception': Exception('Page not Found')}),
+    re_path(r'record/(?P<id>\d+)/options/', SaveOptionsView.as_view(), name='save_options'),
     path(
         'add-to-list/',
         django.views.defaults.page_not_found,
