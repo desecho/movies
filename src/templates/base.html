@@ -13,11 +13,13 @@
   <title>{% block title %}Movies{% endblock %}</title>
 </head>
 <body>
-<div id="app">
+<div>
   <flash-message class="flashpool"></flash-message>
   {% include 'includes/menu.html' %}
-  <div id="content" class="container-fluid mt-3">
-    {% block content %}{% endblock %}
+  <div id="app">
+    <div id="content" class="container-fluid mt-3">
+      {% block content %}{% endblock %}
+    </div>
   </div>
 </div>
 {% include 'includes/footer.html' %}
