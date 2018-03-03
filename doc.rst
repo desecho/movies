@@ -12,6 +12,7 @@ Avatars
 ------------
 
 Priority:
+
 - Vk
 - Fb
 - Gravatar

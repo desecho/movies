@@ -31,9 +31,9 @@ Development
 
 Images
 -----------
-* [IMDb logo](https://commons.wikimedia.org/wiki/File:IMDB_Logo_2016.svg)
-* [Down arrow icon](https://www.iconfinder.com/icons/211614/arrow_b_down_icon)
-* [TMDb Logos](https://www.themoviedb.org/about/logos-attribution)
+* `IMDb logo <https://commons.wikimedia.org/wiki/File:IMDB_Logo_2016.svg>`_
+* `Down arrow icon <https://www.iconfinder.com/icons/211614/arrow_b_down_icon>`_
+* `TMDb Logos <https://www.themoviedb.org/about/logos-attribution>`_
 
 .. |Requirements Status| image:: https://requires.io/github/desecho/movies/requirements.svg?branch=master
    :target: https://requires.io/github/desecho/movies/requirements/?branch=master
