@@ -125,7 +125,8 @@ class UserBase:
 
     def _get_available_users_and_friends(self, sort=False):
         available_users = User.objects.exclude(only_for_friends=True).exclude(pk=self.pk)
-        users = available_users | self.get_friends()
+        # We need distinct here because we can't concatenate distinct and non-distinct querysets.
+        users = available_users.distinct() | self.get_friends()
         if sort:
             users = users.order_by('first_name')
         return list(set(users))
