@@ -10,8 +10,8 @@
       {% include 'includes/form_errors.html' %}
     </div>
     <div class="form-group row vk-app-hide" style="display: none;">
-      <label class="col-form-label col-sm-2" for="lang">{% trans 'Avatar' %}:</label>
-      <div class="col-sm-10">
+      <label class="col-form-label col-sm-4" for="lang">{% trans 'Avatar' %}:</label>
+      <div class="col-sm-8">
         {% avatar_big user %}
         {% if not user.is_linked %}
           <br>
@@ -21,7 +21,7 @@
     </div>
     {% for field in form %}
       <div class="form-group row">
-        <label class="col-form-label col-sm-2 preference-label"
+        <label class="col-form-label col-sm-4 preference-label"
                for="{{ field.id_for_label }}">{{ field.label }}:</label>
         <div class="col-sm-5 col-md-5 ">
           {{ field }}
@@ -32,14 +32,14 @@
       </div>
     {% endfor %}
     <div class="form-group row">
-      <label class="col-form-label col-sm-2">{% trans 'Password' %}:</label>
+      <label class="col-form-label col-sm-4">{% trans 'Password' %}:</label>
       <div class="col-sm-5 col-md-3">
         <a href="{% url 'admin:password_change' %}">{% trans 'Change password' %}</a>
       </div>
     </div>
 
     <div class="form-group row">
-      <label class="col-form-label col-sm-2"></label>
+      <label class="col-form-label col-sm-4"></label>
       <div class="col-sm-5 col-md-3">
         <input type="submit" class="btn btn-block btn-primary" value="{% trans 'Save' %}">
       </div>
