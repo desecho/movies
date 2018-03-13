@@ -43,7 +43,7 @@ function changeRating(id, rating, element) {
     Vue.prototype.$flashStorage.flash(gettext('Error adding a rating'), 'error', vars.flashOptions);
   }
 
-  const url = urls.urlChangeRating + id + '/';
+  const url = urls.changeRating + id + '/';
   const data = $.param({
     rating: rating,
   });
@@ -54,7 +54,7 @@ function applySettings(settings, reload = true) {
   const data = {
     settings: JSON.stringify(settings),
   };
-  axios.put(urls.urlSaveSettings, $.param(data)).then(function() {
+  axios.put(urls.saveSettings, $.param(data)).then(function() {
     if (reload) {
       location.reload();
     }
@@ -97,7 +97,7 @@ window.vm = new Vue({
         options: JSON.stringify(options),
       });
 
-      axios.put(urls.urlRecord + recordId + '/options/', data).then(function() {}).catch(function() {
+      axios.put(urls.record + recordId + '/options/', data).then(function() {}).catch(function() {
         vm.flash(gettext('Error saving options'), 'error', vars.flashOptions);
       });
     },
@@ -174,7 +174,7 @@ window.vm = new Vue({
         vm.flash(gettext('Error removing the movie'), 'error', vars.flashOptions);
       }
 
-      const url = urls.urlRemoveRecord + id + '/';
+      const url = urls.removeRecord + id + '/';
       axios.delete(url).then(success).catch(fail);
     },
     postToWall: function(id) {
@@ -234,7 +234,7 @@ window.vm = new Vue({
       }
 
       function uploadPhotoToWall(uploadUrl) {
-        const url = urls.urlUploadPosterToWall + id + '/';
+        const url = urls.uploadPosterToWall + id + '/';
         axios.post(url, $.param({
           url: uploadUrl,
         })).then(function(response) {
@@ -284,7 +284,7 @@ window.vm = new Vue({
         id: id,
         comment: comment,
       });
-      axios.put(urls.urlSaveComment, data).then(function() {
+      axios.put(urls.saveComment, data).then(function() {
         const commentAreaToggle = $('#comment_area_button' + id);
         if (comment) {
           commentAreaToggle.hide();

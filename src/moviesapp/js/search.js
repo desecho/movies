@@ -35,7 +35,7 @@ window.vm = new Vue({
         type: vm.searchTypeCode,
         options: JSON.stringify(options),
       };
-      const url = urls.urlSearchMovie + '?' + $.param(data);
+      const url = urls.searchMovie + '?' + $.param(data);
       axios.get(url).then(function(response) {
         if (response.data.movies.length === 0) {
           vm.flash(gettext('Nothing has been found'), 'info', vars.flashOptions);
@@ -52,7 +52,7 @@ window.vm = new Vue({
         movieId: movieId,
         listId: listId,
       };
-      axios.post(urls.urlAddToListFromDb, $.param(data)).then(function(response) {
+      axios.post(urls.addToListFromDb, $.param(data)).then(function(response) {
         if (response.data.status === 'not_found') {
           vm.flash(gettext('Movie is not found in the database'), 'error', vars.flashOptions);
           return;

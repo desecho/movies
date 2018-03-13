@@ -4,7 +4,7 @@ import axios from 'axios';
 
 
 export function addToList(movieId, listId, recordId) {
-  const url = urls.urlAddToList + movieId + '/';
+  const url = urls.addToList + movieId + '/';
   axios.post(url, $.param({
     listId: listId,
   })).then(function() {

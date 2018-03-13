@@ -235,13 +235,13 @@
     vars.sort = '{{ sort }}';
     vars.recommendation = {{ request.session.recommendation|yesno:'true,false' }};
     vars.anothersAccount = {{ anothers_account|yesno:'true,false' }};
-    urls.urlChangeRating = '{% url 'change_rating' %}';
-    urls.urlRemoveRecord = '{% url 'remove_record' %}';
-    urls.urlSaveSettings = '{% url 'save_settings' %}';
-    urls.urlRecord = '{% url 'record' %}';
-    urls.urlAddToList = '{% url 'add_to_list' %}';
-    urls.urlSaveComment = '{% url 'save_comment' %}';
-    urls.urlUploadPosterToWall = '{% url 'upload_poster_to_wall' %}';
+    urls.changeRating = '{% url 'change_rating' %}';
+    urls.removeRecord = '{% url 'remove_record' %}';
+    urls.saveSettings = '{% url 'save_settings' %}';
+    urls.record = '{% url 'record' %}';
+    urls.addToList = '{% url 'add_to_list' %}';
+    urls.saveComment = '{% url 'save_comment' %}';
+    urls.uploadPosterToWall = '{% url 'upload_poster_to_wall' %}';
   </script>
   <script src="{% static 'js/list.js' %}"></script>
 {% endblock %}
