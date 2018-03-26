@@ -38,6 +38,7 @@ EMAIL_HOST = local_settings.EMAIL_HOST
 EMAIL_HOST_USER = local_settings.EMAIL_HOST_USER
 EMAIL_HOST_PASSWORD = local_settings.EMAIL_HOST_PASSWORD
 EMAIL_PORT = local_settings.EMAIL_PORT
+DEFAULT_FROM_EMAIL = local_settings.ADMIN_EMAIL
 
 # Allowed hosts
 ALLOWED_HOSTS = [local_settings.PROJECT_DOMAIN]
@@ -376,6 +377,7 @@ RECORDS_ON_PAGE = 50
 PEOPLE_ON_PAGE = 25
 FEED_DAYS = 7
 ADMIN_EMAIL = local_settings.ADMIN_EMAIL
+
 VK_EN = 3
 VK_NO_AVATAR = ['https://vk.com/images/camera_100.png', 'https://vk.com/images/camera_200.png']
 
