@@ -88,6 +88,9 @@ class SaveOptionsView(AjaxAnonymousView):
         r.watched_extended = options['extended']
         r.watched_in_theatre = options['theatre']
         r.watched_in_4k = options['4k']
+        r.watched_in_hd = options['hd']
+        r.watched_in_full_hd = options['fullHd']
+        r.learned_words = options['words']
         r.save()
         return self.success()
 

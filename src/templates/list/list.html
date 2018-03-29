@@ -204,8 +204,17 @@
                       <label for="theatre_{{ record.id }}">Watched in theatre</label>
                       <input @change="saveOptions({{ record.id }})" id="theatre_{{ record.id }}" type="checkbox" {% if record.watched_in_theatre %} checked {% endif %}>
                       <br>
+                      <label for="hd_{{ record.id }}">{% trans 'Watched in HD' %}</label>
+                      <input @change="saveOptions({{ record.id }})" id="hd_{{ record.id }}" type="checkbox" {% if record.watched_in_hd %} checked {% endif %}>
+                      <br>
+                      <label for="full_hd_{{ record.id }}">{% trans 'Watched in FullHD' %}</label>
+                      <input @change="saveOptions({{ record.id }})" id="full_hd_{{ record.id }}" type="checkbox" {% if record.watched_in_full_hd %} checked {% endif %}>
+                      <br>
                       <label for="4k_{{ record.id }}">Watched in 4K</label>
                       <input @change="saveOptions({{ record.id }})" id="4k_{{ record.id }}" type="checkbox" {% if record.watched_in_4k %} checked {% endif %}>
+                      <br>
+                      <label for="words_{{ record.id }}">{% trans 'Learned words' %}</label>
+                      <input @change="saveOptions({{ record.id }})" id="words_{{ record.id }}" type="checkbox" {% if record.learned_words %} checked {% endif %}>
                     </div>
                   {% endif %}
                 {% endifequal %}
