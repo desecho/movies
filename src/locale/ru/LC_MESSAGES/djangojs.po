@@ -8,16 +8,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-04 00:33-0500\n"
-"PO-Revision-Date: 2018-03-03 02:19-0456\n"
-"Last-Translator: b'  <desecho@gmail.com>'\n"
+"POT-Creation-Date: 2018-03-29 03:24-0400\n"
+"PO-Revision-Date: 2018-03-29 03:26-0456\n"
+"Last-Translator: b'Anton Samarchyan <desecho@gmail.com>'\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Translated-Using: django-rosetta 0.8.1\n"
 
 #: moviesapp/js/init.js:59
@@ -56,53 +55,52 @@ msgstr "Ошибка добавления рейтинга"
 msgid "Error applying the settings"
 msgstr "Ошибка применения настроек"
 
-#: moviesapp/js/list.js:101
-#, fuzzy
+#: moviesapp/js/list.js:104
 #| msgid "Error saving settings"
 msgid "Error saving options"
-msgstr "Ошибка сохранения настроек"
+msgstr "Ошибка сохранения опций"
 
-#: moviesapp/js/list.js:174
+#: moviesapp/js/list.js:177
 msgid "Error removing the movie"
 msgstr "Ошибка удаления фильма"
 
-#: moviesapp/js/list.js:191
+#: moviesapp/js/list.js:194
 msgid "I recommend watching"
 msgstr "Я рекомендую к просмотру"
 
-#: moviesapp/js/list.js:193
+#: moviesapp/js/list.js:196
 msgid "I don't recommend watching"
 msgstr "Я не рекомендую к просмотру"
 
-#: moviesapp/js/list.js:195
+#: moviesapp/js/list.js:198
 msgid "My rating"
 msgstr "Моя оценка"
 
-#: moviesapp/js/list.js:219
+#: moviesapp/js/list.js:222
 msgid "Error posting to the wall"
 msgstr "Ошибка размещения на стену"
 
-#: moviesapp/js/list.js:221
+#: moviesapp/js/list.js:224
 msgid "Your post has been posted"
 msgstr "Ваша запись была размещена"
 
-#: moviesapp/js/list.js:229
+#: moviesapp/js/list.js:232
 msgid "Error posting a poster to the wall"
 msgstr "Ошибка размещения постера на стену"
 
-#: moviesapp/js/list.js:244
+#: moviesapp/js/list.js:247
 msgid "Error loading a poster"
 msgstr "Ошибка загрузки постера"
 
-#: moviesapp/js/list.js:251
+#: moviesapp/js/list.js:254
 msgid "Error getting an upload server for wall posting"
 msgstr "Ошибка получения сервера загрузки для размещения на стену"
 
-#: moviesapp/js/list.js:272
+#: moviesapp/js/list.js:275
 msgid "Add a rating to the movie"
 msgstr "Добавьте оценку фильму"
 
-#: moviesapp/js/list.js:297
+#: moviesapp/js/list.js:300
 msgid "Error saving a comment"
 msgstr "Ошибка сохранения комментария"
 

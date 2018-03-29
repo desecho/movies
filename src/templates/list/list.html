@@ -195,13 +195,13 @@
                   <br>
                   {% if not anothers_account %}
                     <div v-show="mode == 'full'">
-                      <label for="original_{{ record.id }}">Watched original version</label>
+                      <label for="original_{{ record.id }}">{% trans 'Watched original version' %}</label>
                       <input @change="saveOptions({{ record.id }})" id="original_{{ record.id }}" type="checkbox" {% if record.watched_original %} checked {% endif %}>
                       <br>
-                      <label for="extended_{{ record.id }}">Watched extended version</label>
+                      <label for="extended_{{ record.id }}">{% trans 'Watched extended version' %}</label>
                       <input @change="saveOptions({{ record.id }})" id="extended_{{ record.id }}" type="checkbox" {% if record.watched_extended %} checked {% endif %}>
                       <br>
-                      <label for="theatre_{{ record.id }}">Watched in theatre</label>
+                      <label for="theatre_{{ record.id }}">{% trans 'Watched in theatre' %}</label>
                       <input @change="saveOptions({{ record.id }})" id="theatre_{{ record.id }}" type="checkbox" {% if record.watched_in_theatre %} checked {% endif %}>
                       <br>
                       <label for="hd_{{ record.id }}">{% trans 'Watched in HD' %}</label>
@@ -210,7 +210,7 @@
                       <label for="full_hd_{{ record.id }}">{% trans 'Watched in FullHD' %}</label>
                       <input @change="saveOptions({{ record.id }})" id="full_hd_{{ record.id }}" type="checkbox" {% if record.watched_in_full_hd %} checked {% endif %}>
                       <br>
-                      <label for="4k_{{ record.id }}">Watched in 4K</label>
+                      <label for="4k_{{ record.id }}">{% trans 'Watched in 4K' %}</label>
                       <input @change="saveOptions({{ record.id }})" id="4k_{{ record.id }}" type="checkbox" {% if record.watched_in_4k %} checked {% endif %}>
                       <br>
                       <label for="words_{{ record.id }}">{% trans 'Learned words' %}</label>

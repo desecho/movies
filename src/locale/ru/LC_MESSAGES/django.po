@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-04 00:33-0500\n"
-"PO-Revision-Date: 2018-03-04 00:34-0456\n"
+"POT-Creation-Date: 2018-03-29 03:24-0400\n"
+"PO-Revision-Date: 2018-03-29 03:26-0456\n"
 "Last-Translator: b'Anton Samarchyan <desecho@gmail.com>'\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -53,19 +53,19 @@ msgstr "Рекоммендации"
 msgid "Feed"
 msgstr "Лента"
 
-#: moviesapp/models.py:154
+#: moviesapp/models.py:155
 msgid "Privacy"
 msgstr "Конфиденциальность"
 
-#: moviesapp/models.py:154
+#: moviesapp/models.py:155
 msgid "Show my lists only to friends"
 msgstr "Показывать мои списки только друзьям"
 
-#: moviesapp/models.py:155
+#: moviesapp/models.py:156
 msgid "Language"
 msgstr "Язык"
 
-#: moviesapp/models.py:156
+#: moviesapp/models.py:157
 msgid "Location"
 msgstr "Местонахождение"
 
@@ -73,7 +73,7 @@ msgstr "Местонахождение"
 msgid "Actor"
 msgstr "Актёр"
 
-#: moviesapp/translations.py:6 templates/list/list.html:148
+#: moviesapp/translations.py:6 templates/list/list.html:146
 #: templates/list/recommendations.html:31 templates/search.html:23
 msgid "Director"
 msgstr "Режиссёр"
@@ -84,32 +84,6 @@ msgid "About Movies"
 msgstr "О Movies"
 
 #: templates/about.html:8
-#| msgid ""
-#| "\n"
-#| "    <p>Create movie lists (\"Watched\" and \"To watch\"), rate movies and add comments.</p>\n"
-#| "    <p>The website is <a href=\"http://movies.desecho.org\" target=\"_blank\">http://movies.desecho.org</a>.</p>\n"
-#| "    <p>There is a \"Movies\" <a href=\"https://vk.com/app3504693_2912142\" target=\"_blank\">VK app</a> available.</p>\n"
-#| "    <p>To use the app in Chrome, open Cookies settings (<a href=\"chrome://settings/content/cookies\">chrome://settings/content/cookies</a>)\n"
-#| "      and disable \"Block third-party cookies\".</p>\n"
-#| "    <p>Rating system:</p>\n"
-#| "    <ul>\n"
-#| "      <li>1 - Awful\n"
-#| "      <li>2 - Bad\n"
-#| "      <li>3 - Ok\n"
-#| "      <li>4 - Good\n"
-#| "      <li>5 - Excellent\n"
-#| "    </ul>\n"
-#| "    <p>If you have problems with account activation or other issues, questions or feedback email me at <a\n"
-#| "      href=\"mailto:desecho@gmail.com\">desecho@gmail.com</a>.</p>\n"
-#| "    <p>Development:</p>\n"
-#| "    <p>The APIs used in \"Movies\" are: </p>\n"
-#| "    <ul>\n"
-#| "      <li><a href=\"https://www.themoviedb.org/\" target=\"_blank\">TMDb</a>\n"
-#| "      <li><a href=\"https://www.omdbapi.com/\" target=\"_blank\">OMDb</a>\n"
-#| "    </ul>\n"
-#| "    <p>The source code is available on GitHub -\n"
-#| "    <a href=\"https://github.com/desecho/movies\" target=\"_blank\">Movies</a>.\n"
-#| "  "
 msgid ""
 "\n"
 "    <p>Create movie lists (\"Watched\" and \"To watch\"), rate movies and add comments.</p>\n"
@@ -223,65 +197,95 @@ msgstr "Сортировать по дате добавления"
 msgid "Date added"
 msgstr "Дата добавления"
 
-#: templates/list/list.html:111
+#: templates/list/list.html:109
 msgid "Delete"
 msgstr "Удалить"
 
-#: templates/list/list.html:115
+#: templates/list/list.html:113
 msgid "Post to the wall"
 msgstr "Отправить на стену"
 
-#: templates/list/list.html:137 templates/list/recommendations.html:21
+#: templates/list/list.html:135 templates/list/recommendations.html:21
 msgid "IMDb Rating"
 msgstr "IMDb Рейтинг"
 
-#: templates/list/list.html:142 templates/list/recommendations.html:26
+#: templates/list/list.html:140 templates/list/recommendations.html:26
 msgid "Release Date"
 msgstr "Дата Выпуска"
 
-#: templates/list/list.html:146 templates/list/recommendations.html:29
+#: templates/list/list.html:144 templates/list/recommendations.html:29
 msgid "Country"
 msgstr "Страна"
 
-#: templates/list/list.html:150 templates/list/recommendations.html:33
+#: templates/list/list.html:148 templates/list/recommendations.html:33
 msgid "Writer"
 msgstr "Сценарист"
 
-#: templates/list/list.html:152 templates/list/recommendations.html:35
+#: templates/list/list.html:150 templates/list/recommendations.html:35
 msgid "Genre"
 msgstr "Жанр"
 
-#: templates/list/list.html:154 templates/list/recommendations.html:37
+#: templates/list/list.html:152 templates/list/recommendations.html:37
 msgid "Actors"
 msgstr "Актёры"
 
-#: templates/list/list.html:156 templates/list/recommendations.html:39
+#: templates/list/list.html:154 templates/list/recommendations.html:39
 msgid "Runtime"
 msgstr "Длительность"
 
-#: templates/list/list.html:158 templates/list/recommendations.html:41
+#: templates/list/list.html:156 templates/list/recommendations.html:41
 msgid "Description"
 msgstr "Описание"
 
-#: templates/list/list.html:161 templates/list/recommendations.html:44
+#: templates/list/list.html:159 templates/list/recommendations.html:44
 msgid "Website"
 msgstr "Вебсайт"
 
-#: templates/list/list.html:165 templates/list/recommendations.html:48
+#: templates/list/list.html:163 templates/list/recommendations.html:48
 msgid "Trailers"
 msgstr "Трейлеры"
 
-#: templates/list/list.html:181
+#: templates/list/list.html:179
 msgid "Comment"
 msgstr "Комментарий"
 
-#: templates/list/list.html:183 templates/user/preferences.html:44
+#: templates/list/list.html:181 templates/user/preferences.html:44
 msgid "Save"
 msgstr "Сохранить"
 
-#: templates/list/list.html:191
+#: templates/list/list.html:189
 msgid "Add comment"
 msgstr "Добавить комментарий"
+
+#: templates/list/list.html:198
+msgid "Watched original version"
+msgstr "Смотрел в оригинале"
+
+#: templates/list/list.html:201
+msgid "Watched extended version"
+msgstr "Смотрел расширенную версию"
+
+#: templates/list/list.html:204
+msgid "Watched in theatre"
+msgstr "Смотрел в кинотеатре"
+
+#: templates/list/list.html:207
+#| msgid "Watched"
+msgid "Watched in HD"
+msgstr "Смотрел в HD"
+
+#: templates/list/list.html:210
+msgid "Watched in FullHD"
+msgstr "Смотрел в FullHD"
+
+#: templates/list/list.html:213
+#| msgid "Watched"
+msgid "Watched in 4K"
+msgstr "Смотрел в 4K"
+
+#: templates/list/list.html:216
+msgid "Learned words"
+msgstr "Выучил слова"
 
 #: templates/registration/password_change_done.html:7
 msgid "Your password was changed."
