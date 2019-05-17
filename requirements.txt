@@ -1,11 +1,11 @@
 # Django
-Django==2.0.3
+Django==2.0.13
 django-annoying==0.10.4
 django-simple-menu==1.2.1
-django-rosetta==0.8.1
-django-braces==1.12.0
+django-rosetta==0.9.3
+django-braces==1.13.0
 django-tqdm==0.0.3
-django-registration-redux==2.2
+django-registration-redux==2.6
 
 # django-google-analytics-app==4.1.0
 # Open PR - https://github.com/praekelt/django-google-analytics/pull/38 - Django 2 support
@@ -15,7 +15,7 @@ django-registration-redux==2.2
 # Use GitHub because the version with required fix is only on GitHub
 -e git+https://github.com/bugov/django-custom-anonymous.git@e2a208dfe3240f42d3a2e1400bc9021a28e1ca15#egg=django-custom-anonymous
 
-social-auth-app-django==2.1.0
+social-auth-app-django==3.1.0
 
 # django-bootstrap-pagination==1.6.2
 # Contains open PRs:
@@ -35,17 +35,17 @@ social-auth-app-django==2.1.0
 
 
 # Requests
-requests==2.18.4
-requests-toolbelt==0.8.0
+requests==2.22.0
+requests-toolbelt==0.9.1
 
 
 # Dates
 python-dateutil==2.6.1
-Babel==2.5.3
+Babel==2.6.0
 
 
 # Social
-facebook-sdk==2.0.0
+facebook-sdk==3.1.0
 
 # vkontakte==1.3.5
 # e27a433cf757a1689ea698339dee9c998acc4ec1
@@ -57,8 +57,8 @@ facebook-sdk==2.0.0
 
 
 mysqlclient==1.3.12
-raven==6.6.0
-tabulate==0.8.2
+raven==6.10.0
+tabulate==0.8.3
 
 # tmdbsimple==2.1.0
 # 528b027aace64ebd33f15c3a80fdcefbebc0922c
