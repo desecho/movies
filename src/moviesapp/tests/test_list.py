@@ -9,6 +9,8 @@ from .base import BaseTestLoginCase
 
 class AddMoviesTestCase(BaseTestLoginCase):
     """
+    Test Add Movies.
+
     Dumpdata commands:
     manage dumpdata moviesapp.Movie --indent 2 > moviesapp/fixtures/movies.json
     manage dumpdata moviesapp.Record --indent 2 > moviesapp/fixtures/records.json
@@ -23,6 +25,7 @@ class AddMoviesTestCase(BaseTestLoginCase):
         - Added "Avengers" to his "Watched" list
 
     """
+
     fixtures = [
         'users.json',
         'lists.json',
@@ -31,15 +34,6 @@ class AddMoviesTestCase(BaseTestLoginCase):
         'records.json',
         'action_records.json',
     ]
-
-    def test_people_watched_404(self):
-        url = reverse(
-            'people', args=(
-                'user',
-                'watched',
-            ))
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, 404)
 
     def test_list_watched(self):
         url = reverse('list', args=('watched', ))
@@ -52,7 +46,7 @@ class AddMoviesTestCase(BaseTestLoginCase):
         conter_watched = counters[0].get_text().strip()
         conter_to_watch = counters[1].get_text().strip()
         self.assertEqual(conter_watched, '3')
-        self.assertEqual(conter_to_watch, '1')
+        self.assertEqual(conter_to_watch, "1")
 
     def test_list_search(self):
         url = reverse('list', args=('watched', ))

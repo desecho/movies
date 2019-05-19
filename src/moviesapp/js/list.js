@@ -87,9 +87,9 @@ window.vm = new Vue({
     },
     saveOptions: function(recordId) {
       const options = {
-        original: $('#original_' + recordId).prop('checked'),
-        extended: $('#extended_' + recordId).prop('checked'),
-        theatre: $('#theatre_' + recordId).prop('checked'),
+        'original': $('#original_' + recordId).prop('checked'),
+        'extended': $('#extended_' + recordId).prop('checked'),
+        'theatre': $('#theatre_' + recordId).prop('checked'),
         'hd': $('#hd_' + recordId).prop('checked'),
         'fullHd': $('#full_hd_' + recordId).prop('checked'),
         '4k': $('#4k_' + recordId).prop('checked'),

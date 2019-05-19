@@ -102,18 +102,18 @@ class SaveCommentView(AjaxView):
             record_id = int(PUT['id'])
         except (KeyError, ValueError):
             return self.render_bad_request_response()
-        self.record = request.user.get_record(record_id)
+        record = request.user.get_record(record_id)
         try:
             comment = PUT['comment']
         except KeyError:
             return self.render_bad_request_response()
 
-        r = self.record
-        if r.comment != comment:
-            if not r.comment:
-                ActionRecord(action_id=Action.ADDED_COMMENT, user=request.user, movie=r.movie, comment=comment).save()
-            r.comment = comment
-            r.save()
+        if record.comment != comment:
+            if not record.comment:
+                ActionRecord(
+                    action_id=Action.ADDED_COMMENT, user=request.user, movie=record.movie, comment=comment).save()
+            record.comment = comment
+            record.save()
         return self.success()
 
 
