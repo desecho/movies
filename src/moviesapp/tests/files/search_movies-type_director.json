@@ -1,115 +1,153 @@
 [{
-  "releaseDate": "Nov 12, 1999",
-  "poster": "http://image.tmdb.org/t/p/w92/c4z6u46AyH3dflgVJLXHbo3lx0U.jpg",
-  "popularity": 3,
   "id": 1832,
-  "title": "Dogma"
+  "tmdbLink": "https://www.themoviedb.org/movie/1832",
+  "elementId": "movie1832",
+  "releaseDate": "Nov 12, 1999",
+  "title": "Dogma",
+  "poster": "http://image.tmdb.org/t/p/w92/c4z6u46AyH3dflgVJLXHbo3lx0U.jpg",
+  "poster2x": "http://image.tmdb.org/t/p/w185/c4z6u46AyH3dflgVJLXHbo3lx0U.jpg"
 }, {
-  "releaseDate": "Apr 4, 1997",
-  "poster": "http://image.tmdb.org/t/p/w92/4vFJileWrCGaBeobCmF0tXpQCUb.jpg",
-  "popularity": 3,
   "id": 2255,
-  "title": "Chasing Amy"
+  "tmdbLink": "https://www.themoviedb.org/movie/2255",
+  "elementId": "movie2255",
+  "releaseDate": "Apr 4, 1997",
+  "title": "Chasing Amy",
+  "poster": "http://image.tmdb.org/t/p/w92/4vFJileWrCGaBeobCmF0tXpQCUb.jpg",
+  "poster2x": "http://image.tmdb.org/t/p/w185/4vFJileWrCGaBeobCmF0tXpQCUb.jpg"
 }, {
-  "releaseDate": "Sep 13, 1994",
-  "poster": "http://image.tmdb.org/t/p/w92/dmNytzvQTjylI83qrgDoS1KQ0ev.jpg",
-  "popularity": 3,
   "id": 2292,
-  "title": "Clerks"
+  "tmdbLink": "https://www.themoviedb.org/movie/2292",
+  "elementId": "movie2292",
+  "releaseDate": "Sep 13, 1994",
+  "title": "Clerks",
+  "poster": "http://image.tmdb.org/t/p/w92/dmNytzvQTjylI83qrgDoS1KQ0ev.jpg",
+  "poster2x": "http://image.tmdb.org/t/p/w185/dmNytzvQTjylI83qrgDoS1KQ0ev.jpg"
 }, {
-  "releaseDate": "Oct 20, 1995",
-  "poster": "http://image.tmdb.org/t/p/w92/4saVIltqkhq9is5NmD7N87Q40M.jpg",
-  "popularity": 3,
   "id": 2293,
-  "title": "Mallrats"
+  "tmdbLink": "https://www.themoviedb.org/movie/2293",
+  "elementId": "movie2293",
+  "releaseDate": "Oct 20, 1995",
+  "title": "Mallrats",
+  "poster": "http://image.tmdb.org/t/p/w92/4saVIltqkhq9is5NmD7N87Q40M.jpg",
+  "poster2x": "http://image.tmdb.org/t/p/w185/4saVIltqkhq9is5NmD7N87Q40M.jpg"
 }, {
-  "releaseDate": "Aug 22, 2001",
-  "poster": "http://image.tmdb.org/t/p/w92/8xI9g6su8aKwg3Nk5qUnS025NyA.jpg",
-  "popularity": 3,
   "id": 2294,
-  "title": "Jay and Silent Bob Strike Back"
+  "tmdbLink": "https://www.themoviedb.org/movie/2294",
+  "elementId": "movie2294",
+  "releaseDate": "Aug 22, 2001",
+  "title": "Jay and Silent Bob Strike Back",
+  "poster": "http://image.tmdb.org/t/p/w92/8xI9g6su8aKwg3Nk5qUnS025NyA.jpg",
+  "poster2x": "http://image.tmdb.org/t/p/w185/8xI9g6su8aKwg3Nk5qUnS025NyA.jpg"
 }, {
-  "releaseDate": "May 25, 2006",
-  "poster": "http://image.tmdb.org/t/p/w92/luPEGTlN8egktVeomdf2nEap5SP.jpg",
-  "popularity": 3,
   "id": 2295,
-  "title": "Clerks II"
+  "tmdbLink": "https://www.themoviedb.org/movie/2295",
+  "elementId": "movie2295",
+  "releaseDate": "May 25, 2006",
+  "title": "Clerks II",
+  "poster": "http://image.tmdb.org/t/p/w92/luPEGTlN8egktVeomdf2nEap5SP.jpg",
+  "poster2x": "http://image.tmdb.org/t/p/w185/luPEGTlN8egktVeomdf2nEap5SP.jpg"
 }, {
-  "releaseDate": "Sep 18, 2008",
-  "poster": "http://image.tmdb.org/t/p/w92/zxwEJBhSSu5AuKTTd4ugWaCqmg.jpg",
-  "popularity": 3,
   "id": 10358,
-  "title": "Zack and Miri Make a Porno"
+  "tmdbLink": "https://www.themoviedb.org/movie/10358",
+  "elementId": "movie10358",
+  "releaseDate": "Sep 18, 2008",
+  "title": "Zack and Miri Make a Porno",
+  "poster": "http://image.tmdb.org/t/p/w92/zxwEJBhSSu5AuKTTd4ugWaCqmg.jpg",
+  "poster2x": "http://image.tmdb.org/t/p/w185/zxwEJBhSSu5AuKTTd4ugWaCqmg.jpg"
 }, {
-  "releaseDate": "Feb 26, 2010",
-  "poster": "http://image.tmdb.org/t/p/w92/cSkPYnVsD7MRNXPhkhBv3Mcxx39.jpg",
-  "popularity": 3,
   "id": 23742,
-  "title": "Cop Out"
+  "tmdbLink": "https://www.themoviedb.org/movie/23742",
+  "elementId": "movie23742",
+  "releaseDate": "Feb 26, 2010",
+  "title": "Cop Out",
+  "poster": "http://image.tmdb.org/t/p/w92/cSkPYnVsD7MRNXPhkhBv3Mcxx39.jpg",
+  "poster2x": "http://image.tmdb.org/t/p/w185/cSkPYnVsD7MRNXPhkhBv3Mcxx39.jpg"
 }, {
-  "releaseDate": "Mar 25, 2004",
-  "poster": "http://image.tmdb.org/t/p/w92/d8Qf8wVQV3K4Nl3KBuVNHMBCxgw.jpg",
-  "popularity": 3,
   "id": 9541,
-  "title": "Jersey Girl"
+  "tmdbLink": "https://www.themoviedb.org/movie/9541",
+  "elementId": "movie9541",
+  "releaseDate": "Mar 25, 2004",
+  "title": "Jersey Girl",
+  "poster": "http://image.tmdb.org/t/p/w92/d8Qf8wVQV3K4Nl3KBuVNHMBCxgw.jpg",
+  "poster2x": "http://image.tmdb.org/t/p/w185/d8Qf8wVQV3K4Nl3KBuVNHMBCxgw.jpg"
 }, {
-  "releaseDate": "Aug 19, 2011",
-  "poster": "http://image.tmdb.org/t/p/w92/h43jPTebYOabSXqNQqrRQpg6DPc.jpg",
-  "popularity": 3,
   "id": 48572,
-  "title": "Red State"
+  "tmdbLink": "https://www.themoviedb.org/movie/48572",
+  "elementId": "movie48572",
+  "releaseDate": "Aug 19, 2011",
+  "title": "Red State",
+  "poster": "http://image.tmdb.org/t/p/w92/h43jPTebYOabSXqNQqrRQpg6DPc.jpg",
+  "poster2x": "http://image.tmdb.org/t/p/w185/h43jPTebYOabSXqNQqrRQpg6DPc.jpg"
 }, {
-  "releaseDate": "Feb 27, 2002",
-  "poster": "http://image.tmdb.org/t/p/w92/mEeDMfjUaB266eGC19QljuYZb8D.jpg",
-  "popularity": 3,
   "id": 87233,
-  "title": "Clerks - The Flying Car"
+  "tmdbLink": "https://www.themoviedb.org/movie/87233",
+  "elementId": "movie87233",
+  "releaseDate": "Feb 27, 2002",
+  "title": "Clerks - The Flying Car",
+  "poster": "http://image.tmdb.org/t/p/w92/mEeDMfjUaB266eGC19QljuYZb8D.jpg",
+  "poster2x": "http://image.tmdb.org/t/p/w185/mEeDMfjUaB266eGC19QljuYZb8D.jpg"
 }, {
-  "releaseDate": "Jan 30, 1992",
-  "poster": "http://image.tmdb.org/t/p/w92/cTE1bar12i6UzqpA3C2VwTUGlkg.jpg",
-  "popularity": 3,
   "id": 160020,
-  "title": "Mae Day: The Crumbling of a Documentary"
+  "tmdbLink": "https://www.themoviedb.org/movie/160020",
+  "elementId": "movie160020",
+  "releaseDate": "Jan 30, 1992",
+  "title": "Mae Day: The Crumbling of a Documentary",
+  "poster": "http://image.tmdb.org/t/p/w92/cTE1bar12i6UzqpA3C2VwTUGlkg.jpg",
+  "poster2x": "http://image.tmdb.org/t/p/w185/cTE1bar12i6UzqpA3C2VwTUGlkg.jpg"
 }, {
-  "releaseDate": null,
-  "poster": "/static/img/no_poster_small.png",
-  "popularity": 3,
   "id": 182812,
-  "title": "Clerks III"
-}, {
-  "releaseDate": "Oct 2, 2012",
-  "poster": "http://image.tmdb.org/t/p/w92/qKkLkSCxiIAqXrFQFEqN8AeGEw2.jpg",
-  "popularity": 3,
-  "id": 177361,
-  "title": "Jay and Silent Bob Get Irish: The Swearing o' The Green!"
-}, {
-  "releaseDate": "Sep 19, 2014",
-  "poster": "http://image.tmdb.org/t/p/w92/ntxILPesM4IRumijc1DRJQTks9t.jpg",
-  "popularity": 3,
-  "id": 246403,
-  "title": "Tusk"
-}, {
-  "releaseDate": "Jul 8, 2016",
-  "poster": "http://image.tmdb.org/t/p/w92/t9K1uUCJsbrFGKYivSH1JBPfvyc.jpg",
-  "popularity": 3,
-  "id": 290825,
-  "title": "Yoga Hosers"
-}, {
-  "releaseDate": "Apr 22, 2016",
-  "poster": "http://image.tmdb.org/t/p/w92/sk9jHoHni5u88SMK4nJKumcM7eR.jpg",
-  "popularity": 3,
-  "id": 323262,
-  "title": "Holidays"
-}, {
+  "tmdbLink": "https://www.themoviedb.org/movie/182812",
+  "elementId": "movie182812",
   "releaseDate": null,
+  "title": "Clerks III",
   "poster": "/static/img/no_poster_small.png",
-  "popularity": 3,
-  "id": 440762,
-  "title": "Jay and Silent Bob Reboot"
+  "poster2x": "/static/img/no_poster_normal.png"
 }, {
+  "id": 177361,
+  "tmdbLink": "https://www.themoviedb.org/movie/177361",
+  "elementId": "movie177361",
+  "releaseDate": "Oct 2, 2012",
+  "title": "Jay and Silent Bob Get Irish: The Swearing o' The Green!",
+  "poster": "http://image.tmdb.org/t/p/w92/qKkLkSCxiIAqXrFQFEqN8AeGEw2.jpg",
+  "poster2x": "http://image.tmdb.org/t/p/w185/qKkLkSCxiIAqXrFQFEqN8AeGEw2.jpg"
+}, {
+  "id": 246403,
+  "tmdbLink": "https://www.themoviedb.org/movie/246403",
+  "elementId": "movie246403",
+  "releaseDate": "Sep 19, 2014",
+  "title": "Tusk",
+  "poster": "http://image.tmdb.org/t/p/w92/ntxILPesM4IRumijc1DRJQTks9t.jpg",
+  "poster2x": "http://image.tmdb.org/t/p/w185/ntxILPesM4IRumijc1DRJQTks9t.jpg"
+}, {
+  "id": 290825,
+  "tmdbLink": "https://www.themoviedb.org/movie/290825",
+  "elementId": "movie290825",
+  "releaseDate": "Jul 8, 2016",
+  "title": "Yoga Hosers",
+  "poster": "http://image.tmdb.org/t/p/w92/t9K1uUCJsbrFGKYivSH1JBPfvyc.jpg",
+  "poster2x": "http://image.tmdb.org/t/p/w185/t9K1uUCJsbrFGKYivSH1JBPfvyc.jpg"
+}, {
+  "id": 323262,
+  "tmdbLink": "https://www.themoviedb.org/movie/323262",
+  "elementId": "movie323262",
+  "releaseDate": "Apr 22, 2016",
+  "title": "Holidays",
+  "poster": "http://image.tmdb.org/t/p/w92/sk9jHoHni5u88SMK4nJKumcM7eR.jpg",
+  "poster2x": "http://image.tmdb.org/t/p/w185/sk9jHoHni5u88SMK4nJKumcM7eR.jpg"
+}, {
+  "id": 440762,
+  "tmdbLink": "https://www.themoviedb.org/movie/440762",
+  "elementId": "movie440762",
   "releaseDate": null,
-  "poster": "http://image.tmdb.org/t/p/w92/xw3RihoqKLuq9ULe2G4EqaHxhlZ.jpg",
-  "popularity": 3,
+  "title": "Jay and Silent Bob Reboot",
+  "poster": "/static/img/no_poster_small.png",
+  "poster2x": "/static/img/no_poster_normal.png"
+}, {
   "id": 405180,
-  "title": "Moose Jaws"
+  "tmdbLink": "https://www.themoviedb.org/movie/405180",
+  "elementId": "movie405180",
+  "releaseDate": null,
+  "title": "Moose Jaws",
+  "poster": "http://image.tmdb.org/t/p/w92/xw3RihoqKLuq9ULe2G4EqaHxhlZ.jpg",
+  "poster2x": "http://image.tmdb.org/t/p/w185/xw3RihoqKLuq9ULe2G4EqaHxhlZ.jpg"
 }]

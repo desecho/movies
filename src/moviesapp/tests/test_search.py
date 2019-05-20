@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 
 import pytest
+import tmdbsimple
 from django.urls import reverse
+from flexmock import flexmock
 
 from .base import BaseTestCase
 
@@ -15,16 +17,14 @@ class SearchMoviesAnonymousTestCase(BaseTestCase):
 
     def test_search_view(self):
         url = reverse('search')
-        response = self.client.get(url)
-        soup = self.get_soup(response)
-        self.assertTrue(soup.find('form', id='search'))
+        self.client.get(url)
 
     @pytest.fixture(autouse=True)
     def run_requests(self, mocker, client):
         def get_response(type_, options):
             if type_ == 'movie':
-                mockfile = 'search_movies-movie-tmdb.json'
                 query = 'Matrix'
+                mockfile = 'search_movies-movie-tmdb.json'
             elif type_ == 'actor':
                 mockfile_movies = 'search_movies-cast-tmdb.json'
                 mockfile_person = 'search_movies-person-actor-tmdb.json'
@@ -47,11 +47,15 @@ class SearchMoviesAnonymousTestCase(BaseTestCase):
                 tmdbsimple_person.return_value = self.load_json(mockfile_person)
 
                 if type_ == 'actor':
-                    tmdbsimple_cast = mocker.patch('tmdbsimple.people.People.cast', create=True)
-                    tmdbsimple_cast.return_value = self.load_json(mockfile_movies)
+                    people_mock = flexmock()
+                    people_mock.cast = self.load_json(mockfile_movies)
+                    people_mock.combined_credits = lambda: None
+                    flexmock(tmdbsimple.people.People).new_instances(people_mock)
                 if type_ == 'director':
-                    tmdbsimple_crew = mocker.patch('tmdbsimple.people.People.crew', create=True)
-                    tmdbsimple_crew.return_value = self.load_json(mockfile_movies)
+                    people_mock = flexmock()
+                    people_mock.crew = self.load_json(mockfile_movies)
+                    people_mock.combined_credits = lambda: None
+                    flexmock(tmdbsimple.people.People).new_instances(people_mock)
 
                 # Don't send API requests which don't make sense.
                 tmdbsimple_GET = mocker.patch('tmdbsimple.base.TMDB._GET')
@@ -62,33 +66,33 @@ class SearchMoviesAnonymousTestCase(BaseTestCase):
             return self.get_json(response)
 
         url = reverse('search_movie')
-        self.response_type_movie = get_response('movie', 'popularOnly=false&sortByDate=false')
-        self.response_type_movie_popular = get_response('movie', 'popularOnly=true&sortByDate=false')
-        self.response_type_movie_sorted = get_response('movie', 'popularOnly=false&sortByDate=true')
-        self.response_type_actor = get_response('actor', 'popularOnly=false&sortByDate=false')
-        self.response_type_director = get_response('director', 'popularOnly=false&sortByDate=false')
+        self.response_type_movie = get_response('movie', '{"popularOnly":false,"sortByDate":false}')
+        self.response_type_movie_popular = get_response('movie', '{"popularOnly":true,"sortByDate":false}')
+        self.response_type_movie_sorted = get_response('movie', '{"popularOnly":false,"sortByDate":true}')
+        self.response_type_actor = get_response('actor', '{"popularOnly":false,"sortByDate":false}')
+        self.response_type_director = get_response('director', '{"popularOnly":false,"sortByDate":false}')
 
     def test_type_movie(self):
         self.assertEqual(self.response_type_movie['status'], 'success')
         self.assertEqual(self.response_type_movie['movies'], self.load_json('search_movies-type_movie.json'))
 
-    # def test_type_movie_popular(self):
-    #     self.assertEqual(self.response_type_movie_popular['status'], 'success')
-    #     self.assertEqual(self.response_type_movie_popular['movies'],
-    #                      self.load_json('search_movies-type_movie-popular.json'))
+    def test_type_movie_popular(self):
+        self.assertEqual(self.response_type_movie_popular['status'], 'success')
+        self.assertEqual(self.response_type_movie_popular['movies'],
+                         self.load_json('search_movies-type_movie-popular.json'))
 
     def test_type_movie_sorted(self):
         self.assertEqual(self.response_type_movie_sorted['status'], 'success')
         self.assertEqual(self.response_type_movie_sorted['movies'],
                          self.load_json('search_movies-type_movie-sorted.json'))
 
-    # def test_type_actor(self):
-    #     self.assertEqual(self.response_type_actor['status'], 'success')
-    #     self.assertEqual(self.response_type_actor['movies'], self.load_json('search_movies-type_actor.json'))
+    def test_type_actor(self):
+        self.assertEqual(self.response_type_actor['status'], 'success')
+        self.assertEqual(self.response_type_actor['movies'], self.load_json('search_movies-type_actor.json'))
 
-    # def test_type_director(self):
-    #     self.assertEqual(self.response_type_director['status'], 'success')
-    #     self.assertEqual(self.response_type_director['movies'], self.load_json('search_movies-type_director.json'))
+    def test_type_director(self):
+        self.assertEqual(self.response_type_director['status'], 'success')
+        self.assertEqual(self.response_type_director['movies'], self.load_json('search_movies-type_director.json'))
 
 
 # class AddMoviesTestCase(BaseTestLoginCase):

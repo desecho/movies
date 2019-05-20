@@ -99,7 +99,7 @@ def get_movies_from_tmdb(query, search_type, options, user, lang):
 
             movie = {
                 'id': tmdb_id,
-                'imdbLink': f'{settings.TMDB_MOVIE_BASE_URL}{tmdb_id}',
+                'tmdbLink': f'{settings.TMDB_MOVIE_BASE_URL}{tmdb_id}',
                 'elementId': f'movie{tmdb_id}',
                 'releaseDate': movie['release_date'],
                 'title': movie['title'],
