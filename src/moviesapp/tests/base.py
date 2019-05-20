@@ -31,7 +31,7 @@ class BaseTestCase(TestCase):
 
     @staticmethod
     def get_soup(response):
-        return BeautifulSoup(response.content)
+        return BeautifulSoup(response.content, features='html.parser')
 
     def get_json(self, response):
         return json.loads(self.get_content(response))
