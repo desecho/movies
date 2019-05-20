@@ -28,8 +28,10 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='user',
             name='language',
-            field=models.CharField(
-                choices=[('en', 'English'), ('ru', 'Русский')], default='en', max_length=2, verbose_name='Language'),
+            field=models.CharField(choices=[('en', 'English'), ('ru', 'Русский')],
+                                   default='en',
+                                   max_length=2,
+                                   verbose_name='Language'),
         ),
         migrations.AlterField(
             model_name='user',
@@ -39,7 +41,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='user',
             name='only_for_friends',
-            field=models.BooleanField(
-                default=False, help_text='Show my lists only to friends', verbose_name='Privacy'),
+            field=models.BooleanField(default=False, help_text='Show my lists only to friends',
+                                      verbose_name='Privacy'),
         ),
     ]

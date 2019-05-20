@@ -27,8 +27,8 @@ class Vk:
         friends_ids = map(str, friends)
 
         # We need to use distinct here because the same user can have several VK backends (both app and oauth)
-        friends = User.objects.filter(
-            social_auth__provider__in=settings.VK_BACKENDS, social_auth__uid__in=friends_ids).distinct()
+        friends = User.objects.filter(social_auth__provider__in=settings.VK_BACKENDS,
+                                      social_auth__uid__in=friends_ids).distinct()
         return friends
 
     def get_data(self, fields):
@@ -151,8 +151,9 @@ class UserBase:
 
 
 class User(AbstractUser, UserBase):
-    only_for_friends = models.BooleanField(
-        verbose_name=_('Privacy'), default=False, help_text=_('Show my lists only to friends'))
+    only_for_friends = models.BooleanField(verbose_name=_('Privacy'),
+                                           default=False,
+                                           help_text=_('Show my lists only to friends'))
     language = models.CharField(max_length=2, choices=settings.LANGUAGES, default='en', verbose_name=_('Language'))
     location = models.CharField(max_length=100, null=True, blank=True, verbose_name=_('Location'))
     avatar_small = models.URLField(null=True, blank=True)

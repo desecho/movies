@@ -1,3 +1,3 @@
 #!/bin/bash
 
-eslint ./*.js src/moviesapp/js/*  --fix
+eslint ./*.js src/moviesapp/js/* --fix

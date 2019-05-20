@@ -16,14 +16,16 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='actionrecord',
             name='user',
-            field=models.ForeignKey(
-                on_delete=django.db.models.deletion.CASCADE, related_name='actions', to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE,
+                                    related_name='actions',
+                                    to=settings.AUTH_USER_MODEL),
         ),
         migrations.AlterField(
             model_name='record',
             name='user',
-            field=models.ForeignKey(
-                on_delete=django.db.models.deletion.CASCADE, related_name='records', to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE,
+                                    related_name='records',
+                                    to=settings.AUTH_USER_MODEL),
         ),
         migrations.AlterField(
             model_name='user',
@@ -45,12 +47,11 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='user',
             name='username',
-            field=models.CharField(
-                error_messages={'unique': 'A user with that username already exists.'},
-                help_text='Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.',
-                max_length=150,
-                unique=True,
-                validators=[django.contrib.auth.validators.UnicodeUsernameValidator()],
-                verbose_name='username'),
+            field=models.CharField(error_messages={'unique': 'A user with that username already exists.'},
+                                   help_text='Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.',
+                                   max_length=150,
+                                   unique=True,
+                                   validators=[django.contrib.auth.validators.UnicodeUsernameValidator()],
+                                   verbose_name='username'),
         ),
     ]
