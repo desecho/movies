@@ -17,7 +17,7 @@ function setAxiosSettings() {
   axios.interceptors.response.use(null, function(error) {
     if (error.response.status === 403) {
       Vue.prototype.$flashStorage.flash(
-        gettext('You need to login to add a movie to your list'), 'info', vars.flashOptions);
+          gettext('You need to login to add a movie to your list'), 'info', vars.flashOptions);
       return new Promise(() => {});
     }
     return Promise.reject(error);

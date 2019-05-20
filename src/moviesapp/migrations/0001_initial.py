@@ -25,22 +25,21 @@ class Migration(migrations.Migration):
                      help_text='Designates that this user has all permissions without explicitly assigning them.',
                      verbose_name='superuser status')),
                 ('username',
-                 models.CharField(
-                     help_text='Required. 30 characters or fewer. Letters, digits and @/./+/-/_ only.',
-                     unique=True,
-                     max_length=30,
-                     verbose_name='username',
-                     validators=[
-                         django.core.validators.RegexValidator('^[\\w.@+-]+$', 'Enter a valid username.', 'invalid')
-                     ])),
+                 models.CharField(help_text='Required. 30 characters or fewer. Letters, digits and @/./+/-/_ only.',
+                                  unique=True,
+                                  max_length=30,
+                                  verbose_name='username',
+                                  validators=[
+                                      django.core.validators.RegexValidator('^[\\w.@+-]+$', 'Enter a valid username.',
+                                                                            'invalid')
+                                  ])),
                 ('first_name', models.CharField(max_length=30, verbose_name='first name', blank=True)),
                 ('last_name', models.CharField(max_length=30, verbose_name='last name', blank=True)),
                 ('email', models.EmailField(max_length=75, verbose_name='email address', blank=True)),
                 ('is_staff',
-                 models.BooleanField(
-                     default=False,
-                     help_text='Designates whether the user can log into this admin site.',
-                     verbose_name='staff status')),
+                 models.BooleanField(default=False,
+                                     help_text='Designates whether the user can log into this admin site.',
+                                     verbose_name='staff status')),
                 ('is_active',
                  models.BooleanField(
                      default=True,
@@ -58,13 +57,12 @@ class Migration(migrations.Migration):
                      'The groups this user belongs to. A user will get all permissions granted to each of his/her group.',
                      verbose_name='groups')),
                 ('user_permissions',
-                 models.ManyToManyField(
-                     related_query_name='user',
-                     related_name='user_set',
-                     to='auth.Permission',
-                     blank=True,
-                     help_text='Specific permissions for this user.',
-                     verbose_name='user permissions')),
+                 models.ManyToManyField(related_query_name='user',
+                                        related_name='user_set',
+                                        to='auth.Permission',
+                                        blank=True,
+                                        help_text='Specific permissions for this user.',
+                                        verbose_name='user permissions')),
             ],
             options={
                 'abstract': False,

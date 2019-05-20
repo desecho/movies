@@ -110,8 +110,8 @@ class SaveCommentView(AjaxView):
 
         if record.comment != comment:
             if not record.comment:
-                ActionRecord(
-                    action_id=Action.ADDED_COMMENT, user=request.user, movie=record.movie, comment=comment).save()
+                ActionRecord(action_id=Action.ADDED_COMMENT, user=request.user, movie=record.movie,
+                             comment=comment).save()
             record.comment = comment
             record.save()
         return self.success()

@@ -46,7 +46,7 @@ class AddMoviesTestCase(BaseTestLoginCase):
         conter_watched = counters[0].get_text().strip()
         conter_to_watch = counters[1].get_text().strip()
         self.assertEqual(conter_watched, '3')
-        self.assertEqual(conter_to_watch, "1")
+        self.assertEqual(conter_to_watch, '1')
 
     def test_list_search(self):
         url = reverse('list', args=('watched', ))
