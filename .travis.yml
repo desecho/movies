@@ -20,6 +20,10 @@ env:
   - TOXENV=pydocstyle
   - TOXENV=safety
   - TOXENV=py36
+  - TOXENV=eslint
+  - TOXENV=csscomb
+  - TOXENV=yapf
+  - TOXENV=unify
 
 before_install:
   - pip install tox codecov
