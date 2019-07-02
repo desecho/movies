@@ -20,11 +20,13 @@ class Vk:
         self.user = user
 
     def get_friends(self):
-        friends = cache.get('vk_friends')
-        if friends is None:
-            friends = self.vk.friends.get(uid=self.vk_id)
-            cache.set('vk_friends', friends)
-        friends_ids = map(str, friends)
+        # 2DO fix this for vk
+        # friends = cache.get('vk_friends')
+        # if friends is None:
+        #     friends = self.vk.friends.get(uid=self.vk_id)
+        #     cache.set('vk_friends', friends)
+        # friends_ids = map(str, friends)
+        friends_ids = []
 
         # We need to use distinct here because the same user can have several VK backends (both app and oauth)
         friends = User.objects.filter(social_auth__provider__in=settings.VK_BACKENDS,
