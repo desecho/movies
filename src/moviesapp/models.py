@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import facebook
-import vkontakte
+import vk
 # Not using django-mysql instead because it's not supported by modeltranslation.
 from annoying.fields import JSONField
 from django.conf import settings
@@ -11,18 +11,21 @@ from django.db import models
 from django.dispatch import receiver
 from django.utils.translation import LANGUAGE_SESSION_KEY, gettext_lazy as _
 
+from moviesapp.vk import get_access_token
 
 class Vk:
     def __init__(self, user):
         vk_account = user.get_vk_account()
-        self.vk = vkontakte.API(*settings.VK_BACKENDS_CREDENTIALS[vk_account.provider])
+        access_token = get_access_token(*settings.VK_BACKENDS_CREDENTIALS[vk_account.provider])
+        session = vk.Session(access_token)
+        self.vk = vk.API(session)
         self.vk_id = vk_account.uid
         self.user = user
 
     def get_friends(self):
         friends = cache.get('vk_friends')
         if friends is None:
-            friends = self.vk.friends.get(uid=self.vk_id)
+            friends = self.vk.friends.get(user_id=self.vk_id)
             cache.set('vk_friends', friends)
         friends_ids = map(str, friends)
 
@@ -32,7 +35,7 @@ class Vk:
         return friends
 
     def get_data(self, fields):
-        return self.vk.getProfiles(uids=self.vk_id, fields=','.join(fields))[0]
+        return self.vk.users.get(user_ids=self.vk_id, fields=','.join(fields))[0]
 
 
 class Fb:

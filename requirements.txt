@@ -47,14 +47,7 @@ Babel==2.6.0
 # Social
 facebook-sdk==3.1.0
 
-# vkontakte==1.3.5
-# e27a433cf757a1689ea698339dee9c998acc4ec1
-# Contains 3 open PRs:
-# - https://github.com/kmike/vkontakte/pull/12 - Replaced custom http requests with requests module
-# - https://github.com/kmike/vkontakte/pull/13 - Increase default timeout to 5 seconds
-# - https://github.com/kmike/vkontakte/pull/14 - Add python 3 support
--e git+https://github.com/desecho/vkontakte.git@dev#egg=vkontakte
-
+vk==2.0.2
 
 mysqlclient==1.4.2.post1
 raven==6.10.0
