@@ -11,7 +11,6 @@ local_settings.py
 .idea
 .vscode
 node_modules
-env
 .cache
 .pytest_cache/
 yarn-error.log
@@ -19,4 +18,4 @@ package-lock.json
 src/moviesapp/static/js/*
 src/moviesapp/static/font/*
 src/moviesapp/static/style.css
-
+venv
