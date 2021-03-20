@@ -18,7 +18,6 @@ django-test-without-migrations>=0.6
 
 # Linting
 pylint>=1.7.1
-tox>=2.7.0
 isort>=4.2
 flake8>=2.2.5
 bandit<1.6.0
