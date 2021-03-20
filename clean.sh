@@ -1,10 +1,7 @@
 #!/bin/bash
 
-# We want to remove imports before running isort.
+# Remove imports before running the rest of formatters
 autoflake --remove-all-unused-imports --in-place -r src
-yapf -ri src
-unify -ri src
-# We want to run isort after yapf to make sure isort lint pass.
 isort -rc src
 csscomb src/moviesapp/styles/*
 ./cleanjs.sh

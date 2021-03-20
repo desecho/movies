@@ -24,8 +24,6 @@ bandit<1.6.0
 pydiatra>=0.11.2
 pydocstyle>=2.1.1
 safety>=1.6.1
-yapf
-unify
 
 ## reStructuredText
 restructuredtext_lint>=1.1.2
