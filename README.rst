@@ -42,8 +42,8 @@ Images
 .. |Codecov| image:: https://codecov.io/gh/desecho/movies/branch/master/graph/badge.svg
    :target: https://codecov.io/gh/desecho/movies
 
-.. |Build Status| image:: https://travis-ci.org/desecho/movies.svg?branch=master
-   :target: https://travis-ci.org/desecho/movies
+.. |Build Status| image:: https://github.com/desecho/movies/actions/workflows/test.yaml/badge.svg
+   :target: https://github.com/desecho/movies/actions/workflows/test.yaml
 
 .. _TMDb: https://www.themoviedb.org/
 .. _OMDb: http://www.omdbapi.com/

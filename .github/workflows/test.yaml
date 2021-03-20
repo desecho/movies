@@ -1,0 +1,30 @@
+name: Test
+on: push
+
+jobs:
+  test:
+    name: Run tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Set up Python 3.7
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.7
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 15.x
+          registry-url: https://registry.npmjs.org
+      - name: Install dependencies
+        run: |
+          rm package.json
+          npm install eslint
+          npm install csscomb-linter
+          npm install eslint-config-google@0.14.0
+          npm install eslint-plugin-vue@7.7.0
+          pip install tox
+          tox -e py37-requirements
+      - name: Run tests
+        run: make test
