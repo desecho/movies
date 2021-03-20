@@ -75,3 +75,17 @@ eslint:
 ## Run tests
 test:
 	tox
+
+.PHONY: format
+## Format code
+format:
+	# Format Python
+	# Remove imports before running the rest of formatters
+	autoflake --remove-all-unused-imports --in-place -r src
+	isort -rc src
+	# Format css
+	csscomb src/moviesapp/styles/*
+	# Format js
+	eslint ./*.js src/moviesapp/js/* --fix
+	find . -type f -name "*.js" -not -path "./node_modules/*" -not -path "./src/moviesapp/static/*" -not -path "./venv/*" -exec js-beautify -r {} \;
+	find . -type f -name "*.json" -not -path "./node_modules/*" -not -path "./src/moviesapp/static/*" -not -path "./venv/*" -exec js-beautify -r {} \;
