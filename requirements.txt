@@ -9,7 +9,7 @@ django-registration-redux==2.6
 
 # django-google-analytics-app==4.1.0
 # Open PR - https://github.com/praekelt/django-google-analytics/pull/38 - Django 2 support
--e git+https://github.com/desecho/django-google-analytics.git@django2#egg=django-google-analytics
+-e git+https://github.com/desecho/django-google-analytics.git@django2#egg=django-google-analytics-app
 
 # django-custom-anonymous==0.2
 # Use GitHub because the version with required fix is only on GitHub
