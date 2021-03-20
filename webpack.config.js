@@ -44,35 +44,35 @@ module.exports = {
   },
   module: {
     rules: [{
-        test: /\.css$/,
-        use: ExtractTextPlugin.extract({
-          fallback: 'style-loader',
-          use: 'css-loader',
-        }),
+      test: /\.css$/,
+      use: ExtractTextPlugin.extract({
+        fallback: 'style-loader',
+        use: 'css-loader',
+      }),
+    },
+    {
+      test: /\.scss$/,
+      loader: ExtractTextPlugin.extract({
+        fallback: 'style-loader',
+        use: [{
+          loader: 'css-loader',
+        }, {
+          loader: 'sass-loader',
+        }],
       },
-      {
-        test: /\.scss$/,
-        loader: ExtractTextPlugin.extract({
-            fallback: 'style-loader',
-            use: [{
-              loader: 'css-loader',
-            }, {
-              loader: 'sass-loader',
-            }],
-          }
 
-        ),
-      },
-      {
-        test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-        loader: 'url-loader?limit=10000&mimetype=application/font-woff',
-        options: loaderFontOptions,
-      },
-      {
-        test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-        loader: 'file-loader',
-        options: loaderFontOptions,
-      },
+      ),
+    },
+    {
+      test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+      loader: 'url-loader?limit=10000&mimetype=application/font-woff',
+      options: loaderFontOptions,
+    },
+    {
+      test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+      loader: 'file-loader',
+      options: loaderFontOptions,
+    },
     ],
   },
   plugins: [
