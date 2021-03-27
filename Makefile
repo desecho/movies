@@ -5,7 +5,7 @@ SOURCE_VENV_CMD := source venv/bin/activate
 #------------------------------------
 # Help
 #------------------------------------
-TARGET_MAX_CHAR_NUM := 20
+TARGET_MAX_CHAR_NUM := 25
 
 # COLORS
 RED     := \033[0;31m
@@ -72,7 +72,12 @@ load-initial-fixtures:
 
 .PHONY: bootstrap
 ## Bootstrap project
-bootstrap: install-deps yarn-install-locked create-venv create-db migrate load-initial-fixtures yarn-build collectstatic createsuperuser
+bootstrap: install-deps yarn-install-locked create-venv create-db migrate load-initial-fixtures yarn-build collectstatic create-local-settings createsuperuser
+
+.PHONY: create-local-settings
+## Create local_settings
+create-local-settings:
+	cp -n src/movies/local_settings_template.py src/movies/local_settings.py
 #------------------------------------
 
 
