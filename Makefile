@@ -1,5 +1,12 @@
 .DEFAULT_GOAL := help
 
+SHELL := /bin/bash
+
+#------------------------------------
+# Help
+#------------------------------------
+TARGET_MAX_CHAR_NUM := 20
+
 # COLORS
 RED     :=\033[0;31m
 GREEN   :=\033[0;32m
@@ -9,14 +16,6 @@ MAGENTA :=\033[0;35m
 CYAN    :=\033[0;36m
 WHITE   :=\033[0;37m
 RESET   :=\033[0;10m
-
-TARGET_MAX_CHAR_NUM := 20
-
-.PHONY: create-venv
-## Create virtual environment and install requirements
-create-venv:
-	dev_scripts/create_venv.sh
-
 
 .PHONY: help
 ## Show help
@@ -35,7 +34,12 @@ help:
 		} \
 	} \
 	{lastLine = $$0}' $(MAKEFILE_LIST)
+#------------------------------------
 
+
+#------------------------------------
+# Installation
+#------------------------------------
 .PHONY: install-deps
 ## Install dependencies
 install-deps:
@@ -44,15 +48,12 @@ install-deps:
 	# Install MySQL dependencies
 	sudo apt install libmysqlclient-dev -y
 
-.PHONY: pydiatra
-## Run pydiatra
-pydiatra:
-	dev_scripts/pydiatra.sh
-
-.PHONY: yarn-build
-## Run yarn build
-yarn-build:
-	yarn build
+.PHONY: create-venv
+## Create virtual environment and install requirements
+create-venv:
+	python3.7 -m venv venv
+	source venv/bin/activate && \
+		pip install -r requirements-dev.txt
 
 .PHONY: yarn-install
 ## Run yarn install
@@ -64,13 +65,42 @@ yarn-install:
 ## Run yarn install using lockfile
 yarn-install-locked:
 	yarn install --frozen-lockfile
+#------------------------------------
 
-.PHONY: eslint
-## Run eslint
-eslint:
-	yarn run eslint "./*.js"
-	yarn run eslint "src/moviesapp/js/*"
 
+#------------------------------------
+# Linters
+#------------------------------------
+.PHONY: pydiatra
+## Run pydiatra
+pydiatra:
+	source venv/bin/activate && \
+	scripts/pydiatra.sh
+
+.PHONY: jsonlint
+## Run jsonlint
+jsonlint:
+	scripts/jsonlint.sh
+#------------------------------------
+
+#------------------------------------
+# Development
+#------------------------------------
+.PHONY: yarn-build
+## Run yarn build
+yarn-build:
+	yarn build
+
+.PHONY: build
+## Run yarn build for development
+build:
+	yarn build --watch
+#------------------------------------
+
+
+#------------------------------------
+# Commands
+#------------------------------------
 .PHONY: test
 ## Run tests
 test:
@@ -79,13 +109,27 @@ test:
 .PHONY: format
 ## Format code
 format:
-	# Format Python
-	# Remove imports before running the rest of formatters
-	autoflake --remove-all-unused-imports --in-place -r src
-	isort -rc src
-	# Format css
-	csscomb src/moviesapp/styles/*
-	# Format js
-	eslint ./*.js src/moviesapp/js/* --fix
-	find . -type f -name "*.js" -not -path "./node_modules/*" -not -path "./src/moviesapp/static/*" -not -path "./venv/*" -exec js-beautify -r {} \;
-	find . -type f -name "*.json" -not -path "./node_modules/*" -not -path "./src/moviesapp/static/*" -not -path "./venv/*" -exec js-beautify -r {} \;
+	source venv/bin/activate && \
+	autoflake --remove-all-unused-imports --in-place -r src && \
+	isort -rc src && \
+	yarn run csscomb src/moviesapp/styles/* && \
+	yarn run eslint ./*.js src/moviesapp/js/* --fix
+#------------------------------------
+
+
+#------------------------------------
+# Django management commands
+#------------------------------------
+.PHONY: makemessages
+## Run makemessages
+makemessages:
+	# dev_scripts/run_server.sh
+	source venv/bin/activate && \
+	src/manage.py makemessages -d djangojs --ignore=moviesapp/static/* --ignore=node_modules/*
+
+.PHONY: runserver
+## Run server for development
+runserver:
+	source venv/bin/activate && \
+	src/manage.py runserver 0.0.0.0:8000
+#------------------------------------

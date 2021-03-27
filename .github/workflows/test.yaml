@@ -17,13 +17,14 @@ jobs:
         with:
           node-version: 15.x
           registry-url: https://registry.npmjs.org
-      - name: Install dependencies
+      - name: Install requirements
         run: |
           rm package.json
-          npm install eslint
-          npm install csscomb-linter
+          npm install eslint@7.22.0
+          npm install csscomb-linter@0.0.4
           npm install eslint-config-google@0.14.0
           npm install eslint-plugin-vue@7.7.0
+          npm install jsonlint@1.6.3
           pip install tox
           tox -e py37-requirements
       - name: Run tests
