@@ -17,7 +17,7 @@ jobs:
         with:
           node-version: 15.x
           registry-url: https://registry.npmjs.org
-      - name: Install requirements
+      - name: Install test requirements
         run: |
           rm package.json
           npm install eslint@7.22.0
@@ -29,5 +29,7 @@ jobs:
           tox -e py37-requirements
       - name: Run tests
         run: make test
+      - name: Install coverage requirements
+        run: pip install coverage
       - name: Run codecov
         uses: codecov/codecov-action@v1
