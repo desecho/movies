@@ -5,8 +5,6 @@ import os
 import os.path as op
 import sys
 
-import raven
-
 try:
     import local_settings
 except ImportError:
@@ -312,7 +310,6 @@ DEBUG_TOOLBAR_PANELS = [
 # raven
 RAVEN_CONFIG = {
     'dsn': local_settings.RAVEN_DSN,
-    'release': raven.fetch_git_sha(local_settings.GIT_ROOT),
 }
 
 # django-modeladmin-reorder
