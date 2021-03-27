@@ -19,3 +19,4 @@ src/moviesapp/static/js/*
 src/moviesapp/static/font/*
 src/moviesapp/static/style.css
 venv
+/static
