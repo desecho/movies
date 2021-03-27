@@ -12,11 +12,6 @@ You can also add additional information such as if you watched the movie in orig
 | The interface is available in English and Russian.
 | See more documentation_.
 
-Used APIs
---------------
-* TMDb_
-* OMDb_
-
 Development
 ----------------------------
 
@@ -34,7 +29,12 @@ Run ``make format`` to format all the code
 
 Run ``make help`` to get a list of all available commands.
 
-Images
+Used APIs
+--------------
+* TMDb_
+* OMDb_
+
+Used images
 -----------
 * `IMDb logo <https://commons.wikimedia.org/wiki/File:IMDB_Logo_2016.svg>`_
 * `Down arrow icon <https://www.iconfinder.com/icons/211614/arrow_b_down_icon>`_
