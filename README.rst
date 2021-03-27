@@ -4,7 +4,7 @@ Movies
 |Build Status| |Requirements Status| |Codecov|
 
 The web application on Django_ 2, Vue.js_ 2, Bootstrap_ 4. Create movie lists ("Watched" and "To watch"), rate movies and add comments.
-You can also add additional information such as if you watched the movie in original version, in theatre, an extended version, in 4k.
+You can also add additional information such as if you watched the movie in original version, in theatre, an extended version, in 4k, etc.
 
 | It is also available as a `VK app <http://vk.com/app3504693_2912142>`_.
 | Share your lists with VK and Facebook friends, get recommendations from friends.
@@ -17,18 +17,14 @@ Used APIs
 * TMDb_
 * OMDb_
 
-Installation instructions
+Development
 ----------------------------
 
-1. Use ansible-playbook-server_ to deploy.
-2. Do git clone.
+1. Use ubuntu-vm_ as a development VM
+2. Use mysql-docker_ to bring up MySQL in Docker
+3. Run ``make bootstrap``
 
-Development
---------------
-
-| Use ``clean.sh`` to automatically prettify your code.
-| Use ``tox`` for testing and linting.
-
+Run ``make help`` to get a list of available commands.
 
 Images
 -----------
@@ -47,8 +43,9 @@ Images
 
 .. _TMDb: https://www.themoviedb.org/
 .. _OMDb: http://www.omdbapi.com/
-.. _ansible-playbook-server: https://github.com/desecho/ansible-playbook-server
 .. _documentation: https://github.com/desecho/movies/blob/master/doc.rst
 .. _Vue.js: https://vuejs.org/
 .. _Bootstrap: https://getbootstrap.com/
 .. _Django: https://www.djangoproject.com/
+.. _ubuntu-vm: https://github.com/desecho/ubuntu-vm
+.. _mysql-docker: https://github.com/desecho/mysql-docker
