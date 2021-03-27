@@ -23,8 +23,16 @@ Development
 1. Use ubuntu-vm_ as a development VM
 2. Use mysql-docker_ to bring up MySQL in Docker
 3. Run ``make bootstrap``
+4. Run ``make createsuperuser`` to create an admin user.
 
-Run ``make help`` to get a list of available commands.
+Run ``make build`` and ``make runserver`` to run the server for development.
+
+Open http://localhost:8000/ to access the web application.
+Open http://localhost:8000/admin to access the admin section.
+
+Run ``make format`` to format all the code
+
+Run ``make help`` to get a list of all available commands.
 
 Images
 -----------
