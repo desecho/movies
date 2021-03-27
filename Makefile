@@ -82,8 +82,13 @@ create-local-settings:
 
 
 #------------------------------------
-# Linters
+# Tox
 #------------------------------------
+.PHONY: test
+## Run tests
+test:
+	tox
+
 .PHONY: pydiatra
 ## Run pydiatra
 pydiatra:
@@ -94,6 +99,56 @@ pydiatra:
 ## Run jsonlint
 jsonlint:
 	scripts/jsonlint.sh lint
+
+.PHONY: pylint
+## Run pylint
+pylint:
+	tox -e py37-pylint
+
+.PHONY: flake8
+## Run flake8
+flake8:
+	tox -e py37-flake8
+
+.PHONY: isort
+## Run isort
+isort:
+	tox -e py37-isort
+
+.PHONY: bandir
+## Run bandir
+bandir:
+	tox -e py37-bandir
+
+.PHONY: rstlint
+## Run rstlint
+rstlint:
+	tox -e py37-rstlint
+
+.PHONY: pydocstyle
+## Run pydocstyle
+pydocstyle:
+	tox -e py37-pydocstyle
+
+.PHONY: safety
+## Run safety
+safety:
+	tox -e py37-safety
+
+.PHONY: pytest
+## Run pytest
+pytest:
+	tox -e py37-pytest
+
+.PHONY: eslint
+## Run eslint
+eslint:
+	tox -e py37-eslint
+
+.PHONY: csscomb-linter
+## Run csscomb-linter
+csscomb-linter:
+	tox -e py37-csscomb-linter
 #------------------------------------
 
 #------------------------------------
@@ -120,11 +175,6 @@ build:
 #------------------------------------
 # Commands
 #------------------------------------
-.PHONY: test
-## Run tests
-test:
-	tox
-
 .PHONY: format
 ## Format code
 format:
