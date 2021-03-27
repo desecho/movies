@@ -14,25 +14,25 @@ from .tmdb import get_tmdb_movie_data
 
 def load_omdb_movie_data(imdb_id):
     try:
-        r = requests.get(f'http://www.omdbapi.com/?i={imdb_id}&apikey={settings.OMDB_KEY}')
+        r = requests.get(f"http://www.omdbapi.com/?i={imdb_id}&apikey={settings.OMDB_KEY}")
     except:  # noqa
         if settings.DEBUG:
             raise
         client.captureException()
         raise OmdbRequestError
     movie_data = r.json()
-    response = movie_data['Response']
-    if response == 'True':
+    response = movie_data["Response"]
+    if response == "True":
         for key in movie_data:
             if len(movie_data[key]) > 255:
-                movie_data[key] = movie_data[key][:252] + '...'
-            if movie_data[key] == 'N/A':
+                movie_data[key] = movie_data[key][:252] + "..."
+            if movie_data[key] == "N/A":
                 movie_data[key] = None
         return movie_data
-    elif response == 'False' and movie_data['Error'] == 'Request limit reached!':
+    elif response == "False" and movie_data["Error"] == "Request limit reached!":
         raise OmdbLimitReached
     else:
-        raise OmdbError(movie_data['Error'], imdb_id)
+        raise OmdbError(movie_data["Error"], imdb_id)
 
 
 def join_dicts(dict1, dict2):
@@ -65,18 +65,18 @@ def add_movie_to_db(tmdb_id, update=False):
         def get_runtime(runtime):
             if runtime is not None:
                 try:
-                    runtime = datetime.strptime(runtime, '%H h %M min')
+                    runtime = datetime.strptime(runtime, "%H h %M min")
                 except:  # noqa
                     try:
-                        runtime = datetime.strptime(runtime, '%H h')
+                        runtime = datetime.strptime(runtime, "%H h")
                     except:  # noqa
                         try:
-                            runtime = datetime.strptime(runtime, '%M min')
+                            runtime = datetime.strptime(runtime, "%M min")
                         except:  # noqa
-                            r = re.match(r'(\d+) min', runtime)
+                            r = re.match(r"(\d+) min", runtime)
                             minutes = int(r.groups()[0])
                             try:
-                                runtime = datetime.strptime('{:02d}:{:02d}'.format(*divmod(minutes, 60)), '%H:%M')
+                                runtime = datetime.strptime("{:02d}:{:02d}".format(*divmod(minutes, 60)), "%H:%M")
                             except:  # noqa
                                 if settings.DEBUG:
                                     raise
@@ -87,17 +87,17 @@ def add_movie_to_db(tmdb_id, update=False):
 
         movie_data = load_omdb_movie_data(imdb_id)
         return {
-            'writer': movie_data.get('Writer'),
-            'director': movie_data.get('Director'),
-            'actors': movie_data.get('Actors'),
-            'genre': movie_data.get('Genre'),
-            'country': movie_data.get('Country'),
-            'imdb_rating': movie_data.get('imdbRating'),
-            'runtime': get_runtime(movie_data.get('Runtime'))
+            "writer": movie_data.get("Writer"),
+            "director": movie_data.get("Director"),
+            "actors": movie_data.get("Actors"),
+            "genre": movie_data.get("Genre"),
+            "country": movie_data.get("Country"),
+            "imdb_rating": movie_data.get("imdbRating"),
+            "runtime": get_runtime(movie_data.get("Runtime")),
         }
 
     movie_data_tmdb = get_tmdb_movie_data(tmdb_id)
-    movie_data_omdb = get_omdb_movie_data(movie_data_tmdb['imdb_id'])
+    movie_data_omdb = get_omdb_movie_data(movie_data_tmdb["imdb_id"])
     movie_data = join_dicts(movie_data_tmdb, movie_data_omdb)
     if update:
         return update_movie()

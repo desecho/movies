@@ -9,20 +9,20 @@ register = template.Library()
 
 
 @register.simple_tag
-def avatar(user, size='small'):
+def avatar(user, size="small"):
     def get_social_avatar_urls():
         if not user.avatar_small:
             return None
-        if size == 'small':
+        if size == "small":
             return (user.avatar_small, user.avatar_small)
         else:
             return (user.avatar_small, user.avatar_big)
 
     def get_gravatar_urls():
         def get_url(size):
-            params = parse.urlencode({'s': str(size)})
-            hash_ = hashlib.md5(user.email.lower().encode('utf-8')).hexdigest()  # nosec
-            return f'https://www.gravatar.com/avatar/{hash_}?{params}'
+            params = parse.urlencode({"s": str(size)})
+            hash_ = hashlib.md5(user.email.lower().encode("utf-8")).hexdigest()  # nosec
+            return f"https://www.gravatar.com/avatar/{hash_}?{params}"
 
         url_2x = get_url(avatar_size * 2)
         url = get_url(avatar_size)
@@ -34,10 +34,12 @@ def avatar(user, size='small'):
         url, url_2x = get_gravatar_urls()
     else:
         url, url_2x = social_avatars_urls
-    return mark_safe('<img class="avatar-{0}" src="{1}" data-rjs="{2}" width="{3}"'  # nosec
-                     'alt="{4}" title="{4}" @load="retinajs"></img>'.format(size, url, url_2x, avatar_size, user))
+    return mark_safe(
+        '<img class="avatar-{0}" src="{1}" data-rjs="{2}" width="{3}"'  # nosec
+        'alt="{4}" title="{4}" @load="retinajs"></img>'.format(size, url, url_2x, avatar_size, user)
+    )
 
 
 @register.simple_tag
 def avatar_big(user):
-    return avatar(user, 'big')
+    return avatar(user, "big")

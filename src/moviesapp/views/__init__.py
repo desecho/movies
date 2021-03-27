@@ -8,11 +8,11 @@ from .utils import get_anothers_account, get_records, sort_by_rating
 
 
 class AboutView(TemplateAnonymousView):
-    template_name = 'about.html'
+    template_name = "about.html"
 
 
 class GalleryView(TemplateAnonymousView):
-    template_name = 'gallery.html'
+    template_name = "gallery.html"
 
     def get_context_data(self, list_name, username=None):
         if username is None and self.request.user.is_anonymous:
@@ -26,7 +26,7 @@ class GalleryView(TemplateAnonymousView):
         records = sort_by_rating(records, username, list_name)
 
         return {
-            'records': records,
-            'anothers_account': anothers_account,
-            'list': list_name,
+            "records": records,
+            "anothers_account": anothers_account,
+            "list": list_name,
         }

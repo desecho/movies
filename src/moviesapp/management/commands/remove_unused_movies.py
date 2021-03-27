@@ -6,7 +6,7 @@ from moviesapp.models import Movie
 
 
 class Command(BaseCommand):
-    help = 'Removes unused movies'
+    help = "Removes unused movies"
 
     def handle(self, *args, **options):  # pylint: disable=unused-argument
         movies = Movie.objects.all()
@@ -17,6 +17,6 @@ class Command(BaseCommand):
             t.set_description(movie_info)
             if not movie.records.exists():
                 movie.delete()
-                message = f'{movie} removed'
+                message = f"{movie} removed"
                 t.info(message)
             t.update()

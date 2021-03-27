@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import facebook
 import vkontakte
+
 # Not using django-mysql instead because it's not supported by modeltranslation.
 from annoying.fields import JSONField
 from django.conf import settings
@@ -29,26 +30,27 @@ class Vk:
         friends_ids = []
 
         # We need to use distinct here because the same user can have several VK backends (both app and oauth)
-        friends = User.objects.filter(social_auth__provider__in=settings.VK_BACKENDS,
-                                      social_auth__uid__in=friends_ids).distinct()
+        friends = User.objects.filter(
+            social_auth__provider__in=settings.VK_BACKENDS, social_auth__uid__in=friends_ids
+        ).distinct()
         return friends
 
     def get_data(self, fields):
-        return self.vk.getProfiles(uids=self.vk_id, fields=','.join(fields))[0]
+        return self.vk.getProfiles(uids=self.vk_id, fields=",".join(fields))[0]
 
 
 class Fb:
     def __init__(self, user):
-        access_token = user.get_fb_account().extra_data['access_token']
-        self.fb = facebook.GraphAPI(access_token=access_token, version='2.7')
+        access_token = user.get_fb_account().extra_data["access_token"]
+        self.fb = facebook.GraphAPI(access_token=access_token, version="2.7")
 
     def get_friends(self):
-        friends = cache.get('fb_friends')
+        friends = cache.get("fb_friends")
         if friends is None:
-            friends = self.fb.get_connections(id='me', connection_name='friends')['data']
-            cache.set('fb_friends', friends)
-        friends_ids = [f['id'] for f in friends]
-        friends = User.objects.filter(social_auth__provider='facebook', social_auth__uid__in=friends_ids)
+            friends = self.fb.get_connections(id="me", connection_name="friends")["data"]
+            cache.set("fb_friends", friends)
+        friends_ids = [f["id"] for f in friends]
+        friends = User.objects.filter(social_auth__provider="facebook", social_auth__uid__in=friends_ids)
         return friends
 
 
@@ -57,23 +59,23 @@ def activate_user_language_preference(request, lang):
 
 
 def get_poster_url(size, poster):
-    if size == 'small':
+    if size == "small":
         poster_size = settings.POSTER_SIZE_SMALL
         no_image_url = settings.NO_POSTER_SMALL_IMAGE_URL
-    elif size == 'normal':
+    elif size == "normal":
         poster_size = settings.POSTER_SIZE_NORMAL
         no_image_url = settings.NO_POSTER_NORMAL_IMAGE_URL
-    elif size == 'big':
+    elif size == "big":
         poster_size = settings.POSTER_SIZE_BIG
         no_image_url = None  # is not used anywhere
     if poster is not None:
-        return settings.POSTER_BASE_URL + poster_size + '/' + poster
+        return settings.POSTER_BASE_URL + poster_size + "/" + poster
     return no_image_url
 
 
 class UserBase:
     def get_movie_ids(self):
-        return self.get_records().values_list('movie__pk')
+        return self.get_records().values_list("movie__pk")
 
     def get_records(self):
         if self.is_authenticated:
@@ -85,7 +87,7 @@ class UserBase:
         return self.get_records().get(pk=id_)
 
     def _get_fb_accounts(self):
-        return self.social_auth.filter(provider='facebook')
+        return self.social_auth.filter(provider="facebook")
 
     def is_fb_user(self):
         if self.is_authenticated:
@@ -130,7 +132,7 @@ class UserBase:
         # We need distinct here because we can't concatenate distinct and non-distinct querysets.
         users = available_users.distinct() | self.get_friends()
         if sort:
-            users = users.order_by('first_name')
+            users = users.order_by("first_name")
         return list(set(users))
 
     def get_vk(self):
@@ -145,7 +147,7 @@ class UserBase:
             if self.is_fb_user():
                 friends |= Fb(self).get_friends()
             if sort:
-                friends = friends.order_by('first_name')
+                friends = friends.order_by("first_name")
         return friends
 
     def has_friends(self):
@@ -153,11 +155,11 @@ class UserBase:
 
 
 class User(AbstractUser, UserBase):
-    only_for_friends = models.BooleanField(verbose_name=_('Privacy'),
-                                           default=False,
-                                           help_text=_('Show my lists only to friends'))
-    language = models.CharField(max_length=2, choices=settings.LANGUAGES, default='en', verbose_name=_('Language'))
-    location = models.CharField(max_length=100, null=True, blank=True, verbose_name=_('Location'))
+    only_for_friends = models.BooleanField(
+        verbose_name=_("Privacy"), default=False, help_text=_("Show my lists only to friends")
+    )
+    language = models.CharField(max_length=2, choices=settings.LANGUAGES, default="en", verbose_name=_("Language"))
+    location = models.CharField(max_length=100, null=True, blank=True, verbose_name=_("Location"))
     avatar_small = models.URLField(null=True, blank=True)
     avatar_big = models.URLField(null=True, blank=True)
     loaded_initial_data = models.BooleanField(default=False)
@@ -215,13 +217,13 @@ class Movie(models.Model):
     trailers = JSONField(null=True, blank=True)
 
     class Meta:
-        ordering = ['pk']
+        ordering = ["pk"]
 
     def __str__(self):
         return self.title
 
     def imdb_url(self):
-        return settings.IMDB_BASE_URL + self.imdb_id + '/'
+        return settings.IMDB_BASE_URL + self.imdb_id + "/"
 
     def get_trailers(self):
         if self.trailers:
@@ -237,19 +239,19 @@ class Movie(models.Model):
 
     @property
     def poster_normal(self):
-        return self._get_poster('normal')
+        return self._get_poster("normal")
 
     @property
     def poster_small(self):
-        return self._get_poster('small')
+        return self._get_poster("small")
 
     @property
     def poster_big(self):
-        return self._get_poster('big')
+        return self._get_poster("big")
 
     @property
     def id_title(self):
-        return f'{self.pk} - {self}'
+        return f"{self.pk} - {self}"
 
     def cli_string(self, last_movie_id):
         """
@@ -261,23 +263,23 @@ class Movie(models.Model):
         function.
         """
         MAX_CHARS = 40
-        ENDING = '..'
-        id_format = '{0: < %d}' % (len(str(last_movie_id)) + 1)
+        ENDING = ".."
+        id_format = "{0: < %d}" % (len(str(last_movie_id)) + 1)
         title = str(self)
         title = (title[:MAX_CHARS] + ENDING) if len(title) > MAX_CHARS else title
         id_ = id_format.format(self.pk)
         title_max_length = MAX_CHARS + len(ENDING)
-        title_format = '{:%ds}' % title_max_length
+        title_format = "{:%ds}" % title_max_length
         title = title_format.format(title)
-        return f'{id_} - {title}' [1:]
+        return f"{id_} - {title}"[1:]
 
 
 class Record(models.Model):
-    user = models.ForeignKey(User, models.CASCADE, related_name='records')
-    movie = models.ForeignKey(Movie, models.CASCADE, related_name='records')
+    user = models.ForeignKey(User, models.CASCADE, related_name="records")
+    movie = models.ForeignKey(Movie, models.CASCADE, related_name="records")
     list = models.ForeignKey(List, models.CASCADE)
     rating = models.IntegerField(default=0)
-    comment = models.CharField(max_length=255, default='')
+    comment = models.CharField(max_length=255, default="")
     date = models.DateTimeField(auto_now_add=True)
     watched_original = models.BooleanField(default=False)
     watched_extended = models.BooleanField(default=False)
@@ -309,7 +311,7 @@ class Action(models.Model):
 
 
 class ActionRecord(models.Model):
-    user = models.ForeignKey(User, models.CASCADE, related_name='actions')
+    user = models.ForeignKey(User, models.CASCADE, related_name="actions")
     action = models.ForeignKey(Action, models.CASCADE)
     movie = models.ForeignKey(Movie, models.CASCADE)
     list = models.ForeignKey(List, models.CASCADE, blank=True, null=True)
@@ -318,9 +320,9 @@ class ActionRecord(models.Model):
     date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f'{self.movie.title} {self.action.name}'
+        return f"{self.movie.title} {self.action.name}"
 
 
 @receiver(user_logged_in)
 def lang(**kwargs):
-    activate_user_language_preference(kwargs['request'], kwargs['user'].language)
+    activate_user_language_preference(kwargs["request"], kwargs["user"].language)

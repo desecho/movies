@@ -9,7 +9,7 @@ def load_fixtures(apps, schema_editor):
 
 class Migration(migrations.Migration):
     dependencies = [
-        ('moviesapp', '0010_auto_20170418_0137'),
+        ("moviesapp", "0010_auto_20170418_0137"),
     ]
 
     operations = [migrations.RunPython(load_fixtures)]

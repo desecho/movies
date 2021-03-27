@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('moviesapp', '0017_auto_20180303_1423'),
+        ("moviesapp", "0017_auto_20180303_1423"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='record',
-            name='watched_in_4k',
+            model_name="record",
+            name="watched_in_4k",
             field=models.BooleanField(default=False),
         ),
     ]

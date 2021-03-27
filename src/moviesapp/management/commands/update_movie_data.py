@@ -15,13 +15,13 @@ class Command(BaseCommand):
     """
 
     def add_arguments(self, parser):
-        parser.add_argument('movie_id', nargs='?', default=None, type=int)
+        parser.add_argument("movie_id", nargs="?", default=None, type=int)
         parser.add_argument(
-            '-s',
-            action='store_true',
-            dest='start_from_id',
+            "-s",
+            action="store_true",
+            dest="start_from_id",
             default=False,
-            help='Start running the script fom provided movie id',
+            help="Start running the script fom provided movie id",
         )
 
     def handle(self, movie_id, start_from_id, *args, **options):  # pylint: disable=unused-argument
@@ -38,15 +38,15 @@ class Command(BaseCommand):
             movies = get_filtered_movies()
             if not movies:  # In case the movie_id is too high and we don't get any movies
                 if start_from_id:
-                    self.error(f'There are no movies found with id > {movie_id}', fatal=True)
+                    self.error(f"There are no movies found with id > {movie_id}", fatal=True)
                 else:
-                    self.error(f'There is no movie with id {movie_id}', fatal=True)
+                    self.error(f"There is no movie with id {movie_id}", fatal=True)
             movies_filtered_number = movies.count()
             # We don't want a progress bar if we just have one movie to process
             if movies_filtered_number == 1:
                 disable = True
 
-        t = self.tqdm(total=movies_total, unit='movies', disable=disable)
+        t = self.tqdm(total=movies_total, unit="movies", disable=disable)
         if filtered:
             t.update(movies_total - movies_filtered_number)
         last_movie_id = movies.last().pk

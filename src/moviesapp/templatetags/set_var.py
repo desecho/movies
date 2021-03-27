@@ -17,9 +17,9 @@ class SetVarNode(template.Node):
         try:
             value = template.Variable(self.var_value).resolve(context)
         except template.VariableDoesNotExist:
-            value = ''
+            value = ""
         context[self.var_name] = value
-        return ''
+        return ""
 
 
 def set_var(parser, token):  # pylint: disable=unused-argument
@@ -35,4 +35,4 @@ def set_var(parser, token):  # pylint: disable=unused-argument
     return SetVarNode(parts[1], parts[3])
 
 
-register.tag('set', set_var)
+register.tag("set", set_var)

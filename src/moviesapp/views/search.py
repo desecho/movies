@@ -12,21 +12,21 @@ from .utils import add_movie_to_list
 
 
 class SearchView(TemplateAnonymousView):
-    template_name = 'search.html'
+    template_name = "search.html"
 
 
 class SearchMovieView(AjaxAnonymousView):
     def get(self, request):
         AVAILABLE_SEARCH_TYPES = [
-            'actor',
-            'movie',
-            'director',
+            "actor",
+            "movie",
+            "director",
         ]
         try:
             GET = request.GET
-            query = GET['query']
-            options = json.loads(GET['options'])
-            type_ = GET['type']
+            query = GET["query"]
+            options = json.loads(GET["options"])
+            type_ = GET["type"]
             if type_ not in AVAILABLE_SEARCH_TYPES:
                 raise NotAvailableSearchType
         except (KeyError, NotAvailableSearchType):
@@ -61,14 +61,14 @@ class AddToListFromDbView(AjaxView):
     def post(self, request):
         try:
             POST = request.POST
-            tmdb_id = int(POST['movieId'])
-            list_id = int(POST['listId'])
+            tmdb_id = int(POST["movieId"])
+            list_id = int(POST["listId"])
         except (KeyError, ValueError):
             return self.render_bad_request_response()
 
         movie_id = self._get_movie_id(tmdb_id)
         result = self._add_to_list_from_db(movie_id, tmdb_id, list_id, request.user)
         if not result:
-            output = {'status': 'not_found'}
+            output = {"status": "not_found"}
             return self.render_json_response(output)
         return self.success()

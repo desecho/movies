@@ -15,23 +15,23 @@ from moviesapp.models import ActionRecord
 
 class BaseTestCase(TestCase):
     fixtures = [
-        'lists.json',
-        'actions.json',
-        'users.json',
+        "lists.json",
+        "actions.json",
+        "users.json",
     ]
 
-    USER_USERNAME = 'neo'
-    USER_PASSWORD = 'password'
+    USER_USERNAME = "neo"
+    USER_PASSWORD = "password"
     # Superuser - admin/adminpassword
     # Another user - fox/password
 
     @staticmethod
     def get_content(response):
-        return response.content.decode('utf-8')
+        return response.content.decode("utf-8")
 
     @staticmethod
     def get_soup(response):
-        return BeautifulSoup(response.content, features='html.parser')
+        return BeautifulSoup(response.content, features="html.parser")
 
     def get_json(self, response):
         return json.loads(self.get_content(response))
@@ -53,7 +53,7 @@ class BaseTestCase(TestCase):
         self.client.login(username=username, password=self.USER_PASSWORD)
 
     def load_json(self, filename):
-        base_path = os.path.join(settings.SRC_DIR, 'moviesapp', 'tests', 'files')
+        base_path = os.path.join(settings.SRC_DIR, "moviesapp", "tests", "files")
         path = os.path.join(base_path, filename)
         with open(path) as f:
             return json.load(f)

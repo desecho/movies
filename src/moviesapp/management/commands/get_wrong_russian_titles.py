@@ -5,11 +5,11 @@ from tabulate import tabulate
 
 from moviesapp.models import Movie
 
-ALLOWED_CHARS = 'абвгдеёжзийклмнопрстуфхцчшщьыъэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЬЫЪЭЮЯ123456789 -:0,"«».?+/–º·№!()½⅓\''
+ALLOWED_CHARS = "абвгдеёжзийклмнопрстуфхцчшщьыъэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЬЫЪЭЮЯ123456789 -:0,\"«».?+/–º·№!()½⅓'"
 
 
 class Command(BaseCommand):
-    help = 'Displays wrong russian titles'
+    help = "Displays wrong russian titles"
 
     def handle(self, *args, **options):  # pylint: disable=unused-argument
         ids_to_ignore = [
@@ -40,7 +40,7 @@ class Command(BaseCommand):
                 if letter not in ALLOWED_CHARS:
                     rows.append((movie.id, movie.tmdb_id, movie.title_ru, movie.title_original))
                     break
-        headers = ('Id', 'TMDB Id', 'Title (ru)', 'Title (eng)')
-        self.info(tabulate(rows, headers, 'fancy_grid'))
+        headers = ("Id", "TMDB Id", "Title (ru)", "Title (eng)")
+        self.info(tabulate(rows, headers, "fancy_grid"))
         number_of_rows = len(rows)
-        self.info(f'Total: {number_of_rows}')
+        self.info(f"Total: {number_of_rows}")

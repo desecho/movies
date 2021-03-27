@@ -6,11 +6,11 @@ from .models import Action, ActionRecord, List, Movie, Record, User
 
 
 class RecordAdmin(admin.ModelAdmin):
-    list_display = ('user', 'movie', 'list', 'date')
+    list_display = ("user", "movie", "list", "date")
 
 
 class ActionRecordAdmin(admin.ModelAdmin):
-    list_display = ('user', 'movie', 'action', 'list', 'date')
+    list_display = ("user", "movie", "action", "list", "date")
 
 
 admin.site.register(User)

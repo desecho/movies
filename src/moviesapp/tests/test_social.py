@@ -6,41 +6,41 @@ from .base import BaseTestLoginCase
 
 class PeopleTestCase(BaseTestLoginCase):
     fixtures = [
-        'users.json',
-        'lists.json',
-        'actions.json',
-        'movies.json',
-        'records.json',
-        'action_records.json',
+        "users.json",
+        "lists.json",
+        "actions.json",
+        "movies.json",
+        "records.json",
+        "action_records.json",
     ]
 
     def setUp(self):
         super().setUp()
-        self.login('fox')
+        self.login("fox")
 
     def test_people(self):
-        url = reverse('people')
+        url = reverse("people")
         response = self.client.get(url)
         soup = self.get_soup(response)
-        records = soup.findAll('div', {'class': 'person'})
+        records = soup.findAll("div", {"class": "person"})
         users = []
         for record in records:
-            users.append(record.find('a', {'class': 'people-user'}).get_text())
-        self.assertListEqual(users, ['admin', 'Thomas Anderson'])
+            users.append(record.find("a", {"class": "people-user"}).get_text())
+        self.assertListEqual(users, ["admin", "Thomas Anderson"])
 
     def test_feed_people(self):
-        url = reverse('feed', args=('people', ))
+        url = reverse("feed", args=("people",))
         response = self.client.get(url)
         soup = self.get_soup(response)
-        records = soup.findAll('tr', {'class': 'feed-record'})
+        records = soup.findAll("tr", {"class": "feed-record"})
         self.assertEqual(len(records), 7)
         records_data = []
         for record in records:
-            user = record.find('td', {'class': 'test-feed-user'}).find('a').find('img').attrs['title'].strip()
-            movie = record.find('td', {'class': 'test-feed-movie'}).get_text().strip()
-            action = record.find('td', {'class': 'feed-action-data'}).get_text().strip()
-            records_data.append({'user': user, 'movie': movie, 'action': action})
-        self.assertIn({'user': 'Thomas Anderson', 'movie': 'The X Files', 'action': 'Watched'}, records_data)
-        self.assertIn({'user': 'Thomas Anderson', 'movie': 'Pulp Fiction', 'action': 'To Watch'}, records_data)
-        self.assertIn({'user': 'Thomas Anderson', 'movie': 'Dogma', 'action': 'Watched'}, records_data)
-        self.assertIn({'user': 'Thomas Anderson', 'movie': 'The Matrix', 'action': 'Watched'}, records_data)
+            user = record.find("td", {"class": "test-feed-user"}).find("a").find("img").attrs["title"].strip()
+            movie = record.find("td", {"class": "test-feed-movie"}).get_text().strip()
+            action = record.find("td", {"class": "feed-action-data"}).get_text().strip()
+            records_data.append({"user": user, "movie": movie, "action": action})
+        self.assertIn({"user": "Thomas Anderson", "movie": "The X Files", "action": "Watched"}, records_data)
+        self.assertIn({"user": "Thomas Anderson", "movie": "Pulp Fiction", "action": "To Watch"}, records_data)
+        self.assertIn({"user": "Thomas Anderson", "movie": "Dogma", "action": "Watched"}, records_data)
+        self.assertIn({"user": "Thomas Anderson", "movie": "The Matrix", "action": "Watched"}, records_data)

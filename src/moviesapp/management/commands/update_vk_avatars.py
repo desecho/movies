@@ -7,7 +7,7 @@ from moviesapp.vk import get_vk_avatar
 
 
 class Command(BaseCommand):
-    help = 'Updates vk avatars'
+    help = "Updates vk avatars"
 
     def handle(self, *args, **options):  # pylint: disable=unused-argument
         users = User.objects.all()
@@ -16,14 +16,14 @@ class Command(BaseCommand):
             vk = user.get_vk()
             if vk is not None:
                 FIELDS = (
-                    'photo_medium',
-                    'photo_big',
+                    "photo_medium",
+                    "photo_big",
                 )
                 data = vk.get_data(FIELDS)
-                avatar_small = get_vk_avatar(data['photo_medium'])
+                avatar_small = get_vk_avatar(data["photo_medium"])
                 if avatar_small:
                     user.avatar_small = avatar_small
-                avatar_big = get_vk_avatar(data['photo_big'])
+                avatar_big = get_vk_avatar(data["photo_big"])
                 if avatar_big:
                     user.avatar_big = avatar_big
                 user.save()

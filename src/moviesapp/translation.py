@@ -7,14 +7,14 @@ from .models import Action, List, Movie
 
 @register(Movie)
 class MovieTranslationOptions(TranslationOptions):
-    fields = ('title', 'poster', 'description', 'trailers')
+    fields = ("title", "poster", "description", "trailers")
 
 
 @register(Action)
 class ActionTranslationOptions(TranslationOptions):
-    fields = ('name', )
+    fields = ("name",)
 
 
 @register(List)
 class ListTranslationOptions(TranslationOptions):
-    fields = ('name', )
+    fields = ("name",)
