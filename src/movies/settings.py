@@ -2,7 +2,6 @@
 """Django settings."""
 
 import os
-import os.path as op
 
 try:
     from movies import local_settings
@@ -210,11 +209,19 @@ LOGIN_URL = "/login/"
 LOGIN_ERROR_URL = "/login-error/"
 
 # Static files
-STATIC_ROOT = op.join(PROJECT_DIR, "static")
+if local_settings.IS_DEV:
+    STATICFILES_DIRS = (
+        os.path.join(SRC_DIR, "moviesapp", 'static'),
+        os.path.join(PROJECT_DIR, "static")
+    )
+    STATIC_ROOT = None
+else:
+    STATIC_ROOT = os.path.join(PROJECT_DIR, "static")
+
 STATIC_URL = "/static/"
 
 # Media files
-MEDIA_ROOT = op.join(PROJECT_DIR, "media")
+MEDIA_ROOT = os.path.join(PROJECT_DIR, "media")
 MEDIA_URL = "/media/"
 
 # --== Modules settings ==--
@@ -359,9 +366,3 @@ VK_NO_AVATAR = ["https://vk.com/images/camera_100.png", "https://vk.com/images/c
 # API Keys
 TMDB_KEY = local_settings.TMDB_KEY
 OMDB_KEY = local_settings.OMDB_KEY
-
-# This is here to fix the problem with static files on dev
-try:
-    from local_settings2 import *  # noqa pylint: disable=wildcard-import
-except ImportError:
-    pass
