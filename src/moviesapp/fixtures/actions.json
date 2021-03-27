@@ -1,6 +1,7 @@
-[{
+[
+  {
     "fields": {
-      "name_ru": "\u0434\u043e\u0431\u0430\u0432\u043b\u0435\u043d \u0432 \u0441\u043f\u0438\u0441\u043e\u043a",
+      "name_ru": "\\u0434\\u043e\\u0431\\u0430\\u0432\\u043b\\u0435\\u043d \\u0432 \\u0441\\u043f\\u0438\\u0441\\u043e\\u043a",
       "name_en": "added to list",
       "name": "added to list"
     },
@@ -9,7 +10,7 @@
   },
   {
     "fields": {
-      "name_ru": "\u0438\u0437\u043c\u0435\u043d\u0435\u043d \u0441\u043f\u0438\u0441\u043e\u043a \u043d\u0430",
+      "name_ru": "\\u0438\\u0437\\u043c\\u0435\\u043d\\u0435\\u043d \\u0441\\u043f\\u0438\\u0441\\u043e\\u043a \\u043d\\u0430",
       "name_en": "list changed to",
       "name": "list changed to"
     },
@@ -18,7 +19,7 @@
   },
   {
     "fields": {
-      "name_ru": "\u0434\u043e\u0431\u0430\u0432\u043b\u0435\u043d\u0430 \u043e\u0446\u0435\u043d\u043a\u0430",
+      "name_ru": "\\u0434\\u043e\\u0431\\u0430\\u0432\\u043b\\u0435\\u043d\\u0430 \\u043e\\u0446\\u0435\\u043d\\u043a\\u0430",
       "name_en": "added rating",
       "name": "added rating"
     },
@@ -27,7 +28,7 @@
   },
   {
     "fields": {
-      "name_ru": "\u0434\u043e\u0431\u0430\u0432\u043b\u0435\u043d \u043a\u043e\u043c\u043c\u0435\u043d\u0442\u0430\u0440\u0438\u0439",
+      "name_ru": "\\u0434\\u043e\\u0431\\u0430\\u0432\\u043b\\u0435\\u043d \\u043a\\u043e\\u043c\\u043c\\u0435\\u043d\\u0442\\u0430\\u0440\\u0438\\u0439",
       "name_en": "added comment",
       "name": "added comment"
     },

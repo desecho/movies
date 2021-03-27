@@ -1,4 +1,5 @@
-[{
+[
+  {
     "model": "moviesapp.record",
     "pk": 1,
     "fields": {

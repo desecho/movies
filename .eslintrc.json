@@ -1,10 +1,17 @@
 {
-  "extends": ["eslint:recommended", "google", "plugin:vue/recommended"],
+  "extends": [
+    "eslint:recommended",
+    "google",
+    "plugin:vue/recommended"
+  ],
   "rules": {
     "require-jsdoc": 0,
-    "max-len": ["error", {
-      "code": 119
-    }]
+    "max-len": [
+      "error",
+      {
+        "code": 119
+      }
+    ]
   },
   "env": {
     "browser": true,
