@@ -29,7 +29,4 @@ pydocstyle
 safety
 autoflake
 black
-
-## reStructuredText
 restructuredtext_lint
-pygments
