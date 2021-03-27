@@ -3,13 +3,11 @@
 
 import os
 import os.path as op
-import sys
 
 try:
     from movies import local_settings
 except ImportError:
-    print("local_settings are missing!")
-    sys.exit()
+    from movies import local_settings_template as local_settings
 
 SRC_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PROJECT_DIR = os.path.dirname(SRC_DIR)
