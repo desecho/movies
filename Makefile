@@ -137,10 +137,10 @@ flake8:
 isort:
 	tox -e py37-isort
 
-.PHONY: bandir
-## Run bandir
-bandir:
-	tox -e py37-bandir
+.PHONY: bandit
+## Run bandit
+bandit:
+	tox -e py37-bandit
 
 .PHONY: rstlint
 ## Run rstlint
