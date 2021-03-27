@@ -15,8 +15,8 @@ node_modules
 .pytest_cache/
 yarn-error.log
 package-lock.json
-src/moviesapp/static/js/*
-src/moviesapp/static/font/*
-src/moviesapp/static/style.css
+src/moviesapp/static/js/
+src/moviesapp/static/font/
+src/moviesapp/static/*.css
 venv
 /static
