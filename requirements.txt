@@ -1,5 +1,6 @@
 # Django
-Django==2.0.13
+Django==2.1.15
+
 django-annoying==0.10.4
 django-simple-menu==1.2.1
 django-rosetta==0.9.3

@@ -4,7 +4,8 @@ import django
 from django.conf import settings
 from django.conf.urls import include
 from django.contrib import admin
-from django.contrib.auth.views import login
+from django.contrib.auth.views import LoginView
+
 from django.urls import path, re_path
 from django.views.i18n import JavaScriptCatalog
 
@@ -38,7 +39,7 @@ urlpatterns = [
     path("search-movie/", SearchMovieView.as_view(), name="search_movie"),
     path("add-to-list-from-db/", AddToListFromDbView.as_view(), name="add_to_list_from_db"),
     # Login
-    path("login/", login, {"template_name": "user/login.html"}, name="login"),
+    path("login/", LoginView.as_view(template_name='user/login.html'), name="login"),
     path("logout/", logout_view, name="logout"),
     path("login-error/", LoginErrorView.as_view(), name="login_error"),
     # Vk
