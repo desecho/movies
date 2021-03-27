@@ -72,7 +72,7 @@ load-initial-fixtures:
 
 .PHONY: bootstrap
 ## Bootstrap project
-bootstrap: install-deps yarn-install-locked create-venv create-db migrate load-initial-fixtures
+bootstrap: install-deps yarn-install-locked create-venv create-db migrate load-initial-fixtures yarn-build collectstatic createsuperuser
 #------------------------------------
 
 
@@ -94,9 +94,9 @@ jsonlint:
 #------------------------------------
 # Development
 #------------------------------------
-.PHONY: yarn-install-fresh
-## Run yarn install (fresh)
-yarn-install-fresh:
+.PHONY: yarn-install-refresh
+## Run yarn install (refresh)
+yarn-install-refresh:
 	rm yarn.lock
 	yarn install
 
