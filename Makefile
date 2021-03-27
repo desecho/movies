@@ -158,6 +158,11 @@ eslint:
 ## Run csscomb-linter
 csscomb-linter:
 	tox -e py37-csscomb-linter
+
+.PHONY: black
+## Run black linter
+black:
+	tox -e py37-black
 #------------------------------------
 
 #------------------------------------
@@ -184,7 +189,8 @@ build:
 format:
 	${SOURCE_VENV_CMD} && \
 	autoflake --remove-all-unused-imports --in-place -r src && \
-	isort -rc src
+	isort -rc src && \
+	black .
 	yarn run csscomb src/moviesapp/styles/*
 	yarn run eslint ./*.js src/moviesapp/js/* --fix
 	scripts/jsonlint.sh format

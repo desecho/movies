@@ -1,0 +1,18 @@
+[tool.black]
+line-length = 119
+target-version = ['py37']
+skip-string-normalization = false
+include = '\.pyi?$'
+exclude = '''
+/(
+    __pycache__
+    | \.hypothesis
+    | \.idea
+    | \.mypy_cache
+    | \.pytest_cache
+    | \.tox
+    | \.venv
+    | \.vscode
+    | htmlcov
+/)
+'''
