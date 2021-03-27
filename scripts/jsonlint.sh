@@ -9,3 +9,10 @@ if [ $1 == "lint" ]; then
         yarn run jsonlint $file -q
     done
 fi
+
+if [ $1 == "format" ]; then
+    for file in $jsonFiles; do
+        yarn run jsonlint $file -i
+        sed -i -e '$a\' $file
+    done
+fi

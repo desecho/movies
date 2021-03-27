@@ -125,9 +125,10 @@ test:
 format:
 	${SOURCE_VENV_CMD} && \
 	autoflake --remove-all-unused-imports --in-place -r src && \
-	isort -rc src && \
-	yarn run csscomb src/moviesapp/styles/* && \
+	isort -rc src
+	yarn run csscomb src/moviesapp/styles/*
 	yarn run eslint ./*.js src/moviesapp/js/* --fix
+	scripts/jsonlint.sh format
 #------------------------------------
 
 
