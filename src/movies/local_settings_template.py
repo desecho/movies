@@ -11,7 +11,7 @@ DATABASES = {
     }
 }
 SECRET_KEY = 'key'
-PROJECT_DOMAIN = '127.0.0.1'
+PROJECT_DOMAIN = 'localhost'
 RAVEN_DSN = ''
 GOOGLE_ANALYTICS_ID = 'id'
 ADMIN_EMAIL = ''
