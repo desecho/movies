@@ -72,7 +72,7 @@ load-initial-fixtures:
 
 .PHONY: bootstrap
 ## Bootstrap project
-bootstrap: install-deps yarn-install-locked create-venv create-db migrate load-initial-fixtures yarn-build collectstatic create-local-settings createsuperuser
+bootstrap: install-deps yarn-install-locked create-venv create-db migrate load-initial-fixtures yarn-build collectstatic create-local-settings
 
 .PHONY: create-local-settings
 ## Create local_settings
@@ -185,4 +185,10 @@ collectstatic:
 createsuperuser:
 	${SOURCE_VENV_CMD} && \
 	${MANAGE_CMD} createsuperuser
+
+.PHONY: makemigrations
+## Run makemigrations command
+makemigrations:
+	${SOURCE_VENV_CMD} && \
+	${MANAGE_CMD} makemigrations
 #------------------------------------
