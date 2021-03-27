@@ -91,6 +91,20 @@ create-local-settings:
 
 
 #------------------------------------
+# Scripts
+#------------------------------------
+
+.PHONY: pydiatra-script
+pydiatra-script:
+	scripts/pydiatra.sh
+
+.PHONY: jsonlint-script
+jsonlint-script:
+	scripts/jsonlint.sh lint
+#------------------------------------
+
+
+#------------------------------------
 # Tox
 #------------------------------------
 .PHONY: test
@@ -101,13 +115,12 @@ test:
 .PHONY: pydiatra
 ## Run pydiatra
 pydiatra:
-	${SOURCE_VENV_CMD} && \
-	scripts/pydiatra.sh
+	tox -e py37-pydiatra
 
 .PHONY: jsonlint
 ## Run jsonlint
 jsonlint:
-	scripts/jsonlint.sh lint
+	tox -e py37-jsonlint
 
 .PHONY: pylint
 ## Run pylint
