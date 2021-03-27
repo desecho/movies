@@ -139,7 +139,7 @@ class UserBase:
 
     def get_friends(self, sort=False):
         friends = User.objects.none()
-        if self.is_linked:
+        if self.is_linked:  # pylint: disable=using-constant-test
             if self.is_vk_user():
                 friends |= self.get_vk().get_friends()
             if self.is_fb_user():
@@ -193,7 +193,7 @@ class List(models.Model):
     key_name = models.CharField(max_length=255)
 
     def __str__(self):
-        return self.name
+        return str(self.name)
 
 
 class Movie(models.Model):
@@ -218,7 +218,7 @@ class Movie(models.Model):
         ordering = ["pk"]
 
     def __str__(self):
-        return self.title
+        return str(self.title)
 
     def imdb_url(self):
         return settings.IMDB_BASE_URL + self.imdb_id + "/"
@@ -305,7 +305,7 @@ class Action(models.Model):
     name = models.CharField(max_length=255)
 
     def __str__(self):
-        return self.name
+        return str(self.name)
 
 
 class ActionRecord(models.Model):

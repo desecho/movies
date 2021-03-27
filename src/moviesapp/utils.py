@@ -15,11 +15,11 @@ from .tmdb import get_tmdb_movie_data
 def load_omdb_movie_data(imdb_id):
     try:
         r = requests.get(f"http://www.omdbapi.com/?i={imdb_id}&apikey={settings.OMDB_KEY}")
-    except:  # noqa
+    except Exception as e:  # noqa
         if settings.DEBUG:
             raise
         client.captureException()
-        raise OmdbRequestError
+        raise OmdbRequestError from e
     movie_data = r.json()
     response = movie_data["Response"]
     if response == "True":

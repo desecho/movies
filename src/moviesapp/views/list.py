@@ -47,8 +47,8 @@ class RemoveRecordView(AjaxView):
             return self.render_bad_request_response()
         try:
             request.user.get_record(record_id).delete()
-        except Record.DoesNotExist:
-            raise Http404
+        except Record.DoesNotExist as e:
+            raise Http404 from e
         return self.success()
 
 
