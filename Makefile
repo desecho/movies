@@ -184,15 +184,19 @@ yarn-build:
 build:
 	yarn build --watch
 
-.PHONY: format
-## Format code
-format:
+.PHONY: format-fast
+## Fast format code
+format-fast:
 	${SOURCE_VENV_CMD} && \
 	autoflake --remove-all-unused-imports --in-place -r src && \
 	isort -rc src && \
 	black .
 	yarn run csscomb src/moviesapp/styles/*
 	yarn run eslint ./*.js src/moviesapp/js/* --fix
+
+.PHONY: format
+## Format code
+format: format-fast
 	scripts/jsonlint.sh format
 #------------------------------------
 
