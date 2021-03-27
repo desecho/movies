@@ -210,10 +210,7 @@ LOGIN_ERROR_URL = "/login-error/"
 
 # Static files
 if local_settings.IS_DEV:
-    STATICFILES_DIRS = (
-        os.path.join(SRC_DIR, "moviesapp", 'static'),
-        os.path.join(PROJECT_DIR, "static")
-    )
+    STATICFILES_DIRS = (os.path.join(SRC_DIR, "moviesapp", "static"), os.path.join(PROJECT_DIR, "static"))
     STATIC_ROOT = None
 else:
     STATIC_ROOT = os.path.join(PROJECT_DIR, "static")

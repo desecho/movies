@@ -7,19 +7,8 @@ from django.http import Http404
 
 from moviesapp.models import Action, ActionRecord, List, Record, User
 
-from .mixins import (
-    AjaxAnonymousView,
-    AjaxView,
-    TemplateAnonymousView,
-    TemplateView,
-)
-from .utils import (
-    add_movie_to_list,
-    get_anothers_account,
-    get_records,
-    paginate,
-    sort_by_rating,
-)
+from .mixins import AjaxAnonymousView, AjaxView, TemplateAnonymousView, TemplateView
+from .utils import add_movie_to_list, get_anothers_account, get_records, paginate, sort_by_rating
 
 
 class ChangeRatingView(AjaxView):

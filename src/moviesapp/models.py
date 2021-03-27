@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 import facebook
 import vkontakte
-
-# Not using django-mysql instead because it's not supported by modeltranslation.
-from annoying.fields import JSONField
+from annoying.fields import JSONField  # Not using django-mysql instead because it's not supported by modeltranslation.
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser, AnonymousUser
 from django.contrib.auth.signals import user_logged_in
