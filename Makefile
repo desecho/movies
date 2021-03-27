@@ -18,29 +18,38 @@ WHITE   := \033[0;37m
 RESET   := \033[0;10m
 
 .PHONY: help
-## Show help
+## Show help | Help
 help:
 	@echo ''
 	@echo 'Usage:'
-	@echo -e '  ${YELLOW}make${RESET} ${GREEN}<target>${RESET}'
+	@printf "  ${YELLOW}make${RESET} ${GREEN}<target>${RESET}"
+	@echo ''
 	@echo ''
 	@echo 'Targets:'
-	@awk '/^[a-zA-Z\-_0-9\\%]+:/ { \
+	@awk '/^[a-zA-Z\-\_0-9]+:/ { \
 		helpMessage = match(lastLine, /^## (.*)/); \
 		if (helpMessage) { \
+		    if (index(lastLine, "|") != 0) { \
+				stage = substr(lastLine, index(lastLine, "|") + 1); \
+				printf "\n ${GRAY}%s: \n", stage;  \
+			} \
 			helpCommand = substr($$1, 0, index($$1, ":")-1); \
 			helpMessage = substr(lastLine, RSTART + 3, RLENGTH); \
-			printf "  ${YELLOW}%-$(TARGET_MAX_CHAR_NUM)s${RESET} ${GREEN}%s${RESET}\n", helpCommand, helpMessage; \
+			if (index(lastLine, "|") != 0) { \
+				helpMessage = substr(helpMessage, 0, index(helpMessage, "|")-1); \
+			} \
+			printf "    ${YELLOW}%-$(TARGET_MAX_CHAR_NUM)s${RESET} ${GREEN}%s${RESET}\n", helpCommand, helpMessage; \
 		} \
 	} \
-	{lastLine = $$0}' $(MAKEFILE_LIST)
+	{ lastLine = $$0 }' $(MAKEFILE_LIST)
 #------------------------------------
 
 #------------------------------------
 # Installation
 #------------------------------------
+
 .PHONY: install-deps
-## Install dependencies
+## Install dependencies | Installation
 install-deps:
 	# Install Python
 	sudo apt install python3.7 python3.7-venv python3.7-dev -y
@@ -85,7 +94,7 @@ create-local-settings:
 # Tox
 #------------------------------------
 .PHONY: test
-## Run tests
+## Run tests | Tests
 test:
 	tox
 
@@ -155,7 +164,7 @@ csscomb-linter:
 # Development
 #------------------------------------
 .PHONY: yarn-install-refresh
-## Run yarn install (refresh)
+## Run yarn install (refresh) | Development
 yarn-install-refresh:
 	rm yarn.lock
 	yarn install
@@ -169,12 +178,7 @@ yarn-build:
 ## Run yarn build for development
 build:
 	yarn build --watch
-#------------------------------------
 
-
-#------------------------------------
-# Commands
-#------------------------------------
 .PHONY: format
 ## Format code
 format:
@@ -194,7 +198,7 @@ format:
 MANAGE_CMD := src/manage.py
 
 .PHONY: makemessages
-## Run makemessages
+## Run makemessages | Django
 makemessages:
 	${SOURCE_VENV_CMD} && \
 	${MANAGE_CMD} makemessages -d djangojs --ignore=moviesapp/static/* --ignore=node_modules/* --ignore=venv/* --ignore=.tox/*
