@@ -88,7 +88,7 @@ pydiatra:
 .PHONY: jsonlint
 ## Run jsonlint
 jsonlint:
-	scripts/jsonlint.sh
+	scripts/jsonlint.sh lint
 #------------------------------------
 
 #------------------------------------
