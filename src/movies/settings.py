@@ -6,15 +6,13 @@ import os.path as op
 import sys
 
 try:
-    import local_settings
+    from movies import local_settings
 except ImportError:
-    try:
-        from . import initial_settings as local_settings
-    except ImportError:
-        print('No initial settings!')
-        sys.exit()
+    print('local_settings are missing!')
+    sys.exit()
 
-BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+SRC_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+PROJECT_DIR = os.path.dirname(SRC_DIR)
 
 # Custom
 IS_VK_DEV = local_settings.IS_VK_DEV
@@ -51,7 +49,7 @@ LANGUAGES = (
     ('en', 'English'),
     ('ru', 'Русский'),
 )
-LOCALE_PATHS = (op.join(local_settings.PROJECT_ROOT, 'project', 'src', 'locale'), )
+LOCALE_PATHS = (os.path.join(SRC_DIR, 'locale'), )
 
 # Timezone
 TIME_ZONE = 'US/Eastern'
@@ -60,7 +58,7 @@ USE_TZ = True
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': (os.path.join(BASE_DIR, 'templates'), ),
+        'DIRS': (os.path.join(SRC_DIR, 'templates'), ),
         'OPTIONS': {
             'context_processors': (
                 'django.template.context_processors.debug',
@@ -221,11 +219,11 @@ LOGIN_URL = '/login/'
 LOGIN_ERROR_URL = '/login-error/'
 
 # Static files
-STATIC_ROOT = op.join(local_settings.PROJECT_ROOT, 'static')
+STATIC_ROOT = op.join(PROJECT_DIR, 'static')
 STATIC_URL = '/static/'
 
 # Media files
-MEDIA_ROOT = op.join(local_settings.PROJECT_ROOT, 'media')
+MEDIA_ROOT = op.join(PROJECT_DIR, 'media')
 MEDIA_URL = '/media/'
 
 # --== Modules settings ==--

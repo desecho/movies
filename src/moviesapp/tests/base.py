@@ -53,7 +53,7 @@ class BaseTestCase(TestCase):
         self.client.login(username=username, password=self.USER_PASSWORD)
 
     def load_json(self, filename):
-        base_path = os.path.join(settings.BASE_DIR, 'moviesapp', 'tests', 'files')
+        base_path = os.path.join(settings.SRC_DIR, 'moviesapp', 'tests', 'files')
         path = os.path.join(base_path, filename)
         with open(path) as f:
             return json.load(f)
