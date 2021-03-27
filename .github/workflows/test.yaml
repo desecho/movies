@@ -29,3 +29,5 @@ jobs:
           tox -e py37-requirements
       - name: Run tests
         run: make test
+      - name: Run codecov
+        uses: codecov/codecov-action@v1
