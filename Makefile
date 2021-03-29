@@ -1,7 +1,7 @@
 .DEFAULT_GOAL := help
 
 SHELL := /bin/bash
-SOURCE_VENV_CMD := source venv/bin/activate
+SOURCE_CMDS := source venv/bin/activate && source env.sh
 #------------------------------------
 # Help
 #------------------------------------
@@ -60,7 +60,7 @@ install-deps:
 ## Create virtual environment and install requirements
 create-venv:
 	python3.7 -m venv venv
-	${SOURCE_VENV_CMD} && \
+	${SOURCE_CMDS} && \
 		pip install -r requirements-dev.txt
 
 .PHONY: yarn-install-locked
@@ -81,12 +81,12 @@ load-initial-fixtures:
 
 .PHONY: bootstrap
 ## Bootstrap project
-bootstrap: install-deps yarn-install-locked create-venv create-db migrate load-initial-fixtures yarn-build collectstatic create-local-settings
+bootstrap: install-deps yarn-install-locked create-venv create-db migrate load-initial-fixtures yarn-build collectstatic create-env-file
 
-.PHONY: create-local-settings
-## Create local_settings
-create-local-settings:
-	cp -n src/movies/local_settings_template.py src/movies/local_settings.py
+.PHONY: create-env-file
+## Create env file
+create-env-file:
+	cp -n env_template.sh env.sh
 #------------------------------------
 
 
@@ -200,7 +200,7 @@ build:
 .PHONY: format-fast
 ## Fast format code
 format-fast:
-	${SOURCE_VENV_CMD} && \
+	${SOURCE_CMDS} && \
 	autoflake --remove-all-unused-imports --in-place -r src && \
 	isort -rc src && \
 	black .
@@ -223,19 +223,19 @@ MANAGE_CMD := src/manage.py
 .PHONY: makemessages
 ## Run makemessages | Django
 makemessages:
-	${SOURCE_VENV_CMD} && \
+	${SOURCE_CMDS} && \
 	${MANAGE_CMD} makemessages -d djangojs --ignore=moviesapp/static/* --ignore=node_modules/* --ignore=venv/* --ignore=.tox/*
 
 .PHONY: runserver
 ## Run server for development
 runserver:
-	${SOURCE_VENV_CMD} && \
+	${SOURCE_CMDS} && \
 	${MANAGE_CMD} runserver 0.0.0.0:8000
 
 .PHONY: migrate
 ## Run data migration
 migrate:
-	${SOURCE_VENV_CMD} && \
+	${SOURCE_CMDS} && \
 	${MANAGE_CMD} migrate
 
 ifeq (loaddata,$(firstword $(MAKECMDGOALS)))
@@ -248,24 +248,24 @@ endif
 .PHONY: loaddata
 ## Load fixtures
 loaddata:
-	${SOURCE_VENV_CMD} && \
+	${SOURCE_CMDS} && \
 	${MANAGE_CMD} loaddata ${LOADDATA_ARGS}
 
 .PHONY: collectstatic
 ## Collect static files
 collectstatic:
-	${SOURCE_VENV_CMD} && \
+	${SOURCE_CMDS} && \
 	${MANAGE_CMD} collectstatic
 
 .PHONY: createsuperuser
 ## Create super user
 createsuperuser:
-	${SOURCE_VENV_CMD} && \
+	${SOURCE_CMDS} && \
 	${MANAGE_CMD} createsuperuser
 
 .PHONY: makemigrations
 ## Run makemigrations command
 makemigrations:
-	${SOURCE_VENV_CMD} && \
+	${SOURCE_CMDS} && \
 	${MANAGE_CMD} makemigrations
 #------------------------------------

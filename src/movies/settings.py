@@ -1,42 +1,50 @@
-# -*- coding: utf-8 -*-
 """Django settings."""
 
-import os
+from os import getenv
+from os.path import abspath, dirname, join
 
-try:
-    from movies import local_settings
-except ImportError:
-    from movies import local_settings_template as local_settings
-
-SRC_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-PROJECT_DIR = os.path.dirname(SRC_DIR)
+SRC_DIR = dirname(dirname(abspath(__file__)))
+PROJECT_DIR = dirname(SRC_DIR)
 
 # Custom
-IS_VK_DEV = local_settings.IS_VK_DEV
+IS_DEV = bool(getenv("IS_DEV"))
+IS_VK_DEV = bool(getenv("IS_VK_DEV"))
 
 # Debug
-DEBUG = local_settings.DEBUG
-INTERNAL_IPS = local_settings.INTERNAL_IPS
+DEBUG = bool(getenv("DEBUG"))
+INTERNAL_IPS = [getenv("INTERNAL_IP")]
 
-SECRET_KEY = local_settings.SECRET_KEY
-DATABASES = local_settings.DATABASES
+ADMIN_EMAIL = getenv("ADMIN_EMAIL")
+SECRET_KEY = getenv("SECRET_KEY")
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.mysql",
+        "NAME": "movies",
+        "USER": getenv("DB_USER"),
+        "PASSWORD": getenv("DB_PASSWORD"),
+        "HOST": getenv("DB_HOST"),
+        "OPTIONS": {
+            "charset": "utf8mb4",
+        },
+    }
+}
 ROOT_URLCONF = "movies.urls"
 WSGI_APPLICATION = "movies.wsgi.application"
 SESSION_SAVE_EVERY_REQUEST = True
 SITE_ID = 1
 
 # Email
-EMAIL_USE_SSL = local_settings.EMAIL_USE_SSL
-EMAIL_HOST = local_settings.EMAIL_HOST
-EMAIL_HOST_USER = local_settings.EMAIL_HOST_USER
-EMAIL_HOST_PASSWORD = local_settings.EMAIL_HOST_PASSWORD
-EMAIL_PORT = local_settings.EMAIL_PORT
-DEFAULT_FROM_EMAIL = local_settings.ADMIN_EMAIL
+EMAIL_USE_SSL = bool(getenv("EMAIL_USE_SSL"))
+EMAIL_HOST = getenv("EMAIL_HOST")
+EMAIL_HOST_USER = getenv("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = getenv("EMAIL_HOST_PASSWORD")
+EMAIL_PORT = int(getenv("EMAIL_PORT"))
+DEFAULT_FROM_EMAIL = ADMIN_EMAIL
 
 # Allowed hosts
-ALLOWED_HOSTS = [local_settings.PROJECT_DOMAIN]
+ALLOWED_HOSTS = [getenv("PROJECT_DOMAIN")]
 if IS_VK_DEV:
-    ALLOWED_HOSTS.append(local_settings.HOST_MOVIES_TEST)
+    ALLOWED_HOSTS.append(getenv("HOST_MOVIES_TEST"))
 
 # Internationalization
 LANGUAGE_CODE = "en"
@@ -46,7 +54,7 @@ LANGUAGES = (
     ("en", "English"),
     ("ru", "Русский"),
 )
-LOCALE_PATHS = (os.path.join(SRC_DIR, "locale"),)
+LOCALE_PATHS = (join(SRC_DIR, "locale"),)
 
 # Timezone
 TIME_ZONE = "US/Eastern"
@@ -55,7 +63,7 @@ USE_TZ = True
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": (os.path.join(SRC_DIR, "templates"),),
+        "DIRS": (join(SRC_DIR, "templates"),),
         "OPTIONS": {
             "context_processors": (
                 "django.template.context_processors.debug",
@@ -204,21 +212,21 @@ AUTH_PASSWORD_VALIDATORS = [
 # Login
 LOGIN_REDIRECT_URL = "/"
 if IS_VK_DEV:
-    LOGIN_REDIRECT_URL = "https://{}".format(local_settings.HOST_MOVIES_TEST)
+    LOGIN_REDIRECT_URL = "https://{}".format(getenv("HOST_MOVIES_TEST"))
 LOGIN_URL = "/login/"
 LOGIN_ERROR_URL = "/login-error/"
 
 # Static files
-if local_settings.IS_DEV:
-    STATICFILES_DIRS = (os.path.join(SRC_DIR, "moviesapp", "static"), os.path.join(PROJECT_DIR, "static"))
+if IS_DEV:
+    STATICFILES_DIRS = (join(SRC_DIR, "moviesapp", "static"), join(PROJECT_DIR, "static"))
     STATIC_ROOT = None
 else:
-    STATIC_ROOT = os.path.join(PROJECT_DIR, "static")
+    STATIC_ROOT = join(PROJECT_DIR, "static")
 
 STATIC_URL = "/static/"
 
 # Media files
-MEDIA_ROOT = os.path.join(PROJECT_DIR, "media")
+MEDIA_ROOT = join(PROJECT_DIR, "media")
 MEDIA_URL = "/media/"
 
 # --== Modules settings ==--
@@ -228,16 +236,16 @@ ACCOUNT_ACTIVATION_DAYS = 7
 REGISTRATION_FORM = "registration.forms.RegistrationFormUniqueEmail"
 
 # social-auth-app-django
-SOCIAL_AUTH_VK_OAUTH2_KEY = local_settings.SOCIAL_AUTH_VK_OAUTH2_KEY
-SOCIAL_AUTH_VK_OAUTH2_SECRET = local_settings.SOCIAL_AUTH_VK_OAUTH2_SECRET
+SOCIAL_AUTH_VK_OAUTH2_KEY = getenv("SOCIAL_AUTH_VK_OAUTH2_KEY")
+SOCIAL_AUTH_VK_OAUTH2_SECRET = getenv("SOCIAL_AUTH_VK_OAUTH2_SECRET")
 SOCIAL_AUTH_VK_OAUTH2_SCOPE = ["friends", "email"]
 
-SOCIAL_AUTH_VK_APP_KEY = local_settings.SOCIAL_AUTH_VK_APP_KEY
-SOCIAL_AUTH_VK_APP_SECRET = local_settings.SOCIAL_AUTH_VK_APP_SECRET
+SOCIAL_AUTH_VK_APP_KEY = getenv("SOCIAL_AUTH_VK_APP_KEY")
+SOCIAL_AUTH_VK_APP_SECRET = getenv("SOCIAL_AUTH_VK_APP_SECRET")
 SOCIAL_AUTH_VK_APP_USER_MODE = 2
 
-SOCIAL_AUTH_FACEBOOK_KEY = local_settings.SOCIAL_AUTH_FACEBOOK_KEY
-SOCIAL_AUTH_FACEBOOK_SECRET = local_settings.SOCIAL_AUTH_FACEBOOK_SECRET
+SOCIAL_AUTH_FACEBOOK_KEY = getenv("SOCIAL_AUTH_FACEBOOK_KEY")
+SOCIAL_AUTH_FACEBOOK_SECRET = getenv("SOCIAL_AUTH_FACEBOOK_SECRET")
 SOCIAL_AUTH_FACEBOOK_SCOPE = ["email", "user_friends", "public_profile", "user_location"]
 
 SOCIAL_AUTH_USER_MODEL = AUTH_USER_MODEL
@@ -291,9 +299,7 @@ DEBUG_TOOLBAR_PANELS = [
 ]
 
 # raven
-RAVEN_CONFIG = {
-    "dsn": local_settings.RAVEN_DSN,
-}
+RAVEN_CONFIG = {"dsn": getenv("RAVEN_DSN")}
 
 # django-modeladmin-reorder
 ADMIN_REORDER = (
@@ -314,9 +320,7 @@ ADMIN_REORDER = (
 )
 
 # django-google-analytics-app
-GOOGLE_ANALYTICS = {
-    "google_analytics_id": local_settings.GOOGLE_ANALYTICS_ID,
-}
+GOOGLE_ANALYTICS = {"google_analytics_id": getenv("GOOGLE_ANALYTICS_ID")}
 
 # --== Project settings ==--
 
@@ -355,11 +359,10 @@ MAX_RECOMMENDATIONS = 50
 RECORDS_ON_PAGE = 50
 PEOPLE_ON_PAGE = 25
 FEED_DAYS = 7
-ADMIN_EMAIL = local_settings.ADMIN_EMAIL
 
 VK_EN = 3
 VK_NO_AVATAR = ["https://vk.com/images/camera_100.png", "https://vk.com/images/camera_200.png"]
 
 # API Keys
-TMDB_KEY = local_settings.TMDB_KEY
-OMDB_KEY = local_settings.OMDB_KEY
+TMDB_KEY = getenv("TMDB_KEY")
+OMDB_KEY = getenv("OMDB_KEY")

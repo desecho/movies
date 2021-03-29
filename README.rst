@@ -19,6 +19,7 @@ Development
 2. Use mysql-docker_ to bring up MySQL in Docker
 3. Run ``make bootstrap``
 4. Run ``make createsuperuser`` to create an admin user.
+5. Edit file ``env.sh``
 
 Run ``make build`` and ``make runserver`` to run the server for development.
 

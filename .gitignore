@@ -6,7 +6,6 @@ __pycache__
 ._*
 .DS_Store
 
-local_settings.py
 .coverage
 .idea
 .vscode
@@ -20,3 +19,4 @@ src/moviesapp/static/font/
 src/moviesapp/static/*.css
 venv
 /static
+env.sh
