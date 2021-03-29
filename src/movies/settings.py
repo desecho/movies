@@ -3,12 +3,11 @@
 from os import getenv
 from os.path import abspath, dirname, join
 
-SRC_DIR = dirname(dirname(abspath(__file__)))
-PROJECT_DIR = dirname(SRC_DIR)
-
 # Custom
 IS_DEV = bool(getenv("IS_DEV"))
 IS_VK_DEV = bool(getenv("IS_VK_DEV"))
+COLLECT_STATIC_RUN = bool(getenv("COLLECT_STATIC_RUN"))
+SRC_DIR = dirname(dirname(abspath(__file__)))
 
 # Debug
 DEBUG = bool(getenv("DEBUG"))
@@ -217,16 +216,16 @@ LOGIN_URL = "/login/"
 LOGIN_ERROR_URL = "/login-error/"
 
 # Static files
-if IS_DEV:
-    STATICFILES_DIRS = (join(SRC_DIR, "moviesapp", "static"), join(PROJECT_DIR, "static"))
+if IS_DEV and not COLLECT_STATIC_RUN:
+    STATICFILES_DIRS = (join(SRC_DIR, "moviesapp", "static"), join(SRC_DIR, "static"))
     STATIC_ROOT = None
 else:
-    STATIC_ROOT = join(PROJECT_DIR, "static")
+    STATIC_ROOT = join(SRC_DIR, "static")
 
 STATIC_URL = "/static/"
 
 # Media files
-MEDIA_ROOT = join(PROJECT_DIR, "media")
+MEDIA_ROOT = join(SRC_DIR, "media")
 MEDIA_URL = "/media/"
 
 # --== Modules settings ==--

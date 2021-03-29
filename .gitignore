@@ -18,5 +18,6 @@ src/moviesapp/static/js/
 src/moviesapp/static/font/
 src/moviesapp/static/*.css
 venv
-/static
 env.sh
+src/static
+src/media
