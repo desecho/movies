@@ -1,9 +1,9 @@
-name: Test
+name: CI/CD
 on: push
 
 jobs:
-  test:
-    name: Run tests
+  ci_cd:
+    name: Run CI/CD
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -29,7 +29,15 @@ jobs:
           tox -e py37-requirements
       - name: Run tests
         run: make test
-      - name: Install coverage requirements
+      - name: Install codecov requirements
         run: pip install coverage
       - name: Run codecov
         uses: codecov/codecov-action@v1
+      - name: Push to GitHub Packages
+        uses: docker/build-push-action@v1
+        with:
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          registry: docker.pkg.github.com
+          repository: ${{ github.actor }}/movies/movies
+          tags: latest
