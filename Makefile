@@ -257,7 +257,7 @@ loaddata:
 ## Collect static files
 collectstatic:
 	${SOURCE_CMDS} && \
-	export COLLECT_STATIC_RUN=True && \
+	export IS_DEV= && \
 	${MANAGE_CMD} collectstatic
 
 .PHONY: createsuperuser

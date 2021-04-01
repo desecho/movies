@@ -6,7 +6,6 @@ from os.path import abspath, dirname, join
 # Custom
 IS_DEV = bool(getenv("IS_DEV"))
 IS_VK_DEV = bool(getenv("IS_VK_DEV"))
-COLLECT_STATIC_RUN = bool(getenv("COLLECT_STATIC_RUN"))
 SRC_DIR = dirname(dirname(abspath(__file__)))
 PROJECT_DIR = dirname(SRC_DIR)
 
@@ -38,7 +37,7 @@ EMAIL_USE_SSL = bool(getenv("EMAIL_USE_SSL"))
 EMAIL_HOST = getenv("EMAIL_HOST")
 EMAIL_HOST_USER = getenv("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = getenv("EMAIL_HOST_PASSWORD")
-EMAIL_PORT = int(getenv("EMAIL_PORT"))
+EMAIL_PORT = int(getenv("EMAIL_PORT", "465"))
 DEFAULT_FROM_EMAIL = ADMIN_EMAIL
 
 # Allowed hosts
@@ -217,13 +216,13 @@ LOGIN_URL = "/login/"
 LOGIN_ERROR_URL = "/login-error/"
 
 # Static files
-if IS_DEV and not COLLECT_STATIC_RUN:
+if IS_DEV:
     STATICFILES_DIRS = (join(SRC_DIR, "moviesapp", "static"), join(PROJECT_DIR, "static"))
     STATIC_ROOT = None
 else:
     STATIC_ROOT = join(PROJECT_DIR, "static")
 
-STATIC_URL = getenv("STATIC_URL")
+STATIC_URL = getenv("STATIC_URL", "/static/")
 
 # Media files
 MEDIA_ROOT = join(PROJECT_DIR, "media")
