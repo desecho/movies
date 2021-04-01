@@ -13,7 +13,7 @@ indent_size = 4
 [*.{py,ini}]
 max_line_length = 119
 
-[*.{css,html,js,json,less,scss,yml}]
+[*.{css,html,js,json,less,scss,yml,yaml}]
 indent_size = 2
 max_line_length = 119
 
