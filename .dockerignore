@@ -1,0 +1,7 @@
+src/moviesapp/static
+venv
+node_modules
+.tox
+.github
+.vscode
+static

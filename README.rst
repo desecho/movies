@@ -19,7 +19,7 @@ Development
 2. Use mysql-docker_ to bring up MySQL in Docker
 3. Run ``make bootstrap``
 4. Run ``make createsuperuser`` to create an admin user.
-5. Edit file ``env.sh``
+5. Edit files ``env.sh``
 
 Run ``make build`` and ``make runserver`` to run the server for development.
 
@@ -29,6 +29,15 @@ Open http://localhost:8000/admin to access the admin section.
 Run ``make format`` to format all the code
 
 Run ``make help`` to get a list of all available commands.
+
+Run in Docker:
+
+1. Edit ``env_docker.sh``
+
+Note: Static files are not served in docker so you will need to put a URL to your static files there in ``STATIC_URL`` variable.
+
+2. Run ``make docker-build``
+3. Run ``make-docker-run``
 
 Used APIs
 --------------

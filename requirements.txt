@@ -67,3 +67,5 @@ tabulate==0.8.3
 # - https://github.com/celiao/tmdbsimple/pull/26 - Handle 429 errors
 # - https://github.com/celiao/tmdbsimple/pull/25 - Added language support
 -e git+https://github.com/desecho/tmdbsimple.git@changes#egg=tmdbsimple
+
+gunicorn==20.1.0

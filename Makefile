@@ -71,7 +71,8 @@ yarn-install-locked:
 .PHONY: create-db
 ## Create db
 create-db:
-	mysql -uroot -ppassword -h127.0.0.1 -e"CREATE DATABASE movies CHARACTER SET utf8 COLLATE utf8_general_ci;"
+	source env.sh && \
+	mysql -u$$DB_USER -p$$DB_PASSWORD -h$$DB_HOST -e"CREATE DATABASE $$DB_NAME CHARACTER SET utf8 COLLATE utf8_general_ci;"
 
 .PHONY: load-initial-fixtures
 ## Load initial fixtures
@@ -81,12 +82,13 @@ load-initial-fixtures:
 
 .PHONY: bootstrap
 ## Bootstrap project
-bootstrap: install-deps yarn-install-locked create-venv create-db migrate load-initial-fixtures yarn-build collectstatic create-env-file
+bootstrap: install-deps yarn-install-locked create-venv create-db migrate load-initial-fixtures yarn-build collectstatic create-env-files
 
-.PHONY: create-env-file
-## Create env file
-create-env-file:
+.PHONY: create-env-files
+## Create env files
+create-env-files:
 	cp -n env_template.sh env.sh
+	cp -n env_docker_template.sh env_docker.sh
 #------------------------------------
 
 
@@ -269,4 +271,30 @@ createsuperuser:
 makemigrations:
 	${SOURCE_CMDS} && \
 	${MANAGE_CMD} makemigrations
+#------------------------------------
+
+
+#------------------------------------
+# Docker commands
+#------------------------------------
+
+.PHONY: docker-build
+## Run docker-build | Docker
+docker-build:
+	docker build -t movies .
+
+TMP_ENV_DOCKER := $(shell mktemp)
+
+.PHONY: docker-run
+## Run docker-run
+docker-run:
+	sed 's/export //g' env_docker.sh > ${TMP_ENV_DOCKER}
+	docker run --add-host host.docker.internal:host-gateway --env-file ${TMP_ENV_DOCKER} -p 8000:8000 movies
+
+.PHONY: docker-sh
+## Run docker shell
+docker-sh:
+	sed 's/export //g' env_docker.sh > ${TMP_ENV_DOCKER}
+	docker run -ti --add-host host.docker.internal:host-gateway --env-file ${TMP_ENV_DOCKER} movies sh
+
 #------------------------------------

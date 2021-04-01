@@ -19,5 +19,6 @@ src/moviesapp/static/font/
 src/moviesapp/static/*.css
 venv
 env.sh
-src/static
-src/media
+env_docker.sh
+/static
+/media

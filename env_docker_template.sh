@@ -1,20 +1,20 @@
 #!/bin/bash
 
 # bool
-export DEBUG=True
+export DEBUG=
 # bool
-export IS_DEV=True
+export IS_DEV=
 export SECRET_KEY=key
 export PROJECT_DOMAIN=localhost
 export ADMIN_EMAIL=
 export INTERNAL_IP=
 export RAVEN_DSN=
 export GOOGLE_ANALYTICS_ID=id
-export STATIC_URL=/static/
+export STATIC_URL=
 
 export DB_USER=root
 export DB_PASSWORD=password
-export DB_HOST=127.0.0.1
+export DB_HOST=host.docker.internal
 
 export SOCIAL_AUTH_VK_APP_KEY=
 export SOCIAL_AUTH_VK_APP_SECRET=
