@@ -1,0 +1,5 @@
+#!/bin/bash
+
+set -eu
+
+mysql -u$DB_USER -p$DB_PASSWORD -h$DB_HOST -e"CREATE DATABASE movies CHARACTER SET utf8 COLLATE utf8_general_ci;"

@@ -39,6 +39,10 @@ Note: Static files are not served in docker so you will need to put a URL to you
 2. Run ``make docker-build``
 3. Run ``make-docker-run``
 
+Production
+----------------------------
+To use production commands edit ``db_env_prod.sh``.
+
 Used APIs
 --------------
 * TMDb_

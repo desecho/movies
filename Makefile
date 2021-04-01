@@ -72,7 +72,7 @@ yarn-install-locked:
 ## Create db
 create-db:
 	source env.sh && \
-	mysql -u$$DB_USER -p$$DB_PASSWORD -h$$DB_HOST -e"CREATE DATABASE $$DB_NAME CHARACTER SET utf8 COLLATE utf8_general_ci;"
+	scripts/create_db.sh
 
 .PHONY: load-initial-fixtures
 ## Load initial fixtures
@@ -89,6 +89,7 @@ bootstrap: install-deps yarn-install-locked create-venv create-db migrate load-i
 create-env-files:
 	cp -n env_template.sh env.sh
 	cp -n env_docker_template.sh env_docker.sh
+	cp -n db_env_prod_template.sh db_env_prod.sh
 #------------------------------------
 
 
@@ -248,7 +249,7 @@ ifeq (loaddata,$(firstword $(MAKECMDGOALS)))
 endif
 
 .PHONY: loaddata
-## Load fixtures
+## Load fixtures. Usage: [fixture]
 loaddata:
 	${SOURCE_CMDS} && \
 	${MANAGE_CMD} loaddata ${LOADDATA_ARGS}
@@ -297,4 +298,28 @@ docker-sh:
 	sed 's/export //g' env_docker.sh > ${TMP_ENV_DOCKER}
 	docker run -ti --add-host host.docker.internal:host-gateway --env-file ${TMP_ENV_DOCKER} movies sh
 
+#------------------------------------
+
+
+#------------------------------------
+# Production commands
+#------------------------------------
+.PHONY: prod-create-db
+## Create prod db | Production
+prod-create-db:
+	source db_env_prod.sh && \
+	scripts/create_db.sh
+
+ifeq (prod-load-db,$(firstword $(MAKECMDGOALS)))
+  # Use the rest as arguments
+  PROD_LOAD_DB_ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
+  # Turn them into do-nothing targets
+  $(eval $(PROD_LOAD_DB_ARGS):;@:)
+endif
+
+.PHONY: prod-load-db
+## Load db to prod. Usage: [gz_path]
+prod-load-db:
+	source db_env_prod.sh && \
+	gunzip -c ${PROD_LOAD_DB_ARGS} | mysql -u$$DB_USER -p"$$DB_PASSWORD" -h$$DB_HOST -Dmovies
 #------------------------------------
