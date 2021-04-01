@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: movies
+data:
+  PROJECT_DOMAIN: movies.desecho.org
+  ADMIN_EMAIL: desecho@gmail.com
+  EMAIL_HOST: smtp.yandex.ru
+  EMAIL_HOST_USER: desecho@gmail.com
+  DB_HOST: mysql.desecho.org
+  DB_USER: root
+  STATIC_URL: https://movies.cdn.desecho.org/
+  GOOGLE_ANALYTICS_ID: UA-655582-5

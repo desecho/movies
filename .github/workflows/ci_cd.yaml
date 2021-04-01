@@ -8,31 +8,34 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
           python-version: 3.7
+
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
           node-version: 15.x
           registry-url: https://registry.npmjs.org
+
       - name: Install test requirements
         run: |
-          rm package.json
-          npm install eslint@7.22.0
-          npm install csscomb-linter@0.0.4
-          npm install eslint-config-google@0.14.0
-          npm install eslint-plugin-vue@7.7.0
-          npm install jsonlint@1.6.3
+          npm install yarn
+          make yarn-install-locked
           pip install tox
           tox -e py37-requirements
+
       - name: Run tests
         run: make test
+
       - name: Install codecov requirements
         run: pip install coverage
+
       - name: Run codecov
         uses: codecov/codecov-action@v1
+
       - name: Push to GitHub Packages
         uses: docker/build-push-action@v1
         with:
@@ -41,3 +44,87 @@ jobs:
           registry: ghcr.io
           repository: ${{ github.actor }}/movies/movies
           tags: latest
+
+      - name: Run yarn build
+        run: make yarn-build
+
+      - name: Collect static files
+        run: |
+          source .tox/py37/bin/activate
+          export SECRET_KEY="key"
+          src/manage.py collectstatic --no-input
+
+      - name: Install s3cmd
+        run: |
+          pip install s3cmd==2.1.0
+          sed "s/\[access_key\]/$SPACES_ACCESS_KEY/g" deployment/.s3cfg -i
+          SPACES_SECRET_KEY=$(echo $SPACES_SECRET_KEY | sed 's;/;\\/;g')
+          sed "s/\[secret_key\]/$SPACES_SECRET_KEY/g" deployment/.s3cfg > ~/.s3cfg
+        env:
+          SPACES_ACCESS_KEY: ${{ secrets.SPACES_ACCESS_KEY }}
+          SPACES_SECRET_KEY: ${{ secrets.SPACES_SECRET_KEY }}
+
+      - name: Upload static files
+        run: |
+          s3cmd put static/* s3://movies.cdn.desecho.org/ -r -P --no-mime-magic --guess-mime-type
+
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+
+      - name: Flush CDN cache
+        run: |
+          CDN_ID=$(doctl compute cdn list | grep movies.cdn.desecho.org | awk '{print $1}')
+          doctl compute cdn flush $CDN_ID
+
+      - name: Install kubectl
+        uses: azure/setup-kubectl@v1
+
+      - name: Configure kubectl
+        run: |
+          mkdir ~/.kube
+          echo $KUBECONFIG > ~/.kube/config
+        env:
+          KUBECONFIG: ${{ secrets.KUBECONFIG }}
+
+      - name: Deploy
+        run: |
+          kubectl apply -f deployment/configmap.yaml
+          kubectl create secret generic movies --from-literal=DB_PASSWORD=$DB_PASSWORD \
+            --from-literal=SECRET_KEY=$SECRET_KEY \
+            --from-literal=SOCIAL_AUTH_VK_APP_KEY=$SOCIAL_AUTH_VK_APP_KEY \
+            --from-literal=SOCIAL_AUTH_VK_APP_SECRET=$SOCIAL_AUTH_VK_APP_SECRET \
+            --from-literal=SOCIAL_AUTH_VK_OAUTH2_KEY=$SOCIAL_AUTH_VK_OAUTH2_KEY \
+            --from-literal=SOCIAL_AUTH_VK_OAUTH2_SECRET=$SOCIAL_AUTH_VK_OAUTH2_SECRET \
+            --from-literal=SOCIAL_AUTH_FACEBOOK_KEY=$SOCIAL_AUTH_FACEBOOK_KEY \
+            --from-literal=SOCIAL_AUTH_FACEBOOK_SECRET=$SOCIAL_AUTH_FACEBOOK_SECRET \
+            --from-literal=TMDB_KEY=$TMDB_KEY \
+            --from-literal=OMDB_KEY=$OMDB_KEY \
+            --from-literal=RAVEN_DSN=$RAVEN_DSN \
+            --from-literal=EMAIL_HOST_PASSWORD=$EMAIL_HOST_PASSWORD \
+            --dry-run=client -o yaml | kubectl apply -f -
+          kubectl apply -f deployment/deployment.yaml
+          kubectl apply -f deployment/ingress.yaml
+          kubectl apply -f deployment/service.yaml
+          kubectl rollout restart deployment/movies
+          kubectl rollout status deployment/movies
+        env:
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          SOCIAL_AUTH_VK_APP_KEY: ${{ secrets.SOCIAL_AUTH_VK_APP_KEY }}
+          SOCIAL_AUTH_VK_APP_SECRET: ${{ secrets.SOCIAL_AUTH_VK_APP_SECRET }}
+          SOCIAL_AUTH_VK_OAUTH2_KEY: ${{ secrets.SOCIAL_AUTH_VK_OAUTH2_KEY }}
+          SOCIAL_AUTH_VK_OAUTH2_SECRET: ${{ secrets.SOCIAL_AUTH_VK_OAUTH2_SECRET }}
+          SOCIAL_AUTH_FACEBOOK_KEY: ${{ secrets.SOCIAL_AUTH_FACEBOOK_KEY }}
+          SOCIAL_AUTH_FACEBOOK_SECRET: ${{ secrets.SOCIAL_AUTH_FACEBOOK_SECRET }}
+          TMDB_KEY: ${{ secrets.TMDB_KEY }}
+          OMDB_KEY: ${{ secrets.OMDB_KEY }}
+          RAVEN_DSN: ${{ secrets.RAVEN_DSN }}
+          GOOGLE_ANALYTICS_ID: ${{ secrets.GOOGLE_ANALYTICS_ID }}
+          EMAIL_HOST_PASSWORD: ${{ secrets.EMAIL_HOST_PASSWORD }}
+
+      - name: Run db migration
+        run: |
+          POD_ID=$(kubectl get pods -lapp=movies -o go-template --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+          kubectl exec $POD_ID -- ./manage.py migrate

@@ -259,7 +259,7 @@ loaddata:
 collectstatic:
 	${SOURCE_CMDS} && \
 	export IS_DEV= && \
-	${MANAGE_CMD} collectstatic
+	${MANAGE_CMD} collectstatic --no-input
 
 .PHONY: createsuperuser
 ## Create super user
