@@ -22,7 +22,7 @@ jobs:
           node-version: 15.x
           registry-url: https://registry.npmjs.org
 
-      - name: Install test requirements
+      - name: Install build and test requirements
         run: |
           npm install yarn
           make yarn-install-locked
