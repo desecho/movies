@@ -55,6 +55,8 @@ install-deps:
 	sudo apt install python3.7 python3.7-venv python3.7-dev -y
 	# Install MySQL dependencies
 	sudo apt install libmysqlclient-dev -y
+	# Install dependency for makemessages
+	sudo apt install gettext -y
 
 .PHONY: create-venv
 ## Create virtual environment and install requirements
