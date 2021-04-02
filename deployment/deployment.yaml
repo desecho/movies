@@ -16,7 +16,7 @@ spec:
       restartPolicy: Always
       containers:
       - name: movies
-        image: ghcr.io/desecho/movies/movies:latest
+        image: ghcr.io/desecho/movies:latest
         imagePullPolicy: Always
         ports:
         - containerPort: 8000
