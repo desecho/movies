@@ -1,0 +1,37 @@
+name: Test
+on:
+  pull_request:
+    branches:
+    - master
+jobs:
+  test:
+    name: Run tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.7
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 15.x
+          registry-url: https://registry.npmjs.org
+
+      - name: Install test requirements
+        run: |
+          rm package.json
+          npm install eslint@7.22.0
+          npm install csscomb-linter@0.0.4
+          npm install eslint-config-google@0.14.0
+          npm install eslint-plugin-vue@7.7.0
+          npm install jsonlint@1.6.3
+          pip install tox
+          tox -e py37-requirements
+
+      - name: Run tests
+        run: make test
