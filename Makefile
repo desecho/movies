@@ -186,8 +186,14 @@ black:
 #------------------------------------
 # Development
 #------------------------------------
+.PHONY: update-venv
+## Update packages in venv with current requirements | Development
+update-venv:
+	${SOURCE_CMDS} && \
+		pip install -r requirements-dev.txt
+
 .PHONY: yarn-install-refresh
-## Run yarn install (refresh) | Development
+## Run yarn install (refresh)
 yarn-install-refresh:
 	rm yarn.lock
 	yarn install
