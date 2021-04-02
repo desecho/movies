@@ -20,6 +20,7 @@ def get_tmdb(lang=None):
 def get_poster_from_tmdb(poster):
     if poster:
         return poster[1:]
+    return None
 
 
 def get_movies_from_tmdb(query, search_type, options, user, lang):
@@ -29,6 +30,7 @@ def get_movies_from_tmdb(query, search_type, options, user, lang):
                 date = datetime.strptime(date, "%Y-%m-%d")
                 if date:
                     return format_date(date, locale=lang)
+            return None
 
         for movie in movies:
             movie["releaseDate"] = get_date(movie["releaseDate"])
@@ -111,20 +113,20 @@ def get_movies_from_tmdb(query, search_type, options, user, lang):
             movies = sort_by_date(movies)
         movies = set_proper_date(movies)
         return movies
-    else:
-        return []
+    return []
 
 
 def get_tmdb_movie_data(tmdb_id):
     def get_release_date(release_date):
         if release_date:
             return release_date
+        return None
 
     def get_trailers(movie_data):
         trailers = []
         for trailer in movie_data.videos()["results"]:
-            t = {"name": trailer["name"], "source": trailer["key"]}
-            trailers.append(t)
+            trailer_ = {"name": trailer["name"], "source": trailer["key"]}
+            trailers.append(trailer_)
         return trailers
 
     def get_movie_data(tmdb_id, lang):
@@ -155,5 +157,4 @@ def get_tmdb_movie_data(tmdb_id):
             "description_en": movie_info_en["overview"],
             "description_ru": movie_info_ru["overview"],
         }
-    else:
-        raise MovieNotInDb(tmdb_id)
+    raise MovieNotInDb(tmdb_id)

@@ -18,7 +18,7 @@ class Vk:
         self.vk_id = vk_account.uid
         self.user = user
 
-    def get_friends(self):
+    def get_friends(self):  # pylint: disable=no-self-use
         # 2DO fix this for vk
         # friends = cache.get('vk_friends')
         # if friends is None:
@@ -52,8 +52,8 @@ class Fb:
         return friends
 
 
-def activate_user_language_preference(request, lang):
-    request.session[LANGUAGE_SESSION_KEY] = lang
+def activate_user_language_preference(request, language_):
+    request.session[LANGUAGE_SESSION_KEY] = language_
 
 
 def get_poster_url(size, poster):
@@ -78,8 +78,7 @@ class UserBase:
     def get_records(self):
         if self.is_authenticated:
             return self.records.all()
-        else:
-            return Record.objects.none()
+        return Record.objects.none()
 
     def get_record(self, id_):
         return self.get_records().get(pk=id_)
@@ -92,16 +91,16 @@ class UserBase:
             return self._get_fb_accounts().exists()
         return False
 
-    def get_fb_account(self):
-        if self.is_fb_user():
-            return self._get_fb_accounts()[0]
+    # It is requried that `is_fb_user` is run before running this.
+    def get_fb_account(self):  # 2DO possibly remove it from this class.
+        return self._get_fb_accounts()[0]
 
     def _get_vk_accounts(self):
         return self.social_auth.filter(provider__in=settings.VK_BACKENDS)
 
-    def get_vk_account(self):
-        if self.is_vk_user():
-            return self._get_vk_accounts()[0]
+    # It is requried that `is_vk_user` is run before running this.
+    def get_vk_account(self):  # 2DO possibly remove it from this class.
+        return self._get_vk_accounts()[0]
 
     def is_vk_user(self):
         """
@@ -136,11 +135,12 @@ class UserBase:
     def get_vk(self):
         if self.is_vk_user():
             return Vk(self)
+        return None
 
     def get_friends(self, sort=False):
         friends = User.objects.none()
         if self.is_linked:  # pylint: disable=using-constant-test
-            if self.is_vk_user():
+            if self.is_vk_user():  # 2DO possibly refactor this (this check is run twice)
                 friends |= self.get_vk().get_friends()
             if self.is_fb_user():
                 friends |= Fb(self).get_friends()
@@ -166,8 +166,7 @@ class User(AbstractUser, UserBase):
         name = self.get_full_name()
         if name:
             return name
-        else:
-            return self.username
+        return self.username
 
     def _get_movies_number(self, list_id):
         return self.get_records().filter(list_id=list_id).count()
@@ -226,8 +225,7 @@ class Movie(models.Model):
     def get_trailers(self):
         if self.trailers:
             return self.trailers
-        else:
-            return self.trailers_en
+        return self.trailers_en
 
     def has_trailers(self):
         return bool(self.get_trailers())
@@ -321,5 +319,5 @@ class ActionRecord(models.Model):
 
 
 @receiver(user_logged_in)
-def lang(**kwargs):
+def language(**kwargs):
     activate_user_language_preference(kwargs["request"], kwargs["user"].language)

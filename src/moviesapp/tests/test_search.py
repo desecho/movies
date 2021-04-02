@@ -58,8 +58,8 @@ class SearchMoviesAnonymousTestCase(BaseTestCase):
                     flexmock(tmdbsimple.people.People).new_instances(people_mock)
 
                 # Don't send API requests which don't make sense.
-                tmdbsimple_GET = mocker.patch("tmdbsimple.base.TMDB._GET")
-                tmdbsimple_GET.return_value = None
+                tmdbsimple_get = mocker.patch("tmdbsimple.base.TMDB._GET")
+                tmdbsimple_get.return_value = None
 
             # We can't use self.client here because mocker breaks it.
             response = client.get(url, params)

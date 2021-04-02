@@ -52,13 +52,15 @@ class BaseTestCase(TestCase):
         self.client.logout()
         self.client.login(username=username, password=self.USER_PASSWORD)
 
-    def load_json(self, filename):
+    @staticmethod
+    def load_json(filename):
         base_path = os.path.join(settings.SRC_DIR, "moviesapp", "tests", "files")
         path = os.path.join(base_path, filename)
         with open(path) as f:
             return json.load(f)
 
-    def dump_instance(self, instance):
+    @staticmethod
+    def dump_instance(instance):
         return json.dumps(model_to_dict(instance), cls=DjangoJSONEncoder)
 
 

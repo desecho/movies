@@ -15,8 +15,7 @@ def avatar(user, size="small"):
             return None
         if size == "small":
             return (user.avatar_small, user.avatar_small)
-        else:
-            return (user.avatar_small, user.avatar_big)
+        return (user.avatar_small, user.avatar_big)
 
     def get_gravatar_urls():
         def get_url(size):

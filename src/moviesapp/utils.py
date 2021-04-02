@@ -6,6 +6,7 @@ from datetime import datetime
 import requests
 from django.conf import settings
 from raven.contrib.django.raven_compat.models import client
+from requests.exceptions import RequestException
 
 from .exceptions import OmdbError, OmdbLimitReached, OmdbRequestError
 from .models import Movie
@@ -14,13 +15,13 @@ from .tmdb import get_tmdb_movie_data
 
 def load_omdb_movie_data(imdb_id):
     try:
-        r = requests.get(f"http://www.omdbapi.com/?i={imdb_id}&apikey={settings.OMDB_KEY}")
-    except Exception as e:  # noqa
+        response = requests.get(f"http://www.omdbapi.com/?i={imdb_id}&apikey={settings.OMDB_KEY}")
+    except RequestException as e:
         if settings.DEBUG:
             raise
         client.captureException()
         raise OmdbRequestError from e
-    movie_data = r.json()
+    movie_data = response.json()
     response = movie_data["Response"]
     if response == "True":
         for key in movie_data:
@@ -29,10 +30,9 @@ def load_omdb_movie_data(imdb_id):
             if movie_data[key] == "N/A":
                 movie_data[key] = None
         return movie_data
-    elif response == "False" and movie_data["Error"] == "Request limit reached!":
+    if response == "False" and movie_data["Error"] == "Request limit reached!":
         raise OmdbLimitReached
-    else:
-        raise OmdbError(movie_data["Error"], imdb_id)
+    raise OmdbError(movie_data["Error"], imdb_id)
 
 
 def join_dicts(dict1, dict2):
@@ -66,24 +66,24 @@ def add_movie_to_db(tmdb_id, update=False):
             if runtime is not None:
                 try:
                     runtime = datetime.strptime(runtime, "%H h %M min")
-                except:  # noqa
+                except ValueError:
                     try:
                         runtime = datetime.strptime(runtime, "%H h")
-                    except:  # noqa
+                    except ValueError:
                         try:
                             runtime = datetime.strptime(runtime, "%M min")
-                        except:  # noqa
+                        except ValueError:
                             r = re.match(r"(\d+) min", runtime)
                             minutes = int(r.groups()[0])
                             try:
                                 runtime = datetime.strptime("{:02d}:{:02d}".format(*divmod(minutes, 60)), "%H:%M")
-                            except:  # noqa
+                            except ValueError:
                                 if settings.DEBUG:
                                     raise
-                                else:
-                                    client.captureException()
-                                return
+                                client.captureException()
+                                return None
                 return runtime
+            return None
 
         movie_data = load_omdb_movie_data(imdb_id)
         return {

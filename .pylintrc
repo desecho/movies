@@ -8,14 +8,8 @@ max-line-length: 119
 output-format=colorized
 
 [MESSAGES CONTROL]
-# Ignore import-error because it gives errors trying to import django. No idea why.
-# Ignore no-member - looks like it is being detected improperly.
-
-# Temporarily ignored - bare-except - TODO
-# Temporarily ignored - R (refactoring) - TODO
-# Temporarily ignored - abstract-method - TODO?
-
-# Disable C0411, C0412, C0413 because imports are handled by isort
-# Disable R0801 because of the issue in pylint where it cannot be partially disabled. https://github.com/PyCQA/pylint/issues/214
-
-disable=missing-docstring,unnecessary-lambda,invalid-name,no-init,redefined-outer-name,too-many-arguments,arguments-differ,import-error,superfluous-parens,too-few-public-methods,no-member,old-style-class,bare-except,fixme,R,abstract-method,C0103,C0111,C0411,C0412,C0413,R0801
+# Disable import-error because it seem to give incorrect errors.
+# Disable no-member because looks like it is being detected improperly.
+# Disable duplicate-code because of the issue in pylint where it cannot be partially disabled. https://github.com/PyCQA/pylint/issues/214
+# Disable invalid-name because it seem to mostly work incorrectly
+disable=import-error,no-member,duplicate-code,invalid-name,missing-docstring,too-many-arguments,arguments-differ,too-few-public-methods,fixme,abstract-method,too-many-locals,too-many-ancestors

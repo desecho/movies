@@ -33,7 +33,7 @@ class FeedView(TemplateAnonymousView):
 
         i = 0
         for action in actions:
-            a = {
+            action_ = {
                 "user": action.user,
                 "action": action,
                 "movie": action.movie,
@@ -44,7 +44,7 @@ class FeedView(TemplateAnonymousView):
                 "rating": action.rating,
                 "date": action.date,
             }
-            actions_output.append(a)
+            actions_output.append(action_)
             i += 1
         return {"list_name": FEED_TITLE[list_name], "actions": actions_output}
 

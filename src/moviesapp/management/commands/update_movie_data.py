@@ -46,19 +46,19 @@ class Command(BaseCommand):
             if movies_filtered_number == 1:
                 disable = True
 
-        t = self.tqdm(total=movies_total, unit="movies", disable=disable)
+        tqdm = self.tqdm(total=movies_total, unit="movies", disable=disable)
         if filtered:
-            t.update(movies_total - movies_filtered_number)
+            tqdm.update(movies_total - movies_filtered_number)
         last_movie_id = movies.last().pk
         for movie in movies:
             movie_info = movie.cli_string(last_movie_id)
-            t.set_description(movie_info)
+            tqdm.set_description(movie_info)
             try:
                 result = add_movie_to_db(movie.tmdb_id, update=True)
             except MovieNotInDb:
-                t.error(f'"{movie.id_title}" is not found in IMDB')
+                tqdm.error(f'"{movie.id_title}" is not found in IMDB')
             else:
                 updated = result
                 if updated:
-                    t.info(f'"{movie}" is updated')
-            t.update()
+                    tqdm.info(f'"{movie}" is updated')
+            tqdm.update()

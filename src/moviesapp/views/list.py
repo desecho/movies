@@ -19,12 +19,14 @@ class ChangeRatingView(AjaxView):
         except KeyError:
             return self.render_bad_request_response()
 
-        r = request.user.get_record(id_)
-        if r.rating != rating:
-            if not r.rating:
-                ActionRecord(action_id=Action.ADDED_RATING, user=request.user, movie=r.movie, rating=rating).save()
-            r.rating = rating
-            r.save()
+        record = request.user.get_record(id_)
+        if record.rating != rating:
+            if not record.rating:
+                ActionRecord(
+                    action_id=Action.ADDED_RATING, user=request.user, movie=record.movie, rating=rating
+                ).save()
+            record.rating = rating
+            record.save()
         return self.success()
 
 
@@ -72,14 +74,14 @@ class SaveOptionsView(AjaxAnonymousView):
         except KeyError:
             return self.render_bad_request_response()
 
-        r = request.user.get_record(record_id)
-        r.watched_original = options["original"]
-        r.watched_extended = options["extended"]
-        r.watched_in_theatre = options["theatre"]
-        r.watched_in_4k = options["4k"]
-        r.watched_in_hd = options["hd"]
-        r.watched_in_full_hd = options["fullHd"]
-        r.save()
+        record = request.user.get_record(record_id)
+        record.watched_original = options["original"]
+        record.watched_extended = options["extended"]
+        record.watched_in_theatre = options["theatre"]
+        record.watched_in_4k = options["4k"]
+        record.watched_in_hd = options["hd"]
+        record.watched_in_full_hd = options["fullHd"]
+        record.save()
         return self.success()
 
 
@@ -117,27 +119,27 @@ class ListView(TemplateAnonymousView):
 
     def _get_comments_and_ratings(self, record_ids_and_movies, user):
         movies, record_ids_and_movies_dict = self._get_record_movie_data(record_ids_and_movies)
-        comments_and_ratings = Record.objects.filter(list_id=1, movie_id__in=movies)
+        records = Record.objects.filter(list_id=1, movie_id__in=movies)
         friends = user.get_friends()
         if friends is None:
-            comments_and_ratings = []
+            records = []
         else:
-            comments_and_ratings = comments_and_ratings.filter(user__in=friends)
+            records = records.filter(user__in=friends)
 
-        comments_and_ratings_dict = {}
-        for x in comments_and_ratings:
-            if x.comment or x.rating:
-                data = {"user": x.user}
-                if x.movie.pk not in comments_and_ratings_dict:
-                    comments_and_ratings_dict[x.movie.pk] = []
-                if x.comment:
-                    data["comment"] = x.comment
-                if x.rating:
-                    data["rating"] = x.rating
-                comments_and_ratings_dict[x.movie.pk].append(data)
+        comments_and_ratings = {}
+        for record in records:
+            if record.comment or record.rating:
+                data = {"user": record.user}
+                if record.movie.pk not in comments_and_ratings:
+                    comments_and_ratings[record.movie.pk] = []
+                if record.comment:
+                    data["comment"] = record.comment
+                if record.rating:
+                    data["rating"] = record.rating
+                comments_and_ratings[record.movie.pk].append(data)
         data = {}
         for record_id, value in record_ids_and_movies_dict.items():
-            data[record_id] = comments_and_ratings_dict.get(value, None)
+            data[record_id] = comments_and_ratings.get(value, None)
         return data
 
     @staticmethod
@@ -148,10 +150,11 @@ class ListView(TemplateAnonymousView):
     def _sort_records(records, sort, username, list_name):
         if sort == "release_date":
             return records.order_by("-movie__release_date")
-        elif sort == "rating":
+        if sort == "rating":
             return sort_by_rating(records, username, list_name)
-        elif sort == "addition_date":
+        if sort == "addition_date":
             return records.order_by("-date")
+        raise Exception("Unsupported sort type")
 
     @staticmethod
     def _get_record_movie_data(record_ids_and_movies):
@@ -164,8 +167,8 @@ class ListView(TemplateAnonymousView):
             self.request.user.get_records().filter(movie_id__in=movies).values_list("movie_id", "list_id")
         )
         movie_id_and_list_id_dict = {}
-        for x in movie_ids_and_list_ids:
-            movie_id_and_list_id_dict[x[0]] = x[1]
+        for movie_id_and_list_id in movie_ids_and_list_ids:
+            movie_id_and_list_id_dict[movie_id_and_list_id[0]] = movie_id_and_list_id[1]
 
         list_data = {}
         for record_id, value in record_ids_and_movies_dict.items():

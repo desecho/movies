@@ -10,13 +10,13 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):  # pylint: disable=unused-argument
         movies = Movie.objects.all()
-        t = self.tqdm(total=movies.count())
+        tqdm = self.tqdm(total=movies.count())
         last_movie_id = movies.last().pk
         for movie in movies:
             movie_info = movie.cli_string(last_movie_id)
-            t.set_description(movie_info)
+            tqdm.set_description(movie_info)
             if not movie.records.exists():
                 movie.delete()
                 message = f"{movie} removed"
-                t.info(message)
-            t.update()
+                tqdm.info(message)
+            tqdm.update()
