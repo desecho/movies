@@ -187,10 +187,13 @@ black:
 # Development
 #------------------------------------
 .PHONY: update-venv
-## Update packages in venv with current requirements | Development
+## Update packages in venv and tox with current requirements | Development
 update-venv:
 	${SOURCE_CMDS} && \
-		pip install -r requirements-dev.txt
+	pip install -r requirements-dev.txt && \
+	deactivate && \
+	source .tox/py37/bin/activate && \
+	pip install -r requirements-dev.txt
 
 .PHONY: yarn-install-refresh
 ## Run yarn install (refresh)
