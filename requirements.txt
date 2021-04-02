@@ -1,12 +1,12 @@
 # Django
 Django==2.2.19
 
-django-annoying==0.10.4
+django-annoying==0.10.6
 django-simple-menu==1.2.1
-django-rosetta==0.9.3
-django-braces==1.13.0
-django-tqdm==0.0.3
-django-registration-redux==2.6
+django-rosetta==0.9.6
+django-braces==1.14.0
+django-tqdm==1.0.0
+django-registration-redux==2.9
 
 # django-google-analytics-app==4.1.0
 # Open PR - https://github.com/praekelt/django-google-analytics/pull/38 - Django 2 support
@@ -36,13 +36,13 @@ social-auth-app-django==3.1.0
 
 
 # Requests
-requests==2.22.0
+requests==2.25.1
 requests-toolbelt==0.9.1
 
 
 # Dates
-python-dateutil==2.8.0
-Babel==2.6.0
+python-dateutil==2.8.1
+Babel==2.9.0
 
 
 # Social
@@ -57,9 +57,9 @@ facebook-sdk==3.1.0
 -e git+https://github.com/desecho/vkontakte.git@dev#egg=vkontakte
 
 
-mysqlclient==1.4.2.post1
+mysqlclient==2.0.3
 raven==6.10.0
-tabulate==0.8.3
+tabulate==0.8.9
 
 # tmdbsimple==2.1.0
 # 528b027aace64ebd33f15c3a80fdcefbebc0922c
