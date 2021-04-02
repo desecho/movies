@@ -92,8 +92,7 @@ window.vm = new Vue({
         'theatre': $('#theatre_' + recordId).prop('checked'),
         'hd': $('#hd_' + recordId).prop('checked'),
         'fullHd': $('#full_hd_' + recordId).prop('checked'),
-        '4k': $('#4k_' + recordId).prop('checked'),
-        'words': $('#words_' + recordId).prop('checked'),
+        '4k': $('#4k_' + recordId).prop('checked')
       };
 
       const data = $.param({

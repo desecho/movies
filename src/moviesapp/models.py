@@ -285,7 +285,6 @@ class Record(models.Model):
     watched_in_hd = models.BooleanField(default=False)
     watched_in_full_hd = models.BooleanField(default=False)
     watched_in_4k = models.BooleanField(default=False)
-    learned_words = models.BooleanField(default=False)
 
     def __str__(self):
         return self.movie.title
