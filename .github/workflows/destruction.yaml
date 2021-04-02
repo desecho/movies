@@ -1,0 +1,24 @@
+name: Destruction
+on: workflow_dispatch
+jobs:
+  destruction:
+    name: Destruction
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install kubectl
+        uses: azure/setup-kubectl@v1
+
+      - name: Configure kubectl
+        run: |
+          mkdir ~/.kube
+          echo $KUBECONFIG > ~/.kube/config
+        env:
+          KUBECONFIG: ${{ secrets.KUBECONFIG }}
+
+      - name: Destroy
+        run: |
+          kubectl delete -f deployment/configmap.yaml --ignore-not-found
+          kubectl delete -f deployment/deployment.yaml --ignore-not-found
+          kubectl delete -f deployment/ingress.yaml --ignore-not-found
+          kubectl delete -f deployment/service.yaml --ignore-not-found
+          kubectl delete secret movies --ignore-not-found
