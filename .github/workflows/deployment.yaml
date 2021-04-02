@@ -1,11 +1,11 @@
-name: CI/CD
+name: Deployment
 on:
   push:
     branches:
       - master
 jobs:
-  ci_cd:
-    name: Run CI/CD
+  deployment:
+    name: Deployment
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code

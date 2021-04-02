@@ -60,8 +60,8 @@ Used images
 .. |Codecov| image:: https://codecov.io/gh/desecho/movies/branch/master/graph/badge.svg
    :target: https://codecov.io/gh/desecho/movies
 
-.. |Build Status| image:: https://github.com/desecho/movies/actions/workflows/test.yaml/badge.svg
-   :target: https://github.com/desecho/movies/actions/workflows/test.yaml
+.. |Build Status| image:: https://github.com/desecho/movies/actions/workflows/deployment.yaml/badge.svg
+   :target: https://github.com/desecho/movies/actions/workflows/deployment.yaml
 
 .. _TMDb: https://www.themoviedb.org/
 .. _OMDb: http://www.omdbapi.com/
