@@ -337,4 +337,18 @@ endif
 prod-load-db:
 	source db_env_prod.sh && \
 	gunzip -c ${PROD_LOAD_DB_ARGS} | mysql -u$$DB_USER -p"$$DB_PASSWORD" -h$$DB_HOST -Dmovies
+
+ifeq (prod-manage,$(firstword $(MAKECMDGOALS)))
+  # Use the rest as arguments
+  PROD_MANAGE_ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
+  # Turn them into do-nothing targets
+  $(eval $(PROD_MANAGE_ARGS):;@:)
+endif
+
+.PHONY: prod-manage
+## Run management command. Usage: [command]
+prod-manage:
+	POD_ID=$(shell scripts/get_pod_id.sh) && \
+	kubectl exec $$POD_ID -- ./manage.py ${PROD_MANAGE_ARGS}
+
 #------------------------------------

@@ -114,6 +114,4 @@ jobs:
           kubectl rollout status deployment/movies
 
       - name: Run db migration
-        run: |
-          POD_ID=$(kubectl get pods -lapp=movies | grep Running | awk '{print $1}')
-          kubectl exec $POD_ID -- ./manage.py migrate
+        run: make prod-manage migrate
