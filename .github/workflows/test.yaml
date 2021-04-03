@@ -14,7 +14,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: 3.7
+          python-version: 3.9
 
       - name: Set up Node.js
         uses: actions/setup-node@v2
@@ -31,7 +31,7 @@ jobs:
           npm install eslint-plugin-vue@7.7.0
           npm install jsonlint@1.6.3
           pip install tox
-          tox -e py37-requirements
+          tox -e py39-requirements
 
       - name: Run tests
         run: make test

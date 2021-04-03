@@ -14,7 +14,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: 3.7
+          python-version: 3.9
 
       - name: Set up Node.js
         uses: actions/setup-node@v2
@@ -27,7 +27,7 @@ jobs:
           npm install yarn
           make yarn-install-locked
           pip install tox
-          tox -e py37-requirements
+          tox -e py39-requirements
 
       - name: Run tests
         run: make test
@@ -56,7 +56,7 @@ jobs:
 
       - name: Collect static files
         run: |
-          source .tox/py37/bin/activate
+          source .tox/py39/bin/activate
           export SECRET_KEY=key
           export COLLECT_STATIC=True
           src/manage.py collectstatic --no-input

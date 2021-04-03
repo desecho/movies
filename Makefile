@@ -52,7 +52,7 @@ help:
 ## Install dependencies | Installation
 install-deps:
 	# Install Python
-	sudo apt install python3.7 python3.7-venv python3.7-dev -y
+	sudo apt install python3.9 python3.9-venv python3.9-dev -y
 	# Install MySQL dependencies
 	sudo apt install libmysqlclient-dev -y
 	# Install dependency for makemessages
@@ -61,7 +61,7 @@ install-deps:
 .PHONY: create-venv
 ## Create virtual environment and install requirements
 create-venv:
-	python3.7 -m venv venv
+	python3.9 -m venv venv
 	${SOURCE_CMDS} && \
 		pip install -r requirements-dev.txt
 
@@ -120,67 +120,67 @@ test:
 .PHONY: pydiatra
 ## Run pydiatra
 pydiatra:
-	tox -e py37-pydiatra
+	tox -e py39-pydiatra
 
 .PHONY: jsonlint
 ## Run jsonlint
 jsonlint:
-	tox -e py37-jsonlint
+	tox -e py39-jsonlint
 
 .PHONY: pylint
 ## Run pylint
 pylint:
-	tox -e py37-pylint
+	tox -e py39-pylint
 
 .PHONY: flake8
 ## Run flake8
 flake8:
-	tox -e py37-flake8
+	tox -e py39-flake8
 
 .PHONY: isort
 ## Run isort
 isort:
-	tox -e py37-isort
+	tox -e py39-isort
 
 .PHONY: bandit
 ## Run bandit
 bandit:
-	tox -e py37-bandit
+	tox -e py39-bandit
 
 .PHONY: rstlint
 ## Run rstlint
 rstlint:
-	tox -e py37-rstlint
+	tox -e py39-rstlint
 
 .PHONY: pydocstyle
 ## Run pydocstyle
 pydocstyle:
-	tox -e py37-pydocstyle
+	tox -e py39-pydocstyle
 
 .PHONY: safety
 ## Run safety
 safety:
-	tox -e py37-safety
+	tox -e py39-safety
 
 .PHONY: pytest
 ## Run pytest
 pytest:
-	tox -e py37-pytest
+	tox -e py39-pytest
 
 .PHONY: eslint
 ## Run eslint
 eslint:
-	tox -e py37-eslint
+	tox -e py39-eslint
 
 .PHONY: csscomb-linter
 ## Run csscomb-linter
 csscomb-linter:
-	tox -e py37-csscomb-linter
+	tox -e py39-csscomb-linter
 
 .PHONY: black
 ## Run black linter
 black:
-	tox -e py37-black
+	tox -e py39-black
 #------------------------------------
 
 #------------------------------------
@@ -192,7 +192,7 @@ update-venv:
 	${SOURCE_CMDS} && \
 	pip install -r requirements-dev.txt && \
 	deactivate && \
-	source .tox/py37/bin/activate && \
+	source .tox/py39/bin/activate && \
 	pip install -r requirements-dev.txt
 
 .PHONY: yarn-install-refresh
