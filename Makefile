@@ -211,9 +211,9 @@ yarn-build:
 build:
 	yarn build --watch
 
-.PHONY: format-fast
-## Fast format code
-format-fast:
+.PHONY: format
+## Format code except for json files
+format:
 	${SOURCE_CMDS} && \
 	autoflake --remove-all-unused-imports --in-place -r src && \
 	isort -rc src && \
@@ -221,10 +221,13 @@ format-fast:
 	yarn run csscomb src/moviesapp/styles/*
 	yarn run eslint ./*.js src/moviesapp/js/* --fix
 
-.PHONY: format
+.PHONY: format-json
+## Format json files
+format-json: scripts/jsonlint.sh format
+
+.PHONY: format-full
 ## Format code
-format: format-fast
-	scripts/jsonlint.sh format
+format-full: format format-json
 #------------------------------------
 
 
