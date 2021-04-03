@@ -1,0 +1,48 @@
+name: Run command
+on:
+  workflow_dispatch:
+    inputs:
+      remove_unused_movies:
+        description: "Remove unused movies"
+        required: false
+        default: ""
+      update_imdb_ratings:
+        description: "Update imdb ratings"
+        required: false
+        default: ""
+      update_movie_data:
+        description: "Update movie data"
+        required: false
+        default: ""
+      update_vk_avatars:
+        description: "Update vk avatars"
+        required: false
+        default: ""
+jobs:
+  run_command:
+    name: Run command
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install kubectl
+        uses: azure/setup-kubectl@v1
+
+      - name: Configure kubectl
+        run: |
+          mkdir ~/.kube
+          echo ${{ secrets.KUBECONFIG }} > ~/.kube/config
+
+      - name: Remove unused movies
+        run: make prod-manage remove_unused_movies
+        if: ${{ github.event.inputs.remove_unused_movies }}
+
+      - name: Update imdb ratings
+        run: make prod-manage update_imdb_ratings
+        if: ${{ github.event.inputs.update_imdb_ratings }}
+
+      - name: Update movie data
+        run: make prod-manage update_movie_data
+        if: ${{ github.event.inputs.update_movie_data }}
+
+      - name: Update vk avatars
+        run: make prod-manage update_vk_avatars
+        if: ${{ github.event.inputs.update_vk_avatars }}
