@@ -1,6 +1,7 @@
 [tool.black]
 line-length = 119
-target-version = ['py37']
+# python 3.9 is not supported yet
+target-version = ['py38']
 skip-string-normalization = false
 include = '\.pyi?$'
 exclude = '''
