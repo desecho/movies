@@ -16,20 +16,15 @@ jobs:
       - name: Backup DB
         run: |
           NOW=$(date +"%d-%m-%Y")
-          mysqldump -u root -h mysql.desecho.org movies -p$DB_PASSWORD | gzip -9 > movies-$NOW.sql.gz
-        env:
-          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          mysqldump -u root -h mysql.desecho.org movies -p${{ secrets.DB_PASSWORD }} | gzip -9 > movies-$NOW.sql.gz
 
       - name: Install s3cmd
         run: |
           pip install s3cmd==2.1.0
           cp .github/workflows/.s3cfg ~/.s3cfg
-          sed "s/\[access_key\]/$SPACES_ACCESS_KEY/g" ~/.s3cfg -i
-          SPACES_SECRET_KEY=$(echo $SPACES_SECRET_KEY | sed 's;/;\\/;g')
+          sed "s/\[access_key\]/${{ secrets.SPACES_ACCESS_KEY }}/g" ~/.s3cfg -i
+          SPACES_SECRET_KEY=$(echo ${{ secrets.SPACES_SECRET_KEY }} | sed 's;/;\\/;g')
           sed "s/\[secret_key\]/$SPACES_SECRET_KEY/g" ~/.s3cfg -i
-        env:
-          SPACES_ACCESS_KEY: ${{ secrets.SPACES_ACCESS_KEY }}
-          SPACES_SECRET_KEY: ${{ secrets.SPACES_SECRET_KEY }}
 
       - name: Upload backup
         run: |

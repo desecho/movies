@@ -65,12 +65,9 @@ jobs:
         run: |
           pip install s3cmd==2.1.0
           cp .github/workflows/.s3cfg ~/.s3cfg
-          sed "s/\[access_key\]/$SPACES_ACCESS_KEY/g" ~/.s3cfg -i
-          SPACES_SECRET_KEY=$(echo $SPACES_SECRET_KEY | sed 's;/;\\/;g')
+          sed "s/\[access_key\]/${{ secrets.SPACES_ACCESS_KEY }}/g" ~/.s3cfg -i
+          SPACES_SECRET_KEY=$(echo ${{ secrets.SPACES_SECRET_KEY }} | sed 's;/;\\/;g')
           sed "s/\[secret_key\]/$SPACES_SECRET_KEY/g" ~/.s3cfg -i
-        env:
-          SPACES_ACCESS_KEY: ${{ secrets.SPACES_ACCESS_KEY }}
-          SPACES_SECRET_KEY: ${{ secrets.SPACES_SECRET_KEY }}
 
       - name: Upload static files
         run: |
@@ -92,45 +89,29 @@ jobs:
       - name: Configure kubectl
         run: |
           mkdir ~/.kube
-          echo $KUBECONFIG > ~/.kube/config
-        env:
-          KUBECONFIG: ${{ secrets.KUBECONFIG }}
+          echo ${{ secrets.KUBECONFIG }} > ~/.kube/config
 
       - name: Deploy
         run: |
           kubectl apply -f deployment/configmap.yaml
-          kubectl create secret generic movies --from-literal=DB_PASSWORD=$DB_PASSWORD \
-            --from-literal=SECRET_KEY=$SECRET_KEY \
-            --from-literal=SOCIAL_AUTH_VK_APP_KEY=$SOCIAL_AUTH_VK_APP_KEY \
-            --from-literal=SOCIAL_AUTH_VK_APP_SECRET=$SOCIAL_AUTH_VK_APP_SECRET \
-            --from-literal=SOCIAL_AUTH_VK_OAUTH2_KEY=$SOCIAL_AUTH_VK_OAUTH2_KEY \
-            --from-literal=SOCIAL_AUTH_VK_OAUTH2_SECRET=$SOCIAL_AUTH_VK_OAUTH2_SECRET \
-            --from-literal=SOCIAL_AUTH_FACEBOOK_KEY=$SOCIAL_AUTH_FACEBOOK_KEY \
-            --from-literal=SOCIAL_AUTH_FACEBOOK_SECRET=$SOCIAL_AUTH_FACEBOOK_SECRET \
-            --from-literal=TMDB_KEY=$TMDB_KEY \
-            --from-literal=OMDB_KEY=$OMDB_KEY \
-            --from-literal=RAVEN_DSN=$RAVEN_DSN \
-            --from-literal=EMAIL_HOST_PASSWORD=$EMAIL_HOST_PASSWORD \
+          kubectl create secret generic movies --from-literal=DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
+            --from-literal=SECRET_KEY=${{ secrets.SECRET_KEY }} \
+            --from-literal=SOCIAL_AUTH_VK_APP_KEY=${{ secrets.SOCIAL_AUTH_VK_APP_KEY }} \
+            --from-literal=SOCIAL_AUTH_VK_APP_SECRET=${{ secrets.SOCIAL_AUTH_VK_APP_SECRET }} \
+            --from-literal=SOCIAL_AUTH_VK_OAUTH2_KEY=${{ secrets.SOCIAL_AUTH_VK_OAUTH2_KEY }} \
+            --from-literal=SOCIAL_AUTH_VK_OAUTH2_SECRET=${{ secrets.SOCIAL_AUTH_VK_OAUTH2_SECRET }} \
+            --from-literal=SOCIAL_AUTH_FACEBOOK_KEY=${{ secrets.SOCIAL_AUTH_FACEBOOK_KEY }} \
+            --from-literal=SOCIAL_AUTH_FACEBOOK_SECRET=${{ secrets.SOCIAL_AUTH_FACEBOOK_SECRET }} \
+            --from-literal=TMDB_KEY=${{ secrets.TMDB_KEY }} \
+            --from-literal=OMDB_KEY=${{ secrets.OMDB_KEY }} \
+            --from-literal=RAVEN_DSN=${{ secrets.RAVEN_DSN }} \
+            --from-literal=EMAIL_HOST_PASSWORD=${{ secrets.EMAIL_HOST_PASSWORD }} \
             --dry-run=client -o yaml | kubectl apply -f -
           kubectl apply -f deployment/deployment.yaml
           kubectl apply -f deployment/ingress.yaml
           kubectl apply -f deployment/service.yaml
           kubectl rollout restart deployment/movies
           kubectl rollout status deployment/movies
-        env:
-          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-          SECRET_KEY: ${{ secrets.SECRET_KEY }}
-          SOCIAL_AUTH_VK_APP_KEY: ${{ secrets.SOCIAL_AUTH_VK_APP_KEY }}
-          SOCIAL_AUTH_VK_APP_SECRET: ${{ secrets.SOCIAL_AUTH_VK_APP_SECRET }}
-          SOCIAL_AUTH_VK_OAUTH2_KEY: ${{ secrets.SOCIAL_AUTH_VK_OAUTH2_KEY }}
-          SOCIAL_AUTH_VK_OAUTH2_SECRET: ${{ secrets.SOCIAL_AUTH_VK_OAUTH2_SECRET }}
-          SOCIAL_AUTH_FACEBOOK_KEY: ${{ secrets.SOCIAL_AUTH_FACEBOOK_KEY }}
-          SOCIAL_AUTH_FACEBOOK_SECRET: ${{ secrets.SOCIAL_AUTH_FACEBOOK_SECRET }}
-          TMDB_KEY: ${{ secrets.TMDB_KEY }}
-          OMDB_KEY: ${{ secrets.OMDB_KEY }}
-          RAVEN_DSN: ${{ secrets.RAVEN_DSN }}
-          GOOGLE_ANALYTICS_ID: ${{ secrets.GOOGLE_ANALYTICS_ID }}
-          EMAIL_HOST_PASSWORD: ${{ secrets.EMAIL_HOST_PASSWORD }}
 
       - name: Run db migration
         run: |
