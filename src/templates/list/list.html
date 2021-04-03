@@ -8,16 +8,15 @@
     {% if anothers_account %}
       <div class="row">
         <div class="col-sm-12">
-          <div class="btn-group btn-group-toggle" data-toggle="buttons">
+          <div class="btn-group btn-group-toggle" data-toggle="buttons" role="group">
             <label class="btn btn-secondary {% ifequal list 'watched' %} active {% endifequal %}"
                    title="{% trans 'Watched' %}"
                    @click="openUrl('{% url 'list' anothers_account.username 'watched' %}')">
-              <input type="radio">{% trans 'Watched' %}
-            </label>
+              <input type="radio" {% ifequal list 'watched' %} checked {% endifequal %}>{% trans 'Watched' %}</label>
             <label class="btn btn-secondary {% ifequal list 'to-watch' %} active {% endifequal %}"
                    title="{% trans 'To Watch' %}"
                    @click="openUrl('{% url 'list' anothers_account.username 'to-watch' %}')">
-              <input type="radio">{% trans 'To Watch' %}
+              <input type="radio" {% ifequal list 'to-watch' %} checked {% endifequal %}>{% trans 'To Watch' %}
             </label>
           </div>
 
@@ -28,20 +27,20 @@
 
     <div class="row">
       <div class="col-sm-12">
-        <div class="btn-group btn-group-toggle" data-toggle="buttons">
+        <div class="btn-group btn-group-toggle" data-toggle="buttons" role="group">
           {% with mode=request.session.mode %}
             <!-- id values are being used as variable name combination to control the button statuses -->
             <label id="button-mode-full" class="btn btn-secondary {% if mode == 'full' %} active {% endif %}"
                    title="{% trans 'Mode' %}" @click="switchMode('full')">
-              <input type="radio">{% trans 'Full' %}
+              <input type="radio" {% if mode == 'full' %} checked {% endif %}>{% trans 'Full' %}
             </label>
             <label id="button-mode-compact" class="btn btn-secondary {% if mode == 'compact' %} active {% endif %}"
                    title="{% trans 'Mode' %}" @click="switchMode('compact')">
-              <input type="radio">{% trans 'Compact' %}
+              <input type="radio" {% if mode == 'compact' %} checked {% endif %}>{% trans 'Compact' %}
             </label>
             <label id="button-mode-minimal" class="btn btn-secondary {% if mode == 'minimal' %} active {% endif %}"
                    title="{% trans 'Mode' %}" @click="switchMode('minimal')">
-              <input type="radio">{% trans 'Minimal' %}
+              <input type="radio" {% if mode == 'minimal' %} checked {% endif %}>{% trans 'Minimal' %}
             </label>
           {% endwith %}
         </div>
@@ -67,15 +66,15 @@
           {% with sort=request.session.sort %}
             <label class="btn btn-secondary {% if sort == 'release_date' %} active {% endif %}"
                    title="{% trans 'Sort by release date' %}" @click="switchSort('release_date')">
-              <input type="radio">{% trans 'Release date' %}
+              <input type="radio" {% if sort == 'release_date' %} checked {% endif %}>{% trans 'Release date' %}
             </label>
             <label class="btn btn-secondary {% if sort == 'rating' %} active {% endif %}"
                    title="{% trans 'Sort by rating' %}" @click="switchSort('rating')">
-              <input type="radio">{% trans 'Rating' %}
+              <input type="radio" {% if sort == 'rating' %} checked {% endif %}>{% trans 'Rating' %}
             </label>
             <label class="btn btn-secondary {% if sort == 'addition_date' %} active {% endif %}"
                    title="{% trans 'Sort by date added' %}" @click="switchSort('addition_date')">
-              <input type="radio">{% trans 'Date added' %}
+              <input type="radio" {% if sort == 'addition_date' %} checked {% endif %}>{% trans 'Date added' %}
             </label>
           {% endwith %}
         </div>

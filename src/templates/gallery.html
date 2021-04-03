@@ -26,7 +26,7 @@
                @click="openUrl('{% url 'gallery' 'watched' %}')"
           {% endif %}
         >
-          <input type="radio">{% trans 'Watched' %}
+          <input type="radio" {% ifequal list 'watched' %} checked {% endifequal %}>{% trans 'Watched' %}
         </label>
         <label class="btn btn-secondary {% ifequal list 'to-watch' %} active {% endifequal %}"
                title="{% trans 'To Watch' %}"
@@ -36,7 +36,7 @@
                @click="openUrl('{% url 'gallery' 'to-watch' %}')"
           {% endif %}
         >
-          <input type="radio">{% trans 'To Watch' %}
+          <input type="radio" {% ifequal list 'to-watch' %} checked {% endifequal %}>{% trans 'To Watch' %}
         </label>
       </div>
 
