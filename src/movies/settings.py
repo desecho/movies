@@ -6,6 +6,7 @@ from os.path import abspath, dirname, join
 # Custom
 IS_DEV = bool(getenv("IS_DEV"))
 IS_VK_DEV = bool(getenv("IS_VK_DEV"))
+COLLECT_STATIC = bool(getenv("COLLECT_STATIC"))
 SRC_DIR = dirname(dirname(abspath(__file__)))
 PROJECT_DIR = dirname(SRC_DIR)
 
@@ -72,7 +73,6 @@ TEMPLATES = [
                 # Custom
                 "django.template.context_processors.i18n",
                 "django.template.context_processors.media",
-                "django.template.context_processors.static",
                 # social_django
                 "social_django.context_processors.backends",
                 "social_django.context_processors.login_redirect",
@@ -89,6 +89,7 @@ TEMPLATES = [
                 ),
             ],
             "debug": DEBUG,
+            "builtins": ["django.templatetags.static"],
         },
     },
 ]
@@ -124,7 +125,6 @@ INSTALLED_APPS = [
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
-    "django.contrib.staticfiles",
     # Custom
     "django.contrib.sites",
     "google_analytics",
@@ -143,6 +143,9 @@ if DEBUG:
         "debug_toolbar",
         "template_timings_panel",
     ]
+
+if DEBUG or COLLECT_STATIC:
+    INSTALLED_APPS.append("django.contrib.staticfiles")
 
 # Logging
 if not DEBUG:

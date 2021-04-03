@@ -3,6 +3,8 @@
 # bool
 export DEBUG=True
 # bool
+export COLLECT_STATIC=True
+# bool
 export IS_DEV=True
 export SECRET_KEY=key
 export PROJECT_DOMAIN=localhost
