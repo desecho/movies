@@ -89,7 +89,7 @@ TEMPLATES = [
                 ),
             ],
             "debug": DEBUG,
-            "builtins": ["django.templatetags.static"],
+            "builtins": ["django.templatetags.static", "django.templatetags.i18n"],
         },
     },
 ]
