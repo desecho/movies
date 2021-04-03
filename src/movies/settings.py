@@ -233,6 +233,7 @@ MEDIA_URL = "/media/"
 # django-registration-redux
 ACCOUNT_ACTIVATION_DAYS = 7
 REGISTRATION_FORM = "registration.forms.RegistrationFormUniqueEmail"
+REGISTRATION_AUTO_LOGIN = True
 
 # social-auth-app-django
 SOCIAL_AUTH_VK_OAUTH2_KEY = getenv("SOCIAL_AUTH_VK_OAUTH2_KEY")
