@@ -64,9 +64,10 @@ jobs:
       - name: Install s3cmd
         run: |
           pip install s3cmd==2.1.0
-          sed "s/\[access_key\]/$SPACES_ACCESS_KEY/g" deployment/.s3cfg -i
+          cp .github/workflows/.s3cfg ~/.s3cfg
+          sed "s/\[access_key\]/$SPACES_ACCESS_KEY/g" ~/.s3cfg -i
           SPACES_SECRET_KEY=$(echo $SPACES_SECRET_KEY | sed 's;/;\\/;g')
-          sed "s/\[secret_key\]/$SPACES_SECRET_KEY/g" deployment/.s3cfg > ~/.s3cfg
+          sed "s/\[secret_key\]/$SPACES_SECRET_KEY/g" ~/.s3cfg -i
         env:
           SPACES_ACCESS_KEY: ${{ secrets.SPACES_ACCESS_KEY }}
           SPACES_SECRET_KEY: ${{ secrets.SPACES_SECRET_KEY }}
