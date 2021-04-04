@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "dependencies": {
     "autosize": "^4.0.0",
-    "axios": "^0.17.1",
+    "axios": "^0.21.1",
     "axios-progress-bar": "^1.1.8",
     "bootstrap": "^4.0.0",
     "bootstrap-social": "^5.1.1",
