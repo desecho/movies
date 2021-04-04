@@ -311,7 +311,7 @@ docker-run:
 ## Run docker shell
 docker-sh:
 	sed 's/export //g' env_docker.sh > ${TMP_ENV_DOCKER}
-	docker run -ti --add-host host.docker.internal:host-gateway --env-file ${TMP_ENV_DOCKER} movies sh
+	docker run -ti --env-file ${TMP_ENV_DOCKER} movies sh
 
 #------------------------------------
 
