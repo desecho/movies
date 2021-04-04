@@ -2,6 +2,8 @@ name: DB Backup
 on:
   schedule:
     - cron: "0 0 * * *"  # Every Day at Midnight
+  workflow_dispatch:
+
 jobs:
   db_backup:
     name: DB Backup
