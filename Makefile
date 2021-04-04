@@ -287,6 +287,18 @@ createsuperuser:
 makemigrations:
 	${SOURCE_CMDS} && \
 	${MANAGE_CMD} makemigrations
+
+ifeq (manage,$(firstword $(MAKECMDGOALS)))
+  # Use the rest as arguments
+  MANAGE_ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
+  # Turn them into do-nothing targets
+  $(eval $(MANAGE_ARGS):;@:)
+endif
+
+.PHONY: manage
+## Run management command. Usage: [command]
+manage:
+	${MANAGE_CMD} ${MANAGE_ARGS}
 #------------------------------------
 
 
@@ -346,7 +358,7 @@ ifeq (prod-manage,$(firstword $(MAKECMDGOALS)))
 endif
 
 .PHONY: prod-manage
-## Run management command. Usage: [command]
+## Run management command in prod. Usage: [command]
 prod-manage:
 	POD_ID=$(shell scripts/get_pod_id.sh) && \
 	kubectl exec $$POD_ID -- ./manage.py ${PROD_MANAGE_ARGS}
