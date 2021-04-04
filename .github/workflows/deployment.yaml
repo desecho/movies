@@ -97,7 +97,7 @@ jobs:
         run: |
           kubectl apply -f deployment/configmap.yaml
           kubectl create secret generic movies --from-literal=DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
-            --from-literal=SECRET_KEY=${{ secrets.SECRET_KEY }} \
+            --from-literal=SECRET_KEY=$SECRET_KEY \
             --from-literal=SOCIAL_AUTH_VK_APP_KEY=${{ secrets.SOCIAL_AUTH_VK_APP_KEY }} \
             --from-literal=SOCIAL_AUTH_VK_APP_SECRET=${{ secrets.SOCIAL_AUTH_VK_APP_SECRET }} \
             --from-literal=SOCIAL_AUTH_VK_OAUTH2_KEY=${{ secrets.SOCIAL_AUTH_VK_OAUTH2_KEY }} \
@@ -114,6 +114,8 @@ jobs:
           kubectl apply -f deployment/service.yaml
           kubectl rollout restart deployment/movies
           kubectl rollout status deployment/movies
+        env:
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
 
       - name: Run db migration
         run: make prod-manage migrate
