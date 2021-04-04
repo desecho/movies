@@ -29,7 +29,9 @@ jobs:
       - name: Configure kubectl
         run: |
           mkdir ~/.kube
-          echo ${{ secrets.KUBECONFIG }} > ~/.kube/config
+          echo $KUBECONFIG > ~/.kube/config
+        env:
+          KUBECONFIG: ${{ secrets.KUBECONFIG }}
 
       - name: Remove unused movies
         run: make prod-manage remove_unused_movies
