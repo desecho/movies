@@ -36,7 +36,7 @@ Run in Docker:
 Note: static files are not served in docker so you will need to put a URL to your static files there in ``STATIC_URL`` variable.
 
 2. Run ``make docker-build``
-3. Run ``make-docker-run``
+3. Run ``make docker-run``
 
 Production
 ----------------------------
