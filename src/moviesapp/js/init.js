@@ -21,14 +21,14 @@ function getIsVkApp() {
   return false;
 }
 
-
-vars.flashOptions = {
-  timeout: 1500,
-  important: true,
-};
 window.urls = {};
 
-Vue.use(VueFlashMessage);
+Vue.use(VueFlashMessage, {
+  messageOptions: {
+    timeout: 1500,
+    important: true
+  },
+});
 Vue.use(VueCookie);
 Vue.options.delimiters = ['[[', ']]'];
 

@@ -40,7 +40,7 @@ function changeRating(id, rating, element) {
     }
 
     revertToPreviousRating(element);
-    Vue.prototype.$flashStorage.flash(gettext('Error adding a rating'), 'error', vars.flashOptions);
+    vm.flashError(gettext('Error adding a rating'));
   }
 
   const url = urls.changeRating + id + '/';
@@ -59,7 +59,7 @@ function applySettings(settings, reload = true) {
       location.reload();
     }
   }).catch(function() {
-    Vue.prototype.$flashStorage.flash(gettext('Error applying the settings'), 'error', vars.flashOptions);
+    vm.flashError(gettext('Error applying the settings'));
   });
 }
 
@@ -100,7 +100,7 @@ window.vm = new Vue({
       });
 
       axios.put(urls.record + recordId + '/options/', data).then(function() {}).catch(function() {
-        vm.flash(gettext('Error saving options'), 'error', vars.flashOptions);
+        vm.flashError(gettext('Error saving options'));
       });
     },
     retinajs: retina,
@@ -173,7 +173,7 @@ window.vm = new Vue({
       }
 
       function fail() {
-        vm.flash(gettext('Error removing the movie'), 'error', vars.flashOptions);
+        vm.flashError(gettext('Error removing the movie'));
       }
 
       const url = urls.removeRecord + id + '/';
@@ -218,9 +218,9 @@ window.vm = new Vue({
             if (response.error.error_code === 10007) {
               return;
             }
-            vm.flash(gettext('Error posting to the wall'), 'error', vars.flashOptions);
+            vm.flashError(gettext('Error posting to the wall'));
           } else {
-            vm.flash(gettext('Your post has been posted'), 'success', vars.flashOptions);
+            vm.flashSuccess(gettext('Your post has been posted'));
           }
         });
       }
@@ -228,7 +228,7 @@ window.vm = new Vue({
       function saveWallPhoto(data) {
         VK.api('photos.saveWallPhoto', data, function(response) {
           if (response.error) {
-            vm.flash(gettext('Error posting a poster to the wall'), 'error', vars.flashOptions);
+            vm.flashError(gettext('Error posting a poster to the wall'));
           } else {
             post(response.response[0].id);
           }
@@ -243,14 +243,14 @@ window.vm = new Vue({
           const data = JSON.parse(response.data.data);
           saveWallPhoto(data);
         }).catch(function() {
-          vm.flash(gettext('Error loading a poster'), 'error', vars.flashOptions);
+          vm.flashError(gettext('Error loading a poster'));
         });
       }
 
       function getWallUploadServerAndUploadPhotoAndPostToWall() {
         VK.api('photos.getWallUploadServer', function(response) {
           if (response.error) {
-            vm.flash(gettext('Error getting an upload server for wall posting'), 'error', vars.flashOptions);
+            vm.flashError(gettext('Error getting an upload server for wall posting'));
           } else {
             uploadPhotoToWall(response.response.upload_url);
           }
@@ -271,7 +271,7 @@ window.vm = new Vue({
           post();
         }
       } else {
-        vm.flash(gettext('Add a rating to the movie'), 'info', vars.flashOptions);
+        vm.flashInfo(gettext('Add a rating to the movie'));
       }
     },
     addToList: addToList,
@@ -296,7 +296,7 @@ window.vm = new Vue({
           commentAreaToggle.show();
         }
       }).catch(function() {
-        vm.flash(gettext('Error saving a comment'), 'error', vars.flashOptions);
+        vm.flashError(gettext('Error saving a comment'));
       });
     },
   },

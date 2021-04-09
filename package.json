@@ -15,7 +15,7 @@
     "tether": "^1.4.3",
     "vue": "^2.5.13",
     "vue-cookies": "^1.5.4",
-    "vue-flash-message": "^0.4.1"
+    "vue-flash-message": "^0.7.2"
   },
   "devDependencies": {
     "css-loader": "^0.28.9",

@@ -4955,11 +4955,6 @@ util-deprecate@^1.0.1, util-deprecate@~1.0.1:
   resolved "https://registry.yarnpkg.com/util-deprecate/-/util-deprecate-1.0.2.tgz#450d4dc9fa70de732762fbd2d4a28981419a0ccf"
   integrity sha1-RQ1Nyfpw3nMnYvvS1KKJgUGaDM8=
 
-util-guid@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/util-guid/-/util-guid-1.0.1.tgz#379ac465585f8c54b267132aee6ca349cf3ed612"
-  integrity sha1-N5rEZVhfjFSyZxMq7myjSc8+1hI=
-
 util@0.10.3:
   version "0.10.3"
   resolved "https://registry.yarnpkg.com/util/-/util-0.10.3.tgz#7afb1afe50805246489e3db7fe0ed379336ac0f9"
@@ -5082,12 +5077,10 @@ vue-eslint-parser@^7.6.0:
     esquery "^1.4.0"
     lodash "^4.17.15"
 
-vue-flash-message@^0.4.1:
-  version "0.4.1"
-  resolved "https://registry.yarnpkg.com/vue-flash-message/-/vue-flash-message-0.4.1.tgz#db837abd8bec7b3749448ad6fa89a81aa5ed8959"
-  integrity sha512-Mcq5AFZKdBXeaaeuKzZlw9drDZB9hM1rMPx7I3xxBqYLjFG0r5cM3CW3R9kMWaxgTntXNZlZsS9R1jf1tZwWlg==
-  dependencies:
-    util-guid "^1.0.1"
+vue-flash-message@^0.7.2:
+  version "0.7.2"
+  resolved "https://registry.yarnpkg.com/vue-flash-message/-/vue-flash-message-0.7.2.tgz#0668d6fa9fc70c65fd5c6ec246a415786960c34d"
+  integrity sha512-swOK9PxlWKzt1zzAMJX4YMU2O3kS0JznbwLy8burtKK2vibYc7ODRiEdAVnxRDQ09TG4tElVeO3hwwGDxQktaw==
 
 vue@^2.5.13:
   version "2.6.12"

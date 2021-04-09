@@ -3,7 +3,6 @@
 import {
   loadProgressBar,
 } from 'axios-progress-bar';
-import Vue from 'vue';
 import axios from 'axios';
 
 function setAxiosSettings() {
@@ -16,8 +15,8 @@ function setAxiosSettings() {
   axios.defaults.headers.common = headers;
   axios.interceptors.response.use(null, function(error) {
     if (error.response.status === 403) {
-      Vue.prototype.$flashStorage.flash(
-          gettext('You need to login to add a movie to your list'), 'info', vars.flashOptions);
+      vm.flashInfo(
+          gettext('You need to login to add a movie to your list'));
       return new Promise(() => {});
     }
     return Promise.reject(error);
