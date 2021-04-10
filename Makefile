@@ -298,6 +298,7 @@ endif
 .PHONY: manage
 ## Run management command. Usage: [command]
 manage:
+	${SOURCE_CMDS} && \
 	${MANAGE_CMD} ${MANAGE_ARGS}
 #------------------------------------
 
