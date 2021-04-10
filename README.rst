@@ -38,6 +38,14 @@ Note: static files are not served in docker so you will need to put a URL to you
 2. Run ``make docker-build``
 3. Run ``make docker-run``
 
+Debugging VK App:
+
+1. Register account on https://ngrok.io
+2. Run ``make ngrok``
+3. Set ``IS_VK_DEV`` to ``True``
+4. Set ``HOST_MOVIES_TEST`` to ngrok host
+5. Set iframe address to ``https://[ngrok_host]/complete/vk-app/``
+
 Production
 ----------------------------
 To use production commands edit ``db_env_prod.sh``.

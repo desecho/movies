@@ -228,6 +228,11 @@ format-json: scripts/jsonlint.sh format
 .PHONY: format-full
 ## Format code
 format-full: format format-json
+
+.PHONY: ngrok
+## Run ngrok
+ngrok:
+	ngrok http 8000
 #------------------------------------
 
 
