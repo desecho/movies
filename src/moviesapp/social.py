@@ -31,3 +31,4 @@ def load_user_data(backend, user, **kwargs):  # pylint: disable=unused-argument
         user.language = "ru"
         user.loaded_initial_data = True
         user.save()
+    return None

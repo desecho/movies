@@ -26,7 +26,7 @@ window.urls = {};
 Vue.use(VueFlashMessage, {
   messageOptions: {
     timeout: 1500,
-    important: true
+    important: true,
   },
 });
 Vue.use(VueCookie);
