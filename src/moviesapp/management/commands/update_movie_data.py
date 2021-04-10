@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from django_tqdm import BaseCommand
 
 from moviesapp.exceptions import MovieNotInDb

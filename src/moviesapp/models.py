@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import facebook
 import vk_api
 from annoying.fields import JSONField  # Not using django-mysql instead because it's not supported by modeltranslation.

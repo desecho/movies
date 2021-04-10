@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import annoying.fields
 import django.core.validators
 import django.utils.timezone

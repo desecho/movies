@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import annoying.fields
 import django.contrib.auth.models
 import django.core.validators
