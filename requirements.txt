@@ -15,6 +15,11 @@ django-bootstrap-pagination==1.7.1
 django-modeltranslation==0.16.2
 django-modeladmin-reorder==0.3.1
 
+# Updated on 10.04.11
+# social-auth-core==4.1.0 (dependency of social-auth-app-django)
+# PR is currently open for this here - https://github.com/python-social-auth/social-core/pull/584
+-e git+https://github.com/desecho/social-core.git@fix_vk_app_token#egg=social-auth-core
+
 # Requests
 requests==2.25.1
 requests-toolbelt==0.9.1
