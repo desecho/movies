@@ -1,6 +1,8 @@
 from django.contrib.auth import logout
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
 from django.urls import reverse
+from django.utils.decorators import method_decorator
 from django.views.generic.edit import FormView
 
 from moviesapp.forms import UserForm
@@ -14,6 +16,7 @@ def logout_view(request):
     return redirect("/")
 
 
+@method_decorator(login_required, name="dispatch")
 class PreferencesView(FormView):
     template_name = "user/preferences.html"
     form_class = UserForm
