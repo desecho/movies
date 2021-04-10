@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import facebook
-import vkontakte
+import vk_api
 from annoying.fields import JSONField  # Not using django-mysql instead because it's not supported by modeltranslation.
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser, AnonymousUser
@@ -14,18 +14,16 @@ from django.utils.translation import LANGUAGE_SESSION_KEY, gettext_lazy as _
 class Vk:
     def __init__(self, user):
         vk_account = user.get_vk_account()
-        self.vk = vkontakte.API(*settings.VK_BACKENDS_CREDENTIALS[vk_account.provider])
+        vk_session = vk_api.VkApi(token=vk_account.access_token)
+        self.vk = vk_session.get_api()
         self.vk_id = vk_account.uid
         self.user = user
 
     def get_friends(self):  # pylint: disable=no-self-use
-        # 2DO fix this for vk
-        # friends = cache.get('vk_friends')
-        # if friends is None:
-        #     friends = self.vk.friends.get(uid=self.vk_id)
-        #     cache.set('vk_friends', friends)
-        # friends_ids = map(str, friends)
-        friends_ids = []
+        friends = cache.get("vk_friends")
+        if friends is None:
+            friends_ids = self.vk.friends.get()["items"]
+            cache.set("vk_friends", friends)
 
         # We need to use distinct here because the same user can have several VK backends (both app and oauth)
         friends = User.objects.filter(
@@ -34,7 +32,7 @@ class Vk:
         return friends
 
     def get_data(self, fields):
-        return self.vk.getProfiles(uids=self.vk_id, fields=",".join(fields))[0]
+        return self.vk.users.get(fields=fields)[0]
 
 
 class Fb:

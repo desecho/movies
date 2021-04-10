@@ -16,14 +16,14 @@ class Command(BaseCommand):
             vk = user.get_vk()
             if vk is not None:
                 FIELDS = (
-                    "photo_medium",
-                    "photo_big",
+                    "photo_100",
+                    "photo_200",
                 )
                 data = vk.get_data(FIELDS)
-                avatar_small = get_vk_avatar(data["photo_medium"])
+                avatar_small = get_vk_avatar(data["photo_100"])
                 if avatar_small:
                     user.avatar_small = avatar_small
-                avatar_big = get_vk_avatar(data["photo_big"])
+                avatar_big = get_vk_avatar(data["photo_200"])
                 if avatar_big:
                     user.avatar_big = avatar_big
                 user.save()
