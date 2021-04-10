@@ -1,9 +1,5 @@
 {% extends 'base.html' %}
 
-{% block head %}
-  <link href="{% static 'vendor/bootstrap-social/bootstrap-social.css' %}" rel="stylesheet">
-{% endblock %}
-
 {% block content %}
   <form method="post" action="{% url 'login' %}" class="form-horizontal col-sm-6 col-md-4 col-lg-4 col-xl-3 mx-auto"
         class="login-form">
