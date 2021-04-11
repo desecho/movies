@@ -44,7 +44,7 @@ Debugging VK App:
 2. Run ``make ngrok``
 3. Set ``IS_VK_DEV`` to ``True``
 4. Set ``HOST_MOVIES_TEST`` to ngrok host
-5. Set iframe address to ``https://[ngrok_host]/complete/vk-app/``
+5. Set iframe address to ``https://[ngrok_host]/complete/vk-app/`` in the app settings
 
 Production
 ----------------------------
