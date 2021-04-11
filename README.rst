@@ -3,8 +3,8 @@ Movies
 
 |Build Status| |Requirements Status| |Codecov|
 
-The web application on Django_ 2, Vue.js_ 2, Bootstrap_ 4. Create movie lists ("Watched" and "To watch"), rate movies and add comments.
-You can also add additional information such as if you watched the movie in original version, in theatre, an extended version, in 4k, etc.
+The web application on Django_ 2, Vue.js_ 2, Bootstrap_ 4. Create movie lists ("Watched" and "To watch"), rate movies, and add comments.
+You can also add additional information such as if you watched the movie in the original version, in theatre, an extended version, in 4k, etc.
 
 | It is also available as a `VK app <http://vk.com/app3504693_2912142>`_.
 | Share your lists with VK and Facebook friends, get recommendations from friends.
@@ -33,7 +33,7 @@ Run in Docker:
 
 1. Edit ``env_docker.sh``
 
-Note: static files are not served in docker so you will need to put a URL to your static files there in ``STATIC_URL`` variable.
+Note: static files are not served in docker so you will need to put a URL to your static files there in the ``STATIC_URL`` variable.
 
 2. Run ``make docker-build``
 3. Run ``make docker-run``
