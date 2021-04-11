@@ -233,6 +233,25 @@ format-full: format format-json
 ## Run ngrok
 ngrok:
 	ngrok http 8000
+
+.PHONY: drop-db
+## Drop db
+drop-db:
+	source env.sh && \
+	scripts/drop_db.sh
+
+ifeq (load-db,$(firstword $(MAKECMDGOALS)))
+  # Use the rest as arguments
+  LOAD_DB_ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
+  # Turn them into do-nothing targets
+  $(eval $(LOAD_DB_ARGS):;@:)
+endif
+
+.PHONY: load-db
+## Load db. Usage: [gz_path]
+load-db: drop-db create-db
+	source env.sh && \
+	gunzip -c ${LOAD_DB_ARGS} | mysql -u$$DB_USER -p"$$DB_PASSWORD" -h$$DB_HOST -Dmovies
 #------------------------------------
 
 
@@ -352,9 +371,15 @@ endif
 
 .PHONY: prod-load-db
 ## Load db to prod. Usage: [gz_path]
-prod-load-db:
+prod-load-db: prod-drop-db prod-create-db
 	source db_env_prod.sh && \
 	gunzip -c ${PROD_LOAD_DB_ARGS} | mysql -u$$DB_USER -p"$$DB_PASSWORD" -h$$DB_HOST -Dmovies
+
+.PHONY: prod-drop-db
+## Drop prod db
+prod-drop-db:
+	source db_env_prod.sh && \
+	scripts/drop_db.sh
 
 ifeq (prod-manage,$(firstword $(MAKECMDGOALS)))
   # Use the rest as arguments
