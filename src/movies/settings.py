@@ -231,6 +231,8 @@ STATIC_URL = getenv("STATIC_URL", "/static/")
 MEDIA_ROOT = join(PROJECT_DIR, "media")
 MEDIA_URL = "/media/"
 
+DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
+
 # --== Modules settings ==--
 
 # django-registration-redux
