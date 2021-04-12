@@ -274,6 +274,10 @@ runserver:
 	${SOURCE_CMDS} && \
 	${MANAGE_CMD} runserver 0.0.0.0:8000
 
+.PHONY: run
+## Run server for development
+run: runserver
+
 .PHONY: migrate
 ## Run data migration
 migrate:

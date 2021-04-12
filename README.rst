@@ -20,7 +20,7 @@ Development
 4. Run ``make createsuperuser`` to create a superadmin user
 5. Edit file ``env.sh``
 
-Run ``make build`` and ``make runserver`` to run the server for development.
+Run ``make build`` and ``make run`` to run the server for development.
 
 | Open http://localhost:8000/ to access the web application.
 | Open http://localhost:8000/admin to access the admin section.
