@@ -265,8 +265,8 @@ MANAGE_CMD := src/manage.py
 ## Run makemessages | Django
 makemessages:
 	${SOURCE_CMDS} && \
-	${MANAGE_CMD} makemessages --ignore=venv/* --ignore=.tox/* --ignore=static && \
-	${MANAGE_CMD} makemessages -d djangojs --ignore=moviesapp/static/* --ignore=node_modules/* --ignore=venv/* --ignore=.tox/* --ignore=static
+	${MANAGE_CMD} makemessages -a --ignore=venv --ignore=.tox --ignore=static && \
+	${MANAGE_CMD} makemessages -a -d djangojs --ignore=moviesapp/static --ignore=node_modules --ignore=venv --ignore=.tox --ignore=static
 
 .PHONY: runserver
 ## Run server for development
