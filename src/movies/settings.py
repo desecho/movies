@@ -335,11 +335,7 @@ GOOGLE_ANALYTICS = {"google_analytics_id": getenv("GOOGLE_ANALYTICS_ID")}
 # --== Project settings ==--
 
 # Social
-VK_BACKENDS_CREDENTIALS = {
-    "vk-app": (SOCIAL_AUTH_VK_APP_KEY, SOCIAL_AUTH_VK_APP_SECRET),
-    "vk-oauth2": (SOCIAL_AUTH_VK_OAUTH2_KEY, SOCIAL_AUTH_VK_OAUTH2_SECRET),
-}
-VK_BACKENDS = VK_BACKENDS_CREDENTIALS.keys()
+VK_BACKENDS = ("vk-app", "vk-oauth2")
 
 # Search settings
 MAX_RESULTS = 50
@@ -370,7 +366,6 @@ RECORDS_ON_PAGE = 50
 PEOPLE_ON_PAGE = 25
 FEED_DAYS = 7
 
-VK_EN = 3
 VK_NO_AVATAR = ["https://vk.com/images/camera_100.png", "https://vk.com/images/camera_200.png"]
 
 # API Keys
