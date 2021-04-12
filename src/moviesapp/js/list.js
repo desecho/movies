@@ -182,7 +182,7 @@ window.vm = new Vue({
     postToWall: function(id) {
       const vm = this;
 
-      function post(photo) {
+      function post(photoId, ownerId) {
         function createWallPostMessage() {
           let text;
           const title = $('#record' + id).data('title');
@@ -206,8 +206,8 @@ window.vm = new Vue({
           const post = {
             message: createWallPostMessage(),
           };
-          if (photo) {
-            post.attachments = photo;
+          if (photoId) {
+            post.attachments = `photo${ownerId}_${photoId}`;
           }
           return post;
         }
@@ -230,7 +230,8 @@ window.vm = new Vue({
           if (response.error) {
             vm.flashError(gettext('Error posting a poster to the wall'));
           } else {
-            post(response.response[0].id);
+            const responseData = response.response[0];
+            post(responseData.id, responseData.owner_id);
           }
         });
       }
@@ -268,7 +269,7 @@ window.vm = new Vue({
         if (hasPoster()) {
           getWallUploadServerAndUploadPhotoAndPostToWall();
         } else {
-          post();
+          post(null, null);
         }
       } else {
         vm.flashInfo(gettext('Add a rating to the movie'));
