@@ -20,3 +20,7 @@ class OmdbRequestError(Exception):
 
 class OmdbError(Exception):
     """OMDb error."""
+
+
+class VKError(Exception):
+    """VK error."""

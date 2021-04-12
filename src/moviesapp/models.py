@@ -8,6 +8,9 @@ from django.core.cache import cache
 from django.db import models
 from django.dispatch import receiver
 from django.utils.translation import LANGUAGE_SESSION_KEY, gettext_lazy as _
+from vk_api.exceptions import ApiError
+
+from moviesapp.exceptions import VKError
 
 
 class Vk:
@@ -97,7 +100,18 @@ class UserBase:
 
     # It is requried that `is_vk_user` is run before running this.
     def get_vk_account(self):  # 2DO possibly remove it from this class.
-        return self._get_vk_accounts()[0]
+        vk_accounts = self._get_vk_accounts()
+        if len(vk_accounts) == 1:
+            return vk_accounts[0]
+        for vk_account in vk_accounts:
+            vk_session = vk_api.VkApi(token=vk_account.access_token)
+            vk = vk_session.get_api()
+            try:
+                vk.users.get(fields=["screen_name"])
+            except ApiError:
+                continue
+            return vk_account
+        raise VKError
 
     def is_vk_user(self):
         """
