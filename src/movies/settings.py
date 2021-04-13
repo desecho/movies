@@ -186,6 +186,8 @@ if not DEBUG:
         },
     }
 
+# It is needed for VK app to work.
+# Security
 CSRF_COOKIE_SAMESITE = "None"
 SESSION_COOKIE_SAMESITE = "None"
 CSRF_COOKIE_SECURE = True
