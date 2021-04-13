@@ -1,7 +1,12 @@
+PROJECT := movies
+
+export
+
 .DEFAULT_GOAL := help
 
 SHELL := /bin/bash
 SOURCE_CMDS := source venv/bin/activate && source env.sh
+
 #------------------------------------
 # Help
 #------------------------------------
@@ -240,18 +245,11 @@ drop-db:
 	source env.sh && \
 	scripts/drop_db.sh
 
-ifeq (load-db,$(firstword $(MAKECMDGOALS)))
-  # Use the rest as arguments
-  LOAD_DB_ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
-  # Turn them into do-nothing targets
-  $(eval $(LOAD_DB_ARGS):;@:)
-endif
-
 .PHONY: load-db
-## Load db. Usage: [gz_path]
+## Load db from yesterday's backup
 load-db: drop-db create-db
 	source env.sh && \
-	gunzip -c ${LOAD_DB_ARGS} | mysql -u$$DB_USER -p"$$DB_PASSWORD" -h$$DB_HOST -Dmovies
+	./scripts/load_db.sh
 #------------------------------------
 
 
@@ -366,24 +364,17 @@ prod-create-db:
 	source db_env_prod.sh && \
 	scripts/create_db.sh
 
-ifeq (prod-load-db,$(firstword $(MAKECMDGOALS)))
-  # Use the rest as arguments
-  PROD_LOAD_DB_ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
-  # Turn them into do-nothing targets
-  $(eval $(PROD_LOAD_DB_ARGS):;@:)
-endif
-
-.PHONY: prod-load-db
-## Load db to prod. Usage: [gz_path]
-prod-load-db: prod-drop-db prod-create-db
-	source db_env_prod.sh && \
-	gunzip -c ${PROD_LOAD_DB_ARGS} | mysql -u$$DB_USER -p"$$DB_PASSWORD" -h$$DB_HOST -Dmovies
-
 .PHONY: prod-drop-db
 ## Drop prod db
 prod-drop-db:
 	source db_env_prod.sh && \
 	scripts/drop_db.sh
+
+.PHONY: prod-load-db
+## Load db to prod from yesterday's backup
+prod-load-db: prod-drop-db prod-create-db
+	source db_env_prod.sh && \
+	./scripts/load_db.sh
 
 ifeq (prod-manage,$(firstword $(MAKECMDGOALS)))
   # Use the rest as arguments
@@ -397,5 +388,4 @@ endif
 prod-manage:
 	POD_ID=$(shell scripts/get_pod_id.sh) && \
 	kubectl exec $$POD_ID -- ./manage.py ${PROD_MANAGE_ARGS}
-
 #------------------------------------
