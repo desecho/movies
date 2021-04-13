@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-11 21:08-0400\n"
+"POT-Creation-Date: 2021-04-13 03:09-0400\n"
 "PO-Revision-Date: 2018-03-29 03:26-0456\n"
 "Last-Translator: b'Anton Samarchyan <desecho@gmail.com>'\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -88,19 +88,19 @@ msgstr "Ваша запись была размещена"
 msgid "Error posting a poster to the wall"
 msgstr "Ошибка размещения постера на стену"
 
-#: src/moviesapp/js/list.js:246
+#: src/moviesapp/js/list.js:247
 msgid "Error loading a poster"
 msgstr "Ошибка загрузки постера"
 
-#: src/moviesapp/js/list.js:253
+#: src/moviesapp/js/list.js:254
 msgid "Error getting an upload server for wall posting"
 msgstr "Ошибка получения сервера загрузки для размещения на стену"
 
-#: src/moviesapp/js/list.js:274
+#: src/moviesapp/js/list.js:275
 msgid "Add a rating to the movie"
 msgstr "Добавьте оценку фильму"
 
-#: src/moviesapp/js/list.js:299
+#: src/moviesapp/js/list.js:300
 msgid "Error saving a comment"
 msgstr "Ошибка сохранения комментария"
 
