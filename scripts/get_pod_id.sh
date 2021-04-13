@@ -2,4 +2,4 @@
 
 set -eu
 
-echo $(kubectl get pods -lapp=movies | grep Running | awk '{print $1}')
+echo $(kubectl get pods -lapp=$PROJECT | grep Running | awk '{print $1}')

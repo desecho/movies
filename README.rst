@@ -25,7 +25,7 @@ Run ``make build`` and ``make run`` to run the server for development.
 | Open http://localhost:8000/ to access the web application.
 | Open http://localhost:8000/admin to access the admin section.
 
-Run ``make format`` to format all the code.
+Run ``make format-all`` to format all the code.
 
 Run ``make help`` to get a list of all available commands.
 

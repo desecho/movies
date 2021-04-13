@@ -1,4 +1,5 @@
 PROJECT := movies
+APP := moviesapp
 
 export
 
@@ -223,16 +224,17 @@ format:
 	autoflake --remove-all-unused-imports --in-place -r src && \
 	isort -rc src && \
 	black .
-	yarn run csscomb src/moviesapp/styles/*
-	yarn run eslint ./*.js src/moviesapp/js/* --fix
+	yarn run csscomb src/${APP}/styles/*
+	yarn run eslint ./*.js src/${APP}/js/* --fix
 
 .PHONY: format-json
 ## Format json files
-format-json: scripts/jsonlint.sh format
+format-json:
+	scripts/jsonlint.sh format
 
-.PHONY: format-full
+.PHONY: format-all
 ## Format code
-format-full: format format-json
+format-all: format format-json
 
 .PHONY: ngrok
 ## Run ngrok
@@ -264,7 +266,7 @@ MANAGE_CMD := src/manage.py
 makemessages:
 	${SOURCE_CMDS} && \
 	${MANAGE_CMD} makemessages -a --ignore=venv --ignore=.tox --ignore=static && \
-	${MANAGE_CMD} makemessages -a -d djangojs --ignore=moviesapp/static --ignore=node_modules --ignore=venv --ignore=.tox --ignore=static
+	${MANAGE_CMD} makemessages -a -d djangojs --ignore=src/${APP}/static --ignore=node_modules --ignore=venv --ignore=.tox --ignore=static
 
 .PHONY: runserver
 ## Run server for development
@@ -312,7 +314,7 @@ createsuperuser:
 ## Run makemigrations command
 makemigrations:
 	${SOURCE_CMDS} && \
-	${MANAGE_CMD} makemigrations moviesapp
+	${MANAGE_CMD} makemigrations ${APP}
 
 ifeq (manage,$(firstword $(MAKECMDGOALS)))
   # Use the rest as arguments
@@ -336,7 +338,7 @@ manage:
 .PHONY: docker-build
 ## Run docker-build | Docker
 docker-build:
-	docker build -t movies .
+	docker build -t ${PROJECT} .
 
 TMP_ENV_DOCKER := $(shell mktemp)
 
@@ -344,13 +346,13 @@ TMP_ENV_DOCKER := $(shell mktemp)
 ## Run docker-run
 docker-run:
 	sed 's/export //g' env_docker.sh > ${TMP_ENV_DOCKER}
-	docker run --add-host host.docker.internal:host-gateway --env-file ${TMP_ENV_DOCKER} -p 8000:8000 movies
+	docker run --add-host host.docker.internal:host-gateway --env-file ${TMP_ENV_DOCKER} -p 8000:8000 ${PROJECT}
 
 .PHONY: docker-sh
 ## Run docker shell
 docker-sh:
 	sed 's/export //g' env_docker.sh > ${TMP_ENV_DOCKER}
-	docker run -ti --env-file ${TMP_ENV_DOCKER} movies sh
+	docker run -ti --env-file ${TMP_ENV_DOCKER} ${PROJECT} sh
 
 #------------------------------------
 

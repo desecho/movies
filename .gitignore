@@ -16,7 +16,7 @@ yarn-error.log
 package-lock.json
 src/moviesapp/static/js/
 src/moviesapp/static/font/
-src/moviesapp/static/*.css
+src/moviesapp/static/css/
 venv
 env.sh
 env_docker.sh

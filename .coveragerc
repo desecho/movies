@@ -5,7 +5,6 @@ omit =
     src/moviesapp/migrations/*
 
 [report]
-
 exclude_lines =
     pragma: no cover
     def __repr__

@@ -76,7 +76,7 @@ module.exports = {
     ],
   },
   plugins: [
-    new ExtractTextPlugin('[name].css'),
+    new ExtractTextPlugin('css/[name].css'),
     new webpack.ProvidePlugin({
       '$': 'jquery',
       'jQuery': 'jquery',
