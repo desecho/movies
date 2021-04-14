@@ -284,10 +284,9 @@ window.vm = new Vue({
     saveComment: function(id) {
       const comment = $('#comment' + id)[0].value;
       const data = $.param({
-        id: id,
         comment: comment,
       });
-      axios.put(urls.saveComment, data).then(function() {
+      axios.put(urls.saveComment + id + '/', data).then(function() {
         const commentAreaToggle = $('#comment_area_button' + id);
         if (comment) {
           commentAreaToggle.hide();

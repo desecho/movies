@@ -81,7 +81,13 @@ urlpatterns = [
         kwargs={"exception": Exception("Page not Found")},
     ),
     re_path(r"change-rating/(?P<id>\d+)/", ChangeRatingView.as_view(), name="change_rating"),
-    path("save-comment/", SaveCommentView.as_view(), name="save_comment"),
+    path(
+        "save-comment/",
+        django.views.defaults.page_not_found,
+        name="save_comment",
+        kwargs={"exception": Exception("Page not Found")},
+    ),
+    re_path(r"save-comment/(?P<id>\d+)/", SaveCommentView.as_view(), name="save_comment"),
     # Social
     re_path("feed/(?P<list_name>people|friends)/", FeedView.as_view(), name="feed"),
     path("people/", PeopleView.as_view(), name="people"),

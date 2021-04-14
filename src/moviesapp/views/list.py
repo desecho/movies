@@ -86,15 +86,14 @@ class SaveOptionsView(AjaxAnonymousView):
 
 
 class SaveCommentView(AjaxView):
-    def put(self, request):
-        PUT = request.PUT
+    def put(self, request, **kwargs):
         try:
-            record_id = int(PUT["id"])
+            record_id = int(kwargs["id"])
         except (KeyError, ValueError):
             return self.render_bad_request_response()
         record = request.user.get_record(record_id)
         try:
-            comment = PUT["comment"]
+            comment = request.PUT["comment"]
         except KeyError:
             return self.render_bad_request_response()
 
