@@ -6,7 +6,6 @@ from django.utils.decorators import method_decorator
 from django.views.generic.edit import FormView
 
 from moviesapp.forms import UserForm
-from moviesapp.models import activate_user_language_preference
 
 from .mixins import TemplateAnonymousView
 
@@ -30,8 +29,6 @@ class PreferencesView(FormView):
         return reverse("preferences")
 
     def form_valid(self, form):
-        if "language" in form.changed_data:
-            activate_user_language_preference(self.request, form.cleaned_data["language"])
         form.save()
         return super().form_valid(form)
 

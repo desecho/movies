@@ -100,21 +100,22 @@ if DEBUG:
     ]
 
 MIDDLEWARE = [
-    "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
+    "django.middleware.security.SecurityMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     # We disable this to make VK iframe app work
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
     # Custom
-    "django.middleware.locale.LocaleMiddleware",
     "django.middleware.gzip.GZipMiddleware",
     "social_django.middleware.SocialAuthExceptionMiddleware",
     "custom_anonymous.middleware.AuthenticationMiddleware",
     "admin_reorder.middleware.ModelAdminReorder",
     "moviesapp.middleware.PutHandlerMiddleware",
+    "moviesapp.middleware.language_middleware",
 ]
 if DEBUG:
     MIDDLEWARE.append("debug_toolbar.middleware.DebugToolbarMiddleware")

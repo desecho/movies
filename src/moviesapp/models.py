@@ -3,11 +3,9 @@ import vk_api
 from annoying.fields import JSONField  # Not using django-mysql instead because it's not supported by modeltranslation.
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser, AnonymousUser
-from django.contrib.auth.signals import user_logged_in
 from django.core.cache import cache
 from django.db import models
-from django.dispatch import receiver
-from django.utils.translation import LANGUAGE_SESSION_KEY, gettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from vk_api.exceptions import ApiError
 
 from moviesapp.exceptions import VKError
@@ -50,10 +48,6 @@ class Fb:
         friends_ids = [f["id"] for f in friends]
         friends = User.objects.filter(social_auth__provider="facebook", social_auth__uid__in=friends_ids)
         return friends
-
-
-def activate_user_language_preference(request, language_):
-    request.session[LANGUAGE_SESSION_KEY] = language_
 
 
 def get_poster_url(size, poster):
@@ -167,7 +161,9 @@ class User(AbstractUser, UserBase):
     only_for_friends = models.BooleanField(
         verbose_name=_("Privacy"), default=False, help_text=_("Show my lists only to friends")
     )
-    language = models.CharField(max_length=2, choices=settings.LANGUAGES, default="en", verbose_name=_("Language"))
+    language = models.CharField(
+        max_length=2, choices=settings.LANGUAGES, default=settings.LANGUAGE_CODE, verbose_name=_("Language")
+    )
     avatar_small = models.URLField(null=True, blank=True)
     avatar_big = models.URLField(null=True, blank=True)
     loaded_initial_data = models.BooleanField(default=False)
@@ -326,8 +322,3 @@ class ActionRecord(models.Model):
 
     def __str__(self):
         return f"{self.movie.title} {self.action.name}"
-
-
-@receiver(user_logged_in)
-def language(**kwargs):
-    activate_user_language_preference(kwargs["request"], kwargs["user"].language)
