@@ -148,10 +148,10 @@ flake8:
 isort:
 	tox -e py39-isort
 
-.PHONY: bandit
-## Run bandit
-bandit:
-	tox -e py39-bandit
+# .PHONY: bandit
+# ## Run bandit
+# bandit:
+# 	tox -e py39-bandit
 
 .PHONY: rstlint
 ## Run rstlint
