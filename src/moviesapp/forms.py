@@ -6,7 +6,7 @@ from .models import User
 class UserForm(ModelForm):
     class Meta:
         model = User
-        fields = ("language", "only_for_friends", "username", "first_name", "last_name", "location")
+        fields = ("language", "only_for_friends", "username", "first_name", "last_name")
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
