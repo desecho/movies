@@ -388,6 +388,5 @@ endif
 .PHONY: prod-manage
 ## Run management command in prod. Usage: [command]
 prod-manage:
-	POD_ID=$(shell scripts/get_pod_id.sh) && \
-	kubectl exec $$POD_ID -- ./manage.py ${PROD_MANAGE_ARGS}
+	scripts/run_management_command.sh ${PROD_MANAGE_ARGS}
 #------------------------------------
