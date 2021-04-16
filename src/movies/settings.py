@@ -228,7 +228,7 @@ LOGIN_ERROR_URL = "/login-error/"
 
 # Static files
 if IS_DEV:
-    STATICFILES_DIRS = (join(SRC_DIR, "moviesapp", "static"), join(PROJECT_DIR, "static"))
+    STATICFILES_DIRS = (join(SRC_DIR, "moviesapp", "static"),)
     STATIC_ROOT = None
 else:
     STATIC_ROOT = join(PROJECT_DIR, "static")
