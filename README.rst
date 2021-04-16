@@ -20,14 +20,12 @@ Development
 4. Run ``make createsuperuser`` to create a superadmin user
 5. Edit file ``env.sh``
 
-Run ``make build`` and ``make run`` to run the server for development.
+| Run ``make build`` and ``make run`` to run the server for development.
+| Run ``make help`` to get a list of all available commands.
 
 | Open http://localhost:8000/ to access the web application.
 | Open http://localhost:8000/admin to access the admin section.
-
-Run ``make format-all`` to format all the code.
-
-Run ``make help`` to get a list of all available commands.
+| Open http://localhost:8000/rosetta to access rosetta.
 
 Run in Docker:
 
