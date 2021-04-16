@@ -29,10 +29,7 @@ Development
 
 Run in Docker:
 
-1. Edit ``env_docker.sh``
-
-Note: static files are not served in docker so you will need to put a URL to your static files there in the ``STATIC_URL`` variable.
-
+1. Run ``make collectstatic``
 2. Run ``make docker-build``
 3. Run ``make docker-run``
 

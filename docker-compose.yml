@@ -1,0 +1,18 @@
+version: "3.9"
+
+services:
+  app:
+    image: ${PROJECT}
+    ports:
+      - 8000:8000
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    env_file:
+      - ${DOCKER_ENV_FILE}
+
+  static:
+    image: nginx:alpine
+    ports:
+      - 8080:80
+    volumes:
+      - "./static/:/usr/share/nginx/html"

@@ -1,0 +1,7 @@
+DB_USER=root
+DB_PASSWORD=password
+DB_HOST=host.docker.internal
+STATIC_URL=http://localhost:8080/
+SECRET_KEY=key
+GOOGLE_ANALYTICS_ID=id
+PROJECT_DOMAIN=localhost
