@@ -10,6 +10,9 @@ jobs:
         with:
           access_token: ${{ github.token }}
 
+      - name: Checkout code
+        uses: actions/checkout@v2
+
       - name: Install kubectl
         uses: azure/setup-kubectl@v1
 
