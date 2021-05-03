@@ -9,10 +9,7 @@ django-tqdm==1.0.0
 django-registration-redux==2.9
 django-custom-anonymous==0.5.0
 social-auth-app-django==4.0.0
-# Updated on 10.04.11
-# django-google-analytics-app==5.0.2
-# Created a PR to support Django 3.2 - https://github.com/praekeltfoundation/django-google-analytics/pull/70
--e git+https://github.com/desecho/django-google-analytics.git@django3.2#egg=django-google-analytics-app
+django-google-analytics-app==5.0.3
 
 django-bootstrap-pagination==1.7.1
 django-modeltranslation==0.16.2
