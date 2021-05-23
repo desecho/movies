@@ -18,7 +18,7 @@ jobs:
       - name: Backup DB
         run: |
           NOW=$(date +"%d-%m-%Y")
-          mysqldump -u root -h mysql.desecho.org movies -p$DB_PASSWORD | gzip -9 > movies-$NOW.sql.gz
+          mysqldump -u root -h mysql.samarchyan.me movies -p$DB_PASSWORD | gzip -9 > movies-$NOW.sql.gz
         env:
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
 

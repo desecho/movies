@@ -8,10 +8,10 @@ metadata:
 spec:
   tls:
   - hosts:
-    - movies.desecho.org
+    - movies.samarchyan.me
     secretName: movies-tls
   rules:
-  - host: movies.desecho.org
+  - host: movies.samarchyan.me
     http:
       paths:
       - pathType: Prefix

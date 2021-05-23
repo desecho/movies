@@ -76,7 +76,7 @@ jobs:
 
       - name: Upload static files
         run: |
-          s3cmd put static/* s3://movies.cdn.desecho.org/ -r -P --no-mime-magic --guess-mime-type
+          s3cmd put static/* s3://movies.cdn.samarchyan.me/ -r -P --no-mime-magic --guess-mime-type
 
       - name: Install doctl
         uses: digitalocean/action-doctl@v2
@@ -85,7 +85,7 @@ jobs:
 
       - name: Flush CDN cache
         run: |
-          CDN_ID=$(doctl compute cdn list | grep movies.cdn.desecho.org | awk '{print $1}')
+          CDN_ID=$(doctl compute cdn list | grep movies.cdn.samarchyan.me | awk '{print $1}')
           doctl compute cdn flush $CDN_ID
 
       - name: Install kubectl

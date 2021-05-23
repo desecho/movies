@@ -8,7 +8,7 @@ You can also add additional information such as if you watched the movie in the 
 
 | It is also available as a `VK app <http://vk.com/app3504693_2912142>`_.
 | Share your lists with VK and Facebook friends, get recommendations from friends.
-| The website is live here - https://movies.desecho.org.
+| The website is live here - https://movies.samarchyan.me.
 | The interface is available in English and Russian.
 | See more documentation_.
 
