@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -eu
+set -eou pipefail
 
-POD_ID=$(kubectl get pods -lapp=$PROJECT | grep Running | awk '{print $1}')
-kubectl exec $POD_ID -- ./manage.py "$@"
+POD_ID=$(kubectl get pods -lapp="$PROJECT" | grep Running | awk '{print $1}')
+kubectl exec "$POD_ID" -- ./manage.py "$@"

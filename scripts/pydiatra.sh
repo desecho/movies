@@ -1,9 +1,9 @@
 #!/bin/bash
 
-set -eu
+set -eou pipefail
 
 result=$(find src -name '*.py' -exec py3diatra {} \;)
 if [[ $result ]]; then
-	echo $result
+	echo "$result"
 	exit 1
 fi
