@@ -1,4 +1,4 @@
-Django==3.2
+Django==3.2.4
 
 # Django related packages
 django-annoying==0.10.6
@@ -12,7 +12,7 @@ social-auth-app-django==4.0.0
 django-google-analytics-app==5.0.3
 
 django-bootstrap-pagination==1.7.1
-django-modeltranslation==0.16.2
+django-modeltranslation==0.17.2
 django-modeladmin-reorder==0.3.1
 
 # Requests
@@ -21,11 +21,11 @@ requests-toolbelt==0.9.1
 
 # Dates
 python-dateutil==2.8.1
-Babel==2.9.0
+Babel==2.9.1
 
 # Social
 facebook-sdk==3.1.0
-vk-api==11.9.1
+vk-api==11.9.4
 
 mysqlclient==2.0.3
 raven==6.10.0
