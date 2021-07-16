@@ -32,4 +32,4 @@ autoflake
 black
 restructuredtext_lint
 
-pip==21.1.2
+pip==21.1.3
