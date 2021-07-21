@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-13 03:09-0400\n"
+"POT-Creation-Date: 2021-07-20 22:46-0400\n"
 "PO-Revision-Date: 2018-03-29 03:26-0456\n"
 "Last-Translator: b'Anton Samarchyan <desecho@gmail.com>'\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -100,7 +100,7 @@ msgstr "Ошибка получения сервера загрузки для �
 msgid "Add a rating to the movie"
 msgstr "Добавьте оценку фильму"
 
-#: src/moviesapp/js/list.js:300
+#: src/moviesapp/js/list.js:299
 msgid "Error saving a comment"
 msgstr "Ошибка сохранения комментария"
 
