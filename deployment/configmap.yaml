@@ -5,7 +5,7 @@ metadata:
 data:
   PROJECT_DOMAIN: movies.samarchyan.me
   ADMIN_EMAIL: desecho@gmail.com
-  EMAIL_HOST: smtp.yandex.ru
+  EMAIL_HOST: smtp.gmail.com
   EMAIL_HOST_USER: desecho@gmail.com
   DB_HOST: mysql.samarchyan.me
   DB_USER: root
