@@ -31,5 +31,3 @@ safety
 autoflake
 black
 restructuredtext_lint
-
-pip==21.2.3
