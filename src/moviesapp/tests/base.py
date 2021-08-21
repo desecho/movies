@@ -56,7 +56,7 @@ class BaseTestCase(TestCase):
     def load_json(filename):
         base_path = os.path.join(settings.SRC_DIR, "moviesapp", "tests", "files")
         path = os.path.join(base_path, filename)
-        with open(path) as f:
+        with open(path, encoding="utf8") as f:
             return json.load(f)
 
     @staticmethod
