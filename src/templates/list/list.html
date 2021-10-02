@@ -7,7 +7,7 @@
 
     {% if anothers_account %}
       <div class="row">
-        <div class="col-sm-12">
+        <div class="list-control-buttons col-sm-12">
           <div class="btn-group btn-group-toggle" data-toggle="buttons" role="group">
             <label class="btn btn-secondary {% ifequal list 'watched' %} active {% endifequal %}"
                    title="{% trans 'Watched' %}"
@@ -26,7 +26,7 @@
     {% endif %}
 
     <div class="row">
-      <div class="col-sm-12">
+      <div class="list-control-buttons col-sm-12">
         <div class="btn-group btn-group-toggle" data-toggle="buttons" role="group">
           {% with mode=request.session.mode %}
             <!-- id values are being used as variable name combination to control the button statuses -->
@@ -45,9 +45,9 @@
           {% endwith %}
         </div>
         {% if anothers_account %}
-          <a class="btn btn-secondary ml-2" href="{% url 'gallery' anothers_account.username list %}">{% trans 'Gallery' %}</a>
+          <a class="gallery btn btn-secondary ml-2" href="{% url 'gallery' anothers_account.username list %}">{% trans 'Gallery' %}</a>
         {% else %}
-          <a class="btn btn-secondary ml-2" href="{% url 'gallery' list %}">{% trans 'Gallery' %}</a>
+          <a class="gallery btn btn-secondary ml-2" href="{% url 'gallery' list %}">{% trans 'Gallery' %}</a>
         {% endif %}
 
         {% if anothers_account and user.is_authenticated %}
@@ -224,7 +224,7 @@
         {% endfor %}
       {% endwith %}
       {% if records.has_other_pages %}
-        {% bootstrap_paginate records range=10 show_prev_next='true' show_first_last='true' alignment='left' %}
+        {% bootstrap_paginate records range=5 show_prev_next='true' show_first_last='true' alignment='left' %}
       {% endif %}
     </div>
   </div>
