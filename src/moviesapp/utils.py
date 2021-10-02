@@ -74,7 +74,8 @@ def add_movie_to_db(tmdb_id, update=False):
                             r = re.match(r"(\d+) min", runtime)
                             minutes = int(r.groups()[0])
                             try:
-                                runtime = datetime.strptime("{:02d}:{:02d}".format(*divmod(minutes, 60)), "%H:%M")
+                                hours, minutes = divmod(minutes, 60)
+                                runtime = datetime.strptime(f"{hours:02d}:{minutes:02d}", "%H:%M")
                             except ValueError:
                                 if settings.DEBUG:
                                     raise

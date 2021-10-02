@@ -34,8 +34,8 @@ def avatar(user, size="small"):
     else:
         url, url_2x = social_avatars_urls
     return mark_safe(  # nosec
-        '<img class="avatar-{0}" src="{1}" data-rjs="{2}" width="{3}"'
-        'alt="{4}" title="{4}" @load="retinajs"></img>'.format(size, url, url_2x, avatar_size, user)
+        f'<img class="avatar-{size}" src="{url}" data-rjs="{url_2x}" width="{avatar_size}"'
+        f'alt="{user}" title="{user}" @load="retinajs"></img>'
     )
 
 

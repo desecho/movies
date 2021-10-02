@@ -266,13 +266,14 @@ class Movie(models.Model):
         """
         MAX_CHARS = 40
         ENDING = ".."
-        id_format = "{0: < %d}" % (len(str(last_movie_id)) + 1)
+        n = len(str(last_movie_id)) + 1
+        id_format = f"{{0: < {n}}}"
         title = str(self)
         title = (title[:MAX_CHARS] + ENDING) if len(title) > MAX_CHARS else title
         id_ = id_format.format(self.pk)
         title_max_length = MAX_CHARS + len(ENDING)
-        title_format = "{:%ds}" % title_max_length
-        title = title_format.format(title)
+        title_format = f"{{:{title_max_length}s}}"
+        title = title_format.format(title)  # pylint: disable=consider-using-f-string
         return f"{id_} - {title}"[1:]
 
 

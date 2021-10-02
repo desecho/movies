@@ -222,7 +222,8 @@ AUTH_PASSWORD_VALIDATORS = [
 # Login
 LOGIN_REDIRECT_URL = "/"
 if IS_VK_DEV:
-    LOGIN_REDIRECT_URL = "https://{}".format(getenv("HOST_MOVIES_TEST"))
+    HOST_MOVIES_TEST = getenv("HOST_MOVIES_TEST")
+    LOGIN_REDIRECT_URL = f"https://{HOST_MOVIES_TEST}"
 LOGIN_URL = "/login/"
 LOGIN_ERROR_URL = "/login-error/"
 
