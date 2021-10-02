@@ -1,4 +1,4 @@
-Django==3.2.6
+Django==3.2.7
 
 # Django related packages
 django-annoying==0.10.6
