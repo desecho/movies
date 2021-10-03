@@ -44,18 +44,24 @@
             </label>
           {% endwith %}
         </div>
+        <br>
+        <br>
+      </div>
+      <div class="col-sm-12">
         {% if anothers_account %}
-          <a class="gallery btn btn-secondary ml-2" href="{% url 'gallery' anothers_account.username list %}">{% trans 'Gallery' %}</a>
+          <a class="gallery btn btn-secondary" href="{% url 'gallery' anothers_account.username list %}">{% trans 'Gallery' %}</a>
         {% else %}
-          <a class="gallery btn btn-secondary ml-2" href="{% url 'gallery' list %}">{% trans 'Gallery' %}</a>
-        {% endif %}
-
-        {% if anothers_account and user.is_authenticated %}
-          <button v-cloak data-toggle="button" id="button-recommendation" type="button" class="btn btn-secondary ml-2"
-                  @click="toggleRecommendation">{% trans 'Recommendations' %}
-          </button>
+          <a class="gallery btn btn-secondary" href="{% url 'gallery' list %}">{% trans 'Gallery' %}</a>
         {% endif %}
       </div>
+    {% if anothers_account and user.is_authenticated %}
+      <div class="col-sm-12">
+        <br>
+        <button v-cloak data-toggle="button" id="button-recommendation" type="button" class="btn btn-secondary"
+                @click="toggleRecommendation">{% trans 'Recommendations' %}
+        </button>
+      </div>
+    {% endif %}
     </div>
     <br>
 
