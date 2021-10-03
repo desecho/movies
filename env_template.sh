@@ -8,6 +8,9 @@ export COLLECT_STATIC=True
 export IS_DEV=True
 export SECRET_KEY=key
 export PROJECT_DOMAIN=localhost
+export PROJECT_DOMAIN_ADDITIONAL=
+# bool
+export DISABLE_CSRF=
 export ADMIN_EMAIL=
 export INTERNAL_IP=
 export RAVEN_DSN=
