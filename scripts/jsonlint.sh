@@ -13,6 +13,7 @@ fi
 if [ "$1" == "format" ]; then
     for file in $jsonFiles; do
         yarn run jsonlint "$file" -i
+        # shellcheck disable=SC1003
         sed -i -e '$a\' "$file"
     done
 fi
