@@ -10,6 +10,11 @@ trim_trailing_whitespace = true
 indent_style = space
 indent_size = 4
 
+[*.sh]
+shell_variant = bash
+switch_case_indent = true
+space_redirects = true
+
 [*.{py,ini}]
 max_line_length = 119
 
@@ -19,3 +24,12 @@ max_line_length = 119
 
 [Makefile]
 indent_style = tab
+
+[node_modules/**]
+ignore = true
+
+[venv/**]
+ignore = true
+
+[.tox/**]
+ignore = true

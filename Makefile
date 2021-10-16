@@ -111,6 +111,11 @@ pydiatra-script:
 .PHONY: jsonlint-script
 jsonlint-script:
 	scripts/jsonlint.sh lint
+
+.PHONY: shellcheck-script
+shellcheck-script:
+	scripts/shellcheck.sh
+
 #------------------------------------
 
 
@@ -186,6 +191,17 @@ csscomb-linter:
 ## Run black linter
 black:
 	tox -e py39-black
+
+.PHONY: shfmt
+## Run shfmt linter
+shfmt:
+	tox -e py39-shfmt
+
+.PHONY: shellcheck
+## Run shellcheck linter
+shellcheck:
+	tox -e py39-shellcheck
+
 #------------------------------------
 
 #------------------------------------
@@ -225,6 +241,7 @@ format:
 	black .
 	yarn run csscomb src/${APP}/styles/*
 	yarn run eslint ./*.js src/${APP}/js/* --fix
+	shfmt -l -w .
 
 .PHONY: format-json
 ## Format json files
