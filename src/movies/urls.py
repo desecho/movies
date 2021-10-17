@@ -26,6 +26,7 @@ from moviesapp.views.vk import UploadPosterToWallView
 
 admin.autodiscover()
 
+
 urlpatterns = [
     path("about/", AboutView.as_view(), name="about"),
     path("preferences/", PreferencesView.as_view(), name="preferences"),

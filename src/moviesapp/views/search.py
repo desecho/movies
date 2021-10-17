@@ -1,6 +1,6 @@
 import json
 
-from raven.contrib.django.raven_compat.models import client
+from sentry_sdk import capture_exception
 
 from moviesapp.exceptions import MovieNotInDb, NotAvailableSearchType
 from moviesapp.models import Movie
@@ -52,8 +52,8 @@ class AddToListFromDbView(AjaxView):
         if movie_id is None:
             try:
                 movie_id = add_movie_to_db(tmdb_id)
-            except MovieNotInDb:
-                client.captureException()
+            except MovieNotInDb as e:
+                capture_exception(e)
                 return None
         add_movie_to_list(movie_id, list_id, user)
         return True

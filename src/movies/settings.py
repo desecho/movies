@@ -3,6 +3,23 @@
 from os import getenv
 from os.path import abspath, dirname, join
 
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
+
+SENTRY_TRACE_SAMPLING = 0.5
+
+sentry_sdk.init(  # pylint: disable=abstract-class-instantiated
+    dsn=getenv("SENTRY_DSN"),
+    integrations=[DjangoIntegration()],
+    # Set traces_sample_rate to 1.0 to capture 100%
+    # of transactions for performance monitoring.
+    # We recommend adjusting this value in production.
+    traces_sample_rate=SENTRY_TRACE_SAMPLING,
+    # If you wish to associate users to errors (assuming you are using
+    # django.contrib.auth) you may enable sending PII data.
+    send_default_pii=True,
+)
+
 # Custom
 IS_DEV = bool(getenv("IS_DEV"))
 IS_VK_DEV = bool(getenv("IS_VK_DEV"))
@@ -139,7 +156,6 @@ INSTALLED_APPS = [
     "rosetta",
     "modeltranslation",
     "social_django",
-    "raven.contrib.django.raven_compat",
     "moviesapp",
 ]
 if DEBUG:
@@ -150,45 +166,6 @@ if DEBUG:
 
 if DEBUG or COLLECT_STATIC:
     INSTALLED_APPS.append("django.contrib.staticfiles")
-
-# Logging
-if not DEBUG:
-    LOGGING = {
-        "version": 1,
-        "disable_existing_loggers": True,
-        "root": {
-            "level": "WARNING",
-            "handlers": ["sentry"],
-        },
-        "formatters": {
-            "verbose": {"format": ("%(levelname)s %(asctime)s %(module)s " "%(process)d %(thread)d %(message)s")},
-        },
-        "handlers": {
-            "sentry": {
-                "level": "ERROR",  # To capture more than ERROR, change to WARNING, INFO, etc.
-                "class": "raven.contrib.django.raven_compat.handlers.SentryHandler",
-                "tags": {"custom-tag": "x"},
-            },
-            "console": {"level": "DEBUG", "class": "logging.StreamHandler", "formatter": "verbose"},
-        },
-        "loggers": {
-            "django.db.backends": {
-                "level": "ERROR",
-                "handlers": ["console"],
-                "propagate": False,
-            },
-            "raven": {
-                "level": "DEBUG",
-                "handlers": ["console"],
-                "propagate": False,
-            },
-            "sentry.errors": {
-                "level": "DEBUG",
-                "handlers": ["console"],
-                "propagate": False,
-            },
-        },
-    }
 
 # It is needed for VK app to work.
 # Security
@@ -316,9 +293,6 @@ DEBUG_TOOLBAR_PANELS = [
     # django-debug-toolbar-template-timings
     "template_timings_panel.panels.TemplateTimings.TemplateTimings",
 ]
-
-# raven
-RAVEN_CONFIG = {"dsn": getenv("RAVEN_DSN")}
 
 # django-modeladmin-reorder
 ADMIN_REORDER = (

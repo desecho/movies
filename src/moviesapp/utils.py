@@ -3,8 +3,8 @@ from datetime import datetime
 
 import requests
 from django.conf import settings
-from raven.contrib.django.raven_compat.models import client
 from requests.exceptions import RequestException
+from sentry_sdk import capture_exception
 
 from .exceptions import OmdbError, OmdbLimitReached, OmdbRequestError
 from .models import Movie
@@ -17,7 +17,7 @@ def load_omdb_movie_data(imdb_id):
     except RequestException as e:
         if settings.DEBUG:
             raise
-        client.captureException()
+        capture_exception(e)
         raise OmdbRequestError from e
     movie_data = response.json()
     response = movie_data["Response"]
@@ -76,10 +76,10 @@ def add_movie_to_db(tmdb_id, update=False):
                             try:
                                 hours, minutes = divmod(minutes, 60)
                                 runtime = datetime.strptime(f"{hours:02d}:{minutes:02d}", "%H:%M")
-                            except ValueError:
+                            except ValueError as e:
                                 if settings.DEBUG:
                                     raise
-                                client.captureException()
+                                capture_exception(e)
                                 return None
                 return runtime
             return None

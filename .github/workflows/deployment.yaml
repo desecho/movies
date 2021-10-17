@@ -114,7 +114,7 @@ jobs:
             --from-literal=SOCIAL_AUTH_FACEBOOK_SECRET=${{ secrets.SOCIAL_AUTH_FACEBOOK_SECRET }} \
             --from-literal=TMDB_KEY=${{ secrets.TMDB_KEY }} \
             --from-literal=OMDB_KEY=${{ secrets.OMDB_KEY }} \
-            --from-literal=RAVEN_DSN=${{ secrets.RAVEN_DSN }} \
+            --from-literal=SENTRY_DSN=${{ secrets.SENTRY_DSN }} \
             --from-literal=EMAIL_HOST_PASSWORD=${{ secrets.EMAIL_HOST_PASSWORD }} \
             --dry-run=client -o yaml | kubectl apply -f -
           kubectl apply -f deployment/deployment.yaml

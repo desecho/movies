@@ -13,7 +13,7 @@ export PROJECT_DOMAIN_ADDITIONAL=
 export DISABLE_CSRF=
 export ADMIN_EMAIL=
 export INTERNAL_IP=
-export RAVEN_DSN=
+export SENTRY_DSN=
 export GOOGLE_ANALYTICS_ID=id
 export STATIC_URL=/static/
 
