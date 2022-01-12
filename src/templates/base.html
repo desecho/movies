@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+  {% include 'includes/google_analytics.html' %}
   <meta HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
   <meta HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -23,7 +24,6 @@
   </div>
 </div>
 {% include 'includes/footer.html' %}
-{% include 'includes/google_analytics.html' %}
 <script src="{% url 'javascript-catalog' %}"></script>
 <script src="{% static 'js/commons.js' %}"></script>
 <script src="{% static 'js/vendor.js' %}"></script>

@@ -6,4 +6,4 @@ DATABASES["default"] = {  # noqa
 }
 
 SECRET_KEY = "key"
-GOOGLE_ANALYTICS = {"google_analytics_id": "id"}
+GOOGLE_ANALYTICS = "id"

@@ -148,7 +148,6 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     # Custom
     "django.contrib.sites",
-    "google_analytics",
     "registration",
     "menu",
     "admin_reorder",
@@ -312,10 +311,9 @@ ADMIN_REORDER = (
     "registration",
 )
 
-# django-google-analytics-app
-GOOGLE_ANALYTICS = {"google_analytics_id": getenv("GOOGLE_ANALYTICS_ID")}
-
 # --== Project settings ==--
+
+GOOGLE_ANALYTICS_ID = getenv("GOOGLE_ANALYTICS_ID")
 
 # Social
 VK_BACKENDS = ("vk-app", "vk-oauth2")

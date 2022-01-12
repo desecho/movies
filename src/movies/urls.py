@@ -95,7 +95,6 @@ urlpatterns = [
     path("", include("django.contrib.auth.urls")),
     path("rosetta/", include("rosetta.urls")),
     path("i18n/", include("django.conf.urls.i18n")),
-    path("djga/", include("google_analytics.urls")),
 ]
 
 if settings.DEBUG:
