@@ -12,9 +12,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Install MySQL client
-        run: sudo apt install mysql-client
-
       - name: Backup DB
         run: |
           NOW=$(date +"%d-%m-%Y")
