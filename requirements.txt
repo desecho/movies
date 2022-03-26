@@ -5,7 +5,7 @@ django-annoying==0.10.6
 django-simple-menu==1.2.1
 django-rosetta==0.9.8
 django-braces==1.15.0
-django-tqdm==1.0.0
+django-tqdm==1.1.0
 django-registration-redux==2.10
 django-custom-anonymous==0.5.0
 social-auth-app-django==5.0.0
