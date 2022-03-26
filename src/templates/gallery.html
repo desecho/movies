@@ -17,7 +17,7 @@
   <div class="row">
     <div class="col-sm-12">
       <div class="btn-group btn-group-toggle" data-toggle="buttons">
-        <label class="btn btn-secondary {% ifequal list 'watched' %} active {% endifequal %}"
+        <label class="btn btn-secondary {% if list == 'watched' %} active {% endif %}"
                title="{% trans 'Watched' %}"
           {% if anothers_account %}
                @click="openUrl('{% url 'gallery' anothers_account.username 'watched' %}')"
@@ -25,9 +25,9 @@
                @click="openUrl('{% url 'gallery' 'watched' %}')"
           {% endif %}
         >
-          <input type="radio" {% ifequal list 'watched' %} checked {% endifequal %}>{% trans 'Watched' %}
+          <input type="radio" {% if list == 'watched' %} checked {% endif %}>{% trans 'Watched' %}
         </label>
-        <label class="btn btn-secondary {% ifequal list 'to-watch' %} active {% endifequal %}"
+        <label class="btn btn-secondary {% if list == 'to-watch' %} active {% endif %}"
                title="{% trans 'To Watch' %}"
           {% if anothers_account %}
                @click="openUrl('{% url 'gallery' anothers_account.username 'to-watch' %}')"
@@ -35,7 +35,7 @@
                @click="openUrl('{% url 'gallery' 'to-watch' %}')"
           {% endif %}
         >
-          <input type="radio" {% ifequal list 'to-watch' %} checked {% endifequal %}>{% trans 'To Watch' %}
+          <input type="radio" {% if list == 'to-watch' %} checked {% endif %}>{% trans 'To Watch' %}
         </label>
       </div>
 

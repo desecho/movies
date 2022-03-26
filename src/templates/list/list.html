@@ -9,14 +9,14 @@
       <div class="row">
         <div class="col-sm-12">
           <div class="btn-group btn-group-toggle" data-toggle="buttons" role="group">
-            <label class="btn btn-secondary {% ifequal list 'watched' %} active {% endifequal %}"
+            <label class="btn btn-secondary {% if list == 'watched' %} active {% endif %}"
                    title="{% trans 'Watched' %}"
                    @click="openUrl('{% url 'list' anothers_account.username 'watched' %}')">
-              <input type="radio" {% ifequal list 'watched' %} checked {% endifequal %}>{% trans 'Watched' %}</label>
-            <label class="btn btn-secondary {% ifequal list 'to-watch' %} active {% endifequal %}"
+              <input type="radio" {% if list == 'watched' %} checked {% endif %}>{% trans 'Watched' %}</label>
+            <label class="btn btn-secondary {% if list == 'to-watch' %} active {% endif %}"
                    title="{% trans 'To Watch' %}"
                    @click="openUrl('{% url 'list' anothers_account.username 'to-watch' %}')">
-              <input type="radio" {% ifequal list 'to-watch' %} checked {% endifequal %}>{% trans 'To Watch' %}
+              <input type="radio" {% if list == 'to-watch' %} checked {% endif %}>{% trans 'To Watch' %}
             </label>
           </div>
 
@@ -120,9 +120,9 @@
               {% endif %}
               <div class="add-to-list-buttons">
                 {% if not anothers_account %}
-                  {% ifequal list 'to-watch' %}
+                  {% if list == 'to-watch' %}
                     {% include 'includes/add_to_watched_list_button.html' %}
-                  {% endifequal %}
+                  {% endif %}
                 {% else %}
                   {% include 'includes/add_to_list_buttons.html' %}
                 {% endif %}
@@ -175,8 +175,8 @@
                 {% endif %}
                 <br>
               </div>
-              <div class="review {% ifequal request.session.mode 'full' %} full {% endifequal %}">
-                {% ifequal list 'watched' %}
+              <div class="review {% if request.session.mode == 'full' %} full {% endif %}">
+                {% if list == 'watched' %}
                   <div class="rating" data-record-id="{{ record.id }}" data-rating="{{ record.rating }}"></div>
                   <div class="comment" id="comment-area{{ record.id }}"
                        style="display: {% if not record.comment %} none {% endif %}" data-id="{{ record.id }}">
@@ -219,7 +219,7 @@
                       <input @change="saveOptions({{ record.id }})" id="4k_{{ record.id }}" type="checkbox" {% if record.watched_in_4k %} checked {% endif %}>
                     </div>
                   {% endif %}
-                {% endifequal %}
+                {% endif %}
               </div>
             </div>
             <div class="clearfix"></div>

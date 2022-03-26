@@ -1,4 +1,4 @@
-Django==3.2.11
+Django==4.0.3
 
 # Django related packages
 django-annoying==0.10.6
@@ -10,7 +10,8 @@ django-registration-redux==2.10
 django-custom-anonymous==0.5.0
 social-auth-app-django==5.0.0
 
-django-bootstrap-pagination==1.7.1
+# Original project no longer maintained
+django-bootstrap-pagination-forked==1.7.2
 django-modeltranslation==0.17.5
 django-modeladmin-reorder==0.3.1
 

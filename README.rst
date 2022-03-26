@@ -3,7 +3,7 @@ Movies
 
 |Build Status| |Requirements Status| |Codecov|
 
-The web application on Django_ 3, Vue.js_ 2, Bootstrap_ 4. Create movie lists ("Watched" and "To watch"), rate movies, and add comments.
+The web application on Django_ 4, Vue.js_ 2, Bootstrap_ 4. Create movie lists ("Watched" and "To watch"), rate movies, and add comments.
 You can also add additional information such as if you watched the movie in the original version, in theatre, an extended version, in 4k, etc.
 
 | It is also available as a `VK app <http://vk.com/app3504693_2912142>`_.
