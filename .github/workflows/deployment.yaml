@@ -9,28 +9,29 @@ jobs:
     name: Deployment
     runs-on: ubuntu-latest
     steps:
-      - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.9.0
+      - name: Cancel previous runs
+        uses: styfle/cancel-workflow-action@0.9.1
         with:
           access_token: ${{ github.token }}
 
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v3
         with:
           python-version: 3.9
 
       - name: Set up Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: 15.x
           registry-url: https://registry.npmjs.org
 
       - name: Install build and test requirements
         run: |
-          sudo curl https://github.com/mvdan/sh/releases/download/v3.4.0/shfmt_v3.4.0_linux_amd64 -Lo /usr/local/bin/shfmt
+          SHFMT_VERSION=3.4.0
+          sudo curl https://github.com/mvdan/sh/releases/download/v${SHFMT_VERSION}/shfmt_v${SHFMT_VERSION}_linux_amd64 -Lo /usr/local/bin/shfmt
           sudo chmod +x /usr/local/bin/shfmt
           sudo apt install shellcheck -y
           npm install yarn
@@ -45,7 +46,7 @@ jobs:
         run: pip install coverage
 
       - name: Run codecov
-        uses: codecov/codecov-action@v1
+        uses: codecov/codecov-action@v2
 
       - name: Login to GitHub registry
         uses: docker/login-action@v1
@@ -105,8 +106,8 @@ jobs:
       - name: Deploy
         run: |
           kubectl apply -f deployment/configmap.yaml
-          kubectl create secret generic movies --from-literal=DB_PASSWORD=$DB_PASSWORD \
-            --from-literal=SECRET_KEY=$SECRET_KEY \
+          kubectl create secret generic movies --from-literal=DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
+            --from-literal=SECRET_KEY=${{ secrets.SECRET_KEY }} \
             --from-literal=SOCIAL_AUTH_VK_APP_KEY=${{ secrets.SOCIAL_AUTH_VK_APP_KEY }} \
             --from-literal=SOCIAL_AUTH_VK_APP_SECRET=${{ secrets.SOCIAL_AUTH_VK_APP_SECRET }} \
             --from-literal=SOCIAL_AUTH_VK_OAUTH2_KEY=${{ secrets.SOCIAL_AUTH_VK_OAUTH2_KEY }} \
@@ -123,9 +124,6 @@ jobs:
           kubectl apply -f deployment/service.yaml
           kubectl rollout restart deployment/movies
           kubectl rollout status deployment/movies
-        env:
-          SECRET_KEY: ${{ secrets.SECRET_KEY }}
-          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
 
       - name: Run db migration
         run: make prod-manage migrate
