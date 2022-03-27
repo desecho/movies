@@ -15,9 +15,7 @@ jobs:
       - name: Backup DB
         run: |
           NOW=$(date +"%d-%m-%Y")
-          mysqldump -u root -h mysql.samarchyan.me movies -p$DB_PASSWORD | gzip -9 > movies-$NOW.sql.gz
-        env:
-          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          mysqldump -u root -h mysql.samarchyan.me movies -p${{ secrets.DB_PASSWORD }} | gzip -9 > movies-$NOW.sql.gz
 
       - name: Install s3cmd
         run: |

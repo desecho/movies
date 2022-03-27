@@ -19,7 +19,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v3
         with:
-          python-version: 3.10
+          python-version: '3.10'
 
       - name: Set up Node.js
         uses: actions/setup-node@v2
@@ -29,7 +29,7 @@ jobs:
 
       - name: Install test requirements
         run: |
-          sudo curl https://github.com/mvdan/sh/releases/download/v3.4.0/shfmt_v3.4.0_linux_amd64 -Lo /usr/local/bin/shfmt
+          sudo curl https://github.com/mvdan/sh/releases/download/v${SHFMT_VERSION}/shfmt_v${SHFMT_VERSION}_linux_amd64 -Lo /usr/local/bin/shfmt
           sudo chmod +x /usr/local/bin/shfmt
           sudo apt install shellcheck -y
           rm package.json
@@ -39,7 +39,9 @@ jobs:
           npm install eslint-plugin-vue@7.7.0
           npm install jsonlint@1.6.3
           pip install tox
-          tox -e py39-requirements
+          tox -e py-requirements
+        env:
+          SHFMT_VERSION: 3.4.3
 
       - name: Run tests
         run: make test

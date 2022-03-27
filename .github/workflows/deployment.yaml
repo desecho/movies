@@ -20,7 +20,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v3
         with:
-          python-version: 3.10
+          python-version: '3.10'
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
@@ -30,14 +30,15 @@ jobs:
 
       - name: Install build and test requirements
         run: |
-          SHFMT_VERSION=3.4.0
           sudo curl https://github.com/mvdan/sh/releases/download/v${SHFMT_VERSION}/shfmt_v${SHFMT_VERSION}_linux_amd64 -Lo /usr/local/bin/shfmt
           sudo chmod +x /usr/local/bin/shfmt
           sudo apt install shellcheck -y
           npm install yarn
           make yarn-install-locked
           pip install tox
-          tox -e py39-requirements
+          tox -e py-requirements
+        env:
+          SHFMT_VERSION: 3.4.3
 
       - name: Run tests
         run: make test
@@ -66,10 +67,11 @@ jobs:
 
       - name: Collect static files
         run: |
-          source .tox/py39/bin/activate
-          export SECRET_KEY=key
-          export COLLECT_STATIC=True
+          source .tox/py/bin/activate
           src/manage.py collectstatic --no-input
+        env:
+          SECRET_KEY: key
+          COLLECT_STATIC: True
 
       - name: Install s3cmd
         run: |
@@ -80,8 +82,7 @@ jobs:
           sed "s/\[secret_key\]/$SPACES_SECRET_KEY/g" ~/.s3cfg -i
 
       - name: Upload static files
-        run: |
-          s3cmd put static/* s3://movies.cdn.samarchyan.me/ -r -P --no-mime-magic --guess-mime-type
+        run: s3cmd put static/* s3://movies.cdn.samarchyan.me/ -r -P --no-mime-magic --guess-mime-type
 
       - name: Install doctl
         uses: digitalocean/action-doctl@v2
@@ -94,18 +95,20 @@ jobs:
           doctl compute cdn flush $CDN_ID
 
       - name: Install kubectl
-        uses: azure/setup-kubectl@v2
+        uses: azure/setup-kubectl@v2.0
 
       - name: Configure kubectl
         run: |
           mkdir ~/.kube
-          echo ${{ secrets.KUBECONFIG }} > ~/.kube/config
+          echo $KUBECONFIG > ~/.kube/config
+        env:
+          KUBECONFIG: ${{ secrets.KUBECONFIG }}  # Done as a variable because doesn't work in place.
 
       - name: Deploy
         run: |
           kubectl apply -f deployment/configmap.yaml
-          kubectl create secret generic movies --from-literal=DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
-            --from-literal=SECRET_KEY=${{ secrets.SECRET_KEY }} \
+          kubectl create secret generic movies --from-literal=DB_PASSWORD="${{ secrets.DB_PASSWORD }}" \
+            --from-literal=SECRET_KEY="${{ secrets.SECRET_KEY }}" \
             --from-literal=SOCIAL_AUTH_VK_APP_KEY=${{ secrets.SOCIAL_AUTH_VK_APP_KEY }} \
             --from-literal=SOCIAL_AUTH_VK_APP_SECRET=${{ secrets.SOCIAL_AUTH_VK_APP_SECRET }} \
             --from-literal=SOCIAL_AUTH_VK_OAUTH2_KEY=${{ secrets.SOCIAL_AUTH_VK_OAUTH2_KEY }} \

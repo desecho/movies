@@ -24,12 +24,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Install kubectl
-        uses: azure/setup-kubectl@v2
+        uses: azure/setup-kubectl@v2.0
 
       - name: Configure kubectl
         run: |
           mkdir ~/.kube
-          echo ${{ secrets.KUBECONFIG }} > ~/.kube/config
+          echo $KUBECONFIG > ~/.kube/config
+        env:
+          KUBECONFIG: ${{ secrets.KUBECONFIG }}  # Done as a variable because doesn't work in place.
 
       - name: Remove unused movies
         run: make prod-manage remove_unused_movies
