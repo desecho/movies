@@ -5,5 +5,5 @@ DATABASES["default"] = {  # noqa
     "NAME": ":memory:",
 }
 
-SECRET_KEY = "key"
+SECRET_KEY = "key"  # nosec B105
 GOOGLE_ANALYTICS = "id"

@@ -20,7 +20,7 @@ def avatar(user, size="small"):
     def get_gravatar_urls():
         def get_url(size):
             params = parse.urlencode({"s": str(size)})
-            hash_ = hashlib.md5(user.email.lower().encode("utf-8")).hexdigest()  # nosec
+            hash_ = hashlib.md5(user.email.lower().encode("utf-8")).hexdigest()  # nosec B324
             return f"https://www.gravatar.com/avatar/{hash_}?{params}"
 
         url_2x = get_url(avatar_size * 2)
@@ -33,7 +33,7 @@ def avatar(user, size="small"):
         url, url_2x = get_gravatar_urls()
     else:
         url, url_2x = social_avatars_urls
-    return mark_safe(  # nosec
+    return mark_safe(  # nosec B703 B308
         f'<img class="avatar-{size}" src="{url}" data-rjs="{url_2x}" width="{avatar_size}"'
         f'alt="{user}" title="{user}" @load="retinajs"></img>'
     )
