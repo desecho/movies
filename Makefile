@@ -58,7 +58,7 @@ help:
 ## Install dependencies | Installation
 install-deps:
 	# Install Python
-	sudo apt install python3.9 python3.9-venv python3.9-dev -y
+	sudo apt install python3.10 python3.10-venv python3.10-dev -y
 	# Install MySQL dependencies
 	sudo apt install libmysqlclient-dev -y
 	# Install dependency for makemessages
@@ -67,7 +67,7 @@ install-deps:
 .PHONY: create-venv
 ## Create virtual environment and install requirements
 create-venv:
-	python3.9 -m venv venv
+	python3.10 -m venv venv
 	${SOURCE_CMDS} && \
 		pip install -r requirements-dev.txt
 
@@ -130,77 +130,77 @@ test:
 .PHONY: pydiatra
 ## Run pydiatra
 pydiatra:
-	tox -e py39-pydiatra
+	tox -e py-pydiatra
 
 .PHONY: jsonlint
 ## Run jsonlint
 jsonlint:
-	tox -e py39-jsonlint
+	tox -e py-jsonlint
 
 .PHONY: pylint
 ## Run pylint
 pylint:
-	tox -e py39-pylint
+	tox -e py-pylint
 
 .PHONY: flake8
 ## Run flake8
 flake8:
-	tox -e py39-flake8
+	tox -e py-flake8
 
 .PHONY: isort
 ## Run isort
 isort:
-	tox -e py39-isort
+	tox -e py-isort
 
 # .PHONY: bandit
 # ## Run bandit
 # bandit:
-# 	tox -e py39-bandit
+# 	tox -e py-bandit
 
 .PHONY: rstlint
 ## Run rstlint
 rstlint:
-	tox -e py39-rstlint
+	tox -e py-rstlint
 
 .PHONY: pydocstyle
 ## Run pydocstyle
 pydocstyle:
-	tox -e py39-pydocstyle
+	tox -e py-pydocstyle
 
 .PHONY: safety
 ## Run safety
 safety:
-	tox -e py39-safety
+	tox -e py-safety
 
 .PHONY: pytest
 ## Run pytest
 pytest:
-	tox -e py39-pytest
+	tox -e py-pytest
 
 .PHONY: eslint
 ## Run eslint
 eslint:
-	tox -e py39-eslint
+	tox -e py-eslint
 
 .PHONY: csscomb-linter
 ## Run csscomb-linter
 csscomb-linter:
-	tox -e py39-csscomb-linter
+	tox -e py-csscomb-linter
 
 .PHONY: black
 ## Run black linter
 black:
-	tox -e py39-black
+	tox -e py-black
 
 .PHONY: shfmt
 ## Run shfmt linter
 shfmt:
-	tox -e py39-shfmt
+	tox -e py-shfmt
 
 .PHONY: shellcheck
 ## Run shellcheck linter
 shellcheck:
-	tox -e py39-shellcheck
+	tox -e py-shellcheck
 
 #------------------------------------
 
@@ -213,7 +213,7 @@ update-venv:
 	${SOURCE_CMDS} && \
 	pip install -r requirements-dev.txt && \
 	deactivate && \
-	source .tox/py39/bin/activate && \
+	source .tox/py/bin/activate && \
 	pip install -r requirements-dev.txt
 
 .PHONY: yarn-install-refresh
