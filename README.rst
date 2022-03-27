@@ -47,14 +47,14 @@ To use production commands edit ``db_env_prod.sh``.
 
 Used APIs
 --------------
-* TMDb_
+* TMDB_
 * OMDb_
 
 Used images
 -----------
 * `IMDb logo <https://commons.wikimedia.org/wiki/File:IMDB_Logo_2016.svg>`_
 * `Down arrow icon <https://www.iconfinder.com/icons/211614/arrow_b_down_icon>`_
-* `TMDb Logos <https://www.themoviedb.org/about/logos-attribution>`_
+* `TMDB Logos <https://www.themoviedb.org/about/logos-attribution>`_
 
 .. |Requirements Status| image:: https://requires.io/github/desecho/movies/requirements.svg?branch=master
    :target: https://requires.io/github/desecho/movies/requirements/?branch=master
@@ -65,7 +65,7 @@ Used images
 .. |Deployment Status| image:: https://github.com/desecho/movies/actions/workflows/deployment.yaml/badge.svg
    :target: https://github.com/desecho/movies/actions/workflows/deployment.yaml
 
-.. _TMDb: https://www.themoviedb.org/
+.. _TMDB: https://www.themoviedb.org/
 .. _OMDb: http://www.omdbapi.com/
 .. _documentation: https://github.com/desecho/movies/blob/master/doc.rst
 .. _Vue.js: https://vuejs.org/
