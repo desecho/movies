@@ -1,7 +1,7 @@
 Movies
 ==============
 
-|Build Status| |Requirements Status| |Codecov|
+|Deployment Status| |Requirements Status| |Codecov|
 
 The web application on Django_ 4, Vue.js_ 2, Bootstrap_ 4. Create movie lists ("Watched" and "To watch"), rate movies, and add comments.
 You can also add additional information such as if you watched the movie in the original version, in theatre, an extended version, in 4k, etc.
@@ -62,7 +62,7 @@ Used images
 .. |Codecov| image:: https://codecov.io/gh/desecho/movies/branch/master/graph/badge.svg
    :target: https://codecov.io/gh/desecho/movies
 
-.. |Build Status| image:: https://github.com/desecho/movies/actions/workflows/deployment.yaml/badge.svg
+.. |Deployment Status| image:: https://github.com/desecho/movies/actions/workflows/deployment.yaml/badge.svg
    :target: https://github.com/desecho/movies/actions/workflows/deployment.yaml
 
 .. _TMDb: https://www.themoviedb.org/
