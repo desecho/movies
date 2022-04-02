@@ -12,8 +12,6 @@ pytest-mock
 pytest-django
 
 # Django
-django-debug-toolbar
-django-debug-toolbar-template-timings
 django-test-without-migrations
 
 # Linting

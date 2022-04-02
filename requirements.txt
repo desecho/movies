@@ -9,11 +9,13 @@ django-tqdm==1.1.0
 django-registration-redux==2.10
 django-custom-anonymous==0.5.0
 social-auth-app-django==5.0.0
-
-# Original project no longer maintained
-django-bootstrap-pagination-forked==1.7.2
+django-bootstrap-pagination-forked==1.7.2  # Original project no longer maintained
 django-modeltranslation==0.17.5
 django-modeladmin-reorder==0.3.1
+
+# Django debug
+django-debug-toolbar
+django-debug-toolbar-template-timings
 
 # Requests
 requests==2.27.1
