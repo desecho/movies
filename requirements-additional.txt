@@ -1,2 +1,2 @@
 # This file is used to signify versions of forked projects.
-tmdbsimple==2.8.0
+tmdbsimple==2.9.1
