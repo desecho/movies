@@ -56,11 +56,11 @@ urlpatterns = [
     #
     # Gallery
     re_path("gallery/(?P<list_name>watched|to-watch)/", GalleryView.as_view(), name="gallery"),
-    re_path(r"(?P<username>[\w\d]+)/gallery/(?P<list_name>watched|to-watch)", GalleryView.as_view(), name="gallery"),
+    re_path(r"(?P<username>[\w\d]+)/gallery/(?P<list_name>watched|to-watch)/", GalleryView.as_view(), name="gallery"),
     #
     # List
     re_path("list/(?P<list_name>watched|to-watch)/", ListView.as_view(), name="list"),
-    re_path(r"(?P<username>[\w\d]+)/list/(?P<list_name>watched|to-watch)", ListView.as_view(), name="list"),
+    re_path(r"(?P<username>[\w\d]+)/list/(?P<list_name>watched|to-watch)/", ListView.as_view(), name="list"),
     #
     path("recommendations/", RecommendationsView.as_view(), name="recommendations"),
     path("save-settings/", SaveSettingsView.as_view(), name="save_settings"),
