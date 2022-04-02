@@ -26,6 +26,7 @@ IS_VK_DEV = bool(getenv("IS_VK_DEV"))
 COLLECT_STATIC = bool(getenv("COLLECT_STATIC"))
 SRC_DIR = dirname(dirname(abspath(__file__)))
 PROJECT_DIR = dirname(SRC_DIR)
+PROJECT_DOMAIN = getenv("PROJECT_DOMAIN")
 
 # Debug
 DEBUG = bool(getenv("DEBUG"))
@@ -59,7 +60,7 @@ EMAIL_PORT = int(getenv("EMAIL_PORT", "465"))
 DEFAULT_FROM_EMAIL = ADMIN_EMAIL
 
 # Allowed hosts
-ALLOWED_HOSTS = [getenv("PROJECT_DOMAIN")]
+ALLOWED_HOSTS = [PROJECT_DOMAIN]
 PROJECT_DOMAIN_ADDITIONAL = getenv("PROJECT_DOMAIN_ADDITIONAL")
 if PROJECT_DOMAIN_ADDITIONAL:
     ALLOWED_HOSTS.append(PROJECT_DOMAIN_ADDITIONAL)
@@ -82,6 +83,7 @@ USE_TZ = True
 
 TEMPLATES = [
     {
+        "NAME": "Main",
         "BACKEND": "django.template.backends.django.DjangoTemplates",
         "DIRS": (join(SRC_DIR, "templates"),),
         "OPTIONS": {
@@ -112,8 +114,16 @@ TEMPLATES = [
             "builtins": ["django.templatetags.static", "django.templatetags.i18n"],
         },
     },
+    {
+        "NAME": "Secondary",
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "debug": DEBUG,
+        },
+    },
 ]
-if DEBUG:
+if IS_DEV:
     TEMPLATES[0]["OPTIONS"]["loaders"] = [
         "django.template.loaders.filesystem.Loader",
         "django.template.loaders.app_directories.Loader",
@@ -163,7 +173,7 @@ if DEBUG:
         "template_timings_panel",
     ]
 
-if DEBUG or COLLECT_STATIC:
+if IS_DEV or COLLECT_STATIC:
     INSTALLED_APPS.append("django.contrib.staticfiles")
 
 # It is needed for VK app to work.
@@ -174,6 +184,7 @@ if not DISABLE_CSRF:
     SESSION_COOKIE_SAMESITE = "None"
     CSRF_COOKIE_SECURE = True
     SESSION_COOKIE_SECURE = True
+    CSRF_TRUSTED_ORIGINS = [f"https://{PROJECT_DOMAIN}"]
 
 # Authentication
 AUTH_USER_MODEL = "moviesapp.User"
