@@ -402,4 +402,10 @@ endif
 ## Run management command in prod. Usage: [command]
 prod-manage:
 	scripts/run_management_command.sh ${PROD_MANAGE_ARGS}
+
+.PHONY: prod-enable-debug
+## Enable debug in prod. It will be reset with the next deployment
+prod-enable-debug:
+	yq eval '.data.DEBUG="True"' deployment/configmap.yaml | kubectl apply -f -
+	kubectl rollout restart "deployment/${PROJECT}"
 #------------------------------------
