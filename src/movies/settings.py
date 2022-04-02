@@ -173,12 +173,13 @@ if DEBUG:
 if IS_DEV or COLLECT_STATIC:
     INSTALLED_APPS.append("django.contrib.staticfiles")
 
-# It is needed for VK app to work.
 # Security
 DISABLE_CSRF = bool(getenv("DISABLE_CSRF"))
 if not DISABLE_CSRF:
+    # It is needed for VK app to work.
     CSRF_COOKIE_SAMESITE = "None"
     SESSION_COOKIE_SAMESITE = "None"
+
     CSRF_COOKIE_SECURE = True
     SESSION_COOKIE_SECURE = True
     CSRF_TRUSTED_ORIGINS = [f"https://{PROJECT_DOMAIN}"]
