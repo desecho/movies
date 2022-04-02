@@ -1,0 +1,2 @@
+# This file is used to signify versions of forked projects.
+tmdbsimple==2.8.0

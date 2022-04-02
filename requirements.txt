@@ -33,8 +33,6 @@ mysqlclient==2.1.0
 sentry-sdk==1.5.8
 tabulate==0.8.9
 
-# Updated on 02.04.11
-# tmdbsimple==2.8.0
 # Contains language support functionality rejected here - https://github.com/celiao/tmdbsimple/pull/25
 -e git+https://github.com/desecho/tmdbsimple.git@lang#egg=tmdbsimple
 
