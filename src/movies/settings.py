@@ -337,7 +337,7 @@ POSTER_SIZE_SMALL = "w92"
 POSTER_SIZE_NORMAL = "w185"
 # This one is only used for vk.
 POSTER_SIZE_BIG = "w500"
-POSTER_BASE_URL = "http://image.tmdb.org/t/p/"
+POSTER_BASE_URL = "https://image.tmdb.org/t/p/"
 
 TMDB_MOVIE_BASE_URL = "https://www.themoviedb.org/movie/"
 AVATAR_SIZES = {"small": 100, "big": 200}
