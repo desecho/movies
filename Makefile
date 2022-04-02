@@ -1,9 +1,8 @@
+export
+.DEFAULT_GOAL := help
+
 PROJECT := movies
 APP := moviesapp
-
-export
-
-.DEFAULT_GOAL := help
 
 SHELL := /bin/bash
 SOURCE_CMDS := source venv/bin/activate && source env.sh
@@ -14,13 +13,8 @@ SOURCE_CMDS := source venv/bin/activate && source env.sh
 TARGET_MAX_CHAR_NUM := 25
 
 # COLORS
-RED     := \033[0;31m
 GREEN   := \033[0;32m
 YELLOW  := \033[0;33m
-BLUE    := \033[0;34m
-MAGENTA := \033[0;35m
-CYAN    := \033[0;36m
-WHITE   := \033[0;37m
 RESET   := \033[0;10m
 
 .PHONY: help
