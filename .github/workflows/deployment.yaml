@@ -95,7 +95,7 @@ jobs:
           doctl compute cdn flush $CDN_ID
 
       - name: Install kubectl
-        uses: azure/setup-kubectl@v2.0
+        uses: azure/setup-kubectl@v2.1
 
       - name: Configure kubectl
         run: |
