@@ -88,8 +88,12 @@ bootstrap: install-deps yarn-install-locked create-venv create-env-files create-
 
 .PHONY: create-env-files
 ## Create env files
-create-env-files:
+create-env-files: env.sh db_env_prod.sh
+
+env.sh:
 	cp -n env_template.sh env.sh
+
+db_env_prod.sh:
 	cp -n db_env_prod_template.sh db_env_prod.sh
 #------------------------------------
 
