@@ -27,19 +27,26 @@
             </div>
           {% endif %}
           {% if record.movie.country %} <span class="item-desc">{% trans 'Country' %}:</span>
-            {{ record.movie.country }}<br> {% endif %}
+            {{ record.movie.country }}<br>
+          {% endif %}
           {% if record.movie.director %} <span class="item-desc">{% trans 'Director' %}:</span>
-            {{ record.movie.director }}<br> {% endif %}
+            {{ record.movie.director }}<br>
+          {% endif %}
           {% if record.movie.writer %} <span class="item-desc">{% trans 'Writer' %}:</span> {{ record.movie.writer }}
-            <br> {% endif %}
+            <br>
+          {% endif %}
           {% if record.movie.genre %} <span class="item-desc">{% trans 'Genre' %}:</span> {{ record.movie.genre }}
-            <br> {% endif %}
+            <br>
+          {% endif %}
           {% if record.movie.actors %} <span class="item-desc">{% trans 'Actors' %}:</span> {{ record.movie.actors }}
-            <br> {% endif %}
+            <br>
+          {% endif %}
           {% if record.movie.runtime %} <span class="item-desc">{% trans 'Runtime' %}:</span>
-            {{ record.movie.runtime|date:'H:i' }}<br> {% endif %}
+            {{ record.movie.runtime|date:'H:i' }}<br>
+          {% endif %}
           {% if record.movie.description %} <span class="item-desc">{% trans 'Description' %}:</span>
-            {{ record.movie.description }}<br> {% endif %}
+            {{ record.movie.description }}<br>
+          {% endif %}
           {% if record.movie.homepage %}
             <a href="{{ record.movie.homepage }}" target="_blank">{% trans 'Website' %}</a><br>
           {% endif %}

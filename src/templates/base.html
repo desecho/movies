@@ -14,29 +14,29 @@
   <title>{% block title %}Movies{% endblock %}</title>
 </head>
 <body>
-<div>
-  {% include 'includes/menu.html' %}
-  <div id="app">
-    <flash-message class="flashpool"></flash-message>
-    <div id="content" class="container-fluid mt-3">
-      {% block content %}{% endblock %}
+  <div>
+    {% include 'includes/menu.html' %}
+    <div id="app">
+      <flash-message class="flashpool"></flash-message>
+      <div id="content" class="container-fluid mt-3">
+        {% block content %}{% endblock %}
+      </div>
     </div>
   </div>
-</div>
-{% include 'includes/footer.html' %}
-<script src="{% url 'javascript-catalog' %}"></script>
-<script src="{% static 'js/commons.js' %}"></script>
-<script src="{% static 'js/vendor.js' %}"></script>
-<script>
-  'use strict';
-  // It has to be before init.js
-  const vars = {isVkUser: {{ user.is_vk_user|yesno:'true,false' }}};
+  {% include 'includes/footer.html' %}
+  <script src="{% url 'javascript-catalog' %}"></script>
+  <script src="{% static 'js/commons.js' %}"></script>
+  <script src="{% static 'js/vendor.js' %}"></script>
+  <script>
+    'use strict';
+    // It has to be before init.js
+    const vars = {isVkUser: {{ user.is_vk_user|yesno:'true,false' }}};
 
-</script>
-<script src="{% static 'js/init.js' %}"></script>
-{% if user.is_vk_user %}
-  <script src="//vk.com/js/api/xd_connection.js?2"></script>
-{% endif %}
-{% block js %}{% endblock %}
-<script src="{% static 'js/setAxiosSettings.js' %}"></script>
+  </script>
+  <script src="{% static 'js/init.js' %}"></script>
+  {% if user.is_vk_user %}
+    <script src="//vk.com/js/api/xd_connection.js?2"></script>
+  {% endif %}
+  {% block js %}{% endblock %}
+  <script src="{% static 'js/setAxiosSettings.js' %}"></script>
 </body>
