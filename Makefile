@@ -91,47 +91,47 @@ test:
 	tox
 
 .PHONY: pydiatra
-## Run pydiatra
+## Run pydiatra linter
 pydiatra:
 	tox -e py-pydiatra
 
 .PHONY: jsonlint
-## Run jsonlint
+## Run jsonlint linter
 jsonlint:
 	tox -e py-jsonlint
 
 .PHONY: pylint
-## Run pylint
+## Run pylint linter
 pylint:
 	tox -e py-pylint
 
 .PHONY: flake8
-## Run flake8
+## Run flake8 linter
 flake8:
 	tox -e py-flake8
 
 .PHONY: isort
-## Run isort
+## Run isort linter
 isort:
 	tox -e py-isort
 
 .PHONY: bandit
-## Run bandit
+## Run bandit linter
 bandit:
 	tox -e py-bandit
 
 .PHONY: rstlint
-## Run rstlint
+## Run rstlint linter
 rstlint:
 	tox -e py-rstlint
 
 .PHONY: pydocstyle
-## Run pydocstyle
+## Run pydocstyle linter
 pydocstyle:
 	tox -e py-pydocstyle
 
 .PHONY: safety
-## Run safety
+## Run safety linter
 safety:
 	tox -e py-safety
 
@@ -141,12 +141,12 @@ pytest:
 	tox -e py-pytest
 
 .PHONY: eslint
-## Run eslint
+## Run eslint linter
 eslint:
 	tox -e py-eslint
 
 .PHONY: csscomb-linter
-## Run csscomb-linter
+## Run csscomb-linter linter
 csscomb-linter:
 	tox -e py-csscomb-linter
 
