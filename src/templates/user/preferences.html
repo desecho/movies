@@ -40,7 +40,7 @@
     <div class="form-group row">
       <label class="col-form-label col-sm-4 text-right">{% trans 'Profile link' %}:</label>
       <div class="col-sm-5 col-md-3">
-        <a href="{% url 'list' user 'watched' %}">{% abs_url 'list' user 'watched' %}</a>
+        <a href="{% url 'list' user.username 'watched' %}">{% abs_url 'list' user.username 'watched' %}</a>
       </div>
     </div>
     <div class="form-group row">
