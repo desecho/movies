@@ -5,9 +5,10 @@ from django.conf import settings
 from django.conf.urls import include
 from django.contrib import admin
 from django.contrib.auth.views import LoginView
-from django.urls import path, re_path
+from django.urls import path, register_converter
 from django.views.i18n import JavaScriptCatalog
 
+from moviesapp.converters import FeedConverter, ListConverter
 from moviesapp.views import AboutView, GalleryView
 from moviesapp.views.list import (
     AddToListView,
@@ -25,6 +26,8 @@ from moviesapp.views.user import LoginErrorView, PreferencesView, logout_view
 from moviesapp.views.vk import UploadPosterToWallView
 
 admin.autodiscover()
+register_converter(ListConverter, "list")
+register_converter(FeedConverter, "feed")
 
 
 def path_404(url_path, name):
@@ -52,36 +55,36 @@ urlpatterns = [
     #
     # Vk
     path_404("upload-poster-to-wall/", "upload_poster_to_wall"),
-    re_path(r"upload-poster-to-wall/(?P<id>\d+)/", UploadPosterToWallView.as_view(), name="upload_poster_to_wall"),
+    path("upload-poster-to-wall/<int:id>/", UploadPosterToWallView.as_view(), name="upload_poster_to_wall"),
     #
     # Gallery
-    re_path("gallery/(?P<list_name>watched|to-watch)/", GalleryView.as_view(), name="gallery"),
-    re_path(r"(?P<username>[\w\d]+)/gallery/(?P<list_name>watched|to-watch)/", GalleryView.as_view(), name="gallery"),
+    path("gallery/<list:list_name>/", GalleryView.as_view(), name="gallery"),
+    path("<str:username>/gallery/<list:list_name>/", GalleryView.as_view(), name="gallery"),
     #
     # List
-    re_path("list/(?P<list_name>watched|to-watch)/", ListView.as_view(), name="list"),
-    re_path(r"(?P<username>[\w\d]+)/list/(?P<list_name>watched|to-watch)/", ListView.as_view(), name="list"),
+    path("list/<list:list_name>/", ListView.as_view(), name="list"),
+    path("<str:username>/list/<list:list_name>/", ListView.as_view(), name="list"),
     #
     path("recommendations/", RecommendationsView.as_view(), name="recommendations"),
     path("save-settings/", SaveSettingsView.as_view(), name="save_settings"),
     #
     path_404("remove-record/", "remove_record"),
-    re_path(r"remove-record/(?P<id>\d+)/", RemoveRecordView.as_view(), name="remove_record"),
+    path("remove-record/<int:id>/", RemoveRecordView.as_view(), name="remove_record"),
     #
     path_404("record/", "record"),
-    re_path(r"record/(?P<id>\d+)/options/", SaveOptionsView.as_view(), name="save_options"),
+    path("record/<int:id>/options/", SaveOptionsView.as_view(), name="save_options"),
     #
     path_404("add-to-list/", "add_to_list"),
-    re_path(r"add-to-list/(?P<id>\d+)/", AddToListView.as_view(), name="add_to_list"),
+    path("add-to-list/<int:id>/", AddToListView.as_view(), name="add_to_list"),
     #
     path_404("change-rating/", "change_rating"),
-    re_path(r"change-rating/(?P<id>\d+)/", ChangeRatingView.as_view(), name="change_rating"),
+    path("change-rating/<int:id>/", ChangeRatingView.as_view(), name="change_rating"),
     #
     path_404("save-comment/", "save_comment"),
-    re_path(r"save-comment/(?P<id>\d+)/", SaveCommentView.as_view(), name="save_comment"),
+    path("save-comment/<int:id>/", SaveCommentView.as_view(), name="save_comment"),
     #
     # Social
-    re_path("feed/(?P<list_name>people|friends)/", FeedView.as_view(), name="feed"),
+    path("feed/<feed:feed_name>/", FeedView.as_view(), name="feed"),
     path("people/", PeopleView.as_view(), name="people"),
     path("friends/", FriendsView.as_view(), name="friends"),
     #

@@ -12,8 +12,8 @@ def is_authenticated(request):
 
 
 feed_children = (
-    MenuItem(_("Friends"), reverse("feed", kwargs={"list_name": "friends"}), check=has_friends),
-    MenuItem(_("People"), reverse("feed", kwargs={"list_name": "people"})),
+    MenuItem(_("Friends"), reverse("feed", kwargs={"feed_name": "friends"}), check=has_friends),
+    MenuItem(_("People"), reverse("feed", kwargs={"feed_name": "people"})),
 )
 
 Menu.add_item("main", MenuItem(_("Search"), reverse("search")))

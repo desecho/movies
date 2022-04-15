@@ -13,7 +13,7 @@ from .utils import paginate
 class FeedView(TemplateAnonymousView):
     template_name = "social/feed.html"
 
-    def get_context_data(self, list_name):
+    def get_context_data(self, feed_name):
         FEED_TITLE = {
             "people": _("People"),
             "friends": _("Friends"),
@@ -23,7 +23,7 @@ class FeedView(TemplateAnonymousView):
         date_from = date_to - relativedelta(days=settings.FEED_DAYS)
         actions = ActionRecord.objects.filter(date__range=(date_from, date_to)).order_by("-pk")
 
-        users = self.request.user.get_users(friends=list_name == "friends")
+        users = self.request.user.get_users(friends=feed_name == "friends")
         actions = actions.filter(user__in=users)
         posters = [action.movie.poster_small for action in actions]
         posters_2x = [action.movie.poster_normal for action in actions]
@@ -44,7 +44,7 @@ class FeedView(TemplateAnonymousView):
             }
             actions_output.append(action_)
             i += 1
-        return {"list_name": FEED_TITLE[list_name], "actions": actions_output}
+        return {"feed_name": FEED_TITLE[feed_name], "actions": actions_output}
 
 
 class PeopleView(TemplateAnonymousView):
