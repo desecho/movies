@@ -4,15 +4,6 @@ from .base import BaseTestLoginCase
 
 
 class PeopleTestCase(BaseTestLoginCase):
-    fixtures = [
-        "users.json",
-        "lists.json",
-        "actions.json",
-        "movies.json",
-        "records.json",
-        "action_records.json",
-    ]
-
     def setUp(self):
         super().setUp()
         self.login("fox")

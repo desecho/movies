@@ -1,10 +1,5 @@
-from django.core.exceptions import PermissionDenied
-from django.http import Http404
-
-from moviesapp.models import User
-
 from .mixins import TemplateAnonymousView
-from .utils import get_anothers_account, get_records, sort_by_rating
+from .utils import get_records, sort_by_rating
 
 
 class AboutView(TemplateAnonymousView):
@@ -15,18 +10,12 @@ class GalleryView(TemplateAnonymousView):
     template_name = "gallery.html"
 
     def get_context_data(self, list_name, username=None):
-        if username is None and self.request.user.is_anonymous:
-            raise Http404
-        anothers_account = get_anothers_account(username)
-        if anothers_account:
-            if User.objects.get(username=username) not in self.request.user.get_users():
-                raise PermissionDenied
-
-        records = get_records(list_name, self.request.user, anothers_account)
+        self.check_if_allowed(username)
+        records = get_records(list_name, self.request.user, self.anothers_account)
         records = sort_by_rating(records, username, list_name)
 
         return {
             "records": records,
-            "anothers_account": anothers_account,
+            "anothers_account": self.anothers_account,
             "list": list_name,
         }

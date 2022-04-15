@@ -1,14 +1,13 @@
 import json
 
 from django.conf import settings
-from django.core.exceptions import PermissionDenied
 from django.db.models import Q
 from django.http import Http404
 
-from moviesapp.models import Action, ActionRecord, List, Record, User
+from moviesapp.models import Action, ActionRecord, List, Record
 
 from .mixins import AjaxAnonymousView, AjaxView, TemplateAnonymousView, TemplateView
-from .utils import add_movie_to_list, get_anothers_account, get_records, paginate, sort_by_rating
+from .utils import add_movie_to_list, get_records, paginate, sort_by_rating
 
 
 class ChangeRatingView(AjaxView):
@@ -185,14 +184,8 @@ class ListView(TemplateAnonymousView):
         self.session = session
 
     def get_context_data(self, list_name, username=None):
-        if username is None and self.request.user.is_anonymous:
-            raise Http404
-        anothers_account = get_anothers_account(username)
-        if anothers_account:
-            if User.objects.get(username=username) not in self.request.user.get_users():
-                raise PermissionDenied
-
-        records = get_records(list_name, self.request.user, anothers_account)
+        self.check_if_allowed(username)
+        records = get_records(list_name, self.request.user, self.anothers_account)
         request = self.request
         session = self.session
         query = request.GET.get("query", False)
@@ -219,7 +212,7 @@ class ListView(TemplateAnonymousView):
             "reviews": comments_and_ratings,
             "list_id": List.objects.get(key_name=list_name).id,
             "list": list_name,
-            "anothers_account": anothers_account,
+            "anothers_account": self.anothers_account,
             "list_data": json.dumps(list_data),
             "sort": session["sort"],
             "query": query,

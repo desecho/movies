@@ -7,8 +7,8 @@ class Command(BaseCommand):
     help = "Removes unused movies"
 
     def handle(self, *args, **options):  # pylint: disable=unused-argument
-        movies = Movie.objects.all()
-        tqdm = self.tqdm(total=movies.count())
+        movies = Movie.objects.all()  # pylint: disable=duplicate-code
+        tqdm = self.tqdm(total=movies.count())  # pylint: disable=duplicate-code
         last_movie_id = movies.last().pk
         for movie in movies:
             movie_info = movie.cli_string(last_movie_id)

@@ -1,6 +1,6 @@
 from django.conf import settings
 
-from .vk import get_vk_avatar
+from .vk import update_user_vk_avatar
 
 
 def load_user_data(backend, user, **kwargs):  # pylint: disable=unused-argument
@@ -17,12 +17,7 @@ def load_user_data(backend, user, **kwargs):  # pylint: disable=unused-argument
         )
         vk = user.get_vk()
         data = vk.get_data(FIELDS)
-        avatar_small = get_vk_avatar(data["photo_100"])
-        if avatar_small:
-            user.avatar_small = avatar_small
-        avatar_big = get_vk_avatar(data["photo_200"])
-        if avatar_big:
-            user.avatar_big = avatar_big
+        user = update_user_vk_avatar(user, data)
         user.first_name = data["first_name"]
         user.last_name = data["last_name"]
         # Language setting is only available for a standalone application. See details:

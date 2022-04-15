@@ -65,6 +65,15 @@ class BaseTestCase(TestCase):
 
 
 class BaseTestLoginCase(BaseTestCase):
+    fixtures = [
+        "users.json",
+        "lists.json",
+        "actions.json",
+        "movies.json",
+        "records.json",
+        "action_records.json",
+    ]
+
     def setUp(self):
         super().setUp()
         self.login()

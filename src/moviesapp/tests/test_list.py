@@ -24,15 +24,6 @@ class AddMoviesTestCase(BaseTestLoginCase):
 
     """
 
-    fixtures = [
-        "users.json",
-        "lists.json",
-        "actions.json",
-        "movies.json",
-        "records.json",
-        "action_records.json",
-    ]
-
     def test_list_watched(self):
         url = reverse("list", args=("watched",))
         response = self.client.get(url)

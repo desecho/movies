@@ -1,7 +1,7 @@
 from django_tqdm import BaseCommand
 
 from moviesapp.models import User
-from moviesapp.vk import get_vk_avatar
+from moviesapp.vk import update_user_vk_avatar
 
 
 class Command(BaseCommand):
@@ -18,12 +18,7 @@ class Command(BaseCommand):
                     "photo_200",
                 )
                 data = vk.get_data(FIELDS)
-                avatar_small = get_vk_avatar(data["photo_100"])
-                if avatar_small:
-                    user.avatar_small = avatar_small
-                avatar_big = get_vk_avatar(data["photo_200"])
-                if avatar_big:
-                    user.avatar_big = avatar_big
+                user = update_user_vk_avatar(user, data)
                 user.save()
                 t.set_description(str(user))
                 t.update()
