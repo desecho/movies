@@ -6,7 +6,7 @@ Movies
 The web application on Django_ 4, Vue.js_ 2, Bootstrap_ 4. Create movie lists ("Watched" and "To watch"), rate movies, and add comments.
 You can also add additional information such as if you watched the movie in the original version, in theatre, an extended version, in 4k, etc.
 
-| It is also available as a `VK app <http://vk.com/app3504693_2912142>`_. Not working temporarily.
+| It is also available as a `VK app`_. Not working temporarily.
 | Share your lists with VK and Facebook friends, get recommendations from friends. Not working temporarily.
 | The website is live here - https://movies.samarchyan.me.
 | The interface is available in English and Russian.
@@ -76,9 +76,9 @@ Used APIs
 
 Used images
 -----------
-* `IMDb logo <https://commons.wikimedia.org/wiki/File:IMDB_Logo_2016.svg>`_
-* `Down arrow icon <https://www.iconfinder.com/icons/211614/arrow_b_down_icon>`_
-* `TMDB Logos <https://www.themoviedb.org/about/logos-attribution>`_
+* `IMDb logo`_
+* `Down arrow icon`_
+* `TMDB Logos`_
 
 .. |Requirements Status| image:: https://requires.io/github/desecho/movies/requirements.svg?branch=master
    :target: https://requires.io/github/desecho/movies/requirements/?branch=master
@@ -107,3 +107,7 @@ Used images
 .. _Docker Build & Push Action: https://github.com/marketplace/actions/docker-build-push-action
 .. _GitHub Action for DigitalOcean - doctl: https://github.com/marketplace/actions/github-action-for-digitalocean-doctl
 .. _Kubectl tool installer: https://github.com/marketplace/actions/kubectl-tool-installer
+.. _VK app: http://vk.com/app3504693_2912142
+.. _IMDb logo: https://commons.wikimedia.org/wiki/File:IMDB_Logo_2016.svg
+.. _Down arrow icon: <https://www.iconfinder.com/icons/211614/arrow_b_down_icon
+.. _TMDB Logos: <https://www.themoviedb.org/about/logos-attribution
