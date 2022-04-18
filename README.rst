@@ -49,7 +49,7 @@ CI/CD
 ----------------------------
 `GitHub Actions`_  are used for CI/CD.
 
-Tests are automatically run on pull requests and in dev branches.
+Tests are automatically run on pull requests and in master or dev branches.
 
 Deployment is automatically done in master branch.
 
