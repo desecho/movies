@@ -66,8 +66,6 @@ if IS_VK_DEV:
 
 # Internationalization
 LANGUAGE_CODE = "en"
-USE_I18N = True
-USE_L10N = True
 LANGUAGES = (
     ("en", "English"),
     ("ru", "Русский"),
