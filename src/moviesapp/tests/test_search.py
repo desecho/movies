@@ -61,7 +61,7 @@ class SearchMoviesAnonymousTestCase(BaseTestCase):
 
             # We can't use self.client here because mocker breaks it.
             response = client.get(url, params)
-            return self.get_json(response)
+            return response.json()
 
         url = reverse("search_movie")
         self.response_type_movie = get_response("movie", '{"popularOnly":false,"sortByDate":false}')

@@ -26,15 +26,8 @@ class BaseTestCase(TestCase):
     # Another user - fox/password
 
     @staticmethod
-    def get_content(response):
-        return response.content.decode("utf-8")
-
-    @staticmethod
     def get_soup(response):
         return BeautifulSoup(response.content, features="html.parser")
-
-    def get_json(self, response):
-        return json.loads(self.get_content(response))
 
     def setUp(self):
         User = get_user_model()
