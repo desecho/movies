@@ -1,3 +1,4 @@
+---
 name: Destruction
 on: workflow_dispatch
 jobs:

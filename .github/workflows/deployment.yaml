@@ -1,3 +1,4 @@
+---
 name: Deployment
 on:
   push:
@@ -30,15 +31,12 @@ jobs:
 
       - name: Install build and test requirements
         run: |
-          sudo curl https://github.com/mvdan/sh/releases/download/v${SHFMT_VERSION}/shfmt_v${SHFMT_VERSION}_linux_amd64 -Lo /usr/local/bin/shfmt
-          sudo chmod +x /usr/local/bin/shfmt
+          make install-shfmt
           sudo apt install shellcheck -y
           npm install yarn
           make yarn-install-locked
           pip install tox
           tox -e py-requirements
-        env:
-          SHFMT_VERSION: 3.4.3
 
       - name: Run tests
         run: make test

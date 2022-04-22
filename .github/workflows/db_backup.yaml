@@ -1,3 +1,4 @@
+---
 name: DB Backup
 on:
   schedule:
