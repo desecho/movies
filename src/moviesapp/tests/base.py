@@ -5,12 +5,11 @@ from datetime import datetime
 import pytz
 from bs4 import BeautifulSoup
 from django.conf import settings
-from django.contrib.auth import get_user_model
 from django.core.serializers.json import DjangoJSONEncoder
 from django.forms.models import model_to_dict
 from django.test import TestCase
 
-from moviesapp.models import ActionRecord
+from moviesapp.models import ActionRecord, User
 
 
 class BaseTestCase(TestCase):
@@ -30,7 +29,6 @@ class BaseTestCase(TestCase):
         return BeautifulSoup(response.content, features="html.parser")
 
     def setUp(self):
-        User = get_user_model()
         self.user = User.objects.get(username=self.USER_USERNAME)
 
         # Make sure we have current dates in action
