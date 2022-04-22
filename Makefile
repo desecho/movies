@@ -1,10 +1,9 @@
-export
 .DEFAULT_GOAL := help
 
 include help.mk
 
-PROJECT := movies
-APP := moviesapp
+export PROJECT := movies
+export APP := moviesapp
 
 SHELL := /bin/bash
 SOURCE_CMDS := source venv/bin/activate && source env.sh
@@ -12,10 +11,18 @@ SOURCE_CMDS := source venv/bin/activate && source env.sh
 #------------------------------------
 # Installation
 #------------------------------------
+SHFMT_VERSION := 3.4.3
+SHFMT_PATH := /usr/local/bin/shfmt
+
+.PHONY: install-shfmt
+## Install shfmt | Installation
+install-shfmt:
+	sudo curl https://github.com/mvdan/sh/releases/download/v${SHFMT_VERSION}/shfmt_v${SHFMT_VERSION}_linux_amd64 -Lo ${SHFMT_PATH}
+	sudo chmod +x ${SHFMT_PATH}
 
 .PHONY: install-deps
-## Install dependencies | Installation
-install-deps:
+## Install dependencies
+install-deps: install-shfmt
 	# Install Python
 	sudo apt install python3.10 python3.10-venv python3.10-dev -y
 	# Install MySQL dependencies
@@ -164,6 +171,11 @@ shfmt:
 ## Run shellcheck linter
 shellcheck:
 	tox -e py-shellcheck
+
+.PHONY: yamllint
+## Run yamllint linter
+yamllint:
+	tox -e py-yamllint
 
 #------------------------------------
 
