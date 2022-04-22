@@ -16,7 +16,10 @@ jobs:
       - name: Backup DB
         run: |
           NOW=$(date +"%d-%m-%Y")
-          mysqldump -u root -h mysql.samarchyan.me movies -p${{ secrets.DB_PASSWORD }} | gzip -9 > movies-$NOW.sql.gz
+          DB_HOST=mysql.samarchyan.me
+          DB_NAME=movies
+          ARCHIVE=${DB_NAME}-${NOW}.sql.gz
+          mysqldump -u root -h ${DB_HOST} ${DB_NAME} -p${{ secrets.DB_PASSWORD }} | gzip -9 > ${ARCHIVE}
 
       - name: Install s3cmd
         run: |
@@ -29,4 +32,7 @@ jobs:
       - name: Upload backup
         run: |
           NOW=$(date +"%d-%m-%Y")
-          s3cmd put movies-$NOW.sql.gz s3://scrap-db-backups/movies/ --acl-private --no-mime-magic --guess-mime-type
+          DB_NAME=githubcontrib
+          DB_NAME=movies
+          ARCHIVE=${DB_NAME}-${NOW}.sql.gz
+          s3cmd put ${ARCHIVE} s3://scrap-db-backups/${DB_NAME}/ --acl-private --no-mime-magic --guess-mime-type
