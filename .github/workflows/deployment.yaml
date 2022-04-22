@@ -32,6 +32,7 @@ jobs:
       - name: Install build and test requirements
         run: |
           make install-shfmt
+          make install-hadolint
           sudo apt install shellcheck -y
           npm install yarn
           make yarn-install-locked

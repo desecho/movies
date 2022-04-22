@@ -34,6 +34,7 @@ jobs:
       - name: Install test requirements
         run: |
           make install-shfmt
+          make install-hadolint
           sudo apt install shellcheck -y
           rm package.json
           npm install eslint@7.22.0
