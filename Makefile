@@ -7,6 +7,7 @@ export APP := moviesapp
 
 SHELL := /bin/bash
 SOURCE_CMDS := source venv/bin/activate && source env.sh
+PYTHON := python3.10
 
 #------------------------------------
 # Installation
@@ -24,7 +25,7 @@ install-shfmt:
 ## Install dependencies
 install-deps: install-shfmt
 	# Install Python
-	sudo apt install python3.10 python3.10-venv python3.10-dev -y
+	sudo apt install ${PYTHON} ${PYTHON}-venv ${PYTHON}-dev -y
 	# Install MySQL dependencies
 	sudo apt install libmysqlclient-dev -y
 	# Install dependency for makemessages
@@ -33,7 +34,7 @@ install-deps: install-shfmt
 .PHONY: create-venv
 ## Create virtual environment and install requirements
 create-venv:
-	python3.10 -m venv venv
+	${PYTHON} -m venv venv
 	${SOURCE_CMDS} && \
 		pip install -r requirements-dev.txt
 
