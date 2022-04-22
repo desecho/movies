@@ -1,6 +1,6 @@
 FROM python:3.10-alpine
 
-ADD requirements.txt /app/requirements.txt
+COPY requirements.txt /app/requirements.txt
 
 WORKDIR /app
 
@@ -10,7 +10,7 @@ RUN apk add --no-cache --virtual .build-deps git gcc musl-dev libffi-dev openssl
     apk del .build-deps && \
     rm requirements.txt
 
-ADD src /app
+COPY src /app
 
 EXPOSE 8000
 
