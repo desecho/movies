@@ -49,7 +49,7 @@ load-initial-fixtures:
 
 .PHONY: bootstrap
 ## Bootstrap project
-bootstrap: install-deps yarn-install-locked create-venv create-env-files create-db migrate load-initial-fixtures yarn-build
+bootstrap: install-deps yarn-install-locked create-env-files create-venv create-db migrate load-initial-fixtures yarn-build
 
 .PHONY: create-env-files
 ## Create env files
