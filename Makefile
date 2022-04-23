@@ -79,35 +79,30 @@ db_env_prod.sh:
 	cp db_env_prod_template.sh db_env_prod.sh
 #------------------------------------
 
-
 #------------------------------------
 # Scripts
 #------------------------------------
-
 .PHONY: pydiatra-script
 pydiatra-script:
 	scripts/pydiatra.sh
-
 #------------------------------------
 
-
 #------------------------------------
-# Tox
+# Tests
 #------------------------------------
 .PHONY: test
 ## Run tests | Tests
-test: shellcheck hadolint shfmt csscomb-linter eslint jsonlint
+test: shellcheck hadolint shfmt csscomb-linter eslint jsonlint tox
+
+.PHONY: tox
+## Run tox
+tox:
 	tox
 
 .PHONY: pydiatra
 ## Run pydiatra linter
 pydiatra:
 	tox -e py-pydiatra
-
-.PHONY: jsonlint
-## Run jsonlint linter
-jsonlint:
-	scripts/jsonlint.sh lint
 
 .PHONY: pylint
 ## Run pylint linter
@@ -149,6 +144,16 @@ safety:
 pytest:
 	tox -e py-pytest
 
+.PHONY: black
+## Run black linter
+black:
+	tox -e py-black
+
+.PHONY: yamllint
+## Run yamllint linter
+yamllint:
+	tox -e py-yamllint
+
 .PHONY: eslint
 ## Run eslint linter
 eslint:
@@ -158,11 +163,6 @@ eslint:
 ## Run csscomb-linter linter
 csscomb-linter:
 	yarn run csscomb-linter "src/${APP}/styles/*"
-
-.PHONY: black
-## Run black linter
-black:
-	tox -e py-black
 
 .PHONY: shfmt
 ## Run shfmt linter
@@ -174,16 +174,15 @@ shfmt:
 shellcheck:
 	shellcheck scripts/*.sh ./*.sh
 
-.PHONY: yamllint
-## Run yamllint linter
-yamllint:
-	tox -e py-yamllint
-
 .PHONY: hadolint
 ## Run hadolint linter
 hadolint:
 	hadolint Dockerfile
 
+.PHONY: jsonlint
+## Run jsonlint linter
+jsonlint:
+	scripts/jsonlint.sh lint
 #------------------------------------
 
 #------------------------------------
@@ -252,11 +251,9 @@ load-db: drop-db create-db
 	./scripts/load_db.sh
 #------------------------------------
 
-
 #------------------------------------
 # Django management commands
 #------------------------------------
-
 MANAGE_CMD := src/manage.py
 
 .PHONY: makemessages
@@ -328,7 +325,6 @@ manage:
 	${MANAGE_CMD} ${MANAGE_ARGS}
 #------------------------------------
 
-
 #------------------------------------
 # Docker commands
 #------------------------------------
@@ -348,9 +344,7 @@ docker-run:
 ## Run docker shell
 docker-sh:
 	docker run -ti --env-file ${DOCKER_ENV_FILE} ${PROJECT} sh
-
 #------------------------------------
-
 
 #------------------------------------
 # Production commands
