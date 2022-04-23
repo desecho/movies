@@ -65,7 +65,7 @@ class SaveSettingsView(AjaxAnonymousView):
         return self.success()
 
 
-class SaveOptionsView(AjaxAnonymousView):
+class SaveOptionsView(AjaxView):
     def put(self, request, **kwargs):
         try:
             record_id = kwargs["id"]
