@@ -88,10 +88,6 @@ db_env_prod.sh:
 pydiatra-script:
 	scripts/pydiatra.sh
 
-.PHONY: jsonlint-script
-jsonlint-script:
-	scripts/jsonlint.sh lint
-
 #------------------------------------
 
 
@@ -100,7 +96,7 @@ jsonlint-script:
 #------------------------------------
 .PHONY: test
 ## Run tests | Tests
-test: shellcheck
+test: shellcheck hadolint shfmt csscomb-linter eslint jsonlint
 	tox
 
 .PHONY: pydiatra
@@ -111,7 +107,7 @@ pydiatra:
 .PHONY: jsonlint
 ## Run jsonlint linter
 jsonlint:
-	tox -e py-jsonlint
+	scripts/jsonlint.sh lint
 
 .PHONY: pylint
 ## Run pylint linter
@@ -156,12 +152,12 @@ pytest:
 .PHONY: eslint
 ## Run eslint linter
 eslint:
-	tox -e py-eslint
+	yarn run eslint "./*.js" "src/${APP}/js/*"
 
 .PHONY: csscomb-linter
 ## Run csscomb-linter linter
 csscomb-linter:
-	tox -e py-csscomb-linter
+	yarn run csscomb-linter "src/${APP}/styles/*"
 
 .PHONY: black
 ## Run black linter
@@ -171,7 +167,7 @@ black:
 .PHONY: shfmt
 ## Run shfmt linter
 shfmt:
-	tox -e py-shfmt
+	shfmt -l -d .
 
 .PHONY: shellcheck
 ## Run shellcheck linter
@@ -186,7 +182,7 @@ yamllint:
 .PHONY: hadolint
 ## Run hadolint linter
 hadolint:
-	tox -e py-hadolint
+	hadolint Dockerfile
 
 #------------------------------------
 
