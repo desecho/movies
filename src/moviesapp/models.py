@@ -1,55 +1,17 @@
-import facebook
 import vk_api
 from annoying.fields import JSONField  # Not using django-mysql instead because it's not supported by modeltranslation.
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser, AnonymousUser
-from django.core.cache import cache
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from vk_api.exceptions import ApiError
 
 from moviesapp.exceptions import VKError
+from moviesapp.fb import Fb
+from moviesapp.vk import Vk
 
 
-class Vk:
-    def __init__(self, user):
-        vk_account = user.get_vk_account()
-        vk_session = vk_api.VkApi(token=vk_account.access_token)
-        self.vk = vk_session.get_api()
-        self.vk_id = vk_account.uid
-        self.user = user
-
-    def get_friends(self):  # pylint: disable=no-self-use
-        friends = cache.get("vk_friends")
-        if friends is None:
-            friends_ids = self.vk.friends.get()["items"]
-            cache.set("vk_friends", friends)
-
-        # We need to use distinct here because the same user can have several VK backends (both app and oauth)
-        friends = User.objects.filter(
-            social_auth__provider__in=settings.VK_BACKENDS, social_auth__uid__in=friends_ids
-        ).distinct()
-        return friends
-
-    def get_data(self, fields):
-        return self.vk.users.get(fields=fields)[0]
-
-
-class Fb:
-    def __init__(self, user):
-        access_token = user.get_fb_account().extra_data["access_token"]
-        self.fb = facebook.GraphAPI(access_token=access_token, version="2.7")
-
-    def get_friends(self):
-        friends = cache.get("fb_friends")
-        if friends is None:
-            friends = self.fb.get_connections(id="me", connection_name="friends")["data"]
-            cache.set("fb_friends", friends)
-        friends_ids = [f["id"] for f in friends]
-        friends = User.objects.filter(social_auth__provider="facebook", social_auth__uid__in=friends_ids)
-        return friends
-
-
+# Cannot be moved to utils because it would cause circular imports
 def get_poster_url(size, poster):
     if size == "small":
         poster_size = settings.POSTER_SIZE_SMALL
