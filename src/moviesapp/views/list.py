@@ -13,9 +13,9 @@ from .utils import add_movie_to_list, get_records, paginate, sort_by_rating
 class ChangeRatingView(AjaxView):
     def put(self, request, **kwargs):
         try:
-            id_ = kwargs["id"]
-            rating = request.PUT["rating"]
-        except KeyError:
+            id_ = int(kwargs["id"])
+            rating = int(request.PUT["rating"])
+        except (KeyError, ValueError):
             return self.render_bad_request_response()
 
         record = request.user.get_record(id_)
