@@ -54,6 +54,10 @@ class BaseTestCase(TestCase):
     def dump_instance(instance):
         return json.dumps(model_to_dict(instance), cls=DjangoJSONEncoder)
 
+    @property
+    def is_authenticated(self):
+        return "_auth_user_id" in self.client.session.keys()
+
 
 class BaseTestLoginCase(BaseTestCase):
     fixtures = [
