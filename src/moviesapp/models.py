@@ -81,6 +81,7 @@ class UserBase:
             return self._get_vk_accounts().exists()
         return False
 
+    @property
     def is_linked(self):
         if self.is_authenticated:
             return self.social_auth.exists()
@@ -106,7 +107,7 @@ class UserBase:
 
     def get_friends(self, sort=False):
         friends = User.objects.none()
-        if self.is_linked:  # pylint: disable=using-constant-test
+        if self.is_linked:
             if self.is_vk_user():  # 2DO possibly refactor this (this check is run twice)
                 friends |= self.get_vk().get_friends()
             if self.is_fb_user():
