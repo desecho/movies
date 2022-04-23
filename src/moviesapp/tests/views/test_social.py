@@ -1,6 +1,6 @@
 from django.urls import reverse
 
-from .base import BaseTestLoginCase
+from ..base import BaseTestLoginCase
 
 
 class PeopleTestCase(BaseTestLoginCase):

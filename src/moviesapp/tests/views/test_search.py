@@ -4,7 +4,7 @@ from tmdbsimple.base import TMDB
 from tmdbsimple.people import People
 from tmdbsimple.search import Search
 
-from .base import BaseTestCase
+from ..base import BaseTestCase
 
 
 class SearchMoviesAnonymousTestCase(BaseTestCase):

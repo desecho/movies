@@ -2,7 +2,7 @@ from django.urls import reverse
 
 from moviesapp.models import List, Movie
 
-from .base import BaseTestLoginCase
+from ..base import BaseTestLoginCase
 
 
 class AddMoviesTestCase(BaseTestLoginCase):

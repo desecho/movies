@@ -9,7 +9,6 @@ from django.urls import path, register_converter
 from django.views.i18n import JavaScriptCatalog
 
 from moviesapp.converters import FeedConverter, ListConverter
-from moviesapp.views import AboutView, GalleryView
 from moviesapp.views.list import (
     AddToListView,
     ChangeRatingView,
@@ -20,6 +19,7 @@ from moviesapp.views.list import (
     SaveOptionsView,
     SaveSettingsView,
 )
+from moviesapp.views.movies import AboutView, GalleryView
 from moviesapp.views.search import AddToListFromDbView, SearchMovieView, SearchView
 from moviesapp.views.social import FeedView, FriendsView, PeopleView
 from moviesapp.views.user import LoginErrorView, PreferencesView, logout_view

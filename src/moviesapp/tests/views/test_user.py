@@ -4,7 +4,7 @@ from django.urls import reverse
 
 from moviesapp.models import User
 
-from .base import BaseTestCase, BaseTestLoginCase
+from ..base import BaseTestCase, BaseTestLoginCase
 
 
 class LoginErrorTestCase(BaseTestCase):
