@@ -3,6 +3,8 @@ branch = True
 omit =
     src/moviesapp/tests/*
     src/moviesapp/migrations/*
+    src/manage.py
+    src/movies/wsgi.py
 
 [report]
 exclude_lines =
@@ -18,3 +20,5 @@ show_missing = True
 omit =
     src/moviesapp/tests/*
     src/moviesapp/migrations/*
+    src/manage.py
+    src/movies/wsgi.py
