@@ -1,7 +1,6 @@
 -r requirements.txt
 
 # Tests
-flexmock
 beautifulsoup4
 
 # Pytest

@@ -21,7 +21,6 @@ class AddMoviesTestCase(BaseTestLoginCase):
         - Added "Pulp Fiction" to his "To watch" list
     fox:
         - Added "Avengers" to his "Watched" list
-
     """
 
     def test_list_watched(self):

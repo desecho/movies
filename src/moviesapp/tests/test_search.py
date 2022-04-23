@@ -1,7 +1,8 @@
 import pytest
-import tmdbsimple
 from django.urls import reverse
-from flexmock import flexmock
+from tmdbsimple.base import TMDB
+from tmdbsimple.people import People
+from tmdbsimple.search import Search
 
 from .base import BaseTestCase
 
@@ -38,26 +39,28 @@ class SearchMoviesAnonymousTestCase(BaseTestCase):
                 "type": type_,
             }
             if type_ == "movie":
-                tmdbsimple_movie = mocker.patch("tmdbsimple.search.Search.movie")
-                tmdbsimple_movie.return_value = self.load_json(mockfile)
+                tmdbsimple_movie_mock = mocker.patch.object(Search, "movie")
+                tmdbsimple_movie_mock.return_value = self.load_json(mockfile)
             else:
-                tmdbsimple_person = mocker.patch("tmdbsimple.search.Search.person")
-                tmdbsimple_person.return_value = self.load_json(mockfile_person)
+                tmdbsimple_person_mock = mocker.patch.object(Search, "person")
+                tmdbsimple_person_mock.return_value = self.load_json(mockfile_person)
 
                 if type_ == "actor":
-                    people_mock = flexmock()
-                    people_mock.cast = self.load_json(mockfile_movies)
-                    people_mock.combined_credits = lambda: None
-                    flexmock(tmdbsimple.people.People).new_instances(people_mock)
+                    people_instance_mock = mocker.Mock()
+                    people_instance_mock.cast = self.load_json(mockfile_movies)
+                    people_instance_mock.combined_credits.return_value = None
+                    people_mock = mocker.patch.object(People, "__new__")
+                    people_mock.return_value = people_instance_mock
                 if type_ == "director":
-                    people_mock = flexmock()
-                    people_mock.crew = self.load_json(mockfile_movies)
-                    people_mock.combined_credits = lambda: None
-                    flexmock(tmdbsimple.people.People).new_instances(people_mock)
+                    people_instance_mock = mocker.Mock()
+                    people_instance_mock.crew = self.load_json(mockfile_movies)
+                    people_instance_mock.combined_credits.return_value = None
+                    people_mock = mocker.patch.object(People, "__new__")
+                    people_mock.return_value = people_instance_mock
 
                 # Don't send API requests which don't make sense.
-                tmdbsimple_get = mocker.patch("tmdbsimple.base.TMDB._GET")
-                tmdbsimple_get.return_value = None
+                tmdbsimple_get_mock = mocker.patch.object(TMDB, "_GET")
+                tmdbsimple_get_mock.return_value = None
 
             # We can't use self.client here because mocker breaks it.
             response = client.get(url, params)
