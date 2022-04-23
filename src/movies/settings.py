@@ -61,7 +61,7 @@ DEFAULT_FROM_EMAIL = ADMIN_EMAIL
 
 # Allowed hosts
 ALLOWED_HOSTS = [PROJECT_DOMAIN]
-if IS_VK_DEV:
+if IS_VK_DEV:  # pragma: no cover
     ALLOWED_HOSTS.append(getenv("HOST_MOVIES_TEST"))
 
 # Internationalization
@@ -118,7 +118,7 @@ TEMPLATES = [
         },
     },
 ]
-if IS_DEV:
+if IS_DEV:  # pragma: no cover
     TEMPLATES[0]["OPTIONS"]["loaders"] = [
         "django.template.loaders.filesystem.Loader",
         "django.template.loaders.app_directories.Loader",
@@ -142,7 +142,7 @@ MIDDLEWARE = [
     "moviesapp.middleware.PutHandlerMiddleware",
     "moviesapp.middleware.language_middleware",
 ]
-if DEBUG:
+if DEBUG:  # pragma: no cover
     MIDDLEWARE.append("debug_toolbar.middleware.DebugToolbarMiddleware")
 
 INSTALLED_APPS = [
@@ -162,18 +162,18 @@ INSTALLED_APPS = [
     "social_django",
     "moviesapp",
 ]
-if DEBUG:
+if DEBUG:  # pragma: no cover
     INSTALLED_APPS += [
         "debug_toolbar",
         "template_timings_panel",
     ]
 
-if IS_DEV or COLLECT_STATIC:
+if IS_DEV or COLLECT_STATIC:  # pragma: no cover
     INSTALLED_APPS.append("django.contrib.staticfiles")
 
 # Security
 DISABLE_CSRF = bool(getenv("DISABLE_CSRF"))
-if not DISABLE_CSRF:
+if not DISABLE_CSRF:  # pragma: no cover
     # It is needed for VK app to work.
     CSRF_COOKIE_SAMESITE = "None"
     SESSION_COOKIE_SAMESITE = "None"
@@ -209,14 +209,14 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Login
 LOGIN_REDIRECT_URL = "/"
-if IS_VK_DEV:
+if IS_VK_DEV:  # pragma: no cover
     HOST_MOVIES_TEST = getenv("HOST_MOVIES_TEST")
     LOGIN_REDIRECT_URL = f"https://{HOST_MOVIES_TEST}"
 LOGIN_URL = "/login/"
 LOGIN_ERROR_URL = "/login-error/"
 
 # Static files
-if IS_DEV:
+if IS_DEV:  # pragma: no cover
     STATICFILES_DIRS = (join(SRC_DIR, "moviesapp", "static"),)
     STATIC_ROOT = None
 else:
