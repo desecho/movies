@@ -1,15 +1,21 @@
+import json
+
 from django.conf import settings
-from django.http import QueryDict
 from django.utils.translation import activate
 
 
-class PutHandlerMiddleware:
+class AjaxHandlerMiddleware:
     def __init__(self, get_response):
         self.get_response = get_response
 
     def __call__(self, request):
-        if request.method == "PUT":
-            request.PUT = QueryDict(request.body)
+        if request.content_type == "application/json":
+            method = request.method
+            body = request.body
+            if method == "PUT":
+                request.PUT = json.loads(body)
+            if method == "POST":
+                request.POST = json.loads(body)
         response = self.get_response(request)
         return response
 

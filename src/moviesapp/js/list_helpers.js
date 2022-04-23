@@ -5,9 +5,9 @@ import axios from 'axios';
 
 export function addToList(movieId, listId, recordId) {
   const url = urls.addToList + movieId + '/';
-  axios.post(url, $.param({
+  axios.post(url, {
     listId: listId,
-  })).then(function() {
+  }).then(function() {
     setViewedIconAndRemoveButtons(recordId, listId);
   }).catch(function() {
     vm.flashError(gettext('Error adding the movie to the list'));

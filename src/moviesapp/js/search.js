@@ -48,11 +48,10 @@ window.vm = new Vue({
     retinajs: retina,
     addToListFromDb: function(movieId, listId) {
       const movie = $('#movie' + movieId);
-      const data = {
+      axios.post(urls.addToListFromDb, {
         movieId: movieId,
         listId: listId,
-      };
-      axios.post(urls.addToListFromDb, $.param(data)).then(function(response) {
+      }).then(function(response) {
         if (response.data.status === 'not_found') {
           vm.flashError(gettext('Movie is not found in the database'));
           return;

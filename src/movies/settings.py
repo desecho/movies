@@ -139,7 +139,7 @@ MIDDLEWARE = [
     "social_django.middleware.SocialAuthExceptionMiddleware",
     "custom_anonymous.middleware.AuthenticationMiddleware",
     "admin_reorder.middleware.ModelAdminReorder",
-    "moviesapp.middleware.PutHandlerMiddleware",
+    "moviesapp.middleware.AjaxHandlerMiddleware",
     "moviesapp.middleware.language_middleware",
 ]
 if DEBUG:  # pragma: no cover

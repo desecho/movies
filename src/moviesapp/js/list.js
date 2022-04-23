@@ -44,17 +44,14 @@ function changeRating(id, rating, element) {
   }
 
   const url = urls.changeRating + id + '/';
-  const data = $.param({
-    rating: rating,
-  });
-  axios.put(url, data).then(success).catch(fail);
+  axios.put(url, {rating: rating}).then(success).catch(fail);
 }
 
 function applySettings(settings, reload = true) {
   const data = {
-    settings: JSON.stringify(settings),
+    settings: settings,
   };
-  axios.put(urls.saveSettings, $.param(data)).then(function() {
+  axios.put(urls.saveSettings, data).then(function() {
     if (reload) {
       location.reload();
     }
@@ -95,9 +92,9 @@ window.vm = new Vue({
         '4k': $('#4k_' + recordId).prop('checked'),
       };
 
-      const data = $.param({
-        options: JSON.stringify(options),
-      });
+      const data = {
+        options: options,
+      };
 
       axios.put(urls.record + recordId + '/options/', data).then(function() {}).catch(function() {
         vm.flashError(gettext('Error saving options'));
@@ -238,9 +235,9 @@ window.vm = new Vue({
 
       function uploadPhotoToWall(uploadUrl) {
         const url = urls.uploadPosterToWall + id + '/';
-        axios.post(url, $.param({
+        axios.post(url, {
           url: uploadUrl,
-        })).then(function(response) {
+        }).then(function(response) {
           const data = JSON.parse(response.data.data);
           saveWallPhoto(data);
         }).catch(function() {
@@ -283,9 +280,9 @@ window.vm = new Vue({
     },
     saveComment: function(id) {
       const comment = $('#comment' + id)[0].value;
-      const data = $.param({
+      const data = {
         comment: comment,
-      });
+      };
       axios.put(urls.saveComment + id + '/', data).then(function() {
         const commentAreaToggle = $('#comment_area_button' + id);
         if (comment) {

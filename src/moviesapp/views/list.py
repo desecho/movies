@@ -56,7 +56,7 @@ class RemoveRecordView(AjaxView):
 class SaveSettingsView(AjaxAnonymousView):
     def put(self, request):
         try:
-            session_settings = json.loads(request.PUT["settings"])
+            session_settings = request.PUT["settings"]
         except KeyError:
             return self.render_bad_request_response()
 
@@ -69,7 +69,7 @@ class SaveOptionsView(AjaxAnonymousView):
     def put(self, request, **kwargs):
         try:
             record_id = kwargs["id"]
-            options = json.loads(request.PUT["options"])
+            options = request.PUT["options"]
         except KeyError:
             return self.render_bad_request_response()
 
