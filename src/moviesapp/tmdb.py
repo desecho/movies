@@ -9,13 +9,13 @@ from .exceptions import MovieNotInDb
 from .models import get_poster_url
 
 
-def get_tmdb(lang=None):
+def _get_tmdb(lang):
     tmdbsimple.API_KEY = settings.TMDB_KEY
     tmdbsimple.LANGUAGE = lang
     return tmdbsimple
 
 
-def get_poster_from_tmdb(poster):
+def _get_poster_from_tmdb(poster):
     if poster:
         return poster[1:]
     return None
@@ -60,7 +60,7 @@ def get_movies_from_tmdb(query, search_type, options, user, lang):
             return [e for e in entries if e["media_type"] == "movie"]
 
         query = query.encode("utf-8")
-        tmdb = get_tmdb(lang)
+        tmdb = _get_tmdb(lang)
         search = tmdb.Search()
         if search_type == "movie":
             movies = search.movie(query=query)["results"]
@@ -92,7 +92,7 @@ def get_movies_from_tmdb(query, search_type, options, user, lang):
                 break
             if tmdb_id in user_movies_tmdb_ids:
                 continue
-            poster = get_poster_from_tmdb(movie["poster_path"])
+            poster = _get_poster_from_tmdb(movie["poster_path"])
             # Skip unpopular movies if this option is enabled.
             if search_type == "movie" and options["popularOnly"] and not is_popular_movie(movie):
                 continue
@@ -128,7 +128,7 @@ def get_tmdb_movie_data(tmdb_id):
         return trailers
 
     def get_movie_data(tmdb_id, lang):
-        tmdb = get_tmdb(lang=lang)
+        tmdb = _get_tmdb(lang)
         return tmdb.Movies(tmdb_id)
 
     movie_data_en = get_movie_data(tmdb_id, "en")
@@ -145,8 +145,8 @@ def get_tmdb_movie_data(tmdb_id):
             "imdb_id": imdb_id,
             "release_date": get_release_date(movie_info_en["release_date"]),
             "title_original": movie_info_en["original_title"],
-            "poster_ru": get_poster_from_tmdb(movie_info_ru["poster_path"]),
-            "poster_en": get_poster_from_tmdb(movie_info_en["poster_path"]),
+            "poster_ru": _get_poster_from_tmdb(movie_info_ru["poster_path"]),
+            "poster_en": _get_poster_from_tmdb(movie_info_en["poster_path"]),
             "homepage": movie_info_en["homepage"],
             "trailers_en": trailers_en,
             "trailers_ru": trailers_ru,
