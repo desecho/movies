@@ -7,10 +7,8 @@ from moviesapp.models import Action, List, Movie
 from ..base import BaseTestLoginCase
 
 
-class AddMoviesTestCase(BaseTestLoginCase):
+class ListTestCase(BaseTestLoginCase):
     """
-    Test Add Movies.
-
     Dumpdata commands:
     manage dumpdata moviesapp.Movie --indent 2 > moviesapp/fixtures/movies.json
     manage dumpdata moviesapp.Record --indent 2 > moviesapp/fixtures/records.json
@@ -47,14 +45,21 @@ class AddMoviesTestCase(BaseTestLoginCase):
         title = titles[0].span.attrs["title"]
         self.assertEqual(title, "The Matrix")
 
+
+class AddToListTestCase(BaseTestLoginCase):
     def test_add_to_list(self):
         LIST_ID = List.WATCHED
         movie_id = Movie.objects.get(title="The Avengers").pk
         url = reverse("add_to_list", args=(movie_id,))
         response = self.client.post_ajax(url, {"listId": LIST_ID})
-        response = response.json()
-        self.assertEqual(response["status"], "success")
+        self.assertEqual(response.status_code, HTTPStatus.OK)
         self.assertTrue(self.user.records.filter(list_id=LIST_ID, movie_id=movie_id).exists())
+
+    def test_add_to_list_fails(self):
+        movie_id = Movie.objects.get(title="The Avengers").pk
+        url = reverse("add_to_list", args=(movie_id,))
+        response = self.client.post_ajax(url)
+        self.assertEqual(response.status_code, HTTPStatus.BAD_REQUEST)
 
 
 class ChangeRatingTestCase(BaseTestLoginCase):
@@ -62,22 +67,37 @@ class ChangeRatingTestCase(BaseTestLoginCase):
         record_id = 1
         rating = 3
         url = reverse("change_rating", args=(record_id,))
-        response = self.client.put_ajax(url, {"rating": rating}).json()
-        self.assertEqual(response["status"], "success")
+        response = self.client.put_ajax(url, {"rating": rating})
+        self.assertEqual(response.status_code, HTTPStatus.OK)
         self.assertTrue(self.user.records.filter(pk=record_id, rating=rating).exists())
         # Rating not changed
-        response = self.client.put_ajax(url, {"rating": rating}).json()
-        self.assertEqual(response["status"], "success")
+        response = self.client.put_ajax(url, {"rating": rating})
+        self.assertEqual(response.status_code, HTTPStatus.OK)
 
     def test_change_rating_action(self):
         record_id = 3
         rating = 3
         url = reverse("change_rating", args=(record_id,))
-        response = self.client.put_ajax(url, {"rating": rating}).json()
-        self.assertEqual(response["status"], "success")
+        response = self.client.put_ajax(url, {"rating": rating})
+        self.assertEqual(response.status_code, HTTPStatus.OK)
         self.assertTrue(self.user.actions.filter(action_id=Action.ADDED_RATING, rating=rating).exists())
 
     def test_change_rating_fails(self):
         url = reverse("change_rating", args=(1,))
-        response = self.client.put_ajax(url, {"something": 3})
+        response = self.client.put_ajax(url)
         self.assertEqual(response.status_code, HTTPStatus.BAD_REQUEST)
+
+
+class RemoveRecordTestCase(BaseTestLoginCase):
+    def test_remove_record(self):
+        record_id = 1
+        url = reverse("remove_record", args=(record_id,))
+        response = self.client.delete(url)
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+        self.assertFalse(self.user.records.filter(pk=record_id).exists())
+
+    def test_remove_record_does_not_exist(self):
+        record_id = 99
+        url = reverse("remove_record", args=(record_id,))
+        response = self.client.delete(url)
+        self.assertEqual(response.status_code, HTTPStatus.NOT_FOUND)
