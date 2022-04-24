@@ -53,3 +53,13 @@ class AddMoviesTestCase(BaseTestLoginCase):
         response = response.json()
         self.assertEqual(response["status"], "success")
         self.assertTrue(self.user.records.filter(list_id=LIST_ID, movie_id=movie_id).exists())
+
+
+class ChangeRatingTestCase(BaseTestLoginCase):
+    def test_change_rating(self):
+        record_id = 1
+        rating = 3
+        url = reverse("change_rating", args=(record_id,))
+        response = self.client.put_ajax(url, {"rating": rating}).json()
+        self.assertEqual(response["status"], "success")
+        self.assertTrue(self.user.records.filter(pk=record_id, rating=rating).exists())
