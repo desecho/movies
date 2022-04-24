@@ -75,21 +75,27 @@ class SaveSettingsView(AjaxAnonymousView):
 class SaveOptionsView(AjaxView):
     def put(self, request, record_id):
         try:
-            options = request.PUT["options"]
-        except KeyError:
-            return self.render_bad_request_response()
-
-        try:
             record = request.user.get_record(record_id)
         except Record.DoesNotExist as e:
             raise Http404 from e
 
-        record.watched_original = options["original"]
-        record.watched_extended = options["extended"]
-        record.watched_in_theatre = options["theatre"]
-        record.watched_in_4k = options["4k"]
-        record.watched_in_hd = options["hd"]
-        record.watched_in_full_hd = options["fullHd"]
+        try:
+            options = request.PUT["options"]
+            watched_original = options["original"]
+            watched_extended = options["extended"]
+            watched_in_theatre = options["theatre"]
+            watched_in_4k = options["4k"]
+            watched_in_hd = options["hd"]
+            watched_in_full_hd = options["fullHd"]
+        except KeyError:
+            return self.render_bad_request_response()
+
+        record.watched_original = watched_original
+        record.watched_extended = watched_extended
+        record.watched_in_theatre = watched_in_theatre
+        record.watched_in_4k = watched_in_4k
+        record.watched_in_hd = watched_in_hd
+        record.watched_in_full_hd = watched_in_full_hd
         record.save()
         return self.success()
 
