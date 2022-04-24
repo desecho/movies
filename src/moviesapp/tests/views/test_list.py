@@ -82,10 +82,15 @@ class ChangeRatingTestCase(BaseTestLoginCase):
         self.assertEqual(response.status_code, HTTPStatus.OK)
         self.assertTrue(self.user.actions.filter(action_id=Action.ADDED_RATING, rating=rating).exists())
 
-    def test_change_rating_fails(self):
+    def test_change_rating_bad_request(self):
         url = reverse("change_rating", args=(1,))
         response = self.client.put_ajax(url)
         self.assertEqual(response.status_code, HTTPStatus.BAD_REQUEST)
+
+    def test_change_rating_record_not_found(self):
+        url = reverse("change_rating", args=(99,))
+        response = self.client.put_ajax(url, {"rating": 3})
+        self.assertEqual(response.status_code, HTTPStatus.NOT_FOUND)
 
 
 class RemoveRecordTestCase(BaseTestLoginCase):

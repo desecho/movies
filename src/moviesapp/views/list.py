@@ -17,7 +17,11 @@ class ChangeRatingView(AjaxView):
         except (KeyError, ValueError):
             return self.render_bad_request_response()
 
-        record = request.user.get_record(record_id)
+        try:
+            record = request.user.get_record(record_id)
+        except Record.DoesNotExist as e:
+            raise Http404 from e
+
         if record.rating != rating:
             if not record.rating:
                 ActionRecord(
