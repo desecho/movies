@@ -263,8 +263,9 @@ class Record(models.Model):
 
     def save(self, *args, **kwargs):
         if self.watched_in_4k:
-            self.watched_in_hd = True
             self.watched_in_full_hd = True
+        if self.watched_in_full_hd:
+            self.watched_in_hd = True
         super().save(*args, **kwargs)
 
 
