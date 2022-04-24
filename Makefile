@@ -214,24 +214,36 @@ build:
 	yarn build --watch
 
 .PHONY: format
-## Format code except for json files
+## Format python code
 format:
 	${SOURCE_CMDS} && \
 	autoflake --remove-all-unused-imports --in-place -r src && \
 	isort src && \
 	black .
-	yarn run csscomb src/${APP}/styles/*
-	yarn run eslint ./*.js src/${APP}/js/* --fix
-	shfmt -l -w .
 
 .PHONY: format-json
 ## Format json files
 format-json:
 	scripts/jsonlint.sh format
 
+.PHONY: format-css
+## Format css files
+format-css:
+	yarn run csscomb src/${APP}/styles/*
+
+.PHONY: format-js
+## Format js files
+format-js:
+	yarn run eslint ./*.js src/${APP}/js/* --fix
+
+.PHONY: format-sh
+## Format sh files
+format-sh:
+	shfmt -l -w .
+
 .PHONY: format-all
 ## Format code
-format-all: format format-json
+format-all: format format-json format-css format-js format-sh
 
 .PHONY: ngrok
 ## Run ngrok
