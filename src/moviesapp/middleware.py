@@ -9,6 +9,7 @@ class AjaxHandlerMiddleware:
         self.get_response = get_response
 
     def __call__(self, request):
+        request.PUT = {}
         if request.content_type == "application/json":
             method = request.method
             body = request.body
