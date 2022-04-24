@@ -213,3 +213,31 @@ class SaveOptionsTestCase(BaseTestLoginCase):
         url = reverse("save_options", args=(99,))
         response = self.client.put_ajax(url, {"options": {}})
         self.assertEqual(response.status_code, HTTPStatus.NOT_FOUND)
+
+
+class SaveCommentTestCase(BaseTestLoginCase):
+    def test_save_comment(self):
+        record_id = 1
+        comment = "comment"
+        url = reverse("save_comment", args=(record_id,))
+        response = self.client.put_ajax(url, {"comment": comment})
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+        self.assertTrue(self.user.records.filter(pk=record_id, comment=comment).exists())
+
+        # Comment unchanged
+        response = self.client.put_ajax(url, {"comment": comment})
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+
+        # Change comment again
+        response = self.client.put_ajax(url, {"comment": "comment2"})
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+
+    def test_save_comment_record_not_found(self):
+        url = reverse("save_comment", args=(99,))
+        response = self.client.put_ajax(url)
+        self.assertEqual(response.status_code, HTTPStatus.NOT_FOUND)
+
+    def test_save_comment_bad_request(self):
+        url = reverse("save_comment", args=(1,))
+        response = self.client.put_ajax(url)
+        self.assertEqual(response.status_code, HTTPStatus.BAD_REQUEST)
