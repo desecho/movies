@@ -102,7 +102,11 @@ class SaveOptionsView(AjaxView):
 
 class SaveCommentView(AjaxView):
     def put(self, request, record_id):
-        record = request.user.get_record(record_id)
+        try:
+            record = request.user.get_record(record_id)
+        except Record.DoesNotExist as e:
+            raise Http404 from e
+
         try:
             comment = request.PUT["comment"]
         except KeyError:
