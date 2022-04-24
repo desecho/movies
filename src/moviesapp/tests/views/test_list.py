@@ -116,3 +116,23 @@ class RemoveRecordTestCase(BaseTestLoginCase):
         url = reverse("remove_record", args=(record_id,))
         response = self.client.delete(url)
         self.assertEqual(response.status_code, HTTPStatus.NOT_FOUND)
+
+
+class SaveSettingsTestCase(BaseTestLoginCase):
+    def setUp(self):
+        super().setUp()
+        self.url = reverse("save_settings")
+
+    def test_save_settings(self):
+        mode = "minimal"
+        sort = "rating"
+        settings = {"mode": mode, "sort": sort, "recommendation": True}
+        response = self.client.put_ajax(self.url, {"settings": settings})
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+        self.assertTrue(self.client.session.get("recommendation"))
+        self.assertEqual(self.client.session.get("mode"), mode)
+        self.assertEqual(self.client.session.get("sort"), sort)
+
+    def test_save_settings_bad_request(self):
+        response = self.client.put_ajax(self.url)
+        self.assertEqual(response.status_code, HTTPStatus.BAD_REQUEST)
