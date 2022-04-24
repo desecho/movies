@@ -79,7 +79,11 @@ class SaveOptionsView(AjaxView):
         except KeyError:
             return self.render_bad_request_response()
 
-        record = request.user.get_record(record_id)
+        try:
+            record = request.user.get_record(record_id)
+        except Record.DoesNotExist as e:
+            raise Http404 from e
+
         record.watched_original = options["original"]
         record.watched_extended = options["extended"]
         record.watched_in_theatre = options["theatre"]
