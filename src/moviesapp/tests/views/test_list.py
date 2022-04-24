@@ -2,7 +2,7 @@ from http import HTTPStatus
 
 from django.urls import reverse
 
-from moviesapp.models import Action, List, Movie
+from moviesapp.models import Action, List, Movie, Record
 
 from ..base import BaseTestLoginCase
 
@@ -136,3 +136,42 @@ class SaveSettingsTestCase(BaseTestLoginCase):
     def test_save_settings_bad_request(self):
         response = self.client.put_ajax(self.url)
         self.assertEqual(response.status_code, HTTPStatus.BAD_REQUEST)
+
+
+class SaveOptionsTestCase(BaseTestLoginCase):
+    def setUp(self):
+        super().setUp()
+
+    def test_save_options(self):
+        record_id = 1
+        url = reverse("save_options", args=(record_id,))
+        options = {
+            "original": True,
+            "extended": True,
+            "theatre": True,
+            "4k": True,
+            "hd": True,
+            "fullHd": True,
+        }
+
+        response = self.client.put_ajax(url, {"options": options})
+
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+
+        record = Record.objects.get(pk=record_id)
+        self.assertTrue(record.watched_original)
+        self.assertTrue(record.watched_extended)
+        self.assertTrue(record.watched_in_theatre)
+        self.assertTrue(record.watched_in_hd)
+        self.assertTrue(record.watched_in_full_hd)
+        self.assertTrue(record.watched_in_4k)
+
+    def test_save_options_bad_request(self):
+        url = reverse("save_options", args=(1,))
+        response = self.client.put_ajax(url)
+        self.assertEqual(response.status_code, HTTPStatus.BAD_REQUEST)
+
+    def test_save_options_record_does_not_exist(self):
+        url = reverse("save_options", args=(99,))
+        response = self.client.put_ajax(url, {"options": {}})
+        self.assertEqual(response.status_code, HTTPStatus.NOT_FOUND)
