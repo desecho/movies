@@ -1,6 +1,8 @@
+from http import HTTPStatus
+
 from django.urls import reverse
 
-from moviesapp.models import List, Movie
+from moviesapp.models import Action, List, Movie
 
 from ..base import BaseTestLoginCase
 
@@ -63,3 +65,19 @@ class ChangeRatingTestCase(BaseTestLoginCase):
         response = self.client.put_ajax(url, {"rating": rating}).json()
         self.assertEqual(response["status"], "success")
         self.assertTrue(self.user.records.filter(pk=record_id, rating=rating).exists())
+        # Rating not changed
+        response = self.client.put_ajax(url, {"rating": rating}).json()
+        self.assertEqual(response["status"], "success")
+
+    def test_change_rating_action(self):
+        record_id = 3
+        rating = 3
+        url = reverse("change_rating", args=(record_id,))
+        response = self.client.put_ajax(url, {"rating": rating}).json()
+        self.assertEqual(response["status"], "success")
+        self.assertTrue(self.user.actions.filter(action_id=Action.ADDED_RATING, rating=rating).exists())
+
+    def test_change_rating_fails(self):
+        url = reverse("change_rating", args=(1,))
+        response = self.client.put_ajax(url, {"something": 3})
+        self.assertEqual(response.status_code, HTTPStatus.BAD_REQUEST)
