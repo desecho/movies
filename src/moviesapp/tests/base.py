@@ -8,11 +8,40 @@ from django.conf import settings
 from django.core.serializers.json import DjangoJSONEncoder
 from django.forms.models import model_to_dict
 from django.test import TestCase
+from django.test.client import Client
 
 from moviesapp.models import ActionRecord, User
 
+CONTENT_TYPE = "application/json"
+
+
+class BaseClient(Client):
+    def post_ajax(
+        self,
+        path,
+        data=None,
+        content_type=CONTENT_TYPE,
+        follow=False,
+        secure=False,
+        **extra,
+    ):
+        return self.post(path, data, content_type, follow, secure, **extra)
+
+    def put_ajax(
+        self,
+        path,
+        data="",
+        content_type=CONTENT_TYPE,
+        follow=False,
+        secure=False,
+        **extra,
+    ):
+        return self.put(path, data, content_type, follow, secure, **extra)
+
 
 class BaseTestCase(TestCase):
+    client_class = BaseClient
+
     fixtures = [
         "lists.json",
         "actions.json",

@@ -49,7 +49,7 @@ class AddMoviesTestCase(BaseTestLoginCase):
         LIST_ID = List.WATCHED
         movie_id = Movie.objects.get(title="The Avengers").pk
         url = reverse("add_to_list", args=(movie_id,))
-        response = self.client.post(url, {"listId": LIST_ID})
+        response = self.client.post_ajax(url, {"listId": LIST_ID})
         response = response.json()
         self.assertEqual(response["status"], "success")
         self.assertTrue(self.user.records.filter(list_id=LIST_ID, movie_id=movie_id).exists())
