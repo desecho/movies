@@ -11,9 +11,7 @@ class AjaxHandlerMiddleware:
     def __call__(self, request):
         request.PUT = {}
         if request.content_type == "application/json":
-            method = request.method
-            body = request.body
-            setattr(request, method, json.loads(body))
+            setattr(request, request.method, json.loads(request.body))
         return self.get_response(request)
 
 
