@@ -28,11 +28,7 @@ class UploadPosterToWallView(VkAjaxView):
             data = MultipartEncoder(fields={"photo": (f.name, f, "image/jpg")})
         return requests.post(url, data=data, headers={"Content-Type": data.content_type}).text
 
-    def post(self, request, **kwargs):
-        try:
-            record_id = int(kwargs["id"])
-        except ValueError:
-            return self.render_bad_request_response()
+    def post(self, request, record_id):
         try:
             url = request.POST["url"]
         except KeyError:

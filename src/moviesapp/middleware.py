@@ -13,12 +13,8 @@ class AjaxHandlerMiddleware:
         if request.content_type == "application/json":
             method = request.method
             body = request.body
-            if method == "PUT":
-                request.PUT = json.loads(body)
-            if method == "POST":
-                request.POST = json.loads(body)
-        response = self.get_response(request)
-        return response
+            setattr(request, method, json.loads(body))
+        return self.get_response(request)
 
 
 def language_middleware(get_response):

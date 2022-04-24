@@ -55,7 +55,7 @@ urlpatterns = [
     #
     # Vk
     path_404("upload-poster-to-wall/", "upload_poster_to_wall"),
-    path("upload-poster-to-wall/<int:id>/", UploadPosterToWallView.as_view(), name="upload_poster_to_wall"),
+    path("upload-poster-to-wall/<int:record_id>/", UploadPosterToWallView.as_view(), name="upload_poster_to_wall"),
     #
     # Gallery
     path("gallery/<list:list_name>/", GalleryView.as_view(), name="gallery"),
@@ -72,16 +72,16 @@ urlpatterns = [
     path("remove-record/<int:record_id>/", RemoveRecordView.as_view(), name="remove_record"),
     #
     path_404("record/", "record"),
-    path("record/<int:id>/options/", SaveOptionsView.as_view(), name="save_options"),
+    path("record/<int:record_id>/options/", SaveOptionsView.as_view(), name="save_options"),
     #
     path_404("add-to-list/", "add_to_list"),
-    path("add-to-list/<int:id>/", AddToListView.as_view(), name="add_to_list"),
+    path("add-to-list/<int:movie_id>/", AddToListView.as_view(), name="add_to_list"),
     #
     path_404("change-rating/", "change_rating"),
-    path("change-rating/<int:id>/", ChangeRatingView.as_view(), name="change_rating"),
+    path("change-rating/<int:record_id>/", ChangeRatingView.as_view(), name="change_rating"),
     #
     path_404("save-comment/", "save_comment"),
-    path("save-comment/<int:id>/", SaveCommentView.as_view(), name="save_comment"),
+    path("save-comment/<int:record_id>/", SaveCommentView.as_view(), name="save_comment"),
     #
     # Social
     path("feed/<feed:feed_name>/", FeedView.as_view(), name="feed"),

@@ -11,14 +11,13 @@ from .utils import add_movie_to_list, get_records, paginate, sort_by_rating
 
 
 class ChangeRatingView(AjaxView):
-    def put(self, request, **kwargs):
+    def put(self, request, record_id):
         try:
-            id_ = int(kwargs["id"])
             rating = int(request.PUT["rating"])
         except (KeyError, ValueError):
             return self.render_bad_request_response()
 
-        record = request.user.get_record(id_)
+        record = request.user.get_record(record_id)
         if record.rating != rating:
             if not record.rating:
                 ActionRecord(
@@ -30,9 +29,8 @@ class ChangeRatingView(AjaxView):
 
 
 class AddToListView(AjaxView):
-    def post(self, request, **kwargs):
+    def post(self, request, movie_id):
         try:
-            movie_id = int(kwargs["id"])
             list_id = int(request.POST["listId"])
         except (KeyError, ValueError):
             return self.render_bad_request_response()
@@ -62,9 +60,8 @@ class SaveSettingsView(AjaxAnonymousView):
 
 
 class SaveOptionsView(AjaxView):
-    def put(self, request, **kwargs):
+    def put(self, request, record_id):
         try:
-            record_id = kwargs["id"]
             options = request.PUT["options"]
         except KeyError:
             return self.render_bad_request_response()
@@ -81,11 +78,7 @@ class SaveOptionsView(AjaxView):
 
 
 class SaveCommentView(AjaxView):
-    def put(self, request, **kwargs):
-        try:
-            record_id = int(kwargs["id"])
-        except (KeyError, ValueError):
-            return self.render_bad_request_response()
+    def put(self, request, record_id):
         record = request.user.get_record(record_id)
         try:
             comment = request.PUT["comment"]
