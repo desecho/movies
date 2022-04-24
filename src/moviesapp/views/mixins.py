@@ -36,6 +36,8 @@ class TemplateAnonymousView(TemplateViewOriginal):
     def check_if_allowed(self, username=None):
         if username is None and self.request.user.is_anonymous:
             raise Http404
+        if self.request.user.username == username:
+            return
         self.anothers_account = get_anothers_account(username)
         if self.anothers_account:
             if User.objects.get(username=username) not in self.request.user.get_users():
