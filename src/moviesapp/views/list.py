@@ -3,6 +3,7 @@ import json
 from django.conf import settings
 from django.db.models import Q
 from django.http import Http404
+from django.shortcuts import get_object_or_404
 
 from moviesapp.models import Action, ActionRecord, List, Movie, Record
 
@@ -17,10 +18,7 @@ class ChangeRatingView(AjaxView):
         except (KeyError, ValueError):
             return self.render_bad_request_response()
 
-        try:
-            record = request.user.get_record(record_id)
-        except Record.DoesNotExist as e:
-            raise Http404 from e
+        record = get_object_or_404(Record, user=request.user, pk=record_id)
 
         if record.rating != rating:
             if not record.rating:
@@ -42,21 +40,15 @@ class AddToListView(AjaxView):
         if not List.is_valid_id(list_id):
             raise Http404
 
-        try:
-            Movie.objects.get(pk=movie_id)
-        except Movie.DoesNotExist as e:
-            raise Http404 from e
-
+        get_object_or_404(Movie, pk=movie_id)
         add_movie_to_list(movie_id, list_id, request.user)
         return self.success()
 
 
 class RemoveRecordView(AjaxView):
     def delete(self, request, record_id):
-        try:
-            request.user.get_record(record_id).delete()
-        except Record.DoesNotExist as e:
-            raise Http404 from e
+        record = get_object_or_404(Record, user=request.user, pk=record_id)
+        record.delete()
         return self.success()
 
 
@@ -74,10 +66,7 @@ class SaveSettingsView(AjaxAnonymousView):
 
 class SaveOptionsView(AjaxView):
     def put(self, request, record_id):
-        try:
-            record = request.user.get_record(record_id)
-        except Record.DoesNotExist as e:
-            raise Http404 from e
+        record = get_object_or_404(Record, user=request.user, pk=record_id)
 
         try:
             options = request.PUT["options"]
@@ -102,10 +91,7 @@ class SaveOptionsView(AjaxView):
 
 class SaveCommentView(AjaxView):
     def put(self, request, record_id):
-        try:
-            record = request.user.get_record(record_id)
-        except Record.DoesNotExist as e:
-            raise Http404 from e
+        record = get_object_or_404(Record, user=request.user, pk=record_id)
 
         try:
             comment = request.PUT["comment"]
