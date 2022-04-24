@@ -4,7 +4,7 @@ from django.conf import settings
 from django.db.models import Q
 from django.http import Http404
 
-from moviesapp.models import Action, ActionRecord, List, Record
+from moviesapp.models import Action, ActionRecord, List, Movie, Record
 
 from .mixins import AjaxAnonymousView, AjaxView, TemplateAnonymousView, TemplateView
 from .utils import add_movie_to_list, get_records, paginate, sort_by_rating
@@ -38,6 +38,15 @@ class AddToListView(AjaxView):
             list_id = int(request.POST["listId"])
         except (KeyError, ValueError):
             return self.render_bad_request_response()
+
+        if not List.is_valid_id(list_id):
+            raise Http404
+
+        try:
+            Movie.objects.get(pk=movie_id)
+        except Movie.DoesNotExist as e:
+            raise Http404 from e
+
         add_movie_to_list(movie_id, list_id, request.user)
         return self.success()
 

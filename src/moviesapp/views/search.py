@@ -1,9 +1,10 @@
 import json
 
+from django.http import Http404
 from sentry_sdk import capture_exception
 
 from moviesapp.exceptions import MovieNotInDb, NotAvailableSearchType
-from moviesapp.models import Movie
+from moviesapp.models import List, Movie
 from moviesapp.tmdb import get_movies_from_tmdb
 from moviesapp.utils import add_movie_to_db
 
@@ -65,6 +66,9 @@ class AddToListFromDbView(AjaxView):
             list_id = int(POST["listId"])
         except (KeyError, ValueError):
             return self.render_bad_request_response()
+
+        if not List.is_valid_id(list_id):
+            raise Http404
 
         movie_id = self._get_movie_id(tmdb_id)
         result = self._add_to_list_from_db(movie_id, tmdb_id, list_id, request.user)

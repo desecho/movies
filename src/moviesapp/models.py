@@ -163,6 +163,10 @@ class List(models.Model):
     def __str__(self):
         return str(self.name)
 
+    @classmethod
+    def is_valid_id(self, list_id):
+        return list_id in [self.WATCHED, self.TO_WATCH]
+
 
 class Movie(models.Model):
     title = models.CharField(max_length=255)

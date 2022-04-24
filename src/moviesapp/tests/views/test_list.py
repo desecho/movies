@@ -55,11 +55,21 @@ class AddToListTestCase(BaseTestLoginCase):
         self.assertEqual(response.status_code, HTTPStatus.OK)
         self.assertTrue(self.user.records.filter(list_id=LIST_ID, movie_id=movie_id).exists())
 
-    def test_add_to_list_fails(self):
+    def test_add_to_list_bad_request(self):
         movie_id = Movie.objects.get(title="The Avengers").pk
         url = reverse("add_to_list", args=(movie_id,))
         response = self.client.post_ajax(url)
         self.assertEqual(response.status_code, HTTPStatus.BAD_REQUEST)
+
+    def test_add_to_list_movie_does_not_exist(self):
+        url = reverse("add_to_list", args=(99,))
+        response = self.client.post_ajax(url, {"listId": List.WATCHED})
+        self.assertEqual(response.status_code, HTTPStatus.NOT_FOUND)
+
+    def test_add_to_list_wrong_list(self):
+        url = reverse("add_to_list", args=(1,))
+        response = self.client.post_ajax(url, {"listId": 9})
+        self.assertEqual(response.status_code, HTTPStatus.NOT_FOUND)
 
 
 class ChangeRatingTestCase(BaseTestLoginCase):
