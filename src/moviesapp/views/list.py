@@ -133,7 +133,7 @@ class ListView(TemplateAnonymousView):
 
     def _get_comments_and_ratings(self, record_ids_and_movies, user):
         movies, record_ids_and_movies_dict = self._get_record_movie_data(record_ids_and_movies)
-        records = Record.objects.filter(list_id=1, movie_id__in=movies)
+        records = Record.objects.filter(list_id=List.WATCHED, movie_id__in=movies)
         friends = user.get_friends()
         if friends is None:
             records = []
