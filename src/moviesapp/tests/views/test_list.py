@@ -166,6 +166,45 @@ class SaveOptionsTestCase(BaseTestLoginCase):
         self.assertTrue(record.watched_in_full_hd)
         self.assertTrue(record.watched_in_4k)
 
+    def test_save_options_auto_set_hd_to_true_when_full_hd_is_true(self):
+        record_id = 1
+        url = reverse("save_options", args=(record_id,))
+        options = {
+            "original": False,
+            "extended": False,
+            "theatre": False,
+            "4k": False,
+            "hd": False,
+            "fullHd": True,
+        }
+
+        response = self.client.put_ajax(url, {"options": options})
+
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+
+        record = Record.objects.get(pk=record_id)
+        self.assertTrue(record.watched_in_hd)
+
+    def test_save_options_auto_set_hd_and_full_hd_to_true_when_4k_is_true(self):
+        record_id = 1
+        url = reverse("save_options", args=(record_id,))
+        options = {
+            "original": False,
+            "extended": False,
+            "theatre": False,
+            "4k": True,
+            "hd": False,
+            "fullHd": False,
+        }
+
+        response = self.client.put_ajax(url, {"options": options})
+
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+
+        record = Record.objects.get(pk=record_id)
+        self.assertTrue(record.watched_in_full_hd)
+        self.assertTrue(record.watched_in_hd)
+
     def test_save_options_bad_request(self):
         url = reverse("save_options", args=(1,))
         response = self.client.put_ajax(url)
