@@ -49,7 +49,7 @@ def add_movie_to_db(tmdb_id, update=False):
     def save_movie():
         movie = Movie(**movie_data)
         movie.save()
-        return movie.id
+        return movie.pk
 
     def update_movie():
         movie = Movie.objects.filter(tmdb_id=tmdb_id)
