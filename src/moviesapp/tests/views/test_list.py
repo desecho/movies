@@ -9,6 +9,8 @@ from ..base import BaseTestLoginCase
 
 class ListTestCase(BaseTestLoginCase):
     """
+    Test case for List views.
+
     Dumpdata commands:
     manage dumpdata moviesapp.Movie --indent 2 > moviesapp/fixtures/movies.json
     manage dumpdata moviesapp.Record --indent 2 > moviesapp/fixtures/records.json
@@ -139,9 +141,6 @@ class SaveSettingsTestCase(BaseTestLoginCase):
 
 
 class SaveOptionsTestCase(BaseTestLoginCase):
-    def setUp(self):
-        super().setUp()
-
     def test_save_options(self):
         record_id = 1
         url = reverse("save_options", args=(record_id,))

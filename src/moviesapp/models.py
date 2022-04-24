@@ -164,8 +164,8 @@ class List(models.Model):
         return str(self.name)
 
     @classmethod
-    def is_valid_id(self, list_id):
-        return list_id in [self.WATCHED, self.TO_WATCH]
+    def is_valid_id(cls, list_id):
+        return list_id in [cls.WATCHED, cls.TO_WATCH]
 
 
 class Movie(models.Model):
