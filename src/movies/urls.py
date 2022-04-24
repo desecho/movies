@@ -69,7 +69,7 @@ urlpatterns = [
     path("save-settings/", SaveSettingsView.as_view(), name="save_settings"),
     #
     path_404("remove-record/", "remove_record"),
-    path("remove-record/<int:id>/", RemoveRecordView.as_view(), name="remove_record"),
+    path("remove-record/<int:record_id>/", RemoveRecordView.as_view(), name="remove_record"),
     #
     path_404("record/", "record"),
     path("record/<int:id>/options/", SaveOptionsView.as_view(), name="save_options"),

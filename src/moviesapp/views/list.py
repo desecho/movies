@@ -41,11 +41,7 @@ class AddToListView(AjaxView):
 
 
 class RemoveRecordView(AjaxView):
-    def delete(self, request, **kwargs):
-        try:
-            record_id = int(kwargs["id"])
-        except (KeyError, ValueError):
-            return self.render_bad_request_response()
+    def delete(self, request, record_id):
         try:
             request.user.get_record(record_id).delete()
         except Record.DoesNotExist as e:
