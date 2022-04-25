@@ -33,18 +33,17 @@ def load_omdb_movie_data(imdb_id):
     raise OmdbError(movie_data["Error"], imdb_id)
 
 
-def join_dicts(dict1, dict2):
-    result = dict1.copy()
-    result.update(dict2)
-    return result
-
-
 def add_movie_to_db(tmdb_id, update=False):
     """
     Return movie id.
 
     If update is True, return bool (updated or not).
     """
+
+    def join_dicts(dict1, dict2):
+        result = dict1.copy()
+        result.update(dict2)
+        return result
 
     def save_movie():
         movie = Movie(**movie_data)
