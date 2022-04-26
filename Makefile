@@ -12,8 +12,10 @@ PYTHON := python3.10
 #------------------------------------
 # Installation
 #------------------------------------
+BIN_DIR := /usr/local/bin
+
 SHFMT_VERSION := 3.4.3
-SHFMT_PATH := /usr/local/bin/shfmt
+SHFMT_PATH := ${BIN_DIR}/shfmt
 
 .PHONY: install-shfmt
 ## Install shfmt | Installation
@@ -22,7 +24,7 @@ install-shfmt:
 	sudo chmod +x ${SHFMT_PATH}
 
 HADOLINT_VERSION := 2.10.0
-HADOLINT_PATH := /usr/local/bin/hadolint
+HADOLINT_PATH := ${BIN_DIR}/hadolint
 
 .PHONY: install-hadolint
 ## Install hadolint
