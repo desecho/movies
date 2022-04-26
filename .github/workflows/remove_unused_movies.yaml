@@ -1,0 +1,27 @@
+---
+name: Remove Unused Movies
+on:
+  schedule:
+    - cron: "0 0 1 * *"  # Every Month at Midnight
+  workflow_dispatch:
+
+jobs:
+  remove_unused_movies:
+    name: Remove unused movies
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install kubectl
+        uses: azure/setup-kubectl@v2.1
+
+      - name: Configure kubectl
+        run: |
+          mkdir ~/.kube
+          echo $KUBECONFIG > ~/.kube/config
+        env:
+          KUBECONFIG: ${{ secrets.KUBECONFIG }}  # Done as a variable because doesn't work in place.
+
+      - name: Remove unused movies
+        run: make prod-manage remove_unused_movies

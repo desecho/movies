@@ -1,0 +1,27 @@
+---
+name: Update Movie Data
+on:
+  schedule:
+    - cron: "0 0 3 * *"  # Every Month at Midnight
+  workflow_dispatch:
+
+jobs:
+  update_movie_data:
+    name: Update movie data
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install kubectl
+        uses: azure/setup-kubectl@v2.1
+
+      - name: Configure kubectl
+        run: |
+          mkdir ~/.kube
+          echo $KUBECONFIG > ~/.kube/config
+        env:
+          KUBECONFIG: ${{ secrets.KUBECONFIG }}  # Done as a variable because doesn't work in place.
+
+      - name: Update movie data
+        run: make prod-manage update_movie_data

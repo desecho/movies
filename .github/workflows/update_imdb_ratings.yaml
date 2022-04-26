@@ -1,0 +1,27 @@
+---
+name: Update IMDb Ratings
+on:
+  schedule:
+    - cron: "0 0 2 * *"  # Every Month at Midnight
+  workflow_dispatch:
+
+jobs:
+  update_imdb_ratings:
+    name: Update IMDb ratings
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install kubectl
+        uses: azure/setup-kubectl@v2.1
+
+      - name: Configure kubectl
+        run: |
+          mkdir ~/.kube
+          echo $KUBECONFIG > ~/.kube/config
+        env:
+          KUBECONFIG: ${{ secrets.KUBECONFIG }}  # Done as a variable because doesn't work in place.
+
+      - name: Update IMDb ratings
+        run: make prod-manage update_imdb_ratings

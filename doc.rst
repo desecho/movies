@@ -19,7 +19,9 @@ Priority:
 Cron jobs
 ------------
 
-- Remove unused movies
-- Update vk avatars
-- Update movie data
-- Update IMDB ratings
+Cronjobs are run with GitHub Actions.
+
+- `Remove unused movies` command runs every month
+- `Update movie data` command runs every month
+- `Update IMDb ratings` command runs every month
+- Backup runs daily

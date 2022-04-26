@@ -65,10 +65,6 @@ The following GitHub Actions are used:
 * `GitHub Action for DigitalOcean - doctl`_
 * `Kubectl tool installer`_
 
-Backup
-----------------------------
-Backup runs daily with GitHub Actions.
-
 Used APIs
 --------------
 * TMDB_
