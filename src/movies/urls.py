@@ -1,11 +1,13 @@
 """URL Configuration."""
 
+from typing import List, Union
+
 import django
 from django.conf import settings
 from django.conf.urls import include
 from django.contrib import admin
 from django.contrib.auth.views import LoginView
-from django.urls import path, register_converter
+from django.urls import URLPattern, URLResolver, path, register_converter
 from django.views.i18n import JavaScriptCatalog
 
 from moviesapp.converters import FeedConverter, ListConverter
@@ -29,8 +31,13 @@ admin.autodiscover()
 register_converter(ListConverter, "list")
 register_converter(FeedConverter, "feed")
 
+URL = Union[URLPattern, URLResolver]
+URLList = List[URL]
 
-def path_404(url_path, name):
+urlpatterns: URLList = []
+
+
+def path_404(url_path: str, name: str) -> URL:
     return path(
         url_path,
         django.views.defaults.page_not_found,
@@ -39,7 +46,14 @@ def path_404(url_path, name):
     )
 
 
-urlpatterns = [
+if settings.DEBUG:  # pragma: no cover
+    import debug_toolbar
+
+    urlpatterns += [
+        path("__debug__/", include(debug_toolbar.urls)),
+    ]
+
+urlpatterns += [
     path("about/", AboutView.as_view(), name="about"),
     path("preferences/", PreferencesView.as_view(), name="preferences"),
     #
@@ -99,10 +113,3 @@ urlpatterns = [
     path("rosetta/", include("rosetta.urls")),
     path("i18n/", include("django.conf.urls.i18n")),
 ]
-
-if settings.DEBUG:  # pragma: no cover
-    import debug_toolbar
-
-    urlpatterns += [
-        path("__debug__/", include(debug_toolbar.urls)),
-    ]

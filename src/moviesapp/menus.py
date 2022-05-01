@@ -1,13 +1,14 @@
+from django.http import HttpRequest
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from menu import Menu, MenuItem
 
 
-def has_friends(request):
+def has_friends(request: HttpRequest) -> bool:
     return request.user.has_friends()
 
 
-def is_authenticated(request):
+def is_authenticated(request: HttpRequest) -> bool:
     return request.user.is_authenticated
 
 

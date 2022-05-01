@@ -1,9 +1,13 @@
+from typing import Any, Dict, List as ListType, Optional
+
 import vk_api
 from annoying.fields import JSONField  # Not using django-mysql instead because it's not supported by modeltranslation.
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser, AnonymousUser
 from django.db import models
+from django.http import HttpRequest
 from django.utils.translation import gettext_lazy as _
+from social_django.models import AbstractUserSocialAuth
 from vk_api.exceptions import ApiError
 
 from moviesapp.exceptions import VKError
@@ -12,7 +16,7 @@ from moviesapp.vk import Vk
 
 
 # Cannot be moved to utils because it would cause circular imports
-def get_poster_url(size, poster):
+def get_poster_url(size: str, poster: Optional[str]) -> Optional[str]:
     if size == "small":
         poster_size = settings.POSTER_SIZE_SMALL
         no_image_url = settings.NO_POSTER_SMALL_IMAGE_URL
@@ -28,34 +32,35 @@ def get_poster_url(size, poster):
 
 
 class UserBase:
-    def get_movie_ids(self):
+    def get_movie_ids(self) -> models.QuerySet["Record"]:
         return self.get_records().values_list("movie__pk")
 
-    def get_records(self):
+    def get_records(self) -> models.QuerySet["Record"]:
         if self.is_authenticated:
-            return self.records.all()
+            records: models.QuerySet[Record] = self.records.all()
+            return records
         return Record.objects.none()
 
-    def get_record(self, id_):
+    def get_record(self, id_: int) -> "Record":
         return self.get_records().get(pk=id_)
 
-    def _get_fb_accounts(self):
+    def _get_fb_accounts(self) -> models.QuerySet[AbstractUserSocialAuth]:
         return self.social_auth.filter(provider="facebook")
 
-    def is_fb_user(self):
+    def is_fb_user(self) -> bool:
         if self.is_authenticated:
             return self._get_fb_accounts().exists()
         return False
 
     # It is requried that `is_fb_user` is run before running this.
-    def get_fb_account(self):  # 2DO possibly remove it from this class.
+    def get_fb_account(self) -> AbstractUserSocialAuth:  # 2DO possibly remove it from this class.
         return self._get_fb_accounts()[0]
 
-    def _get_vk_accounts(self):
+    def _get_vk_accounts(self) -> models.QuerySet[AbstractUserSocialAuth]:
         return self.social_auth.filter(provider__in=settings.VK_BACKENDS)
 
     # It is requried that `is_vk_user` is run before running this.
-    def get_vk_account(self):  # 2DO possibly remove it from this class.
+    def get_vk_account(self) -> AbstractUserSocialAuth:  # 2DO possibly remove it from this class.
         vk_accounts = self._get_vk_accounts()
         if len(vk_accounts) == 1:
             return vk_accounts[0]
@@ -69,7 +74,7 @@ class UserBase:
             return vk_account
         raise VKError
 
-    def is_vk_user(self):
+    def is_vk_user(self) -> bool:
         """
         Show if a user has a vk account.
 
@@ -82,17 +87,17 @@ class UserBase:
         return False
 
     @property
-    def is_linked(self):
+    def is_linked(self) -> bool:
         if self.is_authenticated:
             return self.social_auth.exists()
         return False
 
-    def get_users(self, friends=False, sort=False):
+    def get_users(self, friends: bool = False, sort: bool = False):
         if friends:
             return self.get_friends(sort=sort)
         return self._get_available_users_and_friends(sort=sort)
 
-    def _get_available_users_and_friends(self, sort=False):
+    def _get_available_users_and_friends(self, sort: bool = False) -> ListType["User"]:
         available_users = User.objects.exclude(only_for_friends=True).exclude(pk=self.pk)
         # We need distinct here because we can't concatenate distinct and non-distinct querysets.
         users = available_users.distinct() | self.get_friends()
@@ -100,12 +105,12 @@ class UserBase:
             users = users.order_by("first_name")
         return list(set(users))
 
-    def get_vk(self):
+    def get_vk(self) -> Optional[Vk]:
         if self.is_vk_user():
             return Vk(self)
         return None
 
-    def get_friends(self, sort=False):
+    def get_friends(self, sort: bool = False) -> models.QuerySet["User"]:
         friends = User.objects.none()
         if self.is_linked:
             if self.is_vk_user():  # 2DO possibly refactor this (this check is run twice)
@@ -116,7 +121,7 @@ class UserBase:
                 friends = friends.order_by("first_name")
         return friends
 
-    def has_friends(self):
+    def has_friends(self) -> bool:
         return self.get_friends().exists()
 
 
@@ -131,26 +136,26 @@ class User(AbstractUser, UserBase):
     avatar_big = models.URLField(null=True, blank=True)
     loaded_initial_data = models.BooleanField(default=False)
 
-    def __str__(self):
+    def __str__(self) -> str:
         name = self.get_full_name()
         if name:
             return name
         return self.username
 
-    def _get_movies_number(self, list_id):
+    def _get_movies_number(self, list_id) -> int:
         return self.get_records().filter(list_id=list_id).count()
 
     @property
-    def movies_watched_number(self):
+    def movies_watched_number(self) -> int:
         return self._get_movies_number(List.WATCHED)
 
     @property
-    def movies_to_watch_number(self):
+    def movies_to_watch_number(self) -> int:
         return self._get_movies_number(List.TO_WATCH)
 
 
 class UserAnonymous(AnonymousUser, UserBase):
-    def __init__(self, request):  # pylint: disable=unused-argument
+    def __init__(self, request: HttpRequest):  # pylint: disable=unused-argument
         super().__init__()
 
 
@@ -160,11 +165,11 @@ class List(models.Model):
     name = models.CharField(max_length=255)
     key_name = models.CharField(max_length=255)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return str(self.name)
 
     @classmethod
-    def is_valid_id(cls, list_id):
+    def is_valid_id(cls, list_id: int) -> bool:
         return list_id in [cls.WATCHED, cls.TO_WATCH]
 
 
@@ -189,13 +194,13 @@ class Movie(models.Model):
     class Meta:
         ordering = ["pk"]
 
-    def __str__(self):
+    def __str__(self) -> str:
         return str(self.title)
 
-    def imdb_url(self):
+    def imdb_url(self) -> str:
         return settings.IMDB_BASE_URL + self.imdb_id + "/"
 
-    def get_trailers(self):
+    def get_trailers(self) -> Dict[str, Any]:
         if self.trailers:
             return self.trailers
         return self.trailers_en
@@ -203,26 +208,26 @@ class Movie(models.Model):
     def has_trailers(self):
         return bool(self.get_trailers())
 
-    def _get_poster(self, size):
+    def _get_poster(self, size: str) -> str:
         return get_poster_url(size, self.poster)
 
     @property
-    def poster_normal(self):
+    def poster_normal(self) -> str:
         return self._get_poster("normal")
 
     @property
-    def poster_small(self):
+    def poster_small(self) -> str:
         return self._get_poster("small")
 
     @property
-    def poster_big(self):
+    def poster_big(self) -> str:
         return self._get_poster("big")
 
     @property
-    def id_title(self):
+    def id_title(self) -> str:
         return f"{self.pk} - {self}"
 
-    def cli_string(self, last_movie_id):
+    def cli_string(self, last_movie_id: int) -> str:
         """
         Return string version for CLI.
 
@@ -258,10 +263,10 @@ class Record(models.Model):
     watched_in_full_hd = models.BooleanField(default=False)
     watched_in_4k = models.BooleanField(default=False)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.movie.title
 
-    def save(self, *args, **kwargs):
+    def save(self, *args: Any, **kwargs: Any) -> None:
         if self.watched_in_4k:
             self.watched_in_full_hd = True
         if self.watched_in_full_hd:
@@ -276,7 +281,7 @@ class Action(models.Model):
     ADDED_COMMENT = 4
     name = models.CharField(max_length=255)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return str(self.name)
 
 
@@ -289,5 +294,5 @@ class ActionRecord(models.Model):
     rating = models.IntegerField(blank=True, null=True)
     date = models.DateTimeField(auto_now_add=True)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.movie.title} {self.action.name}"

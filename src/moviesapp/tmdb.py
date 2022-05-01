@@ -1,27 +1,28 @@
 from datetime import datetime
 from operator import itemgetter
+from typing import Dict, List, Optional
 
 import tmdbsimple
 from babel.dates import format_date
 from django.conf import settings
 
 from .exceptions import MovieNotInDb
-from .models import get_poster_url
+from .models import User, get_poster_url
 
 
-def _get_tmdb(lang):
+def _get_tmdb(lang: str) -> tmdbsimple:
     tmdbsimple.API_KEY = settings.TMDB_KEY
     tmdbsimple.LANGUAGE = lang
     return tmdbsimple
 
 
-def _get_poster_from_tmdb(poster):
+def _get_poster_from_tmdb(poster: str) -> Optional[str]:
     if poster:
         return poster[1:]
     return None
 
 
-def get_movies_from_tmdb(query, search_type, options, user, lang):
+def get_movies_from_tmdb(query: str, search_type: str, options: Dict[str, bool], user: User, lang: str):
     def set_proper_date(movies):
         def get_date(date):
             if date:
@@ -49,7 +50,7 @@ def get_movies_from_tmdb(query, search_type, options, user, lang):
         movies = movies_with_date + movies_without_date
         return movies
 
-    def get_data(query, search_type):
+    def get_data(query: str, search_type: str):
         """
         Get data.
 
@@ -114,20 +115,20 @@ def get_movies_from_tmdb(query, search_type, options, user, lang):
     return []
 
 
-def get_tmdb_movie_data(tmdb_id):
+def get_tmdb_movie_data(tmdb_id: int):
     def get_release_date(release_date):
         if release_date:
             return release_date
         return None
 
-    def get_trailers(movie_data):
+    def get_trailers(movie_data: tmdbsimple.Movies) -> List[Dict[str, str]]:
         trailers = []
         for trailer in movie_data.videos()["results"]:
             trailer_ = {"name": trailer["name"], "source": trailer["key"]}
             trailers.append(trailer_)
         return trailers
 
-    def get_movie_data(tmdb_id, lang):
+    def get_movie_data(tmdb_id: int, lang: str) -> tmdbsimple.Movies:
         tmdb = _get_tmdb(lang)
         return tmdb.Movies(tmdb_id)
 

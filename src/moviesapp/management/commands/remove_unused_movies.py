@@ -1,3 +1,5 @@
+from typing import Any
+
 from django_tqdm import BaseCommand
 
 from moviesapp.models import Movie
@@ -6,7 +8,7 @@ from moviesapp.models import Movie
 class Command(BaseCommand):
     help = "Removes unused movies"
 
-    def handle(self, *args, **options):  # pylint: disable=unused-argument
+    def handle(self, *args: Any, **options: Any) -> None:  # pylint: disable=unused-argument
         movies = Movie.objects.all()  # pylint: disable=duplicate-code
         tqdm = self.tqdm(total=movies.count())  # pylint: disable=duplicate-code
         last_movie_id = movies.last().pk

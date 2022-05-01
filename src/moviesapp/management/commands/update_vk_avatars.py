@@ -1,3 +1,5 @@
+from typing import Any
+
 from django_tqdm import BaseCommand
 
 from moviesapp.models import User
@@ -7,7 +9,7 @@ from moviesapp.vk import update_user_vk_avatar
 class Command(BaseCommand):
     help = "Updates vk avatars"
 
-    def handle(self, *args, **options):  # pylint: disable=unused-argument
+    def handle(self, *args: Any, **options: Any) -> None:  # pylint: disable=unused-argument
         users = User.objects.all()
         t = self.tqdm(total=users.count())
         for user in users:

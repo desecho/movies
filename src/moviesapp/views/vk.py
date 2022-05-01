@@ -2,6 +2,7 @@ import os
 import tempfile
 
 import requests
+from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest
 from requests_toolbelt import MultipartEncoder
 
 from moviesapp.models import Record
@@ -12,7 +13,7 @@ from .mixins import VkAjaxView
 class UploadPosterToWallView(VkAjaxView):
     tmp_file = None
 
-    def _get_filepath(self, record_id):
+    def _get_filepath(self, record_id: int) -> None:
         movie = Record.objects.get(pk=record_id).movie
         file_contents = requests.get(movie.poster_big).content
         # We need to make sure that file is not deleted that is why we use `self`.
@@ -22,13 +23,13 @@ class UploadPosterToWallView(VkAjaxView):
         os.chmod(self.tmp_file.name, 0o666)  # nosec
 
     @staticmethod
-    def _upload_file(url, filepath):
+    def _upload_file(url: str, filepath: str) -> str:
         # TODO: need to test this:
         with open(filepath, "rb") as f:
             data = MultipartEncoder(fields={"photo": (f.name, f, "image/jpg")})
         return requests.post(url, data=data, headers={"Content-Type": data.content_type}).text
 
-    def post(self, request, record_id):
+    def post(self, request: HttpRequest, record_id: int) -> (HttpResponse | HttpResponseBadRequest):
         try:
             url = request.POST["url"]
         except KeyError:

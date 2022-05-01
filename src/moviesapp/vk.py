@@ -1,7 +1,10 @@
+from typing import Any, Dict, Tuple
+
 import vk_api
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core.cache import cache
+from django.db.models import QuerySet
 
 
 def _get_vk_avatar(url):
@@ -10,7 +13,7 @@ def _get_vk_avatar(url):
     return url
 
 
-def update_user_vk_avatar(user, data):
+def update_user_vk_avatar(user: "get_user_model()", data: Dict[str, Any]) -> "get_user_model()":
     avatar_small = _get_vk_avatar(data["photo_100"])
     if avatar_small:
         user.avatar_small = avatar_small
@@ -21,14 +24,14 @@ def update_user_vk_avatar(user, data):
 
 
 class Vk:
-    def __init__(self, user):
+    def __init__(self, user: "get_user_model()"):
         vk_account = user.get_vk_account()
         vk_session = vk_api.VkApi(token=vk_account.access_token)
         self.vk = vk_session.get_api()
         self.vk_id = vk_account.uid
         self.user = user
 
-    def get_friends(self):  # pylint: disable=no-self-use
+    def get_friends(self) -> QuerySet["get_user_model()"]:  # pylint: disable=no-self-use
         friends = cache.get("vk_friends")
         if friends is None:
             friends_ids = self.vk.friends.get()["items"]
@@ -42,5 +45,5 @@ class Vk:
         )
         return friends
 
-    def get_data(self, fields):
+    def get_data(self, fields: Tuple[str]):
         return self.vk.users.get(fields=fields)[0]

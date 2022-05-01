@@ -1,24 +1,27 @@
 import hashlib
+from typing import Tuple
 from urllib import parse  # pylint: disable=no-name-in-module
 
 from django import template
 from django.conf import settings
-from django.utils.safestring import mark_safe
+from django.utils.safestring import SafeString, mark_safe
+
+from moviesapp.models import User
 
 register = template.Library()
 
 
 @register.simple_tag
-def avatar(user, size="small"):
-    def get_social_avatar_urls():
+def avatar(user: User, size: str = "small") -> SafeString:
+    def get_social_avatar_urls() -> Tuple[str, str]:
         if not user.avatar_small:
             return None
         if size == "small":
             return (user.avatar_small, user.avatar_small)
         return (user.avatar_small, user.avatar_big)
 
-    def get_gravatar_urls():
-        def get_url(size):
+    def get_gravatar_urls() -> Tuple[str, str]:
+        def get_url(size: int) -> str:
             params = parse.urlencode({"s": str(size)})
             hash_ = hashlib.md5(user.email.lower().encode("utf-8")).hexdigest()  # nosec B324
             return f"https://www.gravatar.com/avatar/{hash_}?{params}"
@@ -40,5 +43,5 @@ def avatar(user, size="small"):
 
 
 @register.simple_tag
-def avatar_big(user):
+def avatar_big(user: User) -> SafeString:
     return avatar(user, "big")

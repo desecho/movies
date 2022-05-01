@@ -1,7 +1,9 @@
 from datetime import datetime
+from typing import Any, Dict
 
 from dateutil.relativedelta import relativedelta
 from django.conf import settings
+from django.http import HttpResponse
 from django.utils.translation import gettext_lazy as _
 
 from moviesapp.models import ActionRecord
@@ -13,7 +15,7 @@ from .utils import paginate
 class FeedView(TemplateAnonymousView):
     template_name = "social/feed.html"
 
-    def get_context_data(self, feed_name):
+    def get_context_data(self, feed_name: str) -> Dict[str, Any]:
         FEED_TITLE = {
             "people": _("People"),
             "friends": _("Friends"),
@@ -51,15 +53,15 @@ class PeopleView(TemplateAnonymousView):
     template_name = "social/people.html"
     users = None
 
-    def get_context_data(self):
+    def get_context_data(self) -> Dict[str, Any]:
         return {"users": paginate(self.users, self.request.GET.get("page"), settings.PEOPLE_ON_PAGE)}
 
-    def get(self, *args, **kwargs):
+    def get(self, *args: Any, **kwargs: Any) -> HttpResponse:
         self.users = self.request.user.get_users(sort=True)
         return super().get(*args, **kwargs)
 
 
 class FriendsView(TemplateView, PeopleView):
-    def get(self, *args, **kwargs):
+    def get(self, *args: Any, **kwargs: Any) -> HttpResponse:
         self.users = self.request.user.get_users(friends=True, sort=True)
         return TemplateView.get(self, *args, **kwargs)

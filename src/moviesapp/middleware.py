@@ -1,24 +1,29 @@
 import json
+from typing import Callable
 
 from django.conf import settings
+from django.http import HttpRequest, HttpResponse
 from django.utils.translation import activate
+
+from moviesapp.models import User
 
 
 class AjaxHandlerMiddleware:
-    def __init__(self, get_response):
+    def __init__(self, get_response: Callable[[HttpRequest], HttpResponse]):
         self.get_response = get_response
 
-    def __call__(self, request):
+    def __call__(self, request: HttpRequest) -> HttpResponse:
         request.PUT = {}
-        if request.content_type == "application/json":
-            setattr(request, request.method, json.loads(request.body))
+        method = request.method
+        if method and request.content_type == "application/json":
+            setattr(request, method, json.loads(request.body))
         return self.get_response(request)
 
 
-def language_middleware(get_response):
-    def middleware(request):
+def language_middleware(get_response: Callable[[HttpRequest], HttpResponse]) -> Callable[[HttpRequest], HttpResponse]:
+    def middleware(request: HttpRequest) -> HttpResponse:
         response = get_response(request)
-        user = request.user
+        user: User = request.user  # type: ignore
         if user.is_authenticated:
             language = user.language
             activate(language)

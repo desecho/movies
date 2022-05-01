@@ -1,14 +1,15 @@
 import facebook
 from django.contrib.auth import get_user_model
 from django.core.cache import cache
+from django.db.models import QuerySet
 
 
 class Fb:
-    def __init__(self, user):
+    def __init__(self, user: "get_user_model()"):
         access_token = user.get_fb_account().extra_data["access_token"]
         self.fb = facebook.GraphAPI(access_token=access_token, version="2.7")
 
-    def get_friends(self):
+    def get_friends(self) -> QuerySet["get_user_model()"]:
         friends = cache.get("fb_friends")
         if friends is None:
             friends = self.fb.get_connections(id="me", connection_name="friends")["data"]

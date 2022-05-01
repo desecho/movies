@@ -1,9 +1,14 @@
+from typing import Dict, Union
+
 from django.conf import settings
+from django.http import HttpRequest
 
 
-def variables(request):  # pylint: disable=unused-argument
+def variables(request: HttpRequest) -> Dict[str, Union[bool, str]]:  # pylint: disable=unused-argument
+    admin_email: str = settings.ADMIN_EMAIL  # type: ignore
+    google_analytics_id: str = settings.GOOGLE_ANALYTICS_ID  # type: ignore
     return {
         "DEBUG": settings.DEBUG,
-        "ADMIN_EMAIL": settings.ADMIN_EMAIL,
-        "GOOGLE_ANALYTICS_ID": settings.GOOGLE_ANALYTICS_ID,
+        "ADMIN_EMAIL": admin_email,
+        "GOOGLE_ANALYTICS_ID": google_analytics_id,
     }

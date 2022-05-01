@@ -1,6 +1,8 @@
+from typing import Any, Optional
+
 from braces.views import JsonRequestResponseMixin, LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
-from django.http import Http404
+from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect, StreamingHttpResponse
 from django.views.generic import TemplateView as TemplateViewOriginal, View
 
 from moviesapp.models import User
@@ -9,7 +11,7 @@ from .utils import get_anothers_account
 
 
 class AjaxAnonymousView(JsonRequestResponseMixin, View):
-    def success(self, **kwargs):
+    def success(self, **kwargs: Any) -> HttpResponse:
         response = {"status": "success"}
         response.update(kwargs)
         return self.render_json_response(response)
@@ -20,7 +22,9 @@ class AjaxView(LoginRequiredMixin, AjaxAnonymousView):
 
 
 class VkAjaxView(AjaxView):
-    def dispatch(self, request, *args, **kwargs):
+    def dispatch(
+        self, request: HttpRequest, *args: Any, **kwargs: Any
+    ) -> (HttpResponseRedirect | HttpResponse | StreamingHttpResponse | Any):
         if not request.user.is_vk_user:
             return self.no_permissions_fail(request)
         return super().dispatch(request, *args, **kwargs)
@@ -33,7 +37,7 @@ class TemplateView(LoginRequiredMixin, TemplateViewOriginal):
 class TemplateAnonymousView(TemplateViewOriginal):
     anothers_account = None
 
-    def check_if_allowed(self, username=None):
+    def check_if_allowed(self, username: Optional[str] = None) -> None:
         if username is None and self.request.user.is_anonymous:
             raise Http404
         if self.request.user.username == username:

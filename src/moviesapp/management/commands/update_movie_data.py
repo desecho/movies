@@ -1,3 +1,7 @@
+from typing import Any
+
+from django.core.management import CommandParser
+from django.db.models.query import QuerySet
 from django_tqdm import BaseCommand
 
 from moviesapp.exceptions import MovieNotInDb
@@ -12,7 +16,7 @@ class Command(BaseCommand):
     We are not specifying if the movie info got actually changed here.
     """
 
-    def add_arguments(self, parser):
+    def add_arguments(self, parser: CommandParser) -> None:
         parser.add_argument("movie_id", nargs="?", default=None, type=int)
         parser.add_argument(
             "-s",
@@ -22,8 +26,10 @@ class Command(BaseCommand):
             help="Start running the script fom provided movie id",
         )
 
-    def handle(self, movie_id, start_from_id, *args, **options):  # pylint: disable=unused-argument
-        def get_filtered_movies():
+    def handle(
+        self, movie_id: int, start_from_id: bool, *args: Any, **options: Any  # pylint: disable=unused-argument
+    ) -> None:
+        def get_filtered_movies() -> QuerySet[Movie]:
             if start_from_id:
                 return movies.filter(pk__gte=movie_id)
             return movies.filter(pk=movie_id)

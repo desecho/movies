@@ -1,10 +1,11 @@
 import json
+from typing import Optional
 
-from django.http import Http404
+from django.http import Http404, HttpRequest, HttpResponse, HttpResponseBadRequest
 from sentry_sdk import capture_exception
 
 from moviesapp.exceptions import MovieNotInDb, NotAvailableSearchType
-from moviesapp.models import List, Movie
+from moviesapp.models import List, Movie, User
 from moviesapp.tmdb import get_movies_from_tmdb
 from moviesapp.utils import add_movie_to_db
 
@@ -17,7 +18,7 @@ class SearchView(TemplateAnonymousView):
 
 
 class SearchMovieView(AjaxAnonymousView):
-    def get(self, request):
+    def get(self, request: HttpRequest) -> (HttpResponse | HttpResponseBadRequest):
         AVAILABLE_SEARCH_TYPES = [
             "actor",
             "movie",
@@ -38,7 +39,7 @@ class SearchMovieView(AjaxAnonymousView):
 
 class AddToListFromDbView(AjaxView):
     @staticmethod
-    def _get_movie_id(tmdb_id):
+    def _get_movie_id(tmdb_id: int) -> Optional[int]:
         """Return movie id or None if movie is not found."""
         try:
             movie = Movie.objects.get(tmdb_id=tmdb_id)
@@ -47,7 +48,7 @@ class AddToListFromDbView(AjaxView):
             return None
 
     @staticmethod
-    def _add_to_list_from_db(movie_id, tmdb_id, list_id, user):
+    def _add_to_list_from_db(movie_id: Optional[int], tmdb_id: int, list_id: int, user: User) -> Optional[bool]:
         """Return True on success and None of failure."""
         # If we don't find the movie in the db we add it to the database.
         if movie_id is None:
@@ -59,7 +60,7 @@ class AddToListFromDbView(AjaxView):
         add_movie_to_list(movie_id, list_id, user)
         return True
 
-    def post(self, request):
+    def post(self, request: HttpRequest) -> (HttpResponse | HttpResponseBadRequest):
         try:
             POST = request.POST
             tmdb_id = int(POST["movieId"])

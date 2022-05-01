@@ -1,8 +1,8 @@
 class Converter:
-    def to_python(self, value):  # pylint:disable=no-self-use
+    def to_python(self, value: str) -> str:  # pylint:disable=no-self-use
         return value
 
-    def to_url(self, value):  # pylint:disable=no-self-use
+    def to_url(self, value: str) -> str:  # pylint:disable=no-self-use
         return value
 
 
