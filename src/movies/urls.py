@@ -2,6 +2,7 @@
 
 from typing import List, Union
 
+import debug_toolbar
 import django
 from django.conf import settings
 from django.conf.urls import include
@@ -47,8 +48,6 @@ def path_404(url_path: str, name: str) -> URL:
 
 
 if settings.DEBUG:  # pragma: no cover
-    import debug_toolbar
-
     urlpatterns += [
         path("__debug__/", include(debug_toolbar.urls)),
     ]

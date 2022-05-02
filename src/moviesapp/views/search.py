@@ -43,12 +43,12 @@ class AddToListFromDbView(AjaxView):
         """Return movie id or None if movie is not found."""
         try:
             movie = Movie.objects.get(tmdb_id=tmdb_id)
-            return movie.id
+            return movie.pk
         except Movie.DoesNotExist:
             return None
 
     @staticmethod
-    def _add_to_list_from_db(movie_id: Optional[int], tmdb_id: int, list_id: int, user: User) -> Optional[bool]:
+    def _add_to_list_from_db(movie_id: Optional[int], tmdb_id: int, list_id: int, user: User) -> bool:
         """Return True on success and None of failure."""
         # If we don't find the movie in the db we add it to the database.
         if movie_id is None:
@@ -56,7 +56,7 @@ class AddToListFromDbView(AjaxView):
                 movie_id = add_movie_to_db(tmdb_id)
             except MovieNotInDb as e:
                 capture_exception(e)
-                return None
+                return False
         add_movie_to_list(movie_id, list_id, user)
         return True
 

@@ -119,9 +119,9 @@ class ListView(TemplateAnonymousView):
         return records.filter(rating__gte=3).exclude(movie__in=user.get_movie_ids())
 
     def _get_comments_and_ratings(
-        self, record_ids_and_movies: QuerySet, user: User
+        self, records_and_movies_ids: QuerySet, user: User
     ) -> "Dict[int, Optional[List[Dict[str, Any]]]]":
-        movies, record_ids_and_movies_dict = self._get_record_movie_data(record_ids_and_movies)
+        movies, record_ids_and_movies_dict = self._get_record_movie_data(records_and_movies_ids)
         records = Record.objects.filter(list_id=List.WATCHED, movie_id__in=movies)
         friends = user.get_friends()
         if friends is None:
@@ -160,9 +160,9 @@ class ListView(TemplateAnonymousView):
         raise Exception("Unsupported sort type")
 
     @staticmethod
-    def _get_record_movie_data(record_ids_and_movies: QuerySet) -> "Tuple[List[int], Dict[int, int]]":
-        movies = [x[1] for x in record_ids_and_movies]
-        return (movies, {x[0]: x[1] for x in record_ids_and_movies})
+    def _get_record_movie_data(records_and_movies_ids: QuerySet) -> "Tuple[List[int], Dict[int, int]]":
+        movies = [x[1] for x in records_and_movies_ids]
+        return (movies, {x[0]: x[1] for x in records_and_movies_ids})
 
     def _get_list_data(self, records: QuerySet[Record]):
         movies, record_ids_and_movies_dict = self._get_record_movie_data(records.values_list("id", "movie_id"))
@@ -215,7 +215,7 @@ class ListView(TemplateAnonymousView):
         return {
             "records": records,
             "reviews": comments_and_ratings,
-            "list_id": List.objects.get(key_name=list_name).id,
+            "list_id": List.objects.get(key_name=list_name).pk,
             "list": list_name,
             "anothers_account": self.anothers_account,
             "list_data": json.dumps(list_data),
@@ -235,15 +235,15 @@ class RecommendationsView(TemplateView, ListView):
     def _filter_duplicated_movies_and_limit(records: QuerySet[Record]) -> "Tuple[List[Record], List[Tuple[int, int]]]":
         records_output = []
         movies = []
-        record_ids_and_movies = []
+        records_and_movies_ids = []
         for record in records:
             if record.movie.pk not in movies:
                 records_output.append(record)
-                record_ids_and_movies.append((record.pk, record.movie.pk))
+                records_and_movies_ids.append((record.pk, record.movie.pk))
                 if len(records_output) == settings.MAX_RECOMMENDATIONS:
                     break
                 movies.append(record.movie.pk)
-        return (records_output, record_ids_and_movies)
+        return (records_output, records_and_movies_ids)
 
     def _get_recommendations_from_friends(self, friends: QuerySet[User]) -> QuerySet[Record]:
         # Exclude own records and include only friends' records.
@@ -255,8 +255,8 @@ class RecommendationsView(TemplateView, ListView):
     def get_context_data(self) -> Dict[str, Any]:
         friends = self.request.user.get_friends()
         records = self._get_recommendations_from_friends(friends)
-        records, record_ids_and_movies = self._filter_duplicated_movies_and_limit(records)
-        reviews = self._get_comments_and_ratings(record_ids_and_movies, self.request.user)
+        records, records_and_movies_ids = self._filter_duplicated_movies_and_limit(records)
+        reviews = self._get_comments_and_ratings(records_and_movies_ids, self.request.user)
         return {"records": records, "reviews": reviews}
 
     def get(self, *args: Any, **kwargs: Any) -> HttpResponse:
