@@ -11,4 +11,4 @@ data:
   DB_HOST: mysql.samarchyan.me
   DB_USER: root
   STATIC_URL: https://movies.cdn.samarchyan.me/
-  GOOGLE_ANALYTICS_ID: UA-655582-5
+  GOOGLE_ANALYTICS_ID: G-6WPPD6FEVM
