@@ -1,10 +1,11 @@
 import json
 from typing import Optional
 
-from django.http import Http404, HttpRequest, HttpResponse, HttpResponseBadRequest
+from django.http import Http404, HttpResponse, HttpResponseBadRequest
 from sentry_sdk import capture_exception
 
 from moviesapp.exceptions import MovieNotInDb, NotAvailableSearchType
+from moviesapp.http import AjaxAuthenticatedHttpRequest, AjaxHttpRequest
 from moviesapp.models import List, Movie, User
 from moviesapp.tmdb import get_movies_from_tmdb
 from moviesapp.utils import add_movie_to_db
@@ -18,7 +19,7 @@ class SearchView(TemplateAnonymousView):
 
 
 class SearchMovieView(AjaxAnonymousView):
-    def get(self, request: HttpRequest) -> (HttpResponse | HttpResponseBadRequest):
+    def get(self, request: AjaxHttpRequest) -> (HttpResponse | HttpResponseBadRequest):
         AVAILABLE_SEARCH_TYPES = [
             "actor",
             "movie",
@@ -32,8 +33,10 @@ class SearchMovieView(AjaxAnonymousView):
             if type_ not in AVAILABLE_SEARCH_TYPES:
                 raise NotAvailableSearchType
         except (KeyError, NotAvailableSearchType):
-            return self.render_bad_request_response()
-        movies = get_movies_from_tmdb(query, type_, options, request.user, self.request.LANGUAGE_CODE)
+            response: HttpResponseBadRequest = self.render_bad_request_response()
+            return response
+        language_code = self.request.LANGUAGE_CODE  # type: ignore
+        movies = get_movies_from_tmdb(query, type_, options, request.user, language_code)
         return self.success(movies=movies)
 
 
@@ -42,7 +45,7 @@ class AddToListFromDbView(AjaxView):
     def _get_movie_id(tmdb_id: int) -> Optional[int]:
         """Return movie id or None if movie is not found."""
         try:
-            movie = Movie.objects.get(tmdb_id=tmdb_id)
+            movie: Movie = Movie.objects.get(tmdb_id=tmdb_id)
             return movie.pk
         except Movie.DoesNotExist:
             return None
@@ -60,13 +63,14 @@ class AddToListFromDbView(AjaxView):
         add_movie_to_list(movie_id, list_id, user)
         return True
 
-    def post(self, request: HttpRequest) -> (HttpResponse | HttpResponseBadRequest):
+    def post(self, request: AjaxAuthenticatedHttpRequest) -> (HttpResponse | HttpResponseBadRequest):
         try:
             POST = request.POST
             tmdb_id = int(POST["movieId"])
             list_id = int(POST["listId"])
         except (KeyError, ValueError):
-            return self.render_bad_request_response()
+            response_bad: HttpResponseBadRequest = self.render_bad_request_response()
+            return response_bad
 
         if not List.is_valid_id(list_id):
             raise Http404
@@ -75,5 +79,6 @@ class AddToListFromDbView(AjaxView):
         result = self._add_to_list_from_db(movie_id, tmdb_id, list_id, request.user)
         if not result:
             output = {"status": "not_found"}
-            return self.render_json_response(output)
+            response: HttpResponse = self.render_json_response(output)
+            return response
         return self.success()

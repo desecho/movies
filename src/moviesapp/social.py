@@ -21,14 +21,15 @@ def load_user_data(backend: BaseAuth, user: User, **kwargs: Any) -> None:  # pyl
             "photo_200",
         )
         vk = user.get_vk()
-        data = vk.get_data(FIELDS)
-        user = update_user_vk_avatar(user, data)
-        user.first_name = data["first_name"]
-        user.last_name = data["last_name"]
-        # Language setting is only available for a standalone application. See details:
-        # https://vk.com/dev/account.getProfileInfo
-        # We assume that the language is Russian.
-        user.language = "ru"
-        user.loaded_initial_data = True
-        user.save()
+        if vk:
+            data = vk.get_data(FIELDS)
+            user = update_user_vk_avatar(user, data)
+            user.first_name = data["first_name"]
+            user.last_name = data["last_name"]
+            # Language setting is only available for a standalone application. See details:
+            # https://vk.com/dev/account.getProfileInfo
+            # We assume that the language is Russian.
+            user.language = "ru"
+            user.loaded_initial_data = True
+            user.save()
     return None

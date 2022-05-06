@@ -2,9 +2,10 @@ import json
 from typing import Callable
 
 from django.conf import settings
-from django.http import HttpRequest, HttpResponse
+from django.http import HttpResponse
 from django.utils.translation import activate
 
+from moviesapp.http import HttpRequest
 from moviesapp.models import User
 
 
@@ -13,7 +14,7 @@ class AjaxHandlerMiddleware:
         self.get_response = get_response
 
     def __call__(self, request: HttpRequest) -> HttpResponse:
-        request.PUT = {}
+        request.PUT = {}  # type: ignore
         method = request.method
         if method and request.content_type == "application/json":
             setattr(request, method, json.loads(request.body))
@@ -23,8 +24,8 @@ class AjaxHandlerMiddleware:
 def language_middleware(get_response: Callable[[HttpRequest], HttpResponse]) -> Callable[[HttpRequest], HttpResponse]:
     def middleware(request: HttpRequest) -> HttpResponse:
         response = get_response(request)
-        user: User = request.user  # type: ignore
-        if user.is_authenticated:
+        if request.user.is_authenticated:
+            user: User = request.user
             language = user.language
             activate(language)
             response.set_cookie(settings.LANGUAGE_COOKIE_NAME, language)

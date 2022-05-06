@@ -1,6 +1,6 @@
 from typing import Any
 
-from django.core.management import CommandParser
+from django.core.management.base import CommandParser
 from django.db.models.query import QuerySet
 from django_tqdm import BaseCommand
 
@@ -53,16 +53,17 @@ class Command(BaseCommand):
         tqdm = self.tqdm(total=movies_total, unit="movies", disable=disable)
         if filtered:
             tqdm.update(movies_total - movies_filtered_number)
-        last_movie_id = movies.last().pk
-        for movie in movies:
-            movie_info = movie.cli_string(last_movie_id)
-            tqdm.set_description(movie_info)
-            try:
-                result = add_movie_to_db(movie.tmdb_id, update=True)
-            except MovieNotInDb:
-                tqdm.error(f'"{movie.id_title}" is not found in IMDB')
-            else:
-                updated = result
-                if updated:
-                    tqdm.info(f'"{movie}" is updated')
-            tqdm.update()
+        last_movie = movies.last()
+        if last_movie:
+            for movie in movies:
+                movie_info = movie.cli_string(last_movie.pk)
+                tqdm.set_description(movie_info)
+                try:
+                    result = add_movie_to_db(movie.tmdb_id, update=True)
+                except MovieNotInDb:
+                    tqdm.error(f'"{movie.id_title}" is not found in IMDB')
+                else:
+                    updated = result
+                    if updated:
+                        tqdm.info(f'"{movie}" is updated')
+                tqdm.update()

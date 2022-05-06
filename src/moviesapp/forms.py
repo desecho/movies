@@ -5,7 +5,7 @@ from django.forms import ModelForm
 from .models import User
 
 
-class UserForm(ModelForm):
+class UserForm(ModelForm[User]):  # pylint:disable=unsubscriptable-object
     class Meta:
         model = User
         fields = ("language", "only_for_friends", "username", "first_name", "last_name")

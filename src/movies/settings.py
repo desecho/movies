@@ -2,9 +2,13 @@
 
 from os import getenv
 from os.path import abspath, dirname, join
+from typing import Any, Dict, List
 
+import django_stubs_ext
 import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
+
+django_stubs_ext.monkeypatch()
 
 SENTRY_TRACE_SAMPLING = 0.5
 
@@ -76,7 +80,7 @@ LOCALE_PATHS = (join(SRC_DIR, "locale"),)
 TIME_ZONE = "US/Eastern"
 USE_TZ = True
 
-TEMPLATES = [
+TEMPLATES: List[Dict[str, Any]] = [
     {
         "NAME": "Main",
         "BACKEND": "django.template.backends.django.DjangoTemplates",

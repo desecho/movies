@@ -5,13 +5,13 @@ from annoying.fields import JSONField  # Not using django-mysql instead because 
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser, AnonymousUser
 from django.db import models
-from django.http import HttpRequest
 from django.utils.translation import gettext_lazy as _
 from social_django.models import AbstractUserSocialAuth
 from vk_api.exceptions import ApiError
 
 from moviesapp.exceptions import VKError
 from moviesapp.fb import Fb
+from moviesapp.http import HttpRequest
 from moviesapp.vk import Vk
 
 
@@ -32,12 +32,12 @@ def get_poster_url(size: str, poster: Optional[str]) -> Optional[str]:
 
 
 class UserBase:
-    def get_movie_ids(self) -> models.QuerySet["Record"]:
-        return self.get_records().values_list("movie__pk")
+    def get_movie_ids(self) -> ListType[int]:
+        return list(self.get_records().values_list("movie__pk", flat=True))
 
     def get_records(self) -> models.QuerySet["Record"]:
-        if self.is_authenticated:
-            records: models.QuerySet[Record] = self.records.all()
+        if self.is_authenticated:  # type: ignore
+            records: models.QuerySet[Record] = self.records.all()  # type: ignore
             return records
         return Record.objects.none()
 
@@ -45,10 +45,10 @@ class UserBase:
         return self.get_records().get(pk=id_)
 
     def _get_fb_accounts(self) -> models.QuerySet[AbstractUserSocialAuth]:
-        return self.social_auth.filter(provider="facebook")
+        return self.social_auth.filter(provider="facebook")  # type: ignore
 
     def is_fb_user(self) -> bool:
-        if self.is_authenticated:
+        if self.is_authenticated:  # type: ignore
             return self._get_fb_accounts().exists()
         return False
 
@@ -57,7 +57,7 @@ class UserBase:
         return self._get_fb_accounts()[0]
 
     def _get_vk_accounts(self) -> models.QuerySet[AbstractUserSocialAuth]:
-        return self.social_auth.filter(provider__in=settings.VK_BACKENDS)
+        return self.social_auth.filter(provider__in=settings.VK_BACKENDS)  # type: ignore
 
     # It is requried that `is_vk_user` is run before running this.
     def get_vk_account(self) -> AbstractUserSocialAuth:  # 2DO possibly remove it from this class.
@@ -74,6 +74,7 @@ class UserBase:
             return vk_account
         raise VKError
 
+    @property
     def is_vk_user(self) -> bool:
         """
         Show if a user has a vk account.
@@ -82,23 +83,23 @@ class UserBase:
         Note: currently it does because it is not possible to link a vk-app account and a website account.
         But it is likely to change in the future.
         """
-        if self.is_authenticated:
+        if self.is_authenticated:  # type: ignore
             return self._get_vk_accounts().exists()
         return False
 
     @property
     def is_linked(self) -> bool:
-        if self.is_authenticated:
-            return self.social_auth.exists()
+        if self.is_authenticated:  # type: ignore
+            return self.social_auth.exists()  # type: ignore
         return False
 
-    def get_users(self, friends: bool = False, sort: bool = False):
+    def get_users(self, friends: bool = False, sort: bool = False) -> ListType["User"]:
         if friends:
-            return self.get_friends(sort=sort)
+            return list(self.get_friends(sort=sort))
         return self._get_available_users_and_friends(sort=sort)
 
     def _get_available_users_and_friends(self, sort: bool = False) -> ListType["User"]:
-        available_users = User.objects.exclude(only_for_friends=True).exclude(pk=self.pk)
+        available_users = User.objects.exclude(only_for_friends=True).exclude(pk=self.pk)  # type: ignore
         # We need distinct here because we can't concatenate distinct and non-distinct querysets.
         users = available_users.distinct() | self.get_friends()
         if sort:
@@ -106,17 +107,20 @@ class UserBase:
         return list(set(users))
 
     def get_vk(self) -> Optional[Vk]:
-        if self.is_vk_user():
-            return Vk(self)
+        if self.is_vk_user:
+            return Vk(self)  # type: ignore
         return None
 
     def get_friends(self, sort: bool = False) -> models.QuerySet["User"]:
         friends = User.objects.none()
         if self.is_linked:
-            if self.is_vk_user():  # 2DO possibly refactor this (this check is run twice)
-                friends |= self.get_vk().get_friends()
+            if self.is_vk_user:  # 2DO possibly refactor this (this check is run twice)
+                vk = self.get_vk()
+                if vk is not None:
+                    friends |= vk.get_friends()
             if self.is_fb_user():
-                friends |= Fb(self).get_friends()
+                user: User = self  # type: ignore
+                friends |= Fb(user).get_friends()
             if sort:
                 friends = friends.order_by("first_name")
         return friends
@@ -142,7 +146,7 @@ class User(AbstractUser, UserBase):
             return name
         return self.username
 
-    def _get_movies_number(self, list_id) -> int:
+    def _get_movies_number(self, list_id: int) -> int:
         return self.get_records().filter(list_id=list_id).count()
 
     @property
@@ -202,25 +206,27 @@ class Movie(models.Model):
 
     def get_trailers(self) -> Dict[str, Any]:
         if self.trailers:
-            return self.trailers
-        return self.trailers_en
+            trailers: Dict[str, Any] = self.trailers
+            return trailers
+        trailers_en: Dict[str, Any] = self.trailers_en  # type: ignore
+        return trailers_en
 
-    def has_trailers(self):
+    def has_trailers(self) -> bool:
         return bool(self.get_trailers())
 
-    def _get_poster(self, size: str) -> str:
+    def _get_poster(self, size: str) -> Optional[str]:
         return get_poster_url(size, self.poster)
 
     @property
-    def poster_normal(self) -> str:
+    def poster_normal(self) -> Optional[str]:
         return self._get_poster("normal")
 
     @property
-    def poster_small(self) -> str:
+    def poster_small(self) -> Optional[str]:
         return self._get_poster("small")
 
     @property
-    def poster_big(self) -> str:
+    def poster_big(self) -> Optional[str]:
         return self._get_poster("big")
 
     @property

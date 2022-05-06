@@ -25,3 +25,9 @@ autoflake
 black
 restructuredtext_lint
 yamllint
+mypy
+
+# Stubs
+django-stubs
+types-python-dateutil
+types-requests

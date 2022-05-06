@@ -3,12 +3,12 @@
 from typing import List, Union
 
 import debug_toolbar
-import django
 from django.conf import settings
 from django.conf.urls import include
 from django.contrib import admin
 from django.contrib.auth.views import LoginView
 from django.urls import URLPattern, URLResolver, path, register_converter
+from django.views.defaults import page_not_found
 from django.views.i18n import JavaScriptCatalog
 
 from moviesapp.converters import FeedConverter, ListConverter
@@ -26,7 +26,8 @@ from moviesapp.views.movies import AboutView, GalleryView
 from moviesapp.views.search import AddToListFromDbView, SearchMovieView, SearchView
 from moviesapp.views.social import FeedView, FriendsView, PeopleView
 from moviesapp.views.user import LoginErrorView, PreferencesView, logout_view
-from moviesapp.views.vk import UploadPosterToWallView
+
+# from moviesapp.views.vk import UploadPosterToWallView
 
 admin.autodiscover()
 register_converter(ListConverter, "list")
@@ -41,7 +42,7 @@ urlpatterns: URLList = []
 def path_404(url_path: str, name: str) -> URL:
     return path(
         url_path,
-        django.views.defaults.page_not_found,
+        page_not_found,
         name=name,
         kwargs={"exception": Exception("Page not Found")},
     )
@@ -68,7 +69,7 @@ urlpatterns += [
     #
     # Vk
     path_404("upload-poster-to-wall/", "upload_poster_to_wall"),
-    path("upload-poster-to-wall/<int:record_id>/", UploadPosterToWallView.as_view(), name="upload_poster_to_wall"),
+    # path("upload-poster-to-wall/<int:record_id>/", UploadPosterToWallView.as_view(), name="upload_poster_to_wall"),
     #
     # Gallery
     path("gallery/<list:list_name>/", GalleryView.as_view(), name="gallery"),
