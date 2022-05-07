@@ -322,6 +322,9 @@ ADMIN_REORDER = (
     "registration",
 )
 
+# django-modeltranslation
+MODELTRANSLATION_CUSTOM_FIELDS = ("JSONField",)
+
 # --== Project settings ==--
 
 GOOGLE_ANALYTICS_ID = getenv("GOOGLE_ANALYTICS_ID")

@@ -1,6 +1,7 @@
 Django==4.0.4
 
 # Django related packages
+# django-annoying is only used in existing migrations.
 django-annoying==0.10.6
 django-simple-menu==1.2.1
 django-rosetta==0.9.8

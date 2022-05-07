@@ -1,7 +1,6 @@
 from typing import Any, Dict, List as ListType, Optional
 
 import vk_api
-from annoying.fields import JSONField  # Not using django-mysql instead because it's not supported by modeltranslation.
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser, AnonymousUser
 from django.db import models
@@ -193,7 +192,7 @@ class Movie(models.Model):
     release_date = models.DateField(null=True)
     runtime = models.TimeField(null=True, blank=True)
     homepage = models.URLField(null=True, blank=True)
-    trailers = JSONField(null=True, blank=True)
+    trailers = models.JSONField(null=True, blank=True)
 
     class Meta:
         ordering = ["pk"]
