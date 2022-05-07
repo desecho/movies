@@ -133,8 +133,7 @@ class UserBase:
                 if vk is not None:
                     friends |= vk.get_friends()
             if self.is_fb_user():
-                user: User = self  # type: ignore
-                friends |= Fb(user).get_friends()
+                friends |= Fb(self).get_friends()  # type: ignore
             if sort:
                 friends = friends.order_by("first_name")
         return friends
