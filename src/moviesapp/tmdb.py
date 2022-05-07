@@ -124,25 +124,27 @@ def get_movies_from_tmdb(
     return []
 
 
+def _get_trailers(movie_data: Movies) -> List[Dict[str, str]]:
+    trailers = []
+    for trailer in movie_data.videos()["results"]:
+        trailer_ = {"name": trailer["name"], "source": trailer["key"]}
+        trailers.append(trailer_)
+    return trailers
+
+
+def _get_movie_data(tmdb_id: int, lang: str) -> Movies:
+    tmdb = _get_tmdb(lang)
+    return tmdb.Movies(tmdb_id)
+
+
 def get_tmdb_movie_data(tmdb_id: int) -> Dict[str, Any]:
-    def get_trailers(movie_data: Movies) -> List[Dict[str, str]]:
-        trailers = []
-        for trailer in movie_data.videos()["results"]:
-            trailer_ = {"name": trailer["name"], "source": trailer["key"]}
-            trailers.append(trailer_)
-        return trailers
-
-    def get_movie_data(tmdb_id: int, lang: str) -> Movies:
-        tmdb = _get_tmdb(lang)
-        return tmdb.Movies(tmdb_id)
-
-    movie_data_en = get_movie_data(tmdb_id, "en")
+    movie_data_en = _get_movie_data(tmdb_id, "en")
     movie_info_en = movie_data_en.info()
     # We have to get all info in english first before we switch to russian or everything breaks.
-    trailers_en = get_trailers(movie_data_en)
-    movie_data_ru = get_movie_data(tmdb_id, "ru")
+    trailers_en = _get_trailers(movie_data_en)
+    movie_data_ru = _get_movie_data(tmdb_id, "ru")
     movie_info_ru = movie_data_ru.info()
-    trailers_ru = get_trailers(movie_data_ru)
+    trailers_ru = _get_trailers(movie_data_ru)
     imdb_id = movie_info_en["imdb_id"]
     release_date = movie_info_en["release_date"] if movie_info_en["release_date"] else None
     if imdb_id:
