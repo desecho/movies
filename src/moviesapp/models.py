@@ -11,9 +11,10 @@ from django.db.models import (
     DateTimeField,
     DecimalField,
     ForeignKey,
-    IntegerField,
     JSONField,
     Model,
+    PositiveIntegerField,
+    PositiveSmallIntegerField,
     QuerySet,
     TextField,
     TimeField,
@@ -200,7 +201,7 @@ class Movie(Model):
     genre = CharField(max_length=255, null=True, blank=True)
     actors = CharField(max_length=255, null=True, blank=True)
     imdb_id = CharField(max_length=15, unique=True, db_index=True)
-    tmdb_id = IntegerField(unique=True)
+    tmdb_id = PositiveIntegerField(unique=True)
     imdb_rating = DecimalField(max_digits=2, decimal_places=1, null=True)
     poster = CharField(max_length=255, null=True)
     release_date = DateField(null=True)
@@ -272,7 +273,7 @@ class Record(Model):
     user = ForeignKey(User, CASCADE, related_name="records")
     movie = ForeignKey(Movie, CASCADE, related_name="records")
     list = ForeignKey(List, CASCADE)
-    rating = IntegerField(default=0)
+    rating = PositiveSmallIntegerField(default=0)
     comment = CharField(max_length=255, default="")
     date = DateTimeField(auto_now_add=True)
     watched_original = BooleanField(default=False)
@@ -310,7 +311,7 @@ class ActionRecord(Model):
     movie = ForeignKey(Movie, CASCADE)
     list = ForeignKey(List, CASCADE, blank=True, null=True)
     comment = CharField(max_length=255, blank=True, null=True)
-    rating = IntegerField(blank=True, null=True)
+    rating = PositiveSmallIntegerField(blank=True, null=True)
     date = DateTimeField(auto_now_add=True)
 
     def __str__(self) -> str:
