@@ -35,17 +35,17 @@ class Vk:
         self.user = user
 
     def get_friends(self) -> QuerySet["User"]:  # pylint: disable=no-self-use
-        friends = cache.get("vk_friends")
-        if friends is None:
+        vk_friends = cache.get("vk_friends")
+        if vk_friends is None:
             friends_ids = self.vk.friends.get()["items"]
-            cache.set("vk_friends", friends)
+            cache.set("vk_friends", vk_friends)
 
         user_model: "User" = get_user_model()  # type: ignore
         # We need to use distinct here because the same user can have several VK backends (both app and oauth)
         friends = user_model.objects.filter(
             social_auth__provider__in=settings.VK_BACKENDS, social_auth__uid__in=friends_ids
         ).distinct()
-        return friends  # type: ignore
+        return friends
 
     def get_data(self, fields: Union[Tuple[str, str, str, str], Tuple[str, str]]) -> Dict[str, Union[str, bool, int]]:
         data: List[Dict[str, Union[str, bool, int]]] = self.vk.users.get(fields=fields)

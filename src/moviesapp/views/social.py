@@ -1,13 +1,13 @@
 from datetime import datetime
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional
 
 from dateutil.relativedelta import relativedelta
 from django.conf import settings
 from django.http import HttpResponse
 from django.utils.translation import gettext_lazy as _
 
-from moviesapp.http import AuthenticatedHttpRequest
-from moviesapp.models import ActionRecord, User, UserAnonymous
+from moviesapp.http import AuthenticatedHttpRequest, HttpRequest
+from moviesapp.models import ActionRecord, User
 
 from .mixins import TemplateAnonymousView, TemplateView
 from .utils import paginate
@@ -61,14 +61,12 @@ class PeopleView(TemplateAnonymousView):
             return {"users": paginate(self.users, self.request.GET.get("page"), settings.PEOPLE_ON_PAGE)}
         return {}
 
-    def get(self, *args: Any, **kwargs: Any) -> HttpResponse:
-        user: Union[User, UserAnonymous] = self.request.user  # type: ignore
-        self.users = user.get_users(sort=True)
-        return super().get(*args, **kwargs)
+    def get(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:  # type: ignore
+        self.users = request.user.get_users(sort=True)
+        return super().get(request, *args, **kwargs)
 
 
 class FriendsView(TemplateView, PeopleView):
-    def get(self, *args: Any, **kwargs: Any) -> HttpResponse:
-        user: User = self.request.user  # type: ignore
-        self.users = user.get_users(friends=True, sort=True)
-        return TemplateView.get(self, *args, **kwargs)
+    def get(self, request: AuthenticatedHttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:  # type: ignore
+        self.users = request.user.get_users(friends=True, sort=True)
+        return TemplateView.get(self, request, *args, **kwargs)

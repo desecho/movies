@@ -5,7 +5,7 @@ from django.core.exceptions import PermissionDenied
 from django.http import Http404, HttpResponse, HttpResponseRedirect, StreamingHttpResponse
 from django.views.generic import TemplateView as TemplateViewOriginal, View
 
-from moviesapp.http import AjaxAuthenticatedHttpRequest, HttpRequest
+from moviesapp.http import AjaxAuthenticatedHttpRequest, AuthenticatedHttpRequest, HttpRequest
 from moviesapp.models import User
 
 from .utils import get_anothers_account
@@ -32,10 +32,6 @@ class VkAjaxView(AjaxView):
         return super().dispatch(request, *args, **kwargs)
 
 
-class TemplateView(LoginRequiredMixin, TemplateViewOriginal):
-    pass
-
-
 class TemplateAnonymousView(TemplateViewOriginal):
     anothers_account: Optional[User] = None
 
@@ -50,3 +46,9 @@ class TemplateAnonymousView(TemplateViewOriginal):
         if self.anothers_account:
             if User.objects.get(username=username) not in user.get_users():
                 raise PermissionDenied
+
+
+class TemplateView(LoginRequiredMixin, TemplateAnonymousView):
+    def get(self, request: AuthenticatedHttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:  # type: ignore
+        request: HttpRequest = request  # type: ignore
+        return TemplateAnonymousView.get(self, request, *args, **kwargs)

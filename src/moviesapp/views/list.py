@@ -245,9 +245,9 @@ class ListView(TemplateAnonymousView):
             }
         return {}
 
-    def get(self, *args: Any, **kwargs: Any) -> HttpResponse:
+    def get(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:  # type: ignore
         self._initialize_session_values()
-        return super().get(*args, **kwargs)
+        return super().get(request, *args, **kwargs)
 
 
 class RecommendationsView(TemplateView, ListView):
@@ -286,9 +286,8 @@ class RecommendationsView(TemplateView, ListView):
         reviews = self._get_comments_and_ratings(records_and_movies_ids, user)
         return {"records": records, "reviews": reviews}
 
-    def get(self, *args: Any, **kwargs: Any) -> HttpResponse:
-        request: AuthenticatedHttpRequest = self.request  # type: ignore
+    def get(self, request: AuthenticatedHttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:  # type: ignore
         has_friends = request.user.has_friends()
         if not has_friends:
             raise Http404
-        return super().get(*args, **kwargs)
+        return super().get(request, *args, **kwargs)
