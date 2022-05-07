@@ -4,6 +4,7 @@ include help.mk
 
 export PROJECT := movies
 export APP := moviesapp
+export BUCKET := scrap-db-backups
 PROD_DB_HOST := mysql.samarchyan.me
 
 SHELL := /bin/bash
@@ -93,6 +94,10 @@ pydiatra-script:
 backup-db:
 	export DB_HOST="${PROD_DB_HOST}" && \
 	scripts/backup_db.sh
+
+.PHONY: upload-backup
+upload-backup:
+	scripts/upload_backup.sh
 #------------------------------------
 
 #------------------------------------
