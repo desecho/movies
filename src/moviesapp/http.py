@@ -16,6 +16,7 @@ class HttpRequest(DjangoHttpRequest):
 
 class AjaxHttpRequest(HttpRequest):
     PUT: Dict[str, Any] = {}
+    LANGUAGE_CODE = ""
 
 
 class AjaxAuthenticatedHttpRequest(AuthenticatedHttpRequest):

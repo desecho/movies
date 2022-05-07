@@ -1,19 +1,19 @@
-from django.contrib import admin
+from django.contrib.admin import ModelAdmin, register, site
 
 from .models import Action, ActionRecord, List, Movie, Record, User
 
 
-@admin.register(Record)
-class RecordAdmin(admin.ModelAdmin[Record]):  # pylint:disable=unsubscriptable-object
+@register(Record)
+class RecordAdmin(ModelAdmin[Record]):  # pylint:disable=unsubscriptable-object
     list_display = ("user", "movie", "list", "date")
 
 
-@admin.register(ActionRecord)
-class ActionRecordAdmin(admin.ModelAdmin[ActionRecord]):  # pylint:disable=unsubscriptable-object
+@register(ActionRecord)
+class ActionRecordAdmin(ModelAdmin[ActionRecord]):  # pylint:disable=unsubscriptable-object
     list_display = ("user", "movie", "action", "list", "date")
 
 
-admin.site.register(User)
-admin.site.register(Movie)
-admin.site.register(List)
-admin.site.register(Action)
+site.register(User)
+site.register(Movie)
+site.register(List)
+site.register(Action)

@@ -5,16 +5,16 @@ from django.conf import settings
 from django.http import HttpResponse
 from django.utils.translation import activate
 
-from moviesapp.http import HttpRequest
+from moviesapp.http import AjaxHttpRequest, HttpRequest
 from moviesapp.models import User
 
 
 class AjaxHandlerMiddleware:
-    def __init__(self, get_response: Callable[[HttpRequest], HttpResponse]):
+    def __init__(self, get_response: Callable[[AjaxHttpRequest], HttpResponse]):
         self.get_response = get_response
 
-    def __call__(self, request: HttpRequest) -> HttpResponse:
-        request.PUT = {}  # type: ignore
+    def __call__(self, request: AjaxHttpRequest) -> HttpResponse:
+        request.PUT = {}
         method = request.method
         if method and request.content_type == "application/json":
             setattr(request, method, json.loads(request.body))

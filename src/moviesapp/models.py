@@ -3,7 +3,22 @@ from typing import Any, Dict, List as ListType, Optional
 import vk_api
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser, AnonymousUser
-from django.db import models
+from django.db.models import (
+    CASCADE,
+    BooleanField,
+    CharField,
+    DateField,
+    DateTimeField,
+    DecimalField,
+    ForeignKey,
+    IntegerField,
+    JSONField,
+    Model,
+    QuerySet,
+    TextField,
+    TimeField,
+    URLField,
+)
 from django.utils.translation import gettext_lazy as _
 from social_django.models import AbstractUserSocialAuth
 from vk_api.exceptions import ApiError
@@ -34,16 +49,16 @@ class UserBase:
     def get_movie_ids(self) -> ListType[int]:
         return list(self.get_records().values_list("movie__pk", flat=True))
 
-    def get_records(self) -> models.QuerySet["Record"]:
+    def get_records(self) -> QuerySet["Record"]:
         if self.is_authenticated:  # type: ignore
-            records: models.QuerySet[Record] = self.records.all()  # type: ignore
+            records: QuerySet[Record] = self.records.all()  # type: ignore
             return records
         return Record.objects.none()
 
     def get_record(self, id_: int) -> "Record":
         return self.get_records().get(pk=id_)
 
-    def _get_fb_accounts(self) -> models.QuerySet[AbstractUserSocialAuth]:
+    def _get_fb_accounts(self) -> QuerySet[AbstractUserSocialAuth]:
         return self.social_auth.filter(provider="facebook")  # type: ignore
 
     def is_fb_user(self) -> bool:
@@ -55,7 +70,7 @@ class UserBase:
     def get_fb_account(self) -> AbstractUserSocialAuth:  # 2DO possibly remove it from this class.
         return self._get_fb_accounts()[0]
 
-    def _get_vk_accounts(self) -> models.QuerySet[AbstractUserSocialAuth]:
+    def _get_vk_accounts(self) -> QuerySet[AbstractUserSocialAuth]:
         return self.social_auth.filter(provider__in=settings.VK_BACKENDS)  # type: ignore
 
     # It is requried that `is_vk_user` is run before running this.
@@ -110,7 +125,7 @@ class UserBase:
             return Vk(self)  # type: ignore
         return None
 
-    def get_friends(self, sort: bool = False) -> models.QuerySet["User"]:
+    def get_friends(self, sort: bool = False) -> QuerySet["User"]:
         friends = User.objects.none()
         if self.is_linked:
             if self.is_vk_user:  # 2DO possibly refactor this (this check is run twice)
@@ -129,15 +144,15 @@ class UserBase:
 
 
 class User(AbstractUser, UserBase):
-    only_for_friends = models.BooleanField(
+    only_for_friends = BooleanField(
         verbose_name=_("Privacy"), default=False, help_text=_("Show my lists only to friends")
     )
-    language = models.CharField(
+    language = CharField(
         max_length=2, choices=settings.LANGUAGES, default=settings.LANGUAGE_CODE, verbose_name=_("Language")
     )
-    avatar_small = models.URLField(null=True, blank=True)
-    avatar_big = models.URLField(null=True, blank=True)
-    loaded_initial_data = models.BooleanField(default=False)
+    avatar_small = URLField(null=True, blank=True)
+    avatar_big = URLField(null=True, blank=True)
+    loaded_initial_data = BooleanField(default=False)
 
     def __str__(self) -> str:
         name = self.get_full_name()
@@ -162,11 +177,11 @@ class UserAnonymous(AnonymousUser, UserBase):
         super().__init__()
 
 
-class List(models.Model):
+class List(Model):
     WATCHED = 1
     TO_WATCH = 2
-    name = models.CharField(max_length=255)
-    key_name = models.CharField(max_length=255)
+    name = CharField(max_length=255)
+    key_name = CharField(max_length=255)
 
     def __str__(self) -> str:
         return str(self.name)
@@ -176,23 +191,23 @@ class List(models.Model):
         return list_id in [cls.WATCHED, cls.TO_WATCH]
 
 
-class Movie(models.Model):
-    title = models.CharField(max_length=255)
-    title_original = models.CharField(max_length=255)
-    country = models.CharField(max_length=255, null=True, blank=True)
-    description = models.TextField(null=True, blank=True)
-    director = models.CharField(max_length=255, null=True, blank=True)
-    writer = models.CharField(max_length=255, null=True, blank=True)
-    genre = models.CharField(max_length=255, null=True, blank=True)
-    actors = models.CharField(max_length=255, null=True, blank=True)
-    imdb_id = models.CharField(max_length=15, unique=True, db_index=True)
-    tmdb_id = models.IntegerField(unique=True)
-    imdb_rating = models.DecimalField(max_digits=2, decimal_places=1, null=True)
-    poster = models.CharField(max_length=255, null=True)
-    release_date = models.DateField(null=True)
-    runtime = models.TimeField(null=True, blank=True)
-    homepage = models.URLField(null=True, blank=True)
-    trailers = models.JSONField(null=True, blank=True)
+class Movie(Model):
+    title = CharField(max_length=255)
+    title_original = CharField(max_length=255)
+    country = CharField(max_length=255, null=True, blank=True)
+    description = TextField(null=True, blank=True)
+    director = CharField(max_length=255, null=True, blank=True)
+    writer = CharField(max_length=255, null=True, blank=True)
+    genre = CharField(max_length=255, null=True, blank=True)
+    actors = CharField(max_length=255, null=True, blank=True)
+    imdb_id = CharField(max_length=15, unique=True, db_index=True)
+    tmdb_id = IntegerField(unique=True)
+    imdb_rating = DecimalField(max_digits=2, decimal_places=1, null=True)
+    poster = CharField(max_length=255, null=True)
+    release_date = DateField(null=True)
+    runtime = TimeField(null=True, blank=True)
+    homepage = URLField(null=True, blank=True)
+    trailers = JSONField(null=True, blank=True)
 
     class Meta:
         ordering = ["pk"]
@@ -254,19 +269,19 @@ class Movie(models.Model):
         return f"{id_} - {title}"[1:]
 
 
-class Record(models.Model):
-    user = models.ForeignKey(User, models.CASCADE, related_name="records")
-    movie = models.ForeignKey(Movie, models.CASCADE, related_name="records")
-    list = models.ForeignKey(List, models.CASCADE)
-    rating = models.IntegerField(default=0)
-    comment = models.CharField(max_length=255, default="")
-    date = models.DateTimeField(auto_now_add=True)
-    watched_original = models.BooleanField(default=False)
-    watched_extended = models.BooleanField(default=False)
-    watched_in_theatre = models.BooleanField(default=False)
-    watched_in_hd = models.BooleanField(default=False)
-    watched_in_full_hd = models.BooleanField(default=False)
-    watched_in_4k = models.BooleanField(default=False)
+class Record(Model):
+    user = ForeignKey(User, CASCADE, related_name="records")
+    movie = ForeignKey(Movie, CASCADE, related_name="records")
+    list = ForeignKey(List, CASCADE)
+    rating = IntegerField(default=0)
+    comment = CharField(max_length=255, default="")
+    date = DateTimeField(auto_now_add=True)
+    watched_original = BooleanField(default=False)
+    watched_extended = BooleanField(default=False)
+    watched_in_theatre = BooleanField(default=False)
+    watched_in_hd = BooleanField(default=False)
+    watched_in_full_hd = BooleanField(default=False)
+    watched_in_4k = BooleanField(default=False)
 
     def __str__(self) -> str:
         return self.movie.title
@@ -279,25 +294,25 @@ class Record(models.Model):
         super().save(*args, **kwargs)
 
 
-class Action(models.Model):
+class Action(Model):
     ADDED_MOVIE = 1
     CHANGED_LIST = 2
     ADDED_RATING = 3
     ADDED_COMMENT = 4
-    name = models.CharField(max_length=255)
+    name = CharField(max_length=255)
 
     def __str__(self) -> str:
         return str(self.name)
 
 
-class ActionRecord(models.Model):
-    user = models.ForeignKey(User, models.CASCADE, related_name="actions")
-    action = models.ForeignKey(Action, models.CASCADE)
-    movie = models.ForeignKey(Movie, models.CASCADE)
-    list = models.ForeignKey(List, models.CASCADE, blank=True, null=True)
-    comment = models.CharField(max_length=255, blank=True, null=True)
-    rating = models.IntegerField(blank=True, null=True)
-    date = models.DateTimeField(auto_now_add=True)
+class ActionRecord(Model):
+    user = ForeignKey(User, CASCADE, related_name="actions")
+    action = ForeignKey(Action, CASCADE)
+    movie = ForeignKey(Movie, CASCADE)
+    list = ForeignKey(List, CASCADE, blank=True, null=True)
+    comment = CharField(max_length=255, blank=True, null=True)
+    rating = IntegerField(blank=True, null=True)
+    date = DateTimeField(auto_now_add=True)
 
     def __str__(self) -> str:
         return f"{self.movie.title} {self.action.name}"

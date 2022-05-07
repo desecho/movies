@@ -35,7 +35,7 @@ class SearchMovieView(AjaxAnonymousView):
         except (KeyError, NotAvailableSearchType):
             response: HttpResponseBadRequest = self.render_bad_request_response()
             return response
-        language_code = self.request.LANGUAGE_CODE  # type: ignore
+        language_code = request.LANGUAGE_CODE
         movies = get_movies_from_tmdb(query, type_, options, request.user, language_code)
         return self.success(movies=movies)
 

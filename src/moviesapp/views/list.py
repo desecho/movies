@@ -1,4 +1,4 @@
-import json
+from json import dumps
 from typing import Any, Dict, List as ListType, Optional, Tuple, Union
 
 from django.conf import settings
@@ -239,7 +239,7 @@ class ListView(TemplateAnonymousView):
                 "list_id": List.objects.get(key_name=list_name).pk,
                 "list": list_name,
                 "anothers_account": self.anothers_account,
-                "list_data": json.dumps(list_data),
+                "list_data": dumps(list_data),
                 "sort": session["sort"],
                 "query": query,
             }

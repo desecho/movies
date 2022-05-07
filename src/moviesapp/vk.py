@@ -1,10 +1,10 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Optional, Tuple, Union
 
-import vk_api
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core.cache import cache
 from django.db.models import QuerySet
+from vk_api import VkApi
 
 if TYPE_CHECKING:
     from moviesapp.models import User
@@ -29,7 +29,7 @@ def update_user_vk_avatar(user: "User", data: Dict[str, Any]) -> "User":
 class Vk:
     def __init__(self, user: "User"):
         vk_account = user.get_vk_account()
-        vk_session = vk_api.VkApi(token=vk_account.access_token)
+        vk_session = VkApi(token=vk_account.access_token)
         self.vk = vk_session.get_api()
         self.vk_id = vk_account.uid
         self.user = user
