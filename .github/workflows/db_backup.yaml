@@ -14,12 +14,9 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Backup DB
-        run: |
-          NOW=$(date +"%d-%m-%Y")
-          DB_HOST=mysql.samarchyan.me
-          DB_NAME=movies
-          ARCHIVE=${DB_NAME}-${NOW}.sql.gz
-          mysqldump -u root -h ${DB_HOST} ${DB_NAME} -p${{ secrets.DB_PASSWORD }} | gzip -9 > ${ARCHIVE}
+        run: make backup-db
+        env:
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
 
       - name: Install s3cmd
         run: |
