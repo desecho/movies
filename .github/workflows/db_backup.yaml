@@ -29,7 +29,6 @@ jobs:
       - name: Upload backup
         run: |
           NOW=$(date +"%d-%m-%Y")
-          DB_NAME=githubcontrib
           DB_NAME=movies
           ARCHIVE=${DB_NAME}-${NOW}.sql.gz
           s3cmd put ${ARCHIVE} s3://scrap-db-backups/${DB_NAME}/ --acl-private --no-mime-magic --guess-mime-type
