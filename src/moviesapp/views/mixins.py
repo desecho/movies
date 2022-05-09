@@ -5,9 +5,8 @@ from django.core.exceptions import PermissionDenied
 from django.http import Http404, HttpResponse, HttpResponseRedirect, StreamingHttpResponse
 from django.views.generic import TemplateView as TemplateViewOriginal, View
 
-from moviesapp.http import AjaxAuthenticatedHttpRequest, AuthenticatedHttpRequest, HttpRequest
-from moviesapp.models import User
-
+from ..http import AjaxAuthenticatedHttpRequest, AuthenticatedHttpRequest, HttpRequest
+from ..models import User
 from .utils import get_anothers_account
 
 

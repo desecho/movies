@@ -4,12 +4,11 @@ from typing import Optional
 from django.http import Http404, HttpResponse, HttpResponseBadRequest
 from sentry_sdk import capture_exception
 
-from moviesapp.exceptions import MovieNotInDb, NotAvailableSearchType
-from moviesapp.http import AjaxAuthenticatedHttpRequest, AjaxHttpRequest
-from moviesapp.models import List, Movie, User
-from moviesapp.tmdb import get_movies_from_tmdb
-from moviesapp.utils import add_movie_to_db
-
+from ..exceptions import MovieNotInDb, NotAvailableSearchType
+from ..http import AjaxAuthenticatedHttpRequest, AjaxHttpRequest
+from ..models import List, Movie, User
+from ..tmdb import get_movies_from_tmdb
+from ..utils import add_movie_to_db
 from .mixins import AjaxAnonymousView, AjaxView, TemplateAnonymousView
 from .utils import add_movie_to_list
 

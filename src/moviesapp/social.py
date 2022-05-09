@@ -3,8 +3,7 @@ from typing import Any
 from django.conf import settings
 from social_core.backends.base import BaseAuth
 
-from moviesapp.models import User
-
+from .models import User
 from .vk import update_user_vk_avatar
 
 

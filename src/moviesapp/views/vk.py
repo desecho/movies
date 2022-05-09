@@ -5,8 +5,8 @@
 # from django.http import HttpResponse, HttpResponseBadRequest
 # from requests_toolbelt import MultipartEncoder
 
-# from moviesapp.http import AuthenticatedHttpRequest
-# from moviesapp.models import Record
+# from ..http import AuthenticatedHttpRequest
+# from ..models import Record
 
 # from .mixins import VkAjaxView
 

@@ -5,7 +5,7 @@ from django.core.paginator import EmptyPage, Page, PageNotAnInteger, Paginator
 from django.db.models import QuerySet
 from django.shortcuts import get_object_or_404
 
-from moviesapp.models import ActionRecord, Record, User, UserAnonymous
+from ..models import ActionRecord, Record, User, UserAnonymous
 
 
 def paginate(

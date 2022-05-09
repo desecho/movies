@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING, Any, Dict, Union
 from django.http import HttpRequest as DjangoHttpRequest
 
 if TYPE_CHECKING:
-    from moviesapp.models import User, UserAnonymous
+    from .models import User, UserAnonymous
 
 
 class AuthenticatedHttpRequest(DjangoHttpRequest):

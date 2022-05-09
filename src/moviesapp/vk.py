@@ -7,7 +7,7 @@ from django.db.models import QuerySet
 from vk_api import VkApi
 
 if TYPE_CHECKING:
-    from moviesapp.models import User
+    from .models import User
 
 
 def _get_vk_avatar(url: str) -> Optional[str]:

@@ -6,9 +6,8 @@ from django.conf import settings
 from django.http import HttpResponse
 from django.utils.translation import gettext_lazy as _
 
-from moviesapp.http import AuthenticatedHttpRequest, HttpRequest
-from moviesapp.models import ActionRecord, User
-
+from ..http import AuthenticatedHttpRequest, HttpRequest
+from ..models import ActionRecord, User
 from .mixins import TemplateAnonymousView, TemplateView
 from .utils import paginate
 

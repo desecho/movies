@@ -1,7 +1,6 @@
 from typing import Any, Dict
 
-from moviesapp.http import HttpRequest
-
+from ..http import HttpRequest
 from .mixins import TemplateAnonymousView
 from .utils import get_records, sort_by_rating
 

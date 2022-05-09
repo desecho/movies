@@ -6,7 +6,7 @@ from django import template
 from django.conf import settings
 from django.utils.safestring import SafeString, mark_safe
 
-from moviesapp.models import User
+from ..models import User
 
 register = template.Library()
 

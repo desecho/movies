@@ -7,9 +7,8 @@ from django.db.models import Q, QuerySet
 from django.http import Http404, HttpResponse, HttpResponseBadRequest
 from django.shortcuts import get_object_or_404
 
-from moviesapp.http import AjaxAuthenticatedHttpRequest, AjaxHttpRequest, AuthenticatedHttpRequest, HttpRequest
-from moviesapp.models import Action, ActionRecord, List, Movie, Record, User, UserAnonymous
-
+from ..http import AjaxAuthenticatedHttpRequest, AjaxHttpRequest, AuthenticatedHttpRequest, HttpRequest
+from ..models import Action, ActionRecord, List, Movie, Record, User, UserAnonymous
 from .mixins import AjaxAnonymousView, AjaxView, TemplateAnonymousView, TemplateView
 from .utils import add_movie_to_list, get_records, paginate, sort_by_rating
 

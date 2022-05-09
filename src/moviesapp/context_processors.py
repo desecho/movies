@@ -2,7 +2,7 @@ from typing import Dict, Union
 
 from django.conf import settings
 
-from moviesapp.http import HttpRequest
+from .http import HttpRequest
 
 
 def variables(request: HttpRequest) -> Dict[str, Union[bool, str]]:  # pylint: disable=unused-argument

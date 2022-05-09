@@ -24,10 +24,10 @@ from django.utils.translation import gettext_lazy as _
 from social_django.models import AbstractUserSocialAuth
 from vk_api.exceptions import ApiError
 
-from moviesapp.exceptions import VKError
-from moviesapp.fb import Fb
-from moviesapp.http import HttpRequest
-from moviesapp.vk import Vk
+from .exceptions import VKError
+from .fb import Fb
+from .http import HttpRequest
+from .vk import Vk
 
 
 # Cannot be moved to utils because it would cause circular imports

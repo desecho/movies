@@ -8,9 +8,8 @@ from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.views.generic.edit import FormView
 
-from moviesapp.forms import UserForm
-from moviesapp.http import HttpRequest
-
+from ..forms import UserForm
+from ..http import HttpRequest
 from .mixins import TemplateAnonymousView
 
 

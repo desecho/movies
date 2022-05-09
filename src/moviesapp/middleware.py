@@ -5,8 +5,8 @@ from django.conf import settings
 from django.http import HttpResponse
 from django.utils.translation import activate
 
-from moviesapp.http import AjaxHttpRequest, HttpRequest
-from moviesapp.models import User
+from .http import AjaxHttpRequest, HttpRequest
+from .models import User
 
 
 class AjaxHandlerMiddleware:

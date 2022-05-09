@@ -2,7 +2,7 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from menu import Menu, MenuItem
 
-from moviesapp.http import HttpRequest
+from .http import HttpRequest
 
 
 def has_friends(request: HttpRequest) -> bool:

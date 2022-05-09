@@ -2,7 +2,7 @@ from django import template
 from django.utils.safestring import SafeString, mark_safe
 from django.utils.translation import gettext_lazy as _
 
-from moviesapp.models import User
+from ..models import User
 
 register = template.Library()
 

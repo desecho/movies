@@ -6,7 +6,7 @@ from django.db.models import QuerySet
 from facebook import GraphAPI
 
 if TYPE_CHECKING:  # pylint: disable=duplicate-code
-    from moviesapp.models import User
+    from .models import User
 
 
 class Fb:
