@@ -64,6 +64,7 @@ The following GitHub Actions are used:
 * `Docker Build & Push Action`_
 * `GitHub Action for DigitalOcean - doctl`_
 * `Kubectl tool installer`_
+* `DigitalOcean Spaces Upload Action`_
 
 Used APIs
 --------------
@@ -103,6 +104,7 @@ Used images
 .. _Docker Build & Push Action: https://github.com/marketplace/actions/docker-build-push-action
 .. _GitHub Action for DigitalOcean - doctl: https://github.com/marketplace/actions/github-action-for-digitalocean-doctl
 .. _Kubectl tool installer: https://github.com/marketplace/actions/kubectl-tool-installer
+.. _DigitalOcean Spaces Upload Action: https://github.com/marketplace/actions/digitalocean-spaces-upload-action
 .. _VK app: http://vk.com/app3504693_2912142
 .. _IMDb logo: https://commons.wikimedia.org/wiki/File:IMDB_Logo_2016.svg
 .. _Down arrow icon: <https://www.iconfinder.com/icons/211614/arrow_b_down_icon
