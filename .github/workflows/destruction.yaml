@@ -5,6 +5,8 @@ jobs:
   destruction:
     name: Destruction
     runs-on: ubuntu-latest
+    env:
+      PROJECT: movies
     steps:
       - name: Cancel previous runs
         uses: styfle/cancel-workflow-action@0.9.1
@@ -30,4 +32,4 @@ jobs:
           kubectl delete -f deployment/deployment.yaml --ignore-not-found
           kubectl delete -f deployment/ingress.yaml --ignore-not-found
           kubectl delete -f deployment/service.yaml --ignore-not-found
-          kubectl delete secret movies --ignore-not-found
+          kubectl delete secret "$PROJECT" --ignore-not-found
