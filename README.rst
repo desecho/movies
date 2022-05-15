@@ -107,5 +107,5 @@ Used images
 .. _DigitalOcean Spaces Upload Action: https://github.com/marketplace/actions/digitalocean-spaces-upload-action
 .. _VK app: http://vk.com/app3504693_2912142
 .. _IMDb logo: https://commons.wikimedia.org/wiki/File:IMDB_Logo_2016.svg
-.. _Down arrow icon: <https://www.iconfinder.com/icons/211614/arrow_b_down_icon
-.. _TMDB Logos: <https://www.themoviedb.org/about/logos-attribution
+.. _Down arrow icon: https://www.iconfinder.com/icons/211614/arrow_b_down_icon
+.. _TMDB Logos: https://www.themoviedb.org/about/logos-attribution
