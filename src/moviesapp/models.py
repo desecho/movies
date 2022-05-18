@@ -75,18 +75,26 @@ class UserBase:
         return self.social_auth.filter(provider__in=settings.VK_BACKENDS)  # type: ignore
 
     # It is requried that `is_vk_user` is run before running this.
-    def get_vk_account(self) -> AbstractUserSocialAuth:  # 2DO possibly remove it from this class.
+    def get_vk_account(self) -> Optional[AbstractUserSocialAuth]:  # 2DO possibly remove it from this class.
         vk_accounts = self._get_vk_accounts()
         if len(vk_accounts) == 1:
             return vk_accounts[0]
         for vk_account in vk_accounts:
             vk_session = vk_api.VkApi(token=vk_account.access_token)
+            if vk_session.token["access_token"] is None:
+                extra_data = vk_account.extra_data
+                extra_data["access_token"] = None
+                vk_account.extra_data = extra_data
+                vk_account.save()
             vk = vk_session.get_api()
             try:
                 vk.users.get(fields=["screen_name"])
             except ApiError:
                 continue
             return vk_account
+
+        if vk_session.token["access_token"] is None:
+            return None
         raise VKError
 
     @property

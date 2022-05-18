@@ -5,6 +5,7 @@ from django.contrib.auth import get_user_model
 from django.core.cache import cache
 from django.db.models import QuerySet
 from vk_api import VkApi
+from vk_api.vk_api import VkApiMethod
 
 if TYPE_CHECKING:
     from .models import User
@@ -27,18 +28,24 @@ def update_user_vk_avatar(user: "User", data: Dict[str, Any]) -> "User":
 
 
 class Vk:
+    vk: VkApiMethod = None
+
     def __init__(self, user: "User"):
         vk_account = user.get_vk_account()
-        vk_session = VkApi(token=vk_account.access_token)
-        self.vk = vk_session.get_api()
-        self.vk_id = vk_account.uid
+        if vk_account is not None:
+            vk_session = VkApi(token=vk_account.access_token)
+            self.vk = vk_session.get_api()
+            self.vk_id = vk_account.uid
         self.user = user
 
     def get_friends(self) -> QuerySet["User"]:  # pylint: disable=no-self-use
         vk_friends = cache.get("vk_friends")
         if vk_friends is None:
-            friends_ids = self.vk.friends.get()["items"]
-            cache.set("vk_friends", vk_friends)
+            if self.vk is not None:
+                friends_ids = self.vk.friends.get()["items"]
+                cache.set("vk_friends", vk_friends)
+            else:
+                friends_ids = []
 
         user_model: "User" = get_user_model()  # type: ignore
         # We need to use distinct here because the same user can have several VK backends (both app and oauth)
@@ -48,5 +55,7 @@ class Vk:
         return friends
 
     def get_data(self, fields: Union[Tuple[str, str, str, str], Tuple[str, str]]) -> Dict[str, Union[str, bool, int]]:
+        if self.vk is None:
+            return {}
         data: List[Dict[str, Union[str, bool, int]]] = self.vk.users.get(fields=fields)
         return data[0]
