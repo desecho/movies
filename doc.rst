@@ -3,9 +3,9 @@ Documentation
 
 Npm module dependencies
 ------------------------
-* ``tether``, ``jquery`` and ``popper.js`` are ``bootstrap`` dependencies.
-* ``node-sass`` is  a dependency of ``sass-loader``.
-* ``less`` is a dependency of ``less-loader`` which is a dependency of ``font-awesome-webpack``.
+* ``tether``, ``jquery`` and ``popper.js`` are ``bootstrap`` dependencies
+* ``node-sass`` is  a dependency of ``sass-loader``
+* ``less`` is a dependency of ``less-loader`` which is a dependency of ``font-awesome-webpack``
 
 Avatars
 ------------
@@ -19,7 +19,7 @@ Priority:
 Cron jobs
 ------------
 
-Cronjobs are run with GitHub Actions.
+Cron jobs are run with GitHub Actions.
 
 - `Remove unused movies` command runs every month
 - `Update movie data` command runs every month
