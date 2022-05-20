@@ -13,6 +13,7 @@ exclude = '''
     | \.tox
     | \.venv
     | \.vscode
+    | migrations
     | node_modules
     | venv
     | htmlcov
