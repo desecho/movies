@@ -189,7 +189,7 @@ class List(Model):
     WATCHED = 1
     TO_WATCH = 2
     name = CharField(max_length=255)
-    key_name = CharField(max_length=255)
+    key_name = CharField(max_length=255, db_index=True)
 
     def __str__(self) -> str:
         return str(self.name)
