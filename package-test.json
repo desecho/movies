@@ -1,0 +1,14 @@
+{
+  "name": "movies",
+  "version": "0.1.0",
+  "dependencies": {
+    "eslint": "7.22.0",
+    "csscomb-linter": "0.0.4",
+    "eslint-config-google": "0.14.0",
+    "eslint-plugin-vue": "7.7.0",
+    "jsonlint": "1.6.3"
+  },
+  "devDependencies": {},
+  "scripts": {},
+  "private": true
+}

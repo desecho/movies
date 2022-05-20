@@ -31,19 +31,67 @@ jobs:
           node-version: 15.x
           registry-url: https://registry.npmjs.org
 
-      - name: Install test requirements
+      - name: Use npm cache
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: npm
+
+      - name: Install yarn
+        run: sudo npm install yarn -g
+
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+
+      - name: Use yarn cache
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: yarn-${{ hashFiles('package-test.json') }}
+          restore-keys: |
+            yarn-
+
+      # Need to use this because yarn cache is not working properly
+      - name: Use node_modules cache
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: node_modules-${{ hashFiles('package-test.json') }}
+          restore-keys: |
+            node_modules-
+
+      - name: Use pip cache
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pip
+          key: pip
+
+      - name: Use tox cache
+        uses: actions/cache@v3
+        with:
+          path: .tox
+          key: tox-${{ hashFiles('requirements.txt', 'requirements-dev.txt', 'requirements-additional.txt') }}
+
+      - name: Install shfmt
+        run: make install-shfmt
+
+      - name: Install hadolint
+        run: make install-hadolint
+
+      - name: Install shellcheck
+        run: sudo apt install shellcheck -y
+
+      - name: Install tox
+        run: pip install tox
+
+      - name: Install python requirements
+        run: tox -e py-requirements
+
+      - name: Install js dependencies
         run: |
-          make install-shfmt
-          make install-hadolint
-          sudo apt install shellcheck -y
-          rm package.json
-          npm install eslint@7.22.0
-          npm install csscomb-linter@0.0.4
-          npm install eslint-config-google@0.14.0
-          npm install eslint-plugin-vue@7.7.0
-          npm install jsonlint@1.6.3
-          pip install tox
-          tox -e py-requirements
+          mv package-test.json package.json
+          make yarn-install-refresh
 
       - name: Run tests
         run: make test
