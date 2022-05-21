@@ -61,7 +61,7 @@ The following GitHub Actions are used:
 * `Setup Node.js environment`_
 * Codecov_
 * `Docker Login`_
-* `Docker Build & Push Action`_
+* `Build and push Docker images`_
 * `GitHub Action for DigitalOcean - doctl`_
 * `Kubectl tool installer`_
 * `DigitalOcean Spaces Upload Action`_
@@ -103,7 +103,7 @@ Used images
 .. _Setup Node.js environment: https://github.com/marketplace/actions/setup-node-js-environment
 .. _Codecov: https://github.com/marketplace/actions/codecov
 .. _Docker Login: https://github.com/marketplace/actions/docker-login
-.. _Docker Build & Push Action: https://github.com/marketplace/actions/docker-build-push-action
+.. _Build and push Docker images: https://github.com/marketplace/actions/build-and-push-docker-images
 .. _GitHub Action for DigitalOcean - doctl: https://github.com/marketplace/actions/github-action-for-digitalocean-doctl
 .. _Kubectl tool installer: https://github.com/marketplace/actions/kubectl-tool-installer
 .. _DigitalOcean Spaces Upload Action: https://github.com/marketplace/actions/digitalocean-spaces-upload-action
