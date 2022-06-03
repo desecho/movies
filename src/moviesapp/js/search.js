@@ -37,26 +37,29 @@ window.vm = new Vue({
       };
       const url = urls.searchMovie + '?' + $.param(data);
       axios.get(url).then(function(response) {
-        if (response.data.movies.length === 0) {
+        const movies = response.data.movies;
+        if (movies.length === 0) {
           vm.flashInfo(gettext('Nothing has been found'));
         }
-        vm.movies = response.data.movies;
+        movies.forEach((m) => {
+          m.hide = false;
+        });
+        vm.movies = movies;
       }).catch(function() {
         vm.flashError(gettext('Search Error'));
       });
     },
     retinajs: retina,
-    addToListFromDb: function(movieId, listId) {
-      const movie = $('#movie' + movieId);
+    addToListFromDb: function(movie, listId) {
       axios.post(urls.addToListFromDb, {
-        movieId: movieId,
+        movieId: movie.id,
         listId: listId,
       }).then(function(response) {
         if (response.data.status === 'not_found') {
           vm.flashError(gettext('Movie is not found in the database'));
           return;
         }
-        movie.fadeOut('fast');
+        movie.hide = true;
       }).catch(function() {
         vm.flashError(gettext('Error adding a movie'));
       });
