@@ -10,18 +10,20 @@ from ..models import ActionRecord, Record, User, UserAnonymous
 
 def paginate(
     objects: Union[QuerySet[Record], List[User]], page: Optional[Union[str, int]], objects_on_page: int
-) -> Page:
+) -> Union[Page[Record], Page[User]]:
     paginator = Paginator(objects, objects_on_page)
+    records: Union[Page[Record], Page[User]]
     if page is None:
-        return paginator.page(1)
-    try:
-        records = paginator.page(page)
-    except PageNotAnInteger:
-        # If page is not an integer, deliver first page.
-        records = paginator.page(1)
-    except EmptyPage:
-        # If page is out of range (e.g. 9999), deliver last page of results.
-        records = paginator.page(paginator.num_pages)
+        records = paginator.page(1)  # type: ignore
+    else:
+        try:
+            records = paginator.page(page)  # type: ignore
+        except PageNotAnInteger:
+            # If page is not an integer, deliver first page.
+            records = paginator.page(1)  # type: ignore
+        except EmptyPage:
+            # If page is out of range (e.g. 9999), deliver last page of results.
+            records = paginator.page(paginator.num_pages)  # type: ignore
     return records
 
 
