@@ -70,8 +70,8 @@ def _get_runtime(runtime_str: Optional[str]) -> Optional[datetime]:
                     r = re.match(r"(\d+) min", runtime_str)
                     if r:
                         minutes = int(r.groups()[0])
+                        hours, minutes = divmod(minutes, 60)
                         try:
-                            hours, minutes = divmod(minutes, 60)
                             runtime = datetime.strptime(f"{hours:02d}:{minutes:02d}", "%H:%M")
                         except ValueError as e:
                             if settings.DEBUG:
