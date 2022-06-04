@@ -1,6 +1,7 @@
 import re
 from datetime import datetime
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional, Union
+from urllib.parse import urljoin
 
 import requests
 from django.conf import settings
@@ -108,3 +109,10 @@ def add_movie_to_db(tmdb_id: int, update: bool = False) -> (int | bool):
     if update:
         return _update_movie(tmdb_id, movie_data)
     return _save_movie(movie_data)
+
+
+def get_providers() -> List[Dict[str, Union[str, int]]]:
+    params = {"api_key": settings.TMDB_KEY}
+    response = requests.get(urljoin(settings.TMDB_API_BASE_URL, "watch/providers/movie"), params=params)
+    providers: List[Dict[str, Union[str, int]]] = response.json()["results"]
+    return providers

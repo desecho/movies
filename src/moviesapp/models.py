@@ -34,7 +34,7 @@ from .vk import Vk
 
 # Cannot be moved to utils because it would cause circular imports
 def get_tmdb_url(tmdb_id: int) -> str:
-    return urljoin(settings.TMDB_BASE_URL, str(tmdb_id))
+    return urljoin(settings.TMDB_MOVIE_BASE_URL, str(tmdb_id))
 
 
 # Cannot be moved to utils because it would cause circular imports
@@ -339,3 +339,15 @@ class ActionRecord(Model):
 
     def __str__(self) -> str:
         return f"{self.movie.title} {self.action.name}"
+
+
+class Provider(Model):
+    id = PositiveSmallIntegerField(primary_key=True)
+    name = CharField(max_length=255)
+
+    def __str__(self) -> str:
+        return str(self.name)
+
+    @property
+    def logo(self) -> str:
+        return f"{settings.STATIC_URL}/img/providers/{self.id}"

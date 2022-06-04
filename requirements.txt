@@ -37,6 +37,7 @@ vk-api==11.9.8
 mysqlclient==2.1.0
 sentry-sdk==1.5.12
 tabulate==0.8.9
+wget==3.2
 
 # Contains language support functionality rejected here - https://github.com/celiao/tmdbsimple/pull/25
 -e git+https://github.com/desecho/tmdbsimple.git@lang#egg=tmdbsimple

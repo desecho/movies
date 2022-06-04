@@ -3,6 +3,7 @@
 from os import getenv
 from os.path import abspath, dirname, join
 from typing import Any, Dict, List
+from urllib.parse import urljoin
 
 import django_stubs_ext
 import sentry_sdk
@@ -221,8 +222,9 @@ LOGIN_URL = "/login/"
 LOGIN_ERROR_URL = "/login-error/"
 
 # Static files
+STATICFILES_DIR = join(SRC_DIR, "moviesapp", "static")
 if IS_DEV:  # pragma: no cover
-    STATICFILES_DIRS = (join(SRC_DIR, "moviesapp", "static"),)
+    STATICFILES_DIRS = (STATICFILES_DIR,)
     STATIC_ROOT = None
 else:
     STATIC_ROOT = join(PROJECT_DIR, "static")
@@ -316,6 +318,7 @@ ADMIN_REORDER = (
             "moviesapp.List",
             "moviesapp.Action",
             "moviesapp.ActionRecord",
+            "moviesapp.Provider",
         ),
     },
     {"app": "social_django", "models": ("social_django.UserSocialAuth",)},
@@ -354,7 +357,11 @@ POSTER_SIZE_NORMAL = "w185"
 POSTER_SIZE_BIG = "w500"
 POSTER_BASE_URL = "https://image.tmdb.org/t/p/"
 
-TMDB_BASE_URL = "https://www.themoviedb.org/movie/"
+PROVIDERS_IMG_DIR = join(STATICFILES_DIR, "img", "providers")
+TMDB_BASE_URL = "https://www.themoviedb.org/"
+TMDB_MOVIE_BASE_URL = urljoin(TMDB_BASE_URL, "movie/")
+TMDB_PROVIDER_BASE_URL = urljoin(TMDB_BASE_URL, "t/p/original/")
+TMDB_API_BASE_URL = "https://api.themoviedb.org/3/"
 AVATAR_SIZES = {"small": 100, "big": 200}
 IMDB_BASE_URL = "http://www.imdb.com/title/"
 MAX_RECOMMENDATIONS = 50

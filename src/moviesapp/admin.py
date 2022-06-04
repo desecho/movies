@@ -1,6 +1,6 @@
 from django.contrib.admin import ModelAdmin, register, site
 
-from .models import Action, ActionRecord, List, Movie, Record, User
+from .models import Action, ActionRecord, List, Movie, Provider, Record, User
 
 
 @register(Record)
@@ -17,3 +17,4 @@ site.register(User)
 site.register(Movie)
 site.register(List)
 site.register(Action)
+site.register(Provider)
