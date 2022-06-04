@@ -353,13 +353,14 @@ POSTER_SIZE_NORMAL = "w185"
 POSTER_SIZE_BIG = "w500"
 POSTER_BASE_URL = "https://image.tmdb.org/t/p/"
 
-TMDB_MOVIE_BASE_URL = "https://www.themoviedb.org/movie/"
+TMDB_BASE_URL = "https://www.themoviedb.org/movie/"
 AVATAR_SIZES = {"small": 100, "big": 200}
 IMDB_BASE_URL = "http://www.imdb.com/title/"
 MAX_RECOMMENDATIONS = 50
 RECORDS_ON_PAGE = 50
 PEOPLE_ON_PAGE = 25
 FEED_DAYS = 7
+OMDB_BASE_URL = "http://www.omdbapi.com/"
 
 VK_NO_AVATAR = ["https://vk.com/images/camera_100.png", "https://vk.com/images/camera_200.png"]
 

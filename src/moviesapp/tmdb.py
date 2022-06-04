@@ -8,7 +8,7 @@ from django.conf import settings
 from tmdbsimple import Movies
 
 from .exceptions import MovieNotInDb
-from .models import User, UserAnonymous, get_poster_url
+from .models import User, UserAnonymous, get_poster_url, get_tmdb_url
 
 
 def _get_tmdb(lang: str) -> tmdbsimple:
@@ -106,10 +106,9 @@ def get_movies_from_tmdb(
             # Skip unpopular movies if this option is enabled.
             if search_type == "movie" and options["popularOnly"] and not _is_popular_movie(movie["popularity"]):
                 continue
-
             movie = {
                 "id": tmdb_id,
-                "tmdbLink": f"{settings.TMDB_MOVIE_BASE_URL}{tmdb_id}",
+                "tmdbLink": get_tmdb_url(tmdb_id),
                 "elementId": f"movie{tmdb_id}",
                 "releaseDate": movie.get("release_date"),
                 "title": movie["title"],

@@ -32,6 +32,11 @@ from .vk import Vk
 
 
 # Cannot be moved to utils because it would cause circular imports
+def get_tmdb_url(tmdb_id: int) -> str:
+    return urljoin(settings.TMDB_BASE_URL, str(tmdb_id))
+
+
+# Cannot be moved to utils because it would cause circular imports
 def get_poster_url(size: str, poster: Optional[str]) -> Optional[str]:
     if size == "small":
         poster_size = settings.POSTER_SIZE_SMALL
@@ -224,12 +229,13 @@ class Movie(Model):
     def __str__(self) -> str:
         return str(self.title)
 
+    @property
     def imdb_url(self) -> str:
-        return settings.IMDB_BASE_URL + self.imdb_id + "/"
+        return urljoin(settings.IMDB_BASE_URL, self.imdb_id)
 
     @property
     def tmdb_url(self) -> str:
-        return urljoin(settings.TMDB_MOVIE_BASE_URL, str(self.tmdb_id))
+        return get_tmdb_url(self.tmdb_id)
 
     def get_trailers(self) -> Dict[str, Any]:
         if self.trailers:
@@ -238,6 +244,7 @@ class Movie(Model):
         trailers_en: Dict[str, Any] = self.trailers_en  # type: ignore
         return trailers_en
 
+    @property
     def has_trailers(self) -> bool:
         return bool(self.get_trailers())
 

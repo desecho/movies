@@ -14,7 +14,8 @@ from .tmdb import get_tmdb_movie_data
 
 def load_omdb_movie_data(imdb_id: str) -> Dict[str, Any]:
     try:
-        response = requests.get(f"http://www.omdbapi.com/?i={imdb_id}&apikey={settings.OMDB_KEY}")
+        params = {"apikey": settings.OMDB_KEY, "i": imdb_id}
+        response = requests.get(settings.OMDB_BASE_URL, params=params)
     except RequestException as e:
         if settings.DEBUG:
             raise
