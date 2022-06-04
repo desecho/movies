@@ -22,6 +22,7 @@ from django.db.models import (
     URLField,
 )
 from django.utils.translation import gettext_lazy as _
+from django_countries.fields import CountryField
 from social_django.models import AbstractUserSocialAuth
 from vk_api.exceptions import ApiError
 
@@ -167,6 +168,7 @@ class User(AbstractUser, UserBase):
     avatar_small = URLField(null=True, blank=True)
     avatar_big = URLField(null=True, blank=True)
     loaded_initial_data = BooleanField(default=False)
+    country = CountryField(verbose_name=_("Country"), null=True, blank=True)
 
     def __str__(self) -> str:
         name = self.get_full_name()

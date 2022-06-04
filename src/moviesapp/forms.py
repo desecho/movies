@@ -1,6 +1,7 @@
 from typing import Any
 
 from django.forms import ModelForm
+from django_countries.widgets import CountrySelectWidget
 
 from .models import User
 
@@ -8,7 +9,8 @@ from .models import User
 class UserForm(ModelForm[User]):  # pylint:disable=unsubscriptable-object
     class Meta:
         model = User
-        fields = ("language", "only_for_friends", "username", "first_name", "last_name")
+        fields = ("language", "only_for_friends", "username", "first_name", "last_name", "country")
+        widgets = {"country": CountrySelectWidget()}
 
     def __init__(self, *args: Any, **kwargs: Any):
         super().__init__(*args, **kwargs)

@@ -164,6 +164,7 @@ INSTALLED_APPS = [
     "rosetta",
     "modeltranslation",
     "social_django",
+    "django_countries",
     "moviesapp",
 ]
 if DEBUG:  # pragma: no cover
