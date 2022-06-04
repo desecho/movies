@@ -40,6 +40,7 @@ class BaseClient(Client):
 
 
 class BaseTestCase(TestCase):
+    maxDiff = None
     client_class = BaseClient
 
     fixtures = [
