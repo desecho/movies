@@ -241,6 +241,7 @@ class Movie(Model):
         if self.trailers:
             trailers: Dict[str, Any] = self.trailers
             return trailers
+        # Fallback to English trailers when localized trailers are not available.
         trailers_en: Dict[str, Any] = self.trailers_en  # type: ignore
         return trailers_en
 
