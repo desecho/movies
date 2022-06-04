@@ -139,7 +139,7 @@ def _get_movie_data(tmdb_id: int, lang: str) -> Movies:
 def get_tmdb_movie_data(tmdb_id: int) -> Dict[str, Any]:
     movie_data_en = _get_movie_data(tmdb_id, "en")
     movie_info_en = movie_data_en.info()
-    # We have to get all info in english first before we switch to russian or everything breaks.
+    # We have to get all info in English first before we switch to Russian.
     trailers_en = _get_trailers(movie_data_en)
     movie_data_ru = _get_movie_data(tmdb_id, "ru")
     movie_info_ru = movie_data_ru.info()
