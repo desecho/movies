@@ -1,4 +1,5 @@
 from typing import Any, Dict, List as ListType, Optional
+from urllib.parse import urljoin
 
 import vk_api
 from django.conf import settings
@@ -225,6 +226,10 @@ class Movie(Model):
 
     def imdb_url(self) -> str:
         return settings.IMDB_BASE_URL + self.imdb_id + "/"
+
+    @property
+    def tmdb_url(self) -> str:
+        return urljoin(settings.TMDB_MOVIE_BASE_URL, str(self.tmdb_id))
 
     def get_trailers(self) -> Dict[str, Any]:
         if self.trailers:

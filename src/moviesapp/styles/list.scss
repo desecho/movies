@@ -49,15 +49,6 @@
   margin-left: 10px;
 }
 
-.imdb {
-  background: url('../images/imdb.svg');
-  background-repeat: no-repeat;
-  width: 100px;
-  height: 50px;
-  display: inline-block;
-  background-size: contain;
-}
-
 @media (max-width: 768px) {
   .search {
     margin-top: 10px;
@@ -73,5 +64,26 @@
       font-size: 1.2em;
     }
     max-width: 290px;
+  }
+}
+
+.urls {
+  .tmdb {
+    background: url('../images/tmdb.svg');
+    background-repeat: no-repeat;
+    width: 70px;
+    height: 50px;
+    display: inline-block;
+    background-size: contain;
+  }
+
+
+  .imdb {
+    background: url('../images/imdb.svg');
+    background-repeat: no-repeat;
+    width: 100px;
+    height: 50px;
+    display: inline-block;
+    background-size: contain;
   }
 }

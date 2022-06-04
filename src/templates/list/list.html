@@ -170,7 +170,10 @@
                 {% if record.movie.homepage %}
                   <a href="{{ record.movie.homepage }}" target="_blank">{% trans 'Website' %}</a><br>
                 {% endif %}
-                <a href="{{ record.movie.imdb_url }}" target="_blank"><span class="imdb"></span></a><br>
+                <div class="urls">
+                  <a href="{{ record.movie.imdb_url }}" target="_blank"><span class="imdb"></span></a>
+                  <a href="{{ record.movie.tmdb_url }}" target="_blank"><span class="tmdb"></span></a>
+                </div>
                 {% if record.movie.has_trailers %}
                   <span class="item-desc">{% trans 'Trailers' %}:</span><br>
                   <div class="trailers">
