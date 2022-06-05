@@ -48,7 +48,7 @@ def get_poster_url(size: str, poster: Optional[str]) -> Optional[str]:
         no_image_url = settings.NO_POSTER_NORMAL_IMAGE_URL
     elif size == "big":
         poster_size = settings.POSTER_SIZE_BIG
-        no_image_url = None  # is not used anywhere
+        no_image_url = settings.NO_POSTER_BIG_IMAGE_URL
     if poster is not None:
         return settings.POSTER_BASE_URL + poster_size + "/" + poster
     return no_image_url

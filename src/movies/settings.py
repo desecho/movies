@@ -340,6 +340,7 @@ MIN_POPULARITY = 1.5
 # Posters
 NO_POSTER_SMALL_IMAGE_URL = STATIC_URL + "img/no_poster_small.png"
 NO_POSTER_NORMAL_IMAGE_URL = STATIC_URL + "img/no_poster_normal.png"
+NO_POSTER_BIG_IMAGE_URL = STATIC_URL + "img/no_poster_big.png"
 # Available sizes:
 # "w92",
 # "w154",
