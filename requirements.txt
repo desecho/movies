@@ -20,7 +20,6 @@ django-countries[pyuca]
 
 # Django debug
 django-debug-toolbar
-django-debug-toolbar-template-timings
 
 # Requests
 requests==2.27.1
