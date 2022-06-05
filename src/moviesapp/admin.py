@@ -13,8 +13,13 @@ class ActionRecordAdmin(ModelAdmin[ActionRecord]):  # pylint:disable=unsubscript
     list_display = ("user", "movie", "action", "list", "date")
 
 
+@register(Movie)
+class MovieAdmin(ModelAdmin[Movie]):  # pylint:disable=unsubscriptable-object
+    list_display = ("title",)
+    search_fields = ["title"]
+
+
 site.register(User)
-site.register(Movie)
 site.register(List)
 site.register(Action)
 site.register(Provider)
