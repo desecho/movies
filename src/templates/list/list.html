@@ -180,7 +180,7 @@
                   <a href="{{ record.movie.tmdb_url }}" target="_blank"><span class="tmdb"></span></a>
                 </div>
                 {% if record.movie.has_trailers %}
-                  <span class="item-desc">{% trans 'Trailers' %}:</span><br>
+                  <span class="item-desc">{% trans 'Trailers' %}:</span>
                   <div class="trailers">
                     {% for trailer in record.movie.get_trailers %}
                       <a href="{{ trailer.url }}" target="_blank">{{ trailer.name }}</a>
