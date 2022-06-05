@@ -24,3 +24,7 @@ class OmdbError(Exception):
 
 class VKError(Exception):
     """VK error."""
+
+
+class TrailerSiteNotFoundError(Exception):
+    """Trailer site not found error."""

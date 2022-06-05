@@ -7,3 +7,4 @@ DATABASES["default"] = {  # noqa
 
 SECRET_KEY = "key"  # nosec B105
 GOOGLE_ANALYTICS = "id"
+IS_TEST = True

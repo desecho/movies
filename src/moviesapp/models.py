@@ -1,3 +1,4 @@
+import json
 from typing import Any, Dict, List as ListType, Optional
 from urllib.parse import urljoin
 
@@ -239,13 +240,37 @@ class Movie(Model):
     def tmdb_url(self) -> str:
         return get_tmdb_url(self.tmdb_id)
 
-    def get_trailers(self) -> Dict[str, Any]:
+    # Hack to make tests work
+    @staticmethod
+    def _get_real_trailers(trailers: Any) -> ListType[Dict[str, str]]:
+        trailers_real: ListType[Dict[str, str]] = trailers
+        if settings.IS_TEST:
+            trailers_real = json.loads(trailers)
+        return trailers_real
+
+    def _pre_get_trailers(self) -> ListType[Dict[str, str]]:
         if self.trailers:
-            trailers: Dict[str, Any] = self.trailers
+            trailers = self._get_real_trailers(self.trailers)
             return trailers
         # Fallback to English trailers when localized trailers are not available.
-        trailers_en: Dict[str, Any] = self.trailers_en  # type: ignore
-        return trailers_en
+        trailers = self._get_real_trailers(self.trailers_en)  # type: ignore
+        return trailers
+
+    @staticmethod
+    def _get_trailer_url(site: str, key: str) -> str:
+        TRAILER_SITES: Dict[str, str] = settings.TRAILER_SITES
+        base_url = TRAILER_SITES[site]
+        return f"{base_url}{key}"
+
+    def get_trailers(self) -> ListType[Dict[str, str]]:
+        trailers = []
+        for t in self._pre_get_trailers():
+            trailer = {
+                "url": self._get_trailer_url(t["site"], t["key"]),
+                "name": t["name"],
+            }
+            trailers.append(trailer)
+        return trailers
 
     @property
     def has_trailers(self) -> bool:

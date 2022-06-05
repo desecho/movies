@@ -57,7 +57,7 @@
             <span class="item-desc">{% trans 'Trailers' %}:</span><br>
             <div class="trailers">
               {% for trailer in record.movie.get_trailers %}
-                <a href="http://www.youtube.com/watch?v={{ trailer.source }}" target="_blank">{{ trailer.name }}</a>
+                <a href="{{ trailer.url }}" target="_blank">{{ trailer.name }}</a>
               {% endfor %}
             </div>
           {% endif %}

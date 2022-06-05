@@ -5,9 +5,10 @@ from typing import Any, Dict, List, Optional, Union
 import tmdbsimple
 from babel.dates import format_date
 from django.conf import settings
+from sentry_sdk import capture_exception
 from tmdbsimple import Movies
 
-from .exceptions import MovieNotInDb
+from .exceptions import MovieNotInDb, TrailerSiteNotFoundError
 from .models import User, UserAnonymous, get_poster_url, get_tmdb_url
 
 
@@ -123,11 +124,25 @@ def get_movies_from_tmdb(
     return []
 
 
+def _is_valid_trailer_site(site: str) -> bool:
+    return site in settings.TRAILER_SITES.keys()
+
+
 def _get_trailers(movie_data: Movies) -> List[Dict[str, str]]:
     trailers = []
-    for trailer in movie_data.videos()["results"]:
-        trailer_ = {"name": trailer["name"], "source": trailer["key"]}
-        trailers.append(trailer_)
+    for t in movie_data.videos()["results"]:
+        if t["type"] == "Trailer":
+            site = t["site"]
+            try:
+                if not _is_valid_trailer_site(site):
+                    raise TrailerSiteNotFoundError(f"Site - {site}")
+            except TrailerSiteNotFoundError as e:
+                if settings.DEBUG:
+                    raise
+                capture_exception(e)
+                continue
+            trailer_ = {"name": t["name"], "key": t["key"], "site": site}
+            trailers.append(trailer_)
     return trailers
 
 

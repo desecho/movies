@@ -24,9 +24,9 @@
       "release_date": "1999-03-30",
       "runtime": "02:16:00",
       "homepage": "http://www.warnerbros.com/matrix",
-      "trailers": "[\n  {\n    \"name\": \"Matrix Trailer HD (1999)\",\n    \"source\": \"m8e-FF8MsqU\"\n  }\n]",
-      "trailers_en": "[\n  {\n    \"name\": \"Matrix Trailer HD (1999)\",\n    \"source\": \"m8e-FF8MsqU\"\n  }\n]",
-      "trailers_ru": "[]"
+      "trailers": "[{\"key\": \"nUEQNVV3Gfs\", \"name\": \"Official 4K Trailer\", \"site\": \"YouTube\"}, {\"key\": \"L0fw0WzFaBM\", \"name\": \"20th Anniversary UK Trailer\", \"site\": \"YouTube\"}, {\"key\": \"m8e-FF8MsqU\", \"name\": \"Classic Trailer\", \"site\": \"YouTube\"}]",
+      "trailers_en": "[{\"key\": \"nUEQNVV3Gfs\", \"name\": \"Official 4K Trailer\", \"site\": \"YouTube\"}, {\"key\": \"L0fw0WzFaBM\", \"name\": \"20th Anniversary UK Trailer\", \"site\": \"YouTube\"}, {\"key\": \"m8e-FF8MsqU\", \"name\": \"Classic Trailer\", \"site\": \"YouTube\"}]",
+      "trailers_ru": "[{\"key\": \"YihPA42fdQ8\", \"name\": \"Матрица (1999) — русский трейлер HD\", \"site\": \"YouTube\"}]"
     }
   },
   {
@@ -54,8 +54,8 @@
       "release_date": "1999-11-12",
       "runtime": "02:10:00",
       "homepage": "http://www.dogma-movie.com/",
-      "trailers": "[\n  {\n    \"name\": \"Trailer 1\",\n    \"source\": \"20CRw3XdETA\"\n  }\n]",
-      "trailers_en": "[\n  {\n    \"name\": \"Trailer 1\",\n    \"source\": \"20CRw3XdETA\"\n  }\n]",
+      "trailers": "[{\"key\": \"j4rIdRC2DMA\", \"name\": \"Dogma ≣ 1999 ≣ Trailer ≣ Remastered\", \"site\": \"YouTube\"}, {\"key\": \"20CRw3XdETA\", \"name\": \"Dogma trailer\", \"site\": \"YouTube\"}]",
+      "trailers_en": "[{\"key\": \"j4rIdRC2DMA\", \"name\": \"Dogma ≣ 1999 ≣ Trailer ≣ Remastered\", \"site\": \"YouTube\"}, {\"key\": \"20CRw3XdETA\", \"name\": \"Dogma trailer\", \"site\": \"YouTube\"}]",
       "trailers_ru": "[]"
     }
   },
@@ -84,9 +84,9 @@
       "release_date": "1994-10-13",
       "runtime": "02:34:00",
       "homepage": "",
-      "trailers": "[\n  {\n    \"name\": \"Official Trailer\",\n    \"source\": \"s7EdQ4FqbhY\"\n  }\n]",
-      "trailers_en": "[\n  {\n    \"name\": \"Official Trailer\",\n    \"source\": \"s7EdQ4FqbhY\"\n  }\n]",
-      "trailers_ru": "[]"
+      "trailers": "[{\"key\": \"tGpTpVyI_OQ\", \"name\": \"Official Trailer\", \"site\": \"YouTube\"}]",
+      "trailers_en": "[{\"key\": \"tGpTpVyI_OQ\", \"name\": \"Official Trailer\", \"site\": \"YouTube\"}]",
+      "trailers_ru": "[{\"key\": \"2fUuQsLcJVw\", \"name\": \"Криминальное чтиво / Pulp Fiction 1994 Русский трейлер HD\", \"site\": \"YouTube\"}, {\"key\": \"VHDmVv8fg1k\", \"name\": \"Криминальное Чтиво - Трейлер\", \"site\": \"YouTube\"}]"
     }
   },
   {
@@ -114,9 +114,9 @@
       "release_date": "2012-04-25",
       "runtime": "02:23:00",
       "homepage": "http://marvel.com/avengers_movie/",
-      "trailers": "[\n  {\n    \"name\": \"Trailer #2\",\n    \"source\": \"hIR8Ar-Z4hw\"\n  },\n  {\n    \"name\": \"Trailer #1\",\n    \"source\": \"eOrNdBpGMv8\"\n  },\n  {\n    \"name\": \"Superbowl XLVI Commercial\",\n    \"source\": \"bGt-saFvkNk\"\n  }\n]",
-      "trailers_en": "[\n  {\n    \"name\": \"Trailer #2\",\n    \"source\": \"hIR8Ar-Z4hw\"\n  },\n  {\n    \"name\": \"Trailer #1\",\n    \"source\": \"eOrNdBpGMv8\"\n  },\n  {\n    \"name\": \"Superbowl XLVI Commercial\",\n    \"source\": \"bGt-saFvkNk\"\n  }\n]",
-      "trailers_ru": "[\n  {\n    \"name\": \"\\u041c\\u0441\\u0442\\u0438\\u0442\\u0435\\u043b\\u0438   \\u0440\\u0443\\u0441\\u0441\\u043a\\u0438\\u0439 \\u0434\\u0443\\u0431\\u043b\\u0438\\u0440\\u043e\\u0432\\u0430\\u043d\\u043d\\u044b\\u0439 \\u0442\\u0440\\u0435\\u0439\\u043b\\u0435\\u0440\",\n    \"source\": \"4VkO26-l9dg\"\n  }\n]"
+      "trailers": "[{\"key\": \"hIR8Ar-Z4hw\", \"name\": \"Marvel's The Avengers Trailer 2 (OFFICIAL)\", \"site\": \"YouTube\"}, {\"key\": \"eOrNdBpGMv8\", \"name\": \"Marvel's The Avengers- Trailer (OFFICIAL)\", \"site\": \"YouTube\"}]",
+      "trailers_en": "[{\"key\": \"hIR8Ar-Z4hw\", \"name\": \"Marvel's The Avengers Trailer 2 (OFFICIAL)\", \"site\": \"YouTube\"}, {\"key\": \"eOrNdBpGMv8\", \"name\": \"Marvel's The Avengers- Trailer (OFFICIAL)\", \"site\": \"YouTube\"}]",
+      "trailers_ru": "[]"
     }
   },
   {
@@ -144,9 +144,9 @@
       "release_date": "1998-06-19",
       "runtime": "02:01:00",
       "homepage": "",
-      "trailers": "[\n  {\n    \"name\": \"The X Files: Fight The Future (1998)\",\n    \"source\": \"2Dauoy3H764\"\n  }\n]",
-      "trailers_en": "[\n  {\n    \"name\": \"The X Files: Fight The Future (1998)\",\n    \"source\": \"2Dauoy3H764\"\n  }\n]",
-      "trailers_ru": "[]"
+      "trailers": "[{\"key\": \"NmVHEEogDII\", \"name\": \"The X-Files: Fight the Future (1998) Trailer C\", \"site\": \"YouTube\"}, {\"key\": \"cuPtbhyFfTE\", \"name\": \"The X-Files: Fight the Future (1998) Trailer B\", \"site\": \"YouTube\"}, {\"key\": \"prV_8CUyu5k\", \"name\": \"The X-Files: Fight the Future (1998) Trailer A\", \"site\": \"YouTube\"}, {\"key\": \"2Dauoy3H764\", \"name\": \"The X-Files: Fight the Future (1998) - Theatrical Trailer\", \"site\": \"YouTube\"}]",
+      "trailers_en": "[{\"key\": \"NmVHEEogDII\", \"name\": \"The X-Files: Fight the Future (1998) Trailer C\", \"site\": \"YouTube\"}, {\"key\": \"cuPtbhyFfTE\", \"name\": \"The X-Files: Fight the Future (1998) Trailer B\", \"site\": \"YouTube\"}, {\"key\": \"prV_8CUyu5k\", \"name\": \"The X-Files: Fight the Future (1998) Trailer A\", \"site\": \"YouTube\"}, {\"key\": \"2Dauoy3H764\", \"name\": \"The X-Files: Fight the Future (1998) - Theatrical Trailer\", \"site\": \"YouTube\"}]",
+      "trailers_ru": "[{\"key\": \"qmH6gixStmE\", \"name\": \"Секретные материалы - Trailer\", \"site\": \"YouTube\"}]"
     }
   }
 ]

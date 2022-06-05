@@ -369,8 +369,12 @@ RECORDS_ON_PAGE = 50
 PEOPLE_ON_PAGE = 25
 FEED_DAYS = 7
 OMDB_BASE_URL = "http://www.omdbapi.com/"
-
+TRAILER_SITES = {
+    "YouTube": "https://www.youtube.com/watch?v=",
+    "Vimeo": "https://vimeo.com/",
+}
 VK_NO_AVATAR = ["https://vk.com/images/camera_100.png", "https://vk.com/images/camera_200.png"]
+IS_TEST = False
 
 # API Keys
 TMDB_KEY = getenv("TMDB_KEY")
