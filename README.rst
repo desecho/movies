@@ -3,8 +3,9 @@ Movies
 
 |Deployment Status| |Requirements Status| |Codecov|
 
-The web application on Django_ 4, Vue.js_ 2, Bootstrap_ 4. Create movie lists ("Watched" and "To watch"), rate movies, and add comments.
-You can also add additional information such as if you watched the movie in the original version, in theatre, an extended version, in 4k, etc.
+The web application on Django_ 4, Vue.js_ 2, Bootstrap_ 4. Create movie lists "Watched" and "To Watch", rate movies, and add comments.
+
+You can also add additional information such as if you watched the movie in the original version, in theatre, an extended version, in 4K, etc.
 
 You can also see where you can stream movies.
 
@@ -92,12 +93,16 @@ Used images
 
 .. _TMDB: https://www.themoviedb.org/
 .. _OMDb: http://www.omdbapi.com/
+
 .. _documentation: https://github.com/desecho/movies/blob/master/doc.rst
+
 .. _Vue.js: https://vuejs.org/
 .. _Bootstrap: https://getbootstrap.com/
 .. _Django: https://www.djangoproject.com/
+
 .. _ubuntu-vm: https://github.com/desecho/ubuntu-vm
 .. _mysql-docker: https://github.com/desecho/mysql-docker
+
 .. _GitHub Actions: https://github.com/features/actions
 .. _Cancel Workflow Action: https://github.com/marketplace/actions/cancel-workflow-action
 .. _Checkout: https://github.com/marketplace/actions/checkout
@@ -111,7 +116,9 @@ Used images
 .. _DigitalOcean Spaces Upload Action: https://github.com/marketplace/actions/digitalocean-spaces-upload-action
 .. _Cache: https://github.com/marketplace/actions/cache
 .. _Docker Setup Buildx: https://github.com/marketplace/actions/docker-setup-buildx
+
 .. _VK app: http://vk.com/app3504693_2912142
+
 .. _IMDb logo: https://commons.wikimedia.org/wiki/File:IMDB_Logo_2016.svg
 .. _Down arrow icon: https://www.iconfinder.com/icons/211614/arrow_b_down_icon
 .. _TMDB Logos: https://www.themoviedb.org/about/logos-attribution
