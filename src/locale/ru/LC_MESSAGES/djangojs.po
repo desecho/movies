@@ -147,12 +147,3 @@ msgstr "Актёр"
 #: src/moviesapp/js/translations.js:6
 msgid "Director"
 msgstr "Режиссёр"
-
-#~ msgid "The list is empty"
-#~ msgstr "Список пуст"
-
-#~ msgid "Close all notifications"
-#~ msgstr "Закрыть все уведомления"
-
-#~ msgid "Error! Code #"
-#~ msgstr "Ошибка! Код #"
