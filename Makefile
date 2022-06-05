@@ -105,7 +105,7 @@ upload-backup:
 #------------------------------------
 .PHONY: test
 ## Run tests | Tests
-test: shellcheck hadolint shfmt csscomb-linter eslint jsonlint tox
+test: shellcheck hadolint shfmt tox eslint csscomb-linter jsonlint
 
 .PHONY: tox
 ## Run tox
