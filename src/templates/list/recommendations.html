@@ -12,17 +12,17 @@
         </div>
         <div class="poster">
           <img src="{{ record.movie.poster_normal }}" data-rjs="{{ record.movie.poster_big }}"
-               alt="{{ record.movie.title }}" loading="lazy"/>
+               alt="{{ record.movie.title }}" title="{{ record.movie.title_original }}" loading="lazy"/>
         </div>
         <div class="details">
           {% if record.movie.imdb_rating %}
-            <div class="imdb-rating"><span
-              class="item-desc">{% trans 'IMDb Rating' %}:</span> {{ record.movie.imdb_rating }}
+            <div class="imdb-rating">
+              <span class="item-desc">{% trans 'IMDb Rating' %}:</span> {{ record.movie.imdb_rating }}
             </div>
           {% endif %}
           {% if record.movie.release_date %}
-            <div class="release-date"><span
-              class="release-date-label item-desc">{% trans 'Release Date' %}:</span> {{ record.movie.release_date }}
+            <div class="release-date">
+              <span class="release-date-label item-desc">{% trans 'Release Date' %}:</span> {{ record.movie.release_date }}
             </div>
           {% endif %}
           {% if record.movie.country %} <span class="item-desc">{% trans 'Country' %}:</span>
@@ -76,8 +76,6 @@
     'use strict';
 
     urls.addToList = '{% url 'add_to_list' %}';
-
-
   </script>
   <script src="{% static 'js/recommendations.js' %}"></script>
 {% endblock %}

@@ -2,7 +2,6 @@
 
 {% block content %}
   {% include 'includes/movie_count.html' %}
-
   <div class="row">
     <div class="col-sm-12">
       {% if anothers_account %}
@@ -13,7 +12,6 @@
     </div>
   </div>
   <br>
-
   <div class="row">
     <div class="col-sm-12">
       <div class="btn-group btn-group-toggle" data-toggle="buttons">
@@ -38,7 +36,6 @@
           <input type="radio" {% if list == 'to-watch' %} checked {% endif %}>{% trans 'To Watch' %}
         </label>
       </div>
-
     </div>
   </div>
   <br>
@@ -47,7 +44,7 @@
   <div>
     {% for record in records %}
       <img src="{{ record.movie.poster_normal }}" data-rjs="{{ record.movie.poster_big }}"
-           alt="{{ record.movie.title }}" class="gallery-poster" loading="lazy"/>
+           alt="{{ record.movie.title }}" class="gallery-poster" title="{{ record.movie.title_original }}" loading="lazy"/>
     {% endfor %}
   </div>
 {% endblock %}

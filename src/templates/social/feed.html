@@ -16,10 +16,10 @@
         </td>
         <td>
           <img src="{{ action.movie_poster }}" data-rjs="{{ action.movie_poster_2x }}" alt="{{ action.movie }}"
-               title="{{ action.movie }}" class="small-poster" loading="lazy">
+               title="{{ action.movie.title_original }}" class="small-poster" loading="lazy">
         </td>
         <td class="d-none d-sm-table-cell test-feed-movie">
-          {{ action.movie }}
+          <span title="{{ action.movie.title_original }}">{{ action.movie }}</span>
         </td>
         <td>
           {{ action.action.action }}
