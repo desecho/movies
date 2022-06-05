@@ -27,7 +27,7 @@ class FeedView(TemplateAnonymousView):
         action_records = ActionRecord.objects.filter(date__range=(date_from, date_to)).order_by("-pk")
         request: AuthenticatedHttpRequest = self.request  # type: ignore
         users = request.user.get_users(friends=feed_name == "friends")
-        action_records = action_records.filter(user__in=users)
+        action_records = action_records.filter(user__in=users).select_related("movie", "action", "user", "list")
         return {"feed_name": FEED_TITLE[feed_name], "action_records": action_records}
 
 
