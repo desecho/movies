@@ -1,8 +1,6 @@
 ---
 name: Update IMDb Ratings
 on:
-  schedule:
-    - cron: "0 0 2 * *"  # Every Month at Midnight
   workflow_dispatch:
 
 jobs:
