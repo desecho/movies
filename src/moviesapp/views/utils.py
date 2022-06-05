@@ -5,7 +5,7 @@ from django.core.paginator import EmptyPage, Page, PageNotAnInteger, Paginator
 from django.db.models import QuerySet
 from django.shortcuts import get_object_or_404
 
-from ..models import ActionRecord, Record, User, UserAnonymous
+from ..models import Action, ActionRecord, Record, User, UserAnonymous
 
 
 def paginate(
@@ -32,14 +32,14 @@ def add_movie_to_list(movie_id: int, list_id: int, user: User) -> None:
     if records.exists():
         record = records[0]
         if record.list_id != list_id:
-            ActionRecord(action_id=2, user=user, movie_id=movie_id, list_id=list_id).save()
+            ActionRecord(action_id=Action.CHANGED_LIST, user=user, movie_id=movie_id, list_id=list_id).save()
             record.list_id = list_id
             record.date = datetime.today()
             record.save()
     else:
         record = Record(movie_id=movie_id, list_id=list_id, user=user)
         record.save()
-        ActionRecord(action_id=1, user=user, movie_id=movie_id, list_id=list_id).save()
+        ActionRecord(action_id=Action.ADDED_MOVIE, user=user, movie_id=movie_id, list_id=list_id).save()
 
 
 def get_anothers_account(username: Optional[str]) -> Optional[User]:

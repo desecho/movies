@@ -6,30 +6,30 @@
   <br>
   <table id="feed" class="table col-md-11 col-lg-10 col-xl-8 table-responsive">
     <tbody>
-    {% for action in actions %}
+    {% for action_record in action_records %}
       <tr class="feed-record">
         <td class="test-feed-user">
-          <a href="{% url 'list' action.user.username 'watched' %}">{% avatar action.user %}</a>
+          <a href="{% url 'list' action_record.user.username 'watched' %}">{% avatar action_record.user %}</a>
         </td>
         <td class="d-none d-sm-table-cell">
-          {{ action.date }}
+          {{ action_record.date }}
         </td>
         <td>
-          <img src="{{ action.movie_poster }}" data-rjs="{{ action.movie_poster_2x }}" alt="{{ action.movie }}"
-               title="{{ action.movie.title_original }}" class="small-poster" loading="lazy">
+          <img src="{{ action_record.movie.poster_small }}" data-rjs="{{ action_record.movie.poster_normal }}" alt="{{ action_record.movie }}"
+               title="{{ action_record.movie.title_original }}" class="small-poster" loading="lazy">
         </td>
         <td class="d-none d-sm-table-cell test-feed-movie">
-          <span title="{{ action.movie.title_original }}">{{ action.movie }}</span>
+          <span title="{{ action_record.movie.title_original }}">{{ action_record.movie }}</span>
         </td>
         <td>
-          {{ action.action.action }}
+          {{ action_record.action }}
         </td>
         <td class="feed-action-data">
-          {% if action.list %} {{ action.list }} {% endif %}
-          {% if action.rating %}
-            <div class="rating" data-rating="{{ action.rating }}"></div>
+          {% if action_record.list %} {{ action_record.list }} {% endif %}
+          {% if action_record.rating %}
+            <div class="rating" data-rating="{{ action_record.rating }}"></div>
           {% endif %}
-          {% if action.comment %} {{ action.comment }} {% endif %}
+          {% if action_record.comment %} {{ action_record.comment }} {% endif %}
         </td>
       </tr>
     {% endfor %}

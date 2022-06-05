@@ -24,30 +24,11 @@ class FeedView(TemplateAnonymousView):
 
         date_to = datetime.today()
         date_from = date_to - relativedelta(days=settings.FEED_DAYS)
-        actions = ActionRecord.objects.filter(date__range=(date_from, date_to)).order_by("-pk")
+        action_records = ActionRecord.objects.filter(date__range=(date_from, date_to)).order_by("-pk")
         request: AuthenticatedHttpRequest = self.request  # type: ignore
         users = request.user.get_users(friends=feed_name == "friends")
-        actions = actions.filter(user__in=users)
-        posters = [action.movie.poster_small for action in actions]
-        posters_2x = [action.movie.poster_normal for action in actions]
-        actions_output = []
-
-        i = 0
-        for action in actions:
-            action_ = {
-                "user": action.user,
-                "action": action,
-                "movie": action.movie,
-                "movie_poster": posters[i],
-                "movie_poster_2x": posters_2x[i],
-                "list": action.list,
-                "comment": action.comment,
-                "rating": action.rating,
-                "date": action.date,
-            }
-            actions_output.append(action_)
-            i += 1
-        return {"feed_name": FEED_TITLE[feed_name], "actions": actions_output}
+        action_records = action_records.filter(user__in=users)
+        return {"feed_name": FEED_TITLE[feed_name], "action_records": action_records}
 
 
 class PeopleView(TemplateAnonymousView):
