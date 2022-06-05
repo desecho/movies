@@ -47,7 +47,7 @@
   <div>
     {% for record in records %}
       <img src="{{ record.movie.poster_normal }}" data-rjs="{{ record.movie.poster_big }}"
-           alt="{{ record.movie.title }}" class="gallery-poster"/>
+           alt="{{ record.movie.title }}" class="gallery-poster" loading="lazy"/>
     {% endfor %}
   </div>
 {% endblock %}

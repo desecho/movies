@@ -130,9 +130,9 @@
             </div>
             <div class="poster">
               <img src="{{ record.movie.poster_normal }}" data-rjs="{{ record.movie.poster_big }}"
-                   alt="{{ record.movie.title }}" v-show="mode == 'full'"/>
+                   alt="{{ record.movie.title }}" v-show="mode == 'full'" loading="lazy"/>
               <img src="{{ record.movie.poster_small }}" data-rjs="{{ record.movie.poster_normal }}"
-                   alt="{{ record.movie.title }}" v-show="mode != 'full'"/>
+                   alt="{{ record.movie.title }}" v-show="mode != 'full'" loading="lazy"/>
             </div>
             <div class="details">
               {% if record.movie.imdb_rating %}
