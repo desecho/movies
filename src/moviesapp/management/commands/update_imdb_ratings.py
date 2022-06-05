@@ -7,7 +7,7 @@ from moviesapp.utils import load_omdb_movie_data
 
 
 class Command(BaseCommand):
-    help = "Updates the IMDB ratings"
+    help = "Updates the IMDb ratings"
 
     def handle(self, *args: Any, **options: Any) -> None:  # pylint: disable=unused-argument
         movies = Movie.objects.all()
