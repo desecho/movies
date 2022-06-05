@@ -187,6 +187,16 @@
                     {% endfor %}
                   </div>
                 {% endif %}
+                {% if user.country and record.movie.provider_records %}
+                  <span class="item-desc">{% trans 'Stream on' %}:</span>
+                  {% for provider_record in record.movie.provider_records.all %}
+                      {% if provider_record.country == user.country %}
+                        <a href="{{ provider_record.tmdb_watch_url }}" target="_blank">
+                          <img src="{{ provider_record.provider.logo }}" alt="{{ provider_record.provider }}" class="provider" />
+                        </a>
+                      {% endif %}
+                    {% endfor %}
+                {% endif %}
                 <br>
               </div>
               <div class="review {% if request.session.mode == 'full' %} full {% endif %}">

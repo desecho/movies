@@ -1,7 +1,7 @@
 [
   {
     "id": 603,
-    "tmdbLink": "https://www.themoviedb.org/movie/603",
+    "tmdbLink": "https://www.themoviedb.org/movie/603/",
     "elementId": "movie603",
     "releaseDate": "Mar 30, 1999",
     "title": "The Matrix",
@@ -10,7 +10,7 @@
   },
   {
     "id": 604,
-    "tmdbLink": "https://www.themoviedb.org/movie/604",
+    "tmdbLink": "https://www.themoviedb.org/movie/604/",
     "elementId": "movie604",
     "releaseDate": "May 15, 2003",
     "title": "The Matrix Reloaded",
@@ -19,7 +19,7 @@
   },
   {
     "id": 605,
-    "tmdbLink": "https://www.themoviedb.org/movie/605",
+    "tmdbLink": "https://www.themoviedb.org/movie/605/",
     "elementId": "movie605",
     "releaseDate": "Nov 5, 2003",
     "title": "The Matrix Revolutions",
@@ -28,7 +28,7 @@
   },
   {
     "id": 14543,
-    "tmdbLink": "https://www.themoviedb.org/movie/14543",
+    "tmdbLink": "https://www.themoviedb.org/movie/14543/",
     "elementId": "movie14543",
     "releaseDate": "Nov 19, 2001",
     "title": "The Matrix Revisited",

@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-05 11:37-0400\n"
-"PO-Revision-Date: 2022-06-05 11:39-0400\n"
+"POT-Creation-Date: 2022-06-05 18:42-0400\n"
+"PO-Revision-Date: 2022-06-05 18:43-0400\n"
 "Last-Translator:   <>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -59,8 +59,8 @@ msgstr "Показывать мои списки только друзьям"
 msgid "Language"
 msgstr "Язык"
 
-#: src/moviesapp/models.py:172 src/templates/list/list.html:154
-#: src/templates/list/recommendations.html:28
+#: src/moviesapp/models.py:172 src/moviesapp/models.py:384
+#: src/templates/list/list.html:154 src/templates/list/recommendations.html:28
 msgid "Country"
 msgstr "Страна"
 
@@ -87,8 +87,9 @@ msgstr "О Movies"
 #| msgid ""
 #| "\n"
 #| "    <p>Create movie lists \"Watched\" and \"To Watch\", rate movies, and add comments.</p>\n"
-#| "    <p>You can also add additional information such as if you watched the movie in the original version, in theatre, an extended version, in 4K.</p>\n"
+#| "    <p>You can also add additional information such as if you watched the movie in the original version, in theatre, an extended version, in 4K, etc.</p>\n"
 #| "    <p>You can see the original title when you hover over the movie title or poster.</p>\n"
+#| "    <p>If you set the country in preferences, you will be able to see where you can stream the movie.</p>\n"
 #| "    <!-- <p>There is a Movies <a href=\"https://vk.com/app3504693_2912142\" target=\"_blank\">VK app</a> available.</p>\n"
 #| "    <p>If the app doesn't work in Chrome - open Cookies settings (chrome://settings/cookies)\n"
 #| "       and change the setting \"Block third-party cookies\".</p>-->\n"
@@ -115,6 +116,7 @@ msgid ""
 "    <p>Create movie lists \"Watched\" and \"To Watch\", rate movies, and add comments.</p>\n"
 "    <p>You can also add additional information such as if you watched the movie in the original version, in theatre, an extended version, in 4K, etc.</p>\n"
 "    <p>You can see the original title when you hover over the movie title or poster.</p>\n"
+"    <p>If you set the country in preferences, you will be able to see where you can stream movies.</p>\n"
 "    <!-- <p>There is a Movies <a href=\"https://vk.com/app3504693_2912142\" target=\"_blank\">VK app</a> available.</p>\n"
 "    <p>If the app doesn't work in Chrome - open Cookies settings (chrome://settings/cookies)\n"
 "       and change the setting \"Block third-party cookies\".</p>-->\n"
@@ -141,6 +143,7 @@ msgstr ""
 "<p>Создавайте списки фильмов \"Просмотрено\" и \"К Просмотру\", ставьте оценки фильмам и добавляйте комментарии.</p>\n"
 "<p>Вы также можете добавить дополнительную информацию такую как если вы смотрели фильм в оригинале, в кинотеатре, расширенную версию, в 4K, и т.д.</p>\n"
 "<p>Вы можете увидеть оригинальное название при наведении курсора на название фильма или на постер.</p>\n"
+"<p>Если вы выберите страну в настройках, вы сможете увидеть где можно посмотреть фильмы.</p>\n"
 "<!-- <p>В VK доступно <a href=\"https://vk.com/app3504693_2912142\" target=\"_blank\">приложение Movies</a>.</p> \n"
 "<p>Если приложение не работает в Chrome - откройте настройки Cookies (chrome://settings/cookies) и измените настройку \"Block third-party cookies\".</p>-->\n"
 "<p>Система оценок:</p>\n"
@@ -270,39 +273,43 @@ msgstr "Вебсайт"
 msgid "Trailers"
 msgstr "Трейлеры"
 
-#: src/templates/list/list.html:198
+#: src/templates/list/list.html:191
+msgid "Stream on"
+msgstr "Смотреть на"
+
+#: src/templates/list/list.html:208
 msgid "Comment"
 msgstr "Комментарий"
 
-#: src/templates/list/list.html:200 src/templates/user/preferences.html:49
+#: src/templates/list/list.html:210 src/templates/user/preferences.html:49
 msgid "Save"
 msgstr "Сохранить"
 
-#: src/templates/list/list.html:208
+#: src/templates/list/list.html:218
 msgid "Add comment"
 msgstr "Добавить комментарий"
 
-#: src/templates/list/list.html:217
+#: src/templates/list/list.html:227
 msgid "Watched original version"
 msgstr "Смотрел в оригинале"
 
-#: src/templates/list/list.html:220
+#: src/templates/list/list.html:230
 msgid "Watched extended version"
 msgstr "Смотрел расширенную версию"
 
-#: src/templates/list/list.html:223
+#: src/templates/list/list.html:233
 msgid "Watched in theatre"
 msgstr "Смотрел в кинотеатре"
 
-#: src/templates/list/list.html:226
+#: src/templates/list/list.html:236
 msgid "Watched in HD"
 msgstr "Смотрел в HD"
 
-#: src/templates/list/list.html:229
+#: src/templates/list/list.html:239
 msgid "Watched in FullHD"
 msgstr "Смотрел в FullHD"
 
-#: src/templates/list/list.html:232
+#: src/templates/list/list.html:242
 msgid "Watched in 4K"
 msgstr "Смотрел в 4K"
 

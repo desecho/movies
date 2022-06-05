@@ -35,7 +35,7 @@ from .vk import Vk
 
 # Cannot be moved to utils because it would cause circular imports
 def get_tmdb_url(tmdb_id: int) -> str:
-    return urljoin(settings.TMDB_MOVIE_BASE_URL, str(tmdb_id))
+    return f"{settings.TMDB_MOVIE_BASE_URL}{tmdb_id}/"
 
 
 # Cannot be moved to utils because it would cause circular imports
@@ -375,4 +375,17 @@ class Provider(Model):
 
     @property
     def logo(self) -> str:
-        return f"{settings.STATIC_URL}/img/providers/{self.id}"
+        return f"{settings.STATIC_URL}/img/providers/{self.id}.jpg"
+
+
+class ProviderRecord(Model):
+    provider = ForeignKey(Provider, CASCADE)
+    movie = ForeignKey(Movie, CASCADE, related_name="provider_records")
+    country = CountryField(verbose_name=_("Country"))
+
+    def __str__(self) -> str:
+        return f"{self.provider} - {self.movie}"
+
+    @property
+    def tmdb_watch_url(self) -> str:
+        return f"{self.movie.tmdb_url}/watch?locale={self.country}"

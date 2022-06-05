@@ -151,9 +151,20 @@ def _get_movie_data(tmdb_id: int, lang: str) -> Movies:
     return tmdb.Movies(tmdb_id)
 
 
+def _get_watch_data(movie_data: Movies) -> List[Dict[str, Union[str, int]]]:
+    watch_data = []
+    for country_code, data in movie_data.watch_providers()["results"].items():
+        if "flatrate" in data:
+            for provider in data["flatrate"]:
+                record = {"country_code": country_code, "provider_id": provider["provider_id"]}
+                watch_data.append(record)
+    return watch_data
+
+
 def get_tmdb_movie_data(tmdb_id: int) -> Dict[str, Any]:
     movie_data_en = _get_movie_data(tmdb_id, "en")
     movie_info_en = movie_data_en.info()
+    watch_data = _get_watch_data(movie_data_en)
     # We have to get all info in English first before we switch to Russian.
     trailers_en = _get_trailers(movie_data_en)
     movie_data_ru = _get_movie_data(tmdb_id, "ru")
@@ -176,5 +187,6 @@ def get_tmdb_movie_data(tmdb_id: int) -> Dict[str, Any]:
             "title_ru": movie_info_ru["title"],
             "description_en": movie_info_en["overview"],
             "description_ru": movie_info_ru["overview"],
+            "watch_data": watch_data,
         }
     raise MovieNotInDb(tmdb_id)

@@ -8,8 +8,8 @@ from django.conf import settings
 from requests.exceptions import RequestException
 from sentry_sdk import capture_exception
 
-from .exceptions import OmdbError, OmdbLimitReached, OmdbRequestError
-from .models import Movie
+from .exceptions import OmdbError, OmdbLimitReached, OmdbRequestError, ProviderNotFoundError
+from .models import Movie, Provider, ProviderRecord
 from .tmdb import get_tmdb_movie_data
 
 
@@ -42,17 +42,43 @@ def join_dicts(dict1: Dict[str, Any], dict2: Dict[str, Any]) -> Dict[str, Any]:
     return result
 
 
+def _save_watch_data(movie: Movie, watch_data: List[Dict[str, Union[str, int]]], refresh: bool = False) -> None:
+    if refresh:
+        ProviderRecord.objects.filter(movie=movie).delete()
+    for record in watch_data:
+        provider_id: int = record["provider_id"]  # type: ignore
+        try:
+            provider = Provider.objects.get(pk=provider_id)
+        except Provider.DoesNotExist as e:
+            raise ProviderNotFoundError(f"Provider ID - {provider_id}") from e
+        ProviderRecord.objects.create(provider=provider, movie=movie, country=record["country_code"])
+
+
 def _save_movie(movie_data: Dict[str, Any]) -> int:
+    watch_data = movie_data.pop("watch_data")
     movie = Movie(**movie_data)
     movie.save()
+    try:
+        _save_watch_data(movie, watch_data)
+    except ProviderNotFoundError as e:
+        if settings.DEBUG:
+            raise
+        capture_exception(e)
     return movie.pk
 
 
 def _update_movie(tmdb_id: int, movie_data: Dict[str, Any]) -> bool:
-    movie = Movie.objects.filter(tmdb_id=tmdb_id)
-    # Maybe use model_to_dict instead?
-    movie_initial_data = movie.values()[0]
-    movie.update(**movie_data)
+    # Use filter here to be able to use "update" functionality.
+    movies = Movie.objects.filter(tmdb_id=tmdb_id)
+    movie_initial_data = movies.values()[0]
+    watch_data = movie_data.pop("watch_data")
+    movies.update(**movie_data)
+    try:
+        _save_watch_data(movies[0], watch_data, True)
+    except ProviderNotFoundError as e:
+        if settings.DEBUG:
+            raise
+        capture_exception(e)
     movie_updated_data = Movie.objects.filter(tmdb_id=tmdb_id).values()[0]
     result: bool = movie_initial_data != movie_updated_data
     return result

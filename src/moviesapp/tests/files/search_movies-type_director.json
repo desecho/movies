@@ -1,7 +1,7 @@
 [
   {
     "id": 1832,
-    "tmdbLink": "https://www.themoviedb.org/movie/1832",
+    "tmdbLink": "https://www.themoviedb.org/movie/1832/",
     "elementId": "movie1832",
     "releaseDate": "Nov 12, 1999",
     "title": "Dogma",
@@ -10,7 +10,7 @@
   },
   {
     "id": 2255,
-    "tmdbLink": "https://www.themoviedb.org/movie/2255",
+    "tmdbLink": "https://www.themoviedb.org/movie/2255/",
     "elementId": "movie2255",
     "releaseDate": "Apr 4, 1997",
     "title": "Chasing Amy",
@@ -19,7 +19,7 @@
   },
   {
     "id": 2292,
-    "tmdbLink": "https://www.themoviedb.org/movie/2292",
+    "tmdbLink": "https://www.themoviedb.org/movie/2292/",
     "elementId": "movie2292",
     "releaseDate": "Sep 13, 1994",
     "title": "Clerks",
@@ -28,7 +28,7 @@
   },
   {
     "id": 2293,
-    "tmdbLink": "https://www.themoviedb.org/movie/2293",
+    "tmdbLink": "https://www.themoviedb.org/movie/2293/",
     "elementId": "movie2293",
     "releaseDate": "Oct 20, 1995",
     "title": "Mallrats",
@@ -37,7 +37,7 @@
   },
   {
     "id": 2294,
-    "tmdbLink": "https://www.themoviedb.org/movie/2294",
+    "tmdbLink": "https://www.themoviedb.org/movie/2294/",
     "elementId": "movie2294",
     "releaseDate": "Aug 22, 2001",
     "title": "Jay and Silent Bob Strike Back",
@@ -46,7 +46,7 @@
   },
   {
     "id": 2295,
-    "tmdbLink": "https://www.themoviedb.org/movie/2295",
+    "tmdbLink": "https://www.themoviedb.org/movie/2295/",
     "elementId": "movie2295",
     "releaseDate": "May 25, 2006",
     "title": "Clerks II",
@@ -55,7 +55,7 @@
   },
   {
     "id": 10358,
-    "tmdbLink": "https://www.themoviedb.org/movie/10358",
+    "tmdbLink": "https://www.themoviedb.org/movie/10358/",
     "elementId": "movie10358",
     "releaseDate": "Sep 18, 2008",
     "title": "Zack and Miri Make a Porno",
@@ -64,7 +64,7 @@
   },
   {
     "id": 23742,
-    "tmdbLink": "https://www.themoviedb.org/movie/23742",
+    "tmdbLink": "https://www.themoviedb.org/movie/23742/",
     "elementId": "movie23742",
     "releaseDate": "Feb 26, 2010",
     "title": "Cop Out",
@@ -73,7 +73,7 @@
   },
   {
     "id": 9541,
-    "tmdbLink": "https://www.themoviedb.org/movie/9541",
+    "tmdbLink": "https://www.themoviedb.org/movie/9541/",
     "elementId": "movie9541",
     "releaseDate": "Mar 25, 2004",
     "title": "Jersey Girl",
@@ -82,7 +82,7 @@
   },
   {
     "id": 48572,
-    "tmdbLink": "https://www.themoviedb.org/movie/48572",
+    "tmdbLink": "https://www.themoviedb.org/movie/48572/",
     "elementId": "movie48572",
     "releaseDate": "Aug 19, 2011",
     "title": "Red State",
@@ -91,7 +91,7 @@
   },
   {
     "id": 87233,
-    "tmdbLink": "https://www.themoviedb.org/movie/87233",
+    "tmdbLink": "https://www.themoviedb.org/movie/87233/",
     "elementId": "movie87233",
     "releaseDate": "Feb 27, 2002",
     "title": "Clerks - The Flying Car",
@@ -100,7 +100,7 @@
   },
   {
     "id": 160020,
-    "tmdbLink": "https://www.themoviedb.org/movie/160020",
+    "tmdbLink": "https://www.themoviedb.org/movie/160020/",
     "elementId": "movie160020",
     "releaseDate": "Jan 30, 1992",
     "title": "Mae Day: The Crumbling of a Documentary",
@@ -109,7 +109,7 @@
   },
   {
     "id": 182812,
-    "tmdbLink": "https://www.themoviedb.org/movie/182812",
+    "tmdbLink": "https://www.themoviedb.org/movie/182812/",
     "elementId": "movie182812",
     "releaseDate": null,
     "title": "Clerks III",
@@ -118,7 +118,7 @@
   },
   {
     "id": 177361,
-    "tmdbLink": "https://www.themoviedb.org/movie/177361",
+    "tmdbLink": "https://www.themoviedb.org/movie/177361/",
     "elementId": "movie177361",
     "releaseDate": "Oct 2, 2012",
     "title": "Jay and Silent Bob Get Irish: The Swearing o' The Green!",
@@ -127,7 +127,7 @@
   },
   {
     "id": 246403,
-    "tmdbLink": "https://www.themoviedb.org/movie/246403",
+    "tmdbLink": "https://www.themoviedb.org/movie/246403/",
     "elementId": "movie246403",
     "releaseDate": "Sep 19, 2014",
     "title": "Tusk",
@@ -136,7 +136,7 @@
   },
   {
     "id": 290825,
-    "tmdbLink": "https://www.themoviedb.org/movie/290825",
+    "tmdbLink": "https://www.themoviedb.org/movie/290825/",
     "elementId": "movie290825",
     "releaseDate": "Jul 8, 2016",
     "title": "Yoga Hosers",
@@ -145,7 +145,7 @@
   },
   {
     "id": 323262,
-    "tmdbLink": "https://www.themoviedb.org/movie/323262",
+    "tmdbLink": "https://www.themoviedb.org/movie/323262/",
     "elementId": "movie323262",
     "releaseDate": "Apr 22, 2016",
     "title": "Holidays",
@@ -154,7 +154,7 @@
   },
   {
     "id": 440762,
-    "tmdbLink": "https://www.themoviedb.org/movie/440762",
+    "tmdbLink": "https://www.themoviedb.org/movie/440762/",
     "elementId": "movie440762",
     "releaseDate": null,
     "title": "Jay and Silent Bob Reboot",
@@ -163,7 +163,7 @@
   },
   {
     "id": 405180,
-    "tmdbLink": "https://www.themoviedb.org/movie/405180",
+    "tmdbLink": "https://www.themoviedb.org/movie/405180/",
     "elementId": "movie405180",
     "releaseDate": null,
     "title": "Moose Jaws",
