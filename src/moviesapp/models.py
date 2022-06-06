@@ -1,4 +1,5 @@
 import json
+from datetime import date
 from typing import Any, Dict, List as ListType, Optional
 from urllib.parse import urljoin
 
@@ -239,6 +240,10 @@ class Movie(Model):
     @property
     def tmdb_url(self) -> str:
         return get_tmdb_url(self.tmdb_id)
+
+    @property
+    def is_released(self) -> bool:
+        return self.release_date is not None and self.release_date <= date.today()
 
     # Hack to make tests work
     @staticmethod
