@@ -353,10 +353,10 @@ ifeq (manage,$(firstword $(MAKECMDGOALS)))
 endif
 
 .PHONY: manage
-## Run management command. Usage: [command]
+## Run management command. Usage: [command] arguments=arguments
 manage:
 	${SOURCE_CMDS} && \
-	${MANAGE_CMD} ${MANAGE_ARGS}
+	${MANAGE_CMD} ${MANAGE_ARGS} $(arguments)
 #------------------------------------
 
 #------------------------------------
@@ -409,9 +409,9 @@ ifeq (prod-manage,$(firstword $(MAKECMDGOALS)))
 endif
 
 .PHONY: prod-manage
-## Run management command in prod. Usage: [command]
+## Run management command in prod. Usage: [command] arguments=arguments
 prod-manage:
-	scripts/run_management_command.sh ${PROD_MANAGE_ARGS}
+	scripts/run_management_command.sh ${PROD_MANAGE_ARGS} $(arguments)
 
 .PHONY: prod-enable-debug
 ## Enable debug in prod. It will be reset with the next deployment

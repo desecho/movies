@@ -1,0 +1,30 @@
+---
+name: Update Movie Data Starting From Movie ID
+on:
+  workflow_dispatch:
+    inputs:
+      movie_id:
+        description: 'Movie ID'
+        required: true
+        type: integer
+
+jobs:
+  update_movie_data:
+    name: Update movie data starting from movie ID
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install kubectl
+        uses: azure/setup-kubectl@v2.1
+
+      - name: Configure kubectl
+        run: |
+          mkdir ~/.kube
+          echo $KUBECONFIG > ~/.kube/config
+        env:
+          KUBECONFIG: ${{ secrets.KUBECONFIG }}  # Done as a variable because doesn't work in place.
+
+      - name: Update all movies starting from selected movie ID
+        run: make prod-manage update_movie_data arguments="-s ${{ github.event.inputs.movie_id }}"
