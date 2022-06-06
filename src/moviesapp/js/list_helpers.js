@@ -26,10 +26,10 @@ export function setViewedIconAndRemoveButtons(recordId, listId) {
 
     if (listId === 0) {
       return;
-    } else if (listId === 1) {
+    } else if (listId === vm.listWatchedId) {
       icon = '';
       title = gettext('Watched');
-    } else if (listId === 2) {
+    } else if (listId === vm.listToWatchId) {
       icon = '-slash';
       title = gettext('To Watch');
     }

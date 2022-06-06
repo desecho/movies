@@ -188,6 +188,7 @@ class ListView(TemplateAnonymousView):
 
         list_data: Dict[int, int] = {}
         for record_id, movie_id in records_and_movies_ids.items():
+            # 0 means no list id.
             list_data[record_id] = movies_and_lists_ids.get(movie_id, 0)
         return list_data
 

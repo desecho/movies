@@ -23,6 +23,8 @@ window.vm = new Vue({
     movies: [],
     popularOnly: true,
     sortByDate: false,
+    listWatchedId: vars.listWatchedId,
+    listToWatchId: vars.listToWatchId,
   },
   methods: {
     search: function() {

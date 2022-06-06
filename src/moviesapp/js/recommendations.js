@@ -11,6 +11,10 @@ import {
 
 window.vm = new Vue({
   el: '#app',
+  data: {
+    listWatchedId: vars.listWatchedId,
+    listToWatchId: vars.listToWatchId,
+  },
   methods: {
     retinajs: retina,
     addToList: addToList,

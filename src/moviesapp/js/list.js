@@ -77,6 +77,8 @@ window.vm = new Vue({
     mode: vars.mode,
     isVkApp: vars.isVkApp,
     sort: vars.sort,
+    listWatchedId: vars.listWatchedId,
+    listToWatchId: vars.listToWatchId,
   },
   methods: {
     openUrl: function(url) {
