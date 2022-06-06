@@ -316,6 +316,7 @@ ADMIN_REORDER = (
             "moviesapp.Action",
             "moviesapp.ActionRecord",
             "moviesapp.Provider",
+            "moviesapp.ProviderRecord",
         ),
     },
     {"app": "social_django", "models": ("social_django.UserSocialAuth",)},
