@@ -166,8 +166,9 @@ package-lock.json
 src/moviesapp/static/js/
 src/moviesapp/static/font/
 src/moviesapp/static/*.css
-env.sh
+env_custom.sh
+env_secrets.sh
 /static
 /media
 db_env_prod.sh
-docker_secret.env
+docker_secrets.env
