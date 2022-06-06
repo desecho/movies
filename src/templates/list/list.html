@@ -187,7 +187,7 @@
                     {% endfor %}
                   </div>
                 {% endif %}
-                {% if user.country and record.movie.provider_records %}
+                {% if user.country and record.movie.provider_records.exists %}
                   <span class="item-desc">{% trans 'Stream on' %}:</span>
                   {% for provider_record in record.movie.provider_records.all %}
                       {% if provider_record.country == user.country %}
