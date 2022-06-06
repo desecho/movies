@@ -32,9 +32,8 @@ Development
 
 Run in Docker:
 
-1. Run ``make collectstatic``
-2. Run ``make docker-build``
-3. Run ``make docker-run``
+1. Run ``make docker-build``
+2. Run ``make docker-run``
 
 Debugging VK App:
 

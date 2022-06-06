@@ -170,3 +170,4 @@ env.sh
 /static
 /media
 db_env_prod.sh
+docker_secret.env

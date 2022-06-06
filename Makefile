@@ -5,6 +5,7 @@ include help.mk
 export PROJECT := movies
 export APP := moviesapp
 export BUCKET := scrap-db-backups
+export DOCKER_SECRET_ENV_FILE := docker_secret.env
 PROD_DB_HOST := mysql.samarchyan.me
 
 SHELL := /bin/bash
@@ -74,13 +75,16 @@ bootstrap: install-deps yarn-install-locked create-env-files create-venv create-
 
 .PHONY: create-env-files
 ## Create env files
-create-env-files: env.sh db_env_prod.sh
+create-env-files: env.sh db_env_prod.sh $(DOCKER_SECRET_ENV_FILE)
+
+$(DOCKER_SECRET_ENV_FILE):
+	cp "${DOCKER_SECRET_ENV_FILE}.tpl" $(DOCKER_SECRET_ENV_FILE)
 
 env.sh:
 	cp env_template.sh env.sh
 
 db_env_prod.sh:
-	cp db_env_prod_template.sh db_env_prod.sh
+	cp db_env_prod.sh.tpl db_env_prod.sh
 #------------------------------------
 
 #------------------------------------
@@ -358,7 +362,7 @@ manage:
 #------------------------------------
 # Docker commands
 #------------------------------------
-DOCKER_ENV_FILE := env_docker
+export DOCKER_ENV_FILE := docker.env
 
 .PHONY: docker-build
 ## Build image | Docker
@@ -367,7 +371,7 @@ docker-build:
 
 .PHONY: docker-run
 ## Run server in docker
-docker-run:
+docker-run: collectstatic
 	docker-compose up
 
 .PHONY: docker-sh

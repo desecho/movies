@@ -9,6 +9,7 @@ services:
       - "host.docker.internal:host-gateway"
     env_file:
       - ${DOCKER_ENV_FILE}
+      - ${DOCKER_SECRET_ENV_FILE}
 
   static:
     image: nginx:alpine
