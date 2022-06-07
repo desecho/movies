@@ -1,6 +1,7 @@
 from typing import Optional
 
 from django.contrib.admin import ModelAdmin, register, site
+from django.contrib.auth.models import Group
 from django.http import HttpRequest
 
 from .models import Action, ActionRecord, List, Movie, Provider, ProviderRecord, Record, User
@@ -53,3 +54,4 @@ class ProviderAdmin(ModelAdmin[Provider]):  # pylint:disable=unsubscriptable-obj
 
 
 site.register(User)
+site.unregister(Group)
