@@ -189,6 +189,10 @@ class User(AbstractUser, UserBase):
     def movies_to_watch_number(self) -> int:
         return self._get_movies_number(List.TO_WATCH)
 
+    @property
+    def country_supported(self) -> bool:
+        return self.country in settings.PROVIDERS_SUPPORTED_COUNTRIES
+
 
 class UserAnonymous(AnonymousUser, UserBase):
     def __init__(self, request: HttpRequest):  # pylint: disable=unused-argument
@@ -345,6 +349,12 @@ class Record(Model):
         if self.watched_in_full_hd:
             self.watched_in_hd = True
         super().save(*args, **kwargs)
+
+    @property
+    def provider_records(self) -> QuerySet["ProviderRecord"]:
+        if not self.user.country_supported:
+            return ProviderRecord.objects.none()
+        return self.movie.provider_records.filter(country=self.user.country)
 
 
 class Action(Model):
