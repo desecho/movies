@@ -372,7 +372,7 @@ TRAILER_SITES = {
     "YouTube": "https://www.youtube.com/watch?v=",
     "Vimeo": "https://vimeo.com/",
 }
-VK_NO_AVATAR = ["https://vk.com/images/camera_100.png", "https://vk.com/images/camera_200.png"]
+VK_NO_AVATAR = ("https://vk.com/images/camera_100.png", "https://vk.com/images/camera_200.png")
 IS_TEST = False
 PROVIDERS_SUPPORTED_COUNTRIES = ("RU", "CA", "US")
 
