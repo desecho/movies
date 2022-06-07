@@ -154,7 +154,7 @@ def _get_movie_data(tmdb_id: int, lang: str) -> Movies:
 def _get_watch_data(movie_data: Movies) -> List[Dict[str, Union[str, int]]]:
     watch_data = []
     for country_code, data in movie_data.watch_providers()["results"].items():
-        if "flatrate" in data:
+        if country_code in settings.PROVIDERS_SUPPORTED_COUNTRIES and "flatrate" in data:
             for provider in data["flatrate"]:
                 record = {"country_code": country_code, "provider_id": provider["provider_id"]}
                 watch_data.append(record)

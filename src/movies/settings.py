@@ -374,6 +374,7 @@ TRAILER_SITES = {
 }
 VK_NO_AVATAR = ["https://vk.com/images/camera_100.png", "https://vk.com/images/camera_200.png"]
 IS_TEST = False
+PROVIDERS_SUPPORTED_COUNTRIES = ("RU", "CA", "US")
 
 # API Keys
 TMDB_KEY = getenv("TMDB_KEY")

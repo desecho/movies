@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-05 18:42-0400\n"
-"PO-Revision-Date: 2022-06-05 18:43-0400\n"
-"Last-Translator:   <>\n"
+"POT-Creation-Date: 2022-06-06 22:41-0400\n"
+"PO-Revision-Date: 2022-06-06 22:46-0400\n"
+"Last-Translator: Anton Samarchyan <desecho@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -47,19 +47,19 @@ msgstr "К Просмотру"
 msgid "Feed"
 msgstr "Лента"
 
-#: src/moviesapp/models.py:164
+#: src/moviesapp/models.py:165
 msgid "Privacy"
 msgstr "Конфиденциальность"
 
-#: src/moviesapp/models.py:164
+#: src/moviesapp/models.py:165
 msgid "Show my lists only to friends"
 msgstr "Показывать мои списки только друзьям"
 
-#: src/moviesapp/models.py:167
+#: src/moviesapp/models.py:168
 msgid "Language"
 msgstr "Язык"
 
-#: src/moviesapp/models.py:172 src/moviesapp/models.py:384
+#: src/moviesapp/models.py:173 src/moviesapp/models.py:389
 #: src/templates/list/list.html:154 src/templates/list/recommendations.html:28
 msgid "Country"
 msgstr "Страна"
@@ -89,7 +89,7 @@ msgstr "О Movies"
 #| "    <p>Create movie lists \"Watched\" and \"To Watch\", rate movies, and add comments.</p>\n"
 #| "    <p>You can also add additional information such as if you watched the movie in the original version, in theatre, an extended version, in 4K, etc.</p>\n"
 #| "    <p>You can see the original title when you hover over the movie title or poster.</p>\n"
-#| "    <p>If you set the country in preferences, you will be able to see where you can stream the movie.</p>\n"
+#| "    <p>If you set the country in preferences, you will be able to see where you can stream movies.</p>\n"
 #| "    <!-- <p>There is a Movies <a href=\"https://vk.com/app3504693_2912142\" target=\"_blank\">VK app</a> available.</p>\n"
 #| "    <p>If the app doesn't work in Chrome - open Cookies settings (chrome://settings/cookies)\n"
 #| "       and change the setting \"Block third-party cookies\".</p>-->\n"
@@ -116,7 +116,10 @@ msgid ""
 "    <p>Create movie lists \"Watched\" and \"To Watch\", rate movies, and add comments.</p>\n"
 "    <p>You can also add additional information such as if you watched the movie in the original version, in theatre, an extended version, in 4K, etc.</p>\n"
 "    <p>You can see the original title when you hover over the movie title or poster.</p>\n"
-"    <p>If you set the country in preferences, you will be able to see where you can stream movies.</p>\n"
+"    <p>\n"
+"      If you set the country in preferences, you will be able to see where you can stream movies. Currently only Canada, United States and Russia are supported.\n"
+"      You can <a href=\"mailto:%(ADMIN_EMAIL)s\">email me</a> to request support for your country.\n"
+"    </p>\n"
 "    <!-- <p>There is a Movies <a href=\"https://vk.com/app3504693_2912142\" target=\"_blank\">VK app</a> available.</p>\n"
 "    <p>If the app doesn't work in Chrome - open Cookies settings (chrome://settings/cookies)\n"
 "       and change the setting \"Block third-party cookies\".</p>-->\n"
@@ -143,7 +146,7 @@ msgstr ""
 "<p>Создавайте списки фильмов \"Просмотрено\" и \"К Просмотру\", ставьте оценки фильмам и добавляйте комментарии.</p>\n"
 "<p>Вы также можете добавить дополнительную информацию такую как если вы смотрели фильм в оригинале, в кинотеатре, расширенную версию, в 4K, и т.д.</p>\n"
 "<p>Вы можете увидеть оригинальное название при наведении курсора на название фильма или на постер.</p>\n"
-"<p>Если вы выберите страну в настройках, вы сможете увидеть где можно посмотреть фильмы.</p>\n"
+"<p>Если вы выберите страну в настройках, вы сможете увидеть где можно посмотреть фильмы. В данное время поддерживаются следующие страны: Канада, Соединённые Штаты Америки и Россия. Вы можете <a href=\"mailto:%(ADMIN_EMAIL)s\">послать мне email</a> для того чтобы запросить поддержку вашей страны.</p>\n"
 "<!-- <p>В VK доступно <a href=\"https://vk.com/app3504693_2912142\" target=\"_blank\">приложение Movies</a>.</p> \n"
 "<p>Если приложение не работает в Chrome - откройте настройки Cookies (chrome://settings/cookies) и измените настройку \"Block third-party cookies\".</p>-->\n"
 "<p>Система оценок:</p>\n"
@@ -172,7 +175,7 @@ msgstr "Список"
 msgid "Add to &quot;To Watch&quot; list"
 msgstr "Добавить в список &quot;К Просмотру&quot;"
 
-#: src/templates/includes/add_to_watched_list_button.html:1
+#: src/templates/includes/add_to_watched_list_button.html:2
 msgid "Add to &quot;Watched&quot; list"
 msgstr "Добавить в список &quot;Просмотрено&quot;"
 
