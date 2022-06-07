@@ -73,6 +73,7 @@ The following GitHub Actions are used:
 * `DigitalOcean Spaces Upload Action`_
 * Cache_
 * `Docker Setup Buildx`_
+* `Set Timezone`_
 
 Used APIs
 --------------
@@ -119,6 +120,7 @@ Used images
 .. _DigitalOcean Spaces Upload Action: https://github.com/marketplace/actions/digitalocean-spaces-upload-action
 .. _Cache: https://github.com/marketplace/actions/cache
 .. _Docker Setup Buildx: https://github.com/marketplace/actions/docker-setup-buildx
+.. _Set Timezone: https://github.com/marketplace/actions/set-timezone
 
 .. _VK app: http://vk.com/app3504693_2912142
 

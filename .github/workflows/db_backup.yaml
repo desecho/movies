@@ -13,6 +13,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - uses: szenius/set-timezone@v1.0
+        with:
+          timezoneLinux: "America/New_York"
+
       - name: Backup DB
         run: make backup-db
         env:
