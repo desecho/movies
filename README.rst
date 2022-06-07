@@ -108,6 +108,7 @@ Used images
 .. _mysql-docker: https://github.com/desecho/mysql-docker
 
 .. _GitHub Actions: https://github.com/features/actions
+
 .. _Cancel Workflow Action: https://github.com/marketplace/actions/cancel-workflow-action
 .. _Checkout: https://github.com/marketplace/actions/checkout
 .. _Setup Python: https://github.com/marketplace/actions/setup-python
