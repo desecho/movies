@@ -1,0 +1,9 @@
+.preference-label {
+  text-align: right;
+}
+
+@media (min-width: 320px) and (max-width: 576px) {
+  .preference-label {
+    text-align: left;
+  }
+}
