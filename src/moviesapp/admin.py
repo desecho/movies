@@ -44,5 +44,12 @@ class ActionAdmin(ModelAdmin[Action]):  # pylint:disable=unsubscriptable-object
         return False
 
 
+@register(Provider)
+class ProviderAdmin(ModelAdmin[Provider]):  # pylint:disable=unsubscriptable-object
+    def has_delete_permission(  # pylint:disable=no-self-use,unused-argument
+        self, request: HttpRequest, obj: Optional[Provider] = None
+    ) -> bool:
+        return False
+
+
 site.register(User)
-site.register(Provider)
