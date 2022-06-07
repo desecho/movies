@@ -21,7 +21,7 @@ class MovieAdmin(ModelAdmin[Movie]):  # pylint:disable=unsubscriptable-object
 
 @register(ProviderRecord)
 class ProviderRecordAdmin(ModelAdmin[ProviderRecord]):  # pylint:disable=unsubscriptable-object
-    list_display = ("provider", "movie")
+    list_display = ("provider", "movie", "country")
     search_fields = ["movie__title"]
 
 
