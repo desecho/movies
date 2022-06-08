@@ -192,7 +192,7 @@
                   <div>
                     {% for provider_record in record.provider_records %}
                       <a href="{{ provider_record.tmdb_watch_url }}" target="_blank">
-                        <img src="{{ provider_record.provider.logo }}" alt="{{ provider_record.provider }}" class="provider" />
+                        <img src="{{ provider_record.provider.logo }}" alt="{{ provider_record.provider }}" title="{{ provider_record.provider }}" class="provider" />
                       </a>
                     {% endfor %}
                   </div>
