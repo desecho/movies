@@ -24,3 +24,4 @@ Cron jobs are run with GitHub Actions.
 - `Remove unused movies` command runs every month
 - `Update movie data` command runs every month
 - Backup runs daily
+- `Update IMDb ratings` runs at 04:00 UTC (00:00 EDT) on Mondays
