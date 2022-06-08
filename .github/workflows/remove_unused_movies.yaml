@@ -2,7 +2,7 @@
 name: Remove Unused Movies
 on:
   schedule:
-    - cron: "0 0 1 * *"  # Every Month at Midnight
+    - cron: "0 7 1 * *"  # Runs at 07:00 UTC (03:00 EDT) on the first day of the month
   workflow_dispatch:
 
 jobs:

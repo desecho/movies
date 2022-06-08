@@ -2,7 +2,7 @@
 name: Update Movie Data
 on:
   schedule:
-    - cron: "0 0 3 * *"  # Every Month at Midnight
+    - cron: "0 4 1 * *"  # Runs at 04:00 UTC (00:00 EDT) on the first day of the month
   workflow_dispatch:
 
 jobs:

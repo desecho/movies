@@ -2,7 +2,7 @@
 name: Update IMDb Ratings
 on:
   schedule:
-    - cron: "0 4 * * 1"  # Runs at 04:00 UTC (00:00 EDT) on Mondays
+    - cron: "0 6 * * 1"  # Runs at 06:00 UTC (02:00 EDT) on Mondays
   workflow_dispatch:
 
 jobs:
