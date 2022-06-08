@@ -189,11 +189,13 @@
                 {% endif %}
                 {% if user.country_supported and record.provider_records.exists %}
                   <span class="item-desc">{% trans 'Stream on' %}:</span>
-                  {% for provider_record in record.provider_records %}
-                    <a href="{{ provider_record.tmdb_watch_url }}" target="_blank">
-                      <img src="{{ provider_record.provider.logo }}" alt="{{ provider_record.provider }}" class="provider" />
-                    </a>
-                  {% endfor %}
+                  <div>
+                    {% for provider_record in record.provider_records %}
+                      <a href="{{ provider_record.tmdb_watch_url }}" target="_blank">
+                        <img src="{{ provider_record.provider.logo }}" alt="{{ provider_record.provider }}" class="provider" />
+                      </a>
+                    {% endfor %}
+                  </div>
                 {% endif %}
                 <br>
               </div>
