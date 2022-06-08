@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date, datetime
 from operator import itemgetter
 from typing import Any, Dict, List, Optional, Union
 
@@ -9,7 +9,7 @@ from sentry_sdk import capture_exception
 from tmdbsimple import Movies
 
 from .exceptions import MovieNotInDb, TrailerSiteNotFoundError
-from .models import User, UserAnonymous, get_poster_url, get_tmdb_url
+from .models import User, UserAnonymous, get_poster_url, get_tmdb_url, is_released
 
 
 def _get_tmdb(lang: str) -> tmdbsimple:
@@ -26,9 +26,9 @@ def _get_poster_from_tmdb(poster: str) -> Optional[str]:
 
 def _get_date(date_str: str, lang: str) -> Optional[str]:
     if date_str:
-        date = datetime.strptime(date_str, "%Y-%m-%d")
-        if date:
-            date_str = format_date(date, locale=lang)
+        date_ = datetime.strptime(date_str, "%Y-%m-%d")
+        if date_:
+            date_str = format_date(date_, locale=lang)
             return date_str
     return None
 
@@ -151,27 +151,32 @@ def _get_movie_data(tmdb_id: int, lang: str) -> Movies:
     return tmdb.Movies(tmdb_id)
 
 
-def _get_watch_data(movie_data: Movies) -> List[Dict[str, Union[str, int]]]:
+def _get_watch_data(movie_data: Movies, release_date: Optional[date]) -> List[Dict[str, Union[str, int]]]:
     watch_data = []
-    for country, data in movie_data.watch_providers()["results"].items():
-        if country in settings.PROVIDERS_SUPPORTED_COUNTRIES and "flatrate" in data:
-            for provider in data["flatrate"]:
-                record = {"country": country, "provider_id": provider["provider_id"]}
-                watch_data.append(record)
+    if is_released(release_date):
+        for country, data in movie_data.watch_providers()["results"].items():
+            if country in settings.PROVIDERS_SUPPORTED_COUNTRIES and "flatrate" in data:
+                for provider in data["flatrate"]:
+                    record = {"country": country, "provider_id": provider["provider_id"]}
+                    watch_data.append(record)
     return watch_data
 
 
 def get_tmdb_movie_data(tmdb_id: int) -> Dict[str, Any]:
     movie_data_en = _get_movie_data(tmdb_id, "en")
     movie_info_en = movie_data_en.info()
-    watch_data = _get_watch_data(movie_data_en)
+    release_date_str = movie_info_en["release_date"]
+    if release_date_str:
+        release_date = datetime.strptime(release_date_str, "%Y-%m-%d").date()
+    else:
+        release_date = None
+    watch_data = _get_watch_data(movie_data_en, release_date)
     # We have to get all info in English first before we switch to Russian.
     trailers_en = _get_trailers(movie_data_en)
     movie_data_ru = _get_movie_data(tmdb_id, "ru")
     movie_info_ru = movie_data_ru.info()
     trailers_ru = _get_trailers(movie_data_ru)
     imdb_id = movie_info_en["imdb_id"]
-    release_date = movie_info_en["release_date"] if movie_info_en["release_date"] else None
     if imdb_id:
         return {
             "tmdb_id": tmdb_id,

@@ -55,6 +55,11 @@ def get_poster_url(size: str, poster: Optional[str]) -> Optional[str]:
     return no_image_url
 
 
+# Cannot be moved to utils because it would cause circular imports
+def is_released(release_date: Optional[date]) -> bool:
+    return release_date is not None and release_date <= date.today()
+
+
 class UserBase:
     def get_movie_ids(self) -> ListType[int]:
         return list(self.get_records().values_list("movie__pk", flat=True))
@@ -247,7 +252,7 @@ class Movie(Model):
 
     @property
     def is_released(self) -> bool:
-        return self.release_date is not None and self.release_date <= date.today()
+        return is_released(self.release_date)
 
     # Hack to make tests work
     @staticmethod
@@ -352,7 +357,7 @@ class Record(Model):
 
     @property
     def provider_records(self) -> QuerySet["ProviderRecord"]:
-        if not self.user.country_supported:
+        if not self.movie.is_released or not self.user.country_supported:
             return ProviderRecord.objects.none()
         return self.movie.provider_records.filter(country=self.user.country)
 
