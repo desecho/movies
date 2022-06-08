@@ -10,23 +10,25 @@ from .models import Action, ActionRecord, List, Movie, Provider, ProviderRecord,
 @register(Record)
 class RecordAdmin(ModelAdmin[Record]):  # pylint:disable=unsubscriptable-object
     list_display = ("user", "movie", "list", "date")
+    search_fields = ("movie__title", "user__username", "user__first_name", "user__last_name")
 
 
 @register(ActionRecord)
 class ActionRecordAdmin(ModelAdmin[ActionRecord]):  # pylint:disable=unsubscriptable-object
-    list_display = ("user", "movie", "action", "list", "date")
+    list_display = ("user", "movie", "action", "date")
+    search_fields = ("movie__title", "user__username", "user__first_name", "user__last_name")
 
 
 @register(Movie)
 class MovieAdmin(ModelAdmin[Movie]):  # pylint:disable=unsubscriptable-object
     list_display = ("title",)
-    search_fields = ["title"]
+    search_fields = ("title",)
 
 
 @register(ProviderRecord)
 class ProviderRecordAdmin(ModelAdmin[ProviderRecord]):  # pylint:disable=unsubscriptable-object
     list_display = ("provider", "movie", "country")
-    search_fields = ["movie__title"]
+    search_fields = ("movie__title",)
 
 
 @register(List)
@@ -47,11 +49,19 @@ class ActionAdmin(ModelAdmin[Action]):  # pylint:disable=unsubscriptable-object
 
 @register(Provider)
 class ProviderAdmin(ModelAdmin[Provider]):  # pylint:disable=unsubscriptable-object
+    list_display = ("name",)
+    search_fields = ("name",)
+
     def has_delete_permission(  # pylint:disable=no-self-use,unused-argument
         self, request: HttpRequest, obj: Optional[Provider] = None
     ) -> bool:
         return False
 
 
-site.register(User)
+@register(User)
+class UserAdmin(ModelAdmin[User]):  # pylint:disable=unsubscriptable-object
+    list_display = ("username", "first_name", "last_name", "country")
+    search_fields = ("username", "first_name", "last_name", "country")
+
+
 site.unregister(Group)
