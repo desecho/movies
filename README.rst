@@ -48,7 +48,7 @@ Production
 ----------------------------
 To use production commands:
 
-1. Edit ``db_env_prod.sh``
+1. Edit file ``db_env_prod.sh``
 2. Activate the kubectl context
 
 CI/CD
