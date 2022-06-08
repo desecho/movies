@@ -44,14 +44,22 @@ def join_dicts(dict1: Dict[str, Any], dict2: Dict[str, Any]) -> Dict[str, Any]:
 
 def _save_watch_data(movie: Movie, watch_data: List[Dict[str, Union[str, int]]], refresh: bool = False) -> None:
     if refresh:
-        ProviderRecord.objects.filter(movie=movie).delete()
-    for record in watch_data:
-        provider_id: int = record["provider_id"]  # type: ignore
+        existing_provider_records: List[Dict[str, Union[str, int]]] = list(
+            movie.provider_records.all().values("id", "provider_id", "country")  # type: ignore
+        )
+        for provider_record in existing_provider_records:
+            provider_record_id = provider_record.pop("id")
+            if provider_record in watch_data:
+                watch_data.remove(provider_record)
+            else:
+                ProviderRecord.objects.get(pk=provider_record_id).delete()
+    for provider_record in watch_data:
+        provider_id: int = provider_record["provider_id"]  # type: ignore
         try:
             provider = Provider.objects.get(pk=provider_id)
         except Provider.DoesNotExist as e:
             raise ProviderNotFoundError(f"Provider ID - {provider_id}") from e
-        ProviderRecord.objects.create(provider=provider, movie=movie, country=record["country_code"])
+        ProviderRecord.objects.create(provider=provider, movie=movie, country=provider_record["country"])
 
 
 def _save_movie(movie_data: Dict[str, Any]) -> int:
