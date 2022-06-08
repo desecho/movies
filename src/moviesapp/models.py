@@ -173,10 +173,9 @@ class User(AbstractUser, UserBase):
     country = CountryField(verbose_name=_("Country"), null=True, blank=True)
 
     def __str__(self) -> str:
-        name = self.get_full_name()
-        if name:
-            return name
-        return self.username
+        if self.username:
+            return self.username
+        return self.get_full_name()
 
     def _get_movies_number(self, list_id: int) -> int:
         return self.get_records().filter(list_id=list_id).count()
@@ -195,6 +194,7 @@ class User(AbstractUser, UserBase):
 
 
 class UserAnonymous(AnonymousUser, UserBase):
+    # Not sure if it is needed.
     def __init__(self, request: HttpRequest):  # pylint: disable=unused-argument
         super().__init__()
 
@@ -341,7 +341,7 @@ class Record(Model):
     watched_in_4k = BooleanField(default=False)
 
     def __str__(self) -> str:
-        return self.movie.title
+        return f"{self.user} - {self.movie.title} - {self.list}"
 
     def save(self, *args: Any, **kwargs: Any) -> None:
         if self.watched_in_4k:
@@ -378,7 +378,7 @@ class ActionRecord(Model):
     date = DateTimeField(auto_now_add=True)
 
     def __str__(self) -> str:
-        return f"{self.movie.title} {self.action.name}"
+        return f"{self.user} - {self.movie.title} - {self.action.name}"
 
 
 class Provider(Model):
