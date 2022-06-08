@@ -390,7 +390,7 @@ class Provider(Model):
 
     @property
     def logo(self) -> str:
-        return f"{settings.STATIC_URL}/img/providers/{self.id}.jpg"
+        return f"{settings.STATIC_URL}img/providers/{self.id}.jpg"
 
 
 class ProviderRecord(Model):
@@ -403,4 +403,4 @@ class ProviderRecord(Model):
 
     @property
     def tmdb_watch_url(self) -> str:
-        return f"{self.movie.tmdb_url}/watch?locale={self.country}"
+        return f"{self.movie.tmdb_url}watch?locale={self.country}"
