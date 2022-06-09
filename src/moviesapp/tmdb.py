@@ -18,8 +18,10 @@ class TmdbNoImdbIdError(Exception):
     """TMDB no IMDb ID error."""
 
 
-def _get_tmdb(lang: str) -> tmdbsimple:
+def _get_tmdb(lang: Optional[str]) -> tmdbsimple:
     tmdbsimple.API_KEY = settings.TMDB_KEY
+    if lang is None:
+        lang = settings.LANGUAGE_CODE
     tmdbsimple.LANGUAGE = lang
     return tmdbsimple
 
@@ -152,7 +154,7 @@ def _get_trailers(movie_data: Movies) -> List[Dict[str, str]]:
     return trailers
 
 
-def _get_movie_data(tmdb_id: int, lang: str) -> Movies:
+def _get_tmdb_movie(tmdb_id: int, lang: Optional[str] = None) -> Movies:
     tmdb = _get_tmdb(lang)
     return tmdb.Movies(tmdb_id)
 
@@ -169,7 +171,7 @@ def _get_watch_data(movie_data: Movies, release_date: Optional[date]) -> List[Di
 
 
 def get_tmdb_movie_data(tmdb_id: int) -> Dict[str, Any]:
-    movie_data_en = _get_movie_data(tmdb_id, "en")
+    movie_data_en = _get_tmdb_movie(tmdb_id)
     movie_info_en = movie_data_en.info()
     release_date_str = movie_info_en["release_date"]
     if release_date_str:
@@ -179,7 +181,7 @@ def get_tmdb_movie_data(tmdb_id: int) -> Dict[str, Any]:
     watch_data = _get_watch_data(movie_data_en, release_date)
     # We have to get all info in English first before we switch to Russian.
     trailers_en = _get_trailers(movie_data_en)
-    movie_data_ru = _get_movie_data(tmdb_id, "ru")
+    movie_data_ru = _get_tmdb_movie(tmdb_id, settings.LANGUAGE_RU)
     movie_info_ru = movie_data_ru.info()
     trailers_ru = _get_trailers(movie_data_ru)
     imdb_id = movie_info_en["imdb_id"]

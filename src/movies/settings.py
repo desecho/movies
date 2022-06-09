@@ -70,10 +70,14 @@ if IS_VK_DEV:  # pragma: no cover
     ALLOWED_HOSTS.append(getenv("HOST_MOVIES_TEST"))
 
 # Internationalization
-LANGUAGE_CODE = "en"
+# Custom
+LANGUAGE_EN = "en"
+LANGUAGE_RU = "ru"
+
+LANGUAGE_CODE = LANGUAGE_EN
 LANGUAGES = (
-    ("en", "English"),
-    ("ru", "Русский"),
+    (LANGUAGE_EN, "English"),
+    (LANGUAGE_RU, "Русский"),
 )
 LOCALE_PATHS = (join(SRC_DIR, "locale"),)
 
