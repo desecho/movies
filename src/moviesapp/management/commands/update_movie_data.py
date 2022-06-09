@@ -53,10 +53,11 @@ class Command(BaseCommand):
         """Return if the movie was updated or not."""
         movie_data = load_movie_data(movie.tmdb_id)
         # Use filter here to be able to use "update" functionality.
+        # We will always have only one movie.
         movies = Movie.objects.filter(pk=movie.pk)
         movie_initial_data = movies.values()[0]
         watch_data = movie_data.pop("watch_data")
-        movies.update(**movie_data)
+        movies.update(watch_data_update_date=None, **movie_data)
         existing_provider_records = movie.provider_records.all().values("id", "provider_id", "country")
         self._remove_no_longer_available_provider_records(list(existing_provider_records), watch_data)  # type: ignore
         self._filter_out_already_existing_provider_records(

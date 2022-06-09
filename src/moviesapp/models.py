@@ -234,6 +234,7 @@ class Movie(Model):
     runtime = TimeField(null=True, blank=True)
     homepage = URLField(null=True, blank=True)
     trailers = JSONField(null=True, blank=True)
+    watch_data_update_date = DateTimeField(null=True, blank=True)
 
     class Meta:
         ordering = ["pk"]

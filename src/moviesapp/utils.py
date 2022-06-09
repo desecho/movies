@@ -1,5 +1,7 @@
 from typing import Any, Dict, List, Union
 
+from django.utils.timezone import now
+
 from .exceptions import ProviderNotFoundError
 from .models import Movie, Provider, ProviderRecord
 from .omdb import get_omdb_movie_data
@@ -22,6 +24,8 @@ def save_watch_data(movie: Movie, watch_data: List[Dict[str, Union[str, int]]]) 
         except Provider.DoesNotExist as e:
             raise ProviderNotFoundError(f"Provider ID - {provider_id}") from e
         ProviderRecord.objects.create(provider=provider, movie=movie, country=provider_record["country"])
+    movie.watch_data_update_date = now()
+    movie.save()
 
 
 def load_movie_data(tmdb_id: int) -> Dict[str, Any]:
