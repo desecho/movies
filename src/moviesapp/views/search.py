@@ -1,14 +1,15 @@
 import json
 from typing import Optional
 
+from django.conf import settings
 from django.http import Http404, HttpResponse, HttpResponseBadRequest
 from sentry_sdk import capture_exception
 
-from ..exceptions import MovieNotInDb, NotAvailableSearchType
+from ..exceptions import NotAvailableSearchTypeError, ProviderNotFoundError
 from ..http import AjaxAuthenticatedHttpRequest, AjaxHttpRequest
 from ..models import List, Movie, User
-from ..tmdb import get_movies_from_tmdb
-from ..utils import add_movie_to_db
+from ..tmdb import TmdbNoImdbIdError, get_movies_from_tmdb
+from ..utils import load_movie_data, save_watch_data
 from .mixins import AjaxAnonymousView, AjaxView, TemplateAnonymousView
 from .utils import add_movie_to_list
 
@@ -30,8 +31,8 @@ class SearchMovieView(AjaxAnonymousView):
             options = json.loads(GET["options"])
             type_ = GET["type"]
             if type_ not in AVAILABLE_SEARCH_TYPES:
-                raise NotAvailableSearchType
-        except (KeyError, NotAvailableSearchType):
+                raise NotAvailableSearchTypeError
+        except (KeyError, NotAvailableSearchTypeError):
             response: HttpResponseBadRequest = self.render_bad_request_response()
             return response
         language_code = request.LANGUAGE_CODE
@@ -41,6 +42,21 @@ class SearchMovieView(AjaxAnonymousView):
 
 class AddToListFromDbView(AjaxView):
     @staticmethod
+    def add_movie_to_db(tmdb_id: int) -> int:
+        """Return movie id."""
+        movie_data = load_movie_data(tmdb_id)
+        watch_data = movie_data.pop("watch_data")
+        movie = Movie(**movie_data)
+        movie.save()
+        try:
+            save_watch_data(movie, watch_data)
+        except ProviderNotFoundError as e:
+            if settings.DEBUG:
+                raise
+            capture_exception(e)
+        return movie.pk
+
+    @staticmethod
     def _get_movie_id(tmdb_id: int) -> Optional[int]:
         """Return movie id or None if movie is not found."""
         try:
@@ -49,14 +65,13 @@ class AddToListFromDbView(AjaxView):
         except Movie.DoesNotExist:
             return None
 
-    @staticmethod
-    def _add_to_list_from_db(movie_id: Optional[int], tmdb_id: int, list_id: int, user: User) -> bool:
+    def _add_to_list_from_db(self, movie_id: Optional[int], tmdb_id: int, list_id: int, user: User) -> bool:
         """Return True on success and None of failure."""
         # If we don't find the movie in the db we add it to the database.
         if movie_id is None:
             try:
-                movie_id = add_movie_to_db(tmdb_id)
-            except MovieNotInDb as e:
+                movie_id = self.add_movie_to_db(tmdb_id)
+            except TmdbNoImdbIdError as e:
                 capture_exception(e)
                 return False
         add_movie_to_list(movie_id, list_id, user)

@@ -28,10 +28,9 @@ from django_countries.fields import CountryField
 from social_django.models import AbstractUserSocialAuth
 from vk_api.exceptions import ApiError
 
-from .exceptions import VKError
 from .fb import Fb
 from .http import HttpRequest
-from .vk import Vk
+from .vk import Vk, VkError
 
 
 # Cannot be moved to utils because it would cause circular imports
@@ -109,7 +108,7 @@ class UserBase:
 
         if vk_session.token["access_token"] is None:
             return None
-        raise VKError
+        raise VkError
 
     @property
     def is_vk_user(self) -> bool:

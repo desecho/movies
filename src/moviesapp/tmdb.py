@@ -1,15 +1,21 @@
 from datetime import date, datetime
 from operator import itemgetter
 from typing import Any, Dict, List, Optional, Union
+from urllib.parse import urljoin
 
+import requests
 import tmdbsimple
 from babel.dates import format_date
 from django.conf import settings
 from sentry_sdk import capture_exception
 from tmdbsimple import Movies
 
-from .exceptions import MovieNotInDb, TrailerSiteNotFoundError
+from .exceptions import TrailerSiteNotFoundError
 from .models import User, UserAnonymous, get_poster_url, get_tmdb_url, is_released
+
+
+class TmdbNoImdbIdError(Exception):
+    """TMDB no IMDb ID error."""
 
 
 def _get_tmdb(lang: str) -> tmdbsimple:
@@ -194,4 +200,11 @@ def get_tmdb_movie_data(tmdb_id: int) -> Dict[str, Any]:
             "description_ru": movie_info_ru["overview"],
             "watch_data": watch_data,
         }
-    raise MovieNotInDb(tmdb_id)
+    raise TmdbNoImdbIdError(tmdb_id)
+
+
+def get_tmdb_providers() -> List[Dict[str, Union[str, int]]]:
+    params = {"api_key": settings.TMDB_KEY}
+    response = requests.get(urljoin(settings.TMDB_API_BASE_URL, "watch/providers/movie"), params=params)
+    providers: List[Dict[str, Union[str, int]]] = response.json()["results"]
+    return providers

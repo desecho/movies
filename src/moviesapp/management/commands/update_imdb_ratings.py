@@ -3,7 +3,7 @@ from typing import Any
 from django_tqdm import BaseCommand
 
 from moviesapp.models import Movie
-from moviesapp.utils import load_omdb_movie_data
+from moviesapp.omdb import load_omdb_movie_data
 
 
 class Command(BaseCommand):

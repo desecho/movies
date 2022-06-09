@@ -6,7 +6,7 @@ import wget
 from django.conf import settings
 from django_tqdm import BaseCommand
 
-from moviesapp.utils import get_providers
+from moviesapp.tmdb import get_tmdb_providers
 
 
 class Command(BaseCommand):
@@ -24,7 +24,7 @@ class Command(BaseCommand):
             wget.download(path, file_path)
 
     def handle(self, *args: Any, **options: Any) -> None:  # pylint: disable=unused-argument
-        providers = get_providers()
+        providers = get_tmdb_providers()
         tqdm = self.tqdm(total=len(providers))
         for provider in providers:
             logo_path: str = provider["logo_path"]  # type: ignore

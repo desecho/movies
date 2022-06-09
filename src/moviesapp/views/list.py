@@ -273,7 +273,7 @@ class RecommendationsView(TemplateView, ListView):
         user: User = self.request.user  # type: ignore
         # Exclude own records and include only friends' records.
         records = Record.objects.exclude(user=user).filter(user__in=friends).select_related("movie")
-        # Order records by user rating and by imdb rating.
+        # Order records by user rating and by IMDb rating.
         records = records.order_by("-rating", "-movie__imdb_rating", "-movie__release_date")
         return self._filter_records_for_recommendation(records, user)
 

@@ -11,6 +11,10 @@ if TYPE_CHECKING:
     from .models import User
 
 
+class VkError(Exception):
+    """VK error."""
+
+
 def _get_vk_avatar(url: str) -> Optional[str]:
     if url in settings.VK_NO_AVATAR:
         return None
