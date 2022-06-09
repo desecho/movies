@@ -349,10 +349,10 @@ createsuperuser:
 	${MANAGE_CMD} createsuperuser
 
 .PHONY: makemigrations
-## Run makemigrations command
+## Run makemigrations command. Usage: make makemigrations arguments="[arguments]"
 makemigrations:
 	${SOURCE_CMDS} && \
-	${MANAGE_CMD} makemigrations ${APP}
+	${MANAGE_CMD} makemigrations $(arguments) ${APP}
 
 ifeq (manage,$(firstword $(MAKECMDGOALS)))
   # Use the rest as arguments
@@ -362,7 +362,7 @@ ifeq (manage,$(firstword $(MAKECMDGOALS)))
 endif
 
 .PHONY: manage
-## Run management command. Usage: [command] arguments=arguments
+## Run management command. Usage: make manage [command] arguments="[arguments]"
 manage:
 	${SOURCE_CMDS} && \
 	${MANAGE_CMD} ${MANAGE_ARGS} $(arguments)
@@ -418,7 +418,7 @@ ifeq (prod-manage,$(firstword $(MAKECMDGOALS)))
 endif
 
 .PHONY: prod-manage
-## Run management command in prod. Usage: [command] arguments=arguments
+## Run management command in prod. Usage: make prod-manage [command] arguments="[arguments]"
 prod-manage:
 	scripts/run_management_command.sh ${PROD_MANAGE_ARGS} $(arguments)
 
