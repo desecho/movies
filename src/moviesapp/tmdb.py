@@ -170,39 +170,43 @@ def _get_watch_data(movie_data: Movies, release_date: Optional[date]) -> List[Di
     return watch_data
 
 
-def get_tmdb_movie_data(tmdb_id: int) -> Dict[str, Any]:
-    movie_data_en = _get_tmdb_movie(tmdb_id)
-    movie_info_en = movie_data_en.info()
-    release_date_str = movie_info_en["release_date"]
+def _get_release_date(release_date_str: str) -> Optional[date]:
     if release_date_str:
-        release_date = datetime.strptime(release_date_str, "%Y-%m-%d").date()
-    else:
-        release_date = None
-    watch_data = _get_watch_data(movie_data_en, release_date)
-    # We have to get all info in English first before we switch to Russian.
-    trailers_en = _get_trailers(movie_data_en)
-    movie_data_ru = _get_tmdb_movie(tmdb_id, settings.LANGUAGE_RU)
-    movie_info_ru = movie_data_ru.info()
-    trailers_ru = _get_trailers(movie_data_ru)
+        return datetime.strptime(release_date_str, "%Y-%m-%d").date()
+    return None
+
+
+def get_tmdb_movie_data(tmdb_id: int) -> Dict[str, Any]:
+    # We have to get and save all info in English first before we switch to Russian or everything breaks.
+    tmdb_movie_en = _get_tmdb_movie(tmdb_id)
+    movie_info_en = tmdb_movie_en.info()
     imdb_id = movie_info_en["imdb_id"]
-    if imdb_id:
-        return {
-            "tmdb_id": tmdb_id,
-            "imdb_id": imdb_id,
-            "release_date": release_date,
-            "title_original": movie_info_en["original_title"],
-            "poster_ru": _get_poster_from_tmdb(movie_info_ru["poster_path"]),
-            "poster_en": _get_poster_from_tmdb(movie_info_en["poster_path"]),
-            "homepage": movie_info_en["homepage"],
-            "trailers_en": trailers_en,
-            "trailers_ru": trailers_ru,
-            "title_en": movie_info_en["title"],
-            "title_ru": movie_info_ru["title"],
-            "description_en": movie_info_en["overview"],
-            "description_ru": movie_info_ru["overview"],
-            "watch_data": watch_data,
-        }
-    raise TmdbNoImdbIdError(tmdb_id)
+    if not imdb_id:
+        raise TmdbNoImdbIdError(tmdb_id)
+    release_date = _get_release_date(movie_info_en["release_date"])
+    watch_data = _get_watch_data(tmdb_movie_en, release_date)
+    trailers_en = _get_trailers(tmdb_movie_en)
+
+    # Switch to Russian here.
+    tmdb_movie_ru = _get_tmdb_movie(tmdb_id, settings.LANGUAGE_RU)
+    movie_info_ru = tmdb_movie_ru.info()
+    trailers_ru = _get_trailers(tmdb_movie_ru)
+    return {
+        "tmdb_id": tmdb_id,
+        "imdb_id": imdb_id,
+        "release_date": release_date,
+        "title_original": movie_info_en["original_title"],
+        "poster_ru": _get_poster_from_tmdb(movie_info_ru["poster_path"]),
+        "poster_en": _get_poster_from_tmdb(movie_info_en["poster_path"]),
+        "homepage": movie_info_en["homepage"],
+        "trailers_en": trailers_en,
+        "trailers_ru": trailers_ru,
+        "title_en": movie_info_en["title"],
+        "title_ru": movie_info_ru["title"],
+        "description_en": movie_info_en["overview"],
+        "description_ru": movie_info_ru["overview"],
+        "watch_data": watch_data,
+    }
 
 
 def get_tmdb_providers() -> List[Dict[str, Union[str, int]]]:
