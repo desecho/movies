@@ -32,14 +32,14 @@ def _get_avatar_urls(
 
 
 def _get_gravatar_url(user: User, size: float) -> str:
-    """Get gravatar URL."""
+    """Get Gravatar URL."""
     params = parse.urlencode({"s": str(size)})
     hash_ = hashlib.md5(user.email.lower().encode("utf-8")).hexdigest()  # nosec B324
     return f"https://www.gravatar.com/avatar/{hash_}?{params}"
 
 
 def _get_gravatar_urls(user: User, size: float) -> Tuple[str, str]:
-    """Get gravatar URLs."""
+    """Get Gravatar URLs."""
     url = _get_gravatar_url(user, size)
     url_2x = _get_gravatar_url(user, size * 2)
     return url, url_2x
