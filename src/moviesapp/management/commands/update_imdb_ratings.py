@@ -23,7 +23,8 @@ class Command(BaseCommand):
                 tqdm.set_description(movie_info)
                 movie_data = load_omdb_movie_data(movie.imdb_id)
                 new_rating = movie_data.get("imdbRating")
-                if new_rating != str(movie.imdb_rating):
+                old_rating = str(movie.imdb_rating)
+                if old_rating != new_rating:
                     movie.imdb_rating = new_rating
                     movie.save()
                     message = f"{movie} - rating updated"
