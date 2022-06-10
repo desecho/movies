@@ -1,3 +1,4 @@
+"""VK views."""
 # import os
 # import tempfile
 

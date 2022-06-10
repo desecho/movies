@@ -1,3 +1,4 @@
+"""Models."""
 import json
 from datetime import date
 from typing import Any, Dict, List as ListType, Optional
@@ -35,11 +36,13 @@ from .vk import Vk, VkError
 
 # Cannot be moved to utils because it would cause circular imports
 def get_tmdb_url(tmdb_id: int) -> str:
+    """Get TMDB URL."""
     return f"{settings.TMDB_MOVIE_BASE_URL}{tmdb_id}/"
 
 
 # Cannot be moved to utils because it would cause circular imports
 def get_poster_url(size: str, poster: Optional[str]) -> Optional[str]:
+    """Get poster URL."""
     if size == "small":
         poster_size = settings.POSTER_SIZE_SMALL
         no_image_url = settings.NO_POSTER_SMALL_IMAGE_URL
@@ -56,39 +59,50 @@ def get_poster_url(size: str, poster: Optional[str]) -> Optional[str]:
 
 # Cannot be moved to utils because it would cause circular imports
 def is_released(release_date: Optional[date]) -> bool:
+    """Return True if movie is released."""
     return release_date is not None and release_date <= date.today()
 
 
 class UserBase:
+    """User base class."""
+
     def get_movie_ids(self) -> ListType[int]:
+        """Get movie IDs."""
         return list(self.get_records().values_list("movie__pk", flat=True))
 
     def get_records(self) -> QuerySet["Record"]:
+        """Get records."""
         if self.is_authenticated:  # type: ignore
             records: QuerySet[Record] = self.records.all()  # type: ignore
             return records
         return Record.objects.none()
 
     def get_record(self, id_: int) -> "Record":
+        """Get record."""
         return self.get_records().get(pk=id_)
 
     def _get_fb_accounts(self) -> QuerySet[AbstractUserSocialAuth]:
+        """Get FB accounts."""
         return self.social_auth.filter(provider="facebook")  # type: ignore
 
     def is_fb_user(self) -> bool:
+        """Return True if user has FB account."""
         if self.is_authenticated:  # type: ignore
             return self._get_fb_accounts().exists()
         return False
 
     # It is requried that `is_fb_user` is run before running this.
     def get_fb_account(self) -> AbstractUserSocialAuth:  # 2DO possibly remove it from this class.
+        """Get FB account."""
         return self._get_fb_accounts()[0]
 
     def _get_vk_accounts(self) -> QuerySet[AbstractUserSocialAuth]:
+        """Get VK accounts."""
         return self.social_auth.filter(provider__in=settings.VK_BACKENDS)  # type: ignore
 
     # It is requried that `is_vk_user` is run before running this.
     def get_vk_account(self) -> Optional[AbstractUserSocialAuth]:  # 2DO possibly remove it from this class.
+        """Get VK account."""
         vk_accounts = self._get_vk_accounts()
         if len(vk_accounts) == 1:
             return vk_accounts[0]
@@ -113,7 +127,7 @@ class UserBase:
     @property
     def is_vk_user(self) -> bool:
         """
-        Show if a user has a vk account.
+        Return True if a user has a VK account.
 
         It doesn't necessarily mean that he is currently using the app.
         Note: currently it does because it is not possible to link a vk-app account and a website account.
@@ -125,16 +139,19 @@ class UserBase:
 
     @property
     def is_linked(self) -> bool:
+        """Return True if user is linked."""
         if self.is_authenticated:  # type: ignore
             return self.social_auth.exists()  # type: ignore
         return False
 
     def get_users(self, friends: bool = False, sort: bool = False) -> ListType["User"]:
+        """Get users."""
         if friends:
             return list(self.get_friends(sort=sort))
         return self._get_available_users_and_friends(sort=sort)
 
     def _get_available_users_and_friends(self, sort: bool = False) -> ListType["User"]:
+        """Get available users and friends."""
         available_users = User.objects.exclude(only_for_friends=True).exclude(pk=self.pk)  # type: ignore
         # We need distinct here because we can't concatenate distinct and non-distinct querysets.
         users = available_users.distinct() | self.get_friends()
@@ -143,11 +160,13 @@ class UserBase:
         return list(set(users))
 
     def get_vk(self) -> Optional[Vk]:
+        """Get VK."""
         if self.is_vk_user:
             return Vk(self)  # type: ignore
         return None
 
     def get_friends(self, sort: bool = False) -> QuerySet["User"]:
+        """Get friends."""
         friends = User.objects.none()
         if self.is_linked:
             if self.is_vk_user:  # 2DO possibly refactor this (this check is run twice)
@@ -161,10 +180,13 @@ class UserBase:
         return friends
 
     def has_friends(self) -> bool:
+        """Return True if user has friends."""
         return self.get_friends().exists()
 
 
 class User(AbstractUser, UserBase):
+    """User class."""
+
     only_for_friends = BooleanField(
         verbose_name=_("Privacy"), default=False, help_text=_("Show my lists only to friends")
     )
@@ -177,47 +199,61 @@ class User(AbstractUser, UserBase):
     country = CountryField(verbose_name=_("Country"), null=True, blank=True)
 
     def __str__(self) -> str:
+        """Return string representation."""
         if self.username:
             return self.username
         return self.get_full_name()
 
     def _get_movies_number(self, list_id: int) -> int:
+        """Get movies number."""
         return self.get_records().filter(list_id=list_id).count()
 
     @property
     def movies_watched_number(self) -> int:
+        """Get movies watched number."""
         return self._get_movies_number(List.WATCHED)
 
     @property
     def movies_to_watch_number(self) -> int:
+        """Get movies to watch number."""
         return self._get_movies_number(List.TO_WATCH)
 
     @property
     def country_supported(self) -> bool:
+        """Return True if country is supported."""
         return self.country in settings.PROVIDERS_SUPPORTED_COUNTRIES
 
 
 class UserAnonymous(AnonymousUser, UserBase):
+    """Anonymous user class."""
+
     # Not sure if it is needed.
     def __init__(self, request: HttpRequest):  # pylint: disable=unused-argument
+        """Init."""
         super().__init__()
 
 
 class List(Model):
+    """List."""
+
     WATCHED = 1
     TO_WATCH = 2
     name = CharField(max_length=255)
     key_name = CharField(max_length=255, db_index=True)
 
     def __str__(self) -> str:
+        """Return string representation."""
         return str(self.name)
 
     @classmethod
     def is_valid_id(cls, list_id: int) -> bool:
+        """Return True if list ID is valid."""
         return list_id in [cls.WATCHED, cls.TO_WATCH]
 
 
 class Movie(Model):
+    """Movie."""
+
     title = CharField(max_length=255)
     title_original = CharField(max_length=255)
     country = CharField(max_length=255, null=True, blank=True)
@@ -237,32 +273,44 @@ class Movie(Model):
     watch_data_update_date = DateTimeField(null=True, blank=True)
 
     class Meta:
+        """Meta."""
+
         ordering = ["pk"]
 
     def __str__(self) -> str:
+        """Return string representation."""
         return str(self.title)
 
     @property
     def imdb_url(self) -> str:
+        """Return IMDb URL."""
         return urljoin(settings.IMDB_BASE_URL, self.imdb_id)
 
     @property
     def tmdb_url(self) -> str:
+        """Return TMDB URL."""
         return get_tmdb_url(self.tmdb_id)
 
     @property
     def is_released(self) -> bool:
+        """Return True if movie is released."""
         return is_released(self.release_date)
 
     # Hack to make tests work
     @staticmethod
     def _get_real_trailers(trailers: Any) -> ListType[Dict[str, str]]:
+        """
+        Get "real" trailers.
+
+        This is a hack to make the tests work.
+        """
         trailers_real: ListType[Dict[str, str]] = trailers
         if settings.IS_TEST:
             trailers_real = json.loads(trailers)
         return trailers_real
 
     def _pre_get_trailers(self) -> ListType[Dict[str, str]]:
+        """Pre-get trailers."""
         if self.trailers:
             trailers = self._get_real_trailers(self.trailers)
             return trailers
@@ -272,11 +320,13 @@ class Movie(Model):
 
     @staticmethod
     def _get_trailer_url(site: str, key: str) -> str:
+        """Get trailer URL."""
         TRAILER_SITES: Dict[str, str] = settings.TRAILER_SITES
         base_url = TRAILER_SITES[site]
         return f"{base_url}{key}"
 
     def get_trailers(self) -> ListType[Dict[str, str]]:
+        """Get trailers."""
         trailers = []
         for t in self._pre_get_trailers():
             trailer = {
@@ -288,32 +338,38 @@ class Movie(Model):
 
     @property
     def has_trailers(self) -> bool:
+        """Return True if movie has trailers."""
         return bool(self.get_trailers())
 
     def _get_poster(self, size: str) -> Optional[str]:
+        """Get poster."""
         return get_poster_url(size, self.poster)
 
     @property
     def poster_normal(self) -> Optional[str]:
+        """Get normal poster."""
         return self._get_poster("normal")
 
     @property
     def poster_small(self) -> Optional[str]:
+        """Get small poster."""
         return self._get_poster("small")
 
     @property
     def poster_big(self) -> Optional[str]:
+        """Get big poster."""
         return self._get_poster("big")
 
     @property
-    def id_title(self) -> str:
+    def title_with_id(self) -> str:
+        """Get title with ID."""
         return f"{self.pk} - {self}"
 
     def cli_string(self, last_movie_id: int) -> str:
         """
-        Return string version for CLI.
+        Return string representation for CLI.
 
-        We need last_movie_id because we want to know how big is the number (in characters) to be able to make
+        We need last movie id because we want to know how big is the number (in characters) to be able to make
         perfect formatting.
         We need to keep last_movie_id as a parameter because otherwise we hit the database every time we run the
         function.
@@ -332,6 +388,8 @@ class Movie(Model):
 
 
 class Record(Model):
+    """Record."""
+
     user = ForeignKey(User, CASCADE, related_name="records")
     movie = ForeignKey(Movie, CASCADE, related_name="records")
     list = ForeignKey(List, CASCADE)
@@ -346,9 +404,11 @@ class Record(Model):
     watched_in_4k = BooleanField(default=False)
 
     def __str__(self) -> str:
+        """Return string representation."""
         return f"{self.user} - {self.movie.title} - {self.list}"
 
     def save(self, *args: Any, **kwargs: Any) -> None:
+        """Save."""
         if self.watched_in_4k:
             self.watched_in_full_hd = True
         if self.watched_in_full_hd:
@@ -357,12 +417,15 @@ class Record(Model):
 
     @property
     def provider_records(self) -> QuerySet["ProviderRecord"]:
+        """Return provider records."""
         if not self.movie.is_released or not self.user.country_supported:
             return ProviderRecord.objects.none()
         return self.movie.provider_records.filter(country=self.user.country)
 
 
 class Action(Model):
+    """Action."""
+
     ADDED_MOVIE = 1
     CHANGED_LIST = 2
     ADDED_RATING = 3
@@ -370,10 +433,13 @@ class Action(Model):
     name = CharField(max_length=255)
 
     def __str__(self) -> str:
+        """Return string representation."""
         return str(self.name)
 
 
 class ActionRecord(Model):
+    """Action record."""
+
     user = ForeignKey(User, CASCADE, related_name="actions")
     action = ForeignKey(Action, CASCADE)
     movie = ForeignKey(Movie, CASCADE)
@@ -383,29 +449,38 @@ class ActionRecord(Model):
     date = DateTimeField(auto_now_add=True)
 
     def __str__(self) -> str:
+        """Return string representation."""
         return f"{self.user} - {self.movie.title} - {self.action.name}"
 
 
 class Provider(Model):
+    """Provider."""
+
     id = PositiveSmallIntegerField(primary_key=True)
     name = CharField(max_length=255)
 
     def __str__(self) -> str:
+        """Return string representation."""
         return str(self.name)
 
     @property
     def logo(self) -> str:
+        """Return logo."""
         return f"{settings.STATIC_URL}img/providers/{self.id}.jpg"
 
 
 class ProviderRecord(Model):
+    """Provider record."""
+
     provider = ForeignKey(Provider, CASCADE)
     movie = ForeignKey(Movie, CASCADE, related_name="provider_records")
     country = CountryField(verbose_name=_("Country"))
 
     def __str__(self) -> str:
+        """Return string representation."""
         return f"{self.provider} - {self.movie}"
 
     @property
     def tmdb_watch_url(self) -> str:
+        """Return TMDb watch URL."""
         return f"{self.movie.tmdb_url}watch?locale={self.country}"

@@ -1,3 +1,4 @@
+"""Social."""
 from typing import Any
 
 from django.conf import settings
@@ -8,6 +9,7 @@ from .vk import update_user_vk_avatar
 
 
 def load_user_data(backend: BaseAuth, user: User, **kwargs: Any) -> None:  # pylint: disable=unused-argument
+    """Load user data."""
     if user.loaded_initial_data:
         return None
 

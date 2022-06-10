@@ -1,3 +1,6 @@
+"""Exceptions."""
+
+
 class NotAvailableSearchTypeError(Exception):
     """Not availabe search type error."""
 

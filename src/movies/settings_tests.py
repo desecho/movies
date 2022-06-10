@@ -1,3 +1,5 @@
+"""Settings for tests."""
+
 from .settings import *  # noqa pylint: disable=unused-wildcard-import,wildcard-import
 
 DATABASES["default"] = {  # noqa

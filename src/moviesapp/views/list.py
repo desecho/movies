@@ -1,3 +1,4 @@
+"""List views."""
 import json
 from typing import Any, Dict, List as ListType, Optional, Tuple, Union
 
@@ -14,7 +15,10 @@ from .utils import add_movie_to_list, get_records, paginate, sort_by_rating
 
 
 class ChangeRatingView(AjaxView):
+    """Change rating view."""
+
     def put(self, request: AjaxAuthenticatedHttpRequest, record_id: int) -> (HttpResponse | HttpResponseBadRequest):
+        """Change rating."""
         try:
             rating = int(request.PUT["rating"])
         except (KeyError, ValueError):
@@ -34,7 +38,10 @@ class ChangeRatingView(AjaxView):
 
 
 class AddToListView(AjaxView):
+    """Add to list view."""
+
     def post(self, request: AjaxAuthenticatedHttpRequest, movie_id: int) -> (HttpResponse | HttpResponseBadRequest):
+        """Add movie to list."""
         try:
             list_id = int(request.POST["listId"])
         except (KeyError, ValueError):
@@ -50,14 +57,20 @@ class AddToListView(AjaxView):
 
 
 class RemoveRecordView(AjaxView):
+    """Remove record view."""
+
     def delete(self, request: AjaxAuthenticatedHttpRequest, record_id: int) -> HttpResponse:
+        """Remove record."""
         record = get_object_or_404(Record, user=request.user, pk=record_id)
         record.delete()
         return self.success()
 
 
 class SaveSettingsView(AjaxAnonymousView):
+    """Save settings view."""
+
     def put(self, request: AjaxHttpRequest) -> (HttpResponse | HttpResponseBadRequest):
+        """Save settings."""
         try:
             session_settings = request.PUT["settings"]
         except KeyError:
@@ -70,7 +83,10 @@ class SaveSettingsView(AjaxAnonymousView):
 
 
 class SaveOptionsView(AjaxView):
+    """Save options view."""
+
     def put(self, request: AjaxAuthenticatedHttpRequest, record_id: int) -> (HttpResponse | HttpResponseBadRequest):
+        """Save options."""
         record = get_object_or_404(Record, user=request.user, pk=record_id)
 
         try:
@@ -96,7 +112,10 @@ class SaveOptionsView(AjaxView):
 
 
 class SaveCommentView(AjaxView):
+    """Save comment view."""
+
     def put(self, request: AjaxAuthenticatedHttpRequest, record_id: int) -> (HttpResponse | HttpResponseBadRequest):
+        """Save comment."""
         record = get_object_or_404(Record, user=request.user, pk=record_id)
 
         try:
@@ -116,6 +135,8 @@ class SaveCommentView(AjaxView):
 
 
 class ListView(TemplateAnonymousView):
+    """List view."""
+
     template_name = "list/list.html"
     session: Optional[SessionBase] = None
 
@@ -123,12 +144,13 @@ class ListView(TemplateAnonymousView):
     def _filter_records_for_recommendation(
         records: QuerySet[Record], user: Union[User, UserAnonymous]
     ) -> QuerySet[Record]:
-        """Keep movies only with 3+ rating, removes watched movies."""
+        """Keep movies only with 3+ rating, remove watched movies."""
         return records.filter(rating__gte=3).exclude(movie__in=user.get_movie_ids())
 
     def _get_comments_and_ratings(
         self, records_ids_and_movies_ids_list: ListType[Tuple[int, int]], user: Union[User, UserAnonymous]
     ) -> "Dict[int, Optional[ListType[Dict[str, Any]]]]":
+        """Get comments and ratings."""
         movies, records_ids_and_movies_ids = self._get_record_movie_data(records_ids_and_movies_ids_list)
         records: QuerySet[Record] = Record.objects.filter(list_id=List.WATCHED, movie_id__in=movies)
         friends = user.get_friends()
@@ -153,12 +175,14 @@ class ListView(TemplateAnonymousView):
 
     @staticmethod
     def _filter_records(records: QuerySet[Record], query: str) -> QuerySet[Record]:
+        """Filter records."""
         return records.filter(Q(movie__title_en__icontains=query) | Q(movie__title_ru__icontains=query))
 
     @staticmethod
     def _sort_records(
         records: QuerySet[Record], sort: str, username: Optional[str], list_name: str
     ) -> QuerySet[Record]:
+        """Sort records."""
         if sort == "release_date":
             return records.order_by("-movie__release_date")
         if sort == "rating":
@@ -171,11 +195,13 @@ class ListView(TemplateAnonymousView):
     def _get_record_movie_data(
         records_ids_and_movies_ids_list: ListType[Tuple[int, int]]
     ) -> Tuple[ListType[int], Dict[int, int]]:
+        """Get record's movie data."""
         movies_ids = [x[1] for x in records_ids_and_movies_ids_list]
         records_ids_and_movies_ids = {x[0]: x[1] for x in records_ids_and_movies_ids_list}
         return (movies_ids, records_ids_and_movies_ids)
 
     def _get_list_data(self, records: QuerySet[Record]) -> Dict[int, int]:
+        """Get list data."""
         movies_ids, records_and_movies_ids = self._get_record_movie_data(list(records.values_list("id", "movie_id")))
         user: Union[User, UserAnonymous] = self.request.user  # type: ignore
         movies_ids_and_lists_ids_list: ListType[Tuple[int, int]] = list(
@@ -193,6 +219,7 @@ class ListView(TemplateAnonymousView):
         return list_data
 
     def _initialize_session_values(self) -> None:
+        """Initialize session values."""
         session = self.request.session
         if "sort" not in session:
             session["sort"] = "addition_date"
@@ -203,6 +230,7 @@ class ListView(TemplateAnonymousView):
         self.session = session
 
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+        """Get context data."""
         list_name: str = kwargs["list_name"]
         username: Optional[str] = kwargs.get("username")
         self.check_if_allowed(username)
@@ -246,17 +274,21 @@ class ListView(TemplateAnonymousView):
         return {}
 
     def get(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:  # type: ignore
+        """Get."""
         self._initialize_session_values()
         return super().get(request, *args, **kwargs)
 
 
 class RecommendationsView(TemplateView, ListView):
+    """Recommendations view."""
+
     template_name = "list/recommendations.html"
 
     @staticmethod
     def _filter_duplicated_movies_and_limit(
         records: QuerySet[Record],
     ) -> Tuple[ListType[Record], ListType[Tuple[int, int]]]:
+        """Filter duplicated movies and limit."""
         records_output = []
         movies = []
         records_and_movies_ids = []
@@ -270,6 +302,7 @@ class RecommendationsView(TemplateView, ListView):
         return (records_output, records_and_movies_ids)
 
     def _get_recommendations_from_friends(self, friends: QuerySet[User]) -> QuerySet[Record]:
+        """Get recommendations from friends."""
         user: User = self.request.user  # type: ignore
         # Exclude own records and include only friends' records.
         records = Record.objects.exclude(user=user).filter(user__in=friends).select_related("movie")
@@ -278,6 +311,7 @@ class RecommendationsView(TemplateView, ListView):
         return self._filter_records_for_recommendation(records, user)
 
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:  # pylint: disable=unused-argument
+        """Get context data."""
         request: AuthenticatedHttpRequest = self.request  # type: ignore
         user = request.user
         friends = user.get_friends()
@@ -287,6 +321,7 @@ class RecommendationsView(TemplateView, ListView):
         return {"records": records, "reviews": reviews}
 
     def get(self, request: AuthenticatedHttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:  # type: ignore
+        """Get."""
         has_friends = request.user.has_friends()
         if not has_friends:
             raise Http404

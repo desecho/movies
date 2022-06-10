@@ -1,3 +1,4 @@
+"""VK."""
 from typing import TYPE_CHECKING, Any, Dict, List, Optional, Tuple, Union
 
 from django.conf import settings
@@ -16,12 +17,14 @@ class VkError(Exception):
 
 
 def _get_vk_avatar(url: str) -> Optional[str]:
+    """Get VK avatar."""
     if url in settings.VK_NO_AVATAR:
         return None
     return url
 
 
 def update_user_vk_avatar(user: "User", data: Dict[str, Any]) -> "User":
+    """Update user's VK avatar."""
     avatar_small = _get_vk_avatar(data["photo_100"])
     if avatar_small:
         user.avatar_small = avatar_small
@@ -32,9 +35,12 @@ def update_user_vk_avatar(user: "User", data: Dict[str, Any]) -> "User":
 
 
 class Vk:
+    """VK."""
+
     vk: VkApiMethod = None
 
     def __init__(self, user: "User"):
+        """Init."""
         vk_account = user.get_vk_account()
         if vk_account is not None:
             vk_session = VkApi(token=vk_account.access_token)
@@ -43,6 +49,7 @@ class Vk:
         self.user = user
 
     def get_friends(self) -> QuerySet["User"]:  # pylint: disable=no-self-use
+        """Get friends."""
         vk_friends = cache.get("vk_friends")
         if vk_friends is None:
             if self.vk is not None:
@@ -59,6 +66,7 @@ class Vk:
         return friends
 
     def get_data(self, fields: Union[Tuple[str, str, str, str], Tuple[str, str]]) -> Dict[str, Union[str, bool, int]]:
+        """Get data."""
         if self.vk is None:
             return {}
         data: List[Dict[str, Union[str, bool, int]]] = self.vk.users.get(fields=fields)

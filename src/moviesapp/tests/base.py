@@ -1,6 +1,8 @@
+"""Base code for tests."""
 import json
 import os
 from datetime import datetime
+from typing import Optional
 
 import pytz
 from bs4 import BeautifulSoup
@@ -16,6 +18,8 @@ CONTENT_TYPE = "application/json"
 
 
 class BaseClient(Client):
+    """Base client class."""
+
     def post_ajax(
         self,
         path,
@@ -25,6 +29,7 @@ class BaseClient(Client):
         secure=False,
         **extra,
     ):
+        """Perform an AJAX POST request."""
         return self.post(path, data, content_type, follow, secure, **extra)
 
     def put_ajax(
@@ -36,10 +41,13 @@ class BaseClient(Client):
         secure=False,
         **extra,
     ):
+        """Perform an AJAX PUT request."""
         return self.put(path, data, content_type, follow, secure, **extra)
 
 
 class BaseTestCase(TestCase):
+    """Base test class."""
+
     maxDiff = None
     client_class = BaseClient
 
@@ -56,9 +64,11 @@ class BaseTestCase(TestCase):
 
     @staticmethod
     def get_soup(response):
+        """Get BeautifulSoup object from response."""
         return BeautifulSoup(response.content, features="html.parser")
 
     def setUp(self):
+        """Set up test environment."""
         self.user = User.objects.get(username=self.USER_USERNAME)
 
         # Make sure we have current dates in action
@@ -67,14 +77,16 @@ class BaseTestCase(TestCase):
             action_record.date = datetime.now(pytz.utc)
             action_record.save()
 
-    def login(self, username=None):
+    def login(self, username: Optional[str] = None):
+        """Login."""
         if username is None:
             username = self.USER_USERNAME
         self.client.logout()
         self.client.login(username=username, password=self.USER_PASSWORD)
 
     @staticmethod
-    def load_json(filename):
+    def load_json(filename: str):
+        """Load JSON from file."""
         base_path = os.path.join(settings.SRC_DIR, "moviesapp", "tests", "files")
         path = os.path.join(base_path, filename)
         with open(path, encoding="utf8") as f:
@@ -82,14 +94,18 @@ class BaseTestCase(TestCase):
 
     @staticmethod
     def dump_instance(instance):
+        """Dump instance to JSON."""
         return json.dumps(model_to_dict(instance), cls=DjangoJSONEncoder)
 
     @property
     def is_authenticated(self):
+        """Check if user is authenticated."""
         return "_auth_user_id" in self.client.session.keys()
 
 
 class BaseTestLoginCase(BaseTestCase):
+    """Base test class (authenticated)."""
+
     fixtures = [
         "users.json",
         "lists.json",
@@ -100,5 +116,6 @@ class BaseTestLoginCase(BaseTestCase):
     ]
 
     def setUp(self):
+        """Set up test environment."""
         super().setUp()
         self.login()

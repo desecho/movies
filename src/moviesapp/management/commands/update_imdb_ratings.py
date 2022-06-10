@@ -1,3 +1,4 @@
+"""Update the IMDb ratings."""
 from typing import Any
 
 from django_tqdm import BaseCommand
@@ -7,9 +8,12 @@ from moviesapp.omdb import load_omdb_movie_data
 
 
 class Command(BaseCommand):
-    help = "Updates the IMDb ratings"
+    """Update the IMDb ratings."""
+
+    help = "Update the IMDb ratings"
 
     def handle(self, *args: Any, **options: Any) -> None:  # pylint: disable=unused-argument
+        """Execute command."""
         movies = Movie.objects.all()
         tqdm = self.tqdm(total=movies.count())
         last_movie = movies.last()

@@ -1,3 +1,5 @@
+"""Template tag for movie count."""
+
 from django import template
 from django.utils.safestring import SafeString, mark_safe
 from django.utils.translation import gettext_lazy as _
@@ -9,6 +11,7 @@ register = template.Library()
 
 @register.simple_tag
 def movie_count(user: User) -> SafeString:
+    """Get movie count HTML snippet."""
     watched = _("Watched")
     to_watch = _("To Watch")
     watched_number = user.movies_watched_number

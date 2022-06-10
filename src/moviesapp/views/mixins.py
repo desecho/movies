@@ -1,3 +1,4 @@
+"""Views mixins."""
 from typing import Any, Optional
 
 from braces.views import JsonRequestResponseMixin, LoginRequiredMixin
@@ -11,7 +12,10 @@ from .utils import get_anothers_account
 
 
 class AjaxAnonymousView(JsonRequestResponseMixin, View):
+    """AJAX anonymous view."""
+
     def success(self, **kwargs: Any) -> HttpResponse:
+        """Return success response."""
         payload = {"status": "success"}
         payload.update(kwargs)
         response: HttpResponse = self.render_json_response(payload)
@@ -19,22 +23,30 @@ class AjaxAnonymousView(JsonRequestResponseMixin, View):
 
 
 class AjaxView(LoginRequiredMixin, AjaxAnonymousView):
+    """AJAX authenticated view."""
+
     raise_exception = True
 
 
 class VkAjaxView(AjaxView):
+    """VK AJAX view."""
+
     def dispatch(  # type: ignore
         self, request: AjaxAuthenticatedHttpRequest, *args: Any, **kwargs: Any
     ) -> (HttpResponseRedirect | HttpResponse | StreamingHttpResponse | Any):
+        """Dispatch."""
         if not request.user.is_vk_user:
             return self.no_permissions_fail(request)
         return super().dispatch(request, *args, **kwargs)
 
 
 class TemplateAnonymousView(TemplateViewOriginal):
+    """Template anonymous view."""
+
     anothers_account: Optional[User] = None
 
     def check_if_allowed(self, username: Optional[str] = None) -> None:
+        """Check if user is allowed to see the page."""
         request: HttpRequest = self.request  # type: ignore
         if username is None and request.user.is_anonymous:
             raise Http404
@@ -48,6 +60,9 @@ class TemplateAnonymousView(TemplateViewOriginal):
 
 
 class TemplateView(LoginRequiredMixin, TemplateAnonymousView):
+    """Template authenticated view."""
+
     def get(self, request: AuthenticatedHttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:  # type: ignore
+        """Get."""
         request: HttpRequest = request  # type: ignore
         return TemplateAnonymousView.get(self, request, *args, **kwargs)

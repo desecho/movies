@@ -1,3 +1,4 @@
+"""Load providers."""
 from typing import Any
 
 from django_tqdm import BaseCommand
@@ -7,9 +8,12 @@ from moviesapp.tmdb import get_tmdb_providers
 
 
 class Command(BaseCommand):
+    """Load providers."""
+
     help = "Load providers"
 
     def handle(self, *args: Any, **options: Any) -> None:  # pylint: disable=unused-argument
+        """Execute command."""
         providers = get_tmdb_providers()
         tqdm = self.tqdm(total=len(providers))
         for provider in providers:

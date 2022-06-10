@@ -1,3 +1,4 @@
+"""Views for movies."""
 from typing import Any, Dict
 
 from ..http import HttpRequest
@@ -6,13 +7,18 @@ from .utils import get_records, sort_by_rating
 
 
 class AboutView(TemplateAnonymousView):
+    """About view."""
+
     template_name = "about.html"
 
 
 class GalleryView(TemplateAnonymousView):
+    """Gallery view."""
+
     template_name = "gallery.html"
 
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+        """Get context data."""
         list_name = kwargs["list_name"]
         username = kwargs.get("username")
         self.check_if_allowed(username)

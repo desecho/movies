@@ -1,3 +1,4 @@
+"""Utils for views."""
 from datetime import datetime
 from typing import List, Optional, Union
 
@@ -11,6 +12,7 @@ from ..models import Action, ActionRecord, Record, User, UserAnonymous
 def paginate(
     objects: Union[QuerySet[Record], List[User]], page: Optional[Union[str, int]], objects_on_page: int
 ) -> Union[Page[Record], Page[User]]:
+    """Paginate objects."""
     paginator = Paginator(objects, objects_on_page)
     records: Union[Page[Record], Page[User]]
     if page is None:
@@ -28,6 +30,7 @@ def paginate(
 
 
 def add_movie_to_list(movie_id: int, list_id: int, user: User) -> None:
+    """Add movie to list."""
     records = user.get_records().filter(movie_id=movie_id)
     if records.exists():
         record = records[0]
@@ -43,6 +46,7 @@ def add_movie_to_list(movie_id: int, list_id: int, user: User) -> None:
 
 
 def get_anothers_account(username: Optional[str]) -> Optional[User]:
+    """Get another's account."""
     if username:
         return get_object_or_404(User, username=username)
     return None
@@ -54,6 +58,7 @@ def get_records(list_name: str, user: Union[User, UserAnonymous]) -> QuerySet[Re
 
 
 def sort_by_rating(records: QuerySet[Record], username: Optional[str], list_name: str) -> QuerySet[Record]:
+    """Sort records by rating."""
     if not username and list_name == "to-watch":
         # Sorting is changing here because there is no user rating yet.
         return records.order_by("-movie__imdb_rating", "-movie__release_date")

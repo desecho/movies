@@ -1,3 +1,4 @@
+"""OMDb."""
 import re
 from datetime import datetime
 from typing import Any, Dict, Optional
@@ -21,6 +22,7 @@ class OmdbError(Exception):
 
 
 def _get_runtime(runtime_str: Optional[str]) -> Optional[datetime]:
+    """Get runtime."""
     if runtime_str is not None:
         try:
             runtime = datetime.strptime(runtime_str, "%H h %M min")
@@ -47,6 +49,7 @@ def _get_runtime(runtime_str: Optional[str]) -> Optional[datetime]:
 
 
 def load_omdb_movie_data(imdb_id: str) -> Dict[str, Any]:
+    """Load movie data from OMDB."""
     try:
         params = {"apikey": settings.OMDB_KEY, "i": imdb_id}
         response = requests.get(settings.OMDB_BASE_URL, params=params)
@@ -70,6 +73,7 @@ def load_omdb_movie_data(imdb_id: str) -> Dict[str, Any]:
 
 
 def get_omdb_movie_data(imdb_id: str) -> Dict[str, Any]:
+    """Get movie data from OMDB."""
     movie_data = load_omdb_movie_data(imdb_id)
     return {
         "writer": movie_data.get("Writer"),

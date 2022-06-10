@@ -1,3 +1,4 @@
+"""Menus."""
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from menu import Menu, MenuItem
@@ -9,6 +10,7 @@ from .http import HttpRequest
 
 
 def is_authenticated(request: HttpRequest) -> bool:
+    """Return True if user is authenticated."""
     return request.user.is_authenticated
 
 

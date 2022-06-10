@@ -1,3 +1,4 @@
+"""Search views."""
 import json
 from typing import Optional
 
@@ -15,11 +16,16 @@ from .utils import add_movie_to_list
 
 
 class SearchView(TemplateAnonymousView):
+    """Search view."""
+
     template_name = "search.html"
 
 
 class SearchMovieView(AjaxAnonymousView):
+    """Search movie view."""
+
     def get(self, request: AjaxHttpRequest) -> (HttpResponse | HttpResponseBadRequest):
+        """Return a list of movies based on the search query."""
         AVAILABLE_SEARCH_TYPES = [
             "actor",
             "movie",
@@ -41,9 +47,15 @@ class SearchMovieView(AjaxAnonymousView):
 
 
 class AddToListFromDbView(AjaxView):
+    """Add to list from DB view."""
+
     @staticmethod
     def add_movie_to_db(tmdb_id: int) -> int:
-        """Return movie id."""
+        """
+        Add a movie to the database.
+
+        Return movie ID.
+        """
         movie_data = load_movie_data(tmdb_id)
         watch_data = movie_data.pop("watch_data")
         movie = Movie(**movie_data)
@@ -58,7 +70,11 @@ class AddToListFromDbView(AjaxView):
 
     @staticmethod
     def _get_movie_id(tmdb_id: int) -> Optional[int]:
-        """Return movie id or None if movie is not found."""
+        """
+        Get movie ID.
+
+        Return movie ID or None if movie is not found.
+        """
         try:
             movie: Movie = Movie.objects.get(tmdb_id=tmdb_id)
             return movie.pk
@@ -66,7 +82,11 @@ class AddToListFromDbView(AjaxView):
             return None
 
     def _add_to_list_from_db(self, movie_id: Optional[int], tmdb_id: int, list_id: int, user: User) -> bool:
-        """Return True on success and None of failure."""
+        """
+        Add a movie to a list from database.
+
+        Return True on success or None on failure.
+        """
         # If we don't find the movie in the db we add it to the database.
         if movie_id is None:
             try:
@@ -78,6 +98,7 @@ class AddToListFromDbView(AjaxView):
         return True
 
     def post(self, request: AjaxAuthenticatedHttpRequest) -> (HttpResponse | HttpResponseBadRequest):
+        """Add a movie to a list."""
         try:
             POST = request.POST
             tmdb_id = int(POST["movieId"])

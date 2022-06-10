@@ -1,3 +1,4 @@
+"""Download provider logos."""
 from os.path import exists, join
 from typing import Any
 from urllib.parse import urljoin
@@ -10,13 +11,17 @@ from moviesapp.tmdb import get_tmdb_providers
 
 
 class Command(BaseCommand):
+    """Download provider logos."""
+
     help = "Download provider logos"
 
     @staticmethod
     def _get_extension(logo_path: str) -> str:
+        """Get extension."""
         return logo_path.split(".")[-1]
 
     def _download_logo(self, logo_path: str, provider_id: int) -> None:
+        """Download logo."""
         extension = self._get_extension(logo_path)
         file_path = join(settings.PROVIDERS_IMG_DIR, f"{provider_id}.{extension}")
         if not exists(file_path):
@@ -24,6 +29,7 @@ class Command(BaseCommand):
             wget.download(path, file_path)
 
     def handle(self, *args: Any, **options: Any) -> None:  # pylint: disable=unused-argument
+        """Execute command."""
         providers = get_tmdb_providers()
         tqdm = self.tqdm(total=len(providers))
         for provider in providers:

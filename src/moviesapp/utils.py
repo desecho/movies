@@ -1,3 +1,4 @@
+"""Utils."""
 from typing import Any, Dict, List, Union
 
 from django.utils.timezone import now

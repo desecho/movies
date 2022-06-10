@@ -1,3 +1,4 @@
+"""Update movie data."""
 from typing import Any, Dict, List, Union
 
 from django.conf import settings
@@ -13,13 +14,16 @@ from moviesapp.utils import load_movie_data, save_watch_data
 
 
 class Command(BaseCommand):
-    help = """Updates movie data
-    If one argument is used then the movie with the selected movie_id is updated
-    If no arguments are used - all movies get updated
-    We are not specifying if the movie info got actually changed here.
+    """Update movie data."""
+
+    help = """Update movie data.
+
+    If one argument is used then the movie with the selected movie_id is updated.
+    If no arguments are used - all movies get updated.
     """
 
     def add_arguments(self, parser: CommandParser) -> None:
+        """Add arguments."""
         parser.add_argument("movie_id", nargs="?", default=None, type=int)
         parser.add_argument(
             "-s",
@@ -76,6 +80,8 @@ class Command(BaseCommand):
     def handle(
         self, movie_id: int, start_from_id: bool, *args: Any, **options: Any  # pylint: disable=unused-argument
     ) -> None:
+        """Execute command."""
+
         def get_filtered_movies() -> QuerySet[Movie]:
             if start_from_id:
                 return movies.filter(pk__gte=movie_id)
@@ -108,7 +114,7 @@ class Command(BaseCommand):
                 try:
                     result = self._update_movie_data(movie)
                 except TmdbNoImdbIdError:
-                    tqdm.error(f'"{movie.id_title}" is not found in IMDb')
+                    tqdm.error(f'"{movie.title_with_id}" is not found in IMDb')
                 else:
                     updated = result
                     if updated:

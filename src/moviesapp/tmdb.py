@@ -1,3 +1,4 @@
+"""TMDB."""
 from datetime import date, datetime
 from operator import itemgetter
 from typing import Any, Dict, List, Optional, Union
@@ -21,12 +22,14 @@ class TmdbNoImdbIdError(Exception):
 
 
 def _get_poster_from_tmdb(poster: str) -> Optional[str]:
+    """Get poster from TMDB."""
     if poster:
         return poster[1:]
     return None
 
 
 def _get_date(date_str: str, lang: str) -> Optional[str]:
+    """Get date."""
     if date_str:
         date_ = datetime.strptime(date_str, "%Y-%m-%d")
         if date_:
@@ -36,16 +39,19 @@ def _get_date(date_str: str, lang: str) -> Optional[str]:
 
 
 def _set_proper_date(movies: List[Dict[str, Any]], lang: str) -> List[Dict[str, Any]]:
+    """Set proper date."""
     for movie in movies:
         movie["releaseDate"] = _get_date(movie["releaseDate"], lang)
     return movies
 
 
 def _is_popular_movie(popularity: float) -> bool:
+    """Return True if movie is popular."""
     return popularity >= settings.MIN_POPULARITY
 
 
 def _sort_by_date(movies: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    """Sort movies by date."""
     movies_with_date = []
     movies_without_date = []
     for movie in movies:
@@ -93,6 +99,7 @@ def _get_data(query_str: str, search_type: str, lang: str) -> List[Dict[str, Any
 def get_movies_from_tmdb(
     query: str, search_type: str, options: Dict[str, bool], user: Union[User, UserAnonymous], lang: str
 ) -> List[Dict[str, Any]]:
+    """Get movies from TMDB."""
     movies_data = _get_data(query, search_type, lang)
     movies = []
     i = 0
@@ -127,10 +134,12 @@ def get_movies_from_tmdb(
 
 
 def _is_valid_trailer_site(site: str) -> bool:
+    """Return True if trailer site is valid."""
     return site in settings.TRAILER_SITES.keys()
 
 
 def _get_trailers(tmdb_movie: Movies, lang: str) -> List[Dict[str, str]]:
+    """Get trailers."""
     trailers = []
     for video in tmdb_movie.videos(language=lang)["results"]:
         if video["type"] == "Trailer":
@@ -149,6 +158,7 @@ def _get_trailers(tmdb_movie: Movies, lang: str) -> List[Dict[str, str]]:
 
 
 def _get_watch_data(tmdb_movie: Movies, release_date: Optional[date]) -> List[Dict[str, Union[str, int]]]:
+    """Get watch data."""
     watch_data = []
     if is_released(release_date):
         for country, data in tmdb_movie.watch_providers()["results"].items():
@@ -160,12 +170,14 @@ def _get_watch_data(tmdb_movie: Movies, release_date: Optional[date]) -> List[Di
 
 
 def _get_release_date(release_date_str: str) -> Optional[date]:
+    """Get release date."""
     if release_date_str:
         return datetime.strptime(release_date_str, "%Y-%m-%d").date()
     return None
 
 
 def get_tmdb_movie_data(tmdb_id: int) -> Dict[str, Any]:
+    """Get TMDB movie data."""
     tmdb_movie = tmdb.Movies(tmdb_id)
     movie_info_en = tmdb_movie.info(language=settings.LANGUAGE_EN)
     imdb_id = movie_info_en["imdb_id"]
@@ -193,6 +205,11 @@ def get_tmdb_movie_data(tmdb_id: int) -> Dict[str, Any]:
 
 
 def get_tmdb_providers() -> List[Dict[str, Union[str, int]]]:
+    """
+    Get TMDB providers.
+
+    The functionality is not supported by tmdbsimple so we have to use the API directly.
+    """
     params = {"api_key": settings.TMDB_KEY}
     response = requests.get(urljoin(settings.TMDB_API_BASE_URL, "watch/providers/movie"), params=params)
     providers: List[Dict[str, Union[str, int]]] = response.json()["results"]

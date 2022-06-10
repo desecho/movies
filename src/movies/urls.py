@@ -40,6 +40,7 @@ urlpatterns: URLList = []
 
 
 def path_404(url_path: str, name: str) -> URL:
+    """Return a path for 404."""
     return path(
         url_path,
         page_not_found,
