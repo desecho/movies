@@ -16,7 +16,7 @@ from moviesapp.utils import load_movie_data, save_watch_data
 class Command(BaseCommand):
     """Update movie data."""
 
-    help = """Update movie data.
+    help = """Update all movie data except for IMDb ratings.
 
     If one argument is used then the movie with the selected movie_id is updated.
     If no arguments are used - all movies get updated.
@@ -61,6 +61,7 @@ class Command(BaseCommand):
         movies = Movie.objects.filter(pk=movie.pk)
         movie_initial_data = movies.values()[0]
         watch_data = movie_data.pop("watch_data")
+        movie_data.pop("imdb_rating")
         movies.update(watch_data_update_date=None, **movie_data)
         existing_provider_records = movie.provider_records.all().values("id", "provider_id", "country")
         self._remove_no_longer_available_provider_records(list(existing_provider_records), watch_data)  # type: ignore
