@@ -77,22 +77,23 @@ class Command(BaseCommand):
         updated: bool = movie_initial_data != movie_updated_data
         return updated
 
+    @staticmethod
+    def filter_movies(movie_id: int, start_from_id: bool, movies: QuerySet[Movie]) -> QuerySet[Movie]:
+        """Filter movies."""
+        if start_from_id:
+            return movies.filter(pk__gte=movie_id)
+        return movies.filter(pk=movie_id)
+
     def handle(
         self, movie_id: int, start_from_id: bool, *args: Any, **options: Any  # pylint: disable=unused-argument
     ) -> None:
         """Execute command."""
-
-        def get_filtered_movies() -> QuerySet[Movie]:
-            if start_from_id:
-                return movies.filter(pk__gte=movie_id)
-            return movies.filter(pk=movie_id)
-
         movies = Movie.objects.all()
         movies_total = movies.count()
         disable = None
         filtered = movie_id is not None
         if filtered:
-            movies = get_filtered_movies()
+            movies = self.filter_movies(movie_id, start_from_id, movies)
             if not movies:  # In case the movie_id is too high and we don't get any movies
                 if start_from_id:
                     self.error(f"There are no movies found with id > {movie_id}", fatal=True)
