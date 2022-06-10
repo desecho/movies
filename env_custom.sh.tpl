@@ -12,4 +12,4 @@ export EMAIL_USE_SSL=
 export EMAIL_HOST=
 export EMAIL_HOST_USER=
 # int
-export EMAIL_PORT=
+export EMAIL_PORT=25
