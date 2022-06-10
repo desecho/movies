@@ -3,17 +3,17 @@ Movies
 
 |Deployment Status| |Requirements Status| |Codecov|
 
-The web application on Django_ 4, Vue.js_ 2, Bootstrap_ 4. Create movie lists "Watched" and "To Watch", rate movies, and add comments.
-
-You can also add additional information such as if you watched the movie in the original version, in theatre, an extended version, in 4K, etc.
-
-You can also see where you can stream movies.
+| The web application on Django_ 4, Vue.js_ 2, Bootstrap_ 4. Create movie lists "Watched" and "To Watch", rate movies, and add comments.
+| You can also add additional information such as if you watched the movie in the original version, in theatre, an extended version, in 4K, etc.
+| You can also see where you can stream movies.
 
 | It is also available as a `VK app`_. Not working temporarily.
 | Share your lists with VK and Facebook friends, get recommendations from friends. Not working temporarily.
+
 | The website is live here - https://movies.samarchyan.me.
 | The interface is available in English and Russian.
-| See more documentation_.
+
+See more documentation_.
 
 Development
 ----------------------------
@@ -28,7 +28,7 @@ Development
 
 | Open http://localhost:8000/ to access the web application.
 | Open http://localhost:8000/admin to access the admin section.
-| Open http://localhost:8000/rosetta to access rosetta.
+| Open http://localhost:8000/rosetta to access Rosetta.
 
 Run in Docker:
 
@@ -36,7 +36,7 @@ Run in Docker:
 2. Edit file ``docker_secrets.env``
 3. Run ``make docker-run``
 
-Debugging the VK App:
+Debugging the VK app:
 
 1. Register account on https://ngrok.io
 2. Run ``make ngrok``
@@ -45,38 +45,14 @@ Debugging the VK App:
 5. Set iframe address to ``https://[ngrok_host]/complete/vk-app/`` in the app settings
 
 Production
-----------------------------
+------------
 To use production commands:
 
 1. Edit file ``db_env_prod.sh``
 2. Activate the kubectl context
 
-CI/CD
-----------------------------
-`GitHub Actions`_  are used for CI/CD.
-
-Tests are automatically run on pull requests and in master or dev branches.
-
-Deployment is automatically done in master branch.
-
-The following GitHub Actions are used:
-
-* `Cancel Workflow Action`_
-* Checkout_
-* `Setup Python`_
-* `Setup Node.js environment`_
-* Codecov_
-* `Docker Login`_
-* `Build and push Docker images`_
-* `GitHub Action for DigitalOcean - doctl`_
-* `Kubectl tool installer`_
-* `DigitalOcean Spaces Upload Action`_
-* Cache_
-* `Docker Setup Buildx`_
-* `Set Timezone`_
-
 Used APIs
---------------
+-----------
 * TMDB_
 * OMDb_
 
@@ -85,6 +61,7 @@ Used images
 * `IMDb logo`_
 * `Down arrow icon`_
 * `TMDB Logos`_
+
 
 .. |Requirements Status| image:: https://requires.io/github/desecho/movies/requirements.svg?branch=master
    :target: https://requires.io/github/desecho/movies/requirements/?branch=master
@@ -106,22 +83,6 @@ Used images
 
 .. _ubuntu-vm: https://github.com/desecho/ubuntu-vm
 .. _mysql-docker: https://github.com/desecho/mysql-docker
-
-.. _GitHub Actions: https://github.com/features/actions
-
-.. _Cancel Workflow Action: https://github.com/marketplace/actions/cancel-workflow-action
-.. _Checkout: https://github.com/marketplace/actions/checkout
-.. _Setup Python: https://github.com/marketplace/actions/setup-python
-.. _Setup Node.js environment: https://github.com/marketplace/actions/setup-node-js-environment
-.. _Codecov: https://github.com/marketplace/actions/codecov
-.. _Docker Login: https://github.com/marketplace/actions/docker-login
-.. _Build and push Docker images: https://github.com/marketplace/actions/build-and-push-docker-images
-.. _GitHub Action for DigitalOcean - doctl: https://github.com/marketplace/actions/github-action-for-digitalocean-doctl
-.. _Kubectl tool installer: https://github.com/marketplace/actions/kubectl-tool-installer
-.. _DigitalOcean Spaces Upload Action: https://github.com/marketplace/actions/digitalocean-spaces-upload-action
-.. _Cache: https://github.com/marketplace/actions/cache
-.. _Docker Setup Buildx: https://github.com/marketplace/actions/docker-setup-buildx
-.. _Set Timezone: https://github.com/marketplace/actions/set-timezone
 
 .. _VK app: http://vk.com/app3504693_2912142
 
