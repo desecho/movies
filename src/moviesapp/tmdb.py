@@ -4,7 +4,7 @@ from typing import Any, Dict, List, Optional, Union
 from urllib.parse import urljoin
 
 import requests
-import tmdbsimple
+import tmdbsimple as tmdb
 from babel.dates import format_date
 from django.conf import settings
 from sentry_sdk import capture_exception
@@ -13,17 +13,11 @@ from tmdbsimple import Movies
 from .exceptions import TrailerSiteNotFoundError
 from .models import User, UserAnonymous, get_poster_url, get_tmdb_url, is_released
 
+tmdb.API_KEY = settings.TMDB_KEY
+
 
 class TmdbNoImdbIdError(Exception):
     """TMDB no IMDb ID error."""
-
-
-def _get_tmdb(lang: Optional[str]) -> tmdbsimple:
-    tmdbsimple.API_KEY = settings.TMDB_KEY
-    if lang is None:
-        lang = settings.LANGUAGE_CODE
-    tmdbsimple.LANGUAGE = lang
-    return tmdbsimple
 
 
 def _get_poster_from_tmdb(poster: str) -> Optional[str]:
@@ -68,26 +62,26 @@ def _get_data(query_str: str, search_type: str, lang: str) -> List[Dict[str, Any
     """
     Get data.
 
-    For actor, director search - the first is used.
+    For actor, director search - the first person found is used.
     """
 
     def filter_movies_only(entries: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
         return [e for e in entries if e["media_type"] == "movie"]
 
     query = query_str.encode("utf-8")
-    tmdb = _get_tmdb(lang)
+    params = {"query": query, "language": lang}
     search = tmdb.Search()
     if search_type == "movie":
-        movies: List[Dict[str, Any]] = search.movie(query=query)["results"]
+        movies: List[Dict[str, Any]] = search.movie(**params)["results"]
     else:
-        persons: List[Dict[str, Any]] = search.person(query=query)["results"]
+        persons: List[Dict[str, Any]] = search.person(**params)["results"]
         # We only select the first found actor/director.
         if persons:
             person_id = persons[0]["id"]
         else:
             return []
         person = tmdb.People(person_id)
-        person.combined_credits()
+        person.combined_credits(language=lang)
         if search_type == "actor":
             movies = filter_movies_only(person.cast)
         else:
@@ -136,11 +130,11 @@ def _is_valid_trailer_site(site: str) -> bool:
     return site in settings.TRAILER_SITES.keys()
 
 
-def _get_trailers(movie_data: Movies) -> List[Dict[str, str]]:
+def _get_trailers(tmdb_movie: Movies, lang: str) -> List[Dict[str, str]]:
     trailers = []
-    for t in movie_data.videos()["results"]:
-        if t["type"] == "Trailer":
-            site = t["site"]
+    for video in tmdb_movie.videos(language=lang)["results"]:
+        if video["type"] == "Trailer":
+            site = video["site"]
             try:
                 if not _is_valid_trailer_site(site):
                     raise TrailerSiteNotFoundError(f"Site - {site}")
@@ -149,20 +143,15 @@ def _get_trailers(movie_data: Movies) -> List[Dict[str, str]]:
                     raise
                 capture_exception(e)
                 continue
-            trailer_ = {"name": t["name"], "key": t["key"], "site": site}
-            trailers.append(trailer_)
+            trailer = {"name": video["name"], "key": video["key"], "site": site}
+            trailers.append(trailer)
     return trailers
 
 
-def _get_tmdb_movie(tmdb_id: int, lang: Optional[str] = None) -> Movies:
-    tmdb = _get_tmdb(lang)
-    return tmdb.Movies(tmdb_id)
-
-
-def _get_watch_data(movie_data: Movies, release_date: Optional[date]) -> List[Dict[str, Union[str, int]]]:
+def _get_watch_data(tmdb_movie: Movies, release_date: Optional[date]) -> List[Dict[str, Union[str, int]]]:
     watch_data = []
     if is_released(release_date):
-        for country, data in movie_data.watch_providers()["results"].items():
+        for country, data in tmdb_movie.watch_providers()["results"].items():
             if country in settings.PROVIDERS_SUPPORTED_COUNTRIES and "flatrate" in data:
                 for provider in data["flatrate"]:
                     record = {"country": country, "provider_id": provider["provider_id"]}
@@ -177,20 +166,14 @@ def _get_release_date(release_date_str: str) -> Optional[date]:
 
 
 def get_tmdb_movie_data(tmdb_id: int) -> Dict[str, Any]:
-    # We have to get and save all info in English first before we switch to Russian or everything breaks.
-    tmdb_movie_en = _get_tmdb_movie(tmdb_id)
-    movie_info_en = tmdb_movie_en.info()
+    tmdb_movie = tmdb.Movies(tmdb_id)
+    movie_info_en = tmdb_movie.info(language=settings.LANGUAGE_EN)
     imdb_id = movie_info_en["imdb_id"]
+    # Fail early if the IMDb ID is not found.
     if not imdb_id:
         raise TmdbNoImdbIdError(tmdb_id)
     release_date = _get_release_date(movie_info_en["release_date"])
-    watch_data = _get_watch_data(tmdb_movie_en, release_date)
-    trailers_en = _get_trailers(tmdb_movie_en)
-
-    # Switch to Russian here.
-    tmdb_movie_ru = _get_tmdb_movie(tmdb_id, settings.LANGUAGE_RU)
-    movie_info_ru = tmdb_movie_ru.info()
-    trailers_ru = _get_trailers(tmdb_movie_ru)
+    movie_info_ru = tmdb_movie.info(language=settings.LANGUAGE_RU)
     return {
         "tmdb_id": tmdb_id,
         "imdb_id": imdb_id,
@@ -199,13 +182,13 @@ def get_tmdb_movie_data(tmdb_id: int) -> Dict[str, Any]:
         "poster_ru": _get_poster_from_tmdb(movie_info_ru["poster_path"]),
         "poster_en": _get_poster_from_tmdb(movie_info_en["poster_path"]),
         "homepage": movie_info_en["homepage"],
-        "trailers_en": trailers_en,
-        "trailers_ru": trailers_ru,
+        "trailers_en": _get_trailers(tmdb_movie, lang=settings.LANGUAGE_EN),
+        "trailers_ru": _get_trailers(tmdb_movie, lang=settings.LANGUAGE_RU),
         "title_en": movie_info_en["title"],
         "title_ru": movie_info_ru["title"],
         "description_en": movie_info_en["overview"],
         "description_ru": movie_info_ru["overview"],
-        "watch_data": watch_data,
+        "watch_data": _get_watch_data(tmdb_movie, release_date),
     }
 
 
