@@ -254,8 +254,30 @@ yarn-build:
 build:
 	yarn build --watch
 
+.PHONY: ngrok
+## Run ngrok
+ngrok:
+	ngrok http 8000
+
+.PHONY: drop-db
+## Drop db
+drop-db:
+	source $(ENV_FILE) && \
+	scripts/drop_db.sh
+
+.PHONY: load-db
+## Load db from today's backup
+load-db: drop-db create-db
+	source $(ENV_FILE) && \
+	scripts/load_db.sh
+#------------------------------------
+
+#------------------------------------
+# Formatting
+#------------------------------------
+
 .PHONY: format
-## Format python code
+## Format python code | Formatting
 format:
 	${SOURCE_CMDS} && \
 	autoflake --remove-all-unused-imports --in-place -r src && \
@@ -285,23 +307,6 @@ format-sh:
 .PHONY: format-all
 ## Format code
 format-all: format format-json format-css format-js format-sh
-
-.PHONY: ngrok
-## Run ngrok
-ngrok:
-	ngrok http 8000
-
-.PHONY: drop-db
-## Drop db
-drop-db:
-	source $(ENV_FILE) && \
-	scripts/drop_db.sh
-
-.PHONY: load-db
-## Load db from today's backup
-load-db: drop-db create-db
-	source $(ENV_FILE) && \
-	scripts/load_db.sh
 #------------------------------------
 
 #------------------------------------
