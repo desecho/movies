@@ -358,6 +358,12 @@ createsuperuser:
 	${SOURCE_CMDS} && \
 	${MANAGE_CMD} createsuperuser
 
+.PHONY: shell
+## Run shell
+shell:
+	${SOURCE_CMDS} && \
+	${MANAGE_CMD} shell
+
 .PHONY: makemigrations
 ## Run makemigrations command. Usage: make makemigrations arguments="[arguments]"
 makemigrations:
