@@ -1,7 +1,8 @@
 """Search views."""
 import json
-from typing import Optional
+from typing import Any, Dict, List as ListType, Optional
 
+from django.conf import settings
 from django.http import Http404, HttpResponse, HttpResponseBadRequest
 from sentry_sdk import capture_exception
 
@@ -24,6 +25,13 @@ class SearchView(TemplateAnonymousView):
 class SearchMovieView(AjaxAnonymousView):
     """Search movie view."""
 
+    def _filter_out_movies_user_already_has_in_lists(self, movies: ListType[Dict[str, Any]]) -> None:
+        user: User = self.request.user  # type: ignore
+        user_movies_tmdb_ids = list(user.get_records().values_list("movie__tmdb_id", flat=True))
+        for movie in movies:
+            if movie["id"] in user_movies_tmdb_ids:
+                movies.remove(movie)
+
     def get(self, request: AjaxHttpRequest) -> (HttpResponse | HttpResponseBadRequest):
         """Return a list of movies based on the search query."""
         AVAILABLE_SEARCH_TYPES = [
@@ -42,7 +50,10 @@ class SearchMovieView(AjaxAnonymousView):
             response: HttpResponseBadRequest = self.render_bad_request_response()
             return response
         language_code = request.LANGUAGE_CODE
-        movies = get_movies_from_tmdb(query, type_, options, request.user, language_code)
+        movies = get_movies_from_tmdb(query, type_, options, language_code)
+        if request.user.is_authenticated:
+            self._filter_out_movies_user_already_has_in_lists(movies)
+        movies = movies[: settings.MAX_RESULTS]
         return self.success(movies=movies)
 
 

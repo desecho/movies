@@ -33,30 +33,8 @@ from vk_api.exceptions import ApiError
 from .exceptions import ProviderNotFoundError
 from .fb import Fb
 from .http import HttpRequest
+from .tmdb import get_poster_url, get_tmdb_url
 from .vk import Vk, VkError
-
-
-# Cannot be moved to utils because it would cause circular imports
-def get_tmdb_url(tmdb_id: int) -> str:
-    """Get TMDB URL."""
-    return f"{settings.TMDB_MOVIE_BASE_URL}{tmdb_id}/"
-
-
-# Cannot be moved to utils because it would cause circular imports
-def get_poster_url(size: str, poster: Optional[str]) -> Optional[str]:
-    """Get poster URL."""
-    if size == "small":
-        poster_size = settings.POSTER_SIZE_SMALL
-        no_image_url = settings.NO_POSTER_SMALL_IMAGE_URL
-    elif size == "normal":
-        poster_size = settings.POSTER_SIZE_NORMAL
-        no_image_url = settings.NO_POSTER_NORMAL_IMAGE_URL
-    elif size == "big":
-        poster_size = settings.POSTER_SIZE_BIG
-        no_image_url = settings.NO_POSTER_BIG_IMAGE_URL
-    if poster is not None:
-        return settings.POSTER_BASE_URL + poster_size + "/" + poster
-    return no_image_url
 
 
 class UserBase:

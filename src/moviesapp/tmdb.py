@@ -12,13 +12,33 @@ from sentry_sdk import capture_exception
 from tmdbsimple import Movies
 
 from .exceptions import TrailerSiteNotFoundError
-from .models import User, UserAnonymous, get_poster_url, get_tmdb_url
 
 tmdb.API_KEY = settings.TMDB_KEY
 
 
 class TmdbNoImdbIdError(Exception):
     """TMDB no IMDb ID error."""
+
+
+def get_tmdb_url(tmdb_id: int) -> str:
+    """Get TMDB URL."""
+    return f"{settings.TMDB_MOVIE_BASE_URL}{tmdb_id}/"
+
+
+def get_poster_url(size: str, poster: Optional[str]) -> Optional[str]:
+    """Get poster URL."""
+    if size == "small":
+        poster_size = settings.POSTER_SIZE_SMALL
+        no_image_url = settings.NO_POSTER_SMALL_IMAGE_URL
+    elif size == "normal":
+        poster_size = settings.POSTER_SIZE_NORMAL
+        no_image_url = settings.NO_POSTER_NORMAL_IMAGE_URL
+    elif size == "big":
+        poster_size = settings.POSTER_SIZE_BIG
+        no_image_url = settings.NO_POSTER_BIG_IMAGE_URL
+    if poster is not None:
+        return settings.POSTER_BASE_URL + poster_size + "/" + poster
+    return no_image_url
 
 
 def _get_poster_from_tmdb(poster: str) -> Optional[str]:
@@ -96,26 +116,17 @@ def _get_data(query_str: str, search_type: str, lang: str) -> List[Dict[str, Any
     return movies
 
 
-def get_movies_from_tmdb(
-    query: str, search_type: str, options: Dict[str, bool], user: Union[User, UserAnonymous], lang: str
-) -> List[Dict[str, Any]]:
+def get_movies_from_tmdb(query: str, search_type: str, options: Dict[str, bool], lang: str) -> List[Dict[str, Any]]:
     """Get movies from TMDB."""
     movies_data = _get_data(query, search_type, lang)
     movies = []
-    i = 0
     if movies_data:
-        user_movies_tmdb_ids = list(user.get_records().values_list("movie__tmdb_id", flat=True))
         for movie in movies_data:
-            tmdb_id = movie["id"]
-            i += 1
-            if i > settings.MAX_RESULTS:
-                break
-            if tmdb_id in user_movies_tmdb_ids:
-                continue
             poster = _get_poster_from_tmdb(movie["poster_path"])
             # Skip unpopular movies if this option is enabled.
             if search_type == "movie" and options["popularOnly"] and not _is_popular_movie(movie["popularity"]):
                 continue
+            tmdb_id = movie["id"]
             movie = {
                 "id": tmdb_id,
                 "tmdbLink": get_tmdb_url(tmdb_id),
