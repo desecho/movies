@@ -56,6 +56,7 @@ create-venv:
 	${PYTHON} -m venv venv
 	${SOURCE_CMDS} && \
 		pip install -r requirements-dev.txt
+	tox -e py-requirements
 
 .PHONY: yarn-install-locked
 ## Run yarn install using lockfile
