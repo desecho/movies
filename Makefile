@@ -228,6 +228,15 @@ update-venv:
 	source .tox/py/bin/activate && \
 	pip install -r requirements-dev.txt
 
+.PHONY: delete-venv
+delete-venv:
+	rm -rf venv
+	rm -rf .tox
+
+.PHONY: recreate-venv
+## Recreate venv
+recreate-venv: delete-venv create-venv
+
 .PHONY: yarn-install-refresh
 ## Run yarn install (refresh)
 yarn-install-refresh:
