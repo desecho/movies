@@ -2,15 +2,15 @@
 import json
 from typing import Optional
 
-from django.conf import settings
 from django.http import Http404, HttpResponse, HttpResponseBadRequest
 from sentry_sdk import capture_exception
 
-from ..exceptions import NotAvailableSearchTypeError, ProviderNotFoundError
+from ..exceptions import NotAvailableSearchTypeError
 from ..http import AjaxAuthenticatedHttpRequest, AjaxHttpRequest
 from ..models import List, Movie, User
+from ..tasks import load_and_save_watch_data_task
 from ..tmdb import TmdbNoImdbIdError, get_movies_from_tmdb
-from ..utils import load_movie_data, save_watch_data
+from ..utils import load_movie_data
 from .mixins import AjaxAnonymousView, AjaxView, TemplateAnonymousView
 from .utils import add_movie_to_list
 
@@ -57,15 +57,10 @@ class AddToListFromDbView(AjaxView):
         Return movie ID.
         """
         movie_data = load_movie_data(tmdb_id)
-        watch_data = movie_data.pop("watch_data")
         movie = Movie(**movie_data)
         movie.save()
-        try:
-            save_watch_data(movie, watch_data)
-        except ProviderNotFoundError as e:
-            if settings.DEBUG:
-                raise
-            capture_exception(e)
+        if movie.is_released:
+            load_and_save_watch_data_task.delay(movie.pk)
         return movie.pk
 
     @staticmethod

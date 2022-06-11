@@ -1,7 +1,7 @@
 """Models."""
 import json
-from datetime import date
-from typing import Any, Dict, List as ListType, Optional
+from datetime import date, timedelta
+from typing import Any, Dict, List as ListType, Optional, Union
 from urllib.parse import urljoin
 
 import vk_api
@@ -24,11 +24,13 @@ from django.db.models import (
     TimeField,
     URLField,
 )
+from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 from django_countries.fields import CountryField
 from social_django.models import AbstractUserSocialAuth
 from vk_api.exceptions import ApiError
 
+from .exceptions import ProviderNotFoundError
 from .fb import Fb
 from .http import HttpRequest
 from .vk import Vk, VkError
@@ -55,12 +57,6 @@ def get_poster_url(size: str, poster: Optional[str]) -> Optional[str]:
     if poster is not None:
         return settings.POSTER_BASE_URL + poster_size + "/" + poster
     return no_image_url
-
-
-# Cannot be moved to utils because it would cause circular imports
-def is_released(release_date: Optional[date]) -> bool:
-    """Return True if movie is released."""
-    return release_date is not None and release_date <= date.today()
 
 
 class UserBase:
@@ -294,7 +290,14 @@ class Movie(Model):
     @property
     def is_released(self) -> bool:
         """Return True if movie is released."""
-        return is_released(self.release_date)
+        return self.release_date is not None and self.release_date <= date.today()
+
+    @property
+    def is_watch_data_updated_recently(self) -> bool:
+        """Return True if watch data was updated recently."""
+        return self.watch_data_update_date is not None and self.watch_data_update_date >= now() - timedelta(
+            days=settings.WATCH_DATA_UPDATE_MIN_DAYS
+        )
 
     # Hack to make tests work
     @staticmethod
@@ -336,6 +339,28 @@ class Movie(Model):
             trailers.append(trailer)
         return trailers
 
+    def save_watch_data(self, watch_data: ListType[Dict[str, Union[str, int]]]) -> None:
+        """Save watch data for a movie."""
+        for provider_record in watch_data:
+            provider_id: int = provider_record["provider_id"]  # type: ignore
+            try:
+                provider = Provider.objects.get(pk=provider_id)
+            except Provider.DoesNotExist as e:
+                raise ProviderNotFoundError(f"Provider ID - {provider_id}") from e
+            ProviderRecord.objects.create(provider=provider, movie=self, country=provider_record["country"])
+        self.watch_data_update_date = now()
+        self.save()
+
+    @classmethod
+    def filter(cls, movie_id: Optional[int], start_from_id: bool = False, **kwargs: Any) -> QuerySet["Movie"]:
+        """Filter movies."""
+        movies = cls.objects.filter(**kwargs)
+        if movie_id is not None:
+            if start_from_id:
+                return movies.filter(pk__gte=movie_id)
+            return movies.filter(pk=movie_id)
+        return movies
+
     @property
     def has_trailers(self) -> bool:
         """Return True if movie has trailers."""
@@ -364,6 +389,11 @@ class Movie(Model):
     def title_with_id(self) -> str:
         """Get title with ID."""
         return f"{self.pk} - {self}"
+
+    @classmethod
+    def last(cls) -> Optional["Movie"]:
+        """Get last movie."""
+        return cls.objects.last()
 
     def cli_string(self, last_movie_id: int) -> str:
         """

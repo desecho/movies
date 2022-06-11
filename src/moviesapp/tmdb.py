@@ -12,7 +12,7 @@ from sentry_sdk import capture_exception
 from tmdbsimple import Movies
 
 from .exceptions import TrailerSiteNotFoundError
-from .models import User, UserAnonymous, get_poster_url, get_tmdb_url, is_released
+from .models import User, UserAnonymous, get_poster_url, get_tmdb_url
 
 tmdb.API_KEY = settings.TMDB_KEY
 
@@ -157,15 +157,15 @@ def _get_trailers(tmdb_movie: Movies, lang: str) -> List[Dict[str, str]]:
     return trailers
 
 
-def _get_watch_data(tmdb_movie: Movies, release_date: Optional[date]) -> List[Dict[str, Union[str, int]]]:
+def get_watch_data(tmdb_id: int) -> List[Dict[str, Union[str, int]]]:
     """Get watch data."""
     watch_data = []
-    if is_released(release_date):
-        for country, data in tmdb_movie.watch_providers()["results"].items():
-            if country in settings.PROVIDERS_SUPPORTED_COUNTRIES and "flatrate" in data:
-                for provider in data["flatrate"]:
-                    record = {"country": country, "provider_id": provider["provider_id"]}
-                    watch_data.append(record)
+    results = tmdb.Movies(tmdb_id).watch_providers()["results"]
+    for country, data in results.items():
+        if country in settings.PROVIDERS_SUPPORTED_COUNTRIES and "flatrate" in data:
+            for provider in data["flatrate"]:
+                record = {"country": country, "provider_id": provider["provider_id"]}
+                watch_data.append(record)
     return watch_data
 
 
@@ -200,7 +200,6 @@ def get_tmdb_movie_data(tmdb_id: int) -> Dict[str, Any]:
         "title_ru": movie_info_ru["title"],
         "description_en": movie_info_en["overview"],
         "description_ru": movie_info_ru["overview"],
-        "watch_data": _get_watch_data(tmdb_movie, release_date),
     }
 
 

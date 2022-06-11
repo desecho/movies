@@ -28,10 +28,14 @@ sentry_sdk.init(  # pylint: disable=abstract-class-instantiated
 # Custom
 IS_DEV = bool(getenv("IS_DEV"))
 IS_VK_DEV = bool(getenv("IS_VK_DEV"))
+IS_CELERY_DEBUG = bool(getenv("IS_CELERY_DEBUG"))
 COLLECT_STATIC = bool(getenv("COLLECT_STATIC"))
 SRC_DIR = dirname(dirname(abspath(__file__)))
+PROJECT = "movies"
+APP = "moviesapp"
 PROJECT_DIR = dirname(SRC_DIR)
 PROJECT_DOMAIN = getenv("PROJECT_DOMAIN")
+REDIS_URL = getenv("REDIS_URL")
 
 # Debug
 DEBUG = bool(getenv("DEBUG"))
@@ -42,7 +46,7 @@ SECRET_KEY = getenv("SECRET_KEY")
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",
-        "NAME": "movies",
+        "NAME": PROJECT,
         "USER": getenv("DB_USER"),
         "PASSWORD": getenv("DB_PASSWORD"),
         "HOST": getenv("DB_HOST"),
@@ -51,8 +55,8 @@ DATABASES = {
         },
     }
 }
-ROOT_URLCONF = "movies.urls"
-WSGI_APPLICATION = "movies.wsgi.application"
+ROOT_URLCONF = f"{PROJECT}.urls"
+WSGI_APPLICATION = f"{PROJECT}.wsgi.application"
 SESSION_SAVE_EVERY_REQUEST = True
 SITE_ID = 1
 
@@ -103,7 +107,7 @@ TEMPLATES: List[Dict[str, Any]] = [
                 "social_django.context_processors.backends",
                 "social_django.context_processors.login_redirect",
                 # Movies
-                "moviesapp.context_processors.variables",
+                f"{APP}.context_processors.variables",
             ),
             "loaders": [
                 (
@@ -148,8 +152,8 @@ MIDDLEWARE = [
     "social_django.middleware.SocialAuthExceptionMiddleware",
     "custom_anonymous.middleware.AuthenticationMiddleware",
     "admin_reorder.middleware.ModelAdminReorder",
-    "moviesapp.middleware.AjaxHandlerMiddleware",
-    "moviesapp.middleware.language_middleware",
+    f"{APP}.middleware.AjaxHandlerMiddleware",
+    f"{APP}.middleware.language_middleware",
 ]
 if DEBUG:  # pragma: no cover
     MIDDLEWARE.append("debug_toolbar.middleware.DebugToolbarMiddleware")
@@ -170,7 +174,8 @@ INSTALLED_APPS = [
     "modeltranslation",
     "social_django",
     "django_countries",
-    "moviesapp",
+    "django_celery_results",
+    APP,
 ]
 if DEBUG:  # pragma: no cover
     INSTALLED_APPS += [
@@ -192,8 +197,8 @@ if not DISABLE_CSRF:  # pragma: no cover
     CSRF_TRUSTED_ORIGINS = [f"https://{PROJECT_DOMAIN}"]
 
 # Authentication
-AUTH_USER_MODEL = "moviesapp.User"
-AUTH_ANONYMOUS_MODEL = "moviesapp.models.UserAnonymous"
+AUTH_USER_MODEL = f"{APP}.User"
+AUTH_ANONYMOUS_MODEL = f"{APP}.models.UserAnonymous"
 AUTHENTICATION_BACKENDS = (
     "django.contrib.auth.backends.ModelBackend",
     # social_core
@@ -216,6 +221,13 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.redis.RedisCache",
+        "LOCATION": REDIS_URL,
+    }
+}
+
 # Login
 LOGIN_REDIRECT_URL = "/"
 if IS_VK_DEV:  # pragma: no cover
@@ -225,7 +237,7 @@ LOGIN_URL = "/login/"
 LOGIN_ERROR_URL = "/login-error/"
 
 # Static files
-STATICFILES_DIR = join(SRC_DIR, "moviesapp", "static")
+STATICFILES_DIR = join(SRC_DIR, APP, "static")
 if IS_DEV:  # pragma: no cover
     STATICFILES_DIRS = (STATICFILES_DIR,)
     STATIC_ROOT = None
@@ -294,7 +306,7 @@ SOCIAL_AUTH_PIPELINE = (
     # 'social_core.pipeline.user.user_details',
     # Custom
     # We do this only if the user get's created for the first time.
-    "moviesapp.social.load_user_data",
+    f"{APP}.social.load_user_data",
 )
 
 # django-simple-menu
@@ -309,27 +321,39 @@ DEBUG_TOOLBAR_PANELS = [
 ]
 
 # django-modeladmin-reorder
-ADMIN_REORDER = (
+ADMIN_REORDER = [
     {
-        "app": "moviesapp",
+        "app": APP,
         "models": (
-            "moviesapp.User",
-            "moviesapp.Movie",
-            "moviesapp.Record",
-            "moviesapp.List",
-            "moviesapp.Action",
-            "moviesapp.ActionRecord",
-            "moviesapp.Provider",
-            "moviesapp.ProviderRecord",
+            f"{APP}.User",
+            f"{APP}.Movie",
+            f"{APP}.Record",
+            f"{APP}.List",
+            f"{APP}.Action",
+            f"{APP}.ActionRecord",
+            f"{APP}.Provider",
+            f"{APP}.ProviderRecord",
         ),
     },
     {"app": "social_django", "models": ("social_django.UserSocialAuth",)},
     {"app": "sites", "models": ("sites.models.Site",)},
     "registration",
-)
+]
+
+if IS_CELERY_DEBUG:
+    ADMIN_REORDER.append({"app": "django_celery_results", "models": ("django_celery_results.TaskResult",)})
 
 # django-modeltranslation
 MODELTRANSLATION_CUSTOM_FIELDS = ("JSONField",)
+
+# Celery
+CELERY_CACHE_BACKEND = "default"
+if IS_CELERY_DEBUG:
+    CELERY_RESULT_BACKEND = "django-db"
+else:
+    CELERY_RESULT_BACKEND = f"{REDIS_URL}0"
+CELERY_BROKER_URL = REDIS_URL
+CELERY_TIMEZONE = TIME_ZONE
 
 # --== Project settings ==--
 
@@ -378,7 +402,11 @@ TRAILER_SITES = {
 }
 VK_NO_AVATAR = ("https://vk.com/images/camera_100.png", "https://vk.com/images/camera_200.png")
 IS_TEST = False
+
+# Watch data
 PROVIDERS_SUPPORTED_COUNTRIES = ("RU", "CA", "US")
+# Number of min days that need to pass before the next watch data update
+WATCH_DATA_UPDATE_MIN_DAYS = 3
 
 # API Keys
 TMDB_KEY = getenv("TMDB_KEY")

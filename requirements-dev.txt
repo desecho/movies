@@ -31,3 +31,5 @@ mypy
 django-stubs
 types-python-dateutil
 types-requests
+
+celery-types

@@ -270,6 +270,13 @@ drop-db:
 load-db: drop-db create-db
 	source $(ENV_FILE) && \
 	scripts/load_db.sh
+
+.PHONY: celery
+## Run Celery
+celery:
+	${SOURCE_CMDS} && \
+	cd src && \
+	celery -A $(PROJECT).celery.app worker
 #------------------------------------
 
 #------------------------------------

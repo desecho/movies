@@ -7,6 +7,8 @@ from django.http import HttpRequest
 
 from .models import Action, ActionRecord, List, Movie, Provider, ProviderRecord, Record, User
 
+# from django_celery_results.models import GroupResult
+
 
 @register(Record)
 class RecordAdmin(ModelAdmin[Record]):  # pylint:disable=unsubscriptable-object
@@ -85,3 +87,4 @@ class UserAdmin(ModelAdmin[User]):  # pylint:disable=unsubscriptable-object
 
 
 site.unregister(Group)
+# site.unregister(GroupResult)

@@ -19,12 +19,20 @@ Development
 ----------------------------
 1. Use ubuntu-vm_ as a development VM
 2. Use mysql-docker_ to bring up MySQL in Docker
-3. Run ``make bootstrap``
-4. Run ``make createsuperuser`` to create a superadmin user
-5. Edit files ``env_custom.sh`` and ``env_secrets.sh``
+3. Use redis-docker_ to bring up Redis in Docker
+4. Run ``make bootstrap``
+5. Run ``make createsuperuser`` to create a superadmin user
+6. Edit files ``env_custom.sh`` and ``env_secrets.sh``
 
-| Run ``make build`` and ``make run`` to run the server for development.
-| Run ``make help`` to get a list of all available commands.
+For development run :
+
+```bash
+make run
+make celery
+make build
+```
+
+Run ``make help`` to get a list of all available commands.
 
 | Open http://localhost:8000/ to access the web application.
 | Open http://localhost:8000/admin to access the admin section.
@@ -83,6 +91,7 @@ Used images
 
 .. _ubuntu-vm: https://github.com/desecho/ubuntu-vm
 .. _mysql-docker: https://github.com/desecho/mysql-docker
+.. _redis-docker: https://github.com/desecho/redis-docker
 
 .. _VK app: http://vk.com/app3504693_2912142
 

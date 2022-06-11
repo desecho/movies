@@ -1,0 +1,27 @@
+---
+name: Update Watch Data
+on:
+  schedule:
+    - cron: "0 7 * * 1"  # Runs at 07:00 UTC (03:00 EDT) on Mondays
+  workflow_dispatch:
+
+jobs:
+  update_watch_data:
+    name: Update watch data
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install kubectl
+        uses: azure/setup-kubectl@v2.1
+
+      - name: Configure kubectl
+        run: |
+          mkdir ~/.kube
+          echo $KUBECONFIG > ~/.kube/config
+        env:
+          KUBECONFIG: ${{ secrets.KUBECONFIG }}  # Done as a variable because doesn't work in place.
+
+      - name: Update watch data
+        run: make prod-manage update_watch_data
