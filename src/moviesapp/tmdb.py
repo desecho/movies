@@ -75,7 +75,7 @@ def _get_data(query_str: str, search_type: str, lang: str) -> List[Dict[str, Any
         return [e for e in entries if e["media_type"] == "movie"]
 
     query = query_str.encode("utf-8")
-    params = {"query": query, "language": lang}
+    params = {"query": query, "language": lang, "include_adult": settings.INCLUDE_ADULT}
     search = tmdb.Search()
     if search_type == "movie":
         movies: List[Dict[str, Any]] = search.movie(**params)["results"]
