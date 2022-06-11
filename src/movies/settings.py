@@ -334,7 +334,7 @@ ADMIN_REORDER = [
         ),
     },
     {"app": "social_django", "models": ("social_django.UserSocialAuth",)},
-    {"app": "sites", "models": ("sites.models.Site",)},
+    {"app": "sites", "models": ("sites.Site",)},
     "registration",
 ]
 
