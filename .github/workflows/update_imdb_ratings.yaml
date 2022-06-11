@@ -21,7 +21,7 @@ jobs:
           mkdir ~/.kube
           echo $KUBECONFIG > ~/.kube/config
         env:
-          KUBECONFIG: ${{ secrets.KUBECONFIG }}  # Done as a variable because doesn't work in place.
+          KUBECONFIG: ${{ secrets.KUBECONFIG }}  # Done as a variable because it doesn't work in place.
 
       - name: Update IMDb ratings
         run: make prod-manage update_imdb_ratings

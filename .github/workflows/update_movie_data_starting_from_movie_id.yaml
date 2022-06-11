@@ -24,7 +24,7 @@ jobs:
           mkdir ~/.kube
           echo $KUBECONFIG > ~/.kube/config
         env:
-          KUBECONFIG: ${{ secrets.KUBECONFIG }}  # Done as a variable because doesn't work in place.
+          KUBECONFIG: ${{ secrets.KUBECONFIG }}  # Done as a variable because it doesn't work in place.
 
       - name: Update all movies starting from selected movie ID
         run: make prod-manage update_movie_data arguments="-s ${{ github.event.inputs.movie_id }}"
