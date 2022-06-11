@@ -36,6 +36,8 @@ APP = "moviesapp"
 PROJECT_DIR = dirname(SRC_DIR)
 PROJECT_DOMAIN = getenv("PROJECT_DOMAIN")
 REDIS_URL = getenv("REDIS_URL")
+LANGUAGE_EN = "en"
+LANGUAGE_RU = "ru"
 
 # Debug
 DEBUG = bool(getenv("DEBUG"))
@@ -74,10 +76,6 @@ if IS_VK_DEV:  # pragma: no cover
     ALLOWED_HOSTS.append(getenv("HOST_MOVIES_TEST"))
 
 # Internationalization
-# Custom
-LANGUAGE_EN = "en"
-LANGUAGE_RU = "ru"
-
 LANGUAGE_CODE = LANGUAGE_EN
 LANGUAGES = (
     (LANGUAGE_EN, "English"),
