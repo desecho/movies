@@ -22,6 +22,7 @@ from django.db.models import (
     QuerySet,
     TextField,
     TimeField,
+    UniqueConstraint,
     URLField,
 )
 from django.utils.timezone import now
@@ -212,8 +213,8 @@ class List(Model):
 
     WATCHED = 1
     TO_WATCH = 2
-    name = CharField(max_length=255)
-    key_name = CharField(max_length=255, db_index=True)
+    name = CharField(max_length=255, unique=True)
+    key_name = CharField(max_length=255, db_index=True, unique=True)
 
     def __str__(self) -> str:
         """Return string representation."""
@@ -411,6 +412,14 @@ class Record(Model):
     watched_in_full_hd = BooleanField(default=False)
     watched_in_4k = BooleanField(default=False)
 
+    class Meta:
+        """Meta."""
+
+        constraints = [
+            # A user should only have one record per movie.
+            UniqueConstraint(fields=("user", "movie"), name="unique_user_movie_record"),
+        ]
+
     def __str__(self) -> str:
         """Return string representation."""
         return f"{self.user} - {self.movie.title} - {self.list}"
@@ -438,7 +447,7 @@ class Action(Model):
     CHANGED_LIST = 2
     ADDED_RATING = 3
     ADDED_COMMENT = 4
-    name = CharField(max_length=255)
+    name = CharField(max_length=255, unique=True)
 
     def __str__(self) -> str:
         """Return string representation."""
@@ -483,6 +492,14 @@ class ProviderRecord(Model):
     provider = ForeignKey(Provider, CASCADE)
     movie = ForeignKey(Movie, CASCADE, related_name="provider_records")
     country = CountryField(verbose_name=_("Country"))
+
+    class Meta:
+        """Meta."""
+
+        constraints = [
+            # We should not have duplicated records
+            UniqueConstraint(fields=("provider", "movie", "country"), name="unique_provider_movie_country_record"),
+        ]
 
     def __str__(self) -> str:
         """Return string representation."""
