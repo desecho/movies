@@ -49,9 +49,10 @@ class Command(BaseCommand):
                 watch_data.remove(provider_record)
 
     @staticmethod
-    def _get_movies_requiring_update(movies: List[Movie]) -> List[Movie]:
-        """Return a list of movies that require an update."""
-        return [movie for movie in movies if not movie.is_watch_data_updated_recently]
+    def filter_out_movies_not_requiring_update(movies: List[Movie]) -> None:
+        for movie in list(movies):
+            if movie.is_watch_data_updated_recently:
+                movies.remove(movie)
 
     def handle(self, movie_id: Optional[int], *args: Any, **options: Any) -> None:  # pylint: disable=unused-argument
         """Execute command."""
@@ -64,7 +65,7 @@ class Command(BaseCommand):
         # If movie_id is provided, we force update the movie
         # (we ignore if the movie needs an update or not).
         if movie_id is None:
-            movies = self._get_movies_requiring_update(movies)
+            self.filter_out_movies_not_requiring_update(movies)
         movies_total = len(movies)
         # We don't want a progress bar if we just have one movie to process
         disable = movies_total == 1
