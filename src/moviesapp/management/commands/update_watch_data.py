@@ -110,7 +110,7 @@ class Command(BaseCommand):
             self.info("No movies to update")
             return
 
-        tqdm = self.tqdm(total=movies_total, unit=settings.PROJECT, disable=disable)
+        tqdm = self.tqdm(total=movies_total, unit="movie", disable=disable)
         last_movie = Movie.last()
         if last_movie:
             for movie in movies:

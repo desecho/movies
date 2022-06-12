@@ -15,7 +15,7 @@ class Command(BaseCommand):
     def handle(self, *args: Any, **options: Any) -> None:  # pylint: disable=unused-argument
         """Execute command."""
         users = User.objects.all()
-        t = self.tqdm(total=users.count())
+        t = self.tqdm(total=users.count(), unit="user")
         for user in users:
             vk = user.get_vk()
             if vk is not None:

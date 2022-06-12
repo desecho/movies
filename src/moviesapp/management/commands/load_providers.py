@@ -15,7 +15,7 @@ class Command(BaseCommand):
     def handle(self, *args: Any, **options: Any) -> None:  # pylint: disable=unused-argument
         """Execute command."""
         providers = get_tmdb_providers()
-        tqdm = self.tqdm(total=len(providers))
+        tqdm = self.tqdm(total=len(providers), unit="provider")
         for provider in providers:
             provider_name = provider["provider_name"]
             Provider(id=provider["provider_id"], name=provider_name).save()

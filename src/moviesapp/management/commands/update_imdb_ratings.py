@@ -15,7 +15,7 @@ class Command(BaseCommand):
     def handle(self, *args: Any, **options: Any) -> None:  # pylint: disable=unused-argument
         """Execute command."""
         movies = Movie.objects.all()
-        tqdm = self.tqdm(total=movies.count())
+        tqdm = self.tqdm(total=movies.count(), unit="movie")
         last_movie = movies.last()
         if last_movie:
             for movie in movies:
