@@ -120,6 +120,7 @@ class Command(BaseCommand):
                 watch_data = get_watch_data(movie.tmdb_id)
                 if not watch_data:
                     self.error(f"No watch data obtained for {movie}. Skipping.")
+                    tqdm.update()
                     continue
 
                 existing_provider_records = movie.provider_records.all().values("id", "provider_id", "country")
