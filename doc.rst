@@ -18,7 +18,7 @@ Priority:
 Cron jobs
 ------------
 
-Cron jobs are run with GitHub Actions. Time zone is UTC.
+Cron jobs are run with `GitHub Actions`_. Time zone is UTC.
 
 - ``Remove unused movies`` runs at 07:00 UTC (03:00 EDT) on the first day of the month
 - ``Update movie data`` runs at 04:00 UTC (00:00 EDT) on the first day of the month
