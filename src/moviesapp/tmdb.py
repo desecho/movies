@@ -1,7 +1,8 @@
 """TMDB."""
+from collections import abc
 from datetime import date, datetime
 from operator import itemgetter
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional
 from urllib.parse import urljoin
 
 import requests
@@ -12,6 +13,7 @@ from sentry_sdk import capture_exception
 from tmdbsimple import Movies
 
 from .exceptions import TrailerSiteNotFoundError
+from .types import ProvidersTmdb, WatchData, WatchDataCountryTmdb, WatchDataRecord, WatchDataTmdb
 
 tmdb.API_KEY = settings.TMDB_KEY
 
@@ -168,14 +170,15 @@ def _get_trailers(tmdb_movie: Movies, lang: str) -> List[Dict[str, str]]:
     return trailers
 
 
-def get_watch_data(tmdb_id: int) -> List[Dict[str, Union[str, int]]]:
+def get_watch_data(tmdb_id: int) -> WatchData:
     """Get watch data."""
-    watch_data = []
-    results = tmdb.Movies(tmdb_id).watch_providers()["results"]
-    for country, data in results.items():
+    watch_data: WatchData = []
+    results: WatchDataTmdb = tmdb.Movies(tmdb_id).watch_providers()["results"]
+    items: abc.ItemsView[str, WatchDataCountryTmdb] = results.items()  # type: ignore
+    for country, data in items:
         if country in settings.PROVIDERS_SUPPORTED_COUNTRIES and "flatrate" in data:
             for provider in data["flatrate"]:
-                record = {"country": country, "provider_id": provider["provider_id"]}
+                record: WatchDataRecord = {"country": country, "provider_id": provider["provider_id"]}
                 watch_data.append(record)
     return watch_data
 
@@ -214,7 +217,7 @@ def get_tmdb_movie_data(tmdb_id: int) -> Dict[str, Any]:
     }
 
 
-def get_tmdb_providers() -> List[Dict[str, Union[str, int]]]:
+def get_tmdb_providers() -> ProvidersTmdb:
     """
     Get TMDB providers.
 
@@ -222,5 +225,5 @@ def get_tmdb_providers() -> List[Dict[str, Union[str, int]]]:
     """
     params = {"api_key": settings.TMDB_KEY}
     response = requests.get(urljoin(settings.TMDB_API_BASE_URL, "watch/providers/movie"), params=params)
-    providers: List[Dict[str, Union[str, int]]] = response.json()["results"]
+    providers: ProvidersTmdb = response.json()["results"]
     return providers

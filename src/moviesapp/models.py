@@ -1,7 +1,7 @@
 """Models."""
 import json
 from datetime import date, timedelta
-from typing import Any, Dict, List as ListType, Optional, Union
+from typing import Any, List as ListType, Optional
 from urllib.parse import urljoin
 
 import vk_api
@@ -35,6 +35,7 @@ from .exceptions import ProviderNotFoundError
 from .fb import Fb
 from .http import HttpRequest
 from .tmdb import get_poster_url, get_tmdb_url
+from .types import Trailer, Trailers, TrailerSite, TrailersTmdb, WatchData
 from .vk import Vk, VkError
 
 
@@ -280,18 +281,19 @@ class Movie(Model):
 
     # Hack to make tests work
     @staticmethod
-    def _get_real_trailers(trailers: Any) -> ListType[Dict[str, str]]:
+    def _get_real_trailers(trailers: TrailersTmdb) -> TrailersTmdb:
         """
         Get "real" trailers.
 
         This is a hack to make the tests work.
         """
-        trailers_real: ListType[Dict[str, str]] = trailers
+        trailers_real = trailers
         if settings.IS_TEST:
-            trailers_real = json.loads(trailers)
+            trailers_str: str = trailers  # type: ignore
+            trailers_real = json.loads(trailers_str)
         return trailers_real
 
-    def _pre_get_trailers(self) -> ListType[Dict[str, str]]:
+    def _pre_get_trailers(self) -> TrailersTmdb:
         """Pre-get trailers."""
         if self.trailers:
             trailers = self._get_real_trailers(self.trailers)
@@ -301,27 +303,27 @@ class Movie(Model):
         return trailers
 
     @staticmethod
-    def _get_trailer_url(site: str, key: str) -> str:
+    def _get_trailer_url(site: TrailerSite, key: str) -> str:
         """Get trailer URL."""
-        TRAILER_SITES: Dict[str, str] = settings.TRAILER_SITES
+        TRAILER_SITES = settings.TRAILER_SITES
         base_url = TRAILER_SITES[site]
         return f"{base_url}{key}"
 
-    def get_trailers(self) -> ListType[Dict[str, str]]:
+    def get_trailers(self) -> Trailers:
         """Get trailers."""
-        trailers = []
+        trailers: Trailers = []
         for t in self._pre_get_trailers():
-            trailer = {
+            trailer: Trailer = {
                 "url": self._get_trailer_url(t["site"], t["key"]),
                 "name": t["name"],
             }
             trailers.append(trailer)
         return trailers
 
-    def save_watch_data(self, watch_data: ListType[Dict[str, Union[str, int]]]) -> None:
+    def save_watch_data(self, watch_data: WatchData) -> None:
         """Save watch data for a movie."""
         for provider_record in watch_data:
-            provider_id: int = provider_record["provider_id"]  # type: ignore
+            provider_id = provider_record["provider_id"]
             try:
                 provider = Provider.objects.get(pk=provider_id)
             except Provider.DoesNotExist as e:

@@ -1,12 +1,14 @@
 """OMDb."""
 import re
 from datetime import datetime
-from typing import Any, Dict, Optional
+from typing import List, Optional, Tuple
 
 import requests
 from django.conf import settings
 from requests.exceptions import RequestException
 from sentry_sdk import capture_exception
+
+from .types import OmdbMovie, OmdbMoviePreprocessed, OmdbMoviePreprocessedKey, OmdbMovieProcessed, Runtime
 
 
 class OmdbLimitReachedError(Exception):
@@ -21,7 +23,7 @@ class OmdbError(Exception):
     """OMDb error."""
 
 
-def _get_runtime(runtime_str: Optional[str]) -> Optional[datetime]:
+def _get_runtime(runtime_str: Optional[str]) -> Runtime:
     """Get runtime."""
     if runtime_str is not None:
         try:
@@ -48,8 +50,37 @@ def _get_runtime(runtime_str: Optional[str]) -> Optional[datetime]:
     return None
 
 
-def load_omdb_movie_data(imdb_id: str) -> Dict[str, Any]:
-    """Load movie data from OMDB."""
+def _get_processed_omdb_movie_data(data_raw: OmdbMovie) -> OmdbMovieProcessed:
+    """Get processed OMDB movie data."""
+    data: OmdbMoviePreprocessed = {
+        "Writer": None,
+        "Director": None,
+        "Actors": None,
+        "Genre": None,
+        "Country": None,
+        "imdbRating": None,
+        "Runtime": None,
+    }
+    items: List[Tuple[OmdbMoviePreprocessedKey, str]] = [
+        (key, value) for (key, value) in data_raw.items() if key in data and value != "N/A"  # type: ignore
+    ]
+    for key, value in items:
+        if len(value) > 255:
+            data[key] = value[:252] + "..."
+        data[key] = value
+    return {
+        "writer": data["Writer"],
+        "director": data["Director"],
+        "actors": data["Actors"],
+        "genre": data["Genre"],
+        "country": data["Country"],
+        "imdb_rating": data["imdbRating"],
+        "runtime": _get_runtime(data["Runtime"]),
+    }
+
+
+def get_omdb_movie_data(imdb_id: str) -> OmdbMovieProcessed:
+    """Get movie data from OMDB."""
     try:
         params = {"apikey": settings.OMDB_KEY, "i": imdb_id}
         response = requests.get(settings.OMDB_BASE_URL, params=params)
@@ -58,29 +89,11 @@ def load_omdb_movie_data(imdb_id: str) -> Dict[str, Any]:
             raise
         capture_exception(e)
         raise OmdbRequestError from e
-    movie_data: Dict[str, Any] = response.json()
-    response_: str = movie_data["Response"]
-    if response_ == "True":
-        for key in movie_data:
-            if len(movie_data[key]) > 255:
-                movie_data[key] = movie_data[key][:252] + "..."
-            if movie_data[key] == "N/A":
-                movie_data[key] = None
-        return movie_data
-    if response_ == "False" and movie_data["Error"] == "Request limit reached!":
+    movie_data: OmdbMovie = response.json()
+    movie_data_response: str = movie_data["Response"]
+    if movie_data_response == "True":
+        return _get_processed_omdb_movie_data(movie_data)
+    error = movie_data["Error"]
+    if error == "Request limit reached!":
         raise OmdbLimitReachedError
-    raise OmdbError(movie_data["Error"], imdb_id)
-
-
-def get_omdb_movie_data(imdb_id: str) -> Dict[str, Any]:
-    """Get movie data from OMDB."""
-    movie_data = load_omdb_movie_data(imdb_id)
-    return {
-        "writer": movie_data.get("Writer"),
-        "director": movie_data.get("Director"),
-        "actors": movie_data.get("Actors"),
-        "genre": movie_data.get("Genre"),
-        "country": movie_data.get("Country"),
-        "imdb_rating": movie_data.get("imdbRating"),
-        "runtime": _get_runtime(movie_data.get("Runtime")),
-    }
+    raise OmdbError(error, imdb_id)

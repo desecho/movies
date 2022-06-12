@@ -2,12 +2,14 @@
 
 from os import getenv
 from os.path import abspath, dirname, join
-from typing import Any, Dict, List
+from typing import List
 from urllib.parse import urljoin
 
 import django_stubs_ext
 import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
+
+from moviesapp.types import TemplatesSettings, TrailerSites
 
 django_stubs_ext.monkeypatch()
 
@@ -86,13 +88,13 @@ LOCALE_PATHS = (join(SRC_DIR, "locale"),)
 TIME_ZONE = "US/Eastern"
 USE_TZ = True
 
-TEMPLATES: List[Dict[str, Any]] = [
+TEMPLATES: List[TemplatesSettings] = [
     {
         "NAME": "Main",
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": (join(SRC_DIR, "templates"),),
+        "DIRS": [join(SRC_DIR, "templates")],
         "OPTIONS": {
-            "context_processors": (
+            "context_processors": [
                 "django.template.context_processors.debug",
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
@@ -105,7 +107,7 @@ TEMPLATES: List[Dict[str, Any]] = [
                 "social_django.context_processors.login_redirect",
                 # Movies
                 f"{APP}.context_processors.variables",
-            ),
+            ],
             "loaders": [
                 (
                     "django.template.loaders.cached.Loader",
@@ -113,18 +115,9 @@ TEMPLATES: List[Dict[str, Any]] = [
                         "django.template.loaders.filesystem.Loader",
                         "django.template.loaders.app_directories.Loader",
                     ],
-                ),
+                )
             ],
-            "debug": DEBUG,
             "builtins": ["django.templatetags.static", "django.templatetags.i18n"],
-        },
-    },
-    {
-        "NAME": "Secondary",
-        "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "APP_DIRS": True,
-        "OPTIONS": {
-            "debug": DEBUG,
         },
     },
 ]
@@ -391,7 +384,7 @@ RECORDS_ON_PAGE = 50
 PEOPLE_ON_PAGE = 25
 FEED_DAYS = 7
 OMDB_BASE_URL = "http://www.omdbapi.com/"
-TRAILER_SITES = {
+TRAILER_SITES: TrailerSites = {
     "YouTube": "https://www.youtube.com/watch?v=",
     "Vimeo": "https://vimeo.com/",
 }

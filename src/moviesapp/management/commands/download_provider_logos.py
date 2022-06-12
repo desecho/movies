@@ -33,8 +33,8 @@ class Command(BaseCommand):
         providers = get_tmdb_providers()
         tqdm = self.tqdm(total=len(providers), unit="provider")
         for provider in providers:
-            logo_path: str = provider["logo_path"]  # type: ignore
-            provider_id: int = provider["provider_id"]  # type: ignore
+            logo_path = provider["logo_path"]
+            provider_id = provider["provider_id"]
             self._download_logo(logo_path, provider_id)
             tqdm.set_description(provider["provider_name"])
             tqdm.update()
