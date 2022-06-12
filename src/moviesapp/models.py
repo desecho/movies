@@ -399,6 +399,7 @@ class Movie(Model):
 class Record(Model):
     """Record."""
 
+    provider_records: Optional[ListType["ProviderRecord"]] = None
     user = ForeignKey(User, CASCADE, related_name="records")
     movie = ForeignKey(Movie, CASCADE, related_name="records")
     list = ForeignKey(List, CASCADE)
@@ -431,13 +432,6 @@ class Record(Model):
         if self.watched_in_full_hd:
             self.watched_in_hd = True
         super().save(*args, **kwargs)
-
-    @property
-    def provider_records(self) -> QuerySet["ProviderRecord"]:
-        """Return provider records."""
-        if not self.movie.is_released or not self.user.country_supported:
-            return ProviderRecord.objects.none()
-        return self.movie.provider_records.filter(country=self.user.country)
 
 
 class Action(Model):

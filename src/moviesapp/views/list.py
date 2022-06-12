@@ -4,12 +4,12 @@ from typing import Any, Dict, List as ListType, Optional, Tuple, Union
 
 from django.conf import settings
 from django.contrib.sessions.backends.base import SessionBase
-from django.db.models import Q, QuerySet
+from django.db.models import Q, QuerySet, prefetch_related_objects
 from django.http import Http404, HttpResponse, HttpResponseBadRequest
 from django.shortcuts import get_object_or_404
 
 from ..http import AjaxAuthenticatedHttpRequest, AjaxHttpRequest, AuthenticatedHttpRequest, HttpRequest
-from ..models import Action, ActionRecord, List, Movie, Record, User, UserAnonymous
+from ..models import Action, ActionRecord, List, Movie, ProviderRecord, Record, User, UserAnonymous
 from .mixins import AjaxAnonymousView, AjaxView, TemplateAnonymousView, TemplateView
 from .utils import add_movie_to_list, get_records, paginate, sort_by_rating
 
@@ -229,6 +229,19 @@ class ListView(TemplateAnonymousView):
             session["mode"] = "full"
         self.session = session
 
+    def _filter_out_provider_records(self, provider_records: ListType[ProviderRecord]) -> None:
+        request: AuthenticatedHttpRequest = self.request  # type: ignore
+        for provider_record in list(provider_records):
+            if request.user.country != provider_record.country:
+                provider_records.remove(provider_record)
+
+    def _inject_provider_records(self, records: QuerySet[Record]) -> None:
+        for record in records:
+            if record.movie.is_released:
+                provider_records = list(record.movie.provider_records.all())
+                self._filter_out_provider_records(provider_records)
+                record.provider_records = provider_records
+
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         """Get context data."""
         list_name: str = kwargs["list_name"]
@@ -260,6 +273,9 @@ class ListView(TemplateAnonymousView):
                 )
             else:
                 comments_and_ratings = None
+            if user.is_authenticated and user.country_supported:
+                prefetch_related_objects(records, "movie__provider_records__provider")
+                self._inject_provider_records(records)
             records_ = paginate(records, request.GET.get("page"), settings.RECORDS_ON_PAGE)
             return {
                 "records": records_,
