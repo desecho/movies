@@ -1,4 +1,5 @@
 """Update watch data."""
+import sys
 from typing import Any, Dict, List as ListType, Optional, Union
 
 from django.conf import settings
@@ -108,7 +109,7 @@ class Command(BaseCommand):
         disable = movies_total == 1
         if not movies:
             self.info("No movies to update")
-            return
+            sys.exit()
 
         tqdm = self.tqdm(total=movies_total, unit="movie", disable=disable)
         last_movie = Movie.last()
