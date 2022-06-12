@@ -25,6 +25,7 @@ Cron jobs are run with GitHub Actions. Time zone is UTC.
 - ``DB backup`` runs at 9:00 UTC (05:00 EDT) daily
 - ``Update IMDb ratings`` runs at 06:00 UTC (02:00 EDT) on Mondays
 - ``Update watch data`` runs at 07:00 UTC (03:00 EDT) on Mondays
+- ``Update watch data minimal`` runs at 00:00 UTC (20:00 EDT) daily
 
 CI/CD
 ----------

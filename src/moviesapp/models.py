@@ -194,7 +194,7 @@ class User(AbstractUser, UserBase):
         return self._get_movies_number(List.TO_WATCH)
 
     @property
-    def country_supported(self) -> bool:
+    def is_country_supported(self) -> bool:
         """Return True if country is supported."""
         return self.country in settings.PROVIDERS_SUPPORTED_COUNTRIES
 
