@@ -10,23 +10,23 @@ from ..models import Action, ActionRecord, Record, User, UserAnonymous
 
 
 def paginate(
-    objects: Union[QuerySet[Record], List[User]], page: Optional[Union[str, int]], objects_on_page: int
+    objects_to_paginate: Union[QuerySet[Record], List[User]], page: Optional[Union[str, int]], objects_on_page: int
 ) -> Union[Page[Record], Page[User]]:
     """Paginate objects."""
-    paginator = Paginator(objects, objects_on_page)
-    records: Union[Page[Record], Page[User]]
+    paginator = Paginator(objects_to_paginate, objects_on_page)
+    objects: Union[Page[Record], Page[User]]
     if page is None:
-        records = paginator.page(1)  # type: ignore
+        objects = paginator.page(1)  # type: ignore
     else:
         try:
-            records = paginator.page(page)  # type: ignore
+            objects = paginator.page(page)  # type: ignore
         except PageNotAnInteger:
             # If page is not an integer, deliver first page.
-            records = paginator.page(1)  # type: ignore
+            objects = paginator.page(1)  # type: ignore
         except EmptyPage:
             # If page is out of range (e.g. 9999), deliver last page of results.
-            records = paginator.page(paginator.num_pages)  # type: ignore
-    return records
+            objects = paginator.page(paginator.num_pages)  # type: ignore
+    return objects
 
 
 def add_movie_to_list(movie_id: int, list_id: int, user: User) -> None:
