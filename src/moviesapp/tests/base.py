@@ -99,7 +99,7 @@ class BaseTestCase(TestCase):
 
     @property
     def is_authenticated(self):
-        """Check if user is authenticated."""
+        """Return True if user is authenticated."""
         return "_auth_user_id" in self.client.session.keys()
 
 

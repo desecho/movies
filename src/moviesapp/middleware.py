@@ -11,7 +11,7 @@ from .models import User
 
 
 class AjaxHandlerMiddleware:
-    """AJAX Handler Middleware."""
+    """AJAX handler middleware."""
 
     def __init__(self, get_response: Callable[[AjaxHttpRequest], HttpResponse]):
         """Init."""
