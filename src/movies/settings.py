@@ -60,7 +60,6 @@ DATABASES = {
 ROOT_URLCONF = f"{PROJECT}.urls"
 WSGI_APPLICATION = f"{PROJECT}.wsgi.application"
 SESSION_SAVE_EVERY_REQUEST = True
-SITE_ID = 1
 
 # Email
 EMAIL_USE_SSL = bool(getenv("EMAIL_USE_SSL", "True"))
@@ -163,7 +162,6 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     # Custom
-    "django.contrib.sites",
     "registration",
     "menu",
     "admin_reorder",
@@ -334,7 +332,6 @@ ADMIN_REORDER = [
         ),
     },
     {"app": "social_django", "models": ("social_django.UserSocialAuth",)},
-    {"app": "sites", "models": ("sites.Site",)},
     "registration",
 ]
 
