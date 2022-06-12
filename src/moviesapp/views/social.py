@@ -1,15 +1,16 @@
 """Social views."""
 
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any, List
 
 from dateutil.relativedelta import relativedelta
 from django.conf import settings
+from django.core.paginator import Page
 from django.http import HttpResponse
 from django.utils.translation import gettext_lazy as _
 
 from ..http import AuthenticatedHttpRequest, HttpRequest
-from ..models import ActionRecord, User
+from ..models import ActionRecord, FeedViewContextData, PeopleViewContextData, User
 from .mixins import TemplateAnonymousView, TemplateView
 from .utils import paginate
 
@@ -19,7 +20,7 @@ class FeedView(TemplateAnonymousView):
 
     template_name = "social/feed.html"
 
-    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+    def get_context_data(self, **kwargs: Any) -> FeedViewContextData:  # type: ignore
         """Get context data."""
         feed_name = kwargs["feed_name"]
         FEED_TITLE = {
@@ -33,21 +34,20 @@ class FeedView(TemplateAnonymousView):
         request: AuthenticatedHttpRequest = self.request  # type: ignore
         users = request.user.get_users(friends=feed_name == "friends")
         action_records = action_records.filter(user__in=users).select_related("movie", "action", "user", "list")
-        return {"feed_name": FEED_TITLE[feed_name], "action_records": action_records}
+        data: FeedViewContextData = {"feed_name": FEED_TITLE[feed_name], "action_records": action_records}
+        return data
 
 
 class PeopleView(TemplateAnonymousView):
     """People view."""
 
     template_name = "social/people.html"
-    users: Optional[List[User]] = None
+    users: List[User] = list(User.objects.none())
 
-    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:  # pylint: disable=unused-argument
+    def get_context_data(self, **kwargs: Any) -> PeopleViewContextData:  # type: ignore  # pylint: disable=unused-argument
         """Get context data."""
-        # Users are supposed to be here already.
-        if self.users:
-            return {"users": paginate(self.users, self.request.GET.get("page"), settings.PEOPLE_ON_PAGE)}
-        return {}
+        users: Page[User] = paginate(self.users, self.request.GET.get("page"), settings.PEOPLE_ON_PAGE)  # type: ignore
+        return {"users": users}
 
     def get(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:  # type: ignore
         """Get."""
