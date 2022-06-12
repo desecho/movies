@@ -10,7 +10,6 @@ services:
     env_file:
       - ${DOCKER_ENV_FILE}
       - ${DOCKER_SECRETS_ENV_FILE}
-
   static:
     image: nginx:alpine
     ports:
