@@ -1,9 +1,8 @@
 """Utils."""
 from typing import Any, Dict
 
-from .omdb import get_omdb_movie_data
+from .omdb import OmdbMovieProcessed, get_omdb_movie_data
 from .tmdb import get_tmdb_movie_data
-from .types import OmdbMovieProcessed
 
 
 def merge_movie_data(movie_data_tmdb: Dict[str, Any], movie_data_omdb: OmdbMovieProcessed) -> Dict[str, Any]:
