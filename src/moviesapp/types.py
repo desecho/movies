@@ -32,15 +32,6 @@ class WatchDataRecord(TypedDict):
     country: str
 
 
-class ProviderTmdb(TypedDict):
-    """Provider TMDB."""
-
-    display_priority: int
-    logo_path: str
-    provider_name: str
-    provider_id: int
-
-
 class ContextVariables(TypedDict):
     """Context variables."""
 
@@ -49,81 +40,11 @@ class ContextVariables(TypedDict):
     GOOGLE_ANALYTICS_ID: str
 
 
-class TrailerTmdb(TypedDict):
-    """Trailer TMDB."""
-
-    key: str
-    name: str
-    site: TrailerSite
-
-
 class Trailer(TypedDict):
     """Trailer."""
 
     url: str
     name: str
-
-
-class WatchDataTmdb(TypedDict):
-    """Watch data from TMDB."""
-
-    AR: WatchDataCountryTmdb
-    AT: WatchDataCountryTmdb
-    AU: WatchDataCountryTmdb
-    BE: WatchDataCountryTmdb
-    BR: WatchDataCountryTmdb
-    CA: WatchDataCountryTmdb
-    CH: WatchDataCountryTmdb
-    CL: WatchDataCountryTmdb
-    CO: WatchDataCountryTmdb
-    CZ: WatchDataCountryTmdb
-    DE: WatchDataCountryTmdb
-    DK: WatchDataCountryTmdb
-    EC: WatchDataCountryTmdb
-    EE: WatchDataCountryTmdb
-    ES: WatchDataCountryTmdb
-    FI: WatchDataCountryTmdb
-    FR: WatchDataCountryTmdb
-    GB: WatchDataCountryTmdb
-    GR: WatchDataCountryTmdb
-    HU: WatchDataCountryTmdb
-    ID: WatchDataCountryTmdb
-    IE: WatchDataCountryTmdb
-    IN: WatchDataCountryTmdb
-    IT: WatchDataCountryTmdb
-    JP: WatchDataCountryTmdb
-    KR: WatchDataCountryTmdb
-    LT: WatchDataCountryTmdb
-    LV: WatchDataCountryTmdb
-    MX: WatchDataCountryTmdb
-    MY: WatchDataCountryTmdb
-    NL: WatchDataCountryTmdb
-    NO: WatchDataCountryTmdb
-    NZ: WatchDataCountryTmdb
-    PE: WatchDataCountryTmdb
-    PH: WatchDataCountryTmdb
-    PL: WatchDataCountryTmdb
-    PT: WatchDataCountryTmdb
-    RO: WatchDataCountryTmdb
-    RU: WatchDataCountryTmdb
-    SE: WatchDataCountryTmdb
-    SG: WatchDataCountryTmdb
-    TH: WatchDataCountryTmdb
-    TR: WatchDataCountryTmdb
-    US: WatchDataCountryTmdb
-    VE: WatchDataCountryTmdb
-    ZA: WatchDataCountryTmdb
-
-
-class WatchDataCountryTmdb(TypedDict):
-    """Watch data country TMDB."""
-
-    link: str
-    flatrate: NotRequired[ProvidersTmdb]
-    free: NotRequired[ProvidersTmdb]
-    ads: NotRequired[ProvidersTmdb]
-    rent: NotRequired[ProvidersTmdb]
-    buy: NotRequired[ProvidersTmdb]
 
 
 class TrailerSites(TypedDict):
@@ -195,11 +116,17 @@ class OmdbMoviePreprocessed(TypedDict):
     Runtime: Optional[str]
 
 
+class SearchOptions(TypedDict):
+    """Search options."""
+
+    popularOnly: bool
+    sortByDate: bool
+
+
 WatchData: TypeAlias = List[WatchDataRecord]
-TrailersTmdb: TypeAlias = List[TrailerTmdb]
 Trailers: TypeAlias = List[Trailer]
-ProvidersTmdb: TypeAlias = List[ProviderTmdb]
 TrailerSite = Literal["YouTube", "Vimeo"]
+SearchType = Literal["movie", "actor", "director"]
 Runtime: TypeAlias = Optional[datetime]
 OmdbRatings: TypeAlias = List[OmdbRating]
 OmdbMoviePreprocessedKey = Literal["Writer", "Actors", "Director", "Genre", "Country", "imdbRating", "Runtime"]

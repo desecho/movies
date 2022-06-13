@@ -11,6 +11,7 @@ from ..http import AjaxAuthenticatedHttpRequest, AjaxHttpRequest
 from ..models import List, Movie, User
 from ..tasks import load_and_save_watch_data_task
 from ..tmdb import TmdbNoImdbIdError, get_movies_from_tmdb
+from ..types import SearchOptions, SearchType
 from ..utils import load_movie_data
 from .mixins import AjaxAnonymousView, AjaxView, TemplateAnonymousView
 from .utils import add_movie_to_list
@@ -42,15 +43,16 @@ class SearchMovieView(AjaxAnonymousView):
         try:
             GET = request.GET
             query = GET["query"]
-            options = json.loads(GET["options"])
+            options: SearchOptions = json.loads(GET["options"])
             type_ = GET["type"]
             if type_ not in AVAILABLE_SEARCH_TYPES:
                 raise NotAvailableSearchTypeError
+            search_type: SearchType = type_  # type: ignore
         except (KeyError, NotAvailableSearchTypeError):
             response: HttpResponseBadRequest = self.render_bad_request_response()
             return response
         language_code = request.LANGUAGE_CODE
-        movies = get_movies_from_tmdb(query, type_, options, language_code)
+        movies = get_movies_from_tmdb(query, search_type, options, language_code)
         if request.user.is_authenticated:
             self._filter_out_movies_user_already_has_in_lists(movies)
         movies = movies[: settings.MAX_RESULTS]

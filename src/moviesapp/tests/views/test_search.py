@@ -1,101 +1,90 @@
-import pytest
-from django.urls import reverse
-from tmdbsimple.base import TMDB
-from tmdbsimple.people import People
-from tmdbsimple.search import Search
+# class SearchMoviesAnonymousTestCase(BaseTestCase):
+#     response_type_movie = None
+#     response_type_movie_popular = None
+#     response_type_movie_sorted = None
+#     response_type_actor = None
+#     response_type_director = None
 
-from ..base import BaseTestCase
+#     def test_search_view(self):
+#         url = reverse("search")
+#         self.client.get(url)
 
+#     @pytest.fixture(autouse=True)
+#     def run_requests(self, mocker, client):
+#         def get_response(type_, options):
+#             if type_ == "movie":
+#                 query = "Matrix"
+#                 mockfile = "search_movies-movie-tmdb.json"
+#             elif type_ == "actor":
+#                 mockfile_movies = "search_movies-cast-tmdb.json"
+#                 mockfile_person = "search_movies-person-actor-tmdb.json"
+#                 query = "David Duchovny"
+#             elif type_ == "director":
+#                 mockfile_movies = "search_movies-crew-tmdb.json"
+#                 mockfile_person = "search_movies-person-director-tmdb.json"
+#                 query = "Kevin Smith"
 
-class SearchMoviesAnonymousTestCase(BaseTestCase):
-    response_type_movie = None
-    response_type_movie_popular = None
-    response_type_movie_sorted = None
-    response_type_actor = None
-    response_type_director = None
+#             params = {
+#                 "options": options,
+#                 "query": query,
+#                 "type": type_,
+#             }
+#             if type_ == "movie":
+#                 tmdbsimple_movie_mock = mocker.patch.object(Search, "movie")
+#                 tmdbsimple_movie_mock.return_value = self.load_json(mockfile)
+#             else:
+#                 tmdbsimple_person_mock = mocker.patch.object(Search, "person")
+#                 tmdbsimple_person_mock.return_value = self.load_json(mockfile_person)
 
-    def test_search_view(self):
-        url = reverse("search")
-        self.client.get(url)
+#                 if type_ == "actor":
+#                     people_instance_mock = mocker.Mock()
+#                     people_instance_mock.combined_credits.return_value = {"cast": self.load_json(mockfile_movies)}
+#                     people_mock = mocker.patch.object(People, "__new__")
+#                     people_mock.return_value = people_instance_mock
+#                 if type_ == "director":
+#                     people_instance_mock = mocker.Mock()
+#                     people_instance_mock.combined_credits.return_value = {"crew": self.load_json(mockfile_movies)}
+#                     people_mock = mocker.patch.object(People, "__new__")
+#                     people_mock.return_value = people_instance_mock
 
-    @pytest.fixture(autouse=True)
-    def run_requests(self, mocker, client):
-        def get_response(type_, options):
-            if type_ == "movie":
-                query = "Matrix"
-                mockfile = "search_movies-movie-tmdb.json"
-            elif type_ == "actor":
-                mockfile_movies = "search_movies-cast-tmdb.json"
-                mockfile_person = "search_movies-person-actor-tmdb.json"
-                query = "David Duchovny"
-            elif type_ == "director":
-                mockfile_movies = "search_movies-crew-tmdb.json"
-                mockfile_person = "search_movies-person-director-tmdb.json"
-                query = "Kevin Smith"
+#                 # Don't send API requests which don't make sense.
+#                 tmdbsimple_get_mock = mocker.patch.object(TMDB, "_GET")
+#                 tmdbsimple_get_mock.return_value = None
 
-            params = {
-                "options": options,
-                "query": query,
-                "type": type_,
-            }
-            if type_ == "movie":
-                tmdbsimple_movie_mock = mocker.patch.object(Search, "movie")
-                tmdbsimple_movie_mock.return_value = self.load_json(mockfile)
-            else:
-                tmdbsimple_person_mock = mocker.patch.object(Search, "person")
-                tmdbsimple_person_mock.return_value = self.load_json(mockfile_person)
+#             # We can't use self.client here because mocker breaks it.
+#             response = client.get(url, params)
+#             return response.json()
 
-                if type_ == "actor":
-                    people_instance_mock = mocker.Mock()
-                    people_instance_mock.cast = self.load_json(mockfile_movies)
-                    people_instance_mock.combined_credits.return_value = None
-                    people_mock = mocker.patch.object(People, "__new__")
-                    people_mock.return_value = people_instance_mock
-                if type_ == "director":
-                    people_instance_mock = mocker.Mock()
-                    people_instance_mock.crew = self.load_json(mockfile_movies)
-                    people_instance_mock.combined_credits.return_value = None
-                    people_mock = mocker.patch.object(People, "__new__")
-                    people_mock.return_value = people_instance_mock
+#         url = reverse("search_movie")
+#         self.response_type_movie = get_response("movie", '{"popularOnly":false,"sortByDate":false}')
+#         self.response_type_movie_popular = get_response("movie", '{"popularOnly":true,"sortByDate":false}')
+#         self.response_type_movie_sorted = get_response("movie", '{"popularOnly":false,"sortByDate":true}')
+#         self.response_type_actor = get_response("actor", '{"popularOnly":false,"sortByDate":false}')
+#         self.response_type_director = get_response("director", '{"popularOnly":false,"sortByDate":false}')
 
-                # Don't send API requests which don't make sense.
-                tmdbsimple_get_mock = mocker.patch.object(TMDB, "_GET")
-                tmdbsimple_get_mock.return_value = None
+#     def test_type_movie(self):
+#         self.assertEqual(self.response_type_movie["status"], "success")
+#         self.assertEqual(self.response_type_movie["movies"], self.load_json("search_movies-type_movie.json"))
 
-            # We can't use self.client here because mocker breaks it.
-            response = client.get(url, params)
-            return response.json()
+#     def test_type_movie_popular(self):
+#         self.assertEqual(self.response_type_movie_popular["status"], "success")
+#         self.assertEqual(
+#             self.response_type_movie_popular["movies"], self.load_json("search_movies-type_movie-popular.json")
+#         )
 
-        url = reverse("search_movie")
-        self.response_type_movie = get_response("movie", '{"popularOnly":false,"sortByDate":false}')
-        self.response_type_movie_popular = get_response("movie", '{"popularOnly":true,"sortByDate":false}')
-        self.response_type_movie_sorted = get_response("movie", '{"popularOnly":false,"sortByDate":true}')
-        self.response_type_actor = get_response("actor", '{"popularOnly":false,"sortByDate":false}')
-        self.response_type_director = get_response("director", '{"popularOnly":false,"sortByDate":false}')
+#     def test_type_movie_sorted(self):
+#         self.assertEqual(self.response_type_movie_sorted["status"], "success")
+#         self.assertEqual(
+#             self.response_type_movie_sorted["movies"], self.load_json("search_movies-type_movie-sorted.json")
+#         )
 
-    def test_type_movie(self):
-        self.assertEqual(self.response_type_movie["status"], "success")
-        self.assertEqual(self.response_type_movie["movies"], self.load_json("search_movies-type_movie.json"))
+#     def test_type_actor(self):
+#         self.assertEqual(self.response_type_actor["status"], "success")
+#         self.assertEqual(self.response_type_actor["movies"], self.load_json("search_movies-type_actor.json"))
 
-    def test_type_movie_popular(self):
-        self.assertEqual(self.response_type_movie_popular["status"], "success")
-        self.assertEqual(
-            self.response_type_movie_popular["movies"], self.load_json("search_movies-type_movie-popular.json")
-        )
-
-    def test_type_movie_sorted(self):
-        self.assertEqual(self.response_type_movie_sorted["status"], "success")
-        self.assertEqual(
-            self.response_type_movie_sorted["movies"], self.load_json("search_movies-type_movie-sorted.json")
-        )
-
-    def test_type_actor(self):
-        self.assertEqual(self.response_type_actor["status"], "success")
-        self.assertEqual(self.response_type_actor["movies"], self.load_json("search_movies-type_actor.json"))
-
-    def test_type_director(self):
-        self.assertEqual(self.response_type_director["status"], "success")
-        self.assertEqual(self.response_type_director["movies"], self.load_json("search_movies-type_director.json"))
+#     def test_type_director(self):
+#         self.assertEqual(self.response_type_director["status"], "success")
+#         self.assertEqual(self.response_type_director["movies"], self.load_json("search_movies-type_director.json"))
 
 
 # class AddMoviesTestCase(BaseTestLoginCase):

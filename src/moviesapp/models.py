@@ -36,8 +36,8 @@ from vk_api.exceptions import ApiError
 from .exceptions import ProviderNotFoundError
 from .fb import Fb
 from .http import HttpRequest
-from .tmdb import get_poster_url, get_tmdb_url
-from .types import Trailer, Trailers, TrailerSite, TrailersTmdb, WatchData
+from .tmdb import TmdbTrailers, get_poster_url, get_tmdb_url
+from .types import Trailer, Trailers, TrailerSite, WatchData
 from .vk import Vk, VkError
 
 
@@ -283,7 +283,7 @@ class Movie(Model):
 
     # Hack to make tests work
     @staticmethod
-    def _get_real_trailers(trailers: TrailersTmdb) -> TrailersTmdb:
+    def _get_real_trailers(trailers: TmdbTrailers) -> TmdbTrailers:
         """
         Get "real" trailers.
 
@@ -295,7 +295,7 @@ class Movie(Model):
             trailers_real = json.loads(trailers_str)
         return trailers_real
 
-    def _pre_get_trailers(self) -> TrailersTmdb:
+    def _pre_get_trailers(self) -> TmdbTrailers:
         """Pre-get trailers."""
         if self.trailers:
             trailers = self._get_real_trailers(self.trailers)

@@ -1,8 +1,10 @@
 """TMDB."""
+from __future__ import annotations
+
 from collections import abc
 from datetime import date, datetime
 from operator import itemgetter
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, TypeAlias
 from urllib.parse import urljoin
 
 import requests
@@ -10,16 +12,181 @@ import tmdbsimple as tmdb
 from babel.dates import format_date
 from django.conf import settings
 from sentry_sdk import capture_exception
-from tmdbsimple import Movies
+from typing_extensions import NotRequired, TypedDict
 
 from .exceptions import TrailerSiteNotFoundError
-from .types import ProvidersTmdb, WatchData, WatchDataCountryTmdb, WatchDataRecord, WatchDataTmdb
+from .types import SearchOptions, SearchType, TrailerSite, WatchData, WatchDataRecord
 
 tmdb.API_KEY = settings.TMDB_KEY
 
 
 class TmdbNoImdbIdError(Exception):
     """TMDB no IMDb ID error."""
+
+
+class TmdbBase(TypedDict):
+    """TMDB base."""
+
+    id: int
+    adult: bool
+    popularity: float
+
+
+class TmdbMovie(TmdbBase):
+    """Movie TMDB."""
+
+    poster_path: TmdbPoster
+    overview: str
+    release_date: str
+    genre_ids: List[int]
+    original_title: str
+    original_language: str
+    title: str
+    backdrop_path: Optional[str]
+    vote_count: int
+    video: bool
+    vote_average: float
+
+
+class TmdbMoviePreprocessed(TypedDict):
+    """Movie TMDB preprocessed."""
+
+    poster_path: TmdbPoster
+    popularity: float
+    id: int
+    release_date: str
+    title: str
+
+
+class TmdbPerson(TmdbBase):
+    """Person TMDB."""
+
+    profile_path: Optional[str]
+    known_for: Dict[str, Any]
+    name: str
+
+
+class TmdbCastCrewBase(TmdbMovie):
+    """Cast/Crew base TMDB."""
+
+    credit_id: str
+    episode_count: int
+    first_air_date: str
+    media_type: str
+    name: str
+    origin_country: List[str]
+    original_name: str
+
+
+class TmdbCast(TmdbCastCrewBase):
+    """Cast TMDB."""
+
+    character: str
+    vote_average: int | float  # type: ignore
+
+
+class TmdbCrew(TmdbCastCrewBase):
+    """Crew TMDB."""
+
+    department: str
+    job: str
+
+
+class TmdbProvider(TypedDict):
+    """Provider TMDB."""
+
+    display_priority: int
+    logo_path: str
+    provider_name: str
+    provider_id: int
+
+
+class TmdbCombinedCredits(TypedDict):
+    """Combined credits TMDB."""
+
+    id: int
+    cast: TmdbCastEntries
+    crew: TmdbCrewEntries
+
+
+class TmdbWatchData(TypedDict):
+    """Watch data from TMDB."""
+
+    AR: TmdbWatchDataCountry
+    AT: TmdbWatchDataCountry
+    AU: TmdbWatchDataCountry
+    BE: TmdbWatchDataCountry
+    BR: TmdbWatchDataCountry
+    CA: TmdbWatchDataCountry
+    CH: TmdbWatchDataCountry
+    CL: TmdbWatchDataCountry
+    CO: TmdbWatchDataCountry
+    CZ: TmdbWatchDataCountry
+    DE: TmdbWatchDataCountry
+    DK: TmdbWatchDataCountry
+    EC: TmdbWatchDataCountry
+    EE: TmdbWatchDataCountry
+    ES: TmdbWatchDataCountry
+    FI: TmdbWatchDataCountry
+    FR: TmdbWatchDataCountry
+    GB: TmdbWatchDataCountry
+    GR: TmdbWatchDataCountry
+    HU: TmdbWatchDataCountry
+    ID: TmdbWatchDataCountry
+    IE: TmdbWatchDataCountry
+    IN: TmdbWatchDataCountry
+    IT: TmdbWatchDataCountry
+    JP: TmdbWatchDataCountry
+    KR: TmdbWatchDataCountry
+    LT: TmdbWatchDataCountry
+    LV: TmdbWatchDataCountry
+    MX: TmdbWatchDataCountry
+    MY: TmdbWatchDataCountry
+    NL: TmdbWatchDataCountry
+    NO: TmdbWatchDataCountry
+    NZ: TmdbWatchDataCountry
+    PE: TmdbWatchDataCountry
+    PH: TmdbWatchDataCountry
+    PL: TmdbWatchDataCountry
+    PT: TmdbWatchDataCountry
+    RO: TmdbWatchDataCountry
+    RU: TmdbWatchDataCountry
+    SE: TmdbWatchDataCountry
+    SG: TmdbWatchDataCountry
+    TH: TmdbWatchDataCountry
+    TR: TmdbWatchDataCountry
+    US: TmdbWatchDataCountry
+    VE: TmdbWatchDataCountry
+    ZA: TmdbWatchDataCountry
+
+
+class TmdbWatchDataCountry(TypedDict):
+    """Watch data country TMDB."""
+
+    link: str
+    flatrate: NotRequired[TmdbProviders]
+    free: NotRequired[TmdbProviders]
+    ads: NotRequired[TmdbProviders]
+    rent: NotRequired[TmdbProviders]
+    buy: NotRequired[TmdbProviders]
+
+
+class TmdbTrailer(TypedDict):
+    """Trailer TMDB."""
+
+    key: str
+    name: str
+    site: TrailerSite
+
+
+TmdbTrailers: TypeAlias = List[TmdbTrailer]
+TmdbProviders: TypeAlias = List[TmdbProvider]
+TmdbMovies: TypeAlias = List[TmdbMovie]
+TmdbPersons: TypeAlias = List[TmdbPerson]
+TmdbCastEntries: TypeAlias = List[TmdbCast]
+TmdbCrewEntries: TypeAlias = List[TmdbCrew]
+TmdbMoviesPreprocessed: TypeAlias = List[TmdbMoviePreprocessed]
+TmdbPoster: TypeAlias = Optional[str]
 
 
 def get_tmdb_url(tmdb_id: int) -> str:
@@ -43,8 +210,8 @@ def get_poster_url(size: str, poster: Optional[str]) -> Optional[str]:
     return no_image_url
 
 
-def _get_poster_from_tmdb(poster: str) -> Optional[str]:
-    """Get poster from TMDB."""
+def _remove_trailing_slash_from_tmdb_poster(poster: TmdbPoster) -> TmdbPoster:
+    """Remove trailing slash from TMDB poster."""
     if poster:
         return poster[1:]
     return None
@@ -86,55 +253,79 @@ def _sort_by_date(movies: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     return movies
 
 
-def _get_data(query_str: str, search_type: str, lang: str) -> List[Dict[str, Any]]:
+def _filter_movies_only(entries: TmdbCastEntries | TmdbCrewEntries) -> List[TmdbCast | TmdbCrew]:
+    return [e for e in entries if e["media_type"] == "movie"]
+
+
+def _get_pre_processed_movie_data(entries: TmdbCastEntries | TmdbCrewEntries | TmdbMovies) -> TmdbMoviesPreprocessed:
+    """Return preprocessed movie data."""
+    movies: TmdbMoviesPreprocessed = []
+    for entry in entries:
+        movie: TmdbMoviePreprocessed = {
+            "poster_path": entry["poster_path"],
+            "popularity": entry["popularity"],
+            "id": entry["id"],
+            "release_date": entry["release_date"],
+            "title": entry["title"],
+        }
+        movies.append(movie)
+    return movies
+
+
+def _get_data(query_str: str, search_type: SearchType, lang: str) -> TmdbMoviesPreprocessed:
     """
     Get data.
 
     For actor, director search - the first person found is used.
     """
-
-    def filter_movies_only(entries: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-        return [e for e in entries if e["media_type"] == "movie"]
-
     query = query_str.encode("utf-8")
     params = {"query": query, "language": lang, "include_adult": settings.INCLUDE_ADULT}
     search = tmdb.Search()
     if search_type == "movie":
-        movies: List[Dict[str, Any]] = search.movie(**params)["results"]
+        movies: TmdbMovies = search.movie(**params)["results"]
+        movies_preprocessed = _get_pre_processed_movie_data(movies)
     else:
-        persons: List[Dict[str, Any]] = search.person(**params)["results"]
+        persons: TmdbPersons = search.person(**params)["results"]
         # We only select the first found actor/director.
         if persons:
             person_id = persons[0]["id"]
         else:
             return []
         person = tmdb.People(person_id)
-        person.combined_credits(language=lang)
+        combined_credits: TmdbCombinedCredits = person.combined_credits(language=lang)
         if search_type == "actor":
-            movies = filter_movies_only(person.cast)
-        else:
-            movies = filter_movies_only(person.crew)
-            movies = [m for m in movies if m["job"] == "Director"]
-    return movies
+            cast_entries: TmdbCastEntries = _filter_movies_only(combined_credits["cast"])  # type: ignore
+            movies_preprocessed = _get_pre_processed_movie_data(cast_entries)
+        else:  # search_type == "director"
+            crew_entries: TmdbCrewEntries = _filter_movies_only(combined_credits["crew"])  # type: ignore
+            crew_entries = [e for e in crew_entries if e["job"] == "Director"]
+            movies_preprocessed = _get_pre_processed_movie_data(crew_entries)
+    return movies_preprocessed
 
 
-def get_movies_from_tmdb(query: str, search_type: str, options: Dict[str, bool], lang: str) -> List[Dict[str, Any]]:
+def get_movies_from_tmdb(
+    query: str, search_type: SearchType, options: SearchOptions, lang: str
+) -> List[Dict[str, Any]]:
     """Get movies from TMDB."""
-    movies_data = _get_data(query, search_type, lang)
+    movies_preprocessed = _get_data(query, search_type, lang)
     movies = []
-    if movies_data:
-        for movie in movies_data:
-            poster = _get_poster_from_tmdb(movie["poster_path"])
+    if movies_preprocessed:
+        for movie_preprocessed in movies_preprocessed:
+            poster = _remove_trailing_slash_from_tmdb_poster(movie_preprocessed["poster_path"])
             # Skip unpopular movies if this option is enabled.
-            if search_type == "movie" and options["popularOnly"] and not _is_popular_movie(movie["popularity"]):
+            if (
+                search_type == "movie"
+                and options["popularOnly"]
+                and not _is_popular_movie(movie_preprocessed["popularity"])
+            ):
                 continue
-            tmdb_id = movie["id"]
+            tmdb_id = movie_preprocessed["id"]
             movie = {
                 "id": tmdb_id,
                 "tmdbLink": get_tmdb_url(tmdb_id),
                 "elementId": f"movie{tmdb_id}",
-                "releaseDate": movie.get("release_date"),
-                "title": movie["title"],
+                "releaseDate": movie_preprocessed.get("release_date"),
+                "title": movie_preprocessed["title"],
                 "poster": get_poster_url("small", poster),
                 "poster2x": get_poster_url("normal", poster),
             }
@@ -151,7 +342,7 @@ def _is_valid_trailer_site(site: str) -> bool:
     return site in settings.TRAILER_SITES.keys()
 
 
-def _get_trailers(tmdb_movie: Movies, lang: str) -> List[Dict[str, str]]:
+def _get_trailers(tmdb_movie: tmdb.Movies, lang: str) -> List[Dict[str, str]]:
     """Get trailers."""
     trailers = []
     for video in tmdb_movie.videos(language=lang)["results"]:
@@ -173,8 +364,8 @@ def _get_trailers(tmdb_movie: Movies, lang: str) -> List[Dict[str, str]]:
 def get_watch_data(tmdb_id: int) -> WatchData:
     """Get watch data."""
     watch_data: WatchData = []
-    results: WatchDataTmdb = tmdb.Movies(tmdb_id).watch_providers()["results"]
-    items: abc.ItemsView[str, WatchDataCountryTmdb] = results.items()  # type: ignore
+    results: TmdbWatchData = tmdb.Movies(tmdb_id).watch_providers()["results"]
+    items: abc.ItemsView[str, TmdbWatchDataCountry] = results.items()  # type: ignore
     for country, data in items:
         if country in settings.PROVIDERS_SUPPORTED_COUNTRIES and "flatrate" in data:
             for provider in data["flatrate"]:
@@ -205,8 +396,8 @@ def get_tmdb_movie_data(tmdb_id: int) -> Dict[str, Any]:
         "imdb_id": imdb_id,
         "release_date": release_date,
         "title_original": movie_info_en["original_title"],
-        "poster_ru": _get_poster_from_tmdb(movie_info_ru["poster_path"]),
-        "poster_en": _get_poster_from_tmdb(movie_info_en["poster_path"]),
+        "poster_ru": _remove_trailing_slash_from_tmdb_poster(movie_info_ru["poster_path"]),
+        "poster_en": _remove_trailing_slash_from_tmdb_poster(movie_info_en["poster_path"]),
         "homepage": movie_info_en["homepage"],
         "trailers_en": _get_trailers(tmdb_movie, lang=settings.LANGUAGE_EN),
         "trailers_ru": _get_trailers(tmdb_movie, lang=settings.LANGUAGE_RU),
@@ -217,7 +408,7 @@ def get_tmdb_movie_data(tmdb_id: int) -> Dict[str, Any]:
     }
 
 
-def get_tmdb_providers() -> ProvidersTmdb:
+def get_tmdb_providers() -> TmdbProviders:
     """
     Get TMDB providers.
 
@@ -225,5 +416,5 @@ def get_tmdb_providers() -> ProvidersTmdb:
     """
     params = {"api_key": settings.TMDB_KEY}
     response = requests.get(urljoin(settings.TMDB_API_BASE_URL, "watch/providers/movie"), params=params)
-    providers: ProvidersTmdb = response.json()["results"]
+    providers: TmdbProviders = response.json()["results"]
     return providers
