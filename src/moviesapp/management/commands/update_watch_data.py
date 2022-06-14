@@ -119,7 +119,7 @@ class Command(BaseCommand):
                 tqdm.set_description(movie_info)
                 watch_data = get_watch_data(movie.tmdb_id)
                 if not watch_data:
-                    self.error(f"No watch data obtained for {movie}. Skipping.")
+                    tqdm.error(f"No watch data obtained for {movie}. Skipping.")
                     tqdm.update()
                     continue
 
