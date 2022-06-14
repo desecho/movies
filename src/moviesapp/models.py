@@ -36,8 +36,8 @@ from vk_api.exceptions import ApiError
 from .exceptions import ProviderNotFoundError
 from .fb import Fb
 from .http import HttpRequest
-from .tmdb import TmdbTrailers, get_poster_url, get_tmdb_url
-from .types import Trailer, Trailers, TrailerSite, WatchData
+from .tmdb import TmdbTrailer, get_poster_url, get_tmdb_url
+from .types import Trailer, TrailerSite, WatchDataRecord
 from .vk import Vk, VkError
 
 
@@ -283,7 +283,7 @@ class Movie(Model):
 
     # Hack to make tests work
     @staticmethod
-    def _get_real_trailers(trailers: TmdbTrailers) -> TmdbTrailers:
+    def _get_real_trailers(trailers: ListType[TmdbTrailer]) -> ListType[TmdbTrailer]:
         """
         Get "real" trailers.
 
@@ -295,7 +295,7 @@ class Movie(Model):
             trailers_real = json.loads(trailers_str)
         return trailers_real
 
-    def _pre_get_trailers(self) -> TmdbTrailers:
+    def _pre_get_trailers(self) -> ListType[TmdbTrailer]:
         """Pre-get trailers."""
         if self.trailers:
             trailers = self._get_real_trailers(self.trailers)
@@ -311,9 +311,9 @@ class Movie(Model):
         base_url = TRAILER_SITES[site]
         return f"{base_url}{key}"
 
-    def get_trailers(self) -> Trailers:
+    def get_trailers(self) -> ListType[Trailer]:
         """Get trailers."""
-        trailers: Trailers = []
+        trailers: ListType[Trailer] = []
         for t in self._pre_get_trailers():
             trailer: Trailer = {
                 "url": self._get_trailer_url(t["site"], t["key"]),
@@ -322,7 +322,7 @@ class Movie(Model):
             trailers.append(trailer)
         return trailers
 
-    def save_watch_data(self, watch_data: WatchData) -> None:
+    def save_watch_data(self, watch_data: ListType[WatchDataRecord]) -> None:
         """Save watch data for a movie."""
         for provider_record in watch_data:
             provider_id = provider_record["provider_id"]

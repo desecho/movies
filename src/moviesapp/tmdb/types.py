@@ -1,11 +1,11 @@
 """TMDB types."""
 from __future__ import annotations
 
-from typing import Any, Dict, List, Optional, TypeAlias
+from typing import List, Optional
 
 from typing_extensions import NotRequired, TypedDict
 
-from ..types import TrailerSite
+from ..types import TrailerSite, UntypedObject
 
 
 class TmdbBase(TypedDict):
@@ -16,26 +16,56 @@ class TmdbBase(TypedDict):
     popularity: float
 
 
-class TmdbMovie(TmdbBase):
-    """Movie TMDB."""
+class TmdbMovieBase(TmdbBase):
+    """TMDB movie base."""
 
-    poster_path: TmdbPoster
-    overview: str
-    release_date: str
-    genre_ids: List[int]
+    backdrop_path: Optional[str]
     original_title: str
     original_language: str
+    poster_path: Optional[str]
+    release_date: str
     title: str
-    backdrop_path: Optional[str]
-    vote_count: int
     video: bool
     vote_average: float
+    vote_count: int
 
 
-class TmdbMoviePreprocessed(TypedDict):
-    """Movie TMDB preprocessed."""
+class TmdbGenre(TypedDict):  # TODO: Not used yet but will need to use later
+    """TMDB genre."""
 
-    poster_path: TmdbPoster
+    id: int
+    name: str
+
+
+class TmdbMovie(TmdbMovieBase):
+    """TMDB movie."""
+
+    belongs_to_collection: Optional[UntypedObject]  # TMDB does not provide a type for this
+    budget: int
+    genres: List[TmdbGenre]
+    homepage: Optional[str]
+    imdb_id: Optional[str]
+    overview: Optional[str]
+    production_companies: List[UntypedObject]  # TMDB provides a type for this. Set as untyped because it is not used.
+    production_countries: List[UntypedObject]  # TMDB provides a type for this. Set as untyped because it is not used.
+    revenue: int
+    runtime: Optional[int]
+    spoken_languages: List[UntypedObject]  # TMDB provides a type for this. Set as untyped because it is not used.
+    status: str
+    tagline: Optional[str]
+
+
+class TmdbMovieSearchResult(TmdbMovieBase):
+    """TMDB movie search result."""
+
+    overview: str
+    genre_ids: List[int]
+
+
+class TmdbMovieSearchResultPreprocessed(TypedDict):
+    """TMDB movie search result preprocessed."""
+
+    poster_path: Optional[str]
     popularity: float
     id: int
     release_date: str
@@ -43,15 +73,15 @@ class TmdbMoviePreprocessed(TypedDict):
 
 
 class TmdbPerson(TmdbBase):
-    """Person TMDB."""
+    """TMDB person."""
 
     profile_path: Optional[str]
-    known_for: Dict[str, Any]
+    known_for: UntypedObject  # TMDB provides a type for this. Set as untyped because it is not used.
     name: str
 
 
-class TmdbCastCrewBase(TmdbMovie):
-    """Cast/Crew base TMDB."""
+class TmdbCastCrewBase(TmdbMovieSearchResult):
+    """TMDB cast/crew base."""
 
     credit_id: str
     episode_count: int
@@ -63,21 +93,29 @@ class TmdbCastCrewBase(TmdbMovie):
 
 
 class TmdbCast(TmdbCastCrewBase):
-    """Cast TMDB."""
+    """TMDB cast."""
 
     character: str
     vote_average: int | float  # type: ignore
 
 
 class TmdbCrew(TmdbCastCrewBase):
-    """Crew TMDB."""
+    """TMDB Crew."""
 
     department: str
     job: str
 
 
+class TmdbCombinedCredits(TypedDict):
+    """TMDB combined credits."""
+
+    id: int
+    cast: List[TmdbCast]
+    crew: List[TmdbCrew]
+
+
 class TmdbProvider(TypedDict):
-    """Provider TMDB."""
+    """TMDB Provider."""
 
     display_priority: int
     logo_path: str
@@ -85,16 +123,19 @@ class TmdbProvider(TypedDict):
     provider_id: int
 
 
-class TmdbCombinedCredits(TypedDict):
-    """Combined credits TMDB."""
+class TmdbWatchDataCountry(TypedDict):
+    """TMDB watch data country."""
 
-    id: int
-    cast: TmdbCastEntries
-    crew: TmdbCrewEntries
+    link: str
+    flatrate: NotRequired[List[TmdbProvider]]
+    free: NotRequired[List[TmdbProvider]]
+    ads: NotRequired[List[TmdbProvider]]
+    rent: NotRequired[List[TmdbProvider]]
+    buy: NotRequired[List[TmdbProvider]]
 
 
 class TmdbWatchData(TypedDict):
-    """Watch data from TMDB."""
+    """TMDB watch data from."""
 
     AR: TmdbWatchDataCountry
     AT: TmdbWatchDataCountry
@@ -144,30 +185,9 @@ class TmdbWatchData(TypedDict):
     ZA: TmdbWatchDataCountry
 
 
-class TmdbWatchDataCountry(TypedDict):
-    """Watch data country TMDB."""
-
-    link: str
-    flatrate: NotRequired[TmdbProviders]
-    free: NotRequired[TmdbProviders]
-    ads: NotRequired[TmdbProviders]
-    rent: NotRequired[TmdbProviders]
-    buy: NotRequired[TmdbProviders]
-
-
 class TmdbTrailer(TypedDict):
-    """Trailer TMDB."""
+    """TMDB trailer."""
 
     key: str
     name: str
     site: TrailerSite
-
-
-TmdbTrailers: TypeAlias = List[TmdbTrailer]
-TmdbProviders: TypeAlias = List[TmdbProvider]
-TmdbMovies: TypeAlias = List[TmdbMovie]
-TmdbPersons: TypeAlias = List[TmdbPerson]
-TmdbCastEntries: TypeAlias = List[TmdbCast]
-TmdbCrewEntries: TypeAlias = List[TmdbCrew]
-TmdbMoviesPreprocessed: TypeAlias = List[TmdbMoviePreprocessed]
-TmdbPoster: TypeAlias = Optional[str]

@@ -1,7 +1,7 @@
 """Custom Types."""
 from __future__ import annotations
 
-from typing import List, Literal, Optional, Tuple, TypeAlias
+from typing import Any, Dict, List, Literal, Optional, Tuple, TypeAlias
 
 from typing_extensions import NotRequired, TypedDict
 
@@ -46,7 +46,7 @@ class Trailer(TypedDict):
     name: str
 
 
-class TrailerSites(TypedDict):
+class TrailerSitesSettings(TypedDict):
     """Trailer sites."""
 
     YouTube: str
@@ -60,7 +60,6 @@ class SearchOptions(TypedDict):
     sortByDate: bool
 
 
-WatchData: TypeAlias = List[WatchDataRecord]
-Trailers: TypeAlias = List[Trailer]
 TrailerSite = Literal["YouTube", "Vimeo"]
 SearchType = Literal["movie", "actor", "director"]
+UntypedObject: TypeAlias = Dict[str, Any]

@@ -9,7 +9,7 @@ from .tmdb import (
     get_tmdb_url,
     get_watch_data,
 )
-from .types import TmdbTrailers
+from .types import TmdbTrailer
 
 __all__ = [
     "TmdbNoImdbIdError",
@@ -19,5 +19,5 @@ __all__ = [
     "get_watch_data",
     "get_tmdb_movie_data",
     "get_tmdb_providers",
-    "TmdbTrailers",
+    "TmdbTrailer",
 ]

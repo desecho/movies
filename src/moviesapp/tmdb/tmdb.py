@@ -13,20 +13,17 @@ from django.conf import settings
 from sentry_sdk import capture_exception
 
 from ..exceptions import TrailerSiteNotFoundError
-from ..types import SearchOptions, SearchType, WatchData, WatchDataRecord
+from ..types import SearchOptions, SearchType, WatchDataRecord
 from .exceptions import TmdbNoImdbIdError
 from .types import (
     TmdbCast,
-    TmdbCastEntries,
     TmdbCombinedCredits,
     TmdbCrew,
-    TmdbCrewEntries,
-    TmdbMoviePreprocessed,
-    TmdbMovies,
-    TmdbMoviesPreprocessed,
-    TmdbPersons,
-    TmdbPoster,
-    TmdbProviders,
+    TmdbMovie,
+    TmdbMovieSearchResult,
+    TmdbMovieSearchResultPreprocessed,
+    TmdbPerson,
+    TmdbProvider,
     TmdbWatchData,
     TmdbWatchDataCountry,
 )
@@ -55,7 +52,7 @@ def get_poster_url(size: str, poster: Optional[str]) -> Optional[str]:
     return no_image_url
 
 
-def _remove_trailing_slash_from_tmdb_poster(poster: TmdbPoster) -> TmdbPoster:
+def _remove_trailing_slash_from_tmdb_poster(poster: Optional[str]) -> Optional[str]:
     """Remove trailing slash from TMDB poster."""
     if poster:
         return poster[1:]
@@ -98,15 +95,17 @@ def _sort_by_date(movies: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     return movies
 
 
-def _filter_movies_only(entries: TmdbCastEntries | TmdbCrewEntries) -> List[TmdbCast | TmdbCrew]:
+def _filter_movies_only(entries: List[TmdbCast] | List[TmdbCrew]) -> List[TmdbCast | TmdbCrew]:
     return [e for e in entries if e["media_type"] == "movie"]
 
 
-def _get_pre_processed_movie_data(entries: TmdbCastEntries | TmdbCrewEntries | TmdbMovies) -> TmdbMoviesPreprocessed:
+def _get_pre_processed_movie_data(
+    entries: List[TmdbCast] | List[TmdbCrew] | List[TmdbMovieSearchResult],
+) -> List[TmdbMovieSearchResultPreprocessed]:
     """Return preprocessed movie data."""
-    movies: TmdbMoviesPreprocessed = []
+    movies: List[TmdbMovieSearchResultPreprocessed] = []
     for entry in entries:
-        movie: TmdbMoviePreprocessed = {
+        movie: TmdbMovieSearchResultPreprocessed = {
             "poster_path": entry["poster_path"],
             "popularity": entry["popularity"],
             "id": entry["id"],
@@ -117,7 +116,7 @@ def _get_pre_processed_movie_data(entries: TmdbCastEntries | TmdbCrewEntries | T
     return movies
 
 
-def _get_data(query_str: str, search_type: SearchType, lang: str) -> TmdbMoviesPreprocessed:
+def _get_data(query_str: str, search_type: SearchType, lang: str) -> List[TmdbMovieSearchResultPreprocessed]:
     """
     Get data.
 
@@ -127,10 +126,10 @@ def _get_data(query_str: str, search_type: SearchType, lang: str) -> TmdbMoviesP
     params = {"query": query, "language": lang, "include_adult": settings.INCLUDE_ADULT}
     search = tmdb.Search()
     if search_type == "movie":
-        movies: TmdbMovies = search.movie(**params)["results"]
+        movies: List[TmdbMovieSearchResult] = search.movie(**params)["results"]
         movies_preprocessed = _get_pre_processed_movie_data(movies)
     else:
-        persons: TmdbPersons = search.person(**params)["results"]
+        persons: List[TmdbPerson] = search.person(**params)["results"]
         # We only select the first found actor/director.
         if persons:
             person_id = persons[0]["id"]
@@ -139,10 +138,10 @@ def _get_data(query_str: str, search_type: SearchType, lang: str) -> TmdbMoviesP
         person = tmdb.People(person_id)
         combined_credits: TmdbCombinedCredits = person.combined_credits(language=lang)
         if search_type == "actor":
-            cast_entries: TmdbCastEntries = _filter_movies_only(combined_credits["cast"])  # type: ignore
+            cast_entries: List[TmdbCast] = _filter_movies_only(combined_credits["cast"])  # type: ignore
             movies_preprocessed = _get_pre_processed_movie_data(cast_entries)
         else:  # search_type == "director"
-            crew_entries: TmdbCrewEntries = _filter_movies_only(combined_credits["crew"])  # type: ignore
+            crew_entries: List[TmdbCrew] = _filter_movies_only(combined_credits["crew"])  # type: ignore
             crew_entries = [e for e in crew_entries if e["job"] == "Director"]
             movies_preprocessed = _get_pre_processed_movie_data(crew_entries)
     return movies_preprocessed
@@ -206,9 +205,9 @@ def _get_trailers(tmdb_movie: tmdb.Movies, lang: str) -> List[Dict[str, str]]:
     return trailers
 
 
-def get_watch_data(tmdb_id: int) -> WatchData:
+def get_watch_data(tmdb_id: int) -> List[WatchDataRecord]:
     """Get watch data."""
-    watch_data: WatchData = []
+    watch_data: List[WatchDataRecord] = []
     results: TmdbWatchData = tmdb.Movies(tmdb_id).watch_providers()["results"]
     items: abc.ItemsView[str, TmdbWatchDataCountry] = results.items()  # type: ignore
     for country, data in items:
@@ -226,16 +225,22 @@ def _get_release_date(release_date_str: str) -> Optional[date]:
     return None
 
 
+def _get_movie_data(tmdb_movie: tmdb.Movies, lang: str) -> TmdbMovie:
+    """Get movie data."""
+    movie: TmdbMovie = tmdb_movie.info(language=lang)
+    return movie
+
+
 def get_tmdb_movie_data(tmdb_id: int) -> Dict[str, Any]:
     """Get TMDB movie data."""
     tmdb_movie = tmdb.Movies(tmdb_id)
-    movie_info_en = tmdb_movie.info(language=settings.LANGUAGE_EN)
+    movie_info_en = _get_movie_data(tmdb_movie, lang=settings.LANGUAGE_EN)
     imdb_id = movie_info_en["imdb_id"]
     # Fail early if the IMDb ID is not found.
     if not imdb_id:
         raise TmdbNoImdbIdError(tmdb_id)
     release_date = _get_release_date(movie_info_en["release_date"])
-    movie_info_ru = tmdb_movie.info(language=settings.LANGUAGE_RU)
+    movie_info_ru = _get_movie_data(tmdb_movie, lang=settings.LANGUAGE_RU)
     return {
         "tmdb_id": tmdb_id,
         "imdb_id": imdb_id,
@@ -253,7 +258,7 @@ def get_tmdb_movie_data(tmdb_id: int) -> Dict[str, Any]:
     }
 
 
-def get_tmdb_providers() -> TmdbProviders:
+def get_tmdb_providers() -> List[TmdbProvider]:
     """
     Get TMDB providers.
 
@@ -261,5 +266,5 @@ def get_tmdb_providers() -> TmdbProviders:
     """
     params = {"api_key": settings.TMDB_KEY}
     response = requests.get(urljoin(settings.TMDB_API_BASE_URL, "watch/providers/movie"), params=params)
-    providers: TmdbProviders = response.json()["results"]
+    providers: List[TmdbProvider] = response.json()["results"]
     return providers

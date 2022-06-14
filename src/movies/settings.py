@@ -9,7 +9,7 @@ import django_stubs_ext
 import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
 
-from moviesapp.types import TemplatesSettings, TrailerSites
+from moviesapp.types import TemplatesSettings, TrailerSitesSettings
 
 django_stubs_ext.monkeypatch()
 
@@ -384,7 +384,7 @@ RECORDS_ON_PAGE = 50
 PEOPLE_ON_PAGE = 25
 FEED_DAYS = 7
 OMDB_BASE_URL = "http://www.omdbapi.com/"
-TRAILER_SITES: TrailerSites = {
+TRAILER_SITES: TrailerSitesSettings = {
     "YouTube": "https://www.youtube.com/watch?v=",
     "Vimeo": "https://vimeo.com/",
 }
