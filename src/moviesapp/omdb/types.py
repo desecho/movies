@@ -6,12 +6,9 @@ from typing import List, Literal, Optional, TypeAlias
 
 from typing_extensions import NotRequired, TypedDict
 
+from ..types import UntypedObject
 
-class OmdbRating(TypedDict):
-    """OMDb rating."""
-
-    Source: str
-    Value: str
+# OMDB does not provide types. We assume these types by experimentation.
 
 
 class OmdbMovie(TypedDict):
@@ -31,7 +28,7 @@ class OmdbMovie(TypedDict):
     Country: str
     Awards: str
     Poster: str
-    Ratings: OmdbRatings
+    Ratings: List[UntypedObject]  # We can set better type for this but it is not used so that is not necessary.
     Metascore: str
     imdbRating: str
     imdbVotes: str
@@ -70,5 +67,4 @@ class OmdbMoviePreprocessed(TypedDict):
 
 
 OmdbRuntime: TypeAlias = Optional[datetime]
-OmdbRatings: TypeAlias = List[OmdbRating]
 OmdbMoviePreprocessedKey = Literal["Writer", "Actors", "Director", "Genre", "Country", "imdbRating", "Runtime"]
