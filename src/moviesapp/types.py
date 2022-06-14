@@ -62,4 +62,5 @@ class SearchOptions(TypedDict):
 
 TrailerSite = Literal["YouTube", "Vimeo"]
 SearchType = Literal["movie", "actor", "director"]
+# UntypedObject means it is a loaded JSON object
 UntypedObject: TypeAlias = Dict[str, Any]

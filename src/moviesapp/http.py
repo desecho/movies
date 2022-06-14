@@ -1,7 +1,9 @@
 """HTTP classes."""
-from typing import TYPE_CHECKING, Any, Dict, Union
+from typing import TYPE_CHECKING, Union
 
 from django.http import HttpRequest as DjangoHttpRequest
+
+from .types import UntypedObject
 
 if TYPE_CHECKING:
     from .models import User, UserAnonymous
@@ -22,11 +24,11 @@ class HttpRequest(DjangoHttpRequest):
 class AjaxHttpRequest(HttpRequest):
     """AJAX HTTP request."""
 
-    PUT: Dict[str, Any] = {}
+    PUT: UntypedObject = {}
     LANGUAGE_CODE = ""
 
 
 class AjaxAuthenticatedHttpRequest(AuthenticatedHttpRequest):
     """AJAX authenticated request."""
 
-    PUT: Dict[str, Any] = {}
+    PUT: UntypedObject = {}

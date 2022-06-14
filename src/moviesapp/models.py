@@ -7,7 +7,6 @@ from urllib.parse import urljoin
 import vk_api
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser, AnonymousUser
-from django.core.paginator import Page
 from django.db.models import (
     CASCADE,
     BooleanField,
@@ -30,7 +29,6 @@ from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 from django_countries.fields import CountryField
 from social_django.models import AbstractUserSocialAuth
-from typing_extensions import TypedDict
 from vk_api.exceptions import ApiError
 
 from .exceptions import ProviderNotFoundError
@@ -507,16 +505,3 @@ class ProviderRecord(Model):
     def tmdb_watch_url(self) -> str:
         """Return TMDb watch URL."""
         return f"{self.movie.tmdb_url}watch?locale={self.country}"
-
-
-class FeedViewContextData(TypedDict):
-    """Feed view context data."""
-
-    feed_name: str
-    action_records: QuerySet[ActionRecord]
-
-
-class PeopleViewContextData(TypedDict):
-    """People view context data."""
-
-    users: Page[User]

@@ -10,8 +10,9 @@ from django.http import HttpResponse
 from django.utils.translation import gettext_lazy as _
 
 from ..http import AuthenticatedHttpRequest, HttpRequest
-from ..models import ActionRecord, FeedViewContextData, PeopleViewContextData, User
+from ..models import ActionRecord, User
 from .mixins import TemplateAnonymousView, TemplateView
+from .types import FeedViewContextData, PeopleViewContextData
 from .utils import paginate
 
 
