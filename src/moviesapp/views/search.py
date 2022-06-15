@@ -32,7 +32,7 @@ class SearchMovieView(AjaxAnonymousView):
     def _filter_out_movies_user_already_has_in_lists(self, movies: ListType[MovieSearchResult]) -> None:
         user: User = self.request.user  # type: ignore
         user_movies_tmdb_ids = list(user.get_records().values_list("movie__tmdb_id", flat=True))
-        for movie in movies:
+        for movie in list(movies):
             if movie["id"] in user_movies_tmdb_ids:
                 movies.remove(movie)
 
