@@ -2,18 +2,16 @@
 
 from collections import abc
 from datetime import date, datetime
-from operator import itemgetter
 from typing import Any, Dict, List, Optional
 from urllib.parse import urljoin
 
 import requests
 import tmdbsimple as tmdb
-from babel.dates import format_date
 from django.conf import settings
 from sentry_sdk import capture_exception
 
 from ..exceptions import TrailerSiteNotFoundError
-from ..types import SearchOptions, SearchType, WatchDataRecord
+from ..types import SearchType, WatchDataRecord
 from .exceptions import TmdbNoImdbIdError
 from .types import (
     TmdbCast,
@@ -21,9 +19,10 @@ from .types import (
     TmdbCrew,
     TmdbMovie,
     TmdbMovieSearchResult,
-    TmdbMovieSearchResultPreprocessed,
+    TmdbMovieSearchResultProcessed,
     TmdbPerson,
     TmdbProvider,
+    TmdbTrailer,
     TmdbWatchData,
     TmdbWatchDataCountry,
 )
@@ -59,67 +58,39 @@ def _remove_trailing_slash_from_tmdb_poster(poster: Optional[str]) -> Optional[s
     return None
 
 
-def _get_date(date_str: str, lang: str) -> Optional[str]:
-    """Get date."""
-    if date_str:
-        date_ = datetime.strptime(date_str, "%Y-%m-%d")
-        if date_:
-            date_str = format_date(date_, locale=lang)
-            return date_str
-    return None
-
-
-def _set_proper_date(movies: List[Dict[str, Any]], lang: str) -> List[Dict[str, Any]]:
-    """Set proper date."""
-    for movie in movies:
-        movie["releaseDate"] = _get_date(movie["releaseDate"], lang)
-    return movies
-
-
-def _is_popular_movie(popularity: float) -> bool:
-    """Return True if movie is popular."""
-    return popularity >= settings.MIN_POPULARITY
-
-
-def _sort_by_date(movies: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-    """Sort movies by date."""
-    movies_with_date = []
-    movies_without_date = []
-    for movie in movies:
-        if movie["releaseDate"]:
-            movies_with_date.append(movie)
-        else:
-            movies_without_date.append(movie)
-    movies_with_date = sorted(movies_with_date, key=itemgetter("releaseDate"), reverse=True)
-    movies = movies_with_date + movies_without_date
-    return movies
-
-
 def _filter_movies_only(entries: List[TmdbCast] | List[TmdbCrew]) -> List[TmdbCast | TmdbCrew]:
     return [e for e in entries if e["media_type"] == "movie"]
 
 
-def _get_pre_processed_movie_data(
+def _get_date(date_str: str) -> Optional[date]:
+    """Get date."""
+    if date_str:
+        return datetime.strptime(date_str, "%Y-%m-%d").date()
+    return None
+
+
+def _get_processed_movie_data(
     entries: List[TmdbCast] | List[TmdbCrew] | List[TmdbMovieSearchResult],
-) -> List[TmdbMovieSearchResultPreprocessed]:
-    """Return preprocessed movie data."""
-    movies: List[TmdbMovieSearchResultPreprocessed] = []
+) -> List[TmdbMovieSearchResultProcessed]:
+    """Return processed movie data."""
+    movies: List[TmdbMovieSearchResultProcessed] = []
     for entry in entries:
-        movie: TmdbMovieSearchResultPreprocessed = {
-            "poster_path": entry["poster_path"],
+        movie: TmdbMovieSearchResultProcessed = {
+            "poster_path": _remove_trailing_slash_from_tmdb_poster(entry["poster_path"]),
             "popularity": entry["popularity"],
             "id": entry["id"],
-            "release_date": entry["release_date"],
+            "release_date": _get_date(entry["release_date"]),
             "title": entry["title"],
         }
         movies.append(movie)
     return movies
 
 
-def _get_data(query_str: str, search_type: SearchType, lang: str) -> List[TmdbMovieSearchResultPreprocessed]:
+def search_movies(query_str: str, search_type: SearchType, lang: str) -> List[TmdbMovieSearchResultProcessed]:
     """
-    Get data.
+    Search Movies.
 
+    Searches for movies based on the query string.
     For actor, director search - the first person found is used.
     """
     query = query_str.encode("utf-8")
@@ -127,8 +98,8 @@ def _get_data(query_str: str, search_type: SearchType, lang: str) -> List[TmdbMo
     search = tmdb.Search()
     if search_type == "movie":
         movies: List[TmdbMovieSearchResult] = search.movie(**params)["results"]
-        movies_preprocessed = _get_pre_processed_movie_data(movies)
-    else:
+        movies_processed = _get_processed_movie_data(movies)
+    else:  # search_type == "actor" or "director"
         persons: List[TmdbPerson] = search.person(**params)["results"]
         # We only select the first found actor/director.
         if persons:
@@ -139,46 +110,12 @@ def _get_data(query_str: str, search_type: SearchType, lang: str) -> List[TmdbMo
         combined_credits: TmdbCombinedCredits = person.combined_credits(language=lang)
         if search_type == "actor":
             cast_entries: List[TmdbCast] = _filter_movies_only(combined_credits["cast"])  # type: ignore
-            movies_preprocessed = _get_pre_processed_movie_data(cast_entries)
+            movies_processed = _get_processed_movie_data(cast_entries)
         else:  # search_type == "director"
             crew_entries: List[TmdbCrew] = _filter_movies_only(combined_credits["crew"])  # type: ignore
             crew_entries = [e for e in crew_entries if e["job"] == "Director"]
-            movies_preprocessed = _get_pre_processed_movie_data(crew_entries)
-    return movies_preprocessed
-
-
-def get_movies_from_tmdb(
-    query: str, search_type: SearchType, options: SearchOptions, lang: str
-) -> List[Dict[str, Any]]:
-    """Get movies from TMDB."""
-    movies_preprocessed = _get_data(query, search_type, lang)
-    movies = []
-    if movies_preprocessed:
-        for movie_preprocessed in movies_preprocessed:
-            poster = _remove_trailing_slash_from_tmdb_poster(movie_preprocessed["poster_path"])
-            # Skip unpopular movies if this option is enabled.
-            if (
-                search_type == "movie"
-                and options["popularOnly"]
-                and not _is_popular_movie(movie_preprocessed["popularity"])
-            ):
-                continue
-            tmdb_id = movie_preprocessed["id"]
-            movie = {
-                "id": tmdb_id,
-                "tmdbLink": get_tmdb_url(tmdb_id),
-                "elementId": f"movie{tmdb_id}",
-                "releaseDate": movie_preprocessed.get("release_date"),
-                "title": movie_preprocessed["title"],
-                "poster": get_poster_url("small", poster),
-                "poster2x": get_poster_url("normal", poster),
-            }
-            movies.append(movie)
-        if options["sortByDate"]:
-            movies = _sort_by_date(movies)
-        movies = _set_proper_date(movies, lang)
-        return movies
-    return []
+            movies_processed = _get_processed_movie_data(crew_entries)
+    return movies_processed
 
 
 def _is_valid_trailer_site(site: str) -> bool:
@@ -186,7 +123,7 @@ def _is_valid_trailer_site(site: str) -> bool:
     return site in settings.TRAILER_SITES.keys()
 
 
-def _get_trailers(tmdb_movie: tmdb.Movies, lang: str) -> List[Dict[str, str]]:
+def _get_trailers(tmdb_movie: tmdb.Movies, lang: str) -> List[TmdbTrailer]:
     """Get trailers."""
     trailers = []
     for video in tmdb_movie.videos(language=lang)["results"]:
@@ -200,7 +137,7 @@ def _get_trailers(tmdb_movie: tmdb.Movies, lang: str) -> List[Dict[str, str]]:
                     raise
                 capture_exception(e)
                 continue
-            trailer = {"name": video["name"], "key": video["key"], "site": site}
+            trailer: TmdbTrailer = {"name": video["name"], "key": video["key"], "site": site}
             trailers.append(trailer)
     return trailers
 

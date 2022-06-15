@@ -1,6 +1,7 @@
 """TMDB types."""
 from __future__ import annotations
 
+from datetime import date
 from typing import List, Optional
 
 from typing_extensions import NotRequired, TypedDict
@@ -62,13 +63,13 @@ class TmdbMovieSearchResult(TmdbMovieBase):
     genre_ids: List[int]
 
 
-class TmdbMovieSearchResultPreprocessed(TypedDict):
-    """TMDB movie search result preprocessed."""
+class TmdbMovieSearchResultProcessed(TypedDict):
+    """TMDB movie search result processed."""
 
     poster_path: Optional[str]
     popularity: float
     id: int
-    release_date: str
+    release_date: Optional[date]
     title: str
 
 

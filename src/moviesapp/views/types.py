@@ -1,3 +1,4 @@
+"""Types for views."""
 from typing import TYPE_CHECKING
 
 from django.core.paginator import Page

@@ -42,18 +42,6 @@ class OmdbMovie(TypedDict):
     Error: NotRequired[str]
 
 
-class OmdbMovieProcessed(TypedDict):
-    """OMDb movie processed."""
-
-    writer: Optional[str]
-    director: Optional[str]
-    actors: Optional[str]
-    genre: Optional[str]
-    country: Optional[str]
-    imdb_rating: Optional[str]
-    runtime: OmdbRuntime
-
-
 class OmdbMoviePreprocessed(TypedDict):
     """OMDb movie preprocessed."""
 
@@ -64,6 +52,18 @@ class OmdbMoviePreprocessed(TypedDict):
     Country: Optional[str]
     imdbRating: Optional[str]
     Runtime: Optional[str]
+
+
+class OmdbMovieProcessed(TypedDict):
+    """OMDb movie processed."""
+
+    writer: Optional[str]
+    director: Optional[str]
+    actors: Optional[str]
+    genre: Optional[str]
+    country: Optional[str]
+    imdb_rating: Optional[str]
+    runtime: OmdbRuntime
 
 
 OmdbRuntime: TypeAlias = Optional[datetime]

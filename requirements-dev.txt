@@ -31,5 +31,5 @@ mypy
 django-stubs
 types-python-dateutil
 types-requests
-
+types-babel
 celery-types

@@ -60,6 +60,18 @@ class SearchOptions(TypedDict):
     sortByDate: bool
 
 
+class MovieSearchResult(TypedDict):
+    """Movie search result."""
+
+    id: int
+    tmdbLink: str
+    elementId: str
+    releaseDate: Optional[str]
+    title: str
+    poster: Optional[str]
+    poster2x: Optional[str]
+
+
 TrailerSite = Literal["YouTube", "Vimeo"]
 SearchType = Literal["movie", "actor", "director"]
 # UntypedObject means it is a loaded JSON object
