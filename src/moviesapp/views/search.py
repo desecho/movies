@@ -74,11 +74,7 @@ class SearchMovieView(AjaxAnonymousView):
         for tmdb_movie in tmdb_movies:
             poster = tmdb_movie["poster_path"]
             # Skip unpopular movies if this option is enabled.
-            if (
-                search_type == "movie"
-                and options["popularOnly"]
-                and not self._is_popular_movie(tmdb_movie["popularity"])
-            ):
+            if options["popularOnly"] and not self._is_popular_movie(tmdb_movie["popularity"]):
                 continue
             tmdb_id = tmdb_movie["id"]
             movie: MovieSearchResult = {
