@@ -1,8 +1,10 @@
 """Views for movies."""
-from typing import Any, Dict
+from typing import Any
 
 from ..http import HttpRequest
+from ..types import ListKeyName
 from .mixins import TemplateAnonymousView
+from .types import GalleryViewContextData
 from .utils import get_records, sort_by_rating
 
 
@@ -17,9 +19,9 @@ class GalleryView(TemplateAnonymousView):
 
     template_name = "gallery.html"
 
-    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+    def get_context_data(self, **kwargs: Any) -> GalleryViewContextData:  # type: ignore
         """Get context data."""
-        list_name = kwargs["list_name"]
+        list_name: ListKeyName = kwargs["list_name"]
         username = kwargs.get("username")
         self.check_if_allowed(username)
         request: HttpRequest = self.request  # type: ignore
