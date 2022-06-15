@@ -1,12 +1,11 @@
 """TMDB types."""
 from __future__ import annotations
 
-from datetime import date
 from typing import List, Optional
 
 from typing_extensions import NotRequired, TypedDict
 
-from ..types import TrailerSite, UntypedObject
+from ..types import UntypedObject
 
 
 class TmdbBase(TypedDict):
@@ -61,16 +60,6 @@ class TmdbMovieSearchResult(TmdbMovieBase):
 
     overview: str
     genre_ids: List[int]
-
-
-class TmdbMovieSearchResultProcessed(TypedDict):
-    """TMDB movie search result processed."""
-
-    poster_path: Optional[str]
-    popularity: float
-    id: int
-    release_date: Optional[date]
-    title: str
 
 
 class TmdbPerson(TmdbBase):
@@ -184,11 +173,3 @@ class TmdbWatchData(TypedDict):
     US: TmdbWatchDataCountry
     VE: TmdbWatchDataCountry
     ZA: TmdbWatchDataCountry
-
-
-class TmdbTrailer(TypedDict):
-    """TMDB trailer."""
-
-    key: str
-    name: str
-    site: TrailerSite

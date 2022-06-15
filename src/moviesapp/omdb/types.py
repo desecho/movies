@@ -1,8 +1,7 @@
 """OMDb types."""
 from __future__ import annotations
 
-from datetime import datetime
-from typing import List, Literal, Optional, TypeAlias
+from typing import List, Literal, Optional
 
 from typing_extensions import NotRequired, TypedDict
 
@@ -54,17 +53,4 @@ class OmdbMoviePreprocessed(TypedDict):
     Runtime: Optional[str]
 
 
-class OmdbMovieProcessed(TypedDict):
-    """OMDb movie processed."""
-
-    writer: Optional[str]
-    director: Optional[str]
-    actors: Optional[str]
-    genre: Optional[str]
-    country: Optional[str]
-    imdb_rating: Optional[str]
-    runtime: OmdbRuntime
-
-
-OmdbRuntime: TypeAlias = Optional[datetime]
 OmdbMoviePreprocessedKey = Literal["Writer", "Actors", "Director", "Genre", "Country", "imdbRating", "Runtime"]

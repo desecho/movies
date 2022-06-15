@@ -2,7 +2,7 @@
 
 from collections import abc
 from datetime import date, datetime
-from typing import Any, Dict, List, Optional
+from typing import List, Optional
 from urllib.parse import urljoin
 
 import requests
@@ -11,7 +11,7 @@ from django.conf import settings
 from sentry_sdk import capture_exception
 
 from ..exceptions import TrailerSiteNotFoundError
-from ..types import SearchType, WatchDataRecord
+from ..types import SearchType, TmdbMovieProcessed, TmdbMovieSearchResultProcessed, TmdbTrailer, WatchDataRecord
 from .exceptions import TmdbNoImdbIdError
 from .types import (
     TmdbCast,
@@ -19,10 +19,8 @@ from .types import (
     TmdbCrew,
     TmdbMovie,
     TmdbMovieSearchResult,
-    TmdbMovieSearchResultProcessed,
     TmdbPerson,
     TmdbProvider,
-    TmdbTrailer,
     TmdbWatchData,
     TmdbWatchDataCountry,
 )
@@ -161,7 +159,7 @@ def _get_movie_data(tmdb_movie: tmdb.Movies, lang: str) -> TmdbMovie:
     return movie
 
 
-def get_tmdb_movie_data(tmdb_id: int) -> Dict[str, Any]:
+def get_tmdb_movie_data(tmdb_id: int) -> TmdbMovieProcessed:
     """Get TMDB movie data."""
     tmdb_movie = tmdb.Movies(tmdb_id)
     movie_info_en = _get_movie_data(tmdb_movie, lang=settings.LANGUAGE_EN)

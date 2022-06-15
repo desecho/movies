@@ -33,12 +33,14 @@ class Command(BaseCommand):
     def _update_movie_data(movie: Movie) -> bool:
         """Return if the movie was updated or not."""
         movie_data = load_movie_data(movie.tmdb_id)
+        # We create a new dict here to avoid modifying the original dict which would result in an error
+        movie_data_to_update = dict(movie_data)
         # Use filter here to be able to use "update" functionality.
         # We will always have only one movie.
         movies = Movie.objects.filter(pk=movie.pk)
         movie_initial_data = movies.values()[0]
-        movie_data.pop("imdb_rating")
-        movies.update(**movie_data)
+        movie_data_to_update.pop("imdb_rating")
+        movies.update(**movie_data_to_update)
         movie_updated_data = Movie.objects.filter(pk=movie.pk).values()[0]
         updated: bool = movie_initial_data != movie_updated_data
         return updated

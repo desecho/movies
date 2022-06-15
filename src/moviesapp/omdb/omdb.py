@@ -8,11 +8,12 @@ from django.conf import settings
 from requests.exceptions import RequestException
 from sentry_sdk import capture_exception
 
+from ..types import OmdbMovieProcessed
 from .exceptions import OmdbError, OmdbLimitReachedError, OmdbRequestError
-from .types import OmdbMovie, OmdbMoviePreprocessed, OmdbMoviePreprocessedKey, OmdbMovieProcessed, OmdbRuntime
+from .types import OmdbMovie, OmdbMoviePreprocessed, OmdbMoviePreprocessedKey
 
 
-def _get_runtime(runtime_str: Optional[str]) -> OmdbRuntime:
+def _get_runtime(runtime_str: Optional[str]) -> Optional[datetime]:
     """Get runtime."""
     if runtime_str is not None:
         try:

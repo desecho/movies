@@ -34,8 +34,8 @@ from vk_api.exceptions import ApiError
 from .exceptions import ProviderNotFoundError
 from .fb import Fb
 from .http import HttpRequest
-from .tmdb import TmdbTrailer, get_poster_url, get_tmdb_url
-from .types import Trailer, TrailerSite, WatchDataRecord
+from .tmdb import get_poster_url, get_tmdb_url
+from .types import TmdbTrailer, Trailer, TrailerSite, WatchDataRecord
 from .vk import Vk, VkError
 
 

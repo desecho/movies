@@ -13,8 +13,8 @@ from ..exceptions import NotAvailableSearchTypeError
 from ..http import AjaxAuthenticatedHttpRequest, AjaxHttpRequest
 from ..models import List, Movie, User
 from ..tasks import load_and_save_watch_data_task
-from ..tmdb import TmdbMovieSearchResultProcessed, TmdbNoImdbIdError, get_poster_url, get_tmdb_url, search_movies
-from ..types import MovieSearchResult, SearchOptions, SearchType
+from ..tmdb import TmdbNoImdbIdError, get_poster_url, get_tmdb_url, search_movies
+from ..types import MovieSearchResult, SearchOptions, SearchType, TmdbMovieSearchResultProcessed
 from ..utils import load_movie_data
 from .mixins import AjaxAnonymousView, AjaxView, TemplateAnonymousView
 from .utils import add_movie_to_list

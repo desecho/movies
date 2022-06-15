@@ -1,6 +1,7 @@
 """Custom Types."""
 from __future__ import annotations
 
+from datetime import date, datetime
 from typing import Any, Dict, List, Literal, Optional, Tuple, TypeAlias
 
 from typing_extensions import NotRequired, TypedDict
@@ -60,6 +61,16 @@ class SearchOptions(TypedDict):
     sortByDate: bool
 
 
+class TmdbMovieSearchResultProcessed(TypedDict):
+    """TMDB movie search result processed."""
+
+    poster_path: Optional[str]
+    popularity: float
+    id: int
+    release_date: Optional[date]
+    title: str
+
+
 class MovieSearchResult(TypedDict):
     """Movie search result."""
 
@@ -70,6 +81,48 @@ class MovieSearchResult(TypedDict):
     title: str
     poster: Optional[str]
     poster2x: Optional[str]
+
+
+class TmdbTrailer(TypedDict):
+    """TMDB trailer."""
+
+    key: str
+    name: str
+    site: TrailerSite
+
+
+class TmdbMovieProcessed(TypedDict):
+    """TMDB movie processed."""
+
+    tmdb_id: int
+    imdb_id: str
+    release_date: Optional[date]
+    title_original: str
+    poster_ru: Optional[str]
+    poster_en: Optional[str]
+    homepage: Optional[str]
+    trailers_en: List[TmdbTrailer]
+    trailers_ru: List[TmdbTrailer]
+    title_en: str
+    title_ru: str
+    description_en: Optional[str]
+    description_ru: Optional[str]
+
+
+class OmdbMovieProcessed(TypedDict):
+    """OMDb movie processed."""
+
+    writer: Optional[str]
+    director: Optional[str]
+    actors: Optional[str]
+    genre: Optional[str]
+    country: Optional[str]
+    imdb_rating: Optional[str]
+    runtime: Optional[datetime]
+
+
+class MovieTmdbOmdb(TmdbMovieProcessed, OmdbMovieProcessed):
+    """Movie TMDb and OMDb merged together."""
 
 
 TrailerSite = Literal["YouTube", "Vimeo"]
