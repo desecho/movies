@@ -7,6 +7,14 @@ Npm module dependencies
 * ``node-sass`` is  a dependency of ``sass-loader``
 * ``less`` is a dependency of ``less-loader`` which is a dependency of ``font-awesome-webpack``
 
+Celery
+---------
+Celery is used to load watch data of a movie that was just added to the database with a delay in the background.
+
+Redis
+--------
+Redis is used for caching.
+
 Avatars
 -----------
 Priority:
@@ -17,7 +25,6 @@ Priority:
 
 Cron jobs
 ------------
-
 Cron jobs are run with `GitHub Actions`_. Time zone is UTC.
 
 - ``Remove unused movies`` runs at 07:00 UTC (03:00 EDT) on the first day of the month
