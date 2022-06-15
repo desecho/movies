@@ -273,7 +273,7 @@ class ListView(TemplateAnonymousView):
                 )
             else:
                 comments_and_ratings = None
-            if user.is_authenticated and user.is_country_supported:
+            if request.user.is_authenticated and request.user.is_country_supported:
                 prefetch_related_objects(records, "movie__provider_records__provider")
                 self._inject_provider_records(records)
             records_ = paginate(records, request.GET.get("page"), settings.RECORDS_ON_PAGE)
