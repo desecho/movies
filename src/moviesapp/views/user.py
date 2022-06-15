@@ -1,6 +1,4 @@
 """User views."""
-from typing import Any, Dict
-
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponsePermanentRedirect, HttpResponseRedirect
@@ -11,6 +9,7 @@ from django.views.generic.edit import FormView
 
 from ..forms import UserForm
 from ..http import HttpRequest
+from ..types import UntypedObject
 from .mixins import TemplateAnonymousView
 
 
@@ -27,7 +26,7 @@ class PreferencesView(FormView[UserForm]):  # pylint:disable=unsubscriptable-obj
     template_name = "user/preferences.html"
     form_class = UserForm
 
-    def get_form_kwargs(self) -> Dict[str, Any]:
+    def get_form_kwargs(self) -> UntypedObject:
         """Get form kwargs."""
         result = super().get_form_kwargs()
         result["instance"] = self.request.user

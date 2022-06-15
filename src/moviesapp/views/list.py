@@ -4,6 +4,7 @@ from typing import Any, Dict, List as ListType, Optional, Tuple, Union
 
 from django.conf import settings
 from django.contrib.sessions.backends.base import SessionBase
+from django.core.paginator import Page
 from django.db.models import Q, QuerySet, prefetch_related_objects
 from django.http import Http404, HttpResponse, HttpResponseBadRequest
 from django.shortcuts import get_object_or_404
@@ -276,7 +277,9 @@ class ListView(TemplateAnonymousView):
             if request.user.is_authenticated and request.user.is_country_supported:
                 prefetch_related_objects(records, "movie__provider_records__provider")
                 self._inject_provider_records(records)
-            records_ = paginate(records, request.GET.get("page"), settings.RECORDS_ON_PAGE)
+            records_: Page[Record] = paginate(  # type: ignore
+                records, request.GET.get("page"), settings.RECORDS_ON_PAGE
+            )
             return {
                 "records": records_,
                 "reviews": comments_and_ratings,
