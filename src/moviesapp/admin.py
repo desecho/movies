@@ -1,13 +1,13 @@
 """Admin."""
 from typing import Optional
 
+from django.conf import settings
 from django.contrib.admin import ModelAdmin, register, site
 from django.contrib.auth.models import Group
 from django.http import HttpRequest
+from django_celery_results.models import GroupResult
 
 from .models import Action, ActionRecord, List, Movie, Provider, ProviderRecord, Record, User
-
-# from django_celery_results.models import GroupResult
 
 
 @register(Record)
@@ -87,4 +87,6 @@ class UserAdmin(ModelAdmin[User]):  # pylint:disable=unsubscriptable-object
 
 
 site.unregister(Group)
-# site.unregister(GroupResult)
+
+if settings.IS_CELERY_DEBUG:
+    site.unregister(GroupResult)
