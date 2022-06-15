@@ -155,13 +155,6 @@ def get_watch_data(tmdb_id: int) -> List[WatchDataRecord]:
     return watch_data
 
 
-def _get_release_date(release_date_str: str) -> Optional[date]:
-    """Get release date."""
-    if release_date_str:
-        return datetime.strptime(release_date_str, "%Y-%m-%d").date()
-    return None
-
-
 def _get_movie_data(tmdb_movie: tmdb.Movies, lang: str) -> TmdbMovie:
     """Get movie data."""
     movie: TmdbMovie = tmdb_movie.info(language=lang)
@@ -176,7 +169,7 @@ def get_tmdb_movie_data(tmdb_id: int) -> Dict[str, Any]:
     # Fail early if the IMDb ID is not found.
     if not imdb_id:
         raise TmdbNoImdbIdError(tmdb_id)
-    release_date = _get_release_date(movie_info_en["release_date"])
+    release_date = _get_date(movie_info_en["release_date"])
     movie_info_ru = _get_movie_data(tmdb_movie, lang=settings.LANGUAGE_RU)
     return {
         "tmdb_id": tmdb_id,
