@@ -63,18 +63,18 @@ class SearchMovieView(AjaxAnonymousView):
         return None
 
     def _get_movies_from_tmdb(
-        self, query: str, search_type: SearchType, options: SearchOptions
+        self, query: str, search_type: SearchType, sort_by_date: bool, popular_only: bool
     ) -> ListType[MovieSearchResult]:
         """Get movies from TMDB."""
         request: AjaxHttpRequest = self.request  # type: ignore
         tmdb_movies = search_movies(query, search_type, request.LANGUAGE_CODE)
-        if options["sortByDate"]:
+        if sort_by_date:
             tmdb_movies = self._sort_by_date(tmdb_movies)
         movies: ListType[MovieSearchResult] = []
         for tmdb_movie in tmdb_movies:
             poster = tmdb_movie["poster_path"]
             # Skip unpopular movies if this option is enabled.
-            if options["popularOnly"] and not self._is_popular_movie(tmdb_movie["popularity"]):
+            if popular_only and not self._is_popular_movie(tmdb_movie["popularity"]):
                 continue
             tmdb_id = tmdb_movie["id"]
             movie: MovieSearchResult = {
@@ -107,7 +107,7 @@ class SearchMovieView(AjaxAnonymousView):
         except (KeyError, NotAvailableSearchTypeError):
             response: HttpResponseBadRequest = self.render_bad_request_response()
             return response
-        movies = self._get_movies_from_tmdb(query, search_type, options)
+        movies = self._get_movies_from_tmdb(query, search_type, options["sortByDate"], options["popularOnly"])
         if request.user.is_authenticated:
             self._filter_out_movies_user_already_has_in_lists(movies)
         movies = movies[: settings.MAX_RESULTS]
