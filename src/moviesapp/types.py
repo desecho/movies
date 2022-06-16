@@ -134,6 +134,7 @@ class MovieTmdbOmdb(TmdbMovieProcessed, OmdbMovieProcessed):
 TrailerSite = Literal["YouTube", "Vimeo"]
 SearchType = Literal["movie", "actor", "director"]
 ListKeyName = Literal["watched", "to-watch"]
+SortType = Literal["release_date", "rating", "addition_date"]
 
 # UntypedObject means it is a loaded JSON object
 UntypedObject: TypeAlias = Dict[str, Any]

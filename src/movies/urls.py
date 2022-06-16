@@ -16,7 +16,6 @@ from moviesapp.views.list import (
     AddToListView,
     ChangeRatingView,
     ListView,
-    RecommendationsView,
     RemoveRecordView,
     SaveCommentView,
     SaveOptionsView,
@@ -80,7 +79,8 @@ urlpatterns += [
     path("list/<list:list_name>/", ListView.as_view(), name="list"),
     path("<str:username>/list/<list:list_name>/", ListView.as_view(), name="list"),
     #
-    path("recommendations/", RecommendationsView.as_view(), name="recommendations"),
+    # Commented out because friends functionality is disabled
+    # path("recommendations/", RecommendationsView.as_view(), name="recommendations"),
     path("save-settings/", SaveSettingsView.as_view(), name="save_settings"),
     #
     path_404("remove-record/", "remove_record"),

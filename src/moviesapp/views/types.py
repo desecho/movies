@@ -1,11 +1,11 @@
 """Types for views."""
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING, List, Optional
 
 from django.core.paginator import Page
 from django.db.models import QuerySet
 from typing_extensions import TypedDict
 
-from ..types import ListKeyName
+from ..types import ListKeyName, SortType
 
 if TYPE_CHECKING:
     from ..models import ActionRecord, Record, User
@@ -30,3 +30,21 @@ class GalleryViewContextData(TypedDict):
     records: QuerySet["Record"]
     anothers_account: Optional["User"]
     list: ListKeyName
+
+
+class ListViewContextData(TypedDict):
+    """List view context data."""
+
+    records: Page["Record"]
+    anothers_account: Optional["User"]
+    list_id: int
+    list: ListKeyName
+    list_data: str
+    sort: SortType
+    query: str
+
+
+class RecommendationsViewContextData(TypedDict):
+    """Recommendations view context data."""
+
+    records: List["Record"]

@@ -3,7 +3,6 @@ import json
 from typing import Any, Dict, List as ListType, Optional, Tuple, Union
 
 from django.conf import settings
-from django.contrib.sessions.backends.base import SessionBase
 from django.core.paginator import Page
 from django.db.models import Q, QuerySet, prefetch_related_objects
 from django.http import Http404, HttpResponse, HttpResponseBadRequest
@@ -11,7 +10,9 @@ from django.shortcuts import get_object_or_404
 
 from ..http import AjaxAuthenticatedHttpRequest, AjaxHttpRequest, AuthenticatedHttpRequest, HttpRequest
 from ..models import Action, ActionRecord, List, Movie, ProviderRecord, Record, User, UserAnonymous
-from .mixins import AjaxAnonymousView, AjaxView, TemplateAnonymousView, TemplateView
+from ..types import ListKeyName, SortType
+from .mixins import AjaxAnonymousView, AjaxView, TemplateAnonymousView
+from .types import ListViewContextData
 from .utils import add_movie_to_list, get_records, paginate, sort_by_rating
 
 
@@ -139,7 +140,6 @@ class ListView(TemplateAnonymousView):
     """List view."""
 
     template_name = "list/list.html"
-    session: Optional[SessionBase] = None
 
     @staticmethod
     def _filter_records_for_recommendation(
@@ -148,31 +148,31 @@ class ListView(TemplateAnonymousView):
         """Keep movies only with 3+ rating, remove watched movies."""
         return records.filter(rating__gte=3).exclude(movie__in=user.get_movie_ids())
 
-    def _get_comments_and_ratings(
-        self, records_ids_and_movies_ids_list: ListType[Tuple[int, int]], user: Union[User, UserAnonymous]
-    ) -> "Dict[int, Optional[ListType[Dict[str, Any]]]]":
-        """Get comments and ratings."""
-        movies, records_ids_and_movies_ids = self._get_record_movie_data(records_ids_and_movies_ids_list)
-        records: QuerySet[Record] = Record.objects.filter(list_id=List.WATCHED, movie_id__in=movies)
-        friends = user.get_friends()
-        records = records.filter(user__in=friends)
+    # def _get_comments_and_ratings(
+    #     self, records_ids_and_movies_ids_list: ListType[Tuple[int, int]], user: Union[User, UserAnonymous]
+    # ) -> "Dict[int, Optional[ListType[Dict[str, Any]]]]":
+    #     """Get comments and ratings."""
+    #     movies, records_ids_and_movies_ids = self._get_record_movie_data(records_ids_and_movies_ids_list)
+    #     records: QuerySet[Record] = Record.objects.filter(list_id=List.WATCHED, movie_id__in=movies)
+    #     friends = user.get_friends()
+    #     records = records.filter(user__in=friends)
 
-        comments_and_ratings: Dict[int, ListType[Dict[str, Any]]] = {}
-        for record in records:
-            if record.comment or record.rating:
-                data: Dict[str, Any] = {"user": record.user}
-                movie_id: int = record.movie.pk
-                if movie_id not in comments_and_ratings:
-                    comments_and_ratings[movie_id] = []
-                if record.comment:
-                    data["comment"] = record.comment
-                if record.rating:
-                    data["rating"] = record.rating
-                comments_and_ratings[movie_id].append(data)
-        result = {}
-        for record_id, movie_id in records_ids_and_movies_ids.items():
-            result[record_id] = comments_and_ratings.get(movie_id, None)
-        return result
+    #     comments_and_ratings: Dict[int, ListType[Dict[str, Any]]] = {}
+    #     for record in records:
+    #         if record.comment or record.rating:
+    #             data: Dict[str, Any] = {"user": record.user}
+    #             movie_id: int = record.movie.pk
+    #             if movie_id not in comments_and_ratings:
+    #                 comments_and_ratings[movie_id] = []
+    #             if record.comment:
+    #                 data["comment"] = record.comment
+    #             if record.rating:
+    #                 data["rating"] = record.rating
+    #             comments_and_ratings[movie_id].append(data)
+    #     result = {}
+    #     for record_id, movie_id in records_ids_and_movies_ids.items():
+    #         result[record_id] = comments_and_ratings.get(movie_id, None)
+    #     return result
 
     @staticmethod
     def _filter_records(records: QuerySet[Record], query: str) -> QuerySet[Record]:
@@ -181,7 +181,7 @@ class ListView(TemplateAnonymousView):
 
     @staticmethod
     def _sort_records(
-        records: QuerySet[Record], sort: str, username: Optional[str], list_name: str
+        records: QuerySet[Record], sort: SortType, username: Optional[str], list_name: str
     ) -> QuerySet[Record]:
         """Sort records."""
         if sort == "release_date":
@@ -223,12 +223,11 @@ class ListView(TemplateAnonymousView):
         """Initialize session values."""
         session = self.request.session
         if "sort" not in session:
-            session["sort"] = "addition_date"
+            self.request.session["sort"] = "addition_date"
         if "recommendation" not in session:
-            session["recommendation"] = False
+            self.request.session["recommendation"] = False
         if "mode" not in session:
-            session["mode"] = "full"
-        self.session = session
+            self.request.session["mode"] = "full"
 
     def _filter_out_provider_records(self, provider_records: ListType[ProviderRecord]) -> None:
         request: AuthenticatedHttpRequest = self.request  # type: ignore
@@ -243,54 +242,50 @@ class ListView(TemplateAnonymousView):
                 self._filter_out_provider_records(provider_records)
                 record.provider_records = provider_records
 
-    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+    def get_context_data(self, **kwargs: Any) -> ListViewContextData:  # type: ignore
         """Get context data."""
-        list_name: str = kwargs["list_name"]
+        list_name: ListKeyName = kwargs["list_name"]
         username: Optional[str] = kwargs.get("username")
         self.check_if_allowed(username)
         request: HttpRequest = self.request  # type: ignore
         user = request.user if self.anothers_account is None else self.anothers_account
         records = get_records(list_name, user)
         # Session is supposed to be initialized at that point.
-        if self.session:
-            session = self.session
-            query = request.GET.get("query", "")
-            if query:
-                query = query.strip()
-                records = self._filter_records(records, query)
-            records = self._sort_records(records, session["sort"], username, list_name)
+        session = self.request.session
+        query = request.GET.get("query", "")
+        if query:
+            query = query.strip()
+            records = self._filter_records(records, query)
+        records = self._sort_records(records, session["sort"], username, list_name)
 
-            if username and session["recommendation"]:
-                records = self._filter_records_for_recommendation(records, user)
+        if username and session["recommendation"]:
+            records = self._filter_records_for_recommendation(records, user)
 
-            if username:
-                list_data = self._get_list_data(records)
-            else:
-                list_data = None
-
-            if not username and list_name == "to-watch" and records:
-                comments_and_ratings = self._get_comments_and_ratings(
-                    list(records.values_list("id", "movie_id")), user
-                )
-            else:
-                comments_and_ratings = None
-            if request.user.is_authenticated and request.user.is_country_supported:
-                prefetch_related_objects(records, "movie__provider_records__provider")
-                self._inject_provider_records(records)
-            records_: Page[Record] = paginate(  # type: ignore
-                records, request.GET.get("page"), settings.RECORDS_ON_PAGE
-            )
-            return {
-                "records": records_,
-                "reviews": comments_and_ratings,
-                "list_id": List.objects.get(key_name=list_name).pk,
-                "list": list_name,
-                "anothers_account": self.anothers_account,
-                "list_data": json.dumps(list_data),
-                "sort": session["sort"],
-                "query": query,
-            }
-        return {}
+        if username:
+            list_data = self._get_list_data(records)
+        else:
+            list_data = None
+        # Commented out because friends functionality is disabled.
+        # if not username and list_name == "to-watch" and records:
+        #     comments_and_ratings = self._get_comments_and_ratings(
+        #         list(records.values_list("id", "movie_id")), user
+        #     )
+        # else:
+        #     comments_and_ratings = None
+        if request.user.is_authenticated and request.user.is_country_supported:
+            prefetch_related_objects(records, "movie__provider_records__provider")
+            self._inject_provider_records(records)
+        records_: Page[Record] = paginate(records, request.GET.get("page"), settings.RECORDS_ON_PAGE)  # type: ignore
+        return {
+            "records": records_,
+            "list_id": List.objects.get(key_name=list_name).pk,
+            "list": list_name,
+            "anothers_account": self.anothers_account,
+            "list_data": json.dumps(list_data),
+            "sort": session["sort"],
+            "query": query,
+            # "reviews": comments_and_ratings,
+        }
 
     def get(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:  # type: ignore
         """Get."""
@@ -298,50 +293,54 @@ class ListView(TemplateAnonymousView):
         return super().get(request, *args, **kwargs)
 
 
-class RecommendationsView(TemplateView, ListView):
-    """Recommendations view."""
+# Commented out because friends functionality is disabled.
+# class RecommendationsView(TemplateView, ListView):
+#     """Recommendations view."""
 
-    template_name = "list/recommendations.html"
+#     template_name = "list/recommendations.html"
 
-    @staticmethod
-    def _filter_duplicated_movies_and_limit(
-        records: QuerySet[Record],
-    ) -> Tuple[ListType[Record], ListType[Tuple[int, int]]]:
-        """Filter duplicated movies and limit."""
-        records_output = []
-        movies = []
-        records_and_movies_ids = []
-        for record in records:
-            if record.movie.pk not in movies:
-                records_output.append(record)
-                records_and_movies_ids.append((record.pk, record.movie.pk))
-                if len(records_output) == settings.MAX_RECOMMENDATIONS:
-                    break
-                movies.append(record.movie.pk)
-        return (records_output, records_and_movies_ids)
+#     @staticmethod
+#     def _filter_duplicated_movies_and_limit(
+#         records: QuerySet[Record],
+#     ) -> Tuple[ListType[Record], ListType[Tuple[int, int]]]:
+#         """Filter duplicated movies and limit."""
+#         records_output = []
+#         movies = []
+#         records_and_movies_ids = []
+#         for record in records:
+#             if record.movie.pk not in movies:
+#                 records_output.append(record)
+#                 records_and_movies_ids.append((record.pk, record.movie.pk))
+#                 if len(records_output) == settings.MAX_RECOMMENDATIONS:
+#                     break
+#                 movies.append(record.movie.pk)
+#         return (records_output, records_and_movies_ids)
 
-    def _get_recommendations_from_friends(self, friends: QuerySet[User]) -> QuerySet[Record]:
-        """Get recommendations from friends."""
-        user: User = self.request.user  # type: ignore
-        # Exclude own records and include only friends' records.
-        records = Record.objects.exclude(user=user).filter(user__in=friends).select_related("movie")
-        # Order records by user rating and by IMDb rating.
-        records = records.order_by("-rating", "-movie__imdb_rating", "-movie__release_date")
-        return self._filter_records_for_recommendation(records, user)
+#     def _get_recommendations_from_friends(self, friends: QuerySet[User]) -> QuerySet[Record]:
+#         """Get recommendations from friends."""
+#         user: User = self.request.user  # type: ignore
+#         # Exclude own records and include only friends' records.
+#         records = Record.objects.exclude(user=user).filter(user__in=friends).select_related("movie")
+#         # Order records by user rating and by IMDb rating.
+#         records = records.order_by("-rating", "-movie__imdb_rating", "-movie__release_date")
+#         return self._filter_records_for_recommendation(records, user)
 
-    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:  # pylint: disable=unused-argument
-        """Get context data."""
-        request: AuthenticatedHttpRequest = self.request  # type: ignore
-        user = request.user
-        friends = user.get_friends()
-        records_qs = self._get_recommendations_from_friends(friends)
-        records, records_and_movies_ids = self._filter_duplicated_movies_and_limit(records_qs)
-        reviews = self._get_comments_and_ratings(records_and_movies_ids, user)
-        return {"records": records, "reviews": reviews}
+#     def get_context_data(self, **kwargs: Any) -> RecommendationsViewContextData:  # type: ignore  # pylint: disable=unused-argument
+#         """Get context data."""
+#         request: AuthenticatedHttpRequest = self.request  # type: ignore
+#         user = request.user
+#         friends = user.get_friends()
+#         records_qs = self._get_recommendations_from_friends(friends)
+#         records, records_and_movies_ids = self._filter_duplicated_movies_and_limit(records_qs)
+#         # reviews = self._get_comments_and_ratings(records_and_movies_ids, user)
+#         return {
+#             "records": records,
+#             # "reviews": reviews
+#         }
 
-    def get(self, request: AuthenticatedHttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:  # type: ignore
-        """Get."""
-        has_friends = request.user.has_friends()
-        if not has_friends:
-            raise Http404
-        return super().get(request, *args, **kwargs)
+#     def get(self, request: AuthenticatedHttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:  # type: ignore
+#         """Get."""
+#         has_friends = request.user.has_friends()
+#         if not has_friends:
+#             raise Http404
+#         return super().get(request, *args, **kwargs)
