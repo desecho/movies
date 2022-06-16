@@ -438,6 +438,12 @@ prod-load-db: prod-drop-db prod-create-db
 	source $(DB_ENV_PROD_FILE) && \
 	scripts/load_db.sh
 
+.PHONY: prod-connect-db
+## Connect to prod db
+prod-connect-db:
+	source $(DB_ENV_PROD_FILE) && \
+	scripts/connect_db.sh
+
 ifeq (prod-manage,$(firstword $(MAKECMDGOALS)))
   # Use the rest as arguments
   PROD_MANAGE_ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
