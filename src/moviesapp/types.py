@@ -32,6 +32,12 @@ class WatchDataRecord(TypedDict):
     country: str
 
 
+class ProviderRecordType(WatchDataRecord, total=False):
+    """Provider record."""
+
+    id: int
+
+
 class ContextVariables(TypedDict):
     """Context variables."""
 

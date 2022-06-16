@@ -1,6 +1,6 @@
 """Update watch data."""
 import sys
-from typing import Any, Dict, List as ListType, Optional, Union
+from typing import Any, List as ListType, Optional
 
 from django.conf import settings
 from django.core.management.base import CommandParser
@@ -11,6 +11,7 @@ from sentry_sdk import capture_exception
 from moviesapp.exceptions import ProviderNotFoundError
 from moviesapp.models import List, Movie, ProviderRecord, Record
 from moviesapp.tmdb import get_watch_data
+from moviesapp.types import ProviderRecordType, WatchDataRecord
 
 
 class Command(BaseCommand):
@@ -51,8 +52,8 @@ class Command(BaseCommand):
 
     @staticmethod
     def _remove_no_longer_available_provider_records(
-        existing_provider_records: ListType[Dict[str, Union[str, int]]],
-        watch_data: ListType[Dict[str, Union[str, int]]],
+        existing_provider_records: ListType[ProviderRecordType],
+        watch_data: ListType[WatchDataRecord],
     ) -> bool:
         """Remove provider records that are no longer available."""
         removed = False
@@ -66,8 +67,8 @@ class Command(BaseCommand):
 
     @staticmethod
     def _filter_out_already_existing_provider_records(
-        existing_provider_records: ListType[Dict[str, Union[str, int]]],
-        watch_data: ListType[Dict[str, Union[str, int]]],
+        existing_provider_records: ListType[ProviderRecordType],
+        watch_data: ListType[WatchDataRecord],
     ) -> None:
         """
         Filter out already existing provider records.
