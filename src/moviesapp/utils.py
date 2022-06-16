@@ -22,13 +22,13 @@ def merge_movie_data(movie_data_tmdb: TmdbMovieProcessed, movie_data_omdb: OmdbM
         "title_ru": movie_data_tmdb["title_ru"],
         "description_en": movie_data_tmdb["description_en"],
         "description_ru": movie_data_tmdb["description_ru"],
+        "runtime": movie_data_tmdb["runtime"],
         "writer": movie_data_omdb["writer"],
         "director": movie_data_omdb["director"],
         "actors": movie_data_omdb["actors"],
         "genre": movie_data_omdb["genre"],
         "country": movie_data_omdb["country"],
         "imdb_rating": movie_data_omdb["imdb_rating"],
-        "runtime": movie_data_omdb["runtime"],
     }
 
 

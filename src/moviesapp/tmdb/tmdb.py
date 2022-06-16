@@ -1,7 +1,7 @@
 """TMDB."""
 
 from collections import abc
-from datetime import date, datetime
+from datetime import date, datetime, time, timedelta
 from typing import List, Optional
 from urllib.parse import urljoin
 
@@ -159,6 +159,12 @@ def _get_movie_data(tmdb_movie: tmdb.Movies, lang: str) -> TmdbMovie:
     return movie
 
 
+def _get_time_from_min(minutes: Optional[int]) -> Optional[time]:
+    if minutes:
+        return (datetime(1900, 1, 1) + timedelta(minutes=minutes)).time()
+    return None
+
+
 def get_tmdb_movie_data(tmdb_id: int) -> TmdbMovieProcessed:
     """Get TMDB movie data."""
     tmdb_movie = tmdb.Movies(tmdb_id)
@@ -183,6 +189,7 @@ def get_tmdb_movie_data(tmdb_id: int) -> TmdbMovieProcessed:
         "title_ru": movie_info_ru["title"],
         "description_en": movie_info_en["overview"],
         "description_ru": movie_info_ru["overview"],
+        "runtime": _get_time_from_min(movie_info_en["runtime"]),
     }
 
 

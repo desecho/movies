@@ -50,7 +50,6 @@ class OmdbMoviePreprocessed(TypedDict):
     Genre: Optional[str]
     Country: Optional[str]
     imdbRating: Optional[str]
-    Runtime: Optional[str]
 
 
-OmdbMoviePreprocessedKey = Literal["Writer", "Actors", "Director", "Genre", "Country", "imdbRating", "Runtime"]
+OmdbMoviePreprocessedKey = Literal["Writer", "Actors", "Director", "Genre", "Country", "imdbRating"]

@@ -1,7 +1,7 @@
 """Custom Types."""
 from __future__ import annotations
 
-from datetime import date, datetime
+from datetime import date, time
 from typing import Any, Dict, List, Literal, Optional, Tuple, TypeAlias
 
 from typing_extensions import NotRequired, TypedDict
@@ -107,6 +107,7 @@ class TmdbMovieProcessed(TypedDict):
     title_ru: str
     description_en: Optional[str]
     description_ru: Optional[str]
+    runtime: Optional[time]
 
 
 class OmdbMovieProcessed(TypedDict):
@@ -118,7 +119,6 @@ class OmdbMovieProcessed(TypedDict):
     genre: Optional[str]
     country: Optional[str]
     imdb_rating: Optional[str]
-    runtime: Optional[datetime]
 
 
 class MovieTmdbOmdb(TmdbMovieProcessed, OmdbMovieProcessed):
