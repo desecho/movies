@@ -187,8 +187,8 @@ def get_tmdb_movie_data(tmdb_id: int) -> TmdbMovieProcessed:
         "trailers_ru": _get_trailers(tmdb_movie, lang=settings.LANGUAGE_RU),
         "title_en": movie_info_en["title"],
         "title_ru": movie_info_ru["title"],
-        "description_en": movie_info_en["overview"],
-        "description_ru": movie_info_ru["overview"],
+        "overview_en": movie_info_en["overview"],
+        "overview_ru": movie_info_ru["overview"],
         "runtime": _get_time_from_min(movie_info_en["runtime"]),
     }
 

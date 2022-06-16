@@ -233,7 +233,7 @@ class Movie(Model):
     title = CharField(max_length=255)
     title_original = CharField(max_length=255)
     country = CharField(max_length=255, null=True, blank=True)
-    description = TextField(null=True, blank=True)
+    overview = TextField(null=True, blank=True)
     director = CharField(max_length=255, null=True, blank=True)
     writer = CharField(max_length=255, null=True, blank=True)
     genre = CharField(max_length=255, null=True, blank=True)

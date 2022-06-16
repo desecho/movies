@@ -105,8 +105,8 @@ class TmdbMovieProcessed(TypedDict):
     trailers_ru: List[TmdbTrailer]
     title_en: str
     title_ru: str
-    description_en: Optional[str]
-    description_ru: Optional[str]
+    overview_en: Optional[str]
+    overview_ru: Optional[str]
     runtime: Optional[time]
 
 

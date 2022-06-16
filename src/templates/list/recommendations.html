@@ -43,8 +43,8 @@
           {% if record.movie.runtime %} <span class="item-desc">{% trans 'Runtime' %}:</span>
             {{ record.movie.runtime|date:'H:i' }}<br>
           {% endif %}
-          {% if record.movie.description %} <span class="item-desc">{% trans 'Description' %}:</span>
-            {{ record.movie.description }}<br>
+          {% if record.movie.overview %} <span class="item-desc">{% trans 'Overview' %}:</span>
+            {{ record.movie.overview }}<br>
           {% endif %}
           {% if record.movie.homepage %}
             <a href="{{ record.movie.homepage }}" target="_blank">{% trans 'Website' %}</a><br>
