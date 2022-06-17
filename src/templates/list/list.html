@@ -247,9 +247,9 @@
               </div>
             </div>
             <div class="clearfix"></div>
-            {% if list == 'to-watch' and not anothers_account %}
+            {% comment %} {% if list == 'to-watch' and not anothers_account %}
               {% include 'includes/reviews.html' %}
-            {% endif %}
+            {% endif %} {% endcomment %}
           </div>
         {% endfor %}
       {% endwith %}
