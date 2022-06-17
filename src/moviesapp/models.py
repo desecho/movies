@@ -1,6 +1,6 @@
 """Models."""
 import json
-from datetime import date, timedelta
+from datetime import timedelta
 from typing import Any, List as ListType, Optional
 from urllib.parse import urljoin
 
@@ -36,6 +36,7 @@ from .fb import Fb
 from .http import HttpRequest
 from .tmdb import get_poster_url, get_tmdb_url
 from .types import TmdbTrailer, Trailer, TrailerSite, WatchDataRecord
+from .utils import is_movie_released
 from .vk import Vk, VkError
 
 
@@ -270,7 +271,7 @@ class Movie(Model):
     @property
     def is_released(self) -> bool:
         """Return True if movie is released."""
-        return self.release_date is not None and self.release_date <= date.today()
+        return is_movie_released(self.release_date)
 
     @property
     def is_watch_data_updated_recently(self) -> bool:

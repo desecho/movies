@@ -15,7 +15,7 @@ from ..models import List, Movie, User
 from ..tasks import load_and_save_watch_data_task
 from ..tmdb import TmdbNoImdbIdError, get_poster_url, get_tmdb_url, search_movies
 from ..types import MovieSearchResult, SearchOptions, SearchType, TmdbMovieSearchResultProcessed
-from ..utils import load_movie_data
+from ..utils import is_movie_released, load_movie_data
 from .mixins import AjaxAnonymousView, AjaxView, TemplateAnonymousView
 from .utils import add_movie_to_list
 
@@ -77,14 +77,16 @@ class SearchMovieView(AjaxAnonymousView):
             if popular_only and not self._is_popular_movie(tmdb_movie["popularity"]):
                 continue
             tmdb_id = tmdb_movie["id"]
+            release_date = tmdb_movie["release_date"]
             movie: MovieSearchResult = {
                 "id": tmdb_id,
                 "tmdbLink": get_tmdb_url(tmdb_id),
                 "elementId": f"movie{tmdb_id}",
-                "releaseDate": self._format_date(tmdb_movie["release_date"]),
+                "releaseDate": self._format_date(release_date),
                 "title": tmdb_movie["title"],
                 "poster": get_poster_url("small", poster),
                 "poster2x": get_poster_url("normal", poster),
+                "isReleased": is_movie_released(release_date),
             }
             movies.append(movie)
         return movies

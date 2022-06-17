@@ -87,6 +87,7 @@ class MovieSearchResult(TypedDict):
     title: str
     poster: Optional[str]
     poster2x: Optional[str]
+    isReleased: bool
 
 
 class TmdbTrailer(TypedDict):

@@ -1,5 +1,8 @@
 """Utils."""
 
+from datetime import date
+from typing import Optional
+
 from .omdb import get_omdb_movie_data
 from .tmdb import get_tmdb_movie_data
 from .types import MovieTmdbOmdb, OmdbMovieProcessed, TmdbMovieProcessed
@@ -37,3 +40,8 @@ def load_movie_data(tmdb_id: int) -> MovieTmdbOmdb:
     movie_data_tmdb = get_tmdb_movie_data(tmdb_id)
     movie_data_omdb = get_omdb_movie_data(movie_data_tmdb["imdb_id"])
     return merge_movie_data(movie_data_tmdb, movie_data_omdb)
+
+
+def is_movie_released(release_date: Optional[date]) -> bool:
+    """Return True if the movie is released."""
+    return release_date is not None and release_date <= date.today()
