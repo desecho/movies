@@ -123,9 +123,7 @@ jobs:
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
       - name: Flush CDN cache
-        run: |
-          CDN_ID="$(doctl compute cdn list | grep "$SPACE_NAME" | awk '{print $1}')"
-          doctl compute cdn flush "$CDN_ID"
+        run: make flush-cdn-cache
   restart_app:
     name: Restart app
     uses: ./.github/workflows/reusable_restart_app.yaml
