@@ -104,7 +104,7 @@ jobs:
         run: make yarn-install-locked
 
       - name: Run yarn build
-        run: make yarn-build
+        run: make yarn-build-prod
 
       - name: Collect static files
         run: |
