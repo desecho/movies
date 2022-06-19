@@ -22,4 +22,4 @@ export DB_HOST=127.0.0.1
 # bool
 export IS_CELERY_DEBUG=True
 export DJANGO_SETTINGS_MODULE=movies.settings
-export REDIS_URL=
+export REDIS_URL=redis://localhost:6379/
