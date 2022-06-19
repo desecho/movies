@@ -7,7 +7,6 @@ on:
         description: 'Movie ID'
         required: true
         type: string
-
 jobs:
   update_movie_data:
     name: Update movie data starting from movie ID
