@@ -1,0 +1,71 @@
+---
+name: Reusable Test
+on:
+  workflow_call:
+jobs:
+  reusable_test:
+    name: Run tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: '3.10'
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+          registry-url: https://registry.npmjs.org
+
+      - name: Use npm cache
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: npm
+
+      - name: Use node_modules cache
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: node_modules-${{ hashFiles('package-test.json') }}
+          restore-keys: |
+            node_modules-
+
+      - name: Use pip cache
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pip
+          key: pip
+
+      - name: Use tox cache
+        uses: actions/cache@v3
+        with:
+          path: .tox
+          key: tox-${{ hashFiles('requirements.txt', 'requirements-dev.txt', 'requirements-additional.txt') }}
+
+      - name: Install linters binaries
+        run: make install-linters-binaries
+
+      - name: Install shellcheck
+        run: sudo apt install shellcheck -y
+
+      - name: Install tox
+        run: pip install tox
+
+      - name: Install python requirements
+        run: tox -e py-requirements
+
+      - name: Install js dependencies
+        run: |
+          mv package-test.json package.json
+          npm install
+
+      - name: Run tests
+        run: make test
+
+      - name: Run codecov
+        uses: codecov/codecov-action@v3
