@@ -8,7 +8,6 @@ const vendorPackages = ['vue-flash-message/dist/vue-flash-message.min.css',
   'bootstrap/dist/css/bootstrap.min.css', 'axios-progress-bar/dist/nprogress.css', 'popper.js/dist/umd/popper.min.js',
   'bootstrap-social/bootstrap-social.css', 'jquery/dist/jquery.min.js',
   'retinajs/dist/retina.min.js', 'raty-js/lib/jquery.raty.css',
-  'autosize/dist/autosize.min.js',
 ];
 
 function getBundle(filename) {
@@ -77,7 +76,6 @@ module.exports = {
       'Tether': 'tether',
       'Popper': 'popper.js',
       'window.Tether': 'tether',
-      'autosize': 'autosize',
       'Alert': 'exports-loader?Alert!bootstrap/js/dist/alert',
       'Button': 'exports-loader?Button!bootstrap/js/dist/button',
       'Carousel': 'exports-loader?Carousel!bootstrap/js/dist/carousel',

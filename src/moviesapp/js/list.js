@@ -1,5 +1,4 @@
 /* global VK:false */
-/* global autosize:false */
 
 'use strict';
 
@@ -12,7 +11,7 @@ import {
   addToList,
   setViewedIconAndRemoveButtons,
 } from './list_helpers';
-
+import autosize from 'autosize';
 
 function activateModeMinimal() {
   $('.poster, .comment, .comment-button, .release-date-label').hide();
