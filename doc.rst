@@ -43,7 +43,6 @@ Deployment is automatically done in master branch.
 
 The following GitHub Actions are used:
 
-* `Cancel Workflow Action`_
 * Checkout_
 * `Setup Python`_
 * `Setup Node.js environment`_
@@ -60,7 +59,6 @@ The following GitHub Actions are used:
 
 .. _GitHub Actions: https://github.com/features/actions
 
-.. _Cancel Workflow Action: https://github.com/marketplace/actions/cancel-workflow-action
 .. _Checkout: https://github.com/marketplace/actions/checkout
 .. _Setup Python: https://github.com/marketplace/actions/setup-python
 .. _Setup Node.js environment: https://github.com/marketplace/actions/setup-node-js-environment

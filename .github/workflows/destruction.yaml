@@ -8,11 +8,6 @@ jobs:
     env:
       PROJECT: movies
     steps:
-      - name: Cancel previous runs
-        uses: styfle/cancel-workflow-action@0.9.1
-        with:
-          access_token: ${{ github.token }}
-
       - name: Checkout code
         uses: actions/checkout@v3
 
@@ -33,3 +28,5 @@ jobs:
           kubectl delete -f deployment/ingress.yaml --ignore-not-found
           kubectl delete -f deployment/service.yaml --ignore-not-found
           kubectl delete secret "$PROJECT" --ignore-not-found
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
