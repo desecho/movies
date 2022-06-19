@@ -210,7 +210,7 @@ class UserAnonymous(AnonymousUser, UserBase):
         super().__init__()
 
 
-class List(Model):
+class List(Model):  # type: ignore
     """List."""
 
     WATCHED = 1
@@ -228,7 +228,7 @@ class List(Model):
         return list_id in [cls.WATCHED, cls.TO_WATCH]
 
 
-class Movie(Model):
+class Movie(Model):  # type: ignore
     """Movie."""
 
     title = CharField(max_length=255)
@@ -437,7 +437,7 @@ class Record(Model):
         super().save(*args, **kwargs)
 
 
-class Action(Model):
+class Action(Model):  # type: ignore
     """Action."""
 
     ADDED_MOVIE = 1
