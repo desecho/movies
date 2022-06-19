@@ -47,12 +47,12 @@ class Command(BaseCommand):
 
     def handle(
         self,
-        movie_id: Optional[int],
-        start_from_id: bool,
         *args: Any,
         **options: Any,  # pylint: disable=unused-argument
     ) -> None:
         """Execute command."""
+        movie_id: Optional[int] = options["movie_id"]
+        start_from_id: bool = options["start_from_id"]
         movies = Movie.filter(movie_id, start_from_id)
         movies_total = movies.count()
         # We don't want a progress bar if we just have one movie to process

@@ -80,10 +80,10 @@ class Command(BaseCommand):
                 # Don't create a record if it already exists.
                 watch_data.remove(provider_record)
 
-    def handle(
-        self, movie_id: Optional[int], minimal: bool, *args: Any, **options: Any
-    ) -> None:  # pylint: disable=unused-argument
+    def handle(self, *args: Any, **options: Any) -> None:  # pylint: disable=unused-argument
         """Execute command."""
+        movie_id: Optional[int] = options["movie_id"]
+        minimal: bool = options["minimal"]
         if minimal and not movie_id:
             records: QuerySet[Record] = Record.objects.filter(
                 list_id=List.TO_WATCH, movie__release_date__isnull=False, user__country__isnull=False
