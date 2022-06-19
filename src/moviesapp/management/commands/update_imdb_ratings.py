@@ -22,7 +22,7 @@ class Command(BaseCommand):
                 movie_info = movie.cli_string(last_movie.pk)
                 tqdm.set_description(movie_info)
                 movie_data = get_omdb_movie_data(movie.imdb_id)
-                new_rating = movie_data.get("imdbRating")
+                new_rating = movie_data["imdb_rating"]
                 if new_rating:
                     old_rating = str(movie.imdb_rating)
                     if old_rating != new_rating:
