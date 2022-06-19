@@ -302,7 +302,7 @@ window.vm = new Vue({
 });
 
 const ratyCustomSettings = {
-  readOnly: vars.anothersAccount || vars.listId == 2,
+  readOnly: vars.anothersAccount || vars.listId == vars.listToWatchId,
   click: function(score) {
     if (!score) {
       score = 0;
