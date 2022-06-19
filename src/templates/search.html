@@ -41,9 +41,9 @@
         <div class="title">[[ movie.title ]]
           <div class="add-to-list-buttons">
             <a href="javascript:void(0)" title="{% trans 'Add to the list' %} {% trans 'Watched' %}"
-               @click="addToListFromDb(movie, listWatchedId)" v-show="movie.isReleased"><i class="fa fa-eye"></i></a>
+               @click="addToListFromDb(movie, listWatchedId)" v-show="movie.isReleased"><font-awesome-icon icon="fa-solid fa-eye" /></a>
             <a href="javascript:void(0)" title="{% trans 'Add to the list' %} {% trans 'To Watch' %}"
-               @click="addToListFromDb(movie, listToWatchId)"><i class="fa fa-eye-slash"></i></a>
+               @click="addToListFromDb(movie, listToWatchId)"><font-awesome-icon icon="fa-solid fa-eye-slash" /></a>
           </div>
         </div>
         <div class="details" v-show="movie.releaseDate">

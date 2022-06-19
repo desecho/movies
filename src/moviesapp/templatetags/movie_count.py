@@ -9,6 +9,10 @@ from ..models import User
 register = template.Library()
 
 
+def _get_icon(name: str) -> str:
+    return f'<span><font-awesome-icon icon="fa-solid {name}" /></span>'
+
+
 @register.simple_tag
 def movie_count(user: User) -> SafeString:
     """Get movie count HTML snippet."""
@@ -16,7 +20,9 @@ def movie_count(user: User) -> SafeString:
     to_watch = _("To Watch")
     watched_number = user.movies_watched_number
     to_watch_number = user.movies_to_watch_number
+    icon_eye = _get_icon("fa-eye")
+    icon_eye_slash = _get_icon("fa-eye-slash")
     return mark_safe(  # nosec
-        f'<span title="{watched}" class="mr-2"><i class="fa fa-eye"></i> {watched_number}</span> '
-        f'<span title="{to_watch}"><i class="fa fa-eye-slash"></i> {to_watch_number}</span>'
+        f'<span title="{watched}" class="mr-2">{icon_eye} {watched_number}</span> '
+        f'<span title="{to_watch}">{icon_eye_slash} {to_watch_number}</span>'
     )

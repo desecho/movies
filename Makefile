@@ -249,6 +249,11 @@ yarn-install-refresh:
 yarn-build:
 	yarn build
 
+.PHONY: yarn-build-prod
+## Run yarn build for prod
+yarn-build-prod:
+	yarn build-prod
+
 .PHONY: build
 ## Run yarn build for development
 build:

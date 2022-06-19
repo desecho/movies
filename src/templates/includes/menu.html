@@ -8,7 +8,7 @@
           aria-label="{% trans 'Toggle navigation' %}">
     <span class="navbar-toggler-icon"></span>
   </button>
-  <a class="navbar-brand" href="#"><i class="fa fa-film"></i></a>
+  <a class="navbar-brand" href="#"><font-awesome-icon icon="fa-solid fa-film" /></i></a>
   <div class="collapse navbar-collapse" id="navbarNavDropdown">
     <ul class="navbar-nav mr-auto">
       {% for item in menus.main %}
@@ -31,26 +31,37 @@
     </ul>
     <ul class="navbar-nav">
       {% if user.is_vk_user %}
-        <li class="nav-item vk-app-show" style="display: none;"><a id="invite" href="javascript:void(0)"
-                                                                   class="nav-link"
-                                                                   @click="invite"><i
-          class="fa fa-envelope-o"></i></a></li>
+        <li class="nav-item vk-app-show" style="display: none;">
+          <a id="invite" href="javascript:void(0)" class="nav-link" @click="invite">
+            <font-awesome-icon icon="fa-solid fa-envelope-open" />
+          </a>
+        </li>
       {% endif %}
       {% if user.is_authenticated %}
-        <li class="nav-item"><a href="{% url 'preferences' %}" class="nav-link"><i class="fa fa-cog"></i></a></li>
-        <li style="display: none;" class="vk-app-hide nav-item"><a href="{% url 'logout' %}" class="nav-link"><i
-          class="fa fa-sign-out"></i></a></li>
+        <li class="nav-item">
+          <a href="{% url 'preferences' %}" class="nav-link">
+            <font-awesome-icon icon="fa-solid fa-gear" />
+          </a>
+        </li>
+        <li style="display: none;" class="vk-app-hide nav-item">
+          <a href="{% url 'logout' %}" class="nav-link">
+            <font-awesome-icon icon="fa-solid fa-sign-out" />
+          </a>
+        </li>
       {% else %}
         {% get_current_language as LANGUAGE_CODE %}
         <li class="nav-item">
-          <a class="nav-link" href="javascript:void(0)" @click="changeLanguage">{% if LANGUAGE_CODE == 'en' %}
-            Русский{% else %}English{% endif %}</a>
+          <a class="nav-link" href="javascript:void(0)" @click="changeLanguage">
+            {% if LANGUAGE_CODE == 'en' %}Русский{% else %}English{% endif %}
+          </a>
         </li>
         <form id="language-form" action="{% url 'set_language' %}" method="post">
           {% csrf_token %}
           <input name="language" type="hidden" value="{% if LANGUAGE_CODE == 'en' %}ru{% else %}en{% endif %}"/>
         </form>
-        <li class="nav-item"><a href="{% url 'login' %}" class="nav-link"><i class="fa fa-sign-in"></i></a></li>
+        <li class="nav-item">
+          <a href="{% url 'login' %}" class="nav-link"><font-awesome-icon icon="fa-solid fa-sign-in" /></a>
+        </li>
       {% endif %}
     </ul>
   </div>

@@ -4,8 +4,7 @@ Documentation
 Npm module dependencies
 ------------------------
 * ``tether``, ``jquery`` and ``popper.js`` are ``bootstrap`` dependencies
-* ``node-sass`` is  a dependency of ``sass-loader``
-* ``less`` is a dependency of ``less-loader`` which is a dependency of ``font-awesome-webpack``
+* ``sass`` is  a dependency of ``sass-loader``
 
 Celery
 ---------

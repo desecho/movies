@@ -14,3 +14,7 @@
     {% bootstrap_paginate users range=5 show_prev_next='true' show_first_last='true' alignment='left' %}
   {% endif %}
 {% endblock %}
+
+{% block js %}
+  <script src="{% static 'js/emptyApp.js' %}"></script>
+{% endblock %}

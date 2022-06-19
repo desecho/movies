@@ -22,7 +22,7 @@
       <div class="form-group">
         <div class="col-sm-offset-2">
           <a href="{% url 'social:begin' 'facebook' %}" class="btn btn-block btn-social btn-facebook">
-            <span class="fa fa-facebook"></span> {% trans 'Log in with' %} Facebook
+            <span><font-awesome-icon icon="fa-brands fa-facebook" /></span> {% trans 'Log in with' %} Facebook
           </a>
         </div>
       </div>
@@ -30,7 +30,7 @@
     <div class="form-group">
       <div class="col-sm-offset-2">
         <a href="{% url 'social:begin' 'vk-oauth2' %}" class="btn btn-block btn-social btn-vk">
-          <span class="fa fa-vk"></span> {% trans 'Log in with' %} VK
+          <span><font-awesome-icon icon="fa-brands fa-vk" /></span> {% trans 'Log in with' %} VK
         </a>
       </div>
     </div>
@@ -46,4 +46,8 @@
     </div>
     </div>
   </form>
+{% endblock %}
+
+{% block js %}
+  <script src="{% static 'js/emptyApp.js' %}"></script>
 {% endblock %}

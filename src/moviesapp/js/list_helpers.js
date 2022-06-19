@@ -33,7 +33,8 @@ export function setViewedIconAndRemoveButtons(recordId, listId) {
       icon = '-slash';
       title = gettext('To Watch');
     }
-    const html = ` <i class="fa fa-eye${icon}" title=${title}></i> `;
+    // TODO fix this:
+    const html = ` <font-awesome-icon icon="fa-solid fa-eye${icon}" title=${title} /> `;
     return $('#record' + recordId).children('.title').prepend(html);
   }
 

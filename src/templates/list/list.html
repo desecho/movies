@@ -100,7 +100,7 @@
     </div>
 
     {% if query %}
-      <h3>{{ query }}: <a href="{{ request.path }}"><i class="fa fa-times" aria-hidden="true"></i></a></h3>
+      <h3>{{ query }}: <a href="{{ request.path }}"><font-awesome-icon icon="fa-solid fa-xmark" /></a></h3>
     {% endif %}
 
     <div class="results col-sm-12 col-md-10 col-lg-8" v-cloak>
@@ -113,13 +113,13 @@
               {% if not anothers_account %}
                 <a href="javascript:void(0)" title="{% trans 'Delete' %}"
                                              @click="removeRecord({{ record.id }})">
-                   <i class="fa fa-trash-o"></i>
+                  <font-awesome-icon icon="fa-solid fa-trash" />
                 </a>
                 {% if is_vk_user %}
                   <a v-show="isVkApp" href="javascript:void(0)" class="wall-post"
                                       title="{% trans 'Post to the wall' %}"
                                       @click="postToWall({{ record.id }})">
-                    <i class="fa fa-share"></i>
+                    <font-awesome-icon icon="fa-solid fa-share" />
                   </a>
                 {% endif %}
               {% endif %}
@@ -192,7 +192,8 @@
                   <div>
                     {% for provider_record in record.provider_records %}
                       <a href="{{ provider_record.tmdb_watch_url }}" target="_blank">
-                        <img src="{{ provider_record.provider.logo }}" alt="{{ provider_record.provider }}" title="{{ provider_record.provider }}" class="provider" />
+                        <img src="{{ provider_record.provider.logo }}" alt="{{ provider_record.provider }}"
+                             title="{{ provider_record.provider }}" class="provider" />
                       </a>
                     {% endfor %}
                   </div>
@@ -208,7 +209,7 @@
                       <textarea class="form-control" title="{% trans 'Comment' %}"
                                 id="comment{{ record.id }}">{{ record.comment }}</textarea><br><br>
                       <button type="button" title="{% trans 'Save' %}" class="btn btn-secondary"
-                              @click="saveComment({{ record.id }})"><i class="fa fa-save"></i></button>
+                              @click="saveComment({{ record.id }})"><font-awesome-icon icon="fa-solid fa-save" /></button>
                       <br>
                     {% else %}
                       <p>{{ record.comment }}</p>
@@ -218,29 +219,35 @@
                     <button id="comment_area_button{{ record.id }}" type="button" title="{% trans 'Add comment' %}"
                             class="btn btn-secondary comment-button"
                             @click="toggleCommentArea({{ record.id }})"
-                      {% if record.comment %} style="display: none;" {% endif %}><i class="fa fa-comment"></i>
+                      {% if record.comment %} style="display: none;" {% endif %}><font-awesome-icon icon="fa-solid fa-comment" />
                     </button>
                   {% endif %}
                   <br>
                   {% if not anothers_account %}
                     <div v-show="mode == 'full'">
                       <label for="original_{{ record.id }}">{% trans 'Watched original version' %}</label>
-                      <input @change="saveOptions({{ record.id }})" id="original_{{ record.id }}" type="checkbox" {% if record.watched_original %} checked {% endif %}>
+                      <input @change="saveOptions({{ record.id }})" id="original_{{ record.id }}"
+                             type="checkbox" {% if record.watched_original %} checked {% endif %}>
                       <br>
                       <label for="extended_{{ record.id }}">{% trans 'Watched extended version' %}</label>
-                      <input @change="saveOptions({{ record.id }})" id="extended_{{ record.id }}" type="checkbox" {% if record.watched_extended %} checked {% endif %}>
+                      <input @change="saveOptions({{ record.id }})" id="extended_{{ record.id }}"
+                             type="checkbox" {% if record.watched_extended %} checked {% endif %}>
                       <br>
                       <label for="theatre_{{ record.id }}">{% trans 'Watched in theatre' %}</label>
-                      <input @change="saveOptions({{ record.id }})" id="theatre_{{ record.id }}" type="checkbox" {% if record.watched_in_theatre %} checked {% endif %}>
+                      <input @change="saveOptions({{ record.id }})" id="theatre_{{ record.id }}"
+                             type="checkbox" {% if record.watched_in_theatre %} checked {% endif %}>
                       <br>
                       <label for="hd_{{ record.id }}">{% trans 'Watched in HD' %}</label>
-                      <input @change="saveOptions({{ record.id }})" id="hd_{{ record.id }}" type="checkbox" {% if record.watched_in_hd %} checked {% endif %}>
+                      <input @change="saveOptions({{ record.id }})" id="hd_{{ record.id }}"
+                             type="checkbox" {% if record.watched_in_hd %} checked {% endif %}>
                       <br>
                       <label for="full_hd_{{ record.id }}">{% trans 'Watched in FullHD' %}</label>
-                      <input @change="saveOptions({{ record.id }})" id="full_hd_{{ record.id }}" type="checkbox" {% if record.watched_in_full_hd %} checked {% endif %}>
+                      <input @change="saveOptions({{ record.id }})" id="full_hd_{{ record.id }}"
+                             type="checkbox" {% if record.watched_in_full_hd %} checked {% endif %}>
                       <br>
                       <label for="4k_{{ record.id }}">{% trans 'Watched in 4K' %}</label>
-                      <input @change="saveOptions({{ record.id }})" id="4k_{{ record.id }}" type="checkbox" {% if record.watched_in_4k %} checked {% endif %}>
+                      <input @change="saveOptions({{ record.id }})" id="4k_{{ record.id }}"
+                             type="checkbox" {% if record.watched_in_4k %} checked {% endif %}>
                     </div>
                   {% endif %}
                 {% endif %}

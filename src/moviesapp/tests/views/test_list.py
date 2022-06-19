@@ -34,7 +34,7 @@ class ListTestCase(BaseTestLoginCase):
         soup = self.get_soup(response)
         counters = soup.find("div", id="movie-count").findAll("span")
         conter_watched = counters[0].get_text().strip()
-        conter_to_watch = counters[1].get_text().strip()
+        conter_to_watch = counters[2].get_text().strip()
         self.assertEqual(conter_watched, "3")
         self.assertEqual(conter_to_watch, "1")
 
