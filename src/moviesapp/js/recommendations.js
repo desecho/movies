@@ -1,25 +1,23 @@
 'use strict';
 
-import Vue from 'vue';
-import {
-  retina,
-} from './helpers';
-import {
-  addToList,
-} from './list_helpers';
+import {retina} from './helpers';
+import {addToList} from './list_helpers';
+import {newApp} from './app';
 
 
-window.vm = new Vue({
-  el: '#app',
-  data: {
-    listWatchedId: vars.listWatchedId,
-    listToWatchId: vars.listToWatchId,
+window.vm = newApp({
+  data() {
+    return {
+      listWatchedId: vars.listWatchedId,
+      listToWatchId: vars.listToWatchId,
+    };
   },
   methods: {
     retinajs: retina,
     addToList: addToList,
-  },
-});
+  }});
+
+window.vm.mount('#app');
 
 const settings = $.extend({
   readOnly: true,

@@ -1,11 +1,8 @@
 'use strict';
 
-import Vue from 'vue';
 import axios from 'axios';
-import {
-  retina,
-} from './helpers';
-
+import {retina, param} from './helpers';
+import {newApp} from './app';
 
 String.prototype.toTitleCase = function() { // eslint-disable-line no-extend-native
   return this.replace(/\w\S*/g, function(txt) {
@@ -13,21 +10,23 @@ String.prototype.toTitleCase = function() { // eslint-disable-line no-extend-nat
   });
 };
 
-window.vm = new Vue({
-  el: '#app',
-  data: {
-    searchType: gettext('Movie'),
-    searchTypeCode: 'movie',
-    language: vars.language,
-    query: '',
-    movies: [],
-    popularOnly: true,
-    sortByDate: false,
-    listWatchedId: vars.listWatchedId,
-    listToWatchId: vars.listToWatchId,
+window.vm = newApp({
+  data() {
+    return {
+      searchType: gettext('Movie'),
+      searchTypeCode: 'movie',
+      language: vars.language,
+      query: '',
+      movies: [],
+      popularOnly: true,
+      sortByDate: false,
+      listWatchedId: vars.listWatchedId,
+      listToWatchId: vars.listToWatchId,
+    };
   },
   methods: {
-    search: function() {
+    search() {
+      const vm = this;
       const options = {
         popularOnly: vm.popularOnly,
         sortByDate: vm.sortByDate,
@@ -37,38 +36,41 @@ window.vm = new Vue({
         type: vm.searchTypeCode,
         options: JSON.stringify(options),
       };
-      const url = urls.searchMovie + '?' + $.param(data);
+      const url = urls.searchMovie + '?' + param(data);
       axios.get(url).then(function(response) {
         const movies = response.data.movies;
         if (movies.length === 0) {
-          vm.flashInfo(gettext('Nothing has been found'));
+          vm.$toast.info(gettext('Nothing has been found'));
         }
         movies.forEach((m) => {
           m.hide = false;
         });
         vm.movies = movies;
       }).catch(function() {
-        vm.flashError(gettext('Search Error'));
+        vm.$toast.error(gettext('Search Error'));
       });
     },
     retinajs: retina,
-    addToListFromDb: function(movie, listId) {
+    addToListFromDb(movie, listId) {
+      const vm = this;
       axios.post(urls.addToListFromDb, {
         movieId: movie.id,
         listId: listId,
       }).then(function(response) {
         if (response.data.status === 'not_found') {
-          vm.flashError(gettext('Movie is not found in the database'));
+          vm.$toast.error(gettext('Movie is not found in the database'));
           return;
         }
         movie.hide = true;
       }).catch(function() {
-        vm.flashError(gettext('Error adding a movie'));
+        vm.$toast.error(gettext('Error adding a movie'));
       });
     },
-    changeSearchType: function(code) {
+    changeSearchType(code) {
+      const vm = this;
       vm.searchTypeCode = code;
       vm.searchType = gettext(code.toTitleCase());
     },
-  },
-});
+  }});
+
+window.vm.mount('#app');

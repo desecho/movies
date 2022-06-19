@@ -3,7 +3,7 @@ Movies
 
 |Deployment Status| |Requirements Status| |Codecov|
 
-| The web application on Django_ 4, Vue.js_ 2, Bootstrap_ 4, `Font Awesome`_ 6. Create movie lists "Watched" and "To Watch", rate movies, and add comments.
+| The web application on Django_ 4, Vue.js_ 3, Bootstrap_ 4, `Font Awesome`_ 6. Create movie lists "Watched" and "To Watch", rate movies, and add comments.
 | You can also add additional information such as if you watched the movie in the original version, in theatre, an extended version, in 4K, etc.
 | You can also see where you can stream movies.
 

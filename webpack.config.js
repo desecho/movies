@@ -4,7 +4,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const basePath = path.resolve(__dirname, 'src', 'moviesapp');
 const jsPath = path.join(basePath, 'js');
-const vendorPackages = ['vue-flash-message/dist/vue-flash-message.min.css',
+const vendorPackages = ['vue-toast-notification/dist/theme-default.css',
   'bootstrap/dist/css/bootstrap.min.css', 'axios-progress-bar/dist/nprogress.css', 'popper.js/dist/umd/popper.min.js',
   'bootstrap-social/bootstrap-social.css', 'jquery/dist/jquery.min.js',
   'retinajs/dist/retina.min.js', 'raty-js/lib/jquery.raty.css',
@@ -19,10 +19,19 @@ function getBundleWithRaty(filename) {
   return bundle.concat(getBundle(filename));
 }
 
-
 function getListBundle() {
   const bundle = ['raty-js/lib/jquery.raty.js', 'bootstrap/dist/js/bootstrap.min.js'];
   return bundle.concat(getBundle('list.js'));
+}
+
+function getFeedBundle() {
+  const bundle = getBundleWithRaty('feed.js');
+  return bundle.concat([path.join(jsPath, 'empty_app.js')]);
+}
+
+function getBundleWithEmptyApp(filename) {
+  const bundle = getBundle(filename);
+  return bundle.concat([path.join(jsPath, 'empty_app.js')]);
 }
 
 module.exports = {
@@ -31,20 +40,15 @@ module.exports = {
     list: getListBundle(),
     gallery: getBundle('gallery.js'),
     recommendations: getBundleWithRaty('recommendations.js'),
-    registration: getBundle('registration.js'),
-    passwordChange: getBundle('password_change.js'),
-    feed: getBundleWithRaty('feed.js'),
+    registration: getBundleWithEmptyApp('registration.js'),
+    passwordChange: getBundleWithEmptyApp('password_change.js'),
+    feed: getFeedBundle(),
     emptyApp: [path.join(jsPath, 'init.js'), path.join(jsPath, 'empty_app.js')],
     style: path.join(basePath, 'styles', 'styles.scss'),
     vendor: vendorPackages,
   },
   watchOptions: {
     poll: true,
-  },
-  resolve: {
-    alias: {
-      vue: 'vue/dist/vue.js',
-    },
   },
   output: {
     filename: 'js/[name].js',
@@ -69,6 +73,10 @@ module.exports = {
   },
   plugins: [
     new MiniCssExtractPlugin(),
+    new webpack.DefinePlugin({
+      __VUE_OPTIONS_API__: true,
+      __VUE_PROD_DEVTOOLS__: false,
+    }),
     new webpack.ProvidePlugin({
       '$': 'jquery',
       'jQuery': 'jquery',

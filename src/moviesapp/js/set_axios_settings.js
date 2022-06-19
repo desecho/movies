@@ -1,8 +1,6 @@
 'use strict';
 
-import {
-  loadProgressBar,
-} from 'axios-progress-bar';
+import {loadProgressBar} from 'axios-progress-bar';
 import axios from 'axios';
 
 function setAxiosSettings() {
@@ -15,7 +13,7 @@ function setAxiosSettings() {
   axios.defaults.headers.common = headers;
   axios.interceptors.response.use(null, function(error) {
     if (error.response.status === 403) {
-      vm.flashInfo(
+      vm.$toast.info(
           gettext('You need to login to add a movie to your list'));
       return new Promise(() => {});
     }

@@ -6,30 +6,6 @@
   display: none;
 }
 
-.flashpool {
-  position: fixed;
-  top: 5px;
-  right: 5px;
-  max-height: 400px;
-  width: 260px;
-  -webkit-perspective: 400px;
-          perspective: 400px;
-  z-index: 2000;
-
-  .flash__message {
-    width: 260px;
-    transition: all 0.5s;
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    font-family: Oxygen,sans-serif;
-    font-size: 13px;
-    line-height: 130%;
-  }
-}
-
-.flash-enter, .flash-leave-to {
-  opacity: 0;
-  -webkit-transform: rotateX(-30deg) scale(0.88) translateY(-30px);
-          transform: rotateX(-30deg) scale(0.88) translateY(-30px);
+.v-toast {
+  padding: 0 8px 0 0;
 }

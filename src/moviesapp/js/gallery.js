@@ -1,16 +1,16 @@
 'use strict';
 
-import Vue from 'vue';
-import {
-  retina,
-} from './helpers';
+import {newApp} from './app';
+import {retina} from './helpers';
 
-window.vm = new Vue({
-  el: '#app',
+
+window.vm = newApp({
   methods: {
-    openUrl: function(url) {
+    openUrl(url) {
       location.href = url;
     },
     retinajs: retina,
   },
 });
+
+window.vm.mount('#app');

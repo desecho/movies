@@ -10,7 +10,7 @@ export function addToList(movieId, listId, recordId) {
   }).then(function() {
     setViewedIconAndRemoveButtons(recordId, listId);
   }).catch(function() {
-    vm.flashError(gettext('Error adding the movie to the list'));
+    vm.$toast.error(gettext('Error adding the movie to the list'));
   });
 }
 

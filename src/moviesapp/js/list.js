@@ -2,11 +2,9 @@
 
 'use strict';
 
-import Vue from 'vue';
 import axios from 'axios';
-import {
-  retina,
-} from './helpers';
+import {retina} from './helpers';
+import {newApp} from './app';
 import {
   addToList,
   setViewedIconAndRemoveButtons,
@@ -39,7 +37,7 @@ function changeRating(id, rating, element) {
     }
 
     revertToPreviousRating(element);
-    vm.flashError(gettext('Error adding a rating'));
+    vm.$toast.error(gettext('Error adding a rating'));
   }
 
   const url = urls.changeRating + id + '/';
@@ -55,7 +53,7 @@ function applySettings(settings, reload = true) {
       location.reload();
     }
   }).catch(function() {
-    vm.flashError(gettext('Error applying the settings'));
+    vm.$toast.error(gettext('Error applying the settings'));
   });
 }
 
@@ -69,21 +67,24 @@ function setViewedIconsAndRemoveButtons() {
   }
 }
 
-window.vm = new Vue({
-  el: '#app',
-  data: {
-    sortByDate: false,
-    mode: vars.mode,
-    isVkApp: vars.isVkApp,
-    sort: vars.sort,
-    listWatchedId: vars.listWatchedId,
-    listToWatchId: vars.listToWatchId,
+
+window.vm = newApp({
+  data() {
+    return {
+      sortByDate: false,
+      mode: vars.mode,
+      isVkApp: vars.isVkApp,
+      sort: vars.sort,
+      listWatchedId: vars.listWatchedId,
+      listToWatchId: vars.listToWatchId,
+    };
   },
   methods: {
-    openUrl: function(url) {
+    openUrl(url) {
       location.href = url;
     },
-    saveOptions: function(recordId) {
+    retinajs: retina,
+    saveOptions(recordId) {
       const options = {
         'original': $('#original_' + recordId).prop('checked'),
         'extended': $('#extended_' + recordId).prop('checked'),
@@ -96,13 +97,13 @@ window.vm = new Vue({
       const data = {
         options: options,
       };
+      const vm = this;
 
       axios.put(urls.record + recordId + '/options/', data).then(function() {}).catch(function() {
-        vm.flashError(gettext('Error saving options'));
+        vm.$toast.error(gettext('Error saving options'));
       });
     },
-    retinajs: retina,
-    switchMode: function(newMode) {
+    switchMode(newMode) {
       function deactivateModeMinimal() {
         $('.comment').each(function() {
           const el = $(this); // eslint-disable-line no-invalid-this
@@ -138,7 +139,7 @@ window.vm = new Vue({
       }, false);
       this.mode = newMode;
     },
-    toggleRecommendation: function() {
+    toggleRecommendation() {
       const newRecommendationSetting = !vars.recommendation;
       const settings = {
         recommendation: newRecommendationSetting,
@@ -148,7 +149,7 @@ window.vm = new Vue({
       }
       applySettings(settings);
     },
-    switchSort: function(newSort) {
+    switchSort(newSort) {
       if (this.sort == newSort) {
         return;
       }
@@ -160,7 +161,7 @@ window.vm = new Vue({
       }
       applySettings(settings);
     },
-    removeRecord: function(id) {
+    removeRecord(id) {
       function success() {
         function removeRecordFromPage(id) {
           $('#record' + id).fadeOut('fast', function() {
@@ -171,15 +172,13 @@ window.vm = new Vue({
       }
 
       function fail() {
-        vm.flashError(gettext('Error removing the movie'));
+        vm.$toast.error(gettext('Error removing the movie'));
       }
-
+      const vm = this;
       const url = urls.removeRecord + id + '/';
       axios.delete(url).then(success).catch(fail);
     },
-    postToWall: function(id) {
-      const vm = this;
-
+    postToWall(id) {
       function post(photoId, ownerId) {
         function createWallPostMessage() {
           let text;
@@ -216,9 +215,9 @@ window.vm = new Vue({
             if (response.error.error_code === 10007) {
               return;
             }
-            vm.flashError(gettext('Error posting to the wall'));
+            vm.$toast.error(gettext('Error posting to the wall'));
           } else {
-            vm.flashSuccess(gettext('Your post has been posted'));
+            vm.$toast.success(gettext('Your post has been posted'));
           }
         });
       }
@@ -226,7 +225,7 @@ window.vm = new Vue({
       function saveWallPhoto(data) {
         VK.api('photos.saveWallPhoto', data, function(response) {
           if (response.error) {
-            vm.flashError(gettext('Error posting a poster to the wall'));
+            vm.$toast.error(gettext('Error posting a poster to the wall'));
           } else {
             const responseData = response.response[0];
             post(responseData.id, responseData.owner_id);
@@ -242,14 +241,14 @@ window.vm = new Vue({
           const data = JSON.parse(response.data.data);
           saveWallPhoto(data);
         }).catch(function() {
-          vm.flashError(gettext('Error loading a poster'));
+          vm.$toast.error(gettext('Error loading a poster'));
         });
       }
 
       function getWallUploadServerAndUploadPhotoAndPostToWall() {
         VK.api('photos.getWallUploadServer', function(response) {
           if (response.error) {
-            vm.flashError(gettext('Error getting an upload server for wall posting'));
+            vm.$toast.error(gettext('Error getting an upload server for wall posting'));
           } else {
             uploadPhotoToWall(response.response.upload_url);
           }
@@ -260,7 +259,7 @@ window.vm = new Vue({
         return ($('#record' + id).children('.poster').children('img').attr('src').indexOf('no_poster') ===
           -1);
       }
-
+      const vm = this;
       const rating = $('#record' + id).children('.details').children('.review').children('.rating').data('rating');
 
       if (rating) {
@@ -270,16 +269,17 @@ window.vm = new Vue({
           post(null, null);
         }
       } else {
-        vm.flashInfo(gettext('Add a rating to the movie'));
+        vm.$toast.info(gettext('Add a rating to the movie'));
       }
     },
     addToList: addToList,
-    toggleCommentArea: function(id) {
+    toggleCommentArea(id) {
       $('#comment-area' + id).toggle();
       $('#comment-area-button' + id).toggle();
       $('#comment' + id).focus();
     },
-    saveComment: function(id) {
+    saveComment(id) {
+      const vm = this;
       const comment = $('#comment' + id)[0].value;
       const data = {
         comment: comment,
@@ -294,11 +294,13 @@ window.vm = new Vue({
           commentAreaToggle.show();
         }
       }).catch(function() {
-        vm.flashError(gettext('Error saving a comment'));
+        vm.$toast.error(gettext('Error saving a comment'));
       });
     },
   },
 });
+
+window.vm.mount('#app');
 
 const ratyCustomSettings = {
   readOnly: vars.anothersAccount || vars.listId == vars.listToWatchId,

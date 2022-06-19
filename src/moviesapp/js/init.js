@@ -2,22 +2,7 @@
 
 'use strict';
 
-import Vue from 'vue';
-import VueFlashMessage from 'vue-flash-message';
-import VueCookie from 'vue-cookies';
-
-import {library} from '@fortawesome/fontawesome-svg-core';
-/* import font awesome icon component */
-import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome';
-
-/* import specific icons */
-import {faGear, faSignIn, faSignOut, faEye, faEyeSlash, faTrash, faFilm,
-  faEnvelopeOpen, faXmark, faShare, faSave, faComment} from '@fortawesome/free-solid-svg-icons';
-import {faVk, faFacebook} from '@fortawesome/free-brands-svg-icons';
-
-/* add icons to the library */
-library.add(faGear, faSignIn, faSignOut, faEye, faEyeSlash, faTrash, faFilm, faEnvelopeOpen, faXmark,
-    faShare, faSave, faComment, faVk, faFacebook);
+import {newApp} from './app';
 
 function getIsVkApp() {
   function inIframe() {
@@ -34,27 +19,16 @@ function getIsVkApp() {
   return false;
 }
 
-Vue.use(VueFlashMessage, {
-  messageOptions: {
-    timeout: 1500,
-    important: true,
-  },
-});
-Vue.use(VueCookie);
-Vue.options.delimiters = ['[[', ']]'];
-Vue.component('FontAwesomeIcon', FontAwesomeIcon);
-
-new Vue({
-  el: '#menu',
+newApp({
   methods: {
-    changeLanguage: function() {
-      $('#language-form').submit();
+    changeLanguage() {
+      document.getElementById('language-form').submit();
     },
-    invite: function() {
+    invite() {
       VK.callMethod('showInviteBox');
     },
   },
-});
+}).mount('#menu');
 
 vars.isVkApp = getIsVkApp();
 // Hardcode list IDs

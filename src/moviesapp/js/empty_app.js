@@ -1,12 +1,12 @@
 'use strict';
-import Vue from 'vue';
-import {
-  retina,
-} from './helpers';
 
-new Vue({
-  el: '#app',
-  methods: {
-    retinajs: retina,
-  },
-});
+import {newApp} from './app';
+
+import {retina} from './helpers';
+
+newApp(
+    {methods: {
+      retinajs: retina,
+    },
+    },
+).mount('#app');
