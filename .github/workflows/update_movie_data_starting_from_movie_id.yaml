@@ -6,7 +6,7 @@ on:
       movie_id:
         description: 'Movie ID'
         required: true
-        type: integer
+        type: string
 
 jobs:
   update_movie_data:
@@ -22,7 +22,7 @@ jobs:
       - name: Configure kubectl
         run: |
           mkdir ~/.kube
-          echo $KUBECONFIG > ~/.kube/config
+          echo "$KUBECONFIG" > ~/.kube/config
         env:
           KUBECONFIG: ${{ secrets.KUBECONFIG }}  # Done as a variable because it doesn't work in place.
 

@@ -143,8 +143,8 @@ jobs:
 
       - name: Flush CDN cache
         run: |
-          CDN_ID="$(doctl compute cdn list | grep $SPACE_NAME | awk '{print $1}')"
-          doctl compute cdn flush $CDN_ID
+          CDN_ID="$(doctl compute cdn list | grep "$SPACE_NAME" | awk '{print $1}')"
+          doctl compute cdn flush "$CDN_ID"
 
       - name: Install kubectl
         uses: azure/setup-kubectl@v2.1
@@ -152,7 +152,7 @@ jobs:
       - name: Configure kubectl
         run: |
           mkdir ~/.kube
-          echo $KUBECONFIG > ~/.kube/config
+          echo "$KUBECONFIG" > ~/.kube/config
         env:
           KUBECONFIG: ${{ secrets.KUBECONFIG }}  # Done as a variable because it doesn't work in place.
 
