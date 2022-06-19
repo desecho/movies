@@ -23,6 +23,6 @@ def movie_count(user: User) -> SafeString:
     icon_eye = _get_icon("fa-eye")
     icon_eye_slash = _get_icon("fa-eye-slash")
     return mark_safe(  # nosec
-        f'<span title="{watched}" class="mr-2">{icon_eye} {watched_number}</span> '
-        f'<span title="{to_watch}">{icon_eye_slash} {to_watch_number}</span>'
+        f'<div class="movie-count"><span title="{watched}" class="mr-2">{icon_eye} {watched_number}</span> '
+        f'<span title="{to_watch}">{icon_eye_slash} {to_watch_number}</span></div>'
     )
