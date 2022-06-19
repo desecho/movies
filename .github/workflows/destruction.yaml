@@ -1,6 +1,8 @@
 ---
 name: Destruction
 on: workflow_dispatch
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
 jobs:
   destruction:
     name: Destruction
@@ -28,5 +30,3 @@ jobs:
           kubectl delete -f deployment/ingress.yaml --ignore-not-found
           kubectl delete -f deployment/service.yaml --ignore-not-found
           kubectl delete secret "$PROJECT" --ignore-not-found
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}

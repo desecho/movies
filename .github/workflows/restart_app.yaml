@@ -2,11 +2,10 @@
 name: Restart App
 on:
   workflow_dispatch:
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
 jobs:
   restart_app:
     name: Restart app
     uses: ./.github/workflows/reusable_restart_app.yaml
-    concurrency:
-      group: ${{ github.workflow }}-${{ github.ref }}
-      cancel-in-progress: true
     secrets: inherit

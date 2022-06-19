@@ -4,6 +4,8 @@ on:
   schedule:
     - cron: "0 9 * * *"  # Runs at 09:00 UTC (05:00 EDT) daily
   workflow_dispatch:
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
 jobs:
   db_backup:
     name: DB backup

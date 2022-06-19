@@ -4,6 +4,8 @@ on:
   schedule:
     - cron: "0 6 * * 1"  # Runs at 06:00 UTC (02:00 EDT) on Mondays
   workflow_dispatch:
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
 jobs:
   update_imdb_ratings:
     name: Update IMDb ratings
