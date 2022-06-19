@@ -40,9 +40,26 @@ install-hadolint:
 	sudo curl https://github.com/hadolint/hadolint/releases/download/v${HADOLINT_VERSION}/hadolint-Linux-x86_64 -Lo ${HADOLINT_PATH}
 	sudo chmod +x ${HADOLINT_PATH}
 
+ACTIONLINT_VERSION := 1.6.13
+ACTIONLINT_PATH := ${BIN_DIR}/actionlint
+ACTIONLINT_URL := https://github.com/rhysd/actionlint/releases/download/v${ACTIONLINT_VERSION}/actionlint_${ACTIONLINT_VERSION}_linux_amd64.tar.gz
+ACTIONLINT_TMP_DIR := $(shell mktemp -d)
+ACTIONLINT_ARCHIVE := actionlint.tar.gz
+.PHONY: install-actionlint
+## Install actionlint
+install-actionlint:
+	cd ${ACTIONLINT_TMP_DIR} && \
+	curl ${ACTIONLINT_URL} -Lo ${ACTIONLINT_ARCHIVE} && \
+	tar -xvf ${ACTIONLINT_ARCHIVE} && \
+	sudo mv actionlint ${ACTIONLINT_PATH}
+
+.PHONY: install-linters-binaries
+## Install linters binaries
+install-linters-binaries: install-shfmt install-hadolint install-actionlint
+
 .PHONY: install-deps
 ## Install dependencies
-install-deps: install-shfmt install-hadolint
+install-deps: install-linters-binaries
 	# Install Python
 	sudo apt install ${PYTHON} ${PYTHON}-venv ${PYTHON}-dev -y
 	# Install MySQL dependencies
@@ -119,7 +136,7 @@ upload-backup:
 #------------------------------------
 .PHONY: test
 ## Run tests | Tests
-test: shellcheck hadolint shfmt tox eslint csscomb-linter jsonlint
+test: shellcheck hadolint shfmt actionlint tox eslint csscomb-linter jsonlint
 
 .PHONY: tox
 ## Run tox
@@ -215,6 +232,11 @@ hadolint:
 ## Run jsonlint linter
 jsonlint:
 	scripts/jsonlint.sh lint
+
+.PHONY: actionlint
+## Run actionlint linter
+actionlint:
+	actionlint
 #------------------------------------
 
 #------------------------------------

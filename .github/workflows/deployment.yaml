@@ -74,11 +74,8 @@ jobs:
           restore-keys: |
             node_modules-
 
-      - name: Install shfmt
-        run: make install-shfmt
-
-      - name: Install hadolint
-        run: make install-hadolint
+      - name: Install linters binaries
+        run: make install-linters-binaries
 
       - name: Install shellcheck
         run: sudo apt install shellcheck -y
