@@ -68,12 +68,20 @@ install-deps: install-linters-binaries
 	sudo apt install gettext -y
 
 .PHONY: create-venv
-## Create virtual environment and install requirements
+## Create venv and install requirements
 create-venv:
 	${PYTHON} -m venv venv
 	${SOURCE_CMDS} && \
 		pip install -r requirements-dev.txt
+
+.PHONY: create-tox-venv
+## Create tox venv and install requirements
+create-tox-venv:
 	tox -e py-requirements
+
+.PHONY: create-venvs
+## Create venv and tox venv and install requirements
+create-venvs: create-venv create-tox-venv
 
 .PHONY: yarn-install-locked
 ## Run yarn install using lockfile
@@ -94,7 +102,7 @@ load-initial-fixtures:
 
 .PHONY: bootstrap
 ## Bootstrap project
-bootstrap: install-deps yarn-install-locked create-env-files create-venv create-db migrate load-initial-fixtures yarn-build
+bootstrap: install-deps yarn-install-locked create-env-files create-venvs create-db migrate load-initial-fixtures yarn-build
 
 .PHONY: create-env-files
 ## Create env files
@@ -242,23 +250,23 @@ actionlint:
 #------------------------------------
 # Development
 #------------------------------------
-.PHONY: update-venv
-## Update packages in venv and tox with current requirements | Development
-update-venv:
+.PHONY: update-venvs
+## Update packages in venv and tox venv with current requirements | Development
+update-venvs:
 	${SOURCE_CMDS} && \
 	pip install -r requirements-dev.txt && \
 	deactivate && \
 	source .tox/py/bin/activate && \
 	pip install -r requirements-dev.txt
 
-.PHONY: delete-venv
-delete-venv:
+.PHONY: delete-venvs
+delete-venvs:
 	rm -rf venv
 	rm -rf .tox
 
-.PHONY: recreate-venv
-## Recreate venv
-recreate-venv: delete-venv create-venv
+.PHONY: recreate-venvs
+## Recreate venvs
+recreate-venvs: delete-venvs create-venvs
 
 .PHONY: yarn-install-refresh
 ## Run yarn install (refresh)
