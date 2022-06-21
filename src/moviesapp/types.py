@@ -82,7 +82,6 @@ class MovieSearchResult(TypedDict):
 
     id: int
     tmdbLink: str
-    elementId: str
     releaseDate: Optional[str]
     title: str
     poster: Optional[str]

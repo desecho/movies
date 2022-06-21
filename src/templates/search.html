@@ -33,7 +33,7 @@
       </div>
     </form>
     <div class="results" v-cloak>
-      <div class="movie" :id="[[ movie.elementId ]]" v-for="movie in movies" v-show="!movie.hide">
+      <div class="movie" v-for="movie in movies" v-show="!movie.hide">
         <div class="poster">
           <img class="search-poster-img" :src="movie.poster" :alt="movie.title"
                :data-rjs="movie.poster2x" @load="retinajs" loading="lazy"/>

@@ -81,7 +81,6 @@ class SearchMovieView(AjaxAnonymousView):
             movie: MovieSearchResult = {
                 "id": tmdb_id,
                 "tmdbLink": get_tmdb_url(tmdb_id),
-                "elementId": f"movie{tmdb_id}",
                 "releaseDate": self._format_date(release_date),
                 "title": tmdb_movie["title"],
                 "poster": get_poster_url("small", poster),
