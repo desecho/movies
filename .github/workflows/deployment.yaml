@@ -39,7 +39,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     env:
-      SPACE_NAME: movies.cdn.samarchyan.me
+      SPACE_NAME: cdn.movies.samarchyan.me
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
