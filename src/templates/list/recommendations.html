@@ -7,7 +7,16 @@
         <div class="title">
           <span title="{{ record.movie.title_original }}">{{ record.movie.title }}</span>
           <div class="add-to-list-buttons">
-            {% include 'includes/add_to_list_buttons.html' %}
+            {% if record.movie.is_released %}
+              <a href="javascript:void(0)" title="{% trans 'Add to &quot;Watched&quot; list' %}"
+                @click="addToList({{ record.movie_id }}, listWatchedId, {{ record.id }})">
+                <font-awesome-icon icon="fa-solid fa-eye" />
+              </a>
+            {% endif %}
+            <a href="javascript:void(0)" title="{% trans 'Add to &quot;To Watch&quot; list' %}"
+              @click="addToList({{ record.movie_id }}, listToWatchId, {{ record.id }})">
+              <font-awesome-icon icon="fa-solid fa-eye-slash" />
+            </a>
           </div>
         </div>
         <div class="poster">

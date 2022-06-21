@@ -1914,6 +1914,11 @@ uuid@^2.0.2:
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-2.0.3.tgz#67e2e863797215530dff318e5bf9dcebfd47b21a"
   integrity sha512-FULf7fayPdpASncVy4DLh3xydlXEJJpvIELjYjNeQWYUZ9pclcpvCZSr2gkmN2FrrGcI7G/cJsIEwk5/8vfXpg==
 
+v-lazy-image@^2.1.1:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/v-lazy-image/-/v-lazy-image-2.1.1.tgz#5cc1b24aa6ab777e7c25ac24004dc464dcfad269"
+  integrity sha512-QC6Jcok99CRhhsO7svfI3hcBaT945dSuaHk3jr7WHm+QJMzbB/f32xKkdF45qL5ezd5KeoqHKh4gD92mQtjfXQ==
+
 v8-compile-cache@^2.0.3:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/v8-compile-cache/-/v8-compile-cache-2.3.0.tgz#2de19618c66dc247dcfb6f99338035d8245a2cee"

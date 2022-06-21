@@ -1,6 +1,0 @@
-{% if record.movie.is_released %}
-  <a href="javascript:void(0)" title="{% trans 'Add to &quot;Watched&quot; list' %}"
-     @click="addToList({{ record.movie_id }}, listWatchedId, {{ record.id }})">
-     <font-awesome-icon icon="fa-solid fa-eye" />
-  </a>
-{% endif %}

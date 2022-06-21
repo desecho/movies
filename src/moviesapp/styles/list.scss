@@ -1,7 +1,3 @@
-.full {
-  clear: both;
-}
-
 #movie-count {
   font-size: 25px;
   float: right;
@@ -93,4 +89,31 @@
   height: 50px;
   margin-left: 10px;
   border-radius: 5px;
+}
+
+.remove-button {
+  display: inline;
+  margin-left: 10px;
+}
+
+.review-minimal {
+  padding-top: 0;
+  display: inline;
+
+  .cancel-on-png, .cancel-off-png, .star-on-png, .star-off-png, .star-half-png {
+    font-size: 1.16em;
+  }
+
+  .rating {
+    margin-left: 10px;
+  }
+}
+
+.details-minimal {
+  display: inline;
+
+  .release-date, .imdb-rating {
+    float: right;
+    margin-right: 10px;
+  }
 }

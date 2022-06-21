@@ -1,3 +1,4 @@
+import json
 from http import HTTPStatus
 
 from django.urls import reverse
@@ -41,10 +42,7 @@ class ListTestCase(BaseTestLoginCase):
     def test_list_search(self):
         url = reverse("list", args=("watched",))
         response = self.client.get(url, {"query": "Matrix"})
-        soup = self.get_soup(response)
-        titles = soup.findAll("div", {"class": "title"})
-        self.assertEqual(len(titles), 1)
-        title = titles[0].span.attrs["title"]
+        title = json.loads(response.context_data["record_objects"])[0]["movie"]["title"]
         self.assertEqual(title, "The Matrix")
 
 
@@ -148,7 +146,7 @@ class SaveOptionsTestCase(BaseTestLoginCase):
             "original": True,
             "extended": True,
             "theatre": True,
-            "4k": True,
+            "ultraHd": True,
             "hd": True,
             "fullHd": True,
         }
@@ -172,7 +170,7 @@ class SaveOptionsTestCase(BaseTestLoginCase):
             "original": False,
             "extended": False,
             "theatre": False,
-            "4k": False,
+            "ultraHd": False,
             "hd": False,
             "fullHd": True,
         }
@@ -191,7 +189,7 @@ class SaveOptionsTestCase(BaseTestLoginCase):
             "original": False,
             "extended": False,
             "theatre": False,
-            "4k": True,
+            "ultraHd": True,
             "hd": False,
             "fullHd": False,
         }

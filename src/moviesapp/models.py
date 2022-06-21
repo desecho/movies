@@ -16,6 +16,7 @@ from django.db.models import (
     DecimalField,
     ForeignKey,
     JSONField,
+    Manager,
     Model,
     PositiveIntegerField,
     PositiveSmallIntegerField,
@@ -25,6 +26,7 @@ from django.db.models import (
     UniqueConstraint,
     URLField,
 )
+from django.utils import formats
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 from django_countries.fields import CountryField
@@ -161,7 +163,7 @@ class UserBase:
         return self.get_friends().exists()
 
 
-class User(AbstractUser, UserBase):
+class User(AbstractUser, UserBase):  # type: ignore
     """User class."""
 
     only_for_friends = BooleanField(
@@ -259,6 +261,27 @@ class Movie(Model):  # type: ignore
         return str(self.title)
 
     @property
+    def release_date_formatted(self) -> Optional[str]:
+        """Return release date formatted."""
+        if self.release_date:
+            return formats.date_format(self.release_date, "DATE_FORMAT")
+        return None
+
+    @property
+    def imdb_rating_float(self) -> Optional[float]:
+        """Get IMDb rating float."""
+        if self.imdb_rating:
+            return float(self.imdb_rating)
+        return None
+
+    @property
+    def runtime_formatted(self) -> Optional[str]:
+        """Return runtime formatted."""
+        if self.runtime:
+            return self.runtime.strftime("%H:%M")
+        return None
+
+    @property
     def imdb_url(self) -> str:
         """Return IMDb URL."""
         return urljoin(settings.IMDB_BASE_URL, self.imdb_id)
@@ -343,11 +366,6 @@ class Movie(Model):  # type: ignore
             return movies.filter(pk=movie_id)
         return movies
 
-    @property
-    def has_trailers(self) -> bool:
-        """Return True if movie has trailers."""
-        return bool(self.get_trailers())
-
     def _get_poster(self, size: str) -> Optional[str]:
         """Get poster."""
         return get_poster_url(size, self.poster)
@@ -366,6 +384,11 @@ class Movie(Model):  # type: ignore
     def poster_big(self) -> Optional[str]:
         """Get big poster."""
         return self._get_poster("big")
+
+    @property
+    def has_poster(self) -> bool:
+        """Return True if movie has poster."""
+        return self.poster is not None
 
     @property
     def title_with_id(self) -> str:
@@ -399,10 +422,23 @@ class Movie(Model):  # type: ignore
         return f"{id_} - {title}"[1:]
 
 
+class RecordQuerySet(QuerySet["Record"]):
+    """Record query set."""
+
+    def update(self, **kwargs: Any) -> int:
+        """Update records."""
+        ids = self.values_list("pk", flat=True)
+        rows = super().update(**kwargs)
+        # This is not optimized - we are saving the object twice.
+        # This is needed because we need to use the custom save method of the model.
+        for id_ in ids:
+            Record.objects.get(pk=id_).save()
+        return rows
+
+
 class Record(Model):
     """Record."""
 
-    provider_records: Optional[ListType["ProviderRecord"]] = None
     user = ForeignKey(User, CASCADE, related_name="records")
     movie = ForeignKey(Movie, CASCADE, related_name="records")
     list = ForeignKey(List, CASCADE)
@@ -415,6 +451,7 @@ class Record(Model):
     watched_in_hd = BooleanField(default=False)
     watched_in_full_hd = BooleanField(default=False)
     watched_in_4k = BooleanField(default=False)
+    objects: Manager["Record"] = RecordQuerySet.as_manager()  # type: ignore
 
     class Meta:
         """Meta."""

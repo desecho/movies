@@ -39,7 +39,7 @@ module.exports = {
     search: getBundle('search.js'),
     list: getListBundle(),
     gallery: getBundle('gallery.js'),
-    recommendations: getBundleWithRaty('recommendations.js'),
+    // recommendations: getBundleWithRaty('recommendations.js'),
     registration: getBundleWithEmptyApp('registration.js'),
     passwordChange: getBundleWithEmptyApp('password_change.js'),
     feed: getFeedBundle(),

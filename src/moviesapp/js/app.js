@@ -3,6 +3,7 @@
 import VueToast from 'vue-toast-notification';
 import VueCookie from 'vue-cookies';
 import {createApp} from 'vue';
+import VLazyImage from 'v-lazy-image';
 
 import {library} from '@fortawesome/fontawesome-svg-core';
 /* import font awesome icon component */
@@ -28,6 +29,7 @@ export function newApp(options) {
   app.use(VueCookie);
 
   app.component('FontAwesomeIcon', FontAwesomeIcon);
+  app.component('VLazyImage', VLazyImage);
 
   return app;
 }

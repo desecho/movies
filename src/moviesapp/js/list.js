@@ -3,24 +3,9 @@
 'use strict';
 
 import axios from 'axios';
-import {retina} from './helpers';
+import {retina, removeItemOnce} from './helpers';
 import {newApp} from './app';
-import {
-  addToList,
-  setViewedIconAndRemoveButtons,
-} from './list_helpers';
 import autosize from 'autosize';
-
-function activateModeMinimal() {
-  $('.poster, .comment, .comment-button, .release-date-label').hide();
-  $('.details, .review').css('display', 'inline');
-  $('.review').css('padding-top', '0');
-  $('.release-date, .imdb-rating').css({
-    'float': 'right',
-    'margin-right': '10px',
-  });
-  $('.movie').addClass('movie-minimal');
-}
 
 function changeRating(id, rating, element) {
   function success() {
@@ -57,82 +42,42 @@ function applySettings(settings, reload = true) {
   });
 }
 
-function setViewedIconsAndRemoveButtons() {
-  if (vars.anothersAccount) {
-    $('.movie').each(function() {
-      const id = $(this).data('id'); // eslint-disable-line no-invalid-this
-      const listId = vars.listData[id];
-      setViewedIconAndRemoveButtons(id, listId);
-    });
-  }
-}
-
 
 window.vm = newApp({
   data() {
     return {
       sortByDate: false,
+      records: vars.records,
       mode: vars.mode,
       isVkApp: vars.isVkApp,
       sort: vars.sort,
       listWatchedId: vars.listWatchedId,
       listToWatchId: vars.listToWatchId,
+      listId: vars.listId,
+      isAnothersAccount: vars.isAnothersAccount,
     };
   },
   methods: {
     openUrl(url) {
       location.href = url;
     },
+    getSrcSet(img1x, img2x) {
+      return `${img1x} 1x, ${img2x} 2x`;
+    },
     retinajs: retina,
-    saveOptions(recordId) {
-      const options = {
-        'original': $('#original_' + recordId).prop('checked'),
-        'extended': $('#extended_' + recordId).prop('checked'),
-        'theatre': $('#theatre_' + recordId).prop('checked'),
-        'hd': $('#hd_' + recordId).prop('checked'),
-        'fullHd': $('#full_hd_' + recordId).prop('checked'),
-        '4k': $('#4k_' + recordId).prop('checked'),
-      };
-
+    saveOptions(record) {
       const data = {
-        options: options,
+        options: record.options,
       };
       const vm = this;
 
-      axios.put(urls.record + recordId + '/options/', data).then(function() {}).catch(function() {
+      axios.put(urls.record + record.id + '/options/', data).then(function() {}).catch(function() {
         vm.$toast.error(gettext('Error saving options'));
       });
     },
     switchMode(newMode) {
-      function deactivateModeMinimal() {
-        $('.comment').each(function() {
-          const el = $(this); // eslint-disable-line no-invalid-this
-          const commentAreaToggle = $('#comment_area_button' + el.data('id'));
-          const comment = el.find('textarea').val();
-          if (comment) {
-            el.show();
-            commentAreaToggle.hide();
-          } else {
-            commentAreaToggle.show();
-          }
-        });
-        $('.poster, .release-date-label').show();
-        $('.details, .imdb-rating, .review, .release-date').css('display', '');
-        $('.review').css('padding-top', '10px');
-        $('.release-date, .imdb-rating').css({
-          'float': '',
-          'margin-right': '0',
-        });
-        $('.movie').removeClass('movie-minimal');
-      }
-
       if (newMode == this.mode) {
         return;
-      }
-      if (newMode === 'minimal') {
-        activateModeMinimal();
-      } else {
-        deactivateModeMinimal();
       }
       applySettings({
         mode: newMode,
@@ -161,29 +106,24 @@ window.vm = newApp({
       }
       applySettings(settings);
     },
-    removeRecord(id) {
+    removeRecord(record) {
       function success() {
-        function removeRecordFromPage(id) {
-          $('#record' + id).fadeOut('fast', function() {
-            $(this).remove(); // eslint-disable-line no-invalid-this
-          });
-        }
-        removeRecordFromPage(id);
+        removeItemOnce(vm.records, record);
       }
 
       function fail() {
         vm.$toast.error(gettext('Error removing the movie'));
       }
       const vm = this;
-      const url = urls.removeRecord + id + '/';
+      const url = urls.removeRecord + record.id + '/';
       axios.delete(url).then(success).catch(fail);
     },
-    postToWall(id) {
+    postToWall(record) {
       function post(photoId, ownerId) {
         function createWallPostMessage() {
           let text;
-          const title = $('#record' + id).data('title');
-          const comment = $('#comment' + id)[0].value;
+          const title = movie.title;
+          const comment = record.comment;
           const ratingTexts = vars.ratySettings.hints;
           const ratingPost = ratingTexts[rating - 1];
           if (rating > 2) {
@@ -234,7 +174,7 @@ window.vm = newApp({
       }
 
       function uploadPhotoToWall(uploadUrl) {
-        const url = urls.uploadPosterToWall + id + '/';
+        const url = urls.uploadPosterToWall + record.id + '/';
         axios.post(url, {
           url: uploadUrl,
         }).then(function(response) {
@@ -254,16 +194,12 @@ window.vm = newApp({
           }
         });
       }
-
-      function hasPoster() {
-        return ($('#record' + id).children('.poster').children('img').attr('src').indexOf('no_poster') ===
-          -1);
-      }
       const vm = this;
-      const rating = $('#record' + id).children('.details').children('.review').children('.rating').data('rating');
+      const rating = record.rating;
+      const movie = record.movie;
 
       if (rating) {
-        if (hasPoster()) {
+        if (record.movie.hasPoster) {
           getWallUploadServerAndUploadPhotoAndPostToWall();
         } else {
           post(null, null);
@@ -272,26 +208,28 @@ window.vm = newApp({
         vm.$toast.info(gettext('Add a rating to the movie'));
       }
     },
-    addToList: addToList,
-    toggleCommentArea(id) {
-      $('#comment-area' + id).toggle();
-      $('#comment-area-button' + id).toggle();
-      $('#comment' + id).focus();
-    },
-    saveComment(id) {
+    addToList(movieId, listId, record) {
+      const url = urls.addToList + movieId + '/';
       const vm = this;
-      const comment = $('#comment' + id)[0].value;
+      axios.post(url, {
+        listId: listId,
+      }).then(function() {
+        record.listId = listId;
+      }).catch(function() {
+        vm.$toast.error(gettext('Error adding the movie to the list'));
+      });
+    },
+    showCommentArea(record) {
+      record.commentArea = true;
+    },
+    saveComment(record) {
+      const vm = this;
       const data = {
-        comment: comment,
+        comment: record.comment,
       };
-      axios.put(urls.saveComment + id + '/', data).then(function() {
-        const commentAreaToggle = $('#comment_area_button' + id);
-        if (comment) {
-          commentAreaToggle.hide();
-        }
-        if (!comment) {
-          vm.toggleCommentArea(id);
-          commentAreaToggle.show();
+      axios.put(urls.saveComment + record.id + '/', data).then(function() {
+        if (record.comment == '') {
+          record.commentArea = false;
         }
       }).catch(function() {
         vm.$toast.error(gettext('Error saving a comment'));
@@ -303,7 +241,7 @@ window.vm = newApp({
 window.vm.mount('#app');
 
 const ratyCustomSettings = {
-  readOnly: vars.anothersAccount || vars.listId == vars.listToWatchId,
+  readOnly: vars.isAnothersAccount || vars.listId == vars.listToWatchId,
   click: function(score) {
     if (!score) {
       score = 0;
@@ -311,10 +249,6 @@ const ratyCustomSettings = {
     changeRating($(this).data('record-id'), score, $(this));
   },
 };
-
-if (vars.mode === 'minimal') {
-  activateModeMinimal();
-}
 
 (function() {
   const settings = $.extend({}, vars.ratySettings, ratyCustomSettings);
@@ -325,5 +259,4 @@ if (vars.recommendation) {
   $('#button-recommendation').button('toggle');
 }
 
-setViewedIconsAndRemoveButtons();
 autosize($('textarea'));

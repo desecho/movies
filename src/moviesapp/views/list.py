@@ -12,7 +12,7 @@ from ..http import AjaxAuthenticatedHttpRequest, AjaxHttpRequest, AuthenticatedH
 from ..models import Action, ActionRecord, List, Movie, ProviderRecord, Record, User, UserAnonymous
 from ..types import ListKeyName, SortType
 from .mixins import AjaxAnonymousView, AjaxView, TemplateAnonymousView
-from .types import ListViewContextData
+from .types import ListViewContextData, MovieObject, OptionsObject, ProviderObject, ProviderRecordObject, RecordObject
 from .utils import add_movie_to_list, get_records, paginate, sort_by_rating
 
 
@@ -89,27 +89,23 @@ class SaveOptionsView(AjaxView):
 
     def put(self, request: AjaxAuthenticatedHttpRequest, record_id: int) -> (HttpResponse | HttpResponseBadRequest):
         """Save options."""
-        record = get_object_or_404(Record, user=request.user, pk=record_id)
+        get_object_or_404(Record, user=request.user, pk=record_id)
 
         try:
-            options = request.PUT["options"]
-            watched_original = options["original"]
-            watched_extended = options["extended"]
-            watched_in_theatre = options["theatre"]
-            watched_in_4k = options["4k"]
-            watched_in_hd = options["hd"]
-            watched_in_full_hd = options["fullHd"]
+            options_object: OptionsObject = request.PUT["options"]
+            options = {
+                "watched_original": options_object["original"],
+                "watched_extended": options_object["extended"],
+                "watched_in_theatre": options_object["theatre"],
+                "watched_in_4k": options_object["ultraHd"],
+                "watched_in_hd": options_object["hd"],
+                "watched_in_full_hd": options_object["fullHd"],
+            }
         except KeyError:
             response: HttpResponseBadRequest = self.render_bad_request_response()
             return response
 
-        record.watched_original = watched_original
-        record.watched_extended = watched_extended
-        record.watched_in_theatre = watched_in_theatre
-        record.watched_in_4k = watched_in_4k
-        record.watched_in_hd = watched_in_hd
-        record.watched_in_full_hd = watched_in_full_hd
-        record.save()
+        Record.objects.filter(pk=record_id).update(**options)
         return self.success()
 
 
@@ -194,29 +190,36 @@ class ListView(TemplateAnonymousView):
 
     @staticmethod
     def _get_record_movie_data(
-        records_ids_and_movies_ids_list: ListType[Tuple[int, int]]
+        record_ids_and_movie_ids_list: ListType[Tuple[int, int]]
     ) -> Tuple[ListType[int], Dict[int, int]]:
-        """Get record's movie data."""
-        movies_ids = [x[1] for x in records_ids_and_movies_ids_list]
-        records_ids_and_movies_ids = {x[0]: x[1] for x in records_ids_and_movies_ids_list}
-        return (movies_ids, records_ids_and_movies_ids)
+        """
+        Get record's movie data.
+
+        Returns a Tuple of movie ids and a dictionary of record ids and movies ids.
+        """
+        movie_ids = [x[1] for x in record_ids_and_movie_ids_list]
+        record_ids_and_movie_ids = {x[0]: x[1] for x in record_ids_and_movie_ids_list}
+        return (movie_ids, record_ids_and_movie_ids)
 
     def _get_list_data(self, records: QuerySet[Record]) -> Dict[int, int]:
-        """Get list data."""
-        movies_ids, records_and_movies_ids = self._get_record_movie_data(list(records.values_list("id", "movie_id")))
+        """
+        Get list data.
+
+        Returns a dictionary with record ids as keys and list ids as values.
+        """
+        movie_ids, record_and_movie_ids = self._get_record_movie_data(list(records.values_list("id", "movie_id")))
         user: Union[User, UserAnonymous] = self.request.user  # type: ignore
-        movies_ids_and_lists_ids_list: ListType[Tuple[int, int]] = list(
-            user.get_records().filter(movie_id__in=movies_ids).values_list("movie_id", "list_id")
+        movie_ids_and_list_ids_list: ListType[Tuple[int, int]] = list(
+            user.get_records().filter(movie_id__in=movie_ids).values_list("movie_id", "list_id")
         )
-        movies_and_lists_ids: Dict[int, int] = {}
-        for movie_id_and_list_id in movies_ids_and_lists_ids_list:
-            movie_id, list_id = movie_id_and_list_id
-            movies_and_lists_ids[movie_id] = list_id
+        movie_and_list_ids: Dict[int, int] = {}
+        for movie_id, list_id in movie_ids_and_list_ids_list:
+            movie_and_list_ids[movie_id] = list_id
 
         list_data: Dict[int, int] = {}
-        for record_id, movie_id in records_and_movies_ids.items():
+        for record_id, movie_id in record_and_movie_ids.items():
             # 0 means no list id.
-            list_data[record_id] = movies_and_lists_ids.get(movie_id, 0)
+            list_data[record_id] = movie_and_list_ids.get(movie_id, 0)
         return list_data
 
     def _initialize_session_values(self) -> None:
@@ -229,18 +232,96 @@ class ListView(TemplateAnonymousView):
         if "mode" not in session:
             self.request.session["mode"] = "full"
 
-    def _filter_out_provider_records(self, provider_records: ListType[ProviderRecord]) -> None:
+    def _filter_out_provider_records_for_other_countries(self, provider_records: ListType[ProviderRecord]) -> None:
         request: AuthenticatedHttpRequest = self.request  # type: ignore
         for provider_record in list(provider_records):
             if request.user.country != provider_record.country:
                 provider_records.remove(provider_record)
 
-    def _inject_provider_records(self, records: QuerySet[Record]) -> None:
+    def _get_provider_records(self, movie: Movie) -> ListType[ProviderRecord]:
+        request: HttpRequest = self.request  # type: ignore
+        if request.user.is_authenticated and request.user.is_country_supported and movie.is_released:
+            provider_records = list(movie.provider_records.all())
+            self._filter_out_provider_records_for_other_countries(provider_records)
+            return provider_records
+        return []
+
+    @staticmethod
+    def _get_provider_record_objects(provider_records: ListType[ProviderRecord]) -> ListType[ProviderRecordObject]:
+        provider_record_objects: ListType[ProviderRecordObject] = []
+        for provider_record in provider_records:
+            provider_object: ProviderObject = {
+                "logo": provider_record.provider.logo,
+                "name": provider_record.provider.name,
+            }
+            provider_record_object: ProviderRecordObject = {
+                "tmdbWatchUrl": provider_record.tmdb_watch_url,
+                "provider": provider_object,
+            }
+            provider_record_objects.append(provider_record_object)
+
+        return provider_record_objects
+
+    @staticmethod
+    def _get_movie_object(movie: Movie) -> MovieObject:
+        """Get movie object."""
+        return {
+            "id": movie.pk,
+            "title": movie.title,
+            "titleOriginal": movie.title_original,
+            "isReleased": movie.is_released,
+            "posterNormal": movie.poster_normal,
+            "posterBig": movie.poster_big,
+            "posterSmall": movie.poster_small,
+            "imdbRating": movie.imdb_rating_float,
+            "releaseDate": movie.release_date_formatted,
+            "country": movie.country,
+            "director": movie.director,
+            "writer": movie.writer,
+            "genre": movie.genre,
+            "actors": movie.actors,
+            "overview": movie.overview,
+            "homepage": movie.homepage,
+            "runtime": movie.runtime_formatted,
+            "imdbUrl": movie.imdb_url,
+            "tmdbUrl": movie.tmdb_url,
+            "trailers": movie.get_trailers(),
+            "hasPoster": movie.has_poster,
+        }
+
+    @staticmethod
+    def _get_options_object(record: Record) -> OptionsObject:
+        """Get options object."""
+        return {
+            "original": record.watched_original,
+            "extended": record.watched_extended,
+            "theatre": record.watched_in_theatre,
+            "hd": record.watched_in_hd,
+            "fullHd": record.watched_in_full_hd,
+            "ultraHd": record.watched_in_4k,
+        }
+
+    def _get_record_objects(self, records: QuerySet[Record]) -> ListType[RecordObject]:
+        """Get record objects."""
+        record_objects: ListType[RecordObject] = []
         for record in records:
-            if record.movie.is_released:
-                provider_records = list(record.movie.provider_records.all())
-                self._filter_out_provider_records(provider_records)
-                record.provider_records = provider_records
+            provider_records = self._get_provider_records(record.movie)
+            record_object: RecordObject = {
+                "id": record.pk,
+                "comment": record.comment,
+                "commentArea": bool(record.comment),
+                "rating": record.rating,
+                "providerRecords": self._get_provider_record_objects(provider_records),
+                "movie": self._get_movie_object(record.movie),
+                "options": self._get_options_object(record),
+            }
+            record_objects.append(record_object)
+        return record_objects
+
+    def _inject_list_ids(self, records: QuerySet[Record], record_objects: ListType[RecordObject]) -> None:
+        list_data = self._get_list_data(records)
+        for record_object in record_objects:
+            record_object["listId"] = list_data.get(record_object["id"])
 
     def get_context_data(self, **kwargs: Any) -> ListViewContextData:  # type: ignore
         """Get context data."""
@@ -248,7 +329,8 @@ class ListView(TemplateAnonymousView):
         username: Optional[str] = kwargs.get("username")
         self.check_if_allowed(username)
         request: HttpRequest = self.request  # type: ignore
-        user = request.user if self.anothers_account is None else self.anothers_account
+        anothers_account = self.anothers_account
+        user = request.user if anothers_account is None else anothers_account
         records = get_records(list_name, user)
         # Session is supposed to be initialized at that point.
         session = self.request.session
@@ -258,13 +340,9 @@ class ListView(TemplateAnonymousView):
             records = self._filter_records(records, query)
         records = self._sort_records(records, session["sort"], username, list_name)
 
-        if username and session["recommendation"]:
+        if anothers_account and session["recommendation"]:
             records = self._filter_records_for_recommendation(records, user)
 
-        if username:
-            list_data = self._get_list_data(records)
-        else:
-            list_data = None
         # Commented out because friends functionality is disabled.
         # if not username and list_name == "to-watch" and records:
         #     comments_and_ratings = self._get_comments_and_ratings(
@@ -274,14 +352,20 @@ class ListView(TemplateAnonymousView):
         #     comments_and_ratings = None
         if request.user.is_authenticated and request.user.is_country_supported:
             prefetch_related_objects(records, "movie__provider_records__provider")
-            self._inject_provider_records(records)
+
         records_: Page[Record] = paginate(records, request.GET.get("page"), settings.RECORDS_ON_PAGE)  # type: ignore
+        # TODO This needs to be fixed. Not optimized. Temporary solution
+        record_ids = [record.pk for record in records_.object_list]
+        records = Record.objects.filter(pk__in=record_ids)
+        record_objects = self._get_record_objects(records)
+        if anothers_account:
+            self._inject_list_ids(records, record_objects)
         return {
             "records": records_,
+            "record_objects": json.dumps(record_objects),
             "list_id": List.objects.get(key_name=list_name).pk,
             "list": list_name,
-            "anothers_account": self.anothers_account,
-            "list_data": json.dumps(list_data),
+            "anothers_account": anothers_account,
             "sort": session["sort"],
             "query": query,
             # "reviews": comments_and_ratings,
