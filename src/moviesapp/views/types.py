@@ -1,13 +1,13 @@
 """Types for views."""
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, List, Optional
+from typing import TYPE_CHECKING, List, Literal, Optional
 
 from django.core.paginator import Page
 from django.db.models import QuerySet
 from typing_extensions import NotRequired, TypedDict
 
-from ..types import ListKeyName, SortType, Trailer
+from ..types import Trailer
 
 if TYPE_CHECKING:
     from ..models import ActionRecord, Record, User
@@ -114,3 +114,26 @@ class RecordObject(TypedDict):
     providerRecords: List[ProviderRecordObject]
     options: OptionsObject
     listId: NotRequired[Optional[int]]
+
+
+class SearchOptions(TypedDict):
+    """Search options."""
+
+    popularOnly: bool
+    sortByDate: bool
+
+
+class MovieSearchResult(TypedDict):
+    """Movie search result."""
+
+    id: int
+    tmdbLink: str
+    releaseDate: Optional[str]
+    title: str
+    poster: Optional[str]
+    poster2x: Optional[str]
+    isReleased: bool
+
+
+ListKeyName = Literal["watched", "to-watch"]
+SortType = Literal["release_date", "rating", "addition_date"]

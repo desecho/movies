@@ -10,9 +10,17 @@ from django.shortcuts import get_object_or_404
 
 from ..http import AjaxAuthenticatedHttpRequest, AjaxHttpRequest, AuthenticatedHttpRequest, HttpRequest
 from ..models import Action, ActionRecord, List, Movie, ProviderRecord, Record, User, UserAnonymous
-from ..types import ListKeyName, SortType
 from .mixins import AjaxAnonymousView, AjaxView, TemplateAnonymousView
-from .types import ListViewContextData, MovieObject, OptionsObject, ProviderObject, ProviderRecordObject, RecordObject
+from .types import (
+    ListKeyName,
+    ListViewContextData,
+    MovieObject,
+    OptionsObject,
+    ProviderObject,
+    ProviderRecordObject,
+    RecordObject,
+    SortType,
+)
 from .utils import add_movie_to_list, get_records, paginate, sort_by_rating
 
 

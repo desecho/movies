@@ -60,13 +60,6 @@ class TrailerSitesSettings(TypedDict):
     Vimeo: str
 
 
-class SearchOptions(TypedDict):
-    """Search options."""
-
-    popularOnly: bool
-    sortByDate: bool
-
-
 class TmdbMovieSearchResultProcessed(TypedDict):
     """TMDB movie search result processed."""
 
@@ -75,18 +68,6 @@ class TmdbMovieSearchResultProcessed(TypedDict):
     id: int
     release_date: Optional[date]
     title: str
-
-
-class MovieSearchResult(TypedDict):
-    """Movie search result."""
-
-    id: int
-    tmdbLink: str
-    releaseDate: Optional[str]
-    title: str
-    poster: Optional[str]
-    poster2x: Optional[str]
-    isReleased: bool
 
 
 class TmdbTrailer(TypedDict):
@@ -133,8 +114,6 @@ class MovieTmdbOmdb(TmdbMovieProcessed, OmdbMovieProcessed):
 
 TrailerSite = Literal["YouTube", "Vimeo"]
 SearchType = Literal["movie", "actor", "director"]
-ListKeyName = Literal["watched", "to-watch"]
-SortType = Literal["release_date", "rating", "addition_date"]
 
 # UntypedObject means it is a loaded JSON object
 UntypedObject: TypeAlias = Dict[str, Any]

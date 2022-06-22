@@ -2,9 +2,8 @@
 from typing import Any
 
 from ..http import HttpRequest
-from ..types import ListKeyName
 from .mixins import TemplateAnonymousView
-from .types import GalleryViewContextData
+from .types import GalleryViewContextData, ListKeyName
 from .utils import get_records, sort_by_rating
 
 
