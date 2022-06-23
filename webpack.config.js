@@ -19,16 +19,6 @@ function getBundleWithRaty(filename) {
   return bundle.concat(getBundle(filename));
 }
 
-function getListBundle() {
-  const bundle = ['raty-js/lib/jquery.raty.js'];
-  return bundle.concat(getBundle('list.js'));
-}
-
-function getFeedBundle() {
-  const bundle = getBundleWithRaty('feed.js');
-  return bundle.concat([path.join(jsPath, 'empty_app.js')]);
-}
-
 function getBundleWithEmptyApp(filename) {
   const bundle = getBundle(filename);
   return bundle.concat([path.join(jsPath, 'empty_app.js')]);
@@ -42,12 +32,12 @@ function getSearchBundle() {
 module.exports = {
   entry: {
     search: getSearchBundle(),
-    list: getListBundle(),
+    list: getBundleWithRaty('list.js'),
     gallery: getBundle('gallery.js'),
     // recommendations: getBundleWithRaty('recommendations.js'),
     registration: getBundleWithEmptyApp('registration.js'),
     passwordChange: getBundleWithEmptyApp('password_change.js'),
-    feed: getFeedBundle(),
+    feed: getBundleWithRaty('feed.js'),
     emptyApp: [path.join(jsPath, 'init.js'), path.join(jsPath, 'empty_app.js')],
     style: path.join(basePath, 'styles', 'styles.scss'),
     vendor: vendorPackages,
