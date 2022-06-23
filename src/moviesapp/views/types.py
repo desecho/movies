@@ -29,9 +29,10 @@ class PeopleViewContextData(TypedDict):
 class GalleryViewContextData(TypedDict):
     """Gallery view context data."""
 
-    records: QuerySet["Record"]
+    movies: str
     anothers_account: Optional["User"]
     list: ListKeyName
+    list_id: int
 
 
 class ListViewContextData(TypedDict):
@@ -52,15 +53,20 @@ class RecommendationsViewContextData(TypedDict):
     records: List["Record"]
 
 
-class MovieObject(TypedDict):
+class MovieGalleryObject(TypedDict):
+    """Movie gallery object."""
+
+    title: str
+    titleOriginal: str
+    posterNormal: Optional[str]
+    posterBig: Optional[str]
+
+
+class MovieObject(MovieGalleryObject):
     """Movie object."""
 
     id: int
-    title: str
-    titleOriginal: str
     isReleased: bool
-    posterNormal: Optional[str]
-    posterBig: Optional[str]
     posterSmall: Optional[str]
     imdbRating: Optional[float]
     releaseDate: Optional[str]

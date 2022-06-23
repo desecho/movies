@@ -30,3 +30,7 @@ export function removeItemOnce(arr, value) {
   }
   return arr;
 }
+
+export function getSrcSet(img1x, img2x) {
+  return `${img1x} 1x, ${img2x} 2x`;
+}

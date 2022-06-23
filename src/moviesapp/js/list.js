@@ -3,7 +3,7 @@
 'use strict';
 
 import axios from 'axios';
-import {retina, removeItemOnce} from './helpers';
+import {retina, removeItemOnce, getSrcSet} from './helpers';
 import {newApp} from './app';
 import autosize from 'autosize';
 
@@ -62,9 +62,7 @@ window.vm = newApp({
     openUrl(url) {
       location.href = url;
     },
-    getSrcSet(img1x, img2x) {
-      return `${img1x} 1x, ${img2x} 2x`;
-    },
+    getSrcSet: getSrcSet,
     retinajs: retina,
     saveOptions(record) {
       const data = {

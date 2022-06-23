@@ -3,52 +3,66 @@
 {% block content %}
   {% include 'includes/movie_count.html' %}
   <div class="row">
-    <div class="col-sm-12">
-      {% if anothers_account %}
-        <a class="btn btn-secondary" href="{% url 'list' anothers_account.username list %}">{% trans 'List' %}</a>
-      {% else %}
-        <a class="btn btn-secondary" href="{% url 'list' list %}">{% trans 'List' %}</a>
-      {% endif %}
+    <div class="col-sm-12 mb-2">
+      <a
+        class="btn btn-secondary"
+        {% if anothers_account %}
+          href="{% url 'list' anothers_account.username list %}"
+        {% else %}
+          href="{% url 'list' list %}"
+        {% endif %}
+      >
+        {% trans 'List' %}
+      </a>
     </div>
   </div>
-  <br>
   <div class="row">
-    <div class="col-sm-12">
+    <div class="col-sm-12 mb-2">
       <div class="btn-group btn-group-toggle" data-toggle="buttons">
-        <label class="btn btn-secondary {% if list == 'watched' %} active {% endif %}"
-               title="{% trans 'Watched' %}"
-          {% if anothers_account %}
-               @click="openUrl('{% url 'gallery' anothers_account.username 'watched' %}')"
-          {% else %}
-               @click="openUrl('{% url 'gallery' 'watched' %}')"
-          {% endif %}
+        <label
+          class="btn btn-secondary" :class="{active: listId == listWatchedId}"
+          @click="openUrl(urlGalleryWatched)"
+          title="{% trans 'Watched' %}"
         >
-          <input type="radio" {% if list == 'watched' %} checked {% endif %}>{% trans 'Watched' %}
+          <input type="radio" :checked="listId == listWatchedId">
+          {% trans 'Watched' %}
         </label>
-        <label class="btn btn-secondary {% if list == 'to-watch' %} active {% endif %}"
-               title="{% trans 'To Watch' %}"
-          {% if anothers_account %}
-               @click="openUrl('{% url 'gallery' anothers_account.username 'to-watch' %}')"
-          {% else %}
-               @click="openUrl('{% url 'gallery' 'to-watch' %}')"
-          {% endif %}
+        <label
+          class="btn btn-secondary" :class="{active: listId == listToWatchId}"
+          @click="openUrl(urlGalleryToWatch)"
+          title="{% trans 'To Watch' %}"
         >
-          <input type="radio" {% if list == 'to-watch' %} checked {% endif %}>{% trans 'To Watch' %}
+          <input type="radio" :checked="listId == listToWatchId">
+          {% trans 'To Watch' %}
         </label>
       </div>
     </div>
   </div>
-  <br>
-  <br>
-  <br>
   <div>
-    {% for record in records %}
-      <img src="{{ record.movie.poster_normal }}" data-rjs="{{ record.movie.poster_big }}"
-           alt="{{ record.movie.title }}" class="gallery-poster" title="{{ record.movie.title_original }}" loading="lazy"/>
-    {% endfor %}
+    <v-lazy-image
+      class="gallery-poster poster-big"
+      :srcset="getSrcSet(movie.posterNormal, movie.posterBig)"
+      :src="movie.posterBig"
+      :title="movie.titleOriginal"
+      :alt="movie.title"
+      v-for="movie in movies"
+    />
   </div>
 {% endblock %}
 
 {% block js %}
+  <script>
+    'use strict';
+
+    vars.movies = JSON.parse('{{ movies|escapejs|safe }}');
+    vars.listId = {{ list_id }};
+    {% if anothers_account %}
+      vars.urlGalleryWatched = '{% url 'gallery' anothers_account.username 'watched' %}';
+      vars.urlGalleryToWatch = '{% url 'gallery' anothers_account.username 'to-watch' %}';
+    {% else %}
+      vars.urlGalleryWatched = '{% url 'gallery' 'watched' %}';
+      vars.urlGalleryToWatch = '{% url 'gallery' 'to-watch' %}';
+    {% endif %}
+  </script>
   <script src="{% static 'js/gallery.js' %}"></script>
 {% endblock %}
