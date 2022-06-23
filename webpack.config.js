@@ -20,7 +20,7 @@ function getBundleWithRaty(filename) {
 }
 
 function getListBundle() {
-  const bundle = ['raty-js/lib/jquery.raty.js', 'bootstrap/dist/js/bootstrap.min.js'];
+  const bundle = ['raty-js/lib/jquery.raty.js'];
   return bundle.concat(getBundle('list.js'));
 }
 
@@ -34,9 +34,14 @@ function getBundleWithEmptyApp(filename) {
   return bundle.concat([path.join(jsPath, 'empty_app.js')]);
 }
 
+function getSearchBundle() {
+  const bundle = ['bootstrap/dist/js/bootstrap.min.js'];
+  return bundle.concat(getBundle('search.js'));
+}
+
 module.exports = {
   entry: {
-    search: getBundle('search.js'),
+    search: getSearchBundle(),
     list: getListBundle(),
     gallery: getBundle('gallery.js'),
     // recommendations: getBundleWithRaty('recommendations.js'),
