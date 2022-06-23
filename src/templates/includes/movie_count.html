@@ -3,12 +3,9 @@
 <div id="movie-count">
   {% if anothers_account %}
     {% movie_count anothers_account %}
-  {% else %}
-    {% movie_count user %}
-  {% endif %}
-
-  {% if anothers_account %}
     <br>{{ anothers_account }}<br>
     {% avatar_big anothers_account %}
+  {% else %}
+    {% movie_count user %}
   {% endif %}
 </div>
