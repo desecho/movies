@@ -514,6 +514,11 @@ prod-manage:
 prod-shell:
 	scripts/run_shell_prod.sh
 
+.PHONY: prod-migrate
+## Run data migration for prod
+prod-migrate:
+	scripts/run_management_command.sh migrate
+
 .PHONY: prod-enable-debug
 ## Enable debug in prod. It will be reset with the next deployment
 prod-enable-debug:

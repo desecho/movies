@@ -45,4 +45,4 @@ jobs:
           kubectl rollout status "deployment/$PROJECT"
 
       - name: Run db migration
-        run: make prod-manage migrate
+        run: make prod-migrate
