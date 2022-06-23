@@ -11,8 +11,7 @@ window.vm = newApp({
       listWatchedId: vars.listWatchedId,
       listToWatchId: vars.listToWatchId,
       listId: vars.listId,
-      urlGalleryWatched: vars.urlGalleryWatched,
-      urlGalleryToWatch: vars.urlGalleryToWatch,
+      urls: urls,
     };
   },
   methods: {

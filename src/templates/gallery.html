@@ -21,7 +21,7 @@
       <div class="btn-group btn-group-toggle" data-toggle="buttons">
         <label
           class="btn btn-secondary" :class="{active: listId == listWatchedId}"
-          @click="openUrl(urlGalleryWatched)"
+          @click="openUrl(urls.galleryWatched)"
           title="{% translate 'Watched' %}"
         >
           <input type="radio" :checked="listId == listWatchedId">
@@ -29,7 +29,7 @@
         </label>
         <label
           class="btn btn-secondary" :class="{active: listId == listToWatchId}"
-          @click="openUrl(urlGalleryToWatch)"
+          @click="openUrl(urls.galleryToWatch)"
           title="{% translate 'To Watch' %}"
         >
           <input type="radio" :checked="listId == listToWatchId">
@@ -57,11 +57,11 @@
     vars.movies = JSON.parse('{{ movies|escapejs|safe }}');
     vars.listId = {{ list_id }};
     {% if anothers_account %}
-      vars.urlGalleryWatched = '{% url 'gallery' anothers_account.username 'watched' %}';
-      vars.urlGalleryToWatch = '{% url 'gallery' anothers_account.username 'to-watch' %}';
+      urls.galleryWatched = '{% url 'gallery' anothers_account.username 'watched' %}';
+      urls.galleryToWatch = '{% url 'gallery' anothers_account.username 'to-watch' %}';
     {% else %}
-      vars.urlGalleryWatched = '{% url 'gallery' 'watched' %}';
-      vars.urlGalleryToWatch = '{% url 'gallery' 'to-watch' %}';
+      urls.galleryWatched = '{% url 'gallery' 'watched' %}';
+      urls.galleryToWatch = '{% url 'gallery' 'to-watch' %}';
     {% endif %}
   </script>
   <script src="{% static 'js/gallery.js' %}"></script>
