@@ -2,38 +2,47 @@
 
 {% block content %}
   <div v-cloak>
-    <form @submit.prevent="search"
-      class="mt-1 col-lg-7 col-md-8 col-sm-10 col-xl-5 mx-auto">
+    <form @submit.prevent="search" class="mt-1 col-lg-7 col-md-8 col-sm-10 col-xl-5 mx-auto">
       <div class="input-group">
-        <input class="form-control" type="text" autofocus v-model="query"
-          required>
+        <input class="form-control" type="text" autofocus v-model="query" required>
         <div class="input-group-append search-btn-group">
           <button class="btn btn-secondary" type="submit">{% trans 'Search' %}</button>
-          <button class="search-type-button btn btn-secondary dropdown-toggle" data-toggle="dropdown"
-            aria-haspopup="true" aria-expanded="false">
+          <button
+            class="search-type-button btn btn-secondary dropdown-toggle"
+            data-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >
             [[ searchType ]] <span class="caret"></span>
           </button>
           <div class="dropdown-menu dropdown-menu-right">
-            <a class="dropdown-item" href="javascript:void(0)"
-              @click="changeSearchType('movie');">{% trans 'Movie' %}</a>
-            <a class="dropdown-item" href="javascript:void(0)"
-              @click="changeSearchType('actor');">{% trans 'Actor' %}</a>
-            <a class="dropdown-item" href="javascript:void(0)"
-              @click="changeSearchType('director');">{% trans 'Director' %}</a>
+            <a class="dropdown-item" href="javascript:void(0)" @click="changeSearchType('movie');">
+              {% trans 'Movie' %}
+            </a>
+            <a class="dropdown-item" href="javascript:void(0)" @click="changeSearchType('actor');">
+              {% trans 'Actor' %}
+            </a>
+            <a class="dropdown-item" href="javascript:void(0)" @click="changeSearchType('director');">
+              {% trans 'Director' %}
+            </a>
           </div>
         </div>
       </div>
       <div class="search-panel-additional">
-        <label class="checkbox">
-          <input type="checkbox" v-model="popularOnly"> {% trans 'show only popular' %}<br>
-        </label>
-        <label class="checkbox">
-          <input type="checkbox" v-model="sortByDate"> {% trans 'sort by date' %}
-        </label>
+        <div>
+          <label class="checkbox">
+            <input type="checkbox" v-model="popularOnly"> {% trans 'show only popular' %}
+          </label>
+        </div>
+        <div>
+          <label class="checkbox">
+            <input type="checkbox" v-model="sortByDate"> {% trans 'sort by date' %}
+          </label>
+        </div>
       </div>
     </form>
     <div class="results" v-cloak>
-      <div class="movie" v-for="movie in movies" v-show="!movie.hide">
+      <div class="movie" v-show="!movie.hide" v-for="movie in movies">
         <div class="poster">
           <v-lazy-image
             class="search-poster-img"
@@ -43,7 +52,8 @@
             :alt="movie.title"
           />
         </div>
-        <div class="title">[[ movie.title ]]
+        <div class="title">
+          [[ movie.title ]]
           <div class="add-to-list-buttons">
             <a href="javascript:void(0)" title="{% trans 'Add to the list' %} {% trans 'Watched' %}"
               @click="addToListFromDb(movie, listWatchedId)" v-show="movie.isReleased"><font-awesome-icon icon="fa-solid fa-eye" /></a>
