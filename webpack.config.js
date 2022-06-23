@@ -11,7 +11,12 @@ const vendorPackages = ['vue-toast-notification/dist/theme-default.css',
 ];
 
 function getBundle(filename) {
-  return [path.join(jsPath, 'init.js'), path.join(jsPath, filename), path.join(jsPath, 'set_axios_settings.js')];
+  return [
+    'bootstrap/dist/js/bootstrap.min.js',
+    path.join(jsPath, 'init.js'),
+    path.join(jsPath, filename),
+    path.join(jsPath, 'set_axios_settings.js'),
+  ];
 }
 
 function getBundleWithRaty(filename) {
@@ -24,14 +29,9 @@ function getBundleWithEmptyApp(filename) {
   return bundle.concat([path.join(jsPath, 'empty_app.js')]);
 }
 
-function getSearchBundle() {
-  const bundle = ['bootstrap/dist/js/bootstrap.min.js'];
-  return bundle.concat(getBundle('search.js'));
-}
-
 module.exports = {
   entry: {
-    search: getSearchBundle(),
+    search: getBundle('search.js'),
     list: getBundleWithRaty('list.js'),
     gallery: getBundle('gallery.js'),
     // recommendations: getBundleWithRaty('recommendations.js'),
