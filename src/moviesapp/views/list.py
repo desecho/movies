@@ -230,6 +230,26 @@ class ListView(TemplateAnonymousView):
             list_data[record_id] = movie_and_list_ids.get(movie_id, 0)
         return list_data
 
+    def _sanitize_session_values(self) -> None:
+        """
+        Sanitize session values.
+
+        We want to make sure that the session values are valid.
+        We need to do this in case a user manually set the wrong session values
+        or if the code changes resulted in invalid values.
+        """
+        SORT_TYPES: ListType[SortType] = ["releaseDate", "rating", "additionDate"]
+        MODES = ["full", "compact", "minimal"]
+
+        session = self.request.session
+        sort = session.get("sort")
+        if sort not in SORT_TYPES:
+            session.pop("sort", None)
+
+        mode = session.get("mode")
+        if mode not in MODES:
+            session.pop("mode", None)
+
     def _initialize_session_values(self) -> None:
         """Initialize session values."""
         session = self.request.session
@@ -381,6 +401,7 @@ class ListView(TemplateAnonymousView):
 
     def get(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:  # type: ignore
         """Get."""
+        self._sanitize_session_values()
         self._initialize_session_values()
         return super().get(request, *args, **kwargs)
 
