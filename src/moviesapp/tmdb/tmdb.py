@@ -57,10 +57,10 @@ def _remove_trailing_slash_from_tmdb_poster(poster: Optional[str]) -> Optional[s
 
 
 def _filter_movies_only(entries: List[TmdbCast] | List[TmdbCrew]) -> List[TmdbCast | TmdbCrew]:
-    return [e for e in entries if e["media_type"] == "movie"]
+    return [e for e in entries if e.get("media_type") == "movie"]
 
 
-def _get_date(date_str: str) -> Optional[date]:
+def _get_date(date_str: Optional[str]) -> Optional[date]:
     """Get date."""
     if date_str:
         return datetime.strptime(date_str, "%Y-%m-%d").date()
@@ -74,10 +74,10 @@ def _get_processed_movie_data(
     movies: List[TmdbMovieSearchResultProcessed] = []
     for entry in entries:
         movie: TmdbMovieSearchResultProcessed = {
-            "poster_path": _remove_trailing_slash_from_tmdb_poster(entry["poster_path"]),
-            "popularity": entry["popularity"],
+            "poster_path": _remove_trailing_slash_from_tmdb_poster(entry.get("poster_path")),
+            "popularity": entry.get("popularity", 0),
             "id": entry["id"],
-            "release_date": _get_date(entry["release_date"]),
+            "release_date": _get_date(entry.get("release_date")),
             "title": entry["title"],
         }
         movies.append(movie)
@@ -125,7 +125,7 @@ def _get_trailers(tmdb_movie: tmdb.Movies, lang: str) -> List[TmdbTrailer]:
     """Get trailers."""
     trailers = []
     for video in tmdb_movie.videos(language=lang)["results"]:
-        if video["type"] == "Trailer":
+        if video.get("type") == "Trailer":
             site = video["site"]
             try:
                 if not _is_valid_trailer_site(site):
@@ -135,7 +135,7 @@ def _get_trailers(tmdb_movie: tmdb.Movies, lang: str) -> List[TmdbTrailer]:
                     raise
                 capture_exception(e)
                 continue
-            trailer: TmdbTrailer = {"name": video["name"], "key": video["key"], "site": site}
+            trailer: TmdbTrailer = {"name": video.get("name", "Trailer"), "key": video["key"], "site": site}
             trailers.append(trailer)
     return trailers
 
@@ -169,27 +169,27 @@ def get_tmdb_movie_data(tmdb_id: int) -> TmdbMovieProcessed:
     """Get TMDB movie data."""
     tmdb_movie = tmdb.Movies(tmdb_id)
     movie_info_en = _get_movie_data(tmdb_movie, lang=settings.LANGUAGE_EN)
-    imdb_id = movie_info_en["imdb_id"]
+    imdb_id = movie_info_en.get("imdb_id")
     # Fail early if the IMDb ID is not found.
     if not imdb_id:
         raise TmdbNoImdbIdError(tmdb_id)
-    release_date = _get_date(movie_info_en["release_date"])
+    release_date = _get_date(movie_info_en.get("release_date"))
     movie_info_ru = _get_movie_data(tmdb_movie, lang=settings.LANGUAGE_RU)
     return {
         "tmdb_id": tmdb_id,
         "imdb_id": imdb_id,
         "release_date": release_date,
         "title_original": movie_info_en["original_title"],
-        "poster_ru": _remove_trailing_slash_from_tmdb_poster(movie_info_ru["poster_path"]),
-        "poster_en": _remove_trailing_slash_from_tmdb_poster(movie_info_en["poster_path"]),
-        "homepage": movie_info_en["homepage"],
+        "poster_ru": _remove_trailing_slash_from_tmdb_poster(movie_info_ru.get("poster_path")),
+        "poster_en": _remove_trailing_slash_from_tmdb_poster(movie_info_en.get("poster_path")),
+        "homepage": movie_info_en.get("homepage"),
         "trailers_en": _get_trailers(tmdb_movie, lang=settings.LANGUAGE_EN),
         "trailers_ru": _get_trailers(tmdb_movie, lang=settings.LANGUAGE_RU),
         "title_en": movie_info_en["title"],
         "title_ru": movie_info_ru["title"],
-        "overview_en": movie_info_en["overview"],
-        "overview_ru": movie_info_ru["overview"],
-        "runtime": _get_time_from_min(movie_info_en["runtime"]),
+        "overview_en": movie_info_en.get("overview"),
+        "overview_ru": movie_info_ru.get("overview"),
+        "runtime": _get_time_from_min(movie_info_en.get("runtime")),
     }
 
 

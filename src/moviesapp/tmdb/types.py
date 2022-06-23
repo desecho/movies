@@ -1,14 +1,12 @@
 """TMDB types."""
-from __future__ import annotations
-
 from typing import List, Optional
 
-from typing_extensions import NotRequired, TypedDict
+from typing_extensions import TypedDict
 
 from ..types import UntypedObject
 
 
-class TmdbBase(TypedDict):
+class TmdbBase(TypedDict, total=False):
     """TMDB base."""
 
     id: int
@@ -16,7 +14,7 @@ class TmdbBase(TypedDict):
     popularity: float
 
 
-class TmdbMovieBase(TmdbBase):
+class TmdbMovieBase(TmdbBase, total=False):
     """TMDB movie base."""
 
     backdrop_path: Optional[str]
@@ -37,7 +35,7 @@ class TmdbGenre(TypedDict):  # TODO: Not used yet but will need to use later
     name: str
 
 
-class TmdbMovie(TmdbMovieBase):
+class TmdbMovie(TmdbMovieBase, total=False):
     """TMDB movie."""
 
     belongs_to_collection: Optional[UntypedObject]  # TMDB does not provide a type for this
@@ -55,14 +53,14 @@ class TmdbMovie(TmdbMovieBase):
     tagline: Optional[str]
 
 
-class TmdbMovieSearchResult(TmdbMovieBase):
+class TmdbMovieSearchResult(TmdbMovieBase, total=False):
     """TMDB movie search result."""
 
     overview: str
     genre_ids: List[int]
 
 
-class TmdbPerson(TmdbBase):
+class TmdbPerson(TmdbBase, total=False):
     """TMDB person."""
 
     profile_path: Optional[str]
@@ -70,7 +68,7 @@ class TmdbPerson(TmdbBase):
     name: str
 
 
-class TmdbCastCrewBase(TmdbMovieSearchResult):
+class TmdbCastCrewBase(TmdbMovieSearchResult, total=False):
     """TMDB cast/crew base."""
 
     credit_id: str
@@ -82,14 +80,14 @@ class TmdbCastCrewBase(TmdbMovieSearchResult):
     original_name: str
 
 
-class TmdbCast(TmdbCastCrewBase):
+class TmdbCast(TmdbCastCrewBase, total=False):
     """TMDB cast."""
 
     character: str
     vote_average: int | float  # type: ignore
 
 
-class TmdbCrew(TmdbCastCrewBase):
+class TmdbCrew(TmdbCastCrewBase, total=False):
     """TMDB Crew."""
 
     department: str
@@ -104,7 +102,7 @@ class TmdbCombinedCredits(TypedDict):
     crew: List[TmdbCrew]
 
 
-class TmdbProvider(TypedDict):
+class TmdbProvider(TypedDict, total=False):
     """TMDB Provider."""
 
     display_priority: int
@@ -113,18 +111,18 @@ class TmdbProvider(TypedDict):
     provider_id: int
 
 
-class TmdbWatchDataCountry(TypedDict):
+class TmdbWatchDataCountry(TypedDict, total=False):
     """TMDB watch data country."""
 
     link: str
-    flatrate: NotRequired[List[TmdbProvider]]
-    free: NotRequired[List[TmdbProvider]]
-    ads: NotRequired[List[TmdbProvider]]
-    rent: NotRequired[List[TmdbProvider]]
-    buy: NotRequired[List[TmdbProvider]]
+    flatrate: List[TmdbProvider]
+    free: List[TmdbProvider]
+    ads: List[TmdbProvider]
+    rent: List[TmdbProvider]
+    buy: List[TmdbProvider]
 
 
-class TmdbWatchData(TypedDict):
+class TmdbWatchData(TypedDict, total=False):
     """TMDB watch data from."""
 
     AR: TmdbWatchDataCountry
