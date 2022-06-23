@@ -5,7 +5,7 @@
   <div>
     {% include 'includes/movie_count.html' %}
     {% if anothers_account %}
-      <div class="row" v-cloak>
+      <div class="row">
         <div class="col-sm-12 mb-2">
           <div class="btn-group btn-group-toggle" data-toggle="buttons" role="group">
             <label
@@ -30,7 +30,7 @@
     {% endif %}
     <div class="row">
       <div class="col-sm-12 mb-2">
-        <div class="btn-group btn-group-toggle" data-toggle="buttons" role="group" v-cloak>
+        <div class="btn-group btn-group-toggle" data-toggle="buttons" role="group">
           <label
             class="btn btn-secondary" :class="{active: mode == 'full'}"
             @click="switchMode('full')"
@@ -80,7 +80,7 @@
       {% endif %}
     </div>
     <div class="row">
-      <div class="col-sm-9 col-md-7 col-lg-5 col-xl-5" v-cloak>
+      <div class="col-sm-9 col-md-7 col-lg-5 col-xl-5">
         <div class="btn-group btn-group-toggle" data-toggle="buttons">
           <label
             class="btn btn-secondary" :class="{active: sort == 'releaseDate'}"
