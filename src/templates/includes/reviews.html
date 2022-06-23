@@ -1,4 +1,4 @@
-{% load avatar get %}
+{% comment %} {% load avatar get %}
 
 {% if reviews|get:record.id %}
   {% for review in reviews|get:record.id %}
@@ -18,4 +18,4 @@
       </table>
     </div>
   {% endfor %}
-{% endif %}
+{% endif %} {% endcomment %}
