@@ -7,14 +7,14 @@
     {% include 'includes/form_errors.html' %}
     <div class="form-group">
       <input type="text" class="form-control" name="username" required {% if form.username.value %}
-        value="{{ form.username.value }}" {% endif %} autofocus placeholder="{% trans 'Username' %}">
+        value="{{ form.username.value }}" {% endif %} autofocus placeholder="{% translate 'Username' %}">
     </div>
     <div class="form-group">
-      <input type="password" class="form-control" name="password" required placeholder="{% trans 'Password' %}">
+      <input type="password" class="form-control" name="password" required placeholder="{% translate 'Password' %}">
     </div>
     <div class="form-group">
       <div class="col-sm-offset-2">
-        <input type="submit" class="btn btn-block btn-primary" value="{% trans 'Log in' %}">
+        <input type="submit" class="btn btn-block btn-primary" value="{% translate 'Log in' %}">
       </div>
     </div>
     <input type="hidden" name="next" value="{{ next }}">
@@ -22,7 +22,7 @@
       <div class="form-group">
         <div class="col-sm-offset-2">
           <a href="{% url 'social:begin' 'facebook' %}" class="btn btn-block btn-social btn-facebook">
-            <span><font-awesome-icon icon="fa-brands fa-facebook" /></span> {% trans 'Log in with' %} Facebook
+            <span><font-awesome-icon icon="fa-brands fa-facebook" /></span> {% translate 'Log in with' %} Facebook
           </a>
         </div>
       </div>
@@ -30,18 +30,18 @@
     <div class="form-group">
       <div class="col-sm-offset-2">
         <a href="{% url 'social:begin' 'vk-oauth2' %}" class="btn btn-block btn-social btn-vk">
-          <span><font-awesome-icon icon="fa-brands fa-vk" /></span> {% trans 'Log in with' %} VK
+          <span><font-awesome-icon icon="fa-brands fa-vk" /></span> {% translate 'Log in with' %} VK
         </a>
       </div>
     </div>
     <div class="form-group">
       <div class="col-sm-offset-2">
-        <a href="{% url 'registration_register' %}" class="btn btn-block btn-primary">{% trans 'Register' %}</a>
+        <a href="{% url 'registration_register' %}" class="btn btn-block btn-primary">{% translate 'Register' %}</a>
       </div>
     </div>
     <div class="form-group">
       <div class="col-sm-offset-2">
-        <a href="{% url 'auth_password_reset' %}" class="btn btn-block btn-primary">{% trans 'Reset password' %}</a>
+        <a href="{% url 'auth_password_reset' %}" class="btn btn-block btn-primary">{% translate 'Reset password' %}</a>
       </div>
     </div>
   </div>

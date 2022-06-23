@@ -12,7 +12,7 @@
           href="{% url 'list' list %}"
         {% endif %}
       >
-        {% trans 'List' %}
+        {% translate 'List' %}
       </a>
     </div>
   </div>
@@ -22,18 +22,18 @@
         <label
           class="btn btn-secondary" :class="{active: listId == listWatchedId}"
           @click="openUrl(urlGalleryWatched)"
-          title="{% trans 'Watched' %}"
+          title="{% translate 'Watched' %}"
         >
           <input type="radio" :checked="listId == listWatchedId">
-          {% trans 'Watched' %}
+          {% translate 'Watched' %}
         </label>
         <label
           class="btn btn-secondary" :class="{active: listId == listToWatchId}"
           @click="openUrl(urlGalleryToWatch)"
-          title="{% trans 'To Watch' %}"
+          title="{% translate 'To Watch' %}"
         >
           <input type="radio" :checked="listId == listToWatchId">
-          {% trans 'To Watch' %}
+          {% translate 'To Watch' %}
         </label>
       </div>
     </div>

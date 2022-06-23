@@ -4,18 +4,18 @@
 {% block content %}
   <form class="form-horizontal" method="post" action="">
     {% csrf_token %}
-    <legend>{% trans 'Settings' %}</legend>
+    <legend>{% translate 'Settings' %}</legend>
     <br>
     <div class="col-sm-7 col-md-5">
       {% include 'includes/form_errors.html' %}
     </div>
     <div class="form-group row vk-app-hide" style="display: none;">
-      <label class="col-form-label col-sm-4 preference-label" for="lang">{% trans 'Avatar' %}:</label>
+      <label class="col-form-label col-sm-4 preference-label" for="lang">{% translate 'Avatar' %}:</label>
       <div class="col-sm-8">
         {% avatar_big user %}
         {% if not user.is_linked %}
           <br>
-          {% trans 'You can change your avatar on' %} <a href="http://gravatar.com" target="_blank">Gravatar</a>
+          {% translate 'You can change your avatar on' %} <a href="http://gravatar.com" target="_blank">Gravatar</a>
         {% endif %}
       </div>
     </div>
@@ -32,13 +32,13 @@
       </div>
     {% endfor %}
     <div class="form-group row">
-      <label class="col-form-label col-sm-4 preference-label">{% trans 'Password' %}:</label>
+      <label class="col-form-label col-sm-4 preference-label">{% translate 'Password' %}:</label>
       <div class="col-sm-5 col-md-3">
-        <a href="{% url 'admin:password_change' %}">{% trans 'Change password' %}</a>
+        <a href="{% url 'admin:password_change' %}">{% translate 'Change password' %}</a>
       </div>
     </div>
     <div class="form-group row">
-      <label class="col-form-label col-sm-4 preference-label">{% trans 'Profile link' %}:</label>
+      <label class="col-form-label col-sm-4 preference-label">{% translate 'Profile link' %}:</label>
       <div class="col-sm-5 col-md-3">
         <a href="{% url 'list' user.username 'watched' %}">{% abs_url 'list' user.username 'watched' %}</a>
       </div>
@@ -46,7 +46,7 @@
     <div class="form-group row">
       <label class="col-form-label col-sm-4"></label>
       <div class="col-sm-5 col-md-3">
-        <input type="submit" class="btn btn-block btn-primary" value="{% trans 'Save' %}">
+        <input type="submit" class="btn btn-block btn-primary" value="{% translate 'Save' %}">
       </div>
     </div>
   </form>

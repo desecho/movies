@@ -1,10 +1,10 @@
 {% extends 'base.html' %}
 
-{% block title %}{% trans 'About Movies' %}{% endblock %}
+{% block title %}{% translate 'About Movies' %}{% endblock %}
 
 {% block content %}
-  <legend>{% trans 'About Movies' %}</legend>
-  {% blocktrans %}
+  <legend>{% translate 'About Movies' %}</legend>
+  {% blocktranslate %}
     <p>Create movie lists "Watched" and "To Watch", rate movies, and add comments.</p>
     <p>You can also add additional information such as if you watched the movie in the original version, in theatre, an extended version, in 4K, etc.</p>
     <p>You can see the original title when you hover over the movie title or poster.</p>
@@ -32,7 +32,7 @@
       <li><a href="https://www.omdbapi.com/" target="_blank">OMDb</a></li>
     </ul>
     <p>The source code is available on GitHub — <a href="https://github.com/desecho/movies" target="_blank">Movies</a>.
-  {% endblocktrans %}
+  {% endblocktranslate %}
 {% endblock %}
 
 {% block js %}
