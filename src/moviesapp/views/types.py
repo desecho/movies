@@ -136,4 +136,4 @@ class MovieSearchResult(TypedDict):
 
 
 ListKeyName = Literal["watched", "to-watch"]
-SortType = Literal["release_date", "rating", "addition_date"]
+SortType = Literal["releaseDate", "rating", "additionDate"]

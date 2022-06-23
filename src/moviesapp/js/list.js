@@ -55,6 +55,7 @@ window.vm = newApp({
       listToWatchId: vars.listToWatchId,
       listId: vars.listId,
       isAnothersAccount: vars.isAnothersAccount,
+      recommendations: vars.recommendations,
     };
   },
   methods: {
@@ -95,13 +96,16 @@ window.vm = newApp({
       applySettings(settings);
     },
     switchSort(newSort) {
-      if (this.sort == newSort) {
+      const vm = this;
+      if (vm.sort == newSort) {
         return;
       }
+      vm.sort = newSort;
       const settings = {
         sort: newSort,
       };
       if (newSort !== 'rating') {
+        // disable recommendation if sorting by rating is manually disabled
         settings.recommendation = false;
       }
       applySettings(settings);
@@ -254,9 +258,5 @@ const ratyCustomSettings = {
   const settings = $.extend({}, vars.ratySettings, ratyCustomSettings);
   $('.rating').raty(settings);
 })();
-
-if (vars.recommendation) {
-  $('#button-recommendation').button('toggle');
-}
 
 autosize($('textarea'));

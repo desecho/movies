@@ -146,7 +146,7 @@ class ListView(TemplateAnonymousView):
     template_name = "list/list.html"
 
     @staticmethod
-    def _filter_records_for_recommendation(
+    def _filter_records_for_recommendations(
         records: QuerySet[Record], user: Union[User, UserAnonymous]
     ) -> QuerySet[Record]:
         """Keep movies only with 3+ rating, remove watched movies."""
@@ -188,11 +188,11 @@ class ListView(TemplateAnonymousView):
         records: QuerySet[Record], sort: SortType, username: Optional[str], list_name: str
     ) -> QuerySet[Record]:
         """Sort records."""
-        if sort == "release_date":
+        if sort == "releaseDate":
             return records.order_by("-movie__release_date")
         if sort == "rating":
             return sort_by_rating(records, username, list_name)
-        if sort == "addition_date":
+        if sort == "additionDate":
             return records.order_by("-date")
         raise Exception("Unsupported sort type")
 
@@ -234,9 +234,9 @@ class ListView(TemplateAnonymousView):
         """Initialize session values."""
         session = self.request.session
         if "sort" not in session:
-            self.request.session["sort"] = "addition_date"
-        if "recommendation" not in session:
-            self.request.session["recommendation"] = False
+            self.request.session["sort"] = "additionDate"
+        if "recommendations" not in session:
+            self.request.session["recommendations"] = False
         if "mode" not in session:
             self.request.session["mode"] = "full"
 
@@ -348,8 +348,8 @@ class ListView(TemplateAnonymousView):
             records = self._filter_records(records, query)
         records = self._sort_records(records, session["sort"], username, list_name)
 
-        if anothers_account and session["recommendation"]:
-            records = self._filter_records_for_recommendation(records, user)
+        if anothers_account and session["recommendations"]:
+            records = self._filter_records_for_recommendations(records, user)
 
         # Commented out because friends functionality is disabled.
         # if not username and list_name == "to-watch" and records:
@@ -415,7 +415,7 @@ class ListView(TemplateAnonymousView):
 #         records = Record.objects.exclude(user=user).filter(user__in=friends).select_related("movie")
 #         # Order records by user rating and by IMDb rating.
 #         records = records.order_by("-rating", "-movie__imdb_rating", "-movie__release_date")
-#         return self._filter_records_for_recommendation(records, user)
+#         return self._filter_records_for_recommendations(records, user)
 
 #     def get_context_data(self, **kwargs: Any) -> RecommendationsViewContextData:  # type: ignore  # pylint: disable=unused-argument
 #         """Get context data."""

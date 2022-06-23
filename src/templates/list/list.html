@@ -4,86 +4,112 @@
 {% block content %}
   <div>
     {% include 'includes/movie_count.html' %}
-
     {% if anothers_account %}
-      <div class="row">
-        <div class="col-sm-12">
+      <div class="row" v-cloak>
+        <div class="col-sm-12 mb-2">
           <div class="btn-group btn-group-toggle" data-toggle="buttons" role="group">
-            <label class="btn btn-secondary {% if list == 'watched' %} active {% endif %}"
-                   title="{% trans 'Watched' %}"
-                   @click="openUrl('{% url 'list' anothers_account.username 'watched' %}')">
-              <input type="radio" {% if list == 'watched' %} checked {% endif %}>{% trans 'Watched' %}</label>
-            <label class="btn btn-secondary {% if list == 'to-watch' %} active {% endif %}"
-                   title="{% trans 'To Watch' %}"
-                   @click="openUrl('{% url 'list' anothers_account.username 'to-watch' %}')">
-              <input type="radio" {% if list == 'to-watch' %} checked {% endif %}>{% trans 'To Watch' %}
+            <label
+              class="btn btn-secondary" :class="{active: listId == listWatchedId}"
+              @click="openUrl('{% url 'list' anothers_account.username 'watched' %}')"
+              title="{% trans 'Watched' %}"
+            >
+              <input type="radio" :checked="listId == listWatchedId">
+              {% trans 'Watched' %}
+            </label>
+            <label
+              class="btn btn-secondary" :class="{active: listId == listToWatchId}"
+              @click="openUrl('{% url 'list' anothers_account.username 'to-watch' %}')"
+              title="{% trans 'To Watch' %}"
+            >
+              <input type="radio" :checked="listId == listToWatchId">
+              {% trans 'To Watch' %}
             </label>
           </div>
         </div>
       </div>
-      <br>
     {% endif %}
     <div class="row">
-      <div class="col-sm-12">
-        <div class="btn-group btn-group-toggle" data-toggle="buttons" role="group">
-          {% with mode=request.session.mode %}
-            <!-- id values are being used as variable name combination to control the button statuses -->
-            <label class="btn btn-secondary {% if mode == 'full' %} active {% endif %}"
-                   title="{% trans 'Mode' %}" @click="switchMode('full')">
-              <input type="radio" {% if mode == 'full' %} checked {% endif %}>{% trans 'Full' %}
-            </label>
-            <label class="btn btn-secondary {% if mode == 'compact' %} active {% endif %}"
-                   title="{% trans 'Mode' %}" @click="switchMode('compact')">
-              <input type="radio" {% if mode == 'compact' %} checked {% endif %}>{% trans 'Compact' %}
-            </label>
-            <label class="btn btn-secondary {% if mode == 'minimal' %} active {% endif %}"
-                   title="{% trans 'Mode' %}" @click="switchMode('minimal')">
-              <input type="radio" {% if mode == 'minimal' %} checked {% endif %}>{% trans 'Minimal' %}
-            </label>
-          {% endwith %}
+      <div class="col-sm-12 mb-2">
+        <div class="btn-group btn-group-toggle" data-toggle="buttons" role="group" v-cloak>
+          <!-- id values are being used as variable name combination to control the button statuses -->
+          <label
+            class="btn btn-secondary" :class="{active: mode == 'full'}"
+            @click="switchMode('full')"
+            title="{% trans 'Mode' %}"
+          >
+            <input type="radio" :checked="mode == 'full'">
+            {% trans 'Full' %}
+          </label>
+          <label
+            class="btn btn-secondary" :class="{active: mode == 'compact'}"
+            @click="switchMode('compact')"
+            title="{% trans 'Mode' %}"
+          >
+            <input type="radio" :checked="mode == 'compact'">
+            {% trans 'Compact' %}
+          </label>
+          <label
+            class="btn btn-secondary" :class="{active: mode == 'minimal'}"
+            @click="switchMode('minimal')"
+            title="{% trans 'Mode' %}"
+          >
+            <input type="radio" :checked="mode == 'minimal'">
+            {% trans 'Minimal' %}
+          </label>
         </div>
-        <br>
-        <br>
       </div>
-      <div class="col-sm-12">
+      <div class="col-sm-12 mb-2">
         {% if anothers_account %}
-          <a class="gallery btn btn-secondary" href="{% url 'gallery' anothers_account.username list %}">{% trans 'Gallery' %}</a>
+          <a class="gallery btn btn-secondary" href="{% url 'gallery' anothers_account.username list %}">
+            {% trans 'Gallery' %}
+          </a>
         {% else %}
           <a class="gallery btn btn-secondary" href="{% url 'gallery' list %}">{% trans 'Gallery' %}</a>
         {% endif %}
       </div>
-    {% if anothers_account and user.is_authenticated %}
-      <div class="col-sm-12">
-        <br>
-        <button v-cloak data-toggle="button" id="button-recommendation" type="button" class="btn btn-secondary"
-                @click="toggleRecommendation">{% trans 'Recommendations' %}
-        </button>
-      </div>
-    {% endif %}
+      {% if anothers_account and user.is_authenticated %}
+        <div class="col-sm-12 mb-2">
+          <button
+            class="btn btn-secondary" :class="{active: recommendations}"
+            data-toggle="button"
+            type="button"
+            @click="toggleRecommendation"
+          >
+            {% trans 'Recommendations' %}
+          </button>
+        </div>
+      {% endif %}
     </div>
-    <br>
-
     <div class="row">
-      <div class="col-sm-9 col-md-7 col-lg-5 col-xl-5">
+      <div class="col-sm-9 col-md-7 col-lg-5 col-xl-5" v-cloak>
         <div class="btn-group btn-group-toggle" data-toggle="buttons">
           <!-- id values are being used as variable name combination to control the button statuses -->
-          {% with sort=request.session.sort %}
-            <label class="btn btn-secondary {% if sort == 'release_date' %} active {% endif %}"
-                   title="{% trans 'Sort by release date' %}" @click="switchSort('release_date')">
-              <input type="radio" {% if sort == 'release_date' %} checked {% endif %}>{% trans 'Release date' %}
-            </label>
-            <label class="btn btn-secondary {% if sort == 'rating' %} active {% endif %}"
-                   title="{% trans 'Sort by rating' %}" @click="switchSort('rating')">
-              <input type="radio" {% if sort == 'rating' %} checked {% endif %}>{% trans 'Rating' %}
-            </label>
-            <label class="btn btn-secondary {% if sort == 'addition_date' %} active {% endif %}"
-                   title="{% trans 'Sort by date added' %}" @click="switchSort('addition_date')">
-              <input type="radio" {% if sort == 'addition_date' %} checked {% endif %}>{% trans 'Date added' %}
-            </label>
-          {% endwith %}
+          <label
+            class="btn btn-secondary" :class="{active: sort == 'releaseDate'}"
+            @click="switchSort('releaseDate')"
+            title="{% trans 'Sort by release date' %}"
+          >
+            <input type="radio" :checked="sort == 'releaseDate'">
+            {% trans 'Release date' %}
+          </label>
+          <label
+            class="btn btn-secondary" :class="{active: sort == 'rating'}"
+            @click="switchSort('rating')"
+            title="{% trans 'Sort by rating' %}"
+          >
+            <input type="radio" :checked="sort == 'rating'">
+            {% trans 'Rating' %}
+          </label>
+          <label
+            class="btn btn-secondary" :class="{active: sort == 'additionDate'}"
+            @click="switchSort('additionDate')"
+            title="{% trans 'Sort by date added' %}"
+          >
+            <input type="radio" :checked="sort == 'additionDate'">
+            {% trans 'Date added' %}
+          </label>
         </div>
       </div>
-
       <div class="col-sm-6 col-md-4 col-lg-4 col-xl-3">
         <form action="" method="get" class="search">
           {% csrf_token %}
@@ -96,187 +122,263 @@
         </form>
       </div>
     </div>
-
     {% if query %}
       <h3>{{ query }}: <a href="{{ request.path }}"><font-awesome-icon icon="fa-solid fa-xmark" /></a></h3>
     {% endif %}
-
     <div class="results col-sm-12 col-md-10 col-lg-8" v-cloak>
-        <div v-for="record in records" class="movie" :class="{'movie-minimal': mode == 'minimal'}">
-          <div class="title">
-            <span :title="record.movie.titleOriginal">[[ record.movie.title ]]</span>
-            <div v-show="!isAnothersAccount" class="remove-button">
-              <a href="javascript:void(0)" title="{% trans 'Delete' %}"
-                                           @click="removeRecord(record)">
+      <div class="movie" :class="{'movie-minimal': mode == 'minimal'}" v-for="record in records">
+        <div class="title">
+          <span :title="record.movie.titleOriginal">[[ record.movie.title ]]</span>
+          {% if not anothers_account %}
+            <div class="remove-button">
+              <a href="javascript:void(0)" @click="removeRecord(record)" title="{% trans 'Delete' %}">
                 <font-awesome-icon icon="fa-solid fa-trash" />
               </a>
-              <a v-show="isVkApp" href="javascript:void(0)" class="wall-post"
-                                  title="{% trans 'Post to the wall' %}"
-                                  @click="postToWall(record)">
+              <a
+                href="javascript:void(0)"
+                class="wall-post"
+                @click="postToWall(record)"
+                title="{% trans 'Post to the wall' %}"
+                v-show="isVkApp"
+              >
                 <font-awesome-icon icon="fa-solid fa-share" />
               </a>
             </div>
-            <div class="add-to-list-buttons">
-              <div v-if="isAnothersAccount" class="inline">
+          {% endif %}
+          <div class="add-to-list-buttons">
+            {% if anothers_account %}
+              <div class="inline">
                 <div class="inline" v-if="!record.listId">
-                  <a href="javascript:void(0)" title="{% trans 'Add to &quot;Watched&quot; list' %}"
-                      v-show="record.movie.isReleased"
-                      @click="addToList(record.movie.id, listWatchedId, record)"
+                  <a
+                    href="javascript:void(0)"
+                    @click="addToList(record.movie.id, listWatchedId, record)"
+                    title="{% trans 'Add to &quot;Watched&quot; list' %}"
+                    v-show="record.movie.isReleased"
                   >
                     <font-awesome-icon icon="fa-solid fa-eye" />
                   </a>
-                  <a href="javascript:void(0)" title="{% trans 'Add to &quot;To Watch&quot; list' %}"
-                      @click="addToList(record.movie.id, listToWatchId, record)"
+                  <a href="javascript:void(0)"
+                    @click="addToList(record.movie.id, listToWatchId, record)"
+                    title="{% trans 'Add to &quot;To Watch&quot; list' %}"
                   >
                     <font-awesome-icon icon="fa-solid fa-eye-slash" />
                   </a>
                 </div>
-                <span v-show="record.listId == listWatchedId" ><font-awesome-icon icon="fa-solid fa-eye" title="{% trans 'Watched' %}" /></span>
-                <span v-show="record.listId == listToWatchId"><font-awesome-icon icon="fa-solid fa-eye-slash" title="{% trans 'To Watch' %}"  /></span>
+                <span v-show="record.listId == listWatchedId" >
+                  <font-awesome-icon icon="fa-solid fa-eye" title="{% trans 'Watched' %}" />
+                </span>
+                <span v-show="record.listId == listToWatchId">
+                  <font-awesome-icon icon="fa-solid fa-eye-slash" title="{% trans 'To Watch' %}" />
+                </span>
               </div>
-              <div v-else class="inline">
+            {% else %}
+              <div class="inline">
                 <div v-if="listId == listToWatchId" class="inline">
-                  <a href="javascript:void(0)" title="{% trans 'Add to &quot;Watched&quot; list' %}"
-                      v-show="record.movie.isReleased && !record.listId"
-                      @click="addToList(record.movie.id, listWatchedId, record)">
+                  <a
+                    href="javascript:void(0)"
+                    @click="addToList(record.movie.id, listWatchedId, record)"
+                    title="{% trans 'Add to &quot;Watched&quot; list' %}"
+                    v-show="record.movie.isReleased && !record.listId"
+                  >
                     <font-awesome-icon icon="fa-solid fa-eye" />
                   </a>
-                  <span><font-awesome-icon icon="fa-solid fa-eye" title="{% trans 'Watched' %}" v-show="record.listId" /></span>
+                  <span>
+                    <font-awesome-icon icon="fa-solid fa-eye" title="{% trans 'Watched' %}" v-show="record.listId" />
+                  </span>
                 </div>
               </div>
-            </div>
+            {% endif %}
           </div>
-          <div class="poster" v-show="mode !='minimal'">
-            <span v-if="mode == 'full'"><v-lazy-image :srcset="getSrcSet(record.movie.posterNormal, record.movie.posterBig)"
-              :alt="record.movie.title" :title="record.movie.titleOriginal" :src="record.movie.posterBig" class="poster-big"/></span>
-            <span v-else><v-lazy-image :srcset="getSrcSet(record.movie.posterSmall, record.movie.posterNormal)"
-              :alt="record.movie.title" :title="record.movie.titleOriginal" :src="record.movie.posterNormal" class="poster-small" /></span>
+        </div>
+        <div class="poster" v-show="mode !='minimal'">
+          <span v-if="mode == 'full'">
+            <v-lazy-image
+              class="poster-big"
+              :srcset="getSrcSet(record.movie.posterNormal, record.movie.posterBig)"
+              :src="record.movie.posterBig"
+              :title="record.movie.titleOriginal"
+              :alt="record.movie.title"
+            />
+          </span>
+          <span v-else>
+            <v-lazy-image
+              class="poster-small"
+              :srcset="getSrcSet(record.movie.posterSmall, record.movie.posterNormal)"
+              :src="record.movie.posterNormal"
+              :title="record.movie.titleOriginal"
+              :alt="record.movie.title"
+            />
+          </span>
+        </div>
+        <div class="details" :class="{ 'details-minimal': mode == 'minimal'}">
+          <div class="imdb-rating" v-show="record.movie.imdbRating">
+            <span class="item-desc">{% trans 'IMDb Rating' %}:</span>
+            [[ record.movie.imdbRating ]]
           </div>
-          <div class="details" :class="{ 'details-minimal': mode == 'minimal'}">
-            <div class="imdb-rating" v-show="record.movie.imdbRating"><span
-              class="item-desc">{% trans 'IMDb Rating' %}:</span> [[ record.movie.imdbRating ]]
+          <div class="release-date" v-show="record.movie.isReleased">
+            <span class="item-desc" v-show="mode != 'minimal'">{% trans 'Release Date' %}:</span>
+            [[ record.movie.releaseDate ]]
+          </div>
+          <div v-show="mode == 'full'">
+            <div v-show="record.movie.country">
+              <span class="item-desc">{% trans 'Country' %}:</span>
+              [[ record.movie.country ]]
             </div>
-            <div class="release-date" v-show="record.movie.isReleased"><span
-              class="item-desc" v-show="mode != 'minimal'">{% trans 'Release Date' %}:</span> [[ record.movie.releaseDate ]]
+            <div v-show="record.movie.director">
+              <span class="item-desc">{% trans 'Director' %}:</span>
+              [[ record.movie.director ]]
             </div>
-            <div v-show="mode == 'full'">
-              <div v-show="record.movie.country">
-                <span class="item-desc">{% trans 'Country' %}:</span>
-                [[ record.movie.country ]]
-              </div>
-              <div v-show="record.movie.director">
-                <span class="item-desc">{% trans 'Director' %}:</span>
-                [[ record.movie.director ]]
-              </div>
-              <div v-show="record.movie.writer">
-                <span class="item-desc">{% trans 'Writer' %}:</span>
-                [[ record.movie.writer ]]
-              </div>
-              <div v-show="record.movie.genre">
-                <span class="item-desc">{% trans 'Genre' %}:</span>
-                [[ record.movie.genre ]]
-              </div>
-              <div v-show="record.movie.actors">
-                <span class="item-desc">{% trans 'Actors' %}:</span>
-                [[ record.movie.actors ]]
-              </div>
-              <div v-show="record.movie.runtime">
-                <span class="item-desc">{% trans 'Runtime' %}:</span>
-                [[ record.movie.runtime ]]
-              </div>
-              <div v-show="record.movie.overview">
-                <span class="item-desc">{% trans 'Overview' %}:</span>
-                [[ record.movie.overview ]]
-              </div>
-              <div v-show="record.movie.homepage">
-                <a :href="record.movie.homepage" target="_blank">{% trans 'Website' %}</a>
-              </div>
-              <div class="urls">
-                <a :href="record.movie.imdbUrl" target="_blank"><span class="imdb"></span></a>
-                <a :href="record.movie.tmdbUrl" target="_blank"><span class="tmdb"></span></a>
-              </div>
-              <div v-show="record.movie.trailers.length">
-                <span class="item-desc">{% trans 'Trailers' %}:</span>
-                <div class="trailers">
-                  <a :href="trailer.url" target="_blank" v-for="trailer in record.movie.trailers">[[ trailer.name ]]</a>
-                </div>
-              </div>
-              <div v-show="record.providerRecords.length">
-                <span class="item-desc">{% trans 'Stream on' %}:</span>
-                <div>
-                  <a :href="providerRecord.tmdbWatchUrl" target="_blank" v-for="providerRecord in record.providerRecords">
-                    <v-lazy-image :src="providerRecord.provider.logo"
-                    :alt="providerRecord.provider.name" :title="providerRecord.provider.name" :src="record.movie.posterBig" class="provider" />
-                  </a>
-                </div>
-              </div>
-              <br>
+            <div v-show="record.movie.writer">
+              <span class="item-desc">{% trans 'Writer' %}:</span>
+              [[ record.movie.writer ]]
             </div>
-            <div class="review" :class="{ 'review-minimal': mode == 'minimal'}">
-              {% if list == 'watched' %}
-                <div class="rating" :data-record-id="record.id" :data-rating="record.rating"></div>
-                <div class="comment" v-show="(record.comment || record.commentArea) && mode != 'minimal'">
-                  <div v-if="isAnothersAccount">
-                    <p>[[ record.comment ]]</p>
+            <div v-show="record.movie.genre">
+              <span class="item-desc">{% trans 'Genre' %}:</span>
+              [[ record.movie.genre ]]
+            </div>
+            <div v-show="record.movie.actors">
+              <span class="item-desc">{% trans 'Actors' %}:</span>
+              [[ record.movie.actors ]]
+            </div>
+            <div v-show="record.movie.runtime">
+              <span class="item-desc">{% trans 'Runtime' %}:</span>
+              [[ record.movie.runtime ]]
+            </div>
+            <div v-show="record.movie.overview">
+              <span class="item-desc">{% trans 'Overview' %}:</span>
+              [[ record.movie.overview ]]
+            </div>
+            <div v-show="record.movie.homepage">
+              <a :href="record.movie.homepage" target="_blank">{% trans 'Website' %}</a>
+            </div>
+            <div class="urls">
+              <a :href="record.movie.imdbUrl" target="_blank"><span class="imdb"></span></a>
+              <a :href="record.movie.tmdbUrl" target="_blank"><span class="tmdb"></span></a>
+            </div>
+            <div v-show="record.movie.trailers.length">
+              <span class="item-desc">{% trans 'Trailers' %}:</span>
+              <div class="trailers">
+                <a :href="trailer.url" target="_blank" v-for="trailer in record.movie.trailers">[[ trailer.name ]]</a>
+              </div>
+            </div>
+            <div v-show="record.providerRecords.length">
+              <span class="item-desc">{% trans 'Stream on' %}:</span>
+              <div>
+                <a
+                  :href="providerRecord.tmdbWatchUrl"
+                  target="_blank"
+                  v-for="providerRecord in record.providerRecords"
+                >
+                  <v-lazy-image
+                    class="provider"
+                    :src="providerRecord.provider.logo"
+                    :title="providerRecord.provider.name"
+                    :alt="providerRecord.provider.name"
+                  />
+                </a>
+              </div>
+            </div>
+            <br>
+          </div>
+          <div class="review" :class="{'review-minimal': mode == 'minimal'}">
+            {% if list == 'watched' %}
+              <div class="rating" :data-record-id="record.id" :data-rating="record.rating"></div>
+              <div class="comment" v-show="(record.comment || record.commentArea) && mode != 'minimal'">
+                {% if anothers_account %}
+                  <p>[[ record.comment ]]</p>
+                {% else %}
+                  <div>
+                    <textarea class="form-control" title="{% trans 'Comment' %}" v-model="record.comment"></textarea>
                   </div>
-                  <div v-else>
-                    <textarea class="form-control" title="{% trans 'Comment' %}"
-                              v-model="record.comment"></textarea><br><br>
-                    <button type="button" title="{% trans 'Save' %}" class="btn btn-secondary"
-                            @click="saveComment(record)"><font-awesome-icon icon="fa-solid fa-save" /></button>
-                  </div>
-                </div>
-                <div v-show="!isAnothersAccount">
-                  <button type="button" title="{% trans 'Add comment' %}"
-                          class="btn btn-secondary comment-button"
-                          @click="showCommentArea(record)"
-                          v-show="record.comment == '' && !record.commentArea && mode != 'minimal'"
-                    ><font-awesome-icon icon="fa-solid fa-comment" />
+                  <br>
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    @click="saveComment(record)"
+                    title="{% trans 'Save' %}"
+                  >
+                    <font-awesome-icon icon="fa-solid fa-save" />
                   </button>
-                  <div v-show="mode == 'full'">
-                    <div>
-                      <label :for="'original_' + record.id">{% trans 'Watched original version' %}</label>
-                      <input @change="saveOptions(record)" :id="'original_' + record.id"
-                              type="checkbox" v-model="record.options.original">
-                    </div>
-                    <div>
-                      <label :for="'extended_' + record.id">{% trans 'Watched extended version' %}</label>
-                      <input @change="saveOptions(record)" :id="'extended_' + record.id"
-                              type="checkbox" v-model="record.options.extended">
-                    </div>
-                    <div>
-                      <label :for="'theatre_' + record.id">{% trans 'Watched in theatre' %}</label>
-                      <input @change="saveOptions(record)" :id="'theatre_' + record.id"
-                              type="checkbox" v-model="record.options.theatre">
-                    </div>
-                    <div>
-                      <label :for="'hd_' + record.id">{% trans 'Watched in HD' %}</label>
-                      <input @change="saveOptions(record)" :id="'hd_' + record.id"
-                              type="checkbox" v-model="record.options.hd">
-                    </div>
-                    <div>
-                      <label :for="'full_hd_' + record.id">{% trans 'Watched in FullHD' %}</label>
-                      <input @change="saveOptions(record)" :id="'full_hd_' + record.id"
-                              type="checkbox" v-model="record.options.fullHd">
-                    </div>
-                    <div>
-                      <label :for="'4k_' + record.id">{% trans 'Watched in 4K' %}</label>
-                      <input @change="saveOptions(record)" :id="'4k_' + record.id"
-                              type="checkbox" v-model="record.options.ultraHd">
-                    </div>
+                {% endif %}
+              </div>
+              {% if not anothers_account %}
+                <button
+                  type="button"
+                  class="btn btn-secondary comment-button"
+                  @click="showCommentArea(record)"
+                  title="{% trans 'Add comment' %}"
+                  v-show="record.comment == '' && !record.commentArea && mode != 'minimal'"
+                >
+                  <font-awesome-icon icon="fa-solid fa-comment" />
+                </button>
+                <div v-show="mode == 'full'">
+                  <div>
+                    <label :for="'original_' + record.id">{% trans 'Watched original version' %}</label>
+                    <input
+                      :id="'original_' + record.id"
+                      type="checkbox"
+                      @change="saveOptions(record)"
+                      v-model="record.options.original"
+                    >
+                  </div>
+                  <div>
+                    <label :for="'extended_' + record.id">{% trans 'Watched extended version' %}</label>
+                    <input
+                      :id="'extended_' + record.id"
+                      type="checkbox"
+                      @change="saveOptions(record)"
+                      v-model="record.options.extended"
+                    >
+                  </div>
+                  <div>
+                    <label :for="'theatre_' + record.id">{% trans 'Watched in theatre' %}</label>
+                    <input
+                      :id="'theatre_' + record.id"
+                      type="checkbox"
+                      @change="saveOptions(record)"
+                      v-model="record.options.theatre"
+                    >
+                  </div>
+                  <div>
+                    <label :for="'hd_' + record.id">{% trans 'Watched in HD' %}</label>
+                    <input
+                      :id="'hd_' + record.id"
+                      type="checkbox"
+                      @change="saveOptions(record)"
+                      v-model="record.options.hd"
+                    >
+                  </div>
+                  <div>
+                    <label :for="'full_hd_' + record.id">{% trans 'Watched in FullHD' %}</label>
+                    <input
+                      :id="'full_hd_' + record.id"
+                      type="checkbox"
+                      @change="saveOptions(record)"
+                      v-model="record.options.fullHd"
+                    >
+                  </div>
+                  <div>
+                    <label :for="'4k_' + record.id">{% trans 'Watched in 4K' %}</label>
+                    <input
+                      :id="'4k_' + record.id"
+                      type="checkbox"
+                      @change="saveOptions(record)"
+                      v-model="record.options.ultraHd"
+                    >
                   </div>
                 </div>
               {% endif %}
-            </div>
+            {% endif %}
           </div>
-          <div class="clearfix"></div>
-          {% comment %} {% if list == 'to-watch' and not anothers_account %}
+        </div>
+        <div class="clearfix"></div>
+        {% comment %} {% if list == 'to-watch' and not anothers_account %}
             {% include 'includes/reviews.html' %}
           {% endif %} {% endcomment %}
-        </div>
-        {% if records.has_other_pages %}
-          {% bootstrap_paginate records range=5 show_prev_next='true' show_first_last='true' alignment='left' %}
-        {% endif %}
+      </div>
+      {% if records.has_other_pages %}
+        {% bootstrap_paginate records range=5 show_prev_next='true' show_first_last='true' alignment='left' %}
+      {% endif %}
     </div>
   </div>
 {% endblock %}
@@ -289,7 +391,7 @@
     vars.mode = '{{ request.session.mode }}';
     vars.listId = {{ list_id }};
     vars.sort = '{{ sort }}';
-    vars.recommendation = {{ request.session.recommendation|yesno:'true,false' }};
+    vars.recommendations = {{ request.session.recommendations|yesno:'true,false' }};
     vars.isAnothersAccount = {{ anothers_account|yesno:'true,false' }};
     urls.changeRating = '{% url 'change_rating' %}';
     urls.removeRecord = '{% url 'remove_record' %}';
