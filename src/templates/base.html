@@ -1,38 +1,38 @@
 <!DOCTYPE html>
 <html>
-<head>
-  {% include 'includes/google_analytics.html' %}
-  <meta HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
-  <meta HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-  <link href="{% static 'vendor.css' %}" rel="stylesheet">
-  <link href="{% static 'style.css' %}" rel="stylesheet">
-  <link rel="icon" type="image/png" href="{% static 'favicon.png' %}">
-  <link rel="icon" type="image/svg+xml" href="{% static 'favicon.svg' %}">
-  {% block head %}{% endblock %}
-  {% block meta %}{% endblock %}
-  <meta charset="utf-8">
-  <title>{% block title %}Movies{% endblock %}</title>
-</head>
-<body>
-  <div>
-    {% include 'includes/menu.html' %}
-    <div id="app">
-      <div id="content" class="container-fluid mt-3">
-        {% block content %}{% endblock %}
+  <head>
+    {% include 'includes/google_analytics.html' %}
+    <meta HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
+    <meta HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link href="{% static 'vendor.css' %}" rel="stylesheet">
+    <link href="{% static 'style.css' %}" rel="stylesheet">
+    <link rel="icon" type="image/png" href="{% static 'favicon.png' %}">
+    <link rel="icon" type="image/svg+xml" href="{% static 'favicon.svg' %}">
+    {% block head %}{% endblock %}
+    {% block meta %}{% endblock %}
+    <meta charset="utf-8">
+    <title>{% block title %}Movies{% endblock %}</title>
+  </head>
+  <body>
+    <div>
+      {% include 'includes/menu.html' %}
+      <div id="app">
+        <div id="content" class="container-fluid mt-3">
+          {% block content %}{% endblock %}
+        </div>
       </div>
     </div>
-  </div>
-  {% include 'includes/footer.html' %}
-  <script src="{% url 'javascript-catalog' %}"></script>
-  <script src="{% static 'js/vendor.js' %}"></script>
-  <script>
-    'use strict';
-    const vars = {isVkUser: {{ user.is_vk_user|yesno:'true,false' }}};
-    const urls = {};
-  </script>
-  {% if user.is_vk_user %}
-    <script src="//vk.com/js/api/xd_connection.js?2"></script>
-  {% endif %}
-  {% block js %}{% endblock %}
-</body>
+    {% include 'includes/footer.html' %}
+    <script src="{% url 'javascript-catalog' %}"></script>
+    <script src="{% static 'js/vendor.js' %}"></script>
+    <script>
+      'use strict';
+      const vars = {isVkUser: {{ user.is_vk_user|yesno:'true,false' }}};
+      const urls = {};
+    </script>
+    {% if user.is_vk_user %}
+      <script src="//vk.com/js/api/xd_connection.js?2"></script>
+    {% endif %}
+    {% block js %}{% endblock %}
+  </body>

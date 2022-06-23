@@ -8,15 +8,15 @@
     {% include 'includes/form_errors.html' %}
     <div class="form-group">
       <input type="text" class="form-control" name="username" required {% if form.username.value %}
-             value="{{ form.username.value }}" {% endif %} autofocus placeholder="{% trans 'Username' %}">
+        value="{{ form.username.value }}" {% endif %} autofocus placeholder="{% trans 'Username' %}">
     </div>
     <div class="form-group">
       <input type="email" class="form-control" name="email" required {% if form.email.value %}
-             value="{{ form.email.value }}" {% endif %} placeholder="{% trans 'Email' %}">
+        value="{{ form.email.value }}" {% endif %} placeholder="{% trans 'Email' %}">
     </div>
     <div class="form-group">
       <input type="password" class="form-control" id="password1" name="password1" required
-             placeholder="{% trans 'Password' %}">
+        placeholder="{% trans 'Password' %}">
     </div>
     <div class="form-group">
       <div class="col-sm-offset-2">

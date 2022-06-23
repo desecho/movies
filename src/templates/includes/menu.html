@@ -4,65 +4,65 @@
 
 <nav id="menu" class="navbar sticky-top navbar-toggleable-md navbar-light bg-faded navbar-expand-md">
   <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
-          data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false"
-          aria-label="{% trans 'Toggle navigation' %}">
+    data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false"
+    aria-label="{% trans 'Toggle navigation' %}">
     <span class="navbar-toggler-icon"></span>
   </button>
   <a class="navbar-brand" href="#"><font-awesome-icon icon="fa-solid fa-film" /></i></a>
-  <div class="collapse navbar-collapse" id="navbarNavDropdown">
-    <ul class="navbar-nav mr-auto">
-      {% for item in menus.main %}
-        <li class="nav-item {% if item.selected %} active{% endif %}{% if item.children %} dropdown{% endif %}"
-            id="top-menu-{{ item.slug }}">
-          {% if item.children %}
-            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-               aria-expanded="false">{% if item.icon %}<i class="icon-{{ item.icon }} icon-white"></i>
+<div class="collapse navbar-collapse" id="navbarNavDropdown">
+  <ul class="navbar-nav mr-auto">
+    {% for item in menus.main %}
+      <li class="nav-item {% if item.selected %} active{% endif %}{% if item.children %} dropdown{% endif %}"
+        id="top-menu-{{ item.slug }}">
+        {% if item.children %}
+          <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+            aria-expanded="false">{% if item.icon %}<i class="icon-{{ item.icon }} icon-white"></i>
               &nbsp;{% endif %}{{ item.title }}&nbsp;<span class="caret"></span></a>
-            <div class="dropdown-menu">
-              {% for child in item.children %}<a class="dropdown-item {% if child.selected %}active{% endif %}"
-                                                 href="{{ child.url }}">{{ child.title }}</a>{% endfor %}
-            </div>
-          {% else %}
-            <a href="{{ item.url }}" class="nav-link">{% if item.icon %}<i class="icon-{{ item.icon }} icon-white"></i>
-              &nbsp;{% endif %}{{ item.title }}</a>
-          {% endif %}
-        </li>
-      {% endfor %}
-    </ul>
-    <ul class="navbar-nav">
-      {% if user.is_vk_user %}
-        <li class="nav-item vk-app-show" style="display: none;">
-          <a id="invite" href="javascript:void(0)" class="nav-link" @click="invite">
-            <font-awesome-icon icon="fa-solid fa-envelope-open" />
-          </a>
-        </li>
-      {% endif %}
-      {% if user.is_authenticated %}
-        <li class="nav-item">
-          <a href="{% url 'preferences' %}" class="nav-link">
-            <font-awesome-icon icon="fa-solid fa-gear" />
-          </a>
-        </li>
-        <li style="display: none;" class="vk-app-hide nav-item">
-          <a href="{% url 'logout' %}" class="nav-link">
-            <font-awesome-icon icon="fa-solid fa-sign-out" />
-          </a>
-        </li>
-      {% else %}
-        {% get_current_language as LANGUAGE_CODE %}
-        <li class="nav-item">
-          <a class="nav-link" href="javascript:void(0)" @click="changeLanguage">
-            {% if LANGUAGE_CODE == 'en' %}Русский{% else %}English{% endif %}
-          </a>
-        </li>
-        <form id="language-form" action="{% url 'set_language' %}" method="post">
-          {% csrf_token %}
-          <input name="language" type="hidden" value="{% if LANGUAGE_CODE == 'en' %}ru{% else %}en{% endif %}"/>
-        </form>
-        <li class="nav-item">
-          <a href="{% url 'login' %}" class="nav-link"><font-awesome-icon icon="fa-solid fa-sign-in" /></a>
-        </li>
-      {% endif %}
-    </ul>
-  </div>
+          <div class="dropdown-menu">
+            {% for child in item.children %}<a class="dropdown-item {% if child.selected %}active{% endif %}"
+              href="{{ child.url }}">{{ child.title }}</a>{% endfor %}
+          </div>
+        {% else %}
+          <a href="{{ item.url }}" class="nav-link">{% if item.icon %}<i class="icon-{{ item.icon }} icon-white"></i>
+            &nbsp;{% endif %}{{ item.title }}</a>
+        {% endif %}
+      </li>
+    {% endfor %}
+  </ul>
+  <ul class="navbar-nav">
+    {% if user.is_vk_user %}
+      <li class="nav-item vk-app-show" style="display: none;">
+        <a id="invite" href="javascript:void(0)" class="nav-link" @click="invite">
+          <font-awesome-icon icon="fa-solid fa-envelope-open" />
+        </a>
+      </li>
+    {% endif %}
+    {% if user.is_authenticated %}
+      <li class="nav-item">
+        <a href="{% url 'preferences' %}" class="nav-link">
+          <font-awesome-icon icon="fa-solid fa-gear" />
+        </a>
+      </li>
+      <li style="display: none;" class="vk-app-hide nav-item">
+        <a href="{% url 'logout' %}" class="nav-link">
+          <font-awesome-icon icon="fa-solid fa-sign-out" />
+        </a>
+      </li>
+    {% else %}
+      {% get_current_language as LANGUAGE_CODE %}
+      <li class="nav-item">
+        <a class="nav-link" href="javascript:void(0)" @click="changeLanguage">
+          {% if LANGUAGE_CODE == 'en' %}Русский{% else %}English{% endif %}
+        </a>
+      </li>
+      <form id="language-form" action="{% url 'set_language' %}" method="post">
+        {% csrf_token %}
+        <input name="language" type="hidden" value="{% if LANGUAGE_CODE == 'en' %}ru{% else %}en{% endif %}"/>
+      </form>
+      <li class="nav-item">
+        <a href="{% url 'login' %}" class="nav-link"><font-awesome-icon icon="fa-solid fa-sign-in" /></a>
+      </li>
+    {% endif %}
+  </ul>
+</div>
 </nav>

@@ -6,33 +6,33 @@
   <br>
   <table id="feed" class="table col-md-11 col-lg-10 col-xl-8 table-responsive">
     <tbody>
-    {% for action_record in action_records %}
-      <tr class="feed-record">
-        <td class="test-feed-user">
-          <a href="{% url 'list' action_record.user.username 'watched' %}">{% avatar action_record.user %}</a>
-        </td>
-        <td class="d-none d-sm-table-cell">
-          {{ action_record.date }}
-        </td>
-        <td>
-          <img src="{{ action_record.movie.poster_small }}" data-rjs="{{ action_record.movie.poster_normal }}" alt="{{ action_record.movie }}"
-               title="{{ action_record.movie.title_original }}" class="small-poster" loading="lazy">
-        </td>
-        <td class="d-none d-sm-table-cell test-feed-movie">
-          <span title="{{ action_record.movie.title_original }}">{{ action_record.movie }}</span>
-        </td>
-        <td>
-          {{ action_record.action }}
-        </td>
-        <td class="feed-action-data">
-          {% if action_record.list %} {{ action_record.list }} {% endif %}
-          {% if action_record.rating %}
-            <div class="rating" data-rating="{{ action_record.rating }}"></div>
-          {% endif %}
-          {% if action_record.comment %} {{ action_record.comment }} {% endif %}
-        </td>
-      </tr>
-    {% endfor %}
+      {% for action_record in action_records %}
+        <tr class="feed-record">
+          <td class="test-feed-user">
+            <a href="{% url 'list' action_record.user.username 'watched' %}">{% avatar action_record.user %}</a>
+          </td>
+          <td class="d-none d-sm-table-cell">
+            {{ action_record.date }}
+          </td>
+          <td>
+            <img src="{{ action_record.movie.poster_small }}" data-rjs="{{ action_record.movie.poster_normal }}" alt="{{ action_record.movie }}"
+              title="{{ action_record.movie.title_original }}" class="small-poster" loading="lazy">
+          </td>
+          <td class="d-none d-sm-table-cell test-feed-movie">
+            <span title="{{ action_record.movie.title_original }}">{{ action_record.movie }}</span>
+          </td>
+          <td>
+            {{ action_record.action }}
+          </td>
+          <td class="feed-action-data">
+            {% if action_record.list %} {{ action_record.list }} {% endif %}
+            {% if action_record.rating %}
+              <div class="rating" data-rating="{{ action_record.rating }}"></div>
+            {% endif %}
+            {% if action_record.comment %} {{ action_record.comment }} {% endif %}
+          </td>
+        </tr>
+      {% endfor %}
     </tbody>
   </table>
 {% endblock %}

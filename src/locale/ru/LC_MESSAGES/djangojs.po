@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-15 22:23-0400\n"
+"POT-Creation-Date: 2022-06-22 23:10-0400\n"
 "PO-Revision-Date: 2018-03-29 03:26-0456\n"
 "Last-Translator: b'Anton Samarchyan <desecho@gmail.com>'\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,111 +20,103 @@ msgstr ""
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Translated-Using: django-rosetta 0.8.1\n"
 
-#: src/moviesapp/js/init.js:62
+#: src/moviesapp/js/init.js:47
 msgid "Awful"
 msgstr "Ужасно"
 
-#: src/moviesapp/js/init.js:63
+#: src/moviesapp/js/init.js:48
 msgid "Bad"
 msgstr "Плохо"
 
-#: src/moviesapp/js/init.js:64
+#: src/moviesapp/js/init.js:49
 msgid "Regular"
 msgstr "Нормально"
 
-#: src/moviesapp/js/init.js:65
+#: src/moviesapp/js/init.js:50
 msgid "Good"
 msgstr "Хорошо"
 
-#: src/moviesapp/js/init.js:66
+#: src/moviesapp/js/init.js:51
 msgid "Awesome"
 msgstr "Отлично"
 
-#: src/moviesapp/js/init.js:68
+#: src/moviesapp/js/init.js:53
 msgid "Cancel rating"
 msgstr "Отменить оценку"
 
-#: src/moviesapp/js/init.js:69
+#: src/moviesapp/js/init.js:54
 msgid "No rating yet"
 msgstr "Пока нет оценки"
 
-#: src/moviesapp/js/list.js:43
+#: src/moviesapp/js/list.js:25
 msgid "Error adding a rating"
 msgstr "Ошибка добавления рейтинга"
 
-#: src/moviesapp/js/list.js:59
+#: src/moviesapp/js/list.js:41
 msgid "Error applying the settings"
 msgstr "Ошибка применения настроек"
 
-#: src/moviesapp/js/list.js:102
+#: src/moviesapp/js/list.js:74
 msgid "Error saving options"
 msgstr "Ошибка сохранения опций"
 
-#: src/moviesapp/js/list.js:175
+#: src/moviesapp/js/list.js:117
 msgid "Error removing the movie"
 msgstr "Ошибка удаления фильма"
 
-#: src/moviesapp/js/list.js:192
+#: src/moviesapp/js/list.js:132
 msgid "I recommend watching"
 msgstr "Я рекомендую к просмотру"
 
-#: src/moviesapp/js/list.js:194
+#: src/moviesapp/js/list.js:134
 msgid "I don't recommend watching"
 msgstr "Я не рекомендую к просмотру"
 
-#: src/moviesapp/js/list.js:196
+#: src/moviesapp/js/list.js:136
 msgid "My rating"
 msgstr "Моя оценка"
 
-#: src/moviesapp/js/list.js:220
+#: src/moviesapp/js/list.js:160
 msgid "Error posting to the wall"
 msgstr "Ошибка размещения на стену"
 
-#: src/moviesapp/js/list.js:222
+#: src/moviesapp/js/list.js:162
 msgid "Your post has been posted"
 msgstr "Ваша запись была размещена"
 
-#: src/moviesapp/js/list.js:230
+#: src/moviesapp/js/list.js:170
 msgid "Error posting a poster to the wall"
 msgstr "Ошибка размещения постера на стену"
 
-#: src/moviesapp/js/list.js:246
+#: src/moviesapp/js/list.js:186
 msgid "Error loading a poster"
 msgstr "Ошибка загрузки постера"
 
-#: src/moviesapp/js/list.js:253
+#: src/moviesapp/js/list.js:193
 msgid "Error getting an upload server for wall posting"
 msgstr "Ошибка получения сервера загрузки для размещения на стену"
 
-#: src/moviesapp/js/list.js:274
+#: src/moviesapp/js/list.js:210
 msgid "Add a rating to the movie"
 msgstr "Добавьте оценку фильму"
 
-#: src/moviesapp/js/list.js:298
-msgid "Error saving a comment"
-msgstr "Ошибка сохранения комментария"
-
-#: src/moviesapp/js/list_helpers.js:13
+#: src/moviesapp/js/list.js:221
 msgid "Error adding the movie to the list"
 msgstr "Ошибка добавления фильма в список"
 
-#: src/moviesapp/js/list_helpers.js:31
-msgid "Watched"
-msgstr "Просмотрено"
+#: src/moviesapp/js/list.js:237
+msgid "Error saving a comment"
+msgstr "Ошибка сохранения комментария"
 
-#: src/moviesapp/js/list_helpers.js:34
-msgid "To Watch"
-msgstr "К Просмотру"
-
-#: src/moviesapp/js/search.js:19
+#: src/moviesapp/js/search.js:16
 msgid "Movie"
 msgstr "Фильм"
 
-#: src/moviesapp/js/search.js:44
+#: src/moviesapp/js/search.js:43
 msgid "Nothing has been found"
 msgstr "Ничего не было найдено"
 
-#: src/moviesapp/js/search.js:51
+#: src/moviesapp/js/search.js:50
 msgid "Search Error"
 msgstr "Ошибка Поиска"
 
@@ -136,7 +128,7 @@ msgstr "Фильм не найден в базе данных"
 msgid "Error adding a movie"
 msgstr "Ошибка добавления фильма"
 
-#: src/moviesapp/js/set_axios_settings.js:19
+#: src/moviesapp/js/set_axios_settings.js:17
 msgid "You need to login to add a movie to your list"
 msgstr "Вам необходимо авторизоваться для того чтобы добавить фильм в список"
 

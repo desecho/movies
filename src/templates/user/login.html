@@ -2,12 +2,12 @@
 
 {% block content %}
   <form method="post" action="{% url 'login' %}" class="form-horizontal col-sm-6 col-md-4 col-lg-4 col-xl-3 mx-auto"
-        class="login-form">
+    class="login-form">
     {% csrf_token %}
     {% include 'includes/form_errors.html' %}
     <div class="form-group">
       <input type="text" class="form-control" name="username" required {% if form.username.value %}
-             value="{{ form.username.value }}" {% endif %} autofocus placeholder="{% trans 'Username' %}">
+        value="{{ form.username.value }}" {% endif %} autofocus placeholder="{% trans 'Username' %}">
     </div>
     <div class="form-group">
       <input type="password" class="form-control" name="password" required placeholder="{% trans 'Password' %}">
@@ -44,7 +44,7 @@
         <a href="{% url 'auth_password_reset' %}" class="btn btn-block btn-primary">{% trans 'Reset password' %}</a>
       </div>
     </div>
-    </div>
+  </div>
   </form>
 {% endblock %}
 
