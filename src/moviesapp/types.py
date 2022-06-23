@@ -68,6 +68,7 @@ class TmdbMovieSearchResultProcessed(TypedDict):
     id: int
     release_date: Optional[date]
     title: str
+    title_original: str
 
 
 class TmdbTrailer(TypedDict):

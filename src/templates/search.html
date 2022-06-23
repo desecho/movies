@@ -35,8 +35,13 @@
     <div class="results" v-cloak>
       <div class="movie" v-for="movie in movies" v-show="!movie.hide">
         <div class="poster">
-          <img class="search-poster-img" :src="movie.poster" :alt="movie.title"
-            :data-rjs="movie.poster2x" @load="retinajs" loading="lazy"/>
+          <v-lazy-image
+            class="search-poster-img"
+            :srcset="getSrcSet(movie.poster, movie.poster2x)"
+            :src="movie.poster2x"
+            :title="movie.titleOriginal"
+            :alt="movie.title"
+          />
         </div>
         <div class="title">[[ movie.title ]]
           <div class="add-to-list-buttons">

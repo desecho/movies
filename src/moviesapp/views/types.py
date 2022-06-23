@@ -136,6 +136,7 @@ class MovieSearchResult(TypedDict):
     tmdbLink: str
     releaseDate: Optional[str]
     title: str
+    titleOriginal: str
     poster: Optional[str]
     poster2x: Optional[str]
     isReleased: bool

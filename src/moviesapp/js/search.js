@@ -1,7 +1,7 @@
 'use strict';
 
 import axios from 'axios';
-import {retina, param} from './helpers';
+import {retina, param, getSrcSet} from './helpers';
 import {newApp} from './app';
 
 String.prototype.toTitleCase = function() { // eslint-disable-line no-extend-native
@@ -25,6 +25,7 @@ window.vm = newApp({
     };
   },
   methods: {
+    getSrcSet: getSrcSet,
     search() {
       const vm = this;
       const options = {

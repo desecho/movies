@@ -79,6 +79,7 @@ def _get_processed_movie_data(
             "id": entry["id"],
             "release_date": _get_date(entry.get("release_date")),
             "title": entry["title"],
+            "title_original": entry["original_title"],
         }
         movies.append(movie)
     return movies
