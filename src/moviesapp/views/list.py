@@ -349,7 +349,7 @@ class ListView(TemplateAnonymousView):
         records = self._sort_records(records, session["sort"], username, list_name)
 
         if anothers_account and session["recommendations"]:
-            records = self._filter_records_for_recommendations(records, user)
+            records = self._filter_records_for_recommendations(records, request.user)
 
         # Commented out because friends functionality is disabled.
         # if not username and list_name == "to-watch" and records:

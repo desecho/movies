@@ -86,7 +86,7 @@ window.vm = newApp({
     toggleRecommendation() {
       const newRecommendationSetting = !vars.recommendation;
       const settings = {
-        recommendation: newRecommendationSetting,
+        recommendations: newRecommendationSetting,
       };
       if (newRecommendationSetting) {
         settings.sort = 'rating';
