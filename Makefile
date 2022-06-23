@@ -507,7 +507,7 @@ endif
 .PHONY: prod-manage
 ## Run management command in prod. Usage: make prod-manage [command] arguments="[arguments]"
 prod-manage:
-	scripts/run_management_command.sh ${PROD_MANAGE_ARGS} $(arguments)
+	scripts/run_management_command_prod.sh ${PROD_MANAGE_ARGS} $(arguments)
 
 .PHONY: prod-shell
 ## Run shell in prod
@@ -517,7 +517,7 @@ prod-shell:
 .PHONY: prod-migrate
 ## Run data migration for prod
 prod-migrate:
-	scripts/run_management_command.sh migrate
+	scripts/run_management_command_prod.sh migrate
 
 .PHONY: prod-enable-debug
 ## Enable debug in prod. It will be reset with the next deployment
