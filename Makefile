@@ -129,6 +129,10 @@ $(DB_ENV_PROD_FILE):
 pydiatra-script:
 	scripts/pydiatra.sh
 
+.PHONY: djhtml-script
+djhtml-script:
+	scripts/djhtml.sh lint
+
 .PHONY: backup-db
 backup-db:
 	export DB_HOST="${PROD_DB_HOST}" && \
@@ -249,6 +253,11 @@ jsonlint:
 ## Run actionlint linter
 actionlint:
 	actionlint
+
+.PHONY: djhtml-lint
+## Run djhtml linter
+djhtml-lint:
+	tox -e py-djhtml
 #------------------------------------
 
 #------------------------------------
@@ -350,9 +359,14 @@ format-js:
 format-sh:
 	shfmt -l -w .
 
+.PHONY: format-html
+## Format html files
+format-html:
+	scripts/djhtml.sh format
+
 .PHONY: format-all
 ## Format code
-format-all: format format-json format-css format-js format-sh
+format-all: format format-html format-js format-css format-sh format-json
 #------------------------------------
 
 #------------------------------------
