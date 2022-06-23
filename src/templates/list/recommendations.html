@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <div class="results col-sm-12 col-md-10 col-lg-8">
+  {% comment %} <div class="results col-sm-12 col-md-10 col-lg-8">
     {% for record in records %}
       <div id="record{{ record.id }}" data-id="{{ record.id }}" class="movie">
         <div class="title">
@@ -77,14 +77,14 @@
         {% include 'includes/reviews.html' %}
       </div>
     {% endfor %}
-  </div>
+  </div> {% endcomment %}
 {% endblock %}
 
 {% block js %}
-  <script>
+  {% comment %} <script>
     'use strict';
 
     urls.addToList = '{% url 'add_to_list' %}';
   </script>
-  <script src="{% static 'js/recommendations.js' %}"></script>
+  <script src="{% static 'js/recommendations.js' %}"></script> {% endcomment %}
 {% endblock %}
