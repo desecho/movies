@@ -56,3 +56,18 @@ class LogoutTestCase(BaseTestLoginCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, HTTPStatus.FOUND)
         self.assertFalse(self.is_authenticated)
+
+
+class AccountDeletedTestCase(BaseTestLoginCase):
+    def test_account_deleted(self):
+        url = reverse("account_deleted")
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+
+
+class AccountDeleteTestCase(BaseTestLoginCase):
+    def test_account_delete(self):
+        url = reverse("delete_account")
+        response = self.client.post(url)
+        self.assertEqual(response.status_code, HTTPStatus.FOUND)
+        self.assertFalse(User.objects.filter(pk=self.user.pk).exists())

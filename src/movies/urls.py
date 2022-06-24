@@ -25,7 +25,7 @@ from moviesapp.views.list import (
 from moviesapp.views.movies import AboutView, GalleryView
 from moviesapp.views.search import AddToListFromDbView, SearchMovieView, SearchView
 from moviesapp.views.social import FeedView, FriendsView, PeopleView
-from moviesapp.views.user import LoginErrorView, PreferencesView, logout_view
+from moviesapp.views.user import AccountDeletedView, AccountDeleteView, LoginErrorView, PreferencesView, logout_view
 
 # from moviesapp.views.vk import UploadPosterToWallView
 
@@ -56,7 +56,11 @@ if settings.DEBUG:  # pragma: no cover
 
 urlpatterns += [
     path("about/", AboutView.as_view(), name="about"),
+    #
+    # User
     path("preferences/", PreferencesView.as_view(), name="preferences"),
+    path("delete/", AccountDeleteView.as_view(), name="delete_account"),
+    path("account-deleted/", AccountDeletedView.as_view(), name="account_deleted"),
     #
     # Search
     path("", SearchView.as_view(), name="search"),

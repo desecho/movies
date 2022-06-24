@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-24 11:51-0400\n"
-"PO-Revision-Date: 2022-06-24 11:50-0400\n"
+"POT-Creation-Date: 2022-06-24 12:00-0400\n"
+"PO-Revision-Date: 2022-06-24 11:59-0400\n"
 "Last-Translator:   <>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -470,6 +470,26 @@ msgstr "сортировать по дате"
 #: src/templates/search.html:61 src/templates/search.html:66
 msgid "Add to the list"
 msgstr "Добавить в список"
+
+#: src/templates/user/account_deleted.html:4
+msgid "Your account has been deleted"
+msgstr "Ваш аккаунт был удален"
+
+#: src/templates/user/delete.html:6 src/templates/user/delete.html:17
+#: src/templates/user/preferences.html:57
+msgid "Delete Account"
+msgstr "Удалить Аккаунт"
+
+#: src/templates/user/delete.html:8
+msgid ""
+"\n"
+"        Are you sure you want to delete your account?\n"
+"        This will permanently delete your profile and all your data.\n"
+"      "
+msgstr ""
+"\n"
+"Вы уверены что Вы хотите удалить Ваш аккаунт? Это полностью удалит Ваш "
+"профайл и все ваши данные."
 
 #: src/templates/user/login.html:35 src/templates/user/login.html:43
 msgid "Log in with"

@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <form class="form-horizontal" method="post" action="">
+    {% csrf_token %}
+    <legend>{% translate 'Delete Account' %}</legend>
+    <p>
+      {% blocktranslate %}
+        Are you sure you want to delete your account?
+        This will permanently delete your profile and all your data.
+      {% endblocktranslate %}
+    </p>
+    <br>
+    <div class="form-group row">
+      <label class="col-form-label col-sm-4"></label>
+      <div class="col-sm-5 col-md-3">
+        <input type="submit" class="btn btn-block btn-danger" value="{% translate 'Delete Account' %}">
+      </div>
+    </div>
+  </form>
+{% endblock %}
+
+{% block js %}
+  <script src="{% static 'js/emptyApp.js' %}"></script>
+{% endblock %}
