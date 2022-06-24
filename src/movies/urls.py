@@ -12,6 +12,8 @@ from django.views.defaults import page_not_found
 from django.views.i18n import JavaScriptCatalog
 
 from moviesapp.converters import FeedConverter, ListConverter
+from moviesapp.views.about import AboutView
+from moviesapp.views.gallery import GalleryView
 from moviesapp.views.list import (
     AddToListView,
     ChangeRatingView,
@@ -22,7 +24,6 @@ from moviesapp.views.list import (
     SaveRecordsOrderView,
     SaveSettingsView,
 )
-from moviesapp.views.movies import AboutView, GalleryView
 from moviesapp.views.search import AddToListFromDbView, SearchMovieView, SearchView
 from moviesapp.views.social import FeedView, FriendsView, PeopleView
 from moviesapp.views.user import AccountDeletedView, AccountDeleteView, LoginErrorView, PreferencesView, logout_view

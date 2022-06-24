@@ -1,4 +1,4 @@
-"""Views for movies."""
+"""Gallery views."""
 import json
 from typing import Any, List as ListType
 
@@ -9,12 +9,6 @@ from ..models import List, Record
 from .mixins import TemplateAnonymousView
 from .types import GalleryViewContextData, ListKeyName, MovieGalleryObject
 from .utils import get_records, sort_by_rating
-
-
-class AboutView(TemplateAnonymousView):
-    """About view."""
-
-    template_name = "about.html"
 
 
 class GalleryView(TemplateAnonymousView):
