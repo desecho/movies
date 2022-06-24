@@ -320,7 +320,7 @@
                     <input
                       :id="'original_' + record.id"
                       type="checkbox"
-                      @change="saveOptions(record)"
+                      @change="saveOptions(record, 'original')"
                       v-model="record.options.original"
                     >
                   </div>
@@ -329,7 +329,7 @@
                     <input
                       :id="'extended_' + record.id"
                       type="checkbox"
-                      @change="saveOptions(record)"
+                      @change="saveOptions(record, 'extended')"
                       v-model="record.options.extended"
                     >
                   </div>
@@ -338,7 +338,7 @@
                     <input
                       :id="'theatre_' + record.id"
                       type="checkbox"
-                      @change="saveOptions(record)"
+                      @change="saveOptions(record, 'theatre')"
                       v-model="record.options.theatre"
                     >
                   </div>
@@ -347,7 +347,7 @@
                     <input
                       :id="'hd_' + record.id"
                       type="checkbox"
-                      @change="saveOptions(record)"
+                      @change="saveOptions(record, 'hd')"
                       v-model="record.options.hd"
                     >
                   </div>
@@ -356,7 +356,7 @@
                     <input
                       :id="'full_hd_' + record.id"
                       type="checkbox"
-                      @change="saveOptions(record)"
+                      @change="saveOptions(record, 'fullHd')"
                       v-model="record.options.fullHd"
                     >
                   </div>
@@ -365,7 +365,7 @@
                     <input
                       :id="'4k_' + record.id"
                       type="checkbox"
-                      @change="saveOptions(record)"
+                      @change="saveOptions(record, 'ultraHd')"
                       v-model="record.options.ultraHd"
                     >
                   </div>

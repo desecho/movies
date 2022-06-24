@@ -64,15 +64,18 @@ window.vm = newApp({
     },
     getSrcSet: getSrcSet,
     retinajs: retina,
-    saveOptions(record) {
+    saveOptions(record, field) {
       const data = {
         options: record.options,
       };
       const vm = this;
 
-      axios.put(urls.record + record.id + '/options/', data).then(function() {}).catch(function() {
-        vm.$toast.error(gettext('Error saving options'));
-      });
+      axios.put(urls.record + record.id + '/options/', data).then(function() {}).catch(
+          function() {
+            // rollback the change
+            record.options[field] = !record.options[field];
+            vm.$toast.error(gettext('Error saving options'));
+          });
     },
     switchMode(newMode) {
       if (newMode == this.mode) {
