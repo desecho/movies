@@ -48,17 +48,44 @@ window.vm = newApp({
     return {
       sortByDate: false,
       records: vars.records,
+      recordsOriginal: vars.records,
       mode: vars.mode,
       isVkApp: vars.isVkApp,
       sort: vars.sort,
       listWatchedId: vars.listWatchedId,
       listToWatchId: vars.listToWatchId,
       listId: vars.listId,
+      listName: vars.listName,
       isAnothersAccount: vars.isAnothersAccount,
       recommendations: vars.recommendations,
     };
   },
+  computed: {
+    isDraggable() {
+      const vm = this;
+      return vm.listId == vm.listToWatchId && !vm.isAnothersAccount && vm.sort == 'custom';
+    },
+  },
   methods: {
+    sortRecords() {
+      function getSortData() {
+        const data = [];
+        vm.records.forEach((record, index) => {
+          const sortData = {'id': record.id, 'order': index};
+          data.push(sortData);
+        });
+        return data;
+      }
+
+      const vm = this;
+      axios.put(urls.saveRecordsOrder, {'records': getSortData()}).then(function() {
+        vm.recordsOriginal = vm.records;
+      }).catch(
+          function() {
+            vm.records = vm.recordsOriginal;
+            vm.$toast.error(gettext('Error saving movie order'));
+          });
+    },
     openUrl(url) {
       location.href = url;
     },
@@ -102,8 +129,10 @@ window.vm = newApp({
         return;
       }
       vm.sort = newSort;
+      const sortSettings = {};
+      sortSettings[vm.listName] = newSort;
       const settings = {
-        sort: newSort,
+        sort: sortSettings,
       };
       if (newSort !== 'rating') {
         // disable recommendation if sorting by rating is manually disabled

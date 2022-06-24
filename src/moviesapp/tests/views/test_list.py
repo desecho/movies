@@ -125,7 +125,7 @@ class SaveSettingsTestCase(BaseTestLoginCase):
 
     def test_save_settings(self):
         mode = "minimal"
-        sort = "rating"
+        sort = {"watched": "rating", "to-watch": "rating"}
         settings = {"mode": mode, "sort": sort, "recommendation": True}
         response = self.client.put_ajax(self.url, {"settings": settings})
         self.assertEqual(response.status_code, HTTPStatus.OK)

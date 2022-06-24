@@ -87,8 +87,30 @@ class SaveSettingsView(AjaxAnonymousView):
             response: HttpResponseBadRequest = self.render_bad_request_response()
             return response
 
+        sort_settings = session_settings.pop("sort", {})
+        if "sort" not in request.session:
+            request.session["sort"] = {}
+        for list_name, sort_type in sort_settings.items():
+            request.session["sort"][list_name] = sort_type
         for setting in session_settings:
             request.session[setting] = session_settings[setting]
+        return self.success()
+
+
+class SaveRecordsOrderView(AjaxView):
+    """Save records order view."""
+
+    def put(self, request: AjaxAuthenticatedHttpRequest) -> (HttpResponse | HttpResponseBadRequest):
+        """Save records order."""
+        try:
+            records = request.PUT["records"]
+        except KeyError:
+            response: HttpResponseBadRequest = self.render_bad_request_response()
+            return response
+
+        for record in records:
+            # If record id is not found we silently ignore it
+            Record.objects.filter(pk=record["id"], user=request.user).update(order=record["order"])
         return self.success()
 
 
@@ -194,6 +216,8 @@ class ListView(TemplateAnonymousView):
             return sort_by_rating(records, username, list_name)
         if sort == "additionDate":
             return records.order_by("-date")
+        if sort == "custom":
+            return records.order_by("order")
         raise Exception("Unsupported sort type")
 
     @staticmethod
@@ -238,13 +262,18 @@ class ListView(TemplateAnonymousView):
         We need to do this in case a user manually set the wrong session values
         or if the code changes resulted in invalid values.
         """
-        SORT_TYPES: ListType[SortType] = ["releaseDate", "rating", "additionDate"]
+        SORT_TYPES: ListType[SortType] = ["releaseDate", "rating", "additionDate", "custom"]
         MODES = ["full", "compact", "minimal"]
-
+        LIST_NAMES = ["watched", "to-watch"]
         session = self.request.session
-        sort = session.get("sort")
-        if sort not in SORT_TYPES:
-            session.pop("sort", None)
+
+        sort = session.get("sort", {})
+        if isinstance(sort, dict):
+            for list_, sort_type in dict(sort).items():
+                if list_ not in LIST_NAMES or sort_type not in SORT_TYPES:
+                    session["sort"].pop(list_)
+        else:
+            session.pop("sort")
 
         mode = session.get("mode")
         if mode not in MODES:
@@ -254,11 +283,15 @@ class ListView(TemplateAnonymousView):
         """Initialize session values."""
         session = self.request.session
         if "sort" not in session:
-            self.request.session["sort"] = "additionDate"
+            session["sort"] = {}
+        if "watched" not in session["sort"]:
+            session["sort"]["watched"] = "additionDate"
+        if "to-watch" not in session["sort"]:
+            session["sort"]["to-watch"] = "custom"
         if "recommendations" not in session:
-            self.request.session["recommendations"] = False
+            session["recommendations"] = False
         if "mode" not in session:
-            self.request.session["mode"] = "full"
+            session["mode"] = "full"
 
     def _filter_out_provider_records_for_other_countries(self, provider_records: ListType[ProviderRecord]) -> None:
         request: AuthenticatedHttpRequest = self.request  # type: ignore
@@ -336,6 +369,7 @@ class ListView(TemplateAnonymousView):
             provider_records = self._get_provider_records(record.movie)
             record_object: RecordObject = {
                 "id": record.pk,
+                "order": record.order,
                 "comment": record.comment,
                 "commentArea": bool(record.comment),
                 "rating": record.rating,
@@ -366,7 +400,7 @@ class ListView(TemplateAnonymousView):
         if query:
             query = query.strip()
             records = self._filter_records(records, query)
-        records = self._sort_records(records, session["sort"], username, list_name)
+        records = self._sort_records(records, session["sort"][list_name], username, list_name)
 
         if anothers_account and session["recommendations"]:
             records = self._filter_records_for_recommendations(records, request.user)
@@ -381,20 +415,22 @@ class ListView(TemplateAnonymousView):
         if request.user.is_authenticated and request.user.is_country_supported:
             prefetch_related_objects(records, "movie__provider_records__provider")
 
-        records_: Page[Record] = paginate(records, request.GET.get("page"), settings.RECORDS_ON_PAGE)  # type: ignore
-        # TODO This needs to be fixed. Not optimized. Temporary solution
-        record_ids = [record.pk for record in records_.object_list]
-        records = Record.objects.filter(pk__in=record_ids)
-        record_objects = self._get_record_objects(records)
+        list_id = List.objects.get(key_name=list_name).pk
+        if list_id == List.TO_WATCH:
+            records_on_page = records.count()
+        else:  # List - watched
+            records_on_page = settings.RECORDS_ON_PAGE
+        records_: Page[Record] = paginate(records, request.GET.get("page"), records_on_page)  # type: ignore
+        record_objects = self._get_record_objects(records[: len(records_)])
         if anothers_account:
             self._inject_list_ids(records, record_objects)
         return {
             "records": records_,
             "record_objects": json.dumps(record_objects),
-            "list_id": List.objects.get(key_name=list_name).pk,
+            "list_id": list_id,
             "list": list_name,
             "anothers_account": anothers_account,
-            "sort": session["sort"],
+            "sort": session["sort"][list_name],
             "query": query,
             # "reviews": comments_and_ratings,
         }

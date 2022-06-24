@@ -19,7 +19,8 @@
     "v-lazy-image": "^2.1.1",
     "vue": "^3.2.37",
     "vue-cookies": "^1.8.1",
-    "vue-toast-notification": "^3.0.4"
+    "vue-toast-notification": "^3.0.4",
+    "vuedraggable": "^4.1.0"
   },
   "devDependencies": {
     "css-loader": "^6.7.1",

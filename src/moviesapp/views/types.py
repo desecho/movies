@@ -113,6 +113,7 @@ class RecordObject(TypedDict):
     """Record object."""
 
     id: int
+    order: int
     movie: MovieObject
     comment: str
     commentArea: bool
@@ -143,4 +144,4 @@ class MovieSearchResult(TypedDict):
 
 
 ListKeyName = Literal["watched", "to-watch"]
-SortType = Literal["releaseDate", "rating", "additionDate"]
+SortType = Literal["releaseDate", "rating", "additionDate", "custom"]

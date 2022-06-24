@@ -443,6 +443,7 @@ class Record(Model):
     movie = ForeignKey(Movie, CASCADE, related_name="records")
     list = ForeignKey(List, CASCADE)
     rating = PositiveSmallIntegerField(default=0)
+    order = PositiveSmallIntegerField(default=0)
     comment = CharField(max_length=255, default="")
     date = DateTimeField(auto_now_add=True)
     watched_original = BooleanField(default=False)

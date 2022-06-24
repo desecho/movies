@@ -19,6 +19,7 @@ from moviesapp.views.list import (
     RemoveRecordView,
     SaveCommentView,
     SaveOptionsView,
+    SaveRecordsOrderView,
     SaveSettingsView,
 )
 from moviesapp.views.movies import AboutView, GalleryView
@@ -88,6 +89,8 @@ urlpatterns += [
     #
     path_404("record/", "record"),
     path("record/<int:record_id>/options/", SaveOptionsView.as_view(), name="save_options"),
+    #
+    path("save-records-order/", SaveRecordsOrderView.as_view(), name="save_records_order"),
     #
     path_404("add-to-list/", "add_to_list"),
     path("add-to-list/<int:movie_id>/", AddToListView.as_view(), name="add_to_list"),

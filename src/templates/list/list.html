@@ -79,7 +79,7 @@
         </div>
       {% endif %}
     </div>
-    <div class="row">
+    <div class="row" v-cloak>
       <div class="col-sm-9 col-md-7 col-lg-5 col-xl-5">
         <div class="btn-group btn-group-toggle" data-toggle="buttons">
           <label
@@ -106,6 +106,15 @@
             <input type="radio" :checked="sort == 'additionDate'">
             {% translate 'Date added' %}
           </label>
+          <label
+            class="btn btn-secondary" :class="{active: sort == 'custom'}"
+            @click="switchSort('custom')"
+            title="{% translate 'Custom sorting' %}"
+            v-if="listId == listToWatchId"
+          >
+            <input type="radio" :checked="sort == 'custom'">
+            {% translate 'Custom' %}
+          </label>
         </div>
       </div>
       <div class="col-sm-6 col-md-4 col-lg-4 col-xl-3">
@@ -124,261 +133,271 @@
       <h3>{{ query }}: <a href="{{ request.path }}"><font-awesome-icon icon="fa-solid fa-xmark" /></a></h3>
     {% endif %}
     <div class="results col-sm-12 col-md-10 col-lg-8" v-cloak>
-      <div class="movie" :class="{'movie-minimal': mode == 'minimal'}" v-for="record in records">
-        <div class="title">
-          <span :title="record.movie.titleOriginal">[[ record.movie.title ]]</span>
-          {% if not anothers_account %}
-            <div class="remove-button">
-              <a href="javascript:void(0)" @click="removeRecord(record)" title="{% translate 'Delete' %}">
-                <font-awesome-icon icon="fa-solid fa-trash" />
-              </a>
-              <a
-                href="javascript:void(0)"
-                class="wall-post"
-                @click="postToWall(record)"
-                title="{% translate 'Post to the wall' %}"
-                v-show="isVkApp"
-              >
-                <font-awesome-icon icon="fa-solid fa-share" />
-              </a>
-            </div>
-          {% endif %}
-          <div class="add-to-list-buttons">
-            {% if anothers_account %}
-              <div class="inline">
-                <div class="inline" v-if="!record.listId">
-                  <a
-                    href="javascript:void(0)"
-                    @click="addToList(record.movie.id, listWatchedId, record)"
-                    title="{% translate 'Add to &quot;Watched&quot; list' %}"
-                    v-show="record.movie.isReleased"
-                  >
-                    <font-awesome-icon icon="fa-solid fa-eye" />
-                  </a>
-                  <a href="javascript:void(0)"
-                    @click="addToList(record.movie.id, listToWatchId, record)"
-                    title="{% translate 'Add to &quot;To Watch&quot; list' %}"
-                  >
-                    <font-awesome-icon icon="fa-solid fa-eye-slash" />
-                  </a>
-                </div>
-                <span v-show="record.listId == listWatchedId" >
-                  <font-awesome-icon icon="fa-solid fa-eye" title="{% translate 'Watched' %}" />
-                </span>
-                <span v-show="record.listId == listToWatchId">
-                  <font-awesome-icon icon="fa-solid fa-eye-slash" title="{% translate 'To Watch' %}" />
-                </span>
-              </div>
-            {% else %}
-              <div class="inline">
-                <div v-if="listId == listToWatchId" class="inline">
-                  <a
-                    href="javascript:void(0)"
-                    @click="addToList(record.movie.id, listWatchedId, record)"
-                    title="{% translate 'Add to &quot;Watched&quot; list' %}"
-                    v-show="record.movie.isReleased && !record.listId"
-                  >
-                    <font-awesome-icon icon="fa-solid fa-eye" />
-                  </a>
-                  <span>
-                    <font-awesome-icon
-                      icon="fa-solid fa-eye"
-                      title="{% translate 'Watched' %}"
-                      v-show="record.listId"
-                    />
-                  </span>
-                </div>
-              </div>
-            {% endif %}
-          </div>
-        </div>
-        <div class="poster" v-show="mode !='minimal'">
-          <span v-if="mode == 'full'">
-            <v-lazy-image
-              class="poster-big"
-              :srcset="getSrcSet(record.movie.posterNormal, record.movie.posterBig)"
-              :src="record.movie.posterBig"
-              :title="record.movie.titleOriginal"
-              :alt="record.movie.title"
-            />
-          </span>
-          <span v-else>
-            <v-lazy-image
-              class="poster-small"
-              :srcset="getSrcSet(record.movie.posterSmall, record.movie.posterNormal)"
-              :src="record.movie.posterNormal"
-              :title="record.movie.titleOriginal"
-              :alt="record.movie.title"
-            />
-          </span>
-        </div>
-        <div class="details" :class="{ 'details-minimal': mode == 'minimal'}">
-          <div class="imdb-rating" v-show="record.movie.imdbRating">
-            <span class="item-desc">{% translate 'IMDb Rating' %}:</span>
-            [[ record.movie.imdbRating ]]
-          </div>
-          <div class="release-date" v-show="record.movie.isReleased">
-            <span class="item-desc" v-show="mode != 'minimal'">{% translate 'Release Date' %}:</span>
-            [[ record.movie.releaseDate ]]
-          </div>
-          <div v-show="mode == 'full'">
-            <div v-show="record.movie.country">
-              <span class="item-desc">{% translate 'Country' %}:</span>
-              [[ record.movie.country ]]
-            </div>
-            <div v-show="record.movie.director">
-              <span class="item-desc">{% translate 'Director' %}:</span>
-              [[ record.movie.director ]]
-            </div>
-            <div v-show="record.movie.writer">
-              <span class="item-desc">{% translate 'Writer' %}:</span>
-              [[ record.movie.writer ]]
-            </div>
-            <div v-show="record.movie.genre">
-              <span class="item-desc">{% translate 'Genre' %}:</span>
-              [[ record.movie.genre ]]
-            </div>
-            <div v-show="record.movie.actors">
-              <span class="item-desc">{% translate 'Actors' %}:</span>
-              [[ record.movie.actors ]]
-            </div>
-            <div v-show="record.movie.runtime">
-              <span class="item-desc">{% translate 'Runtime' %}:</span>
-              [[ record.movie.runtime ]]
-            </div>
-            <div v-show="record.movie.overview">
-              <span class="item-desc">{% translate 'Overview' %}:</span>
-              [[ record.movie.overview ]]
-            </div>
-            <div v-show="record.movie.homepage">
-              <a :href="record.movie.homepage" target="_blank">{% translate 'Website' %}</a>
-            </div>
-            <div class="urls">
-              <a :href="record.movie.imdbUrl" target="_blank"><span class="imdb"></span></a>
-              <a :href="record.movie.tmdbUrl" target="_blank"><span class="tmdb"></span></a>
-            </div>
-            <div v-show="record.movie.trailers.length">
-              <span class="item-desc">{% translate 'Trailers' %}:</span>
-              <div class="trailers">
-                <a :href="trailer.url" target="_blank" v-for="trailer in record.movie.trailers">[[ trailer.name ]]</a>
-              </div>
-            </div>
-            <div v-show="record.providerRecords.length">
-              <span class="item-desc">{% translate 'Stream on' %}:</span>
-              <div>
-                <a
-                  :href="providerRecord.tmdbWatchUrl"
-                  target="_blank"
-                  v-for="providerRecord in record.providerRecords"
-                >
-                  <v-lazy-image
-                    class="provider"
-                    :src="providerRecord.provider.logo"
-                    :title="providerRecord.provider.name"
-                    :alt="providerRecord.provider.name"
-                  />
-                </a>
-              </div>
-            </div>
-            <br>
-          </div>
-          <div class="review" :class="{'review-minimal': mode == 'minimal'}">
-            {% if list == 'watched' %}
-              <div class="rating" :data-record-id="record.id" :data-rating="record.rating"></div>
-              <div class="comment" v-show="(record.comment || record.commentArea) && mode != 'minimal'">
-                {% if anothers_account %}
-                  <p>[[ record.comment ]]</p>
-                {% else %}
-                  <div>
-                    <textarea class="form-control" title="{% translate 'Comment' %}" v-model="record.comment">
-                    </textarea>
-                  </div>
-                  <br>
-                  <button
-                    type="button"
-                    class="btn btn-secondary"
-                    @click="saveComment(record)"
-                    title="{% translate 'Save' %}"
-                  >
-                    <font-awesome-icon icon="fa-solid fa-save" />
-                  </button>
-                {% endif %}
-              </div>
+      <draggable
+        v-model="records"
+        @sort="sortRecords"
+        item-key="id"
+        :disabled="!isDraggable"
+      >
+        <template #item="{element}">
+          <div class="movie" :class="{'movie-minimal': mode == 'minimal', draggable: isDraggable}">
+            <div class="title">
+              <span :title="element.movie.titleOriginal">[[ element.movie.title ]]</span>
               {% if not anothers_account %}
-                <button
-                  type="button"
-                  class="btn btn-secondary comment-button"
-                  @click="showCommentArea(record)"
-                  title="{% translate 'Add comment' %}"
-                  v-show="record.comment == '' && !record.commentArea && mode != 'minimal'"
-                >
-                  <font-awesome-icon icon="fa-solid fa-comment" />
-                </button>
-                <div v-show="mode == 'full'">
-                  <div>
-                    <label :for="'original_' + record.id">{% translate 'Watched original version' %}</label>
-                    <input
-                      :id="'original_' + record.id"
-                      type="checkbox"
-                      @change="saveOptions(record, 'original')"
-                      v-model="record.options.original"
-                    >
-                  </div>
-                  <div>
-                    <label :for="'extended_' + record.id">{% translate 'Watched extended version' %}</label>
-                    <input
-                      :id="'extended_' + record.id"
-                      type="checkbox"
-                      @change="saveOptions(record, 'extended')"
-                      v-model="record.options.extended"
-                    >
-                  </div>
-                  <div>
-                    <label :for="'theatre_' + record.id">{% translate 'Watched in theatre' %}</label>
-                    <input
-                      :id="'theatre_' + record.id"
-                      type="checkbox"
-                      @change="saveOptions(record, 'theatre')"
-                      v-model="record.options.theatre"
-                    >
-                  </div>
-                  <div>
-                    <label :for="'hd_' + record.id">{% translate 'Watched in HD' %}</label>
-                    <input
-                      :id="'hd_' + record.id"
-                      type="checkbox"
-                      @change="saveOptions(record, 'hd')"
-                      v-model="record.options.hd"
-                    >
-                  </div>
-                  <div>
-                    <label :for="'full_hd_' + record.id">{% translate 'Watched in FullHD' %}</label>
-                    <input
-                      :id="'full_hd_' + record.id"
-                      type="checkbox"
-                      @change="saveOptions(record, 'fullHd')"
-                      v-model="record.options.fullHd"
-                    >
-                  </div>
-                  <div>
-                    <label :for="'4k_' + record.id">{% translate 'Watched in 4K' %}</label>
-                    <input
-                      :id="'4k_' + record.id"
-                      type="checkbox"
-                      @change="saveOptions(record, 'ultraHd')"
-                      v-model="record.options.ultraHd"
-                    >
-                  </div>
+                <div class="remove-button">
+                  <a href="javascript:void(0)" @click="removeRecord(element)" title="{% translate 'Delete' %}">
+                    <font-awesome-icon icon="fa-solid fa-trash" />
+                  </a>
+                  <a
+                    href="javascript:void(0)"
+                    class="wall-post"
+                    @click="postToWall(element)"
+                    title="{% translate 'Post to the wall' %}"
+                    v-show="isVkApp"
+                  >
+                    <font-awesome-icon icon="fa-solid fa-share" />
+                  </a>
                 </div>
               {% endif %}
-            {% endif %}
-          </div>
-        </div>
-        <div class="clearfix"></div>
-        {% comment %} {% if list == 'to-watch' and not anothers_account %}
+              <div class="add-to-list-buttons">
+                {% if anothers_account %}
+                  <div class="inline">
+                    <div class="inline" v-if="!element.listId">
+                      <a
+                        href="javascript:void(0)"
+                        @click="addToList(element.movie.id, listWatchedId, element)"
+                        title="{% translate 'Add to &quot;Watched&quot; list' %}"
+                        v-show="element.movie.isReleased"
+                      >
+                        <font-awesome-icon icon="fa-solid fa-eye" />
+                      </a>
+                      <a href="javascript:void(0)"
+                        @click="addToList(element.movie.id, listToWatchId, element)"
+                        title="{% translate 'Add to &quot;To Watch&quot; list' %}"
+                      >
+                        <font-awesome-icon icon="fa-solid fa-eye-slash" />
+                      </a>
+                    </div>
+                    <span v-show="element.listId == listWatchedId" >
+                      <font-awesome-icon icon="fa-solid fa-eye" title="{% translate 'Watched' %}" />
+                    </span>
+                    <span v-show="element.listId == listToWatchId">
+                      <font-awesome-icon icon="fa-solid fa-eye-slash" title="{% translate 'To Watch' %}" />
+                    </span>
+                  </div>
+                {% else %}
+                  <div class="inline">
+                    <div v-if="listId == listToWatchId" class="inline">
+                      <a
+                        href="javascript:void(0)"
+                        @click="addToList(element.movie.id, listWatchedId, element)"
+                        title="{% translate 'Add to &quot;Watched&quot; list' %}"
+                        v-show="element.movie.isReleased && !element.listId"
+                      >
+                        <font-awesome-icon icon="fa-solid fa-eye" />
+                      </a>
+                      <span>
+                        <font-awesome-icon
+                          icon="fa-solid fa-eye"
+                          title="{% translate 'Watched' %}"
+                          v-show="element.listId"
+                        />
+                      </span>
+                    </div>
+                  </div>
+                {% endif %}
+              </div>
+            </div>
+            <div class="poster" v-show="mode !='minimal'">
+              <span v-if="mode == 'full'">
+                <v-lazy-image
+                  class="poster-big"
+                  :srcset="getSrcSet(element.movie.posterNormal, element.movie.posterBig)"
+                  :src="element.movie.posterBig"
+                  :title="element.movie.titleOriginal"
+                  :alt="element.movie.title"
+                />
+              </span>
+              <span v-else>
+                <v-lazy-image
+                  class="poster-small"
+                  :srcset="getSrcSet(element.movie.posterSmall, element.movie.posterNormal)"
+                  :src="element.movie.posterNormal"
+                  :title="element.movie.titleOriginal"
+                  :alt="element.movie.title"
+                />
+              </span>
+            </div>
+            <div class="details" :class="{ 'details-minimal': mode == 'minimal'}">
+              <div class="imdb-rating" v-show="element.movie.imdbRating">
+                <span class="item-desc">{% translate 'IMDb Rating' %}:</span>
+                [[ element.movie.imdbRating ]]
+              </div>
+              <div class="release-date" v-show="element.movie.isReleased">
+                <span class="item-desc" v-show="mode != 'minimal'">{% translate 'Release Date' %}:</span>
+                [[ element.movie.releaseDate ]]
+              </div>
+              <div v-show="mode == 'full'">
+                <div v-show="element.movie.country">
+                  <span class="item-desc">{% translate 'Country' %}:</span>
+                  [[ element.movie.country ]]
+                </div>
+                <div v-show="element.movie.director">
+                  <span class="item-desc">{% translate 'Director' %}:</span>
+                  [[ element.movie.director ]]
+                </div>
+                <div v-show="element.movie.writer">
+                  <span class="item-desc">{% translate 'Writer' %}:</span>
+                  [[ element.movie.writer ]]
+                </div>
+                <div v-show="element.movie.genre">
+                  <span class="item-desc">{% translate 'Genre' %}:</span>
+                  [[ element.movie.genre ]]
+                </div>
+                <div v-show="element.movie.actors">
+                  <span class="item-desc">{% translate 'Actors' %}:</span>
+                  [[ element.movie.actors ]]
+                </div>
+                <div v-show="element.movie.runtime">
+                  <span class="item-desc">{% translate 'Runtime' %}:</span>
+                  [[ element.movie.runtime ]]
+                </div>
+                <div v-show="element.movie.overview">
+                  <span class="item-desc">{% translate 'Overview' %}:</span>
+                  [[ element.movie.overview ]]
+                </div>
+                <div v-show="element.movie.homepage">
+                  <a :href="element.movie.homepage" target="_blank">{% translate 'Website' %}</a>
+                </div>
+                <div class="urls">
+                  <a :href="element.movie.imdbUrl" target="_blank"><span class="imdb"></span></a>
+                  <a :href="element.movie.tmdbUrl" target="_blank"><span class="tmdb"></span></a>
+                </div>
+                <div v-show="element.movie.trailers.length">
+                  <span class="item-desc">{% translate 'Trailers' %}:</span>
+                  <div class="trailers">
+                    <a :href="trailer.url" target="_blank" v-for="trailer in element.movie.trailers">[[ trailer.name ]]</a>
+                  </div>
+                </div>
+                <div v-show="element.providerRecords.length">
+                  <span class="item-desc">{% translate 'Stream on' %}:</span>
+                  <div>
+                    <a
+                      :href="providerRecord.tmdbWatchUrl"
+                      target="_blank"
+                      v-for="providerRecord in element.providerRecords"
+                    >
+                      <v-lazy-image
+                        class="provider"
+                        :src="providerRecord.provider.logo"
+                        :title="providerRecord.provider.name"
+                        :alt="providerRecord.provider.name"
+                      />
+                    </a>
+                  </div>
+                </div>
+                <br>
+              </div>
+              <div class="review" :class="{'review-minimal': mode == 'minimal'}">
+                {% if list == 'watched' %}
+                  <div class="rating" :data-record-id="element.id" :data-rating="element.rating"></div>
+                  <div class="comment" v-show="(element.comment || element.commentArea) && mode != 'minimal'">
+                    {% if anothers_account %}
+                      <p>[[ element.comment ]]</p>
+                    {% else %}
+                      <div>
+                        <textarea class="form-control" title="{% translate 'Comment' %}" v-model="element.comment">
+                        </textarea>
+                      </div>
+                      <br>
+                      <button
+                        type="button"
+                        class="btn btn-secondary"
+                        @click="saveComment(element)"
+                        title="{% translate 'Save' %}"
+                      >
+                        <font-awesome-icon icon="fa-solid fa-save" />
+                      </button>
+                    {% endif %}
+                  </div>
+                  {% if not anothers_account %}
+                    <button
+                      type="button"
+                      class="btn btn-secondary comment-button"
+                      @click="showCommentArea(element)"
+                      title="{% translate 'Add comment' %}"
+                      v-show="element.comment == '' && !element.commentArea && mode != 'minimal'"
+                    >
+                      <font-awesome-icon icon="fa-solid fa-comment" />
+                    </button>
+                    <div v-show="mode == 'full'">
+                      <div>
+                        <label :for="'original_' + element.id">{% translate 'Watched original version' %}</label>
+                        <input
+                          :id="'original_' + element.id"
+                          type="checkbox"
+                          @change="saveOptions(element, 'original')"
+                          v-model="element.options.original"
+                        >
+                      </div>
+                      <div>
+                        <label :for="'extended_' + element.id">{% translate 'Watched extended version' %}</label>
+                        <input
+                          :id="'extended_' + element.id"
+                          type="checkbox"
+                          @change="saveOptions(element, 'extended')"
+                          v-model="element.options.extended"
+                        >
+                      </div>
+                      <div>
+                        <label :for="'theatre_' + element.id">{% translate 'Watched in theatre' %}</label>
+                        <input
+                          :id="'theatre_' + element.id"
+                          type="checkbox"
+                          @change="saveOptions(element, 'theatre')"
+                          v-model="element.options.theatre"
+                        >
+                      </div>
+                      <div>
+                        <label :for="'hd_' + element.id">{% translate 'Watched in HD' %}</label>
+                        <input
+                          :id="'hd_' + element.id"
+                          type="checkbox"
+                          @change="saveOptions(element, 'hd')"
+                          v-model="element.options.hd"
+                        >
+                      </div>
+                      <div>
+                        <label :for="'full_hd_' + element.id">{% translate 'Watched in FullHD' %}</label>
+                        <input
+                          :id="'full_hd_' + element.id"
+                          type="checkbox"
+                          @change="saveOptions(element, 'fullHd')"
+                          v-model="element.options.fullHd"
+                        >
+                      </div>
+                      <div>
+                        <label :for="'4k_' + element.id">{% translate 'Watched in 4K' %}</label>
+                        <input
+                          :id="'4k_' + element.id"
+                          type="checkbox"
+                          @change="saveOptions(element, 'ultraHd')"
+                          v-model="element.options.ultraHd"
+                        >
+                      </div>
+                    </div>
+                  {% endif %}
+                {% endif %}
+              </div>
+            </div>
+            <div class="clearfix"></div>
+            {% comment %} {% if list == 'to-watch' and not anothers_account %}
             {% include 'includes/reviews.html' %}
           {% endif %} {% endcomment %}
-      </div>
+          </div>
+        </template>
+      </draggable>
+
       {% if records.has_other_pages %}
         {% bootstrap_paginate records range=5 show_prev_next='true' show_first_last='true' alignment='left' %}
       {% endif %}
@@ -393,6 +412,7 @@
     vars.records = JSON.parse('{{ record_objects|escapejs|safe }}');
     vars.mode = '{{ request.session.mode }}';
     vars.listId = {{ list_id }};
+    vars.listName = '{{ list }}';
     vars.sort = '{{ sort }}';
     vars.recommendations = {{ request.session.recommendations|yesno:'true,false' }};
     vars.isAnothersAccount = {{ anothers_account|yesno:'true,false' }};
@@ -403,6 +423,7 @@
     urls.addToList = '{% url 'add_to_list' %}';
     urls.saveComment = '{% url 'save_comment' %}';
     urls.uploadPosterToWall = '{% url 'upload_poster_to_wall' %}';
+    urls.saveRecordsOrder = '{% url 'save_records_order' %}';
   </script>
   <script src="{% static 'js/list.js' %}"></script>
 {% endblock %}
