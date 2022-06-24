@@ -29,7 +29,7 @@ class PeopleViewContextData(TypedDict):
 class GalleryViewContextData(TypedDict):
     """Gallery view context data."""
 
-    movies: str
+    records: str
     anothers_account: Optional["User"]
     list: ListKeyName
     list_id: int
@@ -60,6 +60,14 @@ class MovieGalleryObject(TypedDict):
     titleOriginal: str
     posterNormal: Optional[str]
     posterBig: Optional[str]
+
+
+class RecordGalleryObject(TypedDict):
+    """Record gallery object."""
+
+    id: int
+    order: int
+    movie: MovieGalleryObject
 
 
 class MovieObject(MovieGalleryObject):

@@ -1,5 +1,7 @@
 /* global retinajs:false */
 
+'use strict';
+
 export function retina(event) {
   const el = $(event.target);
   if (el.data('rjs-processed-2')) {

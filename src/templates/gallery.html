@@ -38,23 +38,31 @@
       </div>
     </div>
   </div>
-  <div>
-    <v-lazy-image
-      class="gallery-poster poster-big"
-      :srcset="getSrcSet(movie.posterNormal, movie.posterBig)"
-      :src="movie.posterBig"
-      :title="movie.titleOriginal"
-      :alt="movie.title"
-      v-for="movie in movies"
-    />
-  </div>
+  <draggable
+    v-model="records"
+    @sort="sortRecords"
+    item-key="id"
+    :disabled="!isDraggable"
+  >
+    <template #item="{element}">
+      <div class="gallery-record">
+        <v-lazy-image
+          class="poster-big" :class="{draggable: isDraggable}"
+          :srcset="getSrcSet(element.movie.posterNormal, element.movie.posterBig)"
+          :src="element.movie.posterBig"
+          :title="element.movie.titleOriginal"
+          :alt="element.movie.title"
+        />
+      </div>
+    </template>
 {% endblock %}
 
 {% block js %}
   <script>
     'use strict';
 
-    vars.movies = JSON.parse('{{ movies|escapejs|safe }}');
+    vars.records = JSON.parse('{{ records|escapejs|safe }}');
+    vars.isAnothersAccount = {{ anothers_account|yesno:'true,false' }};
     vars.listId = {{ list_id }};
     {% if anothers_account %}
       urls.galleryWatched = '{% url 'gallery' anothers_account.username 'watched' %}';
@@ -63,6 +71,7 @@
       urls.galleryWatched = '{% url 'gallery' 'watched' %}';
       urls.galleryToWatch = '{% url 'gallery' 'to-watch' %}';
     {% endif %}
+    urls.saveRecordsOrder = '{% url 'save_records_order' %}';
   </script>
   <script src="{% static 'js/gallery.js' %}"></script>
 {% endblock %}

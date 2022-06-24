@@ -4,6 +4,7 @@
 
 import axios from 'axios';
 import {retina, removeItemOnce, getSrcSet} from './helpers';
+import {sortRecords} from './list_helpers';
 import {newApp} from './app';
 import autosize from 'autosize';
 
@@ -67,25 +68,7 @@ window.vm = newApp({
     },
   },
   methods: {
-    sortRecords() {
-      function getSortData() {
-        const data = [];
-        vm.records.forEach((record, index) => {
-          const sortData = {'id': record.id, 'order': index};
-          data.push(sortData);
-        });
-        return data;
-      }
-
-      const vm = this;
-      axios.put(urls.saveRecordsOrder, {'records': getSortData()}).then(function() {
-        vm.recordsOriginal = vm.records;
-      }).catch(
-          function() {
-            vm.records = vm.recordsOriginal;
-            vm.$toast.error(gettext('Error saving movie order'));
-          });
-    },
+    sortRecords: sortRecords,
     openUrl(url) {
       location.href = url;
     },
