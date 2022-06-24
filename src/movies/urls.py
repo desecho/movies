@@ -60,8 +60,8 @@ urlpatterns += [
     #
     # User
     path("preferences/", PreferencesView.as_view(), name="preferences"),
-    path("delete/", AccountDeleteView.as_view(), name="delete_account"),
-    path("account-deleted/", AccountDeletedView.as_view(), name="account_deleted"),
+    path("account/delete/", AccountDeleteView.as_view(), name="delete_account"),
+    path("account/deleted/", AccountDeletedView.as_view(), name="account_deleted"),
     #
     # Search
     path("", SearchView.as_view(), name="search"),
