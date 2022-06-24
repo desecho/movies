@@ -43,6 +43,3 @@ jobs:
           kubectl apply -f deployment/service.yaml
           kubectl rollout restart "deployment/$PROJECT"
           kubectl rollout status "deployment/$PROJECT"
-
-      - name: Run db migration
-        run: make prod-migrate
