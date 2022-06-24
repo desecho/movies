@@ -3,7 +3,7 @@
 'use strict';
 
 import axios from 'axios';
-import {retina, removeItemOnce, getSrcSet} from './helpers';
+import {retina, getSrcSet} from './helpers';
 import {saveRecordsOrder} from './list_helpers';
 import {newApp} from './app';
 import autosize from 'autosize';
@@ -123,9 +123,9 @@ window.vm = newApp({
       }
       applySettings(settings);
     },
-    removeRecord(record) {
+    removeRecord(record, index) {
       function success() {
-        removeItemOnce(vm.records, record);
+        vm.records.splice(index, 1);
       }
 
       function fail() {

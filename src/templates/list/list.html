@@ -135,13 +135,13 @@
         item-key="id"
         :disabled="!isSortable"
       >
-        <template #item="{element}">
+        <template #item="{element, index}">
           <div class="movie" :class="{'movie-minimal': mode == 'minimal', draggable: isSortable}">
             <div class="title">
               <span :title="element.movie.titleOriginal">[[ element.movie.title ]]</span>
               {% if not anothers_account %}
                 <div class="remove-button">
-                  <a href="javascript:void(0)" @click="removeRecord(element)" title="{% translate 'Delete' %}">
+                  <a href="javascript:void(0)" @click="removeRecord(element, index)" title="{% translate 'Delete' %}">
                     <font-awesome-icon icon="fa-solid fa-trash" />
                   </a>
                   <a
