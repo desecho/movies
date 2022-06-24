@@ -29,7 +29,7 @@ class PreferencesTestCase(BaseTestLoginCase):
         last_name = "Petrov"
         username = "ivan"
 
-        response = self.client.post_ajax(
+        response = self.client.post(
             self.url,
             {
                 "language": language,
