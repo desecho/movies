@@ -40,14 +40,32 @@
   </div>
   <draggable
     v-model="records"
-    @sort="sortRecords"
+    @sort="saveRecordsOrder"
     item-key="id"
-    :disabled="!isDraggable"
+    :disabled="!isSortable"
   >
-    <template #item="{element}">
+    <template #item="{element, index}">
       <div class="gallery-record">
+        <button
+          type="button"
+          class="btn btn-secondary up-button"
+          @click="moveToTop(element, index)"
+          title="{% translate 'Move to the top' %}"
+          v-show="isSortable"
+        >
+          <font-awesome-icon icon="fa-solid fa-arrow-up" />
+        </button>
+        <button
+          type="button"
+          class="btn btn-secondary down-button"
+          @click="moveToBottom(element, index)"
+          title="{% translate 'Move to the bottom' %}"
+          v-show="isSortable"
+        >
+          <font-awesome-icon icon="fa-solid fa-arrow-down" />
+        </button>
         <v-lazy-image
-          class="poster-big" :class="{draggable: isDraggable}"
+          class="poster-big" :class="{draggable: isSortable}"
           :srcset="getSrcSet(element.movie.posterNormal, element.movie.posterBig)"
           :src="element.movie.posterBig"
           :title="element.movie.titleOriginal"

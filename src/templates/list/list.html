@@ -135,12 +135,12 @@
     <div class="results col-sm-12 col-md-10 col-lg-8" v-cloak>
       <draggable
         v-model="records"
-        @sort="sortRecords"
+        @sort="saveRecordsOrder"
         item-key="id"
-        :disabled="!isDraggable"
+        :disabled="!isSortable"
       >
         <template #item="{element}">
-          <div class="movie" :class="{'movie-minimal': mode == 'minimal', draggable: isDraggable}">
+          <div class="movie" :class="{'movie-minimal': mode == 'minimal', draggable: isSortable}">
             <div class="title">
               <span :title="element.movie.titleOriginal">[[ element.movie.title ]]</span>
               {% if not anothers_account %}
@@ -323,7 +323,7 @@
                   {% if not anothers_account %}
                     <button
                       type="button"
-                      class="btn btn-secondary comment-button"
+                      class="btn btn-secondary"
                       @click="showCommentArea(element)"
                       title="{% translate 'Add comment' %}"
                       v-show="element.comment == '' && !element.commentArea && mode != 'minimal'"

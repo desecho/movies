@@ -1,7 +1,8 @@
 'use strict';
 import axios from 'axios';
 
-export function sortRecords() {
+
+export function saveRecordsOrder() {
   function getSortData() {
     const data = [];
     vm.records.forEach((record, index) => {

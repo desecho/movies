@@ -4,7 +4,7 @@
 
 import axios from 'axios';
 import {retina, removeItemOnce, getSrcSet} from './helpers';
-import {sortRecords} from './list_helpers';
+import {saveRecordsOrder} from './list_helpers';
 import {newApp} from './app';
 import autosize from 'autosize';
 
@@ -62,13 +62,13 @@ window.vm = newApp({
     };
   },
   computed: {
-    isDraggable() {
+    isSortable() {
       const vm = this;
       return vm.listId == vm.listToWatchId && !vm.isAnothersAccount && vm.sort == 'custom';
     },
   },
   methods: {
-    sortRecords: sortRecords,
+    saveRecordsOrder: saveRecordsOrder,
     openUrl(url) {
       location.href = url;
     },
