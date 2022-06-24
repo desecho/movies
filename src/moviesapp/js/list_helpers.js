@@ -6,7 +6,7 @@ export function saveRecordsOrder() {
   function getSortData() {
     const data = [];
     vm.records.forEach((record, index) => {
-      const sortData = {'id': record.id, 'order': index};
+      const sortData = {'id': record.id, 'order': index + 1};
       data.push(sortData);
     });
     return data;
