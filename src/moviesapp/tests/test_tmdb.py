@@ -6,6 +6,7 @@ import tmdbsimple as tmdb
 from django.conf import settings
 
 from moviesapp.tmdb import (
+    TmdbInvalidSearchTypeError,
     TmdbNoImdbIdError,
     get_poster_url,
     get_tmdb_movie_data,
@@ -14,7 +15,6 @@ from moviesapp.tmdb import (
     get_watch_data,
     search_movies,
 )
-from moviesapp.tmdb.exceptions import TmdbInvalidSearchTypeError
 
 from .fixtures.tmdb import (
     get_tmdb_movie_data_result,

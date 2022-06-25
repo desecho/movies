@@ -9,11 +9,10 @@ from django.conf import settings
 from django.http import Http404, HttpResponse, HttpResponseBadRequest
 from sentry_sdk import capture_exception
 
-from ..exceptions import NotAvailableSearchTypeError
 from ..http import AjaxAuthenticatedHttpRequest, AjaxHttpRequest
 from ..models import List, Movie, User
 from ..tasks import load_and_save_watch_data_task
-from ..tmdb import TmdbNoImdbIdError, get_poster_url, get_tmdb_url, search_movies
+from ..tmdb import TmdbInvalidSearchTypeError, TmdbNoImdbIdError, get_poster_url, get_tmdb_url, search_movies
 from ..types import SearchType, TmdbMovieSearchResultProcessed
 from ..utils import is_movie_released, load_movie_data
 from .mixins import AjaxAnonymousView, AjaxView, TemplateAnonymousView
@@ -94,23 +93,20 @@ class SearchMovieView(AjaxAnonymousView):
 
     def get(self, request: AjaxHttpRequest) -> (HttpResponse | HttpResponseBadRequest):
         """Return a list of movies based on the search query."""
-        AVAILABLE_SEARCH_TYPES = [
-            "actor",
-            "movie",
-            "director",
-        ]
+        response_bad_request: HttpResponseBadRequest = self.render_bad_request_response()
+
         try:
             GET = request.GET
             query = GET["query"]
             options: SearchOptions = json.loads(GET["options"])
             type_ = GET["type"]
-            if type_ not in AVAILABLE_SEARCH_TYPES:
-                raise NotAvailableSearchTypeError
             search_type: SearchType = type_  # type: ignore
-        except (KeyError, NotAvailableSearchTypeError):
-            response: HttpResponseBadRequest = self.render_bad_request_response()
-            return response
-        movies = self._get_movies_from_tmdb(query, search_type, options["sortByDate"], options["popularOnly"])
+        except KeyError:
+            return response_bad_request
+        try:
+            movies = self._get_movies_from_tmdb(query, search_type, options["sortByDate"], options["popularOnly"])
+        except TmdbInvalidSearchTypeError:
+            return response_bad_request
         if request.user.is_authenticated:
             self._filter_out_movies_user_already_has_in_lists(movies)
         movies = movies[: settings.MAX_RESULTS]
