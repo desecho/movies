@@ -88,5 +88,5 @@ class UserAdmin(ModelAdmin[User]):  # pylint:disable=unsubscriptable-object
 
 site.unregister(Group)
 
-if settings.IS_CELERY_DEBUG:
+if settings.IS_CELERY_DEBUG:  # pragma: no cover
     site.unregister(GroupResult)

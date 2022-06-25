@@ -328,7 +328,7 @@ ADMIN_REORDER = [
     "registration",
 ]
 
-if IS_CELERY_DEBUG:
+if IS_CELERY_DEBUG:  # pragma: no cover
     ADMIN_REORDER.append({"app": "django_celery_results", "models": ("django_celery_results.TaskResult",)})
 
 # django-modeltranslation
@@ -336,7 +336,7 @@ MODELTRANSLATION_CUSTOM_FIELDS = ("JSONField",)
 
 # Celery
 CELERY_CACHE_BACKEND = "default"
-if IS_CELERY_DEBUG:
+if IS_CELERY_DEBUG:  # pragma: no cover
     CELERY_RESULT_BACKEND = "django-db"
 else:
     CELERY_RESULT_BACKEND = f"{REDIS_URL}0"

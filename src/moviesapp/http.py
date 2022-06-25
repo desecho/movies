@@ -5,7 +5,7 @@ from django.http import HttpRequest as DjangoHttpRequest
 
 from .types import UntypedObject
 
-if TYPE_CHECKING:
+if TYPE_CHECKING:  # pragma: no cover
     from .models import User, UserAnonymous
 
 
