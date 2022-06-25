@@ -179,7 +179,7 @@ class User(AbstractUser, UserBase):  # type: ignore
 
     def __str__(self) -> str:
         """Return string representation."""
-        if self.username:
+        if self.username and not self.username.isnumeric():
             return self.username
         return self.get_full_name()
 
