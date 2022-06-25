@@ -222,7 +222,7 @@ mypy:
 .PHONY: eslint
 ## Run eslint linter
 eslint:
-	yarn run eslint "./*.js" "src/${APP}/js/*"
+	yarn run eslint ./*.js src/${APP}/js/*.js src/${APP}/js/components/*.js
 
 .PHONY: csscomb-linter
 ## Run csscomb-linter linter
@@ -352,7 +352,7 @@ format-css:
 .PHONY: format-js
 ## Format js files
 format-js:
-	yarn run eslint ./*.js src/${APP}/js/* --fix
+	yarn run eslint ./*.js src/${APP}/js/*.js src/${APP}/js/components/*.js --fix
 
 .PHONY: format-sh
 ## Format sh files
