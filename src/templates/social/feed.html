@@ -17,10 +17,10 @@
           <td>
             <v-lazy-image
               class="poster"
-              :srcset="{{ action_record.movie.poster_small }} 1x, {{ action_record.movie.poster_normal }} 2x"
-              :src="{{ action_record.movie.poster_normal }}"
-              :title="{{ action_record.movie.title_original }}"
-              :alt="{{ action_record.movie }}"
+              srcset="{{ action_record.movie.poster_small }} 1x, {{ action_record.movie.poster_normal }} 2x"
+              src="{{ action_record.movie.poster_normal }}"
+              title="{{ action_record.movie.title_original }}"
+              alt="{{ action_record.movie }}"
             />
           </td>
           <td class="d-none d-sm-table-cell test-feed-movie">
@@ -34,7 +34,15 @@
               {{ action_record.list }}
             {% endif %}
             {% if action_record.rating %}
-              <div class="rating" data-rating="{{ action_record.rating }}"></div>
+              <star-rating
+                :star-size=20
+                :show-rating=false
+                :clearable=true
+                :read-only=true
+                :rating={{ action_record.rating }}
+                v-model:rating="element.rating"
+              >
+              </star-rating>
             {% endif %}
             {% if action_record.comment %}
               {{ action_record.comment }}

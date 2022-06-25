@@ -46,7 +46,7 @@
   .review {
     padding-top: 10px;
     button {
-      margin-bottom: 15px;
+      margin: 10px 0;
     }
   }
 
@@ -113,8 +113,11 @@
       font-size: 1.16em;
     }
 
-    .rating {
-      margin-left: 10px;
+    .vue-star-rating {
+      display: inline;
+      top: -2px;
+      position: relative;
+      left: 5px;
     }
   }
 

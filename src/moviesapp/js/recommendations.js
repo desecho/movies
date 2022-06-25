@@ -18,8 +18,3 @@
 //   }});
 
 // window.vm.mount('#app');
-
-// const settings = $.extend({
-//   readOnly: true,
-// }, vars.ratySettings);
-// $('.rating').raty(settings);

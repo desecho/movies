@@ -7,7 +7,7 @@ const jsPath = path.join(basePath, 'js');
 const vendorPackages = ['vue-toast-notification/dist/theme-default.css',
   'bootstrap/dist/css/bootstrap.min.css', 'axios-progress-bar/dist/nprogress.css', 'popper.js/dist/umd/popper.min.js',
   'bootstrap-social/bootstrap-social.css', 'jquery/dist/jquery.min.js',
-  'retinajs/dist/retina.min.js', 'raty-js/lib/jquery.raty.css',
+  'retinajs/dist/retina.min.js',
 ];
 
 function getBundle(filename) {
@@ -19,11 +19,6 @@ function getBundle(filename) {
   ];
 }
 
-function getBundleWithRaty(filename) {
-  const bundle = ['raty-js/lib/jquery.raty.js'];
-  return bundle.concat(getBundle(filename));
-}
-
 function getBundleWithEmptyApp(filename) {
   const bundle = getBundle(filename);
   return bundle.concat([path.join(jsPath, 'empty_app.js')]);
@@ -33,12 +28,12 @@ module.exports = {
   entry: {
     search: getBundle('search.js'),
     trending: getBundle('trending.js'),
-    list: getBundleWithRaty('list.js'),
+    list: getBundle('list.js'),
     gallery: getBundle('gallery.js'),
     // recommendations: getBundleWithRaty('recommendations.js'),
     registration: getBundleWithEmptyApp('registration.js'),
     passwordChange: getBundleWithEmptyApp('password_change.js'),
-    feed: getBundleWithRaty('feed.js'),
+    feed: getBundle('feed.js'),
     emptyApp: [path.join(jsPath, 'init.js'), path.join(jsPath, 'empty_app.js')],
     style: path.join(basePath, 'styles', 'styles.scss'),
     vendor: vendorPackages,

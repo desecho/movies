@@ -38,20 +38,3 @@ if (vars.isVkApp) {
 } else {
   $('.vk-app-hide').show();
 }
-
-vars.ratySettings = {
-  hints: [
-    gettext('Awful'),
-    gettext('Bad'),
-    gettext('Regular'),
-    gettext('Good'),
-    gettext('Awesome'),
-  ],
-  cancelHint: gettext('Cancel rating'),
-  noRatedMsg: gettext('No rating yet'),
-  cancel: true,
-  starType: 'i',
-  score: function() {
-    return $(this).data('rating');
-  },
-};

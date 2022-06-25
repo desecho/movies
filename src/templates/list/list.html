@@ -292,11 +292,17 @@
                     </a>
                   </div>
                 </div>
-                <br>
               </div>
               <div class="review" :class="{'review-minimal': mode == 'minimal'}">
                 {% if list == 'watched' %}
-                  <div class="rating" :data-record-id="element.id" :data-rating="element.rating"></div>
+                  <star-rating
+                    :star-size="starSize"
+                    :show-rating=false
+                    :clearable=true
+                    @update:rating="changeRating(element, $event)"
+                    v-model:rating="element.rating"
+                  >
+                  </star-rating>
                   <div class="comment" v-show="(element.comment || element.commentArea) && mode != 'minimal'">
                     {% if anothers_account %}
                       <p>[[ element.comment ]]</p>

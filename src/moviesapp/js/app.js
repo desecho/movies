@@ -5,6 +5,7 @@ import VueCookie from 'vue-cookies';
 import {createApp} from 'vue';
 import VLazyImage from 'v-lazy-image';
 import draggable from 'vuedraggable';
+import StarRating from 'vue-star-rating';
 
 import {library} from '@fortawesome/fontawesome-svg-core';
 /* import font awesome icon component */
@@ -32,6 +33,7 @@ export function newApp(options) {
   app.component('FontAwesomeIcon', FontAwesomeIcon);
   app.component('VLazyImage', VLazyImage);
   app.component('Draggable', draggable); // eslint-disable-line vue/multi-word-component-names
+  app.component('StarRating', StarRating);
 
   return app;
 }

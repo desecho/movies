@@ -7,29 +7,11 @@ import {retina, getSrcSet} from './helpers';
 import {saveRecordsOrder} from './list_helpers';
 import {newApp} from './app';
 import autosize from 'autosize';
-import {listWatchedId, listToWatchId} from './constants';
+import {listWatchedId, listToWatchId, ratingTexts} from './constants';
 
-function changeRating(id, rating, element) {
-  function success() {
-    element.data('rating', rating);
-  }
+const starSizeNormal = 35;
+const starSizeMinimal = 25;
 
-  function fail() {
-    function revertToPreviousRating(element) {
-      const scoreSettings = {
-        score: element.data('rating'),
-      };
-      const settings = $.extend({}, vars.ratySettings, ratyCustomSettings, scoreSettings);
-      element.raty(settings);
-    }
-
-    revertToPreviousRating(element);
-    vm.$toast.error(gettext('Error adding a rating'));
-  }
-
-  const url = urls.changeRating + id + '/';
-  axios.put(url, {rating: rating}).then(success).catch(fail);
-}
 
 function applySettings(settings, reload = true) {
   const data = {
@@ -67,6 +49,14 @@ window.vm = newApp({
       const vm = this;
       return vm.listId == vm.listToWatchId && !vm.isAnothersAccount && vm.sort == 'custom';
     },
+    starSize() {
+      const vm = this;
+      if (vm.mode == 'minimal') {
+        return starSizeMinimal;
+      } else {
+        return starSizeNormal;
+      }
+    },
   },
   methods: {
     saveRecordsOrder: saveRecordsOrder,
@@ -75,6 +65,20 @@ window.vm = newApp({
     },
     getSrcSet: getSrcSet,
     retinajs: retina,
+    changeRating(record, rating) {
+      function success() {
+        record.ratingOriginal = record.rating;
+      }
+
+      function fail() {
+        record.rating = record.ratingOriginal;
+        vm.$toast.error(gettext('Error saving the rating'));
+      }
+
+      const vm = this;
+      const url = urls.changeRating + record.id + '/';
+      axios.put(url, {rating: rating}).then(success).catch(fail);
+    },
     saveOptions(record, field) {
       const data = {
         options: record.options,
@@ -142,7 +146,6 @@ window.vm = newApp({
           let text;
           const title = movie.title;
           const comment = record.comment;
-          const ratingTexts = vars.ratySettings.hints;
           const ratingPost = ratingTexts[rating - 1];
           if (rating > 2) {
             text = gettext('I recommend watching');
@@ -254,23 +257,13 @@ window.vm = newApp({
       });
     },
   },
+  mounted() {
+    this.records.forEach((record) => {
+      record.ratingOriginal = record.rating;
+    });
+  },
 });
 
 window.vm.mount('#app');
-
-const ratyCustomSettings = {
-  readOnly: vars.isAnothersAccount || vars.listId == vars.listToWatchId,
-  click: function(score) {
-    if (!score) {
-      score = 0;
-    }
-    changeRating($(this).data('record-id'), score, $(this));
-  },
-};
-
-(function() {
-  const settings = $.extend({}, vars.ratySettings, ratyCustomSettings);
-  $('.rating').raty(settings);
-})();
 
 autosize($('textarea'));
