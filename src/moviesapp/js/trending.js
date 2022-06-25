@@ -4,10 +4,10 @@ import {newApp} from './app';
 import {initAxios} from './helpers';
 import MoviesList from './components/movies_list.js';
 
-window.vm = newApp({
+newApp({
   data() {
     return {
-      urls: vars.urls,
+      urls: window.urls,
       movies: vars.movies,
     };
   },
@@ -17,6 +17,4 @@ window.vm = newApp({
   mounted() {
     initAxios(this);
   },
-});
-
-window.vm.mount('#app');
+}).mount('#app');

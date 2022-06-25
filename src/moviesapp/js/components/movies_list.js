@@ -56,7 +56,8 @@ export default {
     getSrcSet: getSrcSet,
     addToListFromDb(movie, listId) {
       const vm = this;
-      axios.post(urls.addToListFromDb, {
+
+      axios.post(vm.urls.addToListFromDb, {
         movieId: movie.id,
         listId: listId,
       }).then(function(response) {

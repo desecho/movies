@@ -11,10 +11,10 @@ String.prototype.toTitleCase = function() { // eslint-disable-line no-extend-nat
   });
 };
 
-window.vm = newApp({
+newApp({
   data() {
     return {
-      urls: vars.urls,
+      urls: window.urls,
       searchType: gettext('Movie'),
       searchTypeCode: 'movie',
       language: vars.language,
@@ -39,7 +39,7 @@ window.vm = newApp({
         type: vm.searchTypeCode,
         options: JSON.stringify(options),
       };
-      const url = urls.searchMovie + '?' + param(data);
+      const url = vm.urls.searchMovie + '?' + param(data);
       axios.get(url).then(function(response) {
         const movies = response.data.movies;
         if (movies.length === 0) {
@@ -62,6 +62,4 @@ window.vm = newApp({
   mounted() {
     initAxios(this);
   },
-});
-
-window.vm.mount('#app');
+}).mount('#app');

@@ -5,7 +5,7 @@
 // import {newApp} from './app';
 
 
-// window.vm = newApp({
+// newApp({
 //   data() {
 //     return {
 //       listWatchedId: vars.listWatchedId,
@@ -15,6 +15,4 @@
 //   methods: {
 //     retinajs: retina,
 //     addToList: addToList,
-//   }});
-
-// window.vm.mount('#app');
+//   }}).mount('#app');

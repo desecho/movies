@@ -12,8 +12,10 @@ import {library} from '@fortawesome/fontawesome-svg-core';
 import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome';
 
 /* import specific icons */
-import {faGear, faSignIn, faSignOut, faEye, faEyeSlash, faTrash, faFilm, faEnvelopeOpen, faXmark, faShare, faSave,
-  faComment, faArrowDown, faArrowUp} from '@fortawesome/free-solid-svg-icons';
+import {
+  faGear, faSignIn, faSignOut, faEye, faEyeSlash, faTrash, faFilm, faEnvelopeOpen, faXmark, faShare, faSave,
+  faComment, faArrowDown, faArrowUp,
+} from '@fortawesome/free-solid-svg-icons';
 import {faVk, faFacebook} from '@fortawesome/free-brands-svg-icons';
 
 /* add icons to the library */
@@ -26,8 +28,7 @@ export function newApp(options) {
   app.use(VueToast, {
     position: 'top-right',
     duration: 1500,
-  },
-  );
+  });
   app.use(VueCookie);
 
   app.component('FontAwesomeIcon', FontAwesomeIcon);

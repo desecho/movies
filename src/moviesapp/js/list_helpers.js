@@ -12,12 +12,15 @@ export function saveRecordsOrder() {
     return data;
   }
 
-  const vm = this; // eslint-disable-line no-invalid-this
-  axios.put(urls.saveRecordsOrder, {'records': getSortData()}).then(function() {
+  function success() {
     vm.recordsOriginal = vm.records;
-  }).catch(
-      function() {
-        vm.records = vm.recordsOriginal;
-        vm.$toast.error(gettext('Error saving movie order'));
-      });
+  }
+
+  function fail() {
+    vm.records = vm.recordsOriginal;
+    vm.$toast.error(gettext('Error saving movie order'));
+  }
+
+  const vm = this; // eslint-disable-line no-invalid-this
+  axios.put(vm.urls.saveRecordsOrder, {'records': getSortData()}).then(success).catch(fail);
 }

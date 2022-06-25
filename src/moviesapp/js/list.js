@@ -13,22 +13,9 @@ const starSizeNormal = 35;
 const starSizeMinimal = 25;
 
 
-function applySettings(settings, reload = true) {
-  const data = {
-    settings: settings,
-  };
-  axios.put(urls.saveSettings, data).then(function() {
-    if (reload) {
-      location.reload();
-    }
-  }).catch(function() {
-    vm.$toast.error(gettext('Error applying the settings'));
-  });
-}
-
-
-window.vm = newApp({
+newApp({
   data() {
+    const vars = window.vars;
     return {
       sortByDate: false,
       records: vars.records,
@@ -42,6 +29,7 @@ window.vm = newApp({
       listName: vars.listName,
       isAnothersAccount: vars.isAnothersAccount,
       recommendations: vars.recommendations,
+      urls: window.urls,
     };
   },
   computed: {
@@ -59,6 +47,19 @@ window.vm = newApp({
     },
   },
   methods: {
+    applySettings(settings, reload = true) {
+      const vm = this;
+      const data = {
+        settings: settings,
+      };
+      axios.put(vm.urls.saveSettings, data).then(function() {
+        if (reload) {
+          location.reload();
+        }
+      }).catch(function() {
+        vm.$toast.error(gettext('Error applying the settings'));
+      });
+    },
     saveRecordsOrder: saveRecordsOrder,
     openUrl(url) {
       location.href = url;
@@ -76,7 +77,7 @@ window.vm = newApp({
       }
 
       const vm = this;
-      const url = urls.changeRating + record.id + '/';
+      const url = vm.urls.changeRating + record.id + '/';
       axios.put(url, {rating: rating}).then(success).catch(fail);
     },
     saveOptions(record, field) {
@@ -85,7 +86,7 @@ window.vm = newApp({
       };
       const vm = this;
 
-      axios.put(urls.record + record.id + '/options/', data).then(function() {}).catch(
+      axios.put(vm.urls.record + record.id + '/options/', data).then(function() {}).catch(
           function() {
             // rollback the change
             record.options[field] = !record.options[field];
@@ -96,7 +97,7 @@ window.vm = newApp({
       if (newMode == this.mode) {
         return;
       }
-      applySettings({
+      this.applySettings({
         mode: newMode,
       }, false);
       this.mode = newMode;
@@ -109,7 +110,7 @@ window.vm = newApp({
       if (newRecommendationSetting) {
         settings.sort = 'rating';
       }
-      applySettings(settings);
+      this.applySettings(settings);
     },
     switchSort(newSort) {
       const vm = this;
@@ -126,7 +127,7 @@ window.vm = newApp({
         // disable recommendation if sorting by rating is manually disabled
         settings.recommendation = false;
       }
-      applySettings(settings);
+      vm.applySettings(settings);
     },
     removeRecord(record, index) {
       function success() {
@@ -137,7 +138,7 @@ window.vm = newApp({
         vm.$toast.error(gettext('Error removing the movie'));
       }
       const vm = this;
-      const url = urls.removeRecord + record.id + '/';
+      const url = vm.urls.removeRecord + record.id + '/';
       axios.delete(url).then(success).catch(fail);
     },
     postToWall(record) {
@@ -195,7 +196,7 @@ window.vm = newApp({
       }
 
       function uploadPhotoToWall(uploadUrl) {
-        const url = urls.uploadPosterToWall + record.id + '/';
+        const url = vm.urls.uploadPosterToWall + record.id + '/';
         axios.post(url, {
           url: uploadUrl,
         }).then(function(response) {
@@ -230,8 +231,8 @@ window.vm = newApp({
       }
     },
     addToList(movieId, listId, record) {
-      const url = urls.addToList + movieId + '/';
       const vm = this;
+      const url = vm.urls.addToList + movieId + '/';
       axios.post(url, {
         listId: listId,
       }).then(function() {
@@ -248,7 +249,7 @@ window.vm = newApp({
       const data = {
         comment: record.comment,
       };
-      axios.put(urls.saveComment + record.id + '/', data).then(function() {
+      axios.put(vm.urls.saveComment + record.id + '/', data).then(function() {
         if (record.comment == '') {
           record.commentArea = false;
         }
@@ -262,9 +263,6 @@ window.vm = newApp({
       record.ratingOriginal = record.rating;
     });
     initAxios(this);
+    autosize($('textarea'));
   },
-});
-
-window.vm.mount('#app');
-
-autosize($('textarea'));
+}).mount('#app');

@@ -21,9 +21,7 @@
   },
   "globals": {
     "gettext": false,
-    "urls": false,
-    "vars": false,
-    "vm": false
+    "vars": false
   },
   "parserOptions": {
     "sourceType": "module"

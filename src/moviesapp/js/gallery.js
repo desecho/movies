@@ -5,7 +5,7 @@ import {retina, getSrcSet} from './helpers';
 import {saveRecordsOrder} from './list_helpers';
 import {listWatchedId, listToWatchId} from './constants';
 
-window.vm = newApp({
+newApp({
   data() {
     return {
       records: vars.records,
@@ -13,7 +13,7 @@ window.vm = newApp({
       listWatchedId: listWatchedId,
       listToWatchId: listToWatchId,
       listId: vars.listId,
-      urls: urls,
+      urls: window.urls,
       isAnothersAccount: vars.isAnothersAccount,
     };
   },
@@ -43,6 +43,4 @@ window.vm = newApp({
       vm.saveRecordsOrder();
     },
   },
-});
-
-window.vm.mount('#app');
+}).mount('#app');
