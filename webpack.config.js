@@ -15,7 +15,6 @@ function getBundle(filename) {
     'bootstrap/dist/js/bootstrap.min.js',
     path.join(jsPath, 'init.js'),
     path.join(jsPath, filename),
-    path.join(jsPath, 'set_axios_settings.js'),
   ];
 }
 
@@ -33,7 +32,6 @@ module.exports = {
     // recommendations: getBundleWithRaty('recommendations.js'),
     registration: getBundleWithEmptyApp('registration.js'),
     passwordChange: getBundleWithEmptyApp('password_change.js'),
-    feed: getBundle('feed.js'),
     emptyApp: [path.join(jsPath, 'init.js'), path.join(jsPath, 'empty_app.js')],
     style: path.join(basePath, 'styles', 'styles.scss'),
     vendor: vendorPackages,

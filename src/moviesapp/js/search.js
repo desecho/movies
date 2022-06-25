@@ -1,7 +1,7 @@
 'use strict';
 
 import axios from 'axios';
-import {param} from './helpers';
+import {param, initAxios} from './helpers';
 import {newApp} from './app';
 import MoviesList from './components/movies_list.js';
 
@@ -58,6 +58,10 @@ window.vm = newApp({
       vm.searchTypeCode = code;
       vm.searchType = gettext(code.toTitleCase());
     },
-  }});
+  },
+  mounted() {
+    initAxios(this);
+  },
+});
 
 window.vm.mount('#app');

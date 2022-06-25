@@ -3,7 +3,7 @@
 'use strict';
 
 import axios from 'axios';
-import {retina, getSrcSet} from './helpers';
+import {retina, getSrcSet, initAxios} from './helpers';
 import {saveRecordsOrder} from './list_helpers';
 import {newApp} from './app';
 import autosize from 'autosize';
@@ -261,6 +261,7 @@ window.vm = newApp({
     this.records.forEach((record) => {
       record.ratingOriginal = record.rating;
     });
+    initAxios(this);
   },
 });
 

@@ -1,6 +1,7 @@
 'use strict';
 
 import {newApp} from './app';
+import {initAxios} from './helpers';
 import MoviesList from './components/movies_list.js';
 
 window.vm = newApp({
@@ -12,6 +13,9 @@ window.vm = newApp({
   },
   components: {
     MoviesList,
+  },
+  mounted() {
+    initAxios(this);
   },
 });
 
