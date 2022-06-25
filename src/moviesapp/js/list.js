@@ -3,8 +3,7 @@
 'use strict';
 
 import axios from 'axios';
-import {retina, getSrcSet, initAxios} from './helpers';
-import {saveRecordsOrder} from './list_helpers';
+import {retina, getSrcSet, initAxios, openUrl, saveRecordsOrder} from './helpers';
 import {newApp} from './app';
 import autosize from 'autosize';
 import {listWatchedId, listToWatchId, ratingTexts} from './constants';
@@ -17,28 +16,30 @@ newApp({
   data() {
     const vars = window.vars;
     return {
-      sortByDate: false,
+      urls: window.urls,
       records: vars.records,
       recordsOriginal: vars.records,
       mode: vars.mode,
       isVkApp: vars.isVkApp,
       sort: vars.sort,
-      listWatchedId: listWatchedId,
-      listToWatchId: listToWatchId,
       listId: vars.listId,
       listName: vars.listName,
       isAnothersAccount: vars.isAnothersAccount,
       recommendations: vars.recommendations,
-      urls: window.urls,
+      listWatchedId: listWatchedId,
+      listToWatchId: listToWatchId,
+      sortByDate: false,
     };
   },
   computed: {
     isSortable() {
       const vm = this;
+
       return vm.listId == vm.listToWatchId && !vm.isAnothersAccount && vm.sort == 'custom';
     },
     starSize() {
       const vm = this;
+
       if (vm.mode == 'minimal') {
         return starSizeMinimal;
       } else {
@@ -52,6 +53,7 @@ newApp({
       const data = {
         settings: settings,
       };
+
       axios.put(vm.urls.saveSettings, data).then(function() {
         if (reload) {
           location.reload();
@@ -61,9 +63,7 @@ newApp({
       });
     },
     saveRecordsOrder: saveRecordsOrder,
-    openUrl(url) {
-      location.href = url;
-    },
+    openUrl: openUrl,
     getSrcSet: getSrcSet,
     retinajs: retina,
     changeRating(record, rating) {
@@ -81,29 +81,31 @@ newApp({
       axios.put(url, {rating: rating}).then(success).catch(fail);
     },
     saveOptions(record, field) {
+      function fail() {
+        record.options[field] = !record.options[field];
+        vm.$toast.error(gettext('Error saving options'));
+      }
+
+      const vm = this;
       const data = {
         options: record.options,
       };
-      const vm = this;
 
-      axios.put(vm.urls.record + record.id + '/options/', data).then(function() {}).catch(
-          function() {
-            // rollback the change
-            record.options[field] = !record.options[field];
-            vm.$toast.error(gettext('Error saving options'));
-          });
+      axios.put(vm.urls.record + record.id + '/options/', data).then(function() {}).catch(fail);
     },
     switchMode(newMode) {
-      if (newMode == this.mode) {
+      const vm = this;
+
+      if (newMode == vm.mode) {
         return;
       }
-      this.applySettings({
+      vm.applySettings({
         mode: newMode,
       }, false);
-      this.mode = newMode;
+      vm.mode = newMode;
     },
     toggleRecommendation() {
-      const newRecommendationSetting = !vars.recommendation;
+      const newRecommendationSetting = !this.recommendations;
       const settings = {
         recommendations: newRecommendationSetting,
       };
@@ -137,6 +139,7 @@ newApp({
       function fail() {
         vm.$toast.error(gettext('Error removing the movie'));
       }
+
       const vm = this;
       const url = vm.urls.removeRecord + record.id + '/';
       axios.delete(url).then(success).catch(fail);

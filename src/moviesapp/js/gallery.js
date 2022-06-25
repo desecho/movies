@@ -1,12 +1,12 @@
 'use strict';
 
 import {newApp} from './app';
-import {retina, getSrcSet} from './helpers';
-import {saveRecordsOrder} from './list_helpers';
+import {retina, getSrcSet, saveRecordsOrder, openUrl} from './helpers';
 import {listWatchedId, listToWatchId} from './constants';
 
 newApp({
   data() {
+    const vars = window.vars;
     return {
       records: vars.records,
       recordsOriginal: vars.records,
@@ -20,13 +20,12 @@ newApp({
   computed: {
     isSortable() {
       const vm = this;
+
       return vm.listId == vm.listToWatchId && !vm.isAnothersAccount;
     },
   },
   methods: {
-    openUrl(url) {
-      location.href = url;
-    },
+    openUrl: openUrl,
     saveRecordsOrder: saveRecordsOrder,
     getSrcSet: getSrcSet,
     retinajs: retina,

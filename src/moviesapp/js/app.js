@@ -6,7 +6,6 @@ import {createApp} from 'vue';
 import VLazyImage from 'v-lazy-image';
 import draggable from 'vuedraggable';
 import StarRating from 'vue-star-rating';
-
 import {library} from '@fortawesome/fontawesome-svg-core';
 /* import font awesome icon component */
 import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome';

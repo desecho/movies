@@ -30,6 +30,7 @@ newApp({
   },
 }).mount('#menu');
 
+const vars = window.vars;
 vars.isVkApp = getIsVkApp();
 
 if (vars.isVkApp) {

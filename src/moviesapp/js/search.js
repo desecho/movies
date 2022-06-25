@@ -13,6 +13,7 @@ String.prototype.toTitleCase = function() { // eslint-disable-line no-extend-nat
 
 newApp({
   data() {
+    const vars = window.vars;
     return {
       urls: window.urls,
       searchType: gettext('Movie'),

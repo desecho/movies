@@ -6,6 +6,7 @@ import MoviesList from './components/movies_list.js';
 
 newApp({
   data() {
+    const vars = window.vars;
     return {
       urls: window.urls,
       movies: vars.movies,
