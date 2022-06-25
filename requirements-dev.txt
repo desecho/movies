@@ -10,6 +10,9 @@ pytest-sugar
 pytest-mock
 pytest-django
 
+# Mocks
+requests-mock
+
 # Django
 django-test-without-migrations
 

@@ -11,3 +11,7 @@ class TrailerSiteNotFoundError(Exception):
 
 class ProviderNotFoundError(Exception):
     """Provider not found error."""
+
+
+class UnsupportedLanguageError(Exception):
+    """Unsupported language error."""

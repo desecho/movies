@@ -12,7 +12,8 @@ from sentry_sdk import capture_exception
 
 from ..exceptions import TrailerSiteNotFoundError
 from ..types import SearchType, TmdbMovieProcessed, TmdbMovieSearchResultProcessed, TmdbTrailer, WatchDataRecord
-from .exceptions import TmdbNoImdbIdError
+from ..validation import validate_language
+from .exceptions import TmdbInvalidSearchTypeError, TmdbNoImdbIdError
 from .types import (
     TmdbCast,
     TmdbCombinedCredits,
@@ -41,7 +42,7 @@ def get_poster_url(size: str, poster: Optional[str]) -> Optional[str]:
     elif size == "normal":
         poster_size = settings.POSTER_SIZE_NORMAL
         no_image_url = settings.NO_POSTER_NORMAL_IMAGE_URL
-    elif size == "big":
+    else:  # size == "big":
         poster_size = settings.POSTER_SIZE_BIG
         no_image_url = settings.NO_POSTER_BIG_IMAGE_URL
     if poster is not None:
@@ -92,28 +93,35 @@ def search_movies(query_str: str, search_type: SearchType, lang: str) -> List[Tm
     Searches for movies based on the query string.
     For actor, director search - the first person found is used.
     """
+    SEARCH_TYPES = ["movie", "actor", "director"]
+    if search_type not in SEARCH_TYPES:
+        raise TmdbInvalidSearchTypeError(search_type)
+
+    validate_language(lang)
+
     query = query_str.encode("utf-8")
     params = {"query": query, "language": lang, "include_adult": settings.INCLUDE_ADULT}
     search = tmdb.Search()
     if search_type == "movie":
         movies: List[TmdbMovieSearchResult] = search.movie(**params)["results"]
-        movies_processed = _get_processed_movie_data(movies)
-    else:  # search_type == "actor" or "director"
-        persons: List[TmdbPerson] = search.person(**params)["results"]
-        # We only select the first found actor/director.
-        if persons:
-            person_id = persons[0]["id"]
-        else:
-            return []
-        person = tmdb.People(person_id)
-        combined_credits: TmdbCombinedCredits = person.combined_credits(language=lang)
-        if search_type == "actor":
-            cast_entries: List[TmdbCast] = _filter_movies_only(combined_credits["cast"])  # type: ignore
-            movies_processed = _get_processed_movie_data(cast_entries)
-        else:  # search_type == "director"
-            crew_entries: List[TmdbCrew] = _filter_movies_only(combined_credits["crew"])  # type: ignore
-            crew_entries = [e for e in crew_entries if e["job"] == "Director"]
-            movies_processed = _get_processed_movie_data(crew_entries)
+        return _get_processed_movie_data(movies)
+
+    # search_type == "actor" or "director"
+    persons: List[TmdbPerson] = search.person(**params)["results"]
+    # We only select the first found actor/director.
+    if persons:
+        person_id = persons[0]["id"]
+    else:
+        return []
+    person = tmdb.People(person_id)
+    combined_credits: TmdbCombinedCredits = person.combined_credits(language=lang)
+    if search_type == "actor":
+        cast_entries: List[TmdbCast] = _filter_movies_only(combined_credits["cast"])  # type: ignore
+        movies_processed = _get_processed_movie_data(cast_entries)
+    else:  # search_type == "director"
+        crew_entries: List[TmdbCrew] = _filter_movies_only(combined_credits["crew"])  # type: ignore
+        crew_entries = [e for e in crew_entries if e["job"] == "Director"]
+        movies_processed = _get_processed_movie_data(crew_entries)
     return movies_processed
 
 
@@ -125,14 +133,15 @@ def _is_valid_trailer_site(site: str) -> bool:
 def _get_trailers(tmdb_movie: tmdb.Movies, lang: str) -> List[TmdbTrailer]:
     """Get trailers."""
     trailers = []
-    for video in tmdb_movie.videos(language=lang)["results"]:
+    videos = tmdb_movie.videos(language=lang)
+    for video in videos["results"]:
         if video.get("type") == "Trailer":
             site = video["site"]
             try:
                 if not _is_valid_trailer_site(site):
                     raise TrailerSiteNotFoundError(f"Site - {site}")
             except TrailerSiteNotFoundError as e:
-                if settings.DEBUG:
+                if settings.DEBUG:  # pragma: no cover
                     raise
                 capture_exception(e)
                 continue
@@ -149,7 +158,7 @@ def get_watch_data(tmdb_id: int) -> List[WatchDataRecord]:
     for country, data in items:
         if country in settings.PROVIDERS_SUPPORTED_COUNTRIES and "flatrate" in data:
             for provider in data["flatrate"]:
-                record: WatchDataRecord = {"country": country, "provider_id": provider["provider_id"]}
+                record = WatchDataRecord(country=country, provider_id=provider["provider_id"])
                 watch_data.append(record)
     return watch_data
 
