@@ -51,6 +51,11 @@
 
     urls.searchMovie = '{% url 'search_movie' %}';
     urls.addToListFromDb = '{% url 'add_to_list_from_db' %}';
+
+    {% get_current_language as LANGUAGE_CODE %}
+
+    vars.language = '{{ LANGUAGE_CODE }}';
+
   </script>
   <script src="{% static 'js/search.js' %}"></script>
 {% endblock %}
