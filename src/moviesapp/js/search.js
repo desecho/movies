@@ -1,7 +1,7 @@
 'use strict';
 
 import axios from 'axios';
-import {retina, param} from './helpers';
+import {param} from './helpers';
 import {newApp} from './app';
 import MoviesList from './components/movies_list.js';
 
@@ -22,8 +22,6 @@ window.vm = newApp({
       movies: [],
       popularOnly: true,
       sortByDate: false,
-      listWatchedId: vars.listWatchedId,
-      listToWatchId: vars.listToWatchId,
     };
   },
   components: {
@@ -55,7 +53,6 @@ window.vm = newApp({
         vm.$toast.error(gettext('Search Error'));
       });
     },
-    retinajs: retina,
     changeSearchType(code) {
       const vm = this;
       vm.searchTypeCode = code;

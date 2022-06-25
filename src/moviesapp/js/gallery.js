@@ -3,14 +3,15 @@
 import {newApp} from './app';
 import {retina, getSrcSet} from './helpers';
 import {saveRecordsOrder} from './list_helpers';
+import {listWatchedId, listToWatchId} from './constants';
 
 window.vm = newApp({
   data() {
     return {
       records: vars.records,
       recordsOriginal: vars.records,
-      listWatchedId: vars.listWatchedId,
-      listToWatchId: vars.listToWatchId,
+      listWatchedId: listWatchedId,
+      listToWatchId: listToWatchId,
       listId: vars.listId,
       urls: urls,
       isAnothersAccount: vars.isAnothersAccount,

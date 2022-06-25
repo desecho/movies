@@ -31,9 +31,6 @@ newApp({
 }).mount('#menu');
 
 vars.isVkApp = getIsVkApp();
-// Hardcode list IDs
-vars.listWatchedId = 1;
-vars.listToWatchId = 2;
 
 if (vars.isVkApp) {
   $('.vk-app-show').show();

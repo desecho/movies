@@ -7,6 +7,7 @@ import {retina, getSrcSet} from './helpers';
 import {saveRecordsOrder} from './list_helpers';
 import {newApp} from './app';
 import autosize from 'autosize';
+import {listWatchedId, listToWatchId} from './constants';
 
 function changeRating(id, rating, element) {
   function success() {
@@ -53,8 +54,8 @@ window.vm = newApp({
       mode: vars.mode,
       isVkApp: vars.isVkApp,
       sort: vars.sort,
-      listWatchedId: vars.listWatchedId,
-      listToWatchId: vars.listToWatchId,
+      listWatchedId: listWatchedId,
+      listToWatchId: listToWatchId,
       listId: vars.listId,
       listName: vars.listName,
       isAnothersAccount: vars.isAnothersAccount,
