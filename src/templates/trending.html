@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div>
+    <movies-list :movies="movies" :urls="urls" />
+  </div>
+{% endblock %}
+
+{% block js %}
+  <script>
+    'use strict';
+
+    vars.movies = JSON.parse('{{ movies|escapejs|safe }}');
+
+    urls.searchMovie = '{% url 'search_movie' %}';
+    urls.addToListFromDb = '{% url 'add_to_list_from_db' %}';
+  </script>
+  <script src="{% static 'js/trending.js' %}"></script>
+{% endblock %}

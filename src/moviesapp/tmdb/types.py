@@ -53,7 +53,7 @@ class TmdbMovie(TmdbMovieBase, total=False):
     tagline: Optional[str]
 
 
-class TmdbMovieSearchResult(TmdbMovieBase, total=False):
+class TmdbMovieListResult(TmdbMovieBase, total=False):
     """TMDB movie search result."""
 
     overview: str
@@ -68,7 +68,7 @@ class TmdbPerson(TmdbBase, total=False):
     name: str
 
 
-class TmdbCastCrewBase(TmdbMovieSearchResult, total=False):
+class TmdbCastCrewBase(TmdbMovieListResult, total=False):
     """TMDB cast/crew base."""
 
     credit_id: str

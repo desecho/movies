@@ -26,6 +26,7 @@ from moviesapp.views.list import (
 )
 from moviesapp.views.search import AddToListFromDbView, SearchMovieView, SearchView
 from moviesapp.views.social import FeedView, FriendsView, PeopleView
+from moviesapp.views.trending import TrendingView
 from moviesapp.views.user import AccountDeletedView, AccountDeleteView, LoginErrorView, PreferencesView, logout_view
 
 # from moviesapp.views.vk import UploadPosterToWallView
@@ -72,6 +73,9 @@ urlpatterns += [
     path("login/", LoginView.as_view(template_name="user/login.html"), name="login"),
     path("logout/", logout_view, name="logout"),
     path("login-error/", LoginErrorView.as_view(), name="login_error"),
+    #
+    # Trending
+    path("trending/", TrendingView.as_view(), name="trending"),
     #
     # Vk
     path_404("upload-poster-to-wall/", "upload_poster_to_wall"),

@@ -11,7 +11,7 @@ from django.conf import settings
 from sentry_sdk import capture_exception
 
 from ..exceptions import TrailerSiteNotFoundError
-from ..types import SearchType, TmdbMovieProcessed, TmdbMovieSearchResultProcessed, TmdbTrailer, WatchDataRecord
+from ..types import SearchType, TmdbMovieListResultProcessed, TmdbMovieProcessed, TmdbTrailer, WatchDataRecord
 from ..validation import validate_language
 from .exceptions import TmdbInvalidSearchTypeError, TmdbNoImdbIdError
 from .types import (
@@ -19,7 +19,7 @@ from .types import (
     TmdbCombinedCredits,
     TmdbCrew,
     TmdbMovie,
-    TmdbMovieSearchResult,
+    TmdbMovieListResult,
     TmdbPerson,
     TmdbProvider,
     TmdbWatchData,
@@ -69,12 +69,12 @@ def _get_date(date_str: Optional[str]) -> Optional[date]:
 
 
 def _get_processed_movie_data(
-    entries: List[TmdbCast] | List[TmdbCrew] | List[TmdbMovieSearchResult],
-) -> List[TmdbMovieSearchResultProcessed]:
+    entries: List[TmdbCast] | List[TmdbCrew] | List[TmdbMovieListResult],
+) -> List[TmdbMovieListResultProcessed]:
     """Return processed movie data."""
-    movies: List[TmdbMovieSearchResultProcessed] = []
+    movies: List[TmdbMovieListResultProcessed] = []
     for entry in entries:
-        movie: TmdbMovieSearchResultProcessed = {
+        movie: TmdbMovieListResultProcessed = {
             "poster_path": _remove_trailing_slash_from_tmdb_poster(entry.get("poster_path")),
             "popularity": entry.get("popularity", 0),
             "id": entry["id"],
@@ -86,7 +86,7 @@ def _get_processed_movie_data(
     return movies
 
 
-def search_movies(query_str: str, search_type: SearchType, lang: str) -> List[TmdbMovieSearchResultProcessed]:
+def search_movies(query_str: str, search_type: SearchType, lang: str) -> List[TmdbMovieListResultProcessed]:
     """
     Search Movies.
 
@@ -103,7 +103,7 @@ def search_movies(query_str: str, search_type: SearchType, lang: str) -> List[Tm
     params = {"query": query, "language": lang, "include_adult": settings.INCLUDE_ADULT}
     search = tmdb.Search()
     if search_type == "movie":
-        movies: List[TmdbMovieSearchResult] = search.movie(**params)["results"]
+        movies: List[TmdbMovieListResult] = search.movie(**params)["results"]
         return _get_processed_movie_data(movies)
 
     # search_type == "actor" or "director"
@@ -213,3 +213,9 @@ def get_tmdb_providers() -> List[TmdbProvider]:
     response = requests.get(urljoin(settings.TMDB_API_BASE_URL, "watch/providers/movie"), params=params)
     providers: List[TmdbProvider] = response.json()["results"]
     return providers
+
+
+def get_trending() -> List[TmdbMovieListResultProcessed]:
+    """Get trending movies."""
+    tmdb_rending = tmdb.Trending(media_type="movie", time_window="week")
+    return _get_processed_movie_data(tmdb_rending.info()["results"])

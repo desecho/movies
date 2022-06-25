@@ -18,6 +18,8 @@ class AuthenticatedHttpRequest(DjangoHttpRequest):
 class HttpRequest(DjangoHttpRequest):
     """HTTP request."""
 
+    LANGUAGE_CODE = ""
+
     user: Union["UserAnonymous", "User"]
 
 
@@ -25,7 +27,6 @@ class AjaxHttpRequest(HttpRequest):
     """AJAX HTTP request."""
 
     PUT: UntypedObject = {}
-    LANGUAGE_CODE = ""
 
 
 class AjaxAuthenticatedHttpRequest(AuthenticatedHttpRequest):

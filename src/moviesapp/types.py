@@ -60,7 +60,7 @@ class TrailerSitesSettings(TypedDict):
     Vimeo: str
 
 
-class TmdbMovieSearchResultProcessed(TypedDict):
+class TmdbMovieListResultProcessed(TypedDict):
     """TMDB movie search result processed."""
 
     poster_path: Optional[str]

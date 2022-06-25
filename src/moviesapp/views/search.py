@@ -1,10 +1,8 @@
 """Search views."""
 import json
-from datetime import date
 from operator import itemgetter
 from typing import List as ListType, Optional
 
-from babel.dates import format_date
 from django.conf import settings
 from django.http import Http404, HttpResponse, HttpResponseBadRequest
 from sentry_sdk import capture_exception
@@ -12,12 +10,12 @@ from sentry_sdk import capture_exception
 from ..http import AjaxAuthenticatedHttpRequest, AjaxHttpRequest
 from ..models import List, Movie, User
 from ..tasks import load_and_save_watch_data_task
-from ..tmdb import TmdbInvalidSearchTypeError, TmdbNoImdbIdError, get_poster_url, get_tmdb_url, search_movies
-from ..types import SearchType, TmdbMovieSearchResultProcessed
-from ..utils import is_movie_released, load_movie_data
+from ..tmdb import TmdbInvalidSearchTypeError, TmdbNoImdbIdError, search_movies
+from ..types import SearchType, TmdbMovieListResultProcessed
+from ..utils import load_movie_data
 from .mixins import AjaxAnonymousView, AjaxView, TemplateAnonymousView
-from .types import MovieSearchResult, SearchOptions
-from .utils import add_movie_to_list
+from .types import MovieListResult, SearchOptions
+from .utils import add_movie_to_list, filter_out_movies_user_already_has_in_lists, get_movie_list_result
 
 
 class SearchView(TemplateAnonymousView):
@@ -29,20 +27,13 @@ class SearchView(TemplateAnonymousView):
 class SearchMovieView(AjaxAnonymousView):
     """Search movie view."""
 
-    def _filter_out_movies_user_already_has_in_lists(self, movies: ListType[MovieSearchResult]) -> None:
-        user: User = self.request.user  # type: ignore
-        user_movies_tmdb_ids = list(user.get_records().values_list("movie__tmdb_id", flat=True))
-        for movie in list(movies):
-            if movie["id"] in user_movies_tmdb_ids:
-                movies.remove(movie)
-
     @staticmethod
     def _is_popular_movie(popularity: float) -> bool:
         """Return True if movie is popular."""
         return popularity >= settings.MIN_POPULARITY
 
     @staticmethod
-    def _sort_by_date(movies: ListType[TmdbMovieSearchResultProcessed]) -> ListType[TmdbMovieSearchResultProcessed]:
+    def _sort_by_date(movies: ListType[TmdbMovieListResultProcessed]) -> ListType[TmdbMovieListResultProcessed]:
         """Sort movies by date."""
         movies_with_date = []
         movies_without_date = []
@@ -55,41 +46,25 @@ class SearchMovieView(AjaxAnonymousView):
         movies = movies_with_date + movies_without_date
         return movies
 
-    def _format_date(self, date_: Optional[date]) -> Optional[str]:
-        """Get date."""
-        request: AjaxHttpRequest = self.request  # type: ignore
-        if date_:
-            return format_date(date_, locale=request.LANGUAGE_CODE)
-        return None
+    def _filter_out_unpopular_movies(self, tmdb_movies: ListType[TmdbMovieListResultProcessed]) -> None:
+        for tmdb_movie in list(tmdb_movies):
+            if not self._is_popular_movie(tmdb_movie["popularity"]):
+                tmdb_movies.remove(tmdb_movie)
 
     def _get_movies_from_tmdb(
         self, query: str, search_type: SearchType, sort_by_date: bool, popular_only: bool
-    ) -> ListType[MovieSearchResult]:
+    ) -> ListType[MovieListResult]:
         """Get movies from TMDB."""
         request: AjaxHttpRequest = self.request  # type: ignore
-        tmdb_movies = search_movies(query, search_type, request.LANGUAGE_CODE)
+        lang = request.LANGUAGE_CODE
+        tmdb_movies = search_movies(query, search_type, lang)
         if sort_by_date:
             tmdb_movies = self._sort_by_date(tmdb_movies)
-        movies: ListType[MovieSearchResult] = []
-        for tmdb_movie in tmdb_movies:
-            poster = tmdb_movie["poster_path"]
-            # Skip unpopular movies if this option is enabled.
-            if popular_only and not self._is_popular_movie(tmdb_movie["popularity"]):
-                continue
-            tmdb_id = tmdb_movie["id"]
-            release_date = tmdb_movie["release_date"]
-            movie: MovieSearchResult = {
-                "id": tmdb_id,
-                "tmdbLink": get_tmdb_url(tmdb_id),
-                "releaseDate": self._format_date(release_date),
-                "title": tmdb_movie["title"],
-                "titleOriginal": tmdb_movie["title_original"],
-                "poster": get_poster_url("normal", poster),
-                "poster2x": get_poster_url("big", poster),
-                "isReleased": is_movie_released(release_date),
-            }
-            movies.append(movie)
-        return movies
+
+        if popular_only:
+            self._filter_out_unpopular_movies(tmdb_movies)
+
+        return [get_movie_list_result(tmdb_movie, lang) for tmdb_movie in tmdb_movies]
 
     def get(self, request: AjaxHttpRequest) -> (HttpResponse | HttpResponseBadRequest):
         """Return a list of movies based on the search query."""
@@ -108,7 +83,7 @@ class SearchMovieView(AjaxAnonymousView):
         except TmdbInvalidSearchTypeError:
             return response_bad_request
         if request.user.is_authenticated:
-            self._filter_out_movies_user_already_has_in_lists(movies)
+            filter_out_movies_user_already_has_in_lists(movies, request.user)
         movies = movies[: settings.MAX_RESULTS]
         return self.success(movies=movies)
 

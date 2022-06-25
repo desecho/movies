@@ -32,6 +32,7 @@ function getBundleWithEmptyApp(filename) {
 module.exports = {
   entry: {
     search: getBundle('search.js'),
+    trending: getBundle('trending.js'),
     list: getBundleWithRaty('list.js'),
     gallery: getBundle('gallery.js'),
     // recommendations: getBundleWithRaty('recommendations.js'),

@@ -53,6 +53,12 @@ class RecommendationsViewContextData(TypedDict):
     records: List["Record"]
 
 
+class TrendingViewContextData(TypedDict):
+    """Trending view context data."""
+
+    movies: str
+
+
 class MovieGalleryObject(TypedDict):
     """Movie gallery object."""
 
@@ -138,7 +144,7 @@ class SearchOptions(TypedDict):
     sortByDate: bool
 
 
-class MovieSearchResult(TypedDict):
+class MovieListResult(TypedDict):
     """Movie search result."""
 
     id: int
