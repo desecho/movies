@@ -84,8 +84,8 @@ class SearchMovieView(AjaxAnonymousView):
                 "releaseDate": self._format_date(release_date),
                 "title": tmdb_movie["title"],
                 "titleOriginal": tmdb_movie["title_original"],
-                "poster": get_poster_url("small", poster),
-                "poster2x": get_poster_url("normal", poster),
+                "poster": get_poster_url("normal", poster),
+                "poster2x": get_poster_url("big", poster),
                 "isReleased": is_movie_released(release_date),
             }
             movies.append(movie)

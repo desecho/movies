@@ -8,16 +8,6 @@ body {
   grid-template-rows: 1fr auto;
 }
 
-footer {
-  text-align: right;
-  grid-row-start: 2;
-  grid-row-end: 3;
-}
-
-.hidden {
-  display: none;
-}
-
 form {
   margin: 0;
 }
@@ -40,17 +30,6 @@ label {
   }
 }
 
-.btn-secondary {
-  color: #000;
-  border-color: #d3d3d3;
-  background-color: #fff;
-}
-
-.col-form-label {
-  padding-top: 0;
-  padding-bottom: 0;
-}
-
 select {
   -webkit-appearance: none;
      -moz-appearance: none;
@@ -67,10 +46,4 @@ img {
 input {
   vertical-align: middle;
   margin: revert;
-}
-
-// Modify bootstrap pagination style
-
-.page-link {
-  padding: 0.5rem 0.7rem;
 }

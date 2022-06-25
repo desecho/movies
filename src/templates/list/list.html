@@ -2,7 +2,7 @@
 {% load bootstrap_pagination %}
 
 {% block content %}
-  <div>
+  <div id="list">
     {% include 'includes/movie_count.html' %}
     <div class="row" v-cloak>
       {% if anothers_account %}
@@ -305,7 +305,6 @@
                         <textarea class="form-control" title="{% translate 'Comment' %}" v-model="element.comment">
                         </textarea>
                       </div>
-                      <br>
                       <button
                         type="button"
                         class="btn btn-secondary"

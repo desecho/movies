@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <div v-cloak>
+  <div v-cloak id="search">
     <form @submit.prevent="search" class="mt-1 col-lg-7 col-md-8 col-sm-10 col-xl-5 mx-auto">
       <div class="input-group">
         <input class="form-control" type="text" autofocus v-model="query" required>
@@ -43,34 +43,36 @@
     </form>
     <div class="results" v-cloak>
       <div class="movie" v-show="!movie.hide" v-for="movie in movies">
-        <div class="poster">
-          <v-lazy-image
-            class="search-poster-img"
-            :srcset="getSrcSet(movie.poster, movie.poster2x)"
-            :src="movie.poster2x"
-            :title="movie.titleOriginal"
-            :alt="movie.title"
-          />
-        </div>
-        <div class="title">
-          [[ movie.title ]]
-          <div class="add-to-list-buttons">
-            <a
-              href="javascript:void(0)"
-              @click="addToListFromDb(movie, listWatchedId)"
-              title="{% translate 'Add to the list' %} {% translate 'Watched' %}"
-              v-show="movie.isReleased"
-            >
-              <font-awesome-icon icon="fa-solid fa-eye" />
+        <div class="poster-wrapper">
+          <div class="poster">
+            <div class="add-to-list-buttons">
+              <a
+                href="javascript:void(0)"
+                @click="addToListFromDb(movie, listWatchedId)"
+                title="{% translate 'Add to the list' %} {% translate 'Watched' %}"
+                v-show="movie.isReleased"
+              >
+                <font-awesome-icon icon="fa-solid fa-eye" />
+              </a>
+              <a href="javascript:void(0)" title="{% translate 'Add to the list' %} {% translate 'To Watch' %}"
+                @click="addToListFromDb(movie, listToWatchId)"><font-awesome-icon icon="fa-solid fa-eye-slash" /></a>
+            </div>
+            <a :href="movie.tmdbLink" target="_blank">
+              <v-lazy-image
+                :srcset="getSrcSet(movie.poster, movie.poster2x)"
+                :src="movie.poster2x"
+                :title="movie.titleOriginal"
+                :alt="movie.title"
+              />
             </a>
-            <a href="javascript:void(0)" title="{% translate 'Add to the list' %} {% translate 'To Watch' %}"
-              @click="addToListFromDb(movie, listToWatchId)"><font-awesome-icon icon="fa-solid fa-eye-slash" /></a>
           </div>
         </div>
-        <div class="details" v-show="movie.releaseDate">
-          [[ movie.releaseDate ]]
+        <div class="movie-content">
+          <div class="title">[[ movie.title ]]</div>
+          <div class="details" v-show="movie.releaseDate">
+            [[ movie.releaseDate ]]
+          </div>
         </div>
-        <div><a :href="movie.tmdbLink" target="_blank"><span class="tmdb"></span></a></div>
       </div>
     </div>
   </div>

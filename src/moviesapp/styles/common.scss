@@ -1,0 +1,66 @@
+
+/* Feed & List */
+.rating {
+  display: inline;
+  margin-right: 10px;
+}
+/* ----------- */
+
+/* Search & List */
+.results {
+  clear: both;
+  margin-top: 20px;
+}
+
+.title {
+  /* copied mostly from bootstrap h4 */
+  font-size: 1em;
+  font-weight: bold;
+  line-height: 20px;
+  display: inline;
+}
+
+.add-to-list-buttons {
+  display: inline;
+  a, span {
+    margin-left: 10px;
+  }
+}
+
+/* ----------- */
+
+/* Gallery & List */
+
+.poster-big {
+  width: 185px;
+}
+
+
+#movie-count {
+  font-size: 25px;
+  float: right;
+  text-align: right;
+  color: #707070;
+
+  img {
+    margin-top: 10px;
+  }
+}
+
+.movie-count {
+  display: inline;
+  margin-left: 10px;
+}
+
+/* List & Feed & Search */
+
+.poster {
+  float: left;
+  margin-right: 10px;
+  margin-bottom: 10px;
+
+  img {
+    border-radius: 5px;
+  }
+}
+/* ----------- */

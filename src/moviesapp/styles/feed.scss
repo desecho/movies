@@ -1,25 +1,27 @@
-@media (min-width: 320px) and (max-width: 475px) {
-  .feed-record {
-    display: grid;
-    padding-bottom: 50px;
+#feed {
+  .poster {
+    width: 60px;
   }
-}
-
-@media (min-width: 320px) and (max-width: 475px) {
-  .feed-record {
-    display: grid;
-    padding-bottom: 50px;
+  tbody tr:first-child td {
+    border-top: 0;
   }
-}
 
-.feed-action-data {
-  min-width: 125px;
-}
 
-.small-poster {
-  width: 60px;
-}
+  @media (min-width: 320px) and (max-width: 475px) {
+    .feed-record {
+      display: grid;
+      padding-bottom: 50px;
+    }
+  }
 
-#feed tbody tr:first-child td {
-  border-top: 0;
+  @media (min-width: 320px) and (max-width: 475px) {
+    .feed-record {
+      display: grid;
+      padding-bottom: 50px;
+    }
+  }
+
+  .feed-action-data {
+    min-width: 125px;
+  }
 }

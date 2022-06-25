@@ -1,32 +1,60 @@
-.search-type-button {
-  width: 105px;
-}
-
-.search-panel-additional {
-  float: right;
-  margin-right: 9px;
-
-  label {
-    display: block;
+#search {
+  .poster-wrapper {
+    height: 227px;
   }
-}
 
-.search-btn-group {
-  .btn-secondary:focus, .btn-secondary.focus, .btn:focus, .btn.focus {
-    box-shadow: none !important;
+  .poster {
+    position: relative;
+
+    img {
+      width: 150px;
+      height: auto;
+    }
+
+    .add-to-list-buttons {
+      display: inline;
+      position: absolute;
+      right: 7px;
+      bottom: 7px;
+      background-color: white;
+      opacity: 0.7;
+      border-radius: 5px;
+    }
   }
-}
 
-.tmdb {
-  background: url('../images/tmdb.svg');
-  background-repeat: no-repeat;
-  width: 85px;
-  height: 61px;
-  display: inline-block;
-  background-size: contain;
-}
+  .movie {
+    min-height: 160px;
+    margin-bottom: 10px;
+    margin-right: 10px;
+    padding: 10px;
+    display: inline-grid;
+    width: 150px;
+  }
 
-.search-poster-img {
-  width: 92px;
-  height: auto;
+  a, span {
+    margin: 0 10px;
+  }
+
+  .movie-content {
+    margin-left: 10px;
+  }
+
+  .search-type-button {
+    width: 105px;
+  }
+
+  .search-panel-additional {
+    float: right;
+    margin-right: 9px;
+
+    label {
+      display: block;
+    }
+  }
+
+  .search-btn-group {
+    .btn-secondary:focus, .btn-secondary.focus, .btn:focus, .btn.focus {
+      box-shadow: none !important;
+    }
+  }
 }
