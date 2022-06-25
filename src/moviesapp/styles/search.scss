@@ -2,43 +2,6 @@
   .poster-wrapper {
     height: 227px;
   }
-
-  .poster {
-    position: relative;
-
-    img {
-      width: 150px;
-      height: auto;
-    }
-
-    .add-to-list-buttons {
-      display: inline;
-      position: absolute;
-      right: 7px;
-      bottom: 7px;
-      background-color: white;
-      opacity: 0.7;
-      border-radius: 5px;
-    }
-  }
-
-  .movie {
-    min-height: 160px;
-    margin-bottom: 10px;
-    margin-right: 10px;
-    padding: 10px;
-    display: inline-grid;
-    width: 150px;
-  }
-
-  a, span {
-    margin: 0 10px;
-  }
-
-  .movie-content {
-    margin-left: 10px;
-  }
-
   .search-type-button {
     width: 105px;
   }

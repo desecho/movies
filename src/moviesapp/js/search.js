@@ -1,8 +1,9 @@
 'use strict';
 
 import axios from 'axios';
-import {retina, param, getSrcSet} from './helpers';
+import {retina, param} from './helpers';
 import {newApp} from './app';
+import MoviesList from './components/movies_list.js';
 
 String.prototype.toTitleCase = function() { // eslint-disable-line no-extend-native
   return this.replace(/\w\S*/g, function(txt) {
@@ -13,6 +14,7 @@ String.prototype.toTitleCase = function() { // eslint-disable-line no-extend-nat
 window.vm = newApp({
   data() {
     return {
+      urls: vars.urls,
       searchType: gettext('Movie'),
       searchTypeCode: 'movie',
       language: vars.language,
@@ -24,8 +26,10 @@ window.vm = newApp({
       listToWatchId: vars.listToWatchId,
     };
   },
+  components: {
+    MoviesList,
+  },
   methods: {
-    getSrcSet: getSrcSet,
     search() {
       const vm = this;
       const options = {
@@ -52,21 +56,6 @@ window.vm = newApp({
       });
     },
     retinajs: retina,
-    addToListFromDb(movie, listId) {
-      const vm = this;
-      axios.post(urls.addToListFromDb, {
-        movieId: movie.id,
-        listId: listId,
-      }).then(function(response) {
-        if (response.data.status === 'not_found') {
-          vm.$toast.error(gettext('Movie is not found in the database'));
-          return;
-        }
-        movie.hide = true;
-      }).catch(function() {
-        vm.$toast.error(gettext('Error adding a movie'));
-      });
-    },
     changeSearchType(code) {
       const vm = this;
       vm.searchTypeCode = code;
