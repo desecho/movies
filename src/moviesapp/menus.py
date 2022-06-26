@@ -5,8 +5,10 @@ from menu import Menu, MenuItem
 
 from .http import HttpRequest
 
-# def has_friends(request: HttpRequest) -> bool:
-#     return request.user.has_friends()
+
+def has_friends(request: HttpRequest) -> bool:
+    """Return True if user has friends."""
+    return request.user.has_friends()
 
 
 def is_authenticated(request: HttpRequest) -> bool:
@@ -15,7 +17,7 @@ def is_authenticated(request: HttpRequest) -> bool:
 
 
 feed_children = (
-    # MenuItem(_("Friends"), reverse("feed", kwargs={"feed_name": "friends"}), check=has_friends),
+    MenuItem(_("Friends"), reverse("feed", kwargs={"feed_name": "friends"}), check=has_friends),
     MenuItem(_("People"), reverse("feed", kwargs={"feed_name": "people"})),
 )
 
@@ -25,6 +27,6 @@ Menu.add_item(
     "main", MenuItem(_("To Watch"), reverse("list", kwargs={"list_name": "to-watch"}), check=is_authenticated)
 )
 Menu.add_item("main", MenuItem(_("Trending"), reverse("trending")))
-# Menu.add_item("main", MenuItem(_("Friends"), reverse("friends"), check=has_friends))
+Menu.add_item("main", MenuItem(_("Friends"), reverse("friends"), check=has_friends))
 Menu.add_item("main", MenuItem(_("People"), reverse("people")))
 Menu.add_item("main", MenuItem(_("Feed"), "moviesapp.views.search", children=feed_children))

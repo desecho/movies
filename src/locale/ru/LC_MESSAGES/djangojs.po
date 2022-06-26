@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-26 12:34-0400\n"
+"POT-Creation-Date: 2022-06-26 15:07-0400\n"
 "PO-Revision-Date: 2022-06-25 20:42-0400\n"
 "Last-Translator:   <>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -56,27 +56,27 @@ msgstr "Вам необходимо авторизоваться для того
 msgid "Error saving movie order"
 msgstr "Ошибка сохранения порядка фильмов"
 
-#: src/moviesapp/js/list.js:59
+#: src/moviesapp/js/list.js:58
 msgid "Error applying the settings"
 msgstr "Ошибка применения настроек"
 
-#: src/moviesapp/js/list.js:72
+#: src/moviesapp/js/list.js:71
 msgid "Error saving the rating"
 msgstr "Ошибка сохранения рейтинга"
 
-#: src/moviesapp/js/list.js:82
+#: src/moviesapp/js/list.js:81
 msgid "Error saving options"
 msgstr "Ошибка сохранения опций"
 
-#: src/moviesapp/js/list.js:142
+#: src/moviesapp/js/list.js:141
 msgid "Error removing the movie"
 msgstr "Ошибка удаления фильма"
 
-#: src/moviesapp/js/list.js:157
+#: src/moviesapp/js/list.js:156
 msgid "Error adding the movie to the list"
 msgstr "Ошибка добавления фильма в список"
 
-#: src/moviesapp/js/list.js:173
+#: src/moviesapp/js/list.js:172
 msgid "Error saving a comment"
 msgstr "Ошибка сохранения комментария"
 

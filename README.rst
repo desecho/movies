@@ -4,10 +4,9 @@ Movies
 |Deployment Status| |Requirements Status| |Codecov|
 
 | The web application on Django_ 4, Vue.js_ 3, Bootstrap_ 4, `Font Awesome`_ 6. Create movie lists "Watched" and "To Watch", rate movies, and add comments.
-| You can also add additional information such as if you watched the movie in the original version, in theatre, an extended version, in 4K, etc.
-| You can also see where you can stream movies.
+| See more information here - https://movies.samarchyan.me/about/
 
-| Share your lists with your VK and Facebook friends, get recommendations from friends. **Temporarily disabled.**
+| Share your lists with your VK friends.
 
 | The website is live here - https://movies.samarchyan.me.
 | The interface is available in English and Russian.

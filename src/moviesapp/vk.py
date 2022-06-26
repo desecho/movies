@@ -52,11 +52,12 @@ class Vk:
 
     def get_friends(self) -> QuerySet["User"]:  # pylint: disable=no-self-use
         """Get friends."""
-        vk_friends = cache.get("vk_friends")
+        cache_id = f"vk_friends_{self.vk_id}"
+        vk_friends = cache.get(cache_id)
         if vk_friends is None:
             if self.vk is not None:
                 friends_ids = self.vk.friends.get()["items"]
-                cache.set("vk_friends", vk_friends)
+                cache.set(cache_id, vk_friends)
             else:
                 friends_ids = []
 

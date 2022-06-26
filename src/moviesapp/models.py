@@ -6,6 +6,7 @@ from urllib.parse import urljoin
 
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser, AnonymousUser
+from django.core.cache import cache
 from django.db.models import (
     CASCADE,
     BooleanField,
@@ -138,7 +139,15 @@ class UserBase:
 
     def has_friends(self) -> bool:
         """Return True if user has friends."""
-        return self.get_friends().exists()
+        if self.is_authenticated:  # type: ignore
+            user: User = self  # type: ignore
+            cache_id = f"has_friends_{user.pk}"
+            has_friends: Optional[bool] = cache.get(cache_id)
+            if has_friends is None:
+                has_friends = user.get_friends().exists()
+                cache.set(cache_id, has_friends)
+            return has_friends
+        return False
 
 
 class User(AbstractUser, UserBase):  # type: ignore
