@@ -22,18 +22,9 @@
     }
   }
 
-  .recommendation-review {
-    margin-bottom: 10px;
-    padding: 10px;
-    vertical-align: middle;
-    border-radius: 5px;
-    background-color: #f4f4f4;
-  }
-
   .item-desc {
     color: #808080;
   }
-
 
   .comment {
     margin-top: 10px;
@@ -62,13 +53,6 @@
     #movie-count {
       min-height: 50px;
       float: none;
-    }
-
-    .recommendation-review {
-      .cancel-on-png, .cancel-off-png, .star-on-png, .star-off-png, .star-half-png {
-        font-size: 1.2em;
-      }
-      max-width: 290px;
     }
   }
 

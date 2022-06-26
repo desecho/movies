@@ -174,32 +174,6 @@ class ListView(TemplateAnonymousView):
         """Keep movies only with 3+ rating, remove watched movies."""
         return records.filter(rating__gte=3).exclude(movie__in=user.get_movie_ids())
 
-    # def _get_comments_and_ratings(
-    #     self, records_ids_and_movies_ids_list: ListType[Tuple[int, int]], user: Union[User, UserAnonymous]
-    # ) -> "Dict[int, Optional[ListType[Dict[str, Any]]]]":
-    #     """Get comments and ratings."""
-    #     movies, records_ids_and_movies_ids = self._get_record_movie_data(records_ids_and_movies_ids_list)
-    #     records: QuerySet[Record] = Record.objects.filter(list_id=List.WATCHED, movie_id__in=movies)
-    #     friends = user.get_friends()
-    #     records = records.filter(user__in=friends)
-
-    #     comments_and_ratings: Dict[int, ListType[Dict[str, Any]]] = {}
-    #     for record in records:
-    #         if record.comment or record.rating:
-    #             data: Dict[str, Any] = {"user": record.user}
-    #             movie_id: int = record.movie.pk
-    #             if movie_id not in comments_and_ratings:
-    #                 comments_and_ratings[movie_id] = []
-    #             if record.comment:
-    #                 data["comment"] = record.comment
-    #             if record.rating:
-    #                 data["rating"] = record.rating
-    #             comments_and_ratings[movie_id].append(data)
-    #     result = {}
-    #     for record_id, movie_id in records_ids_and_movies_ids.items():
-    #         result[record_id] = comments_and_ratings.get(movie_id, None)
-    #     return result
-
     @staticmethod
     def _filter_records(records: QuerySet[Record], query: str) -> QuerySet[Record]:
         """Filter records."""
@@ -405,13 +379,6 @@ class ListView(TemplateAnonymousView):
         if anothers_account and session["recommendations"]:
             records = self._filter_records_for_recommendations(records, request.user)
 
-        # Commented out because friends functionality is disabled.
-        # if not username and list_name == "to-watch" and records:
-        #     comments_and_ratings = self._get_comments_and_ratings(
-        #         list(records.values_list("id", "movie_id")), user
-        #     )
-        # else:
-        #     comments_and_ratings = None
         if request.user.is_authenticated and request.user.is_country_supported:
             prefetch_related_objects(records, "movie__provider_records__provider")
 
@@ -432,7 +399,6 @@ class ListView(TemplateAnonymousView):
             "anothers_account": anothers_account,
             "sort": session["sort"][list_name],
             "query": query,
-            # "reviews": comments_and_ratings,
         }
 
     def get(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:  # type: ignore
