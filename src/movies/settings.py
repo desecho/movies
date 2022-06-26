@@ -103,7 +103,7 @@ TEMPLATES: List[TemplatesSettings] = [
                 "social_django.context_processors.backends",
                 "social_django.context_processors.login_redirect",
                 # Movies
-                f"{APP}.context_processors.variables",
+                "moviesapp.context_processors.variables",
             ],
             "loaders": [
                 (
@@ -182,8 +182,8 @@ if not DISABLE_CSRF:  # pragma: no cover
     CSRF_TRUSTED_ORIGINS = [f"https://{PROJECT_DOMAIN}"]
 
 # Authentication
-AUTH_USER_MODEL = f"{APP}.User"
-AUTH_ANONYMOUS_MODEL = f"{APP}.models.UserAnonymous"
+AUTH_USER_MODEL = "moviesapp.User"
+AUTH_ANONYMOUS_MODEL = "moviesapp.models.UserAnonymous"
 AUTHENTICATION_BACKENDS = (
     "django.contrib.auth.backends.ModelBackend",
     # social_core
@@ -283,7 +283,7 @@ SOCIAL_AUTH_PIPELINE = (
     # 'social_core.pipeline.user.user_details',
     # Custom
     # We do this only if the user get's created for the first time.
-    f"{APP}.social.load_user_data",
+    "moviesapp.social.load_user_data",
 )
 
 # django-simple-menu
@@ -302,15 +302,15 @@ ADMIN_REORDER = [
     {
         "app": APP,
         "models": (
-            f"{APP}.User",
-            f"{APP}.Movie",
-            f"{APP}.Record",
-            f"{APP}.List",
-            f"{APP}.Action",
-            f"{APP}.ActionRecord",
-            f"{APP}.Provider",
-            f"{APP}.ProviderRecord",
-            f"{APP}.VkCountry",
+            "moviesapp.User",
+            "moviesapp.Movie",
+            "moviesapp.Record",
+            "moviesapp.List",
+            "moviesapp.Action",
+            "moviesapp.ActionRecord",
+            "moviesapp.Provider",
+            "moviesapp.ProviderRecord",
+            "moviesapp.VkCountry",
         ),
     },
     {"app": "social_django", "models": ("social_django.UserSocialAuth",)},
