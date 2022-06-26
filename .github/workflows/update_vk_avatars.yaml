@@ -1,0 +1,28 @@
+---
+name: Update VK Avatars
+on:
+  schedule:
+    - cron: "0 5 1 * *"  # Runs at 05:00 UTC (01:00 EDT) on the first day of the month
+  workflow_dispatch:
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+jobs:
+  update_vk_avatars:
+    name: Update VK avatars
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install kubectl
+        uses: azure/setup-kubectl@v2.1
+
+      - name: Configure kubectl
+        run: |
+          mkdir ~/.kube
+          echo "$KUBECONFIG" > ~/.kube/config
+        env:
+          KUBECONFIG: ${{ secrets.KUBECONFIG }}  # Done as a variable because it doesn't work in place.
+
+      - name: Update VK avatars
+        run: make prod-manage update_vk_avatars
