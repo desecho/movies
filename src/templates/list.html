@@ -286,6 +286,7 @@
               <div class="review" :class="{'review-minimal': mode == 'minimal'}">
                 {% if list == 'watched' %}
                   <star-rating
+                    :read-only="isAnothersAccount"
                     :star-size="starSize"
                     :show-rating=false
                     :clearable=true
