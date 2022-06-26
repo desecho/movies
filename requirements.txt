@@ -32,7 +32,7 @@ Babel==2.10.3
 
 # Social
 facebook-sdk==3.1.0
-vk-api==11.9.8
+vk-api==11.9.9
 
 mysqlclient==2.1.1
 sentry-sdk==1.6.0
