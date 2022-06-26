@@ -371,7 +371,8 @@ class ListView(TemplateAnonymousView):
         else:  # List - watched
             records_on_page = settings.RECORDS_ON_PAGE
         records_: Page[Record] = paginate(records, request.GET.get("page"), records_on_page)  # type: ignore
-        record_objects = self._get_record_objects(records[: len(records_)])
+        records_paginated_ids = [record.pk for record in records_]
+        record_objects = self._get_record_objects(records.filter(pk__in=records_paginated_ids))
         if anothers_account:
             self._inject_list_ids(records, record_objects)
         return {
