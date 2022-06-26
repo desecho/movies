@@ -1,5 +1,7 @@
 from unittest.mock import Mock, patch
 
+from django.conf import settings
+
 from moviesapp import vk
 from moviesapp.models import User
 from moviesapp.social import load_user_data
@@ -43,7 +45,8 @@ class LoadUserDataTestCase(BaseTestCase):
         self.assertEqual(user.avatar_big, avatar_big)
         self.assertEqual(user.first_name, first_name)
         self.assertEqual(user.last_name, last_name)
-        self.assertEqual(user.language, "ru")
+        self.assertEqual(user.language, settings.VK_DEFAULT_LANGUAGE)
+        self.assertEqual(user.timezone.key, settings.VK_DEFAULT_TIMEZONE)
         self.assertEqual(user.country, "CA")
         self.assertTrue(user.loaded_initial_data)
 

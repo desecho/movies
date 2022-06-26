@@ -48,6 +48,7 @@ def load_user_data(backend: BaseAuth, user: User, **kwargs: Any) -> None:  # pyl
             "photo_100",
             "photo_200",
             "country",
+            # "timezone",
         ]
         vk = user.get_vk()
         if vk:
@@ -60,7 +61,10 @@ def load_user_data(backend: BaseAuth, user: User, **kwargs: Any) -> None:  # pyl
             # Language setting is only available for a standalone application. See details:
             # https://dev.vk.com/method/account.getInfo
             # We assume that the language is Russian.
-            user.language = "ru"
+
+            user.language = settings.VK_DEFAULT_LANGUAGE
+            # Until we get the timezone from VK, we set it manually.
+            user.timezone = settings.VK_DEFAULT_TIMEZONE
             user.loaded_initial_data = True
             user.save()
     return None

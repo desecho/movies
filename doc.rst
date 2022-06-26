@@ -38,6 +38,7 @@ the language information at this point due to the difficulty related to obtainin
 See details in `VK docs`_.
 
 For VK logins we assume that the language is Russian.
+We also assume that the timezone is Europe/Moscow.
 
 Cron jobs
 ------------
