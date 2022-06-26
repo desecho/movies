@@ -36,41 +36,43 @@
       </div>
     </div>
   </div>
-  <draggable
-    v-model="records"
-    @sort="saveRecordsOrder"
-    item-key="id"
-    :disabled="!isSortable"
-  >
-    <template #item="{element, index}">
-      <div class="gallery-record">
-        <button
-          type="button"
-          class="btn btn-secondary up-button"
-          @click="moveToTop(element, index)"
-          title="{% translate 'Move to the top' %}"
-          v-show="isSortable"
-        >
-          <font-awesome-icon icon="fa-solid fa-arrow-up" />
-        </button>
-        <button
-          type="button"
-          class="btn btn-secondary down-button"
-          @click="moveToBottom(element, index)"
-          title="{% translate 'Move to the bottom' %}"
-          v-show="isSortable"
-        >
-          <font-awesome-icon icon="fa-solid fa-arrow-down" />
-        </button>
-        <v-lazy-image
-          class="poster-big" :class="{draggable: isSortable}"
-          :srcset="getSrcSet(element.movie.posterNormal, element.movie.posterBig)"
-          :src="element.movie.posterBig"
-          :title="element.movie.titleOriginal"
-          :alt="element.movie.title"
-        />
-      </div>
-    </template>
+  <div id="gallery">
+    <draggable
+      v-model="records"
+      @sort="saveRecordsOrder"
+      item-key="id"
+      :disabled="!isSortable"
+    >
+      <template #item="{element, index}">
+        <div class="gallery-record">
+          <button
+            type="button"
+            class="btn btn-secondary up-button"
+            @click="moveToTop(element, index)"
+            title="{% translate 'Move to the top' %}"
+            v-show="isSortable"
+          >
+            <font-awesome-icon icon="fa-solid fa-arrow-up" />
+          </button>
+          <button
+            type="button"
+            class="btn btn-secondary down-button"
+            @click="moveToBottom(element, index)"
+            title="{% translate 'Move to the bottom' %}"
+            v-show="isSortable"
+          >
+            <font-awesome-icon icon="fa-solid fa-arrow-down" />
+          </button>
+          <v-lazy-image
+            class="poster-big" :class="{draggable: isSortable}"
+            :srcset="getSrcSet(element.movie.posterNormal, element.movie.posterBig)"
+            :src="element.movie.posterBig"
+            :title="element.movie.titleOriginal"
+            :alt="element.movie.title"
+          />
+        </div>
+      </template>
+    </div>
 {% endblock %}
 
 {% block js %}
