@@ -30,6 +30,7 @@ from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 from django_countries.fields import CountryField
 from social_django.models import AbstractUserSocialAuth
+from timezone_field import TimeZoneField
 
 from .exceptions import ProviderNotFoundError
 from .fb import Fb
@@ -153,6 +154,7 @@ class User(AbstractUser, UserBase):  # type: ignore
     avatar_big = URLField(null=True, blank=True)
     loaded_initial_data = BooleanField(default=False)
     country = CountryField(verbose_name=_("Country"), null=True, blank=True)
+    timezone = TimeZoneField(default=settings.TIME_ZONE)
 
     def __str__(self) -> str:
         """Return string representation."""

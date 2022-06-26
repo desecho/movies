@@ -138,8 +138,9 @@ MIDDLEWARE = [
     "social_django.middleware.SocialAuthExceptionMiddleware",
     "custom_anonymous.middleware.AuthenticationMiddleware",
     "admin_reorder.middleware.ModelAdminReorder",
-    f"{APP}.middleware.AjaxHandlerMiddleware",
-    f"{APP}.middleware.language_middleware",
+    "moviesapp.middleware.AjaxHandlerMiddleware",
+    "moviesapp.middleware.language_middleware",
+    "moviesapp.middleware.TimezoneMiddleware",
 ]
 if DEBUG:  # pragma: no cover
     MIDDLEWARE.append("debug_toolbar.middleware.DebugToolbarMiddleware")

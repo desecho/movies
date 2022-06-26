@@ -14,7 +14,7 @@ class UserForm(ModelForm[User]):  # pylint:disable=unsubscriptable-object
         """Meta."""
 
         model = User
-        fields = ("language", "only_for_friends", "username", "first_name", "last_name", "country")
+        fields = ("language", "only_for_friends", "username", "first_name", "last_name", "country", "timezone")
         widgets = {"country": CountrySelectWidget()}
 
     def __init__(self, *args: Any, **kwargs: Any):

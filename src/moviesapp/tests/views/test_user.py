@@ -28,6 +28,7 @@ class PreferencesTestCase(BaseTestLoginCase):
         first_name = "Ivan"
         last_name = "Petrov"
         username = "ivan"
+        timezone = "Europe/Moscow"
 
         response = self.client.post(
             self.url,
@@ -37,6 +38,7 @@ class PreferencesTestCase(BaseTestLoginCase):
                 "first_name": first_name,
                 "last_name": last_name,
                 "username": username,
+                "timezone": timezone,
             },
         )
 
@@ -47,6 +49,7 @@ class PreferencesTestCase(BaseTestLoginCase):
         self.assertEqual(user.username, username)
         self.assertEqual(user.first_name, first_name)
         self.assertEqual(user.last_name, last_name)
+        self.assertEqual(user.timezone.key, timezone)
         self.assertTrue(user.only_for_friends)
 
 
