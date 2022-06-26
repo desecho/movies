@@ -122,11 +122,13 @@
             </div>
           </div>
         </form>
+        {% if query %}
+          <h3 id="query">
+            {{ query }} <span><a href="{{ request.path }}"><font-awesome-icon icon="fa-solid fa-xmark" /></a></span>
+          </h3>
+        {% endif %}
       </div>
     </div>
-    {% if query %}
-      <h3>{{ query }}: <a href="{{ request.path }}"><font-awesome-icon icon="fa-solid fa-xmark" /></a></h3>
-    {% endif %}
     <div class="results col-sm-12 col-md-10 col-lg-8" v-cloak>
       <draggable
         v-model="records"

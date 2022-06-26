@@ -47,7 +47,9 @@ class PeopleView(TemplateAnonymousView):
 
     def get_context_data(self, **kwargs: Any) -> PeopleViewContextData:  # type: ignore  # pylint: disable=unused-argument
         """Get context data."""
-        users: Page[User] | List[User] = paginate(self.users, self.request.GET.get("page"), settings.PEOPLE_ON_PAGE)  # type: ignore
+        users: Page[User] | List[User] = paginate(  # type: ignore
+            self.users, self.request.GET.get("page"), settings.PEOPLE_ON_PAGE
+        )
         return {"users": users}
 
     def get(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:  # type: ignore
