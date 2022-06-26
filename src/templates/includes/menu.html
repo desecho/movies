@@ -52,20 +52,13 @@
     {% endfor %}
   </ul>
   <ul class="navbar-nav">
-    {% if user.is_vk_user %}
-      <li class="nav-item vk-app-show" style="display: none;">
-        <a id="invite" href="javascript:void(0)" class="nav-link" @click="invite">
-          <font-awesome-icon icon="fa-solid fa-envelope-open" />
-        </a>
-      </li>
-    {% endif %}
     {% if user.is_authenticated %}
       <li class="nav-item">
         <a href="{% url 'preferences' %}" class="nav-link">
           <font-awesome-icon icon="fa-solid fa-gear" />
         </a>
       </li>
-      <li class="vk-app-hide nav-item">
+      <li class="nav-item">
         <a href="{% url 'logout' %}" class="nav-link">
           <font-awesome-icon icon="fa-solid fa-sign-out" />
         </a>

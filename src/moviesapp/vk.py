@@ -59,11 +59,7 @@ class Vk:
                 friends_ids = []
 
         user_model: "User" = get_user_model()  # type: ignore
-        # We need to use distinct here because the same user can have several VK backends (both app and oauth)
-        friends = user_model.objects.filter(
-            social_auth__provider__in=settings.VK_BACKENDS, social_auth__uid__in=friends_ids
-        ).distinct()
-        return friends
+        return user_model.objects.filter(social_auth__provider=settings.VK_BACKEND, social_auth__uid__in=friends_ids)
 
     def get_data(self, fields: Union[Tuple[str, str, str, str], Tuple[str, str]]) -> Dict[str, Union[str, bool, int]]:
         """Get data."""

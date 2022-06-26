@@ -165,7 +165,7 @@ class SaveCommentView(AjaxView):
 class ListView(TemplateAnonymousView):
     """List view."""
 
-    template_name = "list/list.html"
+    template_name = "list.html"
 
     @staticmethod
     def _filter_records_for_recommendations(
@@ -440,56 +440,3 @@ class ListView(TemplateAnonymousView):
         self._sanitize_session_values()
         self._initialize_session_values()
         return super().get(request, *args, **kwargs)
-
-
-# Commented out because friends functionality is disabled.
-# class RecommendationsView(TemplateView, ListView):
-#     """Recommendations view."""
-
-#     template_name = "list/recommendations.html"
-
-#     @staticmethod
-#     def _filter_duplicated_movies_and_limit(
-#         records: QuerySet[Record],
-#     ) -> Tuple[ListType[Record], ListType[Tuple[int, int]]]:
-#         """Filter duplicated movies and limit."""
-#         records_output = []
-#         movies = []
-#         records_and_movies_ids = []
-#         for record in records:
-#             if record.movie.pk not in movies:
-#                 records_output.append(record)
-#                 records_and_movies_ids.append((record.pk, record.movie.pk))
-#                 if len(records_output) == settings.MAX_RECOMMENDATIONS:
-#                     break
-#                 movies.append(record.movie.pk)
-#         return (records_output, records_and_movies_ids)
-
-#     def _get_recommendations_from_friends(self, friends: QuerySet[User]) -> QuerySet[Record]:
-#         """Get recommendations from friends."""
-#         user: User = self.request.user  # type: ignore
-#         # Exclude own records and include only friends' records.
-#         records = Record.objects.exclude(user=user).filter(user__in=friends).select_related("movie")
-#         # Order records by user rating and by IMDb rating.
-#         records = records.order_by("-rating", "-movie__imdb_rating", "-movie__release_date")
-#         return self._filter_records_for_recommendations(records, user)
-
-#     def get_context_data(self, **kwargs: Any) -> RecommendationsViewContextData:  # type: ignore  # pylint: disable=unused-argument
-#         """Get context data."""
-#         request: AuthenticatedHttpRequest = self.request  # type: ignore
-#         user = request.user
-#         friends = user.get_friends()
-#         records_qs = self._get_recommendations_from_friends(friends)
-#         records, records_and_movies_ids = self._filter_duplicated_movies_and_limit(records_qs)
-#         # reviews = self._get_comments_and_ratings(records_and_movies_ids, user)
-#         return {
-#             "records": records,
-#             # "reviews": reviews
-#         }
-
-#     def get(self, request: AuthenticatedHttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:  # type: ignore
-#         """Get."""
-#         has_friends = request.user.has_friends()
-#         if not has_friends:
-#             raise Http404
-#         return super().get(request, *args, **kwargs)

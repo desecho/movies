@@ -143,15 +143,6 @@
                   <a href="javascript:void(0)" @click="removeRecord(element, index)" title="{% translate 'Delete' %}">
                     <font-awesome-icon icon="fa-solid fa-trash" />
                   </a>
-                  <a
-                    href="javascript:void(0)"
-                    class="wall-post"
-                    @click="postToWall(element)"
-                    title="{% translate 'Post to the wall' %}"
-                    v-show="isVkApp"
-                  >
-                    <font-awesome-icon icon="fa-solid fa-share" />
-                  </a>
                 </div>
               {% endif %}
               <div class="add-to-list-buttons">
@@ -422,7 +413,6 @@
     urls.record = '{% url 'record' %}';
     urls.addToList = '{% url 'add_to_list' %}';
     urls.saveComment = '{% url 'save_comment' %}';
-    urls.uploadPosterToWall = '{% url 'upload_poster_to_wall' %}';
     urls.saveRecordsOrder = '{% url 'save_records_order' %}';
   </script>
   <script src="{% static 'js/list.js' %}"></script>

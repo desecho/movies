@@ -25,7 +25,6 @@ Menu.add_item(
     "main", MenuItem(_("To Watch"), reverse("list", kwargs={"list_name": "to-watch"}), check=is_authenticated)
 )
 Menu.add_item("main", MenuItem(_("Trending"), reverse("trending")))
-# Menu.add_item("main", MenuItem(_("Recommendations"), reverse("recommendations"), check=has_friends))
 # Menu.add_item("main", MenuItem(_("Friends"), reverse("friends"), check=has_friends))
 Menu.add_item("main", MenuItem(_("People"), reverse("people")))
 Menu.add_item("main", MenuItem(_("Feed"), "moviesapp.views.search", children=feed_children))

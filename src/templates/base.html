@@ -28,11 +28,8 @@
     <script src="{% static 'js/vendor.js' %}"></script>
     <script>
       'use strict';
-      window.vars = {isVkUser: {{ user.is_vk_user|yesno:'true,false' }}};
+      window.vars = {};
       window.urls = {};
     </script>
-    {% if user.is_vk_user %}
-      <script src="//vk.com/js/api/xd_connection.js?2"></script>
-    {% endif %}
     {% block js %}{% endblock %}
   </body>

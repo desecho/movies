@@ -4,7 +4,6 @@ from datetime import timedelta
 from typing import Any, List as ListType, Optional
 from urllib.parse import urljoin
 
-import vk_api
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser, AnonymousUser
 from django.db.models import (
@@ -31,7 +30,6 @@ from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 from django_countries.fields import CountryField
 from social_django.models import AbstractUserSocialAuth
-from vk_api.exceptions import ApiError
 
 from .exceptions import ProviderNotFoundError
 from .fb import Fb
@@ -77,7 +75,7 @@ class UserBase:
 
     def _get_vk_accounts(self) -> QuerySet[AbstractUserSocialAuth]:
         """Get VK accounts."""
-        return self.social_auth.filter(provider__in=settings.VK_BACKENDS)  # type: ignore
+        return self.social_auth.filter(provider=settings.VK_BACKEND)  # type: ignore
 
     # It is requried that `is_vk_user` is run before running this.
     def get_vk_account(self) -> Optional[AbstractUserSocialAuth]:  # 2DO possibly remove it from this class.
@@ -85,33 +83,12 @@ class UserBase:
         vk_accounts = self._get_vk_accounts()
         if len(vk_accounts) == 1:
             return vk_accounts[0]
-        for vk_account in vk_accounts:
-            vk_session = vk_api.VkApi(token=vk_account.access_token)
-            if vk_session.token["access_token"] is None:
-                extra_data = vk_account.extra_data
-                extra_data["access_token"] = None
-                vk_account.extra_data = extra_data
-                vk_account.save()
-            vk = vk_session.get_api()
-            try:
-                vk.users.get(fields=["screen_name"])
-            except ApiError:
-                continue
-            return vk_account
 
-        if vk_session.token["access_token"] is None:
-            return None
         raise VkError
 
     @property
     def is_vk_user(self) -> bool:
-        """
-        Return True if a user has a VK account.
-
-        It doesn't necessarily mean that he is currently using the app.
-        Note: currently it does because it is not possible to link a vk-app account and a website account.
-        But it is likely to change in the future.
-        """
+        """Return True if a user has a VK account."""
         if self.is_authenticated:  # type: ignore
             return self._get_vk_accounts().exists()
         return False

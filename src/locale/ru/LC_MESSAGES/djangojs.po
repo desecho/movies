@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-25 20:41-0400\n"
+"POT-Creation-Date: 2022-06-25 23:55-0400\n"
 "PO-Revision-Date: 2022-06-25 20:42-0400\n"
 "Last-Translator:   <>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,7 +16,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Translated-Using: django-rosetta 0.9.8\n"
 
 #: src/moviesapp/js/components/movies_list.js:65
@@ -27,23 +28,23 @@ msgstr "Фильм не найден в базе данных"
 msgid "Error adding a movie"
 msgstr "Ошибка добавления фильма"
 
-#: src/moviesapp/js/constants.js:5
+#: src/moviesapp/js/constants.js:8
 msgid "Awful"
 msgstr "Ужасно"
 
-#: src/moviesapp/js/constants.js:6
+#: src/moviesapp/js/constants.js:9
 msgid "Bad"
 msgstr "Плохо"
 
-#: src/moviesapp/js/constants.js:7
+#: src/moviesapp/js/constants.js:10
 msgid "Regular"
 msgstr "Нормально"
 
-#: src/moviesapp/js/constants.js:8
+#: src/moviesapp/js/constants.js:11
 msgid "Good"
 msgstr "Хорошо"
 
-#: src/moviesapp/js/constants.js:9
+#: src/moviesapp/js/constants.js:12
 msgid "Awesome"
 msgstr "Отлично"
 
@@ -55,64 +56,27 @@ msgstr "Вам необходимо авторизоваться для того
 msgid "Error saving movie order"
 msgstr "Ошибка сохранения порядка фильмов"
 
-#: src/moviesapp/js/list.js:62
+#: src/moviesapp/js/list.js:59
 msgid "Error applying the settings"
 msgstr "Ошибка применения настроек"
 
-#: src/moviesapp/js/list.js:75
-#| msgid "Error adding a rating"
+#: src/moviesapp/js/list.js:72
 msgid "Error saving the rating"
 msgstr "Ошибка сохранения рейтинга"
 
-#: src/moviesapp/js/list.js:85
+#: src/moviesapp/js/list.js:82
 msgid "Error saving options"
 msgstr "Ошибка сохранения опций"
 
-#: src/moviesapp/js/list.js:139
+#: src/moviesapp/js/list.js:142
 msgid "Error removing the movie"
 msgstr "Ошибка удаления фильма"
 
-#: src/moviesapp/js/list.js:154
-msgid "I recommend watching"
-msgstr "Я рекомендую к просмотру"
-
-#: src/moviesapp/js/list.js:156
-msgid "I don't recommend watching"
-msgstr "Я не рекомендую к просмотру"
-
-#: src/moviesapp/js/list.js:158
-msgid "My rating"
-msgstr "Моя оценка"
-
-#: src/moviesapp/js/list.js:182
-msgid "Error posting to the wall"
-msgstr "Ошибка размещения на стену"
-
-#: src/moviesapp/js/list.js:184
-msgid "Your post has been posted"
-msgstr "Ваша запись была размещена"
-
-#: src/moviesapp/js/list.js:192
-msgid "Error posting a poster to the wall"
-msgstr "Ошибка размещения постера на стену"
-
-#: src/moviesapp/js/list.js:208
-msgid "Error loading a poster"
-msgstr "Ошибка загрузки постера"
-
-#: src/moviesapp/js/list.js:215
-msgid "Error getting an upload server for wall posting"
-msgstr "Ошибка получения сервера загрузки для размещения на стену"
-
-#: src/moviesapp/js/list.js:232
-msgid "Add a rating to the movie"
-msgstr "Добавьте оценку фильму"
-
-#: src/moviesapp/js/list.js:243
+#: src/moviesapp/js/list.js:157
 msgid "Error adding the movie to the list"
 msgstr "Ошибка добавления фильма в список"
 
-#: src/moviesapp/js/list.js:259
+#: src/moviesapp/js/list.js:173
 msgid "Error saving a comment"
 msgstr "Ошибка сохранения комментария"
 

@@ -302,11 +302,6 @@ yarn-build-prod:
 build:
 	yarn build --watch
 
-.PHONY: ngrok
-## Run ngrok
-ngrok:
-	ngrok http 8000
-
 .PHONY: drop-db
 ## Drop db
 drop-db:

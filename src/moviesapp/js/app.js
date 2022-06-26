@@ -12,14 +12,14 @@ import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome';
 
 /* import specific icons */
 import {
-  faGear, faSignIn, faSignOut, faEye, faEyeSlash, faTrash, faFilm, faEnvelopeOpen, faXmark, faShare, faSave,
+  faGear, faSignIn, faSignOut, faEye, faEyeSlash, faTrash, faFilm, faXmark, faSave,
   faComment, faArrowDown, faArrowUp,
 } from '@fortawesome/free-solid-svg-icons';
 import {faVk, faFacebook} from '@fortawesome/free-brands-svg-icons';
 
 /* add icons to the library */
-library.add(faGear, faSignIn, faSignOut, faEye, faEyeSlash, faTrash, faFilm, faEnvelopeOpen, faXmark,
-    faShare, faSave, faComment, faVk, faFacebook, faArrowDown, faArrowUp);
+library.add(faGear, faSignIn, faSignOut, faEye, faEyeSlash, faTrash, faFilm, faXmark,
+    faSave, faComment, faVk, faFacebook, faArrowDown, faArrowUp);
 
 export function newApp(options) {
   const app = createApp(options);

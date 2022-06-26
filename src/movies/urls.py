@@ -29,8 +29,6 @@ from moviesapp.views.social import FeedView, FriendsView, PeopleView
 from moviesapp.views.trending import TrendingView
 from moviesapp.views.user import AccountDeletedView, AccountDeleteView, LoginErrorView, PreferencesView, logout_view
 
-# from moviesapp.views.vk import UploadPosterToWallView
-
 admin.autodiscover()
 register_converter(ListConverter, "list")
 register_converter(FeedConverter, "feed")
@@ -77,10 +75,6 @@ urlpatterns += [
     # Trending
     path("trending/", TrendingView.as_view(), name="trending"),
     #
-    # Vk
-    path_404("upload-poster-to-wall/", "upload_poster_to_wall"),
-    # path("upload-poster-to-wall/<int:record_id>/", UploadPosterToWallView.as_view(), name="upload_poster_to_wall"),
-    #
     # Gallery
     path("gallery/<list:list_name>/", GalleryView.as_view(), name="gallery"),
     path("<str:username>/gallery/<list:list_name>/", GalleryView.as_view(), name="gallery"),
@@ -89,8 +83,6 @@ urlpatterns += [
     path("list/<list:list_name>/", ListView.as_view(), name="list"),
     path("<str:username>/list/<list:list_name>/", ListView.as_view(), name="list"),
     #
-    # Commented out because friends functionality is disabled
-    # path("recommendations/", RecommendationsView.as_view(), name="recommendations"),
     path("save-settings/", SaveSettingsView.as_view(), name="save_settings"),
     #
     path_404("remove-record/", "remove_record"),

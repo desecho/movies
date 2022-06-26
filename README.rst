@@ -7,8 +7,7 @@ Movies
 | You can also add additional information such as if you watched the movie in the original version, in theatre, an extended version, in 4K, etc.
 | You can also see where you can stream movies.
 
-| It is also available as a `VK app`_. Not working temporarily.
-| Share your lists with VK and Facebook friends, get recommendations from friends. Not working temporarily.
+| Share your lists with your VK and Facebook friends, get recommendations from friends. **Temporarily disabled.**
 
 | The website is live here - https://movies.samarchyan.me.
 | The interface is available in English and Russian.
@@ -43,14 +42,6 @@ Run in Docker:
 1. Run ``make docker-build``
 2. Edit file ``docker_secrets.env``
 3. Run ``make docker-run``
-
-Debugging the VK app:
-
-1. Register account on https://ngrok.io
-2. Run ``make ngrok``
-3. Set ``IS_VK_DEV`` to ``True``
-4. Set ``HOST_MOVIES_TEST`` to ngrok host
-5. Set iframe address to ``https://[ngrok_host]/complete/vk-app/`` in the app settings
 
 Production
 ------------
@@ -93,8 +84,6 @@ Used images
 .. _ubuntu-vm: https://github.com/desecho/ubuntu-vm
 .. _mysql-docker: https://github.com/desecho/mysql-docker
 .. _redis-docker: https://github.com/desecho/redis-docker
-
-.. _VK app: http://vk.com/app3504693_2912142
 
 .. _IMDb logo: https://commons.wikimedia.org/wiki/File:IMDB_Logo_2016.svg
 .. _Down arrow icon: https://www.iconfinder.com/icons/211614/arrow_b_down_icon

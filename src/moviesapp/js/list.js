@@ -1,12 +1,10 @@
-/* global VK:false */
-
 'use strict';
 
 import axios from 'axios';
 import {getSrcSet, initAxios, openUrl, saveRecordsOrder} from './helpers';
 import {newApp} from './app';
 import autosize from 'autosize';
-import {listWatchedId, listToWatchId, ratingTexts} from './constants';
+import {listWatchedId, listToWatchId} from './constants';
 
 const starSizeNormal = 35;
 const starSizeMinimal = 25;
@@ -20,7 +18,6 @@ newApp({
       records: vars.records,
       recordsOriginal: vars.records,
       mode: vars.mode,
-      isVkApp: vars.isVkApp,
       sort: vars.sort,
       listId: vars.listId,
       listName: vars.listName,
@@ -148,95 +145,6 @@ newApp({
       const vm = this;
       const url = vm.urls.removeRecord + record.id + '/';
       axios.delete(url).then(success).catch(fail);
-    },
-    postToWall(record) {
-      function post(photoId, ownerId) {
-        function createWallPostMessage() {
-          let text;
-          const title = movie.title;
-          const comment = record.comment;
-          const ratingPost = ratingTexts[rating - 1];
-          if (rating > 2) {
-            text = gettext('I recommend watching');
-          } else {
-            text = gettext('I don\'t recommend watching');
-          }
-          const myRating = gettext('My rating');
-          text += ` "${title}".\n${myRating} - ${ratingPost}.`;
-          if (comment) {
-            text += '\n' + comment;
-          }
-          return text;
-        }
-
-        function createWallPost() {
-          const post = {
-            message: createWallPostMessage(),
-          };
-          if (photoId) {
-            post.attachments = `photo${ownerId}_${photoId}`;
-          }
-          return post;
-        }
-
-        VK.api('wall.post', createWallPost(), function(response) {
-          if (response.error) {
-            // error_msg: "Operation denied by user"
-            if (response.error.error_code === 10007) {
-              return;
-            }
-            vm.$toast.error(gettext('Error posting to the wall'));
-          } else {
-            vm.$toast.success(gettext('Your post has been posted'));
-          }
-        });
-      }
-
-      function saveWallPhoto(data) {
-        VK.api('photos.saveWallPhoto', data, function(response) {
-          if (response.error) {
-            vm.$toast.error(gettext('Error posting a poster to the wall'));
-          } else {
-            const responseData = response.response[0];
-            post(responseData.id, responseData.owner_id);
-          }
-        });
-      }
-
-      function uploadPhotoToWall(uploadUrl) {
-        const url = vm.urls.uploadPosterToWall + record.id + '/';
-        axios.post(url, {
-          url: uploadUrl,
-        }).then(function(response) {
-          const data = JSON.parse(response.data.data);
-          saveWallPhoto(data);
-        }).catch(function() {
-          vm.$toast.error(gettext('Error loading a poster'));
-        });
-      }
-
-      function getWallUploadServerAndUploadPhotoAndPostToWall() {
-        VK.api('photos.getWallUploadServer', function(response) {
-          if (response.error) {
-            vm.$toast.error(gettext('Error getting an upload server for wall posting'));
-          } else {
-            uploadPhotoToWall(response.response.upload_url);
-          }
-        });
-      }
-      const vm = this;
-      const rating = record.rating;
-      const movie = record.movie;
-
-      if (rating) {
-        if (record.movie.hasPoster) {
-          getWallUploadServerAndUploadPhotoAndPostToWall();
-        } else {
-          post(null, null);
-        }
-      } else {
-        vm.$toast.info(gettext('Add a rating to the movie'));
-      }
     },
     addToList(movieId, listId, record) {
       const vm = this;

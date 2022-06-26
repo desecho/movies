@@ -3,10 +3,10 @@ from typing import Any, Optional
 
 from braces.views import JsonRequestResponseMixin, LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
-from django.http import Http404, HttpResponse, HttpResponseRedirect, StreamingHttpResponse
+from django.http import Http404, HttpResponse
 from django.views.generic import TemplateView as TemplateViewOriginal, View
 
-from ..http import AjaxAuthenticatedHttpRequest, AuthenticatedHttpRequest, HttpRequest
+from ..http import AuthenticatedHttpRequest, HttpRequest
 from ..models import User
 from .utils import get_anothers_account
 
@@ -26,18 +26,6 @@ class AjaxView(LoginRequiredMixin, AjaxAnonymousView):
     """AJAX authenticated view."""
 
     raise_exception = True
-
-
-class VkAjaxView(AjaxView):
-    """VK AJAX view."""
-
-    def dispatch(  # type: ignore
-        self, request: AjaxAuthenticatedHttpRequest, *args: Any, **kwargs: Any
-    ) -> (HttpResponseRedirect | HttpResponse | StreamingHttpResponse | Any):
-        """Dispatch."""
-        if not request.user.is_vk_user:
-            return self.no_permissions_fail(request)
-        return super().dispatch(request, *args, **kwargs)
 
 
 class TemplateAnonymousView(TemplateViewOriginal):

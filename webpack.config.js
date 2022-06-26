@@ -12,7 +12,7 @@ const vendorPackages = ['vue-toast-notification/dist/theme-default.css',
 function getBundle(filename) {
   return [
     'bootstrap/dist/js/bootstrap.min.js',
-    path.join(jsPath, 'init.js'),
+    path.join(jsPath, 'menu.js'),
     path.join(jsPath, filename),
   ];
 }
@@ -28,7 +28,6 @@ module.exports = {
     trending: getBundle('trending.js'),
     list: getBundle('list.js'),
     gallery: getBundle('gallery.js'),
-    // recommendations: getBundleWithRaty('recommendations.js'),
     registration: getBundleWithEmptyApp('registration.js'),
     passwordChange: getBundleWithEmptyApp('password_change.js'),
     emptyApp: [path.join(jsPath, 'init.js'), path.join(jsPath, 'empty_app.js')],

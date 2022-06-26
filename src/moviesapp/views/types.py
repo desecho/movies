@@ -47,12 +47,6 @@ class ListViewContextData(TypedDict):
     query: str
 
 
-class RecommendationsViewContextData(TypedDict):
-    """Recommendations view context data."""
-
-    records: List["Record"]
-
-
 class TrendingViewContextData(TypedDict):
     """Trending view context data."""
 

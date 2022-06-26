@@ -13,7 +13,7 @@ def load_user_data(backend: BaseAuth, user: User, **kwargs: Any) -> None:  # pyl
     if user.loaded_initial_data:
         return None
 
-    if backend.name in settings.VK_BACKENDS:
+    if backend.name == settings.VK_BACKEND:
         # We don't need the username and email because they are already loaded.
         FIELDS = (
             "first_name",
@@ -28,7 +28,7 @@ def load_user_data(backend: BaseAuth, user: User, **kwargs: Any) -> None:  # pyl
             user.first_name = data["first_name"]
             user.last_name = data["last_name"]
             # Language setting is only available for a standalone application. See details:
-            # https://vk.com/dev/account.getProfileInfo
+            # https://dev.vk.com/method/account.getInfo
             # We assume that the language is Russian.
             user.language = "ru"
             user.loaded_initial_data = True

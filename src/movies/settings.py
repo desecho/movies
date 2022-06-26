@@ -29,7 +29,6 @@ sentry_sdk.init(  # pylint: disable=abstract-class-instantiated
 
 # Custom
 IS_DEV = bool(getenv("IS_DEV"))
-IS_VK_DEV = bool(getenv("IS_VK_DEV"))
 IS_CELERY_DEBUG = bool(getenv("IS_CELERY_DEBUG"))
 COLLECT_STATIC = bool(getenv("COLLECT_STATIC"))
 SRC_DIR = dirname(dirname(abspath(__file__)))
@@ -73,8 +72,6 @@ DEFAULT_FROM_EMAIL = ADMIN_EMAIL
 
 # Allowed hosts
 ALLOWED_HOSTS = [PROJECT_DOMAIN]
-if IS_VK_DEV:  # pragma: no cover
-    ALLOWED_HOSTS.append(getenv("HOST_MOVIES_TEST"))
 
 # Internationalization
 LANGUAGE_CODE = LANGUAGE_EN
@@ -135,8 +132,7 @@ MIDDLEWARE = [
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
-    # We disable this to make VK iframe app work
-    # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
     # Custom
     "django.middleware.gzip.GZipMiddleware",
     "social_django.middleware.SocialAuthExceptionMiddleware",
@@ -177,9 +173,8 @@ if IS_DEV or COLLECT_STATIC:  # pragma: no cover
 # Security
 DISABLE_CSRF = bool(getenv("DISABLE_CSRF"))
 if not DISABLE_CSRF:  # pragma: no cover
-    # It is needed for VK app to work.
-    CSRF_COOKIE_SAMESITE = "None"
-    SESSION_COOKIE_SAMESITE = "None"
+    # CSRF_COOKIE_SAMESITE = "None"
+    # SESSION_COOKIE_SAMESITE = "None"
 
     CSRF_COOKIE_SECURE = True
     SESSION_COOKIE_SECURE = True
@@ -192,7 +187,6 @@ AUTHENTICATION_BACKENDS = (
     "django.contrib.auth.backends.ModelBackend",
     # social_core
     "social_core.backends.vk.VKOAuth2",
-    "social_core.backends.vk.VKAppOAuth2",
     "social_core.backends.facebook.FacebookOAuth2",
 )
 AUTH_PASSWORD_VALIDATORS = [
@@ -219,9 +213,6 @@ CACHES = {
 
 # Login
 LOGIN_REDIRECT_URL = "/"
-if IS_VK_DEV:  # pragma: no cover
-    HOST_MOVIES_TEST = getenv("HOST_MOVIES_TEST")
-    LOGIN_REDIRECT_URL = f"https://{HOST_MOVIES_TEST}"
 LOGIN_URL = "/login/"
 LOGIN_ERROR_URL = "/login-error/"
 
@@ -252,10 +243,6 @@ REGISTRATION_AUTO_LOGIN = True
 SOCIAL_AUTH_VK_OAUTH2_KEY = getenv("SOCIAL_AUTH_VK_OAUTH2_KEY")
 SOCIAL_AUTH_VK_OAUTH2_SECRET = getenv("SOCIAL_AUTH_VK_OAUTH2_SECRET")
 SOCIAL_AUTH_VK_OAUTH2_SCOPE = ["friends", "email", "offline"]
-
-SOCIAL_AUTH_VK_APP_KEY = getenv("SOCIAL_AUTH_VK_APP_KEY")
-SOCIAL_AUTH_VK_APP_SECRET = getenv("SOCIAL_AUTH_VK_APP_SECRET")
-SOCIAL_AUTH_VK_APP_USER_MODE = 2
 
 SOCIAL_AUTH_FACEBOOK_KEY = getenv("SOCIAL_AUTH_FACEBOOK_KEY")
 SOCIAL_AUTH_FACEBOOK_SECRET = getenv("SOCIAL_AUTH_FACEBOOK_SECRET")
@@ -348,7 +335,7 @@ CELERY_TIMEZONE = TIME_ZONE
 GOOGLE_ANALYTICS_ID = getenv("GOOGLE_ANALYTICS_ID")
 
 # Social
-VK_BACKENDS = ("vk-app", "vk-oauth2")
+VK_BACKEND = "vk-oauth2"
 
 # Search settings
 MAX_RESULTS = 50
@@ -358,17 +345,8 @@ MIN_POPULARITY = 1.5
 NO_POSTER_SMALL_IMAGE_URL = STATIC_URL + "img/no_poster_small.png"
 NO_POSTER_NORMAL_IMAGE_URL = STATIC_URL + "img/no_poster_normal.png"
 NO_POSTER_BIG_IMAGE_URL = STATIC_URL + "img/no_poster_big.png"
-# Available sizes:
-# "w92",
-# "w154",
-# "w185",
-# "w342",
-# "w500",
-# "w780",
-# "original"
 POSTER_SIZE_SMALL = "w92"
 POSTER_SIZE_NORMAL = "w185"
-# This one is only used for vk.
 POSTER_SIZE_BIG = "w500"
 POSTER_BASE_URL = "https://image.tmdb.org/t/p/"
 
@@ -379,7 +357,6 @@ TMDB_PROVIDER_BASE_URL = urljoin(TMDB_BASE_URL, "t/p/original/")
 TMDB_API_BASE_URL = "https://api.themoviedb.org/3/"
 AVATAR_SIZES = {"small": 100, "big": 200}
 IMDB_BASE_URL = "http://www.imdb.com/title/"
-MAX_RECOMMENDATIONS = 50
 RECORDS_ON_PAGE = 50
 PEOPLE_ON_PAGE = 25
 FEED_DAYS = 7
