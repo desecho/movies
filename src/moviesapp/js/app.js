@@ -7,6 +7,7 @@ import VLazyImage from 'v-lazy-image';
 import draggable from 'vuedraggable';
 import StarRating from 'vue-star-rating';
 import {library} from '@fortawesome/fontawesome-svg-core';
+import ResizeTextarea from 'resize-textarea-vue3';
 /* import font awesome icon component */
 import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome';
 
@@ -29,6 +30,7 @@ export function newApp(options) {
     duration: 1500,
   });
   app.use(VueCookie);
+  app.use(ResizeTextarea);
 
   app.component('FontAwesomeIcon', FontAwesomeIcon);
   app.component('VLazyImage', VLazyImage);

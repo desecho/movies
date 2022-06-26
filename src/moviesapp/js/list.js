@@ -3,7 +3,6 @@
 import axios from 'axios';
 import {getSrcSet, initAxios, openUrl, saveRecordsOrder} from './helpers';
 import {newApp} from './app';
-import autosize from 'autosize';
 import {listWatchedId, listToWatchId} from './constants';
 
 const starSizeNormal = 35;
@@ -179,6 +178,5 @@ newApp({
       record.ratingOriginal = record.rating;
     });
     initAxios(this);
-    autosize($('textarea'));
   },
 }).mount('#app');

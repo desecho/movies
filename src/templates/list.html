@@ -298,8 +298,12 @@
                       <p>[[ element.comment ]]</p>
                     {% else %}
                       <div>
-                        <textarea class="form-control" title="{% translate 'Comment' %}" v-model="element.comment">
-                        </textarea>
+                        <resize-textarea
+                          class="form-control"
+                          title="{% translate 'Comment' %}"
+                          v-model="element.comment"
+                        >
+                        </resize-textarea>
                       </div>
                       <button
                         type="button"
