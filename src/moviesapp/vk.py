@@ -1,5 +1,5 @@
 """VK."""
-from typing import TYPE_CHECKING, Any, Dict, List, Optional
+from typing import TYPE_CHECKING, Dict, List, Optional
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
@@ -25,7 +25,7 @@ def _get_vk_avatar(url: str) -> Optional[str]:
     return url
 
 
-def update_user_vk_avatar(user: "User", data: Dict[str, Any]) -> "User":
+def update_user_vk_avatar(user: "User", data: UntypedObject) -> "User":
     """Update user's VK avatar."""
     avatar_small = _get_vk_avatar(data["photo_100"])
     if avatar_small:
