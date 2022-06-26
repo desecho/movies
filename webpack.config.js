@@ -30,7 +30,7 @@ module.exports = {
     gallery: getBundle('gallery.js'),
     registration: getBundleWithEmptyApp('registration.js'),
     passwordChange: getBundleWithEmptyApp('password_change.js'),
-    emptyApp: [path.join(jsPath, 'init.js'), path.join(jsPath, 'empty_app.js')],
+    emptyApp: getBundle('empty_app.js'),
     style: path.join(basePath, 'styles', 'styles.scss'),
     vendor: vendorPackages,
   },
