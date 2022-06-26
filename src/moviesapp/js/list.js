@@ -3,7 +3,7 @@
 'use strict';
 
 import axios from 'axios';
-import {retina, getSrcSet, initAxios, openUrl, saveRecordsOrder} from './helpers';
+import {getSrcSet, initAxios, openUrl, saveRecordsOrder} from './helpers';
 import {newApp} from './app';
 import autosize from 'autosize';
 import {listWatchedId, listToWatchId, ratingTexts} from './constants';
@@ -65,7 +65,6 @@ newApp({
     saveRecordsOrder: saveRecordsOrder,
     openUrl: openUrl,
     getSrcSet: getSrcSet,
-    retinajs: retina,
     changeRating(record, rating) {
       function success() {
         record.ratingOriginal = record.rating;

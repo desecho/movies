@@ -7,7 +7,6 @@ const jsPath = path.join(basePath, 'js');
 const vendorPackages = ['vue-toast-notification/dist/theme-default.css',
   'bootstrap/dist/css/bootstrap.min.css', 'axios-progress-bar/dist/nprogress.css', 'popper.js/dist/umd/popper.min.js',
   'bootstrap-social/bootstrap-social.css', 'jquery/dist/jquery.min.js',
-  'retinajs/dist/retina.min.js',
 ];
 
 function getBundle(filename) {

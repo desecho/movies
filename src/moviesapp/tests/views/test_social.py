@@ -30,7 +30,7 @@ class PeopleTestCase(BaseTestLoginCase):
         self.assertEqual(len(records), 7)
         records_data = []
         for record in records:
-            user = record.find("td", {"class": "test-feed-user"}).find("a").find("img").attrs["title"].strip()
+            user = record.find("td", {"class": "test-feed-user"}).find("a").find("v-lazy-image").attrs["title"].strip()
             movie = record.find("td", {"class": "test-feed-movie"}).get_text().strip()
             action = record.find("td", {"class": "feed-action-data"}).get_text().strip()
             records_data.append({"user": user, "movie": movie, "action": action})

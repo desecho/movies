@@ -51,10 +51,11 @@ def avatar(user: User, size_type: str = "small") -> SafeString:
     size = settings.AVATAR_SIZES[size_type] / 2
     social_avatars_urls = _get_social_avatar_urls(user, size_type)
     url, url_2x = _get_avatar_urls(user, size, social_avatars_urls)
-    return mark_safe(  # nosec B703 B308
-        f'<img class="avatar-{size_type}" src="{url}" data-rjs="{url_2x}" width="{size}"'
-        f'alt="{user}" title="{user}" @load="retinajs"></img>'
+    html = (
+        f'<v-lazy-image class="avatar-{size_type}" srcset="{url} 1x, {url_2x} 2x" src="{url_2x}" width="{size}" '
+        f'title="{user}" alt="{user}" />'
     )
+    return mark_safe(html)  # nosec B703 B308
 
 
 @register.simple_tag

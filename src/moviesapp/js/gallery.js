@@ -1,7 +1,7 @@
 'use strict';
 
 import {newApp} from './app';
-import {retina, getSrcSet, saveRecordsOrder, openUrl} from './helpers';
+import {getSrcSet, saveRecordsOrder, openUrl} from './helpers';
 import {listWatchedId, listToWatchId} from './constants';
 
 newApp({
@@ -28,7 +28,6 @@ newApp({
     openUrl: openUrl,
     saveRecordsOrder: saveRecordsOrder,
     getSrcSet: getSrcSet,
-    retinajs: retina,
     moveToTop(record, index) {
       const vm = this;
       vm.records.splice(index, 1);
