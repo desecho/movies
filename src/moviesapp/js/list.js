@@ -104,12 +104,17 @@ newApp({
       vm.mode = newMode;
     },
     toggleRecommendation() {
-      const newRecommendationSetting = !this.recommendations;
+      const vm = this;
+      const newRecommendationSetting = !vm.recommendations;
+      vm.recommendations = newRecommendationSetting;
       const settings = {
         recommendations: newRecommendationSetting,
       };
       if (newRecommendationSetting) {
-        settings.sort = 'rating';
+        vm.sort = 'rating';
+        const sortSettings = {};
+        sortSettings[vm.listName] = 'rating';
+        settings.sort = sortSettings;
       }
       this.applySettings(settings);
     },
@@ -125,8 +130,9 @@ newApp({
         sort: sortSettings,
       };
       if (newSort !== 'rating') {
-        // disable recommendation if sorting by rating is manually disabled
-        settings.recommendation = false;
+        // disable recommendations if sorting by rating is manually disabled
+        settings.recommendations = false;
+        vm.recommendations = false;
       }
       vm.applySettings(settings);
     },
