@@ -8,133 +8,125 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-25 14:40-0400\n"
-"PO-Revision-Date: 2022-06-24 11:52-0400\n"
+"POT-Creation-Date: 2022-06-25 20:41-0400\n"
+"PO-Revision-Date: 2022-06-25 20:42-0400\n"
 "Last-Translator:   <>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Translated-Using: django-rosetta 0.9.8\n"
 
-#: src/moviesapp/js/components/movies_list.js:64
+#: src/moviesapp/js/components/movies_list.js:65
 msgid "Movie is not found in the database"
 msgstr "Фильм не найден в базе данных"
 
-#: src/moviesapp/js/components/movies_list.js:69
+#: src/moviesapp/js/components/movies_list.js:70
 msgid "Error adding a movie"
 msgstr "Ошибка добавления фильма"
 
-#: src/moviesapp/js/init.js:47
+#: src/moviesapp/js/constants.js:5
 msgid "Awful"
 msgstr "Ужасно"
 
-#: src/moviesapp/js/init.js:48
+#: src/moviesapp/js/constants.js:6
 msgid "Bad"
 msgstr "Плохо"
 
-#: src/moviesapp/js/init.js:49
+#: src/moviesapp/js/constants.js:7
 msgid "Regular"
 msgstr "Нормально"
 
-#: src/moviesapp/js/init.js:50
+#: src/moviesapp/js/constants.js:8
 msgid "Good"
 msgstr "Хорошо"
 
-#: src/moviesapp/js/init.js:51
+#: src/moviesapp/js/constants.js:9
 msgid "Awesome"
 msgstr "Отлично"
 
-#: src/moviesapp/js/init.js:53
-msgid "Cancel rating"
-msgstr "Отменить оценку"
+#: src/moviesapp/js/helpers.js:39
+msgid "You need to login to add a movie to your list"
+msgstr "Вам необходимо авторизоваться для того чтобы добавить фильм в список"
 
-#: src/moviesapp/js/init.js:54
-msgid "No rating yet"
-msgstr "Пока нет оценки"
-
-#: src/moviesapp/js/list.js:26
-msgid "Error adding a rating"
-msgstr "Ошибка добавления рейтинга"
-
-#: src/moviesapp/js/list.js:42
-msgid "Error applying the settings"
-msgstr "Ошибка применения настроек"
-
-#: src/moviesapp/js/list.js:87
-msgid "Error saving options"
-msgstr "Ошибка сохранения опций"
-
-#: src/moviesapp/js/list.js:132
-msgid "Error removing the movie"
-msgstr "Ошибка удаления фильма"
-
-#: src/moviesapp/js/list.js:147
-msgid "I recommend watching"
-msgstr "Я рекомендую к просмотру"
-
-#: src/moviesapp/js/list.js:149
-msgid "I don't recommend watching"
-msgstr "Я не рекомендую к просмотру"
-
-#: src/moviesapp/js/list.js:151
-msgid "My rating"
-msgstr "Моя оценка"
-
-#: src/moviesapp/js/list.js:175
-msgid "Error posting to the wall"
-msgstr "Ошибка размещения на стену"
-
-#: src/moviesapp/js/list.js:177
-msgid "Your post has been posted"
-msgstr "Ваша запись была размещена"
-
-#: src/moviesapp/js/list.js:185
-msgid "Error posting a poster to the wall"
-msgstr "Ошибка размещения постера на стену"
-
-#: src/moviesapp/js/list.js:201
-msgid "Error loading a poster"
-msgstr "Ошибка загрузки постера"
-
-#: src/moviesapp/js/list.js:208
-msgid "Error getting an upload server for wall posting"
-msgstr "Ошибка получения сервера загрузки для размещения на стену"
-
-#: src/moviesapp/js/list.js:225
-msgid "Add a rating to the movie"
-msgstr "Добавьте оценку фильму"
-
-#: src/moviesapp/js/list.js:236
-msgid "Error adding the movie to the list"
-msgstr "Ошибка добавления фильма в список"
-
-#: src/moviesapp/js/list.js:252
-msgid "Error saving a comment"
-msgstr "Ошибка сохранения комментария"
-
-#: src/moviesapp/js/list_helpers.js:21
+#: src/moviesapp/js/helpers.js:62
 msgid "Error saving movie order"
 msgstr "Ошибка сохранения порядка фильмов"
 
-#: src/moviesapp/js/search.js:18
+#: src/moviesapp/js/list.js:62
+msgid "Error applying the settings"
+msgstr "Ошибка применения настроек"
+
+#: src/moviesapp/js/list.js:75
+#| msgid "Error adding a rating"
+msgid "Error saving the rating"
+msgstr "Ошибка сохранения рейтинга"
+
+#: src/moviesapp/js/list.js:85
+msgid "Error saving options"
+msgstr "Ошибка сохранения опций"
+
+#: src/moviesapp/js/list.js:139
+msgid "Error removing the movie"
+msgstr "Ошибка удаления фильма"
+
+#: src/moviesapp/js/list.js:154
+msgid "I recommend watching"
+msgstr "Я рекомендую к просмотру"
+
+#: src/moviesapp/js/list.js:156
+msgid "I don't recommend watching"
+msgstr "Я не рекомендую к просмотру"
+
+#: src/moviesapp/js/list.js:158
+msgid "My rating"
+msgstr "Моя оценка"
+
+#: src/moviesapp/js/list.js:182
+msgid "Error posting to the wall"
+msgstr "Ошибка размещения на стену"
+
+#: src/moviesapp/js/list.js:184
+msgid "Your post has been posted"
+msgstr "Ваша запись была размещена"
+
+#: src/moviesapp/js/list.js:192
+msgid "Error posting a poster to the wall"
+msgstr "Ошибка размещения постера на стену"
+
+#: src/moviesapp/js/list.js:208
+msgid "Error loading a poster"
+msgstr "Ошибка загрузки постера"
+
+#: src/moviesapp/js/list.js:215
+msgid "Error getting an upload server for wall posting"
+msgstr "Ошибка получения сервера загрузки для размещения на стену"
+
+#: src/moviesapp/js/list.js:232
+msgid "Add a rating to the movie"
+msgstr "Добавьте оценку фильму"
+
+#: src/moviesapp/js/list.js:243
+msgid "Error adding the movie to the list"
+msgstr "Ошибка добавления фильма в список"
+
+#: src/moviesapp/js/list.js:259
+msgid "Error saving a comment"
+msgstr "Ошибка сохранения комментария"
+
+#: src/moviesapp/js/search.js:19
 msgid "Movie"
 msgstr "Фильм"
 
-#: src/moviesapp/js/search.js:48
+#: src/moviesapp/js/search.js:47
 msgid "Nothing has been found"
 msgstr "Ничего не было найдено"
 
-#: src/moviesapp/js/search.js:55
+#: src/moviesapp/js/search.js:54
 msgid "Search Error"
 msgstr "Ошибка Поиска"
-
-#: src/moviesapp/js/set_axios_settings.js:17
-msgid "You need to login to add a movie to your list"
-msgstr "Вам необходимо авторизоваться для того чтобы добавить фильм в список"
 
 #: src/moviesapp/js/translations.js:5
 msgid "Actor"
