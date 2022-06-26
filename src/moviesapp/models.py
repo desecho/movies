@@ -110,7 +110,7 @@ class UserBase:
         """Get available users and friends."""
         available_users = User.objects.exclude(only_for_friends=True).exclude(pk=self.pk)  # type: ignore
         # We need distinct here because we can't concatenate distinct and non-distinct querysets.
-        users = available_users.distinct() | self.get_friends()
+        users = available_users | self.get_friends()
         if sort:
             users = users.order_by("first_name")
         return list(set(users))
