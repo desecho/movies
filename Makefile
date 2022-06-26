@@ -99,6 +99,8 @@ create-db:
 load-initial-fixtures:
 	$(MAKE) loaddata lists
 	$(MAKE) loaddata actions
+	$(MAKE) loaddata providers
+	$(MAKE) loaddata vk_countries
 
 .PHONY: bootstrap
 ## Bootstrap project

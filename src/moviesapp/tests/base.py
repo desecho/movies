@@ -56,6 +56,7 @@ class BaseTestCase(TestCase):
         "actions.json",
         "users.json",
         "vk_countries.json",
+        "providers.json",
     ]
 
     USER_USERNAME = "neo"
