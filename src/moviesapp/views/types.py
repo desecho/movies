@@ -23,7 +23,7 @@ class FeedViewContextData(TypedDict):
 class PeopleViewContextData(TypedDict):
     """People view context data."""
 
-    users: Page["User"]
+    users: Page["User"] | List["User"]
 
 
 class GalleryViewContextData(TypedDict):
@@ -38,7 +38,7 @@ class GalleryViewContextData(TypedDict):
 class ListViewContextData(TypedDict):
     """List view context data."""
 
-    records: Page["Record"]
+    records: Page["Record"] | List["Record"]
     record_objects: str
     anothers_account: Optional["User"]
     list_id: int

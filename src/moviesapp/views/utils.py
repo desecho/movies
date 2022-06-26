@@ -16,8 +16,14 @@ from .types import MovieListResult
 
 def paginate(
     objects_to_paginate: Union[QuerySet[Record], List[User]], page: Optional[Union[str, int]], objects_on_page: int
-) -> Union[Page[Record], Page[User]]:
-    """Paginate objects."""
+) -> Union[Page[Record], Page[User] | List[Record | User]]:
+    """
+    Paginate objects.
+
+    Return Page object or empty list if object list is empty.
+    """
+    if not objects_to_paginate:
+        return []
     paginator = Paginator(objects_to_paginate, objects_on_page)
     objects: Union[Page[Record], Page[User]]
     if page is None:
