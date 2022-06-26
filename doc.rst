@@ -18,9 +18,26 @@ Avatars
 -----------
 Priority:
 
-- Vk
-- Fb
+- VK
+- FB
 - Gravatar
+
+oAuth
+-----------
+Users can login with their VK or FB accounts. **FB is temporarily disabled**.
+
+When a user logs in with an oAuth account, the user is automatically created if the user with the email address
+linked to oAuth account does not exist already. If it does exist - the user is automatically linked to the oAuth account.
+
+VK
+----------
+For a VK account, first name, last name, avatar and country data is loaded.
+
+Language data is only available for Standalone applications only and we are not getting
+the language information at this point due to the difficulty related to obtaining it.
+See details in `VK docs`_.
+
+For VK logins we assume that the language is Russian.
 
 Cron jobs
 ------------
@@ -56,7 +73,7 @@ The following GitHub Actions are used:
 * `Docker Setup Buildx`_
 * `Set Timezone`_
 
-
+.. _VK Docs: https://dev.vk.com/method/account.getInfo
 .. _GitHub Actions: https://github.com/features/actions
 
 .. _Checkout: https://github.com/marketplace/actions/checkout

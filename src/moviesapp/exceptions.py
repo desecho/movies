@@ -11,3 +11,7 @@ class ProviderNotFoundError(Exception):
 
 class UnsupportedLanguageError(Exception):
     """Unsupported language error."""
+
+
+class VkCountryNotFoundError(Exception):
+    """VK country not found error."""

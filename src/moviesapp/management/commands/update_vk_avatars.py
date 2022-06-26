@@ -19,10 +19,10 @@ class Command(BaseCommand):
         for user in users:
             vk = user.get_vk()
             if vk is not None:
-                FIELDS = (
+                FIELDS = [
                     "photo_100",
                     "photo_200",
-                )
+                ]
                 data = vk.get_data(FIELDS)
                 user = update_user_vk_avatar(user, data)
                 user.save()

@@ -521,3 +521,14 @@ class ProviderRecord(Model):
     def tmdb_watch_url(self) -> str:
         """Return TMDb watch URL."""
         return f"{self.movie.tmdb_url}watch?locale={self.country}"
+
+
+class VkCountry(Model):
+    """VK country."""
+
+    id = PositiveSmallIntegerField(primary_key=True)
+    country = CountryField(verbose_name=_("Country"), unique=True)
+
+    def __str__(self) -> str:
+        """Return string representation."""
+        return str(self.country)

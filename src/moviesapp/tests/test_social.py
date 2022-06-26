@@ -29,6 +29,7 @@ class LoadUserDataTestCase(BaseTestCase):
             "photo_200": avatar_big,
             "first_name": first_name,
             "last_name": last_name,
+            "country": {"id": 10, "title": "Канада"},
         }
         get_vk_mock.return_value = vk_mock
         update_user_vk_avatar_mock.return_value = user
@@ -43,6 +44,7 @@ class LoadUserDataTestCase(BaseTestCase):
         self.assertEqual(user.first_name, first_name)
         self.assertEqual(user.last_name, last_name)
         self.assertEqual(user.language, "ru")
+        self.assertEqual(user.country, "CA")
         self.assertTrue(user.loaded_initial_data)
 
     def test_load_user_data_skip(self):

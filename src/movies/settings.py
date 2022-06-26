@@ -309,6 +309,7 @@ ADMIN_REORDER = [
             f"{APP}.ActionRecord",
             f"{APP}.Provider",
             f"{APP}.ProviderRecord",
+            f"{APP}.VkCountry",
         ),
     },
     {"app": "social_django", "models": ("social_django.UserSocialAuth",)},

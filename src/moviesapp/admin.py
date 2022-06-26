@@ -7,7 +7,7 @@ from django.contrib.auth.models import Group
 from django.http import HttpRequest
 from django_celery_results.models import GroupResult
 
-from .models import Action, ActionRecord, List, Movie, Provider, ProviderRecord, Record, User
+from .models import Action, ActionRecord, List, Movie, Provider, ProviderRecord, Record, User, VkCountry
 
 
 @register(Record)
@@ -86,7 +86,8 @@ class UserAdmin(ModelAdmin[User]):  # pylint:disable=unsubscriptable-object
     search_fields = ("username", "first_name", "last_name", "country")
 
 
-site.unregister(Group)
+site.register(VkCountry)
 
+site.unregister(Group)
 if settings.IS_CELERY_DEBUG:  # pragma: no cover
     site.unregister(GroupResult)
