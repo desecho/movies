@@ -62,7 +62,9 @@ class Vk:
                 friends_ids = []
 
         user_model: "User" = get_user_model()  # type: ignore
-        return user_model.objects.filter(social_auth__provider=settings.VK_BACKEND, social_auth__uid__in=friends_ids)
+        return user_model.objects.filter(
+            social_auth__provider=settings.VK_BACKEND, social_auth__uid__in=friends_ids
+        ).exclude(hidden=True)
 
     def get_data(self, fields: List[str]) -> UntypedObject:
         """Get data."""

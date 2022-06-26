@@ -110,8 +110,10 @@ class UserBase:
 
     def _get_available_users_and_friends(self, sort: bool = False) -> ListType["User"]:
         """Get available users and friends."""
-        available_users = User.objects.exclude(only_for_friends=True).exclude(pk=self.pk)  # type: ignore
-        # We need distinct here because we can't concatenate distinct and non-distinct querysets.
+        user: User | UserAnonymous = self  # type: ignore
+        available_users = User.objects.exclude(only_for_friends=True).exclude(hidden=True)
+        if user.is_authenticated:
+            available_users = available_users.exclude(pk=user.pk)
         users = available_users | self.get_friends()
         if sort:
             users = users.order_by("first_name")
@@ -154,8 +156,9 @@ class User(AbstractUser, UserBase):  # type: ignore
     """User class."""
 
     only_for_friends = BooleanField(
-        verbose_name=_("Privacy"), default=False, help_text=_("Show my lists only to friends")
+        verbose_name=_("Only for friends"), default=False, help_text=_("Show my lists only to friends")
     )
+    hidden = BooleanField(verbose_name=_("Hide account"), default=False, help_text=_("Don't show my lists to anybody"))
     language = CharField(
         max_length=2, choices=settings.LANGUAGES, default=settings.LANGUAGE_CODE, verbose_name=_("Language")
     )

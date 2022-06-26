@@ -35,6 +35,7 @@ class PreferencesTestCase(BaseTestLoginCase):
             {
                 "language": language,
                 "only_for_friends": "1",
+                "hidden": "1",
                 "first_name": first_name,
                 "last_name": last_name,
                 "username": username,
@@ -51,6 +52,7 @@ class PreferencesTestCase(BaseTestLoginCase):
         self.assertEqual(user.last_name, last_name)
         self.assertEqual(user.timezone.key, timezone)
         self.assertTrue(user.only_for_friends)
+        self.assertTrue(user.hidden)
 
 
 class LogoutTestCase(BaseTestLoginCase):

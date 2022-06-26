@@ -35,6 +35,8 @@
           {{ field }}
           {% if field.name == 'only_for_friends' %}
             <label class="small" for="id_only_for_friends">{{ field.help_text }}</label>
+          {% elif field.name == 'hidden' %}
+            <label class="small" for="id_hidden">{{ field.help_text }}</label>
           {% endif %}
         </div>
       </div>

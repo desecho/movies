@@ -28,5 +28,5 @@ class Fb:
         user_model: "User" = get_user_model()  # type: ignore
         friends: QuerySet["User"] = user_model.objects.filter(
             social_auth__provider="facebook", social_auth__uid__in=friends_ids
-        )
+        ).exclude(hidden=True)
         return friends
