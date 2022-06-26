@@ -13,6 +13,7 @@ from django.views.i18n import JavaScriptCatalog
 
 from moviesapp.converters import FeedConverter, ListConverter
 from moviesapp.views.about import AboutView
+from moviesapp.views.common import SaveRecordsOrderView
 from moviesapp.views.gallery import GalleryView
 from moviesapp.views.list import (
     AddToListView,
@@ -21,7 +22,6 @@ from moviesapp.views.list import (
     RemoveRecordView,
     SaveCommentView,
     SaveOptionsView,
-    SaveRecordsOrderView,
     SaveSettingsView,
 )
 from moviesapp.views.search import AddToListFromDbView, SearchMovieView, SearchView
