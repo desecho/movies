@@ -1,7 +1,7 @@
 'use strict';
 
 import {newApp} from './app';
-import {getSrcSet, saveRecordsOrder, openUrl} from './helpers';
+import {getSrcSet, saveRecordsOrder, openUrl, initAxios} from './helpers';
 import {listWatchedId, listToWatchId} from './constants';
 
 newApp({
@@ -40,5 +40,8 @@ newApp({
       vm.records.push(record);
       vm.saveRecordsOrder();
     },
+  },
+  mounted() {
+    initAxios(this);
   },
 }).mount('#app');
