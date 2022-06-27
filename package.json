@@ -23,8 +23,6 @@
   },
   "devDependencies": {
     "css-loader": "^6.7.1",
-    "csscomb": "^4.3.0",
-    "csscomb-linter": "^0.0.4",
     "prettier": "^2.7.1",
     "eslint": "^8.16.0",
     "eslint-config-google": "^0.14.0",

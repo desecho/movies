@@ -154,7 +154,7 @@ flush-cdn-cache:
 #------------------------------------
 .PHONY: test
 ## Run tests | Tests
-test: shellcheck hadolint shfmt actionlint tox eslint csscomb-linter prettier-json-lint
+test: shellcheck hadolint shfmt actionlint tox eslint prettier-json-lint prettier-scss-lint prettier-yaml-lint
 
 .PHONY: tox
 ## Run tox
@@ -211,11 +211,6 @@ pytest:
 black:
 	tox -e py-black
 
-.PHONY: yamllint
-## Run yamllint linter
-yamllint:
-	tox -e py-yamllint
-
 .PHONY: mypy
 ## Run mypy linter
 mypy:
@@ -225,11 +220,6 @@ mypy:
 ## Run eslint linter
 eslint:
 	yarn run eslint ./*.js src/${APP}/js/*.js src/${APP}/js/components/*.js
-
-.PHONY: csscomb-linter
-## Run csscomb-linter linter
-csscomb-linter:
-	yarn run csscomb-linter "src/${APP}/styles/*"
 
 .PHONY: shfmt
 ## Run shfmt linter
@@ -246,11 +236,6 @@ shellcheck:
 hadolint:
 	hadolint Dockerfile
 
-.PHONY: prettier-json-lint
-## Run json linter
-prettier-json-lint:
-	yarn run prettier --check ./**/*.json
-
 .PHONY: actionlint
 ## Run actionlint linter
 actionlint:
@@ -265,6 +250,21 @@ djhtml-lint:
 ## Run html linter. This linter is used manually to verify that html is valid. It is not used in CI.
 prettier-html-lint:
 	yarn run prettier --check ./**/*.html
+
+.PHONY: prettier-scss-lint
+## Run scss linter
+prettier-scss-lint:
+	yarn run prettier --check ./**/*.scss
+
+.PHONY: prettier-json-lint
+## Run json linter
+prettier-json-lint:
+	yarn run prettier --check ./**/*.json
+
+.PHONY: prettier-yaml-lint
+## Run yaml linter
+prettier-yaml-lint:
+	yarn run prettier --check ./deployment/*.yaml ./.github/**/*.yaml
 #------------------------------------
 
 #------------------------------------
@@ -341,11 +341,6 @@ format:
 	isort src && \
 	black .
 
-.PHONY: format-css
-## Format css files
-format-css:
-	yarn run csscomb src/${APP}/styles/*
-
 .PHONY: format-json
 ## Format json files
 format-json:
@@ -366,9 +361,19 @@ format-sh:
 format-html:
 	scripts/djhtml.sh format
 
+.PHONY: format-scss
+## Format scss files
+format-scss:
+	yarn run prettier --write ./**/*.scss
+
+.PHONY: format-yaml
+## Format yaml files
+format-yaml:
+	yarn run prettier --write ./deployment/*.yaml ./.github/**/*.yaml
+
 .PHONY: format-all
 ## Format code
-format-all: format format-html format-js format-css format-sh format-json
+format-all: format format-html format-js format-scss format-sh format-json format-yaml
 #------------------------------------
 
 #------------------------------------
