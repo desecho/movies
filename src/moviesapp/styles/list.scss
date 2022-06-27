@@ -62,7 +62,7 @@
 
   .urls {
     .tmdb {
-      background: url('../images/tmdb.svg');
+      background: url("../images/tmdb.svg");
       background-repeat: no-repeat;
       width: 70px;
       height: 50px;
@@ -72,7 +72,7 @@
     }
 
     .imdb {
-      background: url('../images/imdb.svg');
+      background: url("../images/imdb.svg");
       background-repeat: no-repeat;
       width: 100px;
       height: 50px;
@@ -97,7 +97,11 @@
     padding-top: 0;
     display: inline;
 
-    .cancel-on-png, .cancel-off-png, .star-on-png, .star-off-png, .star-half-png {
+    .cancel-on-png,
+    .cancel-off-png,
+    .star-on-png,
+    .star-off-png,
+    .star-half-png {
       font-size: 1.16em;
     }
 
@@ -112,7 +116,8 @@
   .details-minimal {
     display: inline;
 
-    .release-date, .imdb-rating {
+    .release-date,
+    .imdb-rating {
       float: right;
       margin-right: 10px;
     }

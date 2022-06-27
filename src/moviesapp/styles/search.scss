@@ -16,7 +16,10 @@
   }
 
   .search-btn-group {
-    .btn-secondary:focus, .btn-secondary.focus, .btn:focus, .btn.focus {
+    .btn-secondary:focus,
+    .btn-secondary.focus,
+    .btn:focus,
+    .btn.focus {
       box-shadow: none !important;
     }
   }
