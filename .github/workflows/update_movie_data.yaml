@@ -2,7 +2,7 @@
 name: Update Movie Data
 on:
   schedule:
-    - cron: "0 4 1 * *"  # Runs at 04:00 UTC (00:00 EDT) on the first day of the month
+    - cron: "0 4 1 * *" # Runs at 04:00 UTC (00:00 EDT) on the first day of the month
   workflow_dispatch:
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -22,7 +22,7 @@ jobs:
           mkdir ~/.kube
           echo "$KUBECONFIG" > ~/.kube/config
         env:
-          KUBECONFIG: ${{ secrets.KUBECONFIG }}  # Done as a variable because it doesn't work in place.
+          KUBECONFIG: ${{ secrets.KUBECONFIG }} # Done as a variable because it doesn't work in place.
 
       - name: Update movie data
         run: make prod-manage update_movie_data

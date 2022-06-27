@@ -2,7 +2,7 @@
 name: Update IMDb Ratings
 on:
   schedule:
-    - cron: "0 6 * * 1"  # Runs at 06:00 UTC (02:00 EDT) on Mondays
+    - cron: "0 6 * * 1" # Runs at 06:00 UTC (02:00 EDT) on Mondays
   workflow_dispatch:
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -22,7 +22,7 @@ jobs:
           mkdir ~/.kube
           echo "$KUBECONFIG" > ~/.kube/config
         env:
-          KUBECONFIG: ${{ secrets.KUBECONFIG }}  # Done as a variable because it doesn't work in place.
+          KUBECONFIG: ${{ secrets.KUBECONFIG }} # Done as a variable because it doesn't work in place.
 
       - name: Update IMDb ratings
         run: make prod-manage update_imdb_ratings

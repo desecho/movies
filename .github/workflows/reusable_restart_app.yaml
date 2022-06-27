@@ -20,7 +20,7 @@ jobs:
           mkdir ~/.kube
           echo "$KUBECONFIG" > ~/.kube/config
         env:
-          KUBECONFIG: ${{ secrets.KUBECONFIG }}  # Done as a variable because it doesn't work in place.
+          KUBECONFIG: ${{ secrets.KUBECONFIG }} # Done as a variable because it doesn't work in place.
 
       - name: Restart app
         run: |

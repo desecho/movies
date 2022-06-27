@@ -2,7 +2,7 @@
 name: Update Watch Data Minimal
 on:
   schedule:
-    - cron: "0 0 * * *"  # Runs at 00:00 UTC (20:00 EDT) daily
+    - cron: "0 0 * * *" # Runs at 00:00 UTC (20:00 EDT) daily
   workflow_dispatch:
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -22,7 +22,7 @@ jobs:
           mkdir ~/.kube
           echo "$KUBECONFIG" > ~/.kube/config
         env:
-          KUBECONFIG: ${{ secrets.KUBECONFIG }}  # Done as a variable because it doesn't work in place.
+          KUBECONFIG: ${{ secrets.KUBECONFIG }} # Done as a variable because it doesn't work in place.
 
       - name: Update watch data minimal
         run: make prod-manage update_watch_data arguments="-m"
