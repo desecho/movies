@@ -6,38 +6,38 @@ import axios from 'axios';
 
 const template = `
 <div class="results" id="movies-list">
-<div class="movie" v-show="!movie.hide" v-for="movie in movies">
-  <div class="poster-wrapper">
-    <div class="poster">
-      <div class="add-to-list-buttons">
-        <a
-          href="javascript:void(0)"
-          @click="addToListFromDb(movie, listWatchedId)"
-          title="{% translate 'Add to the list' %} {% translate 'Watched' %}"
-          v-show="movie.isReleased"
-        >
-          <font-awesome-icon icon="fa-solid fa-eye" />
+  <div class="movie" v-show="!movie.hide" v-for="movie in movies">
+    <div class="poster-wrapper">
+      <div class="poster">
+        <div class="add-to-list-buttons">
+          <a
+            href="javascript:void(0)"
+            @click="addToListFromDb(movie, listWatchedId)"
+            title="{% translate 'Add to the list' %} {% translate 'Watched' %}"
+            v-show="movie.isReleased"
+          >
+            <font-awesome-icon icon="fa-solid fa-eye" />
+          </a>
+          <a href="javascript:void(0)" title="{% translate 'Add to the list' %} {% translate 'To Watch' %}"
+            @click="addToListFromDb(movie, listToWatchId)"><font-awesome-icon icon="fa-solid fa-eye-slash" /></a>
+        </div>
+        <a :href="movie.tmdbLink" target="_blank">
+          <v-lazy-image
+            :srcset="getSrcSet(movie.poster, movie.poster2x)"
+            :src="movie.poster2x"
+            :title="movie.titleOriginal"
+            :alt="movie.title"
+          />
         </a>
-        <a href="javascript:void(0)" title="{% translate 'Add to the list' %} {% translate 'To Watch' %}"
-          @click="addToListFromDb(movie, listToWatchId)"><font-awesome-icon icon="fa-solid fa-eye-slash" /></a>
       </div>
-      <a :href="movie.tmdbLink" target="_blank">
-        <v-lazy-image
-          :srcset="getSrcSet(movie.poster, movie.poster2x)"
-          :src="movie.poster2x"
-          :title="movie.titleOriginal"
-          :alt="movie.title"
-        />
-      </a>
+    </div>
+    <div class="movie-content">
+      <div class="title">[[ movie.title ]]</div>
+      <div class="details" v-show="movie.releaseDate">
+        [[ movie.releaseDate ]]
+      </div>
     </div>
   </div>
-  <div class="movie-content">
-    <div class="title">[[ movie.title ]]</div>
-    <div class="details" v-show="movie.releaseDate">
-      [[ movie.releaseDate ]]
-    </div>
-  </div>
-</div>
 </div>
 `;
 
