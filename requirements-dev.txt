@@ -27,7 +27,6 @@ safety
 autoflake
 black
 restructuredtext_lint
-yamllint
 mypy
 djhtml
 
