@@ -260,6 +260,11 @@ actionlint:
 ## Run djhtml linter
 djhtml-lint:
 	tox -e py-djhtml
+
+.PHONY: prettier-html-lint
+## Run html linter. This linter is used manually to verify that html is valid. It is not used in CI.
+prettier-html-lint:
+	yarn run prettier --check ./**/*.html
 #------------------------------------
 
 #------------------------------------
