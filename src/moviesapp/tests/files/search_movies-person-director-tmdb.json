@@ -20,12 +20,7 @@
           "media_type": "movie",
           "original_language": "en",
           "id": 140607,
-          "genre_ids": [
-            28,
-            12,
-            878,
-            14
-          ]
+          "genre_ids": [28, 12, 878, 14]
         },
         {
           "poster_path": "/jq8LjngZ7XZEQge5JFTdOGMrHyZ.jpg",
@@ -42,9 +37,7 @@
           "media_type": "movie",
           "original_language": "en",
           "id": 489,
-          "genre_ids": [
-            18
-          ]
+          "genre_ids": [18]
         },
         {
           "poster_path": "/pHWgbaXiQD2nmex7u8Xv6XmhaZS.jpg",
@@ -61,10 +54,7 @@
           "media_type": "movie",
           "original_language": "en",
           "id": 1571,
-          "genre_ids": [
-            28,
-            53
-          ]
+          "genre_ids": [28, 53]
         }
       ],
       "name": "Kevin Smith",
@@ -90,9 +80,7 @@
           "media_type": "movie",
           "original_language": "en",
           "id": 22391,
-          "genre_ids": [
-            18
-          ]
+          "genre_ids": [18]
         }
       ],
       "name": "Kevin Jay Smith",
@@ -118,17 +106,10 @@
           "media_type": "movie",
           "original_language": "en",
           "id": 9799,
-          "genre_ids": [
-            28,
-            80,
-            53
-          ]
+          "genre_ids": [28, 80, 53]
         },
         {
-          "origin_country": [
-            "NZ",
-            "US"
-          ],
+          "origin_country": ["NZ", "US"],
           "poster_path": "/sM653hLpCQRFHXIpvywkdTuE2WL.jpg",
           "name": "Xena: Warrior Princess",
           "overview": "Xena: Warrior Princess is an American\\u2013New Zealand supernatural fantasy adventure series that aired in syndication from September 4, 1995 until June 18, 2001.\n\nThe series was created in 1995 by writer-director-producer Robert Tapert under his production tag, Renaissance Pictures with later executive producers being R. J. Stewart and Sam Raimi. The series narrative follows Xena, as an infamous warrior on a quest to seek redemption for her past sins against the innocent by using her formidable fighting skills to now, help those who are unable to defend themselves. Xena is accompanied by Gabrielle, who during the series changes from a simple farm girl into an Amazon warrior and Xena's comrade-in-arms; her initial na\\u00efvet\\u00e9 helps to balance Xena and assists her in recognizing and pursuing the \"greater good\".\n\nThe show is a spin-off of the television series Hercules: The Legendary Journeys; the saga began with three episodes in Hercules where Xena was a recurring character originally scheduled to die in her third appearance. Aware that the character of Xena had been very successful among the public, the producers of the series decided to create a spin-off series based on her adventures. Xena was a successful show which has aired in more than 108 countries around the world since 1998. In 2004 and 2007, it was ranked #9 and #10 on TV Guide's Top Cult Shows Ever and the title character was ranked #100 on Bravo's 100 Greatest TV Characters. Xena's success has led to hundreds of tie-in products, including, comics, books, video games and conventions, realized annually since 1998 in Pasadena, California and London.",
@@ -141,15 +122,10 @@
           "media_type": "tv",
           "original_language": "en",
           "id": 4616,
-          "genre_ids": [
-            35,
-            18
-          ]
+          "genre_ids": [35, 18]
         },
         {
-          "origin_country": [
-            "US"
-          ],
+          "origin_country": ["US"],
           "poster_path": "/ayK0FP2CHrFG8CGDJ1fYgKVa5JP.jpg",
           "name": "Hercules: The Legendary Journeys",
           "overview": "Hercules: The Legendary Journeys is a television series, filmed in New Zealand and the United States. It was produced from 1995, and was very loosely based on the tales of the classical Greek culture hero Heracles. It ran for six seasons, producing action figures and other memorabilia as it became one of the highest rated syndicated television shows in the world at that time. It also gained a cult following along with its spin-off, Xena: Warrior Princess.\n\nIt was preceded by several TV movies with the same major characters in 1994 as part of Universal Television's Action Pack: in order, Hercules and the Amazon Women, Hercules and the Lost Kingdom, Hercules and the Circle of Fire, Hercules in the Underworld, and Hercules in the Maze of the Minotaur, the last of which served mostly as a \"clip show\" of the previous movies as a lead up to the series.",
@@ -162,11 +138,7 @@
           "media_type": "tv",
           "original_language": "en",
           "id": 4615,
-          "genre_ids": [
-            10759,
-            18,
-            10765
-          ]
+          "genre_ids": [10759, 18, 10765]
         }
       ],
       "name": "Kevin Smith",
@@ -192,12 +164,7 @@
           "media_type": "movie",
           "original_language": "en",
           "id": 77174,
-          "genre_ids": [
-            10751,
-            16,
-            12,
-            35
-          ]
+          "genre_ids": [10751, 16, 12, 35]
         }
       ],
       "name": "Kevin Smith",
@@ -223,10 +190,7 @@
           "media_type": "movie",
           "original_language": "en",
           "id": 38298,
-          "genre_ids": [
-            18,
-            36
-          ]
+          "genre_ids": [18, 36]
         },
         {
           "poster_path": "/hhl3h0JEl0A4Y3PdGUB1ZKTn0wx.jpg",
@@ -243,9 +207,7 @@
           "media_type": "movie",
           "original_language": "af",
           "id": 181492,
-          "genre_ids": [
-            35
-          ]
+          "genre_ids": [35]
         },
         {
           "poster_path": "/51ZBnFFoyReaEhJgffJSf60SlqU.jpg",
@@ -262,9 +224,7 @@
           "media_type": "movie",
           "original_language": "en",
           "id": 260736,
-          "genre_ids": [
-            18
-          ]
+          "genre_ids": [18]
         }
       ],
       "name": "Kevin Smith",
@@ -290,10 +250,7 @@
           "media_type": "movie",
           "original_language": "en",
           "id": 24083,
-          "genre_ids": [
-            35,
-            18
-          ]
+          "genre_ids": [35, 18]
         }
       ],
       "name": "Kevin Smith",
@@ -319,10 +276,7 @@
           "media_type": "movie",
           "original_language": "en",
           "id": 402450,
-          "genre_ids": [
-            27,
-            18
-          ]
+          "genre_ids": [27, 18]
         }
       ],
       "name": "Kevin Smith",
@@ -348,9 +302,7 @@
           "media_type": "movie",
           "original_language": "en",
           "id": 260570,
-          "genre_ids": [
-            99
-          ]
+          "genre_ids": [99]
         }
       ],
       "name": "Kevin Smith",
@@ -393,9 +345,7 @@
           "media_type": "movie",
           "original_language": "en",
           "id": 416915,
-          "genre_ids": [
-            27
-          ]
+          "genre_ids": [27]
         },
         {
           "poster_path": "/1nYimaIYefhbn5hIwKhqW5IFAS2.jpg",
@@ -412,9 +362,7 @@
           "media_type": "movie",
           "original_language": "en",
           "id": 416919,
-          "genre_ids": [
-            27
-          ]
+          "genre_ids": [27]
         }
       ],
       "name": "Kevin K. Smith",
@@ -440,10 +388,7 @@
           "media_type": "movie",
           "original_language": "de",
           "id": 140401,
-          "genre_ids": [
-            35,
-            10749
-          ]
+          "genre_ids": [35, 10749]
         }
       ],
       "name": "Kevin W. Smith",
@@ -469,11 +414,7 @@
           "media_type": "movie",
           "original_language": "en",
           "id": 122917,
-          "genre_ids": [
-            28,
-            12,
-            14
-          ]
+          "genre_ids": [28, 12, 14]
         },
         {
           "poster_path": "/g23cs30dCMiG4ldaoVNP1ucjs6.jpg",
@@ -490,11 +431,7 @@
           "media_type": "movie",
           "original_language": "en",
           "id": 166424,
-          "genre_ids": [
-            28,
-            12,
-            878
-          ]
+          "genre_ids": [28, 12, 878]
         },
         {
           "poster_path": "/27SiV4EBHcTBMz4IKANjhX5iIoX.jpg",
@@ -511,11 +448,7 @@
           "media_type": "movie",
           "original_language": "en",
           "id": 287903,
-          "genre_ids": [
-            27,
-            35,
-            14
-          ]
+          "genre_ids": [27, 35, 14]
         }
       ],
       "name": "Kevin Andrew Smith",
@@ -541,9 +474,7 @@
           "media_type": "movie",
           "original_language": "en",
           "id": 368256,
-          "genre_ids": [
-            27
-          ]
+          "genre_ids": [27]
         }
       ],
       "name": "Kevin Smith Kirkwood",
@@ -569,9 +500,7 @@
           "media_type": "movie",
           "original_language": "es",
           "id": 389685,
-          "genre_ids": [
-            18
-          ]
+          "genre_ids": [18]
         }
       ],
       "name": "Kevin Smithers",
@@ -597,11 +526,7 @@
           "media_type": "movie",
           "original_language": "en",
           "id": 46429,
-          "genre_ids": [
-            28,
-            27,
-            37
-          ]
+          "genre_ids": [28, 27, 37]
         },
         {
           "poster_path": "/pz6IlqoYK4jVgPrXXGJd41guSOX.jpg",
@@ -618,10 +543,7 @@
           "media_type": "movie",
           "original_language": "en",
           "id": 127651,
-          "genre_ids": [
-            27,
-            53
-          ]
+          "genre_ids": [27, 53]
         },
         {
           "poster_path": "/j6Ok8JETcTlclWCWCZR8dn3uXM9.jpg",
@@ -638,10 +560,7 @@
           "media_type": "movie",
           "original_language": "en",
           "id": 25033,
-          "genre_ids": [
-            27,
-            53
-          ]
+          "genre_ids": [27, 53]
         }
       ],
       "name": "Kevin Howarth",

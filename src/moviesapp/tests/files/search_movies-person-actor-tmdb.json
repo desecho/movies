@@ -20,14 +20,10 @@
           "media_type": "movie",
           "original_language": "en",
           "id": 9398,
-          "genre_ids": [
-            35
-          ]
+          "genre_ids": [35]
         },
         {
-          "origin_country": [
-            "US"
-          ],
+          "origin_country": ["US"],
           "poster_path": "/yTZQkSsxUFJZJe67IenRM0AEklc.jpg",
           "name": "The Simpsons",
           "overview": "Set in Springfield, the average American town, the show focuses on the antics and everyday adventures of the Simpson family; Homer, Marge, Bart, Lisa and Maggie, as well as a virtual cast of thousands. Since the beginning, the series has been a pop culture icon, attracting hundreds of celebrities to guest star. The show has also made name for itself in its fearless satirical take on politics, media and American life in general.",
@@ -40,10 +36,7 @@
           "media_type": "tv",
           "original_language": "en",
           "id": 456,
-          "genre_ids": [
-            16,
-            35
-          ]
+          "genre_ids": [16, 35]
         },
         {
           "poster_path": "/zGwNEPgfCXthetspyTHwvTEbfJG.jpg",
@@ -60,11 +53,7 @@
           "media_type": "movie",
           "original_language": "en",
           "id": 9397,
-          "genre_ids": [
-            28,
-            35,
-            878
-          ]
+          "genre_ids": [28, 35, 878]
         }
       ],
       "name": "David Duchovny",

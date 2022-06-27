@@ -1,3243 +1,3243 @@
 [
-{
-  "model": "moviesapp.provider",
-  "pk": 2,
-  "fields": {
-    "name": "Apple iTunes"
+  {
+    "model": "moviesapp.provider",
+    "pk": 2,
+    "fields": {
+      "name": "Apple iTunes"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 3,
+    "fields": {
+      "name": "Google Play Movies"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 7,
+    "fields": {
+      "name": "Vudu"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 8,
+    "fields": {
+      "name": "Netflix"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 9,
+    "fields": {
+      "name": "Amazon Prime Video"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 10,
+    "fields": {
+      "name": "Amazon Video"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 11,
+    "fields": {
+      "name": "Mubi"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 12,
+    "fields": {
+      "name": "Crackle"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 14,
+    "fields": {
+      "name": "realeyz"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 15,
+    "fields": {
+      "name": "Hulu"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 19,
+    "fields": {
+      "name": "NetMovies"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 20,
+    "fields": {
+      "name": "maxdome Store"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 21,
+    "fields": {
+      "name": "Stan"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 22,
+    "fields": {
+      "name": "Quickflix"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 24,
+    "fields": {
+      "name": "Quickflix Store"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 25,
+    "fields": {
+      "name": "Fandor"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 27,
+    "fields": {
+      "name": "HBO Now"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 28,
+    "fields": {
+      "name": "Netzkino"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 29,
+    "fields": {
+      "name": "Sky Go"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 30,
+    "fields": {
+      "name": "Sky Ticket"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 31,
+    "fields": {
+      "name": "HBO Go"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 33,
+    "fields": {
+      "name": "Alleskino"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 34,
+    "fields": {
+      "name": "Epix"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 35,
+    "fields": {
+      "name": "Rakuten TV"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 37,
+    "fields": {
+      "name": "Showtime"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 38,
+    "fields": {
+      "name": "BBC iPlayer"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 39,
+    "fields": {
+      "name": "Now TV"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 40,
+    "fields": {
+      "name": "Chili"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 41,
+    "fields": {
+      "name": "ITV Hub"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 43,
+    "fields": {
+      "name": "Starz"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 47,
+    "fields": {
+      "name": "Looke"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 53,
+    "fields": {
+      "name": "Volta"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 54,
+    "fields": {
+      "name": "BoxOffice"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 55,
+    "fields": {
+      "name": "ShowMax"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 56,
+    "fields": {
+      "name": "OCS Go"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 58,
+    "fields": {
+      "name": "Canal VOD"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 59,
+    "fields": {
+      "name": "Bbox VOD"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 61,
+    "fields": {
+      "name": "Orange VOD"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 62,
+    "fields": {
+      "name": "Atres Player"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 63,
+    "fields": {
+      "name": "Filmin"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 64,
+    "fields": {
+      "name": "Filmin Plus"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 66,
+    "fields": {
+      "name": "Filmin Latino"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 67,
+    "fields": {
+      "name": "Blim"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 68,
+    "fields": {
+      "name": "Microsoft Store"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 71,
+    "fields": {
+      "name": "Pathé Thuis"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 72,
+    "fields": {
+      "name": "Videoland"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 73,
+    "fields": {
+      "name": "Tubi TV"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 76,
+    "fields": {
+      "name": "Viaplay"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 77,
+    "fields": {
+      "name": "C More"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 78,
+    "fields": {
+      "name": "CBS"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 83,
+    "fields": {
+      "name": "The CW"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 84,
+    "fields": {
+      "name": "U-NEXT"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 85,
+    "fields": {
+      "name": "dTV"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 86,
+    "fields": {
+      "name": "GYAO"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 87,
+    "fields": {
+      "name": "Acorn TV"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 89,
+    "fields": {
+      "name": "Kividoo"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 96,
+    "fields": {
+      "name": "Naver Store"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 97,
+    "fields": {
+      "name": "Watcha"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 99,
+    "fields": {
+      "name": "Shudder"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 100,
+    "fields": {
+      "name": "GuideDoc"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 103,
+    "fields": {
+      "name": "All 4"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 109,
+    "fields": {
+      "name": "Timvision"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 110,
+    "fields": {
+      "name": "Infinity"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 113,
+    "fields": {
+      "name": "Ivi"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 115,
+    "fields": {
+      "name": "Okko"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 116,
+    "fields": {
+      "name": "Amediateka"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 117,
+    "fields": {
+      "name": "Kinopoisk"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 118,
+    "fields": {
+      "name": "HBO"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 119,
+    "fields": {
+      "name": "Amazon Prime Video"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 121,
+    "fields": {
+      "name": "Voot"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 122,
+    "fields": {
+      "name": "Hotstar"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 123,
+    "fields": {
+      "name": "FXNow"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 124,
+    "fields": {
+      "name": "Bookmyshow"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 130,
+    "fields": {
+      "name": "Sky Store"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 132,
+    "fields": {
+      "name": "SBS On Demand"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 133,
+    "fields": {
+      "name": "Videobuster"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 134,
+    "fields": {
+      "name": "Foxtel Now"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 135,
+    "fields": {
+      "name": "ABC iview"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 138,
+    "fields": {
+      "name": "Filmo TV"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 139,
+    "fields": {
+      "name": "Max Go"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 140,
+    "fields": {
+      "name": "Cineplex"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 142,
+    "fields": {
+      "name": "Flimmit"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 143,
+    "fields": {
+      "name": "Sundance Now"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 146,
+    "fields": {
+      "name": "iciTouTV"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 147,
+    "fields": {
+      "name": "Sixplay"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 148,
+    "fields": {
+      "name": "ABC"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 149,
+    "fields": {
+      "name": "Movistar Plus"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 150,
+    "fields": {
+      "name": "SwissCom"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 151,
+    "fields": {
+      "name": "BritBox"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 155,
+    "fields": {
+      "name": "History"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 157,
+    "fields": {
+      "name": "Lifetime"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 158,
+    "fields": {
+      "name": "Viu"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 159,
+    "fields": {
+      "name": "Catchplay"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 160,
+    "fields": {
+      "name": "iflix"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 164,
+    "fields": {
+      "name": "Hollystar"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 167,
+    "fields": {
+      "name": "Claro video"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 171,
+    "fields": {
+      "name": "Watchbox"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 175,
+    "fields": {
+      "name": "Netflix Kids"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 177,
+    "fields": {
+      "name": "Pantaflix"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 178,
+    "fields": {
+      "name": "MagentaTV"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 182,
+    "fields": {
+      "name": "Hollywood Suite"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 185,
+    "fields": {
+      "name": "Screambox"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 188,
+    "fields": {
+      "name": "YouTube Premium"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 189,
+    "fields": {
+      "name": "Curzon Home Cinema"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 190,
+    "fields": {
+      "name": "Curiosity Stream"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 191,
+    "fields": {
+      "name": "Kanopy"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 192,
+    "fields": {
+      "name": "YouTube"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 194,
+    "fields": {
+      "name": "Starz Play Amazon Channel"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 195,
+    "fields": {
+      "name": "Animax Plus Amazon Channel"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 196,
+    "fields": {
+      "name": "AcornTV Amazon Channel"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 197,
+    "fields": {
+      "name": "BritBox Amazon Channel"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 199,
+    "fields": {
+      "name": "Fandor Amazon Channel"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 201,
+    "fields": {
+      "name": "Mubi Amazon Channel"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 202,
+    "fields": {
+      "name": "Screambox Amazon Channel"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 203,
+    "fields": {
+      "name": "Showtime Amazon Channel"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 204,
+    "fields": {
+      "name": "Shudder Amazon Channel"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 205,
+    "fields": {
+      "name": "Sundance Now Amazon Channel"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 207,
+    "fields": {
+      "name": "The Roku Channel"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 209,
+    "fields": {
+      "name": "PBS"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 210,
+    "fields": {
+      "name": "Sky"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 211,
+    "fields": {
+      "name": "Freeform"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 212,
+    "fields": {
+      "name": "Hoopla"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 215,
+    "fields": {
+      "name": "Syfy"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 218,
+    "fields": {
+      "name": "Eros Now"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 219,
+    "fields": {
+      "name": "Das Erste Mediathek"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 220,
+    "fields": {
+      "name": "Jio Cinema"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 222,
+    "fields": {
+      "name": "Rai Play"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 224,
+    "fields": {
+      "name": "BFI Player"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 227,
+    "fields": {
+      "name": "Telecine Play"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 230,
+    "fields": {
+      "name": "Crave"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 232,
+    "fields": {
+      "name": "Zee5"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 234,
+    "fields": {
+      "name": "Arte"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 235,
+    "fields": {
+      "name": "YouTube Free"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 236,
+    "fields": {
+      "name": "France TV"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 237,
+    "fields": {
+      "name": "Sony Liv"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 239,
+    "fields": {
+      "name": "Universcine"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 241,
+    "fields": {
+      "name": "Popcornflix"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 242,
+    "fields": {
+      "name": "Meo"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 244,
+    "fields": {
+      "name": "HBO Poland"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 245,
+    "fields": {
+      "name": "VOD Poland"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 246,
+    "fields": {
+      "name": "7plus"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 247,
+    "fields": {
+      "name": "Pantaya"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 248,
+    "fields": {
+      "name": "Boomerang"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 250,
+    "fields": {
+      "name": "Horizon"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 251,
+    "fields": {
+      "name": "Urban Movie Channel"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 254,
+    "fields": {
+      "name": "Dove Channel"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 255,
+    "fields": {
+      "name": "Yupp TV"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 257,
+    "fields": {
+      "name": "fuboTV"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 258,
+    "fields": {
+      "name": "Criterion Channel"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 259,
+    "fields": {
+      "name": "Magnolia Selects"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 260,
+    "fields": {
+      "name": "WWE Network"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 261,
+    "fields": {
+      "name": "Nickhits Amazon Channel"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 268,
+    "fields": {
+      "name": "History Vault"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 269,
+    "fields": {
+      "name": "Funimation Now"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 273,
+    "fields": {
+      "name": "Neon TV"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 274,
+    "fields": {
+      "name": "QubitTV"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 275,
+    "fields": {
+      "name": "Laugh Out Loud"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 276,
+    "fields": {
+      "name": "Smithsonian Channel"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 278,
+    "fields": {
+      "name": "Pure Flix"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 279,
+    "fields": {
+      "name": "Redbox"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 281,
+    "fields": {
+      "name": "Hallmark Movies"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 283,
+    "fields": {
+      "name": "Crunchyroll"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 284,
+    "fields": {
+      "name": "Lifetime Movie Club"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 285,
+    "fields": {
+      "name": "BBC Player Amazon Channel"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 286,
+    "fields": {
+      "name": "ZDF Herzkino Amazon Channel"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 287,
+    "fields": {
+      "name": "BFI Player Amazon Channel"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 288,
+    "fields": {
+      "name": "Boomerang Amazon Channel"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 289,
+    "fields": {
+      "name": "Cinemax Amazon Channel"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 290,
+    "fields": {
+      "name": "Hallmark Movies Now Amazon Channel"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 291,
+    "fields": {
+      "name": "MZ Choice Amazon Channel"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 292,
+    "fields": {
+      "name": "Pantaya Amazon Channel"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 293,
+    "fields": {
+      "name": "PBS Kids Amazon Channel"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 294,
+    "fields": {
+      "name": "PBS Masterpiece Amazon Channel"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 295,
+    "fields": {
+      "name": "Viewster Amazon Channel"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 296,
+    "fields": {
+      "name": "Hayu Amazon Channel"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 297,
+    "fields": {
+      "name": "Ziggo TV"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 298,
+    "fields": {
+      "name": "RTL+"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 299,
+    "fields": {
+      "name": "Sling TV"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 300,
+    "fields": {
+      "name": "Pluto TV"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 304,
+    "fields": {
+      "name": "Joyn"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 305,
+    "fields": {
+      "name": "Crave Starz"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 307,
+    "fields": {
+      "name": "Globoplay"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 308,
+    "fields": {
+      "name": "O2 TV"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 309,
+    "fields": {
+      "name": "Sun Nxt"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 310,
+    "fields": {
+      "name": "LaCinetek"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 311,
+    "fields": {
+      "name": "Be TV Go"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 312,
+    "fields": {
+      "name": "VRT nu"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 313,
+    "fields": {
+      "name": "Yelo Play"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 314,
+    "fields": {
+      "name": "CBC Gem"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 315,
+    "fields": {
+      "name": "Hoichoi"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 319,
+    "fields": {
+      "name": "Alt Balaji"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 321,
+    "fields": {
+      "name": "Sky X"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 322,
+    "fields": {
+      "name": "USA Network"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 323,
+    "fields": {
+      "name": "Yle Areena"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 324,
+    "fields": {
+      "name": "Cinemas a la Demande"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 326,
+    "fields": {
+      "name": "CTV"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 331,
+    "fields": {
+      "name": "FlixFling"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 332,
+    "fields": {
+      "name": "VUDU Free"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 333,
+    "fields": {
+      "name": "My5"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 334,
+    "fields": {
+      "name": "Filmtastic Amazon Channel"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 337,
+    "fields": {
+      "name": "Disney Plus"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 338,
+    "fields": {
+      "name": "Ruutu"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 339,
+    "fields": {
+      "name": "Movistar Play"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 341,
+    "fields": {
+      "name": "blutv"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 342,
+    "fields": {
+      "name": "puhutv"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 343,
+    "fields": {
+      "name": "Bet+ Amazon Channel"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 344,
+    "fields": {
+      "name": "Rakuten Viki"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 349,
+    "fields": {
+      "name": "Kino on Demand"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 350,
+    "fields": {
+      "name": "Apple TV Plus"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 352,
+    "fields": {
+      "name": "AMC on Demand"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 354,
+    "fields": {
+      "name": "WAKANIM"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 355,
+    "fields": {
+      "name": "Darkmatter TV"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 356,
+    "fields": {
+      "name": "wavve"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 357,
+    "fields": {
+      "name": "DocPlay"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 358,
+    "fields": {
+      "name": "DIRECTV"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 359,
+    "fields": {
+      "name": "Mediaset Play"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 360,
+    "fields": {
+      "name": "NPO Start"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 361,
+    "fields": {
+      "name": "TCM"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 363,
+    "fields": {
+      "name": "TNT"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 365,
+    "fields": {
+      "name": "Bravo TV"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 368,
+    "fields": {
+      "name": "IndieFlix"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 370,
+    "fields": {
+      "name": "VOD Club"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 373,
+    "fields": {
+      "name": "Go3"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 377,
+    "fields": {
+      "name": "Hotstar Disney+"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 380,
+    "fields": {
+      "name": "BritBox"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 381,
+    "fields": {
+      "name": "Canal+"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 383,
+    "fields": {
+      "name": "TV 2"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 384,
+    "fields": {
+      "name": "HBO Max"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 385,
+    "fields": {
+      "name": "BINGE"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 386,
+    "fields": {
+      "name": "Peacock"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 387,
+    "fields": {
+      "name": "Peacock Premium"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 389,
+    "fields": {
+      "name": "Sooner"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 390,
+    "fields": {
+      "name": "Disney Plus"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 392,
+    "fields": {
+      "name": "wedotv"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 393,
+    "fields": {
+      "name": "FlixOlé"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 395,
+    "fields": {
+      "name": "TVNZ"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 396,
+    "fields": {
+      "name": "Film1"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 397,
+    "fields": {
+      "name": "BBC America"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 414,
+    "fields": {
+      "name": "VVVVID"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 415,
+    "fields": {
+      "name": "Anime Digital Networks"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 417,
+    "fields": {
+      "name": "Here TV"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 421,
+    "fields": {
+      "name": "Joyn Plus"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 423,
+    "fields": {
+      "name": "Blockbuster"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 425,
+    "fields": {
+      "name": "HBO Go"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 426,
+    "fields": {
+      "name": "SF Anytime"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 428,
+    "fields": {
+      "name": "CONtv"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 429,
+    "fields": {
+      "name": "Telstra TV"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 430,
+    "fields": {
+      "name": "HiDive"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 431,
+    "fields": {
+      "name": "SumoTV"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 432,
+    "fields": {
+      "name": "Flix Premiere"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 433,
+    "fields": {
+      "name": "OVID"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 434,
+    "fields": {
+      "name": "OzFlix"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 435,
+    "fields": {
+      "name": "Draken Films"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 436,
+    "fields": {
+      "name": "Fetch TV"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 437,
+    "fields": {
+      "name": "Hungama Play"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 438,
+    "fields": {
+      "name": "Chai Flicks"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 439,
+    "fields": {
+      "name": "Shout! Factory TV"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 440,
+    "fields": {
+      "name": "ThreeNow"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 441,
+    "fields": {
+      "name": "NFB"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 442,
+    "fields": {
+      "name": "NRK TV"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 443,
+    "fields": {
+      "name": "Filmstriben"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 444,
+    "fields": {
+      "name": "Dekkoo"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 445,
+    "fields": {
+      "name": "Classix"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 446,
+    "fields": {
+      "name": "Retrocrush"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 447,
+    "fields": {
+      "name": "Belas Artes à La Carte"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 448,
+    "fields": {
+      "name": "Beamafilm"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 449,
+    "fields": {
+      "name": "Global TV"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 450,
+    "fields": {
+      "name": "Vodacom Video Play"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 451,
+    "fields": {
+      "name": "Picl"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 452,
+    "fields": {
+      "name": "RTPplay"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 454,
+    "fields": {
+      "name": "Topic"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 455,
+    "fields": {
+      "name": "Night Flight Plus"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 456,
+    "fields": {
+      "name": "Mitele "
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 457,
+    "fields": {
+      "name": "VIX "
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 460,
+    "fields": {
+      "name": "Horrify"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 461,
+    "fields": {
+      "name": "RTBF"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 463,
+    "fields": {
+      "name": "Kirjastokino"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 465,
+    "fields": {
+      "name": "Believe"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 466,
+    "fields": {
+      "name": "Bioskop Online"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 467,
+    "fields": {
+      "name": "DIRECTV GO"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 468,
+    "fields": {
+      "name": "genflix"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 469,
+    "fields": {
+      "name": "Club Illico"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 470,
+    "fields": {
+      "name": "The Film Detective"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 471,
+    "fields": {
+      "name": "FILMRISE"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 472,
+    "fields": {
+      "name": "NLZIET"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 473,
+    "fields": {
+      "name": "Revry"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 474,
+    "fields": {
+      "name": "ShemarooMe"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 475,
+    "fields": {
+      "name": "DOCSVILLE"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 476,
+    "fields": {
+      "name": "EPIC ON"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 477,
+    "fields": {
+      "name": "GOSPEL PLAY"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 478,
+    "fields": {
+      "name": "History Play"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 479,
+    "fields": {
+      "name": "Home of Horror"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 480,
+    "fields": {
+      "name": "Filmtastic"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 481,
+    "fields": {
+      "name": "ArthouseCNMA"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 482,
+    "fields": {
+      "name": "ManoramaMax"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 483,
+    "fields": {
+      "name": "MAX Stream"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 484,
+    "fields": {
+      "name": "NOW"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 486,
+    "fields": {
+      "name": "Spectrum On Demand"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 488,
+    "fields": {
+      "name": "tvo"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 489,
+    "fields": {
+      "name": "Vidio"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 491,
+    "fields": {
+      "name": "CINE"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 492,
+    "fields": {
+      "name": "ILLICO"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 493,
+    "fields": {
+      "name": "SVT"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 494,
+    "fields": {
+      "name": "Viafree"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 496,
+    "fields": {
+      "name": "Cineasterna"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 497,
+    "fields": {
+      "name": "Comhem Play"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 499,
+    "fields": {
+      "name": "Oldflix"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 500,
+    "fields": {
+      "name": "TVF Play"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 501,
+    "fields": {
+      "name": "Wink"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 502,
+    "fields": {
+      "name": "Tata Play"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 503,
+    "fields": {
+      "name": "Hi-YAH"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 504,
+    "fields": {
+      "name": "VRV"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 505,
+    "fields": {
+      "name": "Player"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 506,
+    "fields": {
+      "name": "TBS"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 507,
+    "fields": {
+      "name": "tru TV"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 510,
+    "fields": {
+      "name": "Discovery Plus"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 511,
+    "fields": {
+      "name": "iWantTFC"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 512,
+    "fields": {
+      "name": "TNTGo"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 513,
+    "fields": {
+      "name": "Shadowz"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 514,
+    "fields": {
+      "name": "AsianCrush"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 515,
+    "fields": {
+      "name": "MX Player"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 516,
+    "fields": {
+      "name": "Noovo"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 517,
+    "fields": {
+      "name": "TriArt Play"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 518,
+    "fields": {
+      "name": "La Toile"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 520,
+    "fields": {
+      "name": "Discovery Plus"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 521,
+    "fields": {
+      "name": "Spamflix"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 522,
+    "fields": {
+      "name": "Popcorntimes"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 524,
+    "fields": {
+      "name": "Discovery Plus"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 525,
+    "fields": {
+      "name": "Knowledge Network"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 526,
+    "fields": {
+      "name": "AMC+"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 528,
+    "fields": {
+      "name": "AMC+ Amazon Channel"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 529,
+    "fields": {
+      "name": "ARROW"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 530,
+    "fields": {
+      "name": "Supo Mungam Plus"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 531,
+    "fields": {
+      "name": "Paramount Plus"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 532,
+    "fields": {
+      "name": "aha"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 533,
+    "fields": {
+      "name": "Amazon Arthaus Channel"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 534,
+    "fields": {
+      "name": "Argo"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 535,
+    "fields": {
+      "name": "digital TIFF Bell Lightbox"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 536,
+    "fields": {
+      "name": "Dogwoof On Demand"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 537,
+    "fields": {
+      "name": "ZDF"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 538,
+    "fields": {
+      "name": "Plex"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 539,
+    "fields": {
+      "name": "Viddla"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 540,
+    "fields": {
+      "name": "Elisa Viihde"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 541,
+    "fields": {
+      "name": "rtve"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 542,
+    "fields": {
+      "name": "filmfriend"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 543,
+    "fields": {
+      "name": "CONTAR"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 544,
+    "fields": {
+      "name": "Libreflix"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 545,
+    "fields": {
+      "name": "Spuul"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 546,
+    "fields": {
+      "name": "WOW Presents Plus"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 547,
+    "fields": {
+      "name": "Alamo on Demand"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 548,
+    "fields": {
+      "name": "IFFR Unleashed"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 549,
+    "fields": {
+      "name": "IPLA"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 550,
+    "fields": {
+      "name": "Tenk"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 551,
+    "fields": {
+      "name": "Magellan TV"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 552,
+    "fields": {
+      "name": "QFT Player"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 553,
+    "fields": {
+      "name": "Telia Play"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 554,
+    "fields": {
+      "name": "BroadwayHD"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 556,
+    "fields": {
+      "name": "tvzavr"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 557,
+    "fields": {
+      "name": "More TV"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 558,
+    "fields": {
+      "name": "Cinépolis KLIC"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 559,
+    "fields": {
+      "name": "Filmzie"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 560,
+    "fields": {
+      "name": "Filmoteket"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 561,
+    "fields": {
+      "name": "Lionsgate Play"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 562,
+    "fields": {
+      "name": "MovieSaints"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 563,
+    "fields": {
+      "name": "KPN"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 564,
+    "fields": {
+      "name": "SALTO"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 566,
+    "fields": {
+      "name": "Filme Filme"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 567,
+    "fields": {
+      "name": "True Story"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 569,
+    "fields": {
+      "name": "DocAlliance Films"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 570,
+    "fields": {
+      "name": "Premier"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 572,
+    "fields": {
+      "name": "RTL Play"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 573,
+    "fields": {
+      "name": "KinoPop"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 574,
+    "fields": {
+      "name": "Oi Play"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 575,
+    "fields": {
+      "name": "KoreaOnDemand"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 576,
+    "fields": {
+      "name": "Klik Film"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 577,
+    "fields": {
+      "name": "TvIgle"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 578,
+    "fields": {
+      "name": "Strim"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 579,
+    "fields": {
+      "name": "Film Movement Plus"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 580,
+    "fields": {
+      "name": "Nova Play"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 581,
+    "fields": {
+      "name": "iQIYI"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 582,
+    "fields": {
+      "name": "Paramount+ Amazon Channel"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 583,
+    "fields": {
+      "name": "EPIX Amazon Channel"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 584,
+    "fields": {
+      "name": "Discovery+ Amazon Channel"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 585,
+    "fields": {
+      "name": "Metrograph"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 587,
+    "fields": {
+      "name": "IFC Amazon Channel"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 588,
+    "fields": {
+      "name": "MGM Amazon Channel"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 589,
+    "fields": {
+      "name": "Nick+ Amazon Channel"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 591,
+    "fields": {
+      "name": "Now TV Cinema"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 593,
+    "fields": {
+      "name": "STV Player"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 594,
+    "fields": {
+      "name": "Virgin TV Go"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 595,
+    "fields": {
+      "name": "Eros Now Amazon Channel"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 596,
+    "fields": {
+      "name": "Arrow Video Amazon Channel"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 597,
+    "fields": {
+      "name": "Full Moon Amazon Channel"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 599,
+    "fields": {
+      "name": "Pokémon Amazon Channel"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 600,
+    "fields": {
+      "name": "Shout! Factory Amazon Channel"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 601,
+    "fields": {
+      "name": "MotorTrend Amazon Channel"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 602,
+    "fields": {
+      "name": "FilmBox Live Amazon Channel"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 603,
+    "fields": {
+      "name": "CuriosityStream Amazon Channel"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 604,
+    "fields": {
+      "name": "DocuBay Amazon Channel"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 605,
+    "fields": {
+      "name": "Super Channel Amazon Channel"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 606,
+    "fields": {
+      "name": "StackTV Amazon Channel"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 607,
+    "fields": {
+      "name": "OUTtv Amazon Channel"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 608,
+    "fields": {
+      "name": "Love Nature Amazon Channel"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 609,
+    "fields": {
+      "name": "Smithsonian Channel Amazon Channel"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 610,
+    "fields": {
+      "name": "BBC Earth Amazon Channel"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 612,
+    "fields": {
+      "name": "UMC Amazon Channel"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 613,
+    "fields": {
+      "name": "Freevee Amazon Channel"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 614,
+    "fields": {
+      "name": "VI movies and tv"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 615,
+    "fields": {
+      "name": "W4free"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 616,
+    "fields": {
+      "name": "HBO Max Free"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 617,
+    "fields": {
+      "name": "Curia"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 618,
+    "fields": {
+      "name": "Paus"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 619,
+    "fields": {
+      "name": "Star Plus"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 620,
+    "fields": {
+      "name": "DRTV"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 621,
+    "fields": {
+      "name": "Dansk Filmskat"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 622,
+    "fields": {
+      "name": "UPC TV"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 623,
+    "fields": {
+      "name": "WeTV"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 624,
+    "fields": {
+      "name": "KKTV"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 625,
+    "fields": {
+      "name": "LINE TV"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 626,
+    "fields": {
+      "name": "Otta"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 627,
+    "fields": {
+      "name": "Voyo"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 628,
+    "fields": {
+      "name": "Edisonline"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 629,
+    "fields": {
+      "name": "OSN"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 630,
+    "fields": {
+      "name": "STARZPLAY"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 631,
+    "fields": {
+      "name": "HRTi"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 632,
+    "fields": {
+      "name": "Showtime Roku Premium Channel"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 633,
+    "fields": {
+      "name": "Paramount+ Roku Premium Channel"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 634,
+    "fields": {
+      "name": "Starz Roku Premium Channel"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 635,
+    "fields": {
+      "name": "AMC+ Roku Premium Channel"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 636,
+    "fields": {
+      "name": "Epix Roku Premium Channel"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 637,
+    "fields": {
+      "name": "Pickbox NOW"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 638,
+    "fields": {
+      "name": "Public Domain Movies"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 639,
+    "fields": {
+      "name": "CineMember"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 640,
+    "fields": {
+      "name": "Kino Now"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 641,
+    "fields": {
+      "name": "Nexo Plus"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 642,
+    "fields": {
+      "name": "STUDIOCANAL PRESENTS Apple TV Channel"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 677,
+    "fields": {
+      "name": "Eventive"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 678,
+    "fields": {
+      "name": "Filmlegenden Amazon Channel"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 679,
+    "fields": {
+      "name": "Cinema of Hearts Amazon Channel"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 680,
+    "fields": {
+      "name": "Bloody Movies Amazon Channel"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 681,
+    "fields": {
+      "name": "Film Total Amazon Channel"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 683,
+    "fields": {
+      "name": "Looke Amazon Channel"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 684,
+    "fields": {
+      "name": "FlixOlé Amazon Channel"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 685,
+    "fields": {
+      "name": "OCS Amazon Channel "
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 686,
+    "fields": {
+      "name": "Home of Horror Amazon Channel"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 687,
+    "fields": {
+      "name": "Arthouse CNMA Amazon Channel"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 688,
+    "fields": {
+      "name": "ShortsTV Amazon Channel"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 689,
+    "fields": {
+      "name": "TVCortos Amazon Channel"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 690,
+    "fields": {
+      "name": "Pongalo Amazon Channel  "
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 691,
+    "fields": {
+      "name": "Play Suisse"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 692,
+    "fields": {
+      "name": "Cultpix"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 693,
+    "fields": {
+      "name": "Turk On Video Amazon Channel"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 694,
+    "fields": {
+      "name": "Cinessance"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 697,
+    "fields": {
+      "name": "meJane"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 701,
+    "fields": {
+      "name": "FilmBox+"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 702,
+    "fields": {
+      "name": "iBAKATV"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 704,
+    "fields": {
+      "name": "IROKOTV"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 705,
+    "fields": {
+      "name": "Hollywood Suite Amazon Channel"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 706,
+    "fields": {
+      "name": "Moviedome Plus Amazon Channel"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 707,
+    "fields": {
+      "name": "Aniverse Amazon Channel"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 708,
+    "fields": {
+      "name": "Superfresh Amazon Channel"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 1715,
+    "fields": {
+      "name": "Shahid VIP"
+    }
+  },
+  {
+    "model": "moviesapp.provider",
+    "pk": 1717,
+    "fields": {
+      "name": "Acontra Plus"
+    }
   }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 3,
-  "fields": {
-    "name": "Google Play Movies"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 7,
-  "fields": {
-    "name": "Vudu"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 8,
-  "fields": {
-    "name": "Netflix"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 9,
-  "fields": {
-    "name": "Amazon Prime Video"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 10,
-  "fields": {
-    "name": "Amazon Video"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 11,
-  "fields": {
-    "name": "Mubi"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 12,
-  "fields": {
-    "name": "Crackle"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 14,
-  "fields": {
-    "name": "realeyz"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 15,
-  "fields": {
-    "name": "Hulu"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 19,
-  "fields": {
-    "name": "NetMovies"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 20,
-  "fields": {
-    "name": "maxdome Store"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 21,
-  "fields": {
-    "name": "Stan"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 22,
-  "fields": {
-    "name": "Quickflix"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 24,
-  "fields": {
-    "name": "Quickflix Store"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 25,
-  "fields": {
-    "name": "Fandor"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 27,
-  "fields": {
-    "name": "HBO Now"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 28,
-  "fields": {
-    "name": "Netzkino"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 29,
-  "fields": {
-    "name": "Sky Go"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 30,
-  "fields": {
-    "name": "Sky Ticket"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 31,
-  "fields": {
-    "name": "HBO Go"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 33,
-  "fields": {
-    "name": "Alleskino"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 34,
-  "fields": {
-    "name": "Epix"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 35,
-  "fields": {
-    "name": "Rakuten TV"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 37,
-  "fields": {
-    "name": "Showtime"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 38,
-  "fields": {
-    "name": "BBC iPlayer"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 39,
-  "fields": {
-    "name": "Now TV"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 40,
-  "fields": {
-    "name": "Chili"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 41,
-  "fields": {
-    "name": "ITV Hub"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 43,
-  "fields": {
-    "name": "Starz"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 47,
-  "fields": {
-    "name": "Looke"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 53,
-  "fields": {
-    "name": "Volta"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 54,
-  "fields": {
-    "name": "BoxOffice"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 55,
-  "fields": {
-    "name": "ShowMax"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 56,
-  "fields": {
-    "name": "OCS Go"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 58,
-  "fields": {
-    "name": "Canal VOD"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 59,
-  "fields": {
-    "name": "Bbox VOD"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 61,
-  "fields": {
-    "name": "Orange VOD"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 62,
-  "fields": {
-    "name": "Atres Player"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 63,
-  "fields": {
-    "name": "Filmin"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 64,
-  "fields": {
-    "name": "Filmin Plus"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 66,
-  "fields": {
-    "name": "Filmin Latino"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 67,
-  "fields": {
-    "name": "Blim"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 68,
-  "fields": {
-    "name": "Microsoft Store"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 71,
-  "fields": {
-    "name": "Pathé Thuis"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 72,
-  "fields": {
-    "name": "Videoland"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 73,
-  "fields": {
-    "name": "Tubi TV"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 76,
-  "fields": {
-    "name": "Viaplay"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 77,
-  "fields": {
-    "name": "C More"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 78,
-  "fields": {
-    "name": "CBS"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 83,
-  "fields": {
-    "name": "The CW"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 84,
-  "fields": {
-    "name": "U-NEXT"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 85,
-  "fields": {
-    "name": "dTV"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 86,
-  "fields": {
-    "name": "GYAO"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 87,
-  "fields": {
-    "name": "Acorn TV"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 89,
-  "fields": {
-    "name": "Kividoo"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 96,
-  "fields": {
-    "name": "Naver Store"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 97,
-  "fields": {
-    "name": "Watcha"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 99,
-  "fields": {
-    "name": "Shudder"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 100,
-  "fields": {
-    "name": "GuideDoc"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 103,
-  "fields": {
-    "name": "All 4"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 109,
-  "fields": {
-    "name": "Timvision"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 110,
-  "fields": {
-    "name": "Infinity"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 113,
-  "fields": {
-    "name": "Ivi"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 115,
-  "fields": {
-    "name": "Okko"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 116,
-  "fields": {
-    "name": "Amediateka"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 117,
-  "fields": {
-    "name": "Kinopoisk"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 118,
-  "fields": {
-    "name": "HBO"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 119,
-  "fields": {
-    "name": "Amazon Prime Video"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 121,
-  "fields": {
-    "name": "Voot"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 122,
-  "fields": {
-    "name": "Hotstar"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 123,
-  "fields": {
-    "name": "FXNow"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 124,
-  "fields": {
-    "name": "Bookmyshow"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 130,
-  "fields": {
-    "name": "Sky Store"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 132,
-  "fields": {
-    "name": "SBS On Demand"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 133,
-  "fields": {
-    "name": "Videobuster"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 134,
-  "fields": {
-    "name": "Foxtel Now"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 135,
-  "fields": {
-    "name": "ABC iview"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 138,
-  "fields": {
-    "name": "Filmo TV"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 139,
-  "fields": {
-    "name": "Max Go"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 140,
-  "fields": {
-    "name": "Cineplex"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 142,
-  "fields": {
-    "name": "Flimmit"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 143,
-  "fields": {
-    "name": "Sundance Now"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 146,
-  "fields": {
-    "name": "iciTouTV"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 147,
-  "fields": {
-    "name": "Sixplay"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 148,
-  "fields": {
-    "name": "ABC"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 149,
-  "fields": {
-    "name": "Movistar Plus"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 150,
-  "fields": {
-    "name": "SwissCom"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 151,
-  "fields": {
-    "name": "BritBox"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 155,
-  "fields": {
-    "name": "History"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 157,
-  "fields": {
-    "name": "Lifetime"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 158,
-  "fields": {
-    "name": "Viu"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 159,
-  "fields": {
-    "name": "Catchplay"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 160,
-  "fields": {
-    "name": "iflix"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 164,
-  "fields": {
-    "name": "Hollystar"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 167,
-  "fields": {
-    "name": "Claro video"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 171,
-  "fields": {
-    "name": "Watchbox"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 175,
-  "fields": {
-    "name": "Netflix Kids"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 177,
-  "fields": {
-    "name": "Pantaflix"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 178,
-  "fields": {
-    "name": "MagentaTV"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 182,
-  "fields": {
-    "name": "Hollywood Suite"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 185,
-  "fields": {
-    "name": "Screambox"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 188,
-  "fields": {
-    "name": "YouTube Premium"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 189,
-  "fields": {
-    "name": "Curzon Home Cinema"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 190,
-  "fields": {
-    "name": "Curiosity Stream"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 191,
-  "fields": {
-    "name": "Kanopy"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 192,
-  "fields": {
-    "name": "YouTube"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 194,
-  "fields": {
-    "name": "Starz Play Amazon Channel"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 195,
-  "fields": {
-    "name": "Animax Plus Amazon Channel"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 196,
-  "fields": {
-    "name": "AcornTV Amazon Channel"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 197,
-  "fields": {
-    "name": "BritBox Amazon Channel"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 199,
-  "fields": {
-    "name": "Fandor Amazon Channel"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 201,
-  "fields": {
-    "name": "Mubi Amazon Channel"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 202,
-  "fields": {
-    "name": "Screambox Amazon Channel"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 203,
-  "fields": {
-    "name": "Showtime Amazon Channel"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 204,
-  "fields": {
-    "name": "Shudder Amazon Channel"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 205,
-  "fields": {
-    "name": "Sundance Now Amazon Channel"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 207,
-  "fields": {
-    "name": "The Roku Channel"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 209,
-  "fields": {
-    "name": "PBS"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 210,
-  "fields": {
-    "name": "Sky"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 211,
-  "fields": {
-    "name": "Freeform"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 212,
-  "fields": {
-    "name": "Hoopla"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 215,
-  "fields": {
-    "name": "Syfy"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 218,
-  "fields": {
-    "name": "Eros Now"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 219,
-  "fields": {
-    "name": "Das Erste Mediathek"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 220,
-  "fields": {
-    "name": "Jio Cinema"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 222,
-  "fields": {
-    "name": "Rai Play"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 224,
-  "fields": {
-    "name": "BFI Player"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 227,
-  "fields": {
-    "name": "Telecine Play"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 230,
-  "fields": {
-    "name": "Crave"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 232,
-  "fields": {
-    "name": "Zee5"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 234,
-  "fields": {
-    "name": "Arte"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 235,
-  "fields": {
-    "name": "YouTube Free"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 236,
-  "fields": {
-    "name": "France TV"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 237,
-  "fields": {
-    "name": "Sony Liv"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 239,
-  "fields": {
-    "name": "Universcine"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 241,
-  "fields": {
-    "name": "Popcornflix"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 242,
-  "fields": {
-    "name": "Meo"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 244,
-  "fields": {
-    "name": "HBO Poland"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 245,
-  "fields": {
-    "name": "VOD Poland"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 246,
-  "fields": {
-    "name": "7plus"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 247,
-  "fields": {
-    "name": "Pantaya"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 248,
-  "fields": {
-    "name": "Boomerang"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 250,
-  "fields": {
-    "name": "Horizon"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 251,
-  "fields": {
-    "name": "Urban Movie Channel"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 254,
-  "fields": {
-    "name": "Dove Channel"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 255,
-  "fields": {
-    "name": "Yupp TV"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 257,
-  "fields": {
-    "name": "fuboTV"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 258,
-  "fields": {
-    "name": "Criterion Channel"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 259,
-  "fields": {
-    "name": "Magnolia Selects"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 260,
-  "fields": {
-    "name": "WWE Network"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 261,
-  "fields": {
-    "name": "Nickhits Amazon Channel"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 268,
-  "fields": {
-    "name": "History Vault"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 269,
-  "fields": {
-    "name": "Funimation Now"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 273,
-  "fields": {
-    "name": "Neon TV"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 274,
-  "fields": {
-    "name": "QubitTV"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 275,
-  "fields": {
-    "name": "Laugh Out Loud"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 276,
-  "fields": {
-    "name": "Smithsonian Channel"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 278,
-  "fields": {
-    "name": "Pure Flix"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 279,
-  "fields": {
-    "name": "Redbox"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 281,
-  "fields": {
-    "name": "Hallmark Movies"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 283,
-  "fields": {
-    "name": "Crunchyroll"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 284,
-  "fields": {
-    "name": "Lifetime Movie Club"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 285,
-  "fields": {
-    "name": "BBC Player Amazon Channel"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 286,
-  "fields": {
-    "name": "ZDF Herzkino Amazon Channel"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 287,
-  "fields": {
-    "name": "BFI Player Amazon Channel"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 288,
-  "fields": {
-    "name": "Boomerang Amazon Channel"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 289,
-  "fields": {
-    "name": "Cinemax Amazon Channel"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 290,
-  "fields": {
-    "name": "Hallmark Movies Now Amazon Channel"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 291,
-  "fields": {
-    "name": "MZ Choice Amazon Channel"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 292,
-  "fields": {
-    "name": "Pantaya Amazon Channel"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 293,
-  "fields": {
-    "name": "PBS Kids Amazon Channel"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 294,
-  "fields": {
-    "name": "PBS Masterpiece Amazon Channel"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 295,
-  "fields": {
-    "name": "Viewster Amazon Channel"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 296,
-  "fields": {
-    "name": "Hayu Amazon Channel"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 297,
-  "fields": {
-    "name": "Ziggo TV"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 298,
-  "fields": {
-    "name": "RTL+"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 299,
-  "fields": {
-    "name": "Sling TV"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 300,
-  "fields": {
-    "name": "Pluto TV"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 304,
-  "fields": {
-    "name": "Joyn"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 305,
-  "fields": {
-    "name": "Crave Starz"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 307,
-  "fields": {
-    "name": "Globoplay"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 308,
-  "fields": {
-    "name": "O2 TV"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 309,
-  "fields": {
-    "name": "Sun Nxt"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 310,
-  "fields": {
-    "name": "LaCinetek"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 311,
-  "fields": {
-    "name": "Be TV Go"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 312,
-  "fields": {
-    "name": "VRT nu"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 313,
-  "fields": {
-    "name": "Yelo Play"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 314,
-  "fields": {
-    "name": "CBC Gem"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 315,
-  "fields": {
-    "name": "Hoichoi"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 319,
-  "fields": {
-    "name": "Alt Balaji"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 321,
-  "fields": {
-    "name": "Sky X"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 322,
-  "fields": {
-    "name": "USA Network"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 323,
-  "fields": {
-    "name": "Yle Areena"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 324,
-  "fields": {
-    "name": "Cinemas a la Demande"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 326,
-  "fields": {
-    "name": "CTV"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 331,
-  "fields": {
-    "name": "FlixFling"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 332,
-  "fields": {
-    "name": "VUDU Free"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 333,
-  "fields": {
-    "name": "My5"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 334,
-  "fields": {
-    "name": "Filmtastic Amazon Channel"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 337,
-  "fields": {
-    "name": "Disney Plus"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 338,
-  "fields": {
-    "name": "Ruutu"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 339,
-  "fields": {
-    "name": "Movistar Play"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 341,
-  "fields": {
-    "name": "blutv"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 342,
-  "fields": {
-    "name": "puhutv"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 343,
-  "fields": {
-    "name": "Bet+ Amazon Channel"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 344,
-  "fields": {
-    "name": "Rakuten Viki"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 349,
-  "fields": {
-    "name": "Kino on Demand"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 350,
-  "fields": {
-    "name": "Apple TV Plus"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 352,
-  "fields": {
-    "name": "AMC on Demand"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 354,
-  "fields": {
-    "name": "WAKANIM"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 355,
-  "fields": {
-    "name": "Darkmatter TV"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 356,
-  "fields": {
-    "name": "wavve"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 357,
-  "fields": {
-    "name": "DocPlay"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 358,
-  "fields": {
-    "name": "DIRECTV"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 359,
-  "fields": {
-    "name": "Mediaset Play"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 360,
-  "fields": {
-    "name": "NPO Start"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 361,
-  "fields": {
-    "name": "TCM"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 363,
-  "fields": {
-    "name": "TNT"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 365,
-  "fields": {
-    "name": "Bravo TV"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 368,
-  "fields": {
-    "name": "IndieFlix"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 370,
-  "fields": {
-    "name": "VOD Club"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 373,
-  "fields": {
-    "name": "Go3"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 377,
-  "fields": {
-    "name": "Hotstar Disney+"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 380,
-  "fields": {
-    "name": "BritBox"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 381,
-  "fields": {
-    "name": "Canal+"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 383,
-  "fields": {
-    "name": "TV 2"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 384,
-  "fields": {
-    "name": "HBO Max"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 385,
-  "fields": {
-    "name": "BINGE"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 386,
-  "fields": {
-    "name": "Peacock"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 387,
-  "fields": {
-    "name": "Peacock Premium"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 389,
-  "fields": {
-    "name": "Sooner"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 390,
-  "fields": {
-    "name": "Disney Plus"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 392,
-  "fields": {
-    "name": "wedotv"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 393,
-  "fields": {
-    "name": "FlixOlé"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 395,
-  "fields": {
-    "name": "TVNZ"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 396,
-  "fields": {
-    "name": "Film1"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 397,
-  "fields": {
-    "name": "BBC America"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 414,
-  "fields": {
-    "name": "VVVVID"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 415,
-  "fields": {
-    "name": "Anime Digital Networks"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 417,
-  "fields": {
-    "name": "Here TV"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 421,
-  "fields": {
-    "name": "Joyn Plus"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 423,
-  "fields": {
-    "name": "Blockbuster"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 425,
-  "fields": {
-    "name": "HBO Go"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 426,
-  "fields": {
-    "name": "SF Anytime"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 428,
-  "fields": {
-    "name": "CONtv"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 429,
-  "fields": {
-    "name": "Telstra TV"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 430,
-  "fields": {
-    "name": "HiDive"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 431,
-  "fields": {
-    "name": "SumoTV"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 432,
-  "fields": {
-    "name": "Flix Premiere"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 433,
-  "fields": {
-    "name": "OVID"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 434,
-  "fields": {
-    "name": "OzFlix"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 435,
-  "fields": {
-    "name": "Draken Films"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 436,
-  "fields": {
-    "name": "Fetch TV"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 437,
-  "fields": {
-    "name": "Hungama Play"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 438,
-  "fields": {
-    "name": "Chai Flicks"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 439,
-  "fields": {
-    "name": "Shout! Factory TV"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 440,
-  "fields": {
-    "name": "ThreeNow"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 441,
-  "fields": {
-    "name": "NFB"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 442,
-  "fields": {
-    "name": "NRK TV"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 443,
-  "fields": {
-    "name": "Filmstriben"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 444,
-  "fields": {
-    "name": "Dekkoo"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 445,
-  "fields": {
-    "name": "Classix"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 446,
-  "fields": {
-    "name": "Retrocrush"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 447,
-  "fields": {
-    "name": "Belas Artes à La Carte"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 448,
-  "fields": {
-    "name": "Beamafilm"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 449,
-  "fields": {
-    "name": "Global TV"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 450,
-  "fields": {
-    "name": "Vodacom Video Play"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 451,
-  "fields": {
-    "name": "Picl"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 452,
-  "fields": {
-    "name": "RTPplay"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 454,
-  "fields": {
-    "name": "Topic"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 455,
-  "fields": {
-    "name": "Night Flight Plus"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 456,
-  "fields": {
-    "name": "Mitele "
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 457,
-  "fields": {
-    "name": "VIX "
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 460,
-  "fields": {
-    "name": "Horrify"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 461,
-  "fields": {
-    "name": "RTBF"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 463,
-  "fields": {
-    "name": "Kirjastokino"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 465,
-  "fields": {
-    "name": "Believe"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 466,
-  "fields": {
-    "name": "Bioskop Online"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 467,
-  "fields": {
-    "name": "DIRECTV GO"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 468,
-  "fields": {
-    "name": "genflix"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 469,
-  "fields": {
-    "name": "Club Illico"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 470,
-  "fields": {
-    "name": "The Film Detective"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 471,
-  "fields": {
-    "name": "FILMRISE"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 472,
-  "fields": {
-    "name": "NLZIET"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 473,
-  "fields": {
-    "name": "Revry"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 474,
-  "fields": {
-    "name": "ShemarooMe"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 475,
-  "fields": {
-    "name": "DOCSVILLE"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 476,
-  "fields": {
-    "name": "EPIC ON"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 477,
-  "fields": {
-    "name": "GOSPEL PLAY"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 478,
-  "fields": {
-    "name": "History Play"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 479,
-  "fields": {
-    "name": "Home of Horror"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 480,
-  "fields": {
-    "name": "Filmtastic"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 481,
-  "fields": {
-    "name": "ArthouseCNMA"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 482,
-  "fields": {
-    "name": "ManoramaMax"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 483,
-  "fields": {
-    "name": "MAX Stream"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 484,
-  "fields": {
-    "name": "NOW"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 486,
-  "fields": {
-    "name": "Spectrum On Demand"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 488,
-  "fields": {
-    "name": "tvo"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 489,
-  "fields": {
-    "name": "Vidio"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 491,
-  "fields": {
-    "name": "CINE"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 492,
-  "fields": {
-    "name": "ILLICO"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 493,
-  "fields": {
-    "name": "SVT"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 494,
-  "fields": {
-    "name": "Viafree"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 496,
-  "fields": {
-    "name": "Cineasterna"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 497,
-  "fields": {
-    "name": "Comhem Play"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 499,
-  "fields": {
-    "name": "Oldflix"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 500,
-  "fields": {
-    "name": "TVF Play"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 501,
-  "fields": {
-    "name": "Wink"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 502,
-  "fields": {
-    "name": "Tata Play"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 503,
-  "fields": {
-    "name": "Hi-YAH"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 504,
-  "fields": {
-    "name": "VRV"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 505,
-  "fields": {
-    "name": "Player"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 506,
-  "fields": {
-    "name": "TBS"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 507,
-  "fields": {
-    "name": "tru TV"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 510,
-  "fields": {
-    "name": "Discovery Plus"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 511,
-  "fields": {
-    "name": "iWantTFC"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 512,
-  "fields": {
-    "name": "TNTGo"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 513,
-  "fields": {
-    "name": "Shadowz"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 514,
-  "fields": {
-    "name": "AsianCrush"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 515,
-  "fields": {
-    "name": "MX Player"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 516,
-  "fields": {
-    "name": "Noovo"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 517,
-  "fields": {
-    "name": "TriArt Play"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 518,
-  "fields": {
-    "name": "La Toile"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 520,
-  "fields": {
-    "name": "Discovery Plus"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 521,
-  "fields": {
-    "name": "Spamflix"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 522,
-  "fields": {
-    "name": "Popcorntimes"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 524,
-  "fields": {
-    "name": "Discovery Plus"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 525,
-  "fields": {
-    "name": "Knowledge Network"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 526,
-  "fields": {
-    "name": "AMC+"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 528,
-  "fields": {
-    "name": "AMC+ Amazon Channel"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 529,
-  "fields": {
-    "name": "ARROW"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 530,
-  "fields": {
-    "name": "Supo Mungam Plus"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 531,
-  "fields": {
-    "name": "Paramount Plus"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 532,
-  "fields": {
-    "name": "aha"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 533,
-  "fields": {
-    "name": "Amazon Arthaus Channel"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 534,
-  "fields": {
-    "name": "Argo"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 535,
-  "fields": {
-    "name": "digital TIFF Bell Lightbox"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 536,
-  "fields": {
-    "name": "Dogwoof On Demand"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 537,
-  "fields": {
-    "name": "ZDF"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 538,
-  "fields": {
-    "name": "Plex"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 539,
-  "fields": {
-    "name": "Viddla"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 540,
-  "fields": {
-    "name": "Elisa Viihde"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 541,
-  "fields": {
-    "name": "rtve"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 542,
-  "fields": {
-    "name": "filmfriend"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 543,
-  "fields": {
-    "name": "CONTAR"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 544,
-  "fields": {
-    "name": "Libreflix"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 545,
-  "fields": {
-    "name": "Spuul"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 546,
-  "fields": {
-    "name": "WOW Presents Plus"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 547,
-  "fields": {
-    "name": "Alamo on Demand"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 548,
-  "fields": {
-    "name": "IFFR Unleashed"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 549,
-  "fields": {
-    "name": "IPLA"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 550,
-  "fields": {
-    "name": "Tenk"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 551,
-  "fields": {
-    "name": "Magellan TV"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 552,
-  "fields": {
-    "name": "QFT Player"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 553,
-  "fields": {
-    "name": "Telia Play"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 554,
-  "fields": {
-    "name": "BroadwayHD"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 556,
-  "fields": {
-    "name": "tvzavr"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 557,
-  "fields": {
-    "name": "More TV"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 558,
-  "fields": {
-    "name": "Cinépolis KLIC"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 559,
-  "fields": {
-    "name": "Filmzie"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 560,
-  "fields": {
-    "name": "Filmoteket"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 561,
-  "fields": {
-    "name": "Lionsgate Play"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 562,
-  "fields": {
-    "name": "MovieSaints"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 563,
-  "fields": {
-    "name": "KPN"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 564,
-  "fields": {
-    "name": "SALTO"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 566,
-  "fields": {
-    "name": "Filme Filme"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 567,
-  "fields": {
-    "name": "True Story"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 569,
-  "fields": {
-    "name": "DocAlliance Films"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 570,
-  "fields": {
-    "name": "Premier"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 572,
-  "fields": {
-    "name": "RTL Play"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 573,
-  "fields": {
-    "name": "KinoPop"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 574,
-  "fields": {
-    "name": "Oi Play"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 575,
-  "fields": {
-    "name": "KoreaOnDemand"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 576,
-  "fields": {
-    "name": "Klik Film"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 577,
-  "fields": {
-    "name": "TvIgle"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 578,
-  "fields": {
-    "name": "Strim"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 579,
-  "fields": {
-    "name": "Film Movement Plus"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 580,
-  "fields": {
-    "name": "Nova Play"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 581,
-  "fields": {
-    "name": "iQIYI"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 582,
-  "fields": {
-    "name": "Paramount+ Amazon Channel"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 583,
-  "fields": {
-    "name": "EPIX Amazon Channel"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 584,
-  "fields": {
-    "name": "Discovery+ Amazon Channel"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 585,
-  "fields": {
-    "name": "Metrograph"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 587,
-  "fields": {
-    "name": "IFC Amazon Channel"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 588,
-  "fields": {
-    "name": "MGM Amazon Channel"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 589,
-  "fields": {
-    "name": "Nick+ Amazon Channel"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 591,
-  "fields": {
-    "name": "Now TV Cinema"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 593,
-  "fields": {
-    "name": "STV Player"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 594,
-  "fields": {
-    "name": "Virgin TV Go"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 595,
-  "fields": {
-    "name": "Eros Now Amazon Channel"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 596,
-  "fields": {
-    "name": "Arrow Video Amazon Channel"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 597,
-  "fields": {
-    "name": "Full Moon Amazon Channel"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 599,
-  "fields": {
-    "name": "Pokémon Amazon Channel"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 600,
-  "fields": {
-    "name": "Shout! Factory Amazon Channel"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 601,
-  "fields": {
-    "name": "MotorTrend Amazon Channel"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 602,
-  "fields": {
-    "name": "FilmBox Live Amazon Channel"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 603,
-  "fields": {
-    "name": "CuriosityStream Amazon Channel"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 604,
-  "fields": {
-    "name": "DocuBay Amazon Channel"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 605,
-  "fields": {
-    "name": "Super Channel Amazon Channel"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 606,
-  "fields": {
-    "name": "StackTV Amazon Channel"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 607,
-  "fields": {
-    "name": "OUTtv Amazon Channel"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 608,
-  "fields": {
-    "name": "Love Nature Amazon Channel"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 609,
-  "fields": {
-    "name": "Smithsonian Channel Amazon Channel"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 610,
-  "fields": {
-    "name": "BBC Earth Amazon Channel"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 612,
-  "fields": {
-    "name": "UMC Amazon Channel"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 613,
-  "fields": {
-    "name": "Freevee Amazon Channel"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 614,
-  "fields": {
-    "name": "VI movies and tv"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 615,
-  "fields": {
-    "name": "W4free"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 616,
-  "fields": {
-    "name": "HBO Max Free"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 617,
-  "fields": {
-    "name": "Curia"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 618,
-  "fields": {
-    "name": "Paus"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 619,
-  "fields": {
-    "name": "Star Plus"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 620,
-  "fields": {
-    "name": "DRTV"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 621,
-  "fields": {
-    "name": "Dansk Filmskat"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 622,
-  "fields": {
-    "name": "UPC TV"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 623,
-  "fields": {
-    "name": "WeTV"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 624,
-  "fields": {
-    "name": "KKTV"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 625,
-  "fields": {
-    "name": "LINE TV"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 626,
-  "fields": {
-    "name": "Otta"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 627,
-  "fields": {
-    "name": "Voyo"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 628,
-  "fields": {
-    "name": "Edisonline"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 629,
-  "fields": {
-    "name": "OSN"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 630,
-  "fields": {
-    "name": "STARZPLAY"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 631,
-  "fields": {
-    "name": "HRTi"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 632,
-  "fields": {
-    "name": "Showtime Roku Premium Channel"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 633,
-  "fields": {
-    "name": "Paramount+ Roku Premium Channel"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 634,
-  "fields": {
-    "name": "Starz Roku Premium Channel"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 635,
-  "fields": {
-    "name": "AMC+ Roku Premium Channel"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 636,
-  "fields": {
-    "name": "Epix Roku Premium Channel"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 637,
-  "fields": {
-    "name": "Pickbox NOW"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 638,
-  "fields": {
-    "name": "Public Domain Movies"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 639,
-  "fields": {
-    "name": "CineMember"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 640,
-  "fields": {
-    "name": "Kino Now"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 641,
-  "fields": {
-    "name": "Nexo Plus"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 642,
-  "fields": {
-    "name": "STUDIOCANAL PRESENTS Apple TV Channel"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 677,
-  "fields": {
-    "name": "Eventive"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 678,
-  "fields": {
-    "name": "Filmlegenden Amazon Channel"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 679,
-  "fields": {
-    "name": "Cinema of Hearts Amazon Channel"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 680,
-  "fields": {
-    "name": "Bloody Movies Amazon Channel"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 681,
-  "fields": {
-    "name": "Film Total Amazon Channel"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 683,
-  "fields": {
-    "name": "Looke Amazon Channel"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 684,
-  "fields": {
-    "name": "FlixOlé Amazon Channel"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 685,
-  "fields": {
-    "name": "OCS Amazon Channel "
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 686,
-  "fields": {
-    "name": "Home of Horror Amazon Channel"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 687,
-  "fields": {
-    "name": "Arthouse CNMA Amazon Channel"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 688,
-  "fields": {
-    "name": "ShortsTV Amazon Channel"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 689,
-  "fields": {
-    "name": "TVCortos Amazon Channel"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 690,
-  "fields": {
-    "name": "Pongalo Amazon Channel  "
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 691,
-  "fields": {
-    "name": "Play Suisse"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 692,
-  "fields": {
-    "name": "Cultpix"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 693,
-  "fields": {
-    "name": "Turk On Video Amazon Channel"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 694,
-  "fields": {
-    "name": "Cinessance"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 697,
-  "fields": {
-    "name": "meJane"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 701,
-  "fields": {
-    "name": "FilmBox+"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 702,
-  "fields": {
-    "name": "iBAKATV"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 704,
-  "fields": {
-    "name": "IROKOTV"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 705,
-  "fields": {
-    "name": "Hollywood Suite Amazon Channel"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 706,
-  "fields": {
-    "name": "Moviedome Plus Amazon Channel"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 707,
-  "fields": {
-    "name": "Aniverse Amazon Channel"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 708,
-  "fields": {
-    "name": "Superfresh Amazon Channel"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 1715,
-  "fields": {
-    "name": "Shahid VIP"
-  }
-},
-{
-  "model": "moviesapp.provider",
-  "pk": 1717,
-  "fields": {
-    "name": "Acontra Plus"
-  }
-}
 ]
