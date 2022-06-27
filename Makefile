@@ -154,7 +154,7 @@ flush-cdn-cache:
 #------------------------------------
 .PHONY: test
 ## Run tests | Tests
-test: shellcheck hadolint shfmt actionlint tox eslint csscomb-linter jsonlint
+test: shellcheck hadolint shfmt actionlint tox eslint csscomb-linter prettier-json-lint
 
 .PHONY: tox
 ## Run tox
@@ -246,10 +246,10 @@ shellcheck:
 hadolint:
 	hadolint Dockerfile
 
-.PHONY: jsonlint
-## Run jsonlint linter
-jsonlint:
-	scripts/jsonlint.sh lint
+.PHONY: prettier-json-lint
+## Run json linter
+prettier-json-lint:
+	yarn run prettier --check ./**/*.json
 
 .PHONY: actionlint
 ## Run actionlint linter
@@ -336,15 +336,15 @@ format:
 	isort src && \
 	black .
 
-.PHONY: format-json
-## Format json files
-format-json:
-	scripts/jsonlint.sh format
-
 .PHONY: format-css
 ## Format css files
 format-css:
 	yarn run csscomb src/${APP}/styles/*
+
+.PHONY: format-json
+## Format json files
+format-json:
+	yarn run prettier --write ./**/*.json
 
 .PHONY: format-js
 ## Format js files

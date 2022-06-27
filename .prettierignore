@@ -1,0 +1,6 @@
+node_modules
+src/moviesapp/static
+venv/*
+.tox/*
+.mypy_cache/*
+.vscode/*

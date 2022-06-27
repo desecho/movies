@@ -6,7 +6,7 @@
     "eslint-config-google": "0.14.0",
     "eslint-plugin-vue": "9.1.1",
     "csscomb-linter": "0.0.4",
-    "jsonlint": "1.6.3"
+    "prettier": "2.7.1"
   },
   "devDependencies": {},
   "scripts": {},

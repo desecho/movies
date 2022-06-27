@@ -1,9 +1,5 @@
 {
-  "extends": [
-    "eslint:recommended",
-    "google",
-    "plugin:vue/recommended"
-  ],
+  "extends": ["eslint:recommended", "google", "plugin:vue/recommended"],
   "rules": {
     "require-jsdoc": 0,
     "max-len": [
