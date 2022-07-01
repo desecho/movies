@@ -7,7 +7,7 @@ from django.conf import settings
 from django.http import Http404, HttpResponse, HttpResponseBadRequest
 from sentry_sdk import capture_exception
 
-from ..http import AjaxAuthenticatedHttpRequest, AjaxHttpRequest
+from ..http import AjaxHttpRequest, AuthenticatedAjaxHttpRequest
 from ..models import List, Movie, User
 from ..tasks import load_and_save_watch_data_task
 from ..tmdb import TmdbInvalidSearchTypeError, TmdbNoImdbIdError, search_movies
@@ -134,7 +134,7 @@ class AddToListFromDbView(AjaxView):
         add_movie_to_list(movie_id, list_id, user)
         return True
 
-    def post(self, request: AjaxAuthenticatedHttpRequest) -> (HttpResponse | HttpResponseBadRequest):
+    def post(self, request: AuthenticatedAjaxHttpRequest) -> (HttpResponse | HttpResponseBadRequest):
         """Add a movie to a list."""
         try:
             POST = request.POST

@@ -8,7 +8,7 @@ from django.db.models import Q, QuerySet, prefetch_related_objects
 from django.http import Http404, HttpResponse, HttpResponseBadRequest
 from django.shortcuts import get_object_or_404
 
-from ..http import AjaxAuthenticatedHttpRequest, AjaxHttpRequest, AuthenticatedHttpRequest, HttpRequest
+from ..http import AjaxHttpRequest, AuthenticatedAjaxHttpRequest, AuthenticatedHttpRequest, HttpRequest
 from ..models import Action, ActionRecord, List, Movie, ProviderRecord, Record, User, UserAnonymous
 from .mixins import AjaxAnonymousView, AjaxView, TemplateAnonymousView
 from .types import (
@@ -27,7 +27,7 @@ from .utils import add_movie_to_list, get_records, paginate, sort_by_rating
 class ChangeRatingView(AjaxView):
     """Change rating view."""
 
-    def put(self, request: AjaxAuthenticatedHttpRequest, record_id: int) -> (HttpResponse | HttpResponseBadRequest):
+    def put(self, request: AuthenticatedAjaxHttpRequest, record_id: int) -> (HttpResponse | HttpResponseBadRequest):
         """Change rating."""
         try:
             rating = int(request.PUT["rating"])
@@ -50,7 +50,7 @@ class ChangeRatingView(AjaxView):
 class AddToListView(AjaxView):
     """Add to list view."""
 
-    def post(self, request: AjaxAuthenticatedHttpRequest, movie_id: int) -> (HttpResponse | HttpResponseBadRequest):
+    def post(self, request: AuthenticatedAjaxHttpRequest, movie_id: int) -> (HttpResponse | HttpResponseBadRequest):
         """Add movie to list."""
         try:
             list_id = int(request.POST["listId"])
@@ -69,7 +69,7 @@ class AddToListView(AjaxView):
 class RemoveRecordView(AjaxView):
     """Remove record view."""
 
-    def delete(self, request: AjaxAuthenticatedHttpRequest, record_id: int) -> HttpResponse:
+    def delete(self, request: AuthenticatedAjaxHttpRequest, record_id: int) -> HttpResponse:
         """Remove record."""
         record = get_object_or_404(Record, user=request.user, pk=record_id)
         record.delete()
@@ -100,7 +100,7 @@ class SaveSettingsView(AjaxAnonymousView):
 class SaveOptionsView(AjaxView):
     """Save options view."""
 
-    def put(self, request: AjaxAuthenticatedHttpRequest, record_id: int) -> (HttpResponse | HttpResponseBadRequest):
+    def put(self, request: AuthenticatedAjaxHttpRequest, record_id: int) -> (HttpResponse | HttpResponseBadRequest):
         """Save options."""
         get_object_or_404(Record, user=request.user, pk=record_id)
 
@@ -125,7 +125,7 @@ class SaveOptionsView(AjaxView):
 class SaveCommentView(AjaxView):
     """Save comment view."""
 
-    def put(self, request: AjaxAuthenticatedHttpRequest, record_id: int) -> (HttpResponse | HttpResponseBadRequest):
+    def put(self, request: AuthenticatedAjaxHttpRequest, record_id: int) -> (HttpResponse | HttpResponseBadRequest):
         """Save comment."""
         record = get_object_or_404(Record, user=request.user, pk=record_id)
 
