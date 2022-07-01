@@ -6,7 +6,6 @@ export PROJECT := movies
 export APP := moviesapp
 export BUCKET := scrap-db-backups
 export DOCKER_SECRETS_ENV_FILE := docker_secrets.env
-PROD_DB_HOST := mysql.samarchyan.me
 
 ENV_FILE := env.sh
 ENV_CUSTOM_FILE := env_custom.sh
@@ -137,7 +136,6 @@ djhtml-script:
 
 .PHONY: backup-db
 backup-db:
-	export DB_HOST="${PROD_DB_HOST}" && \
 	scripts/backup_db.sh
 
 .PHONY: upload-backup
