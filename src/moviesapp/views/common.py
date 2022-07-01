@@ -10,7 +10,7 @@ class SaveRecordsOrderView(AjaxView):
     """
     Save records order view.
 
-    This view is used on the list nd gallery pages.
+    This view is used on the list and gallery pages.
     """
 
     def put(self, request: AjaxAuthenticatedHttpRequest) -> (HttpResponse | HttpResponseBadRequest):
