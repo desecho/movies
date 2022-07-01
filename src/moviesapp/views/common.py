@@ -1,7 +1,7 @@
 """Common views."""
 from django.http import HttpResponse, HttpResponseBadRequest
 
-from ..http import AjaxAuthenticatedHttpRequest
+from ..http import AuthenticatedAjaxHttpRequest
 from ..models import Record
 from .mixins import AjaxView
 
@@ -13,7 +13,7 @@ class SaveRecordsOrderView(AjaxView):
     This view is used on the list and gallery pages.
     """
 
-    def put(self, request: AjaxAuthenticatedHttpRequest) -> (HttpResponse | HttpResponseBadRequest):
+    def put(self, request: AuthenticatedAjaxHttpRequest) -> (HttpResponse | HttpResponseBadRequest):
         """Save records order."""
         try:
             records = request.PUT["records"]

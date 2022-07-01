@@ -29,7 +29,7 @@ class AjaxHttpRequest(HttpRequest):
     PUT: UntypedObject = {}
 
 
-class AjaxAuthenticatedHttpRequest(AuthenticatedHttpRequest):
-    """AJAX authenticated request."""
+class AuthenticatedAjaxHttpRequest(AuthenticatedHttpRequest):
+    """Authenticated AJAX request."""
 
     PUT: UntypedObject = {}
