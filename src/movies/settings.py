@@ -44,6 +44,9 @@ LANGUAGE_RU = "ru"
 DEBUG = bool(getenv("DEBUG"))
 INTERNAL_IPS = [getenv("INTERNAL_IP")]
 
+# Test
+IS_TEST = bool(getenv("IS_TEST"))
+
 ADMIN_EMAIL = getenv("ADMIN_EMAIL")
 SECRET_KEY = getenv("SECRET_KEY")
 DATABASES = {
@@ -161,6 +164,7 @@ INSTALLED_APPS = [
     "social_django",
     "django_countries",
     "django_celery_results",
+    "cacheops",
     APP,
 ]
 if DEBUG:  # pragma: no cover
@@ -234,6 +238,11 @@ MEDIA_URL = "/media/"
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
 # --== Modules settings ==--
+
+# cacheops
+CACHEOPS_REDIS = f"{REDIS_URL}0"
+CACHEOPS_DEFAULTS = {"timeout": 60 * 60}
+CACHEOPS = {"moviesapp.*": {}}
 
 # django-registration-redux
 ACCOUNT_ACTIVATION_DAYS = 7
@@ -370,7 +379,6 @@ TRAILER_SITES: TrailerSitesSettings = {
     "Vimeo": "https://vimeo.com/",
 }
 VK_NO_AVATAR = ("https://vk.com/images/camera_100.png", "https://vk.com/images/camera_200.png")
-IS_TEST = False
 INCLUDE_ADULT = False
 
 # Watch data

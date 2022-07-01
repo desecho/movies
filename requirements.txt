@@ -18,6 +18,7 @@ django-celery-results==2.4.0
 # Contains types support not released yet
 -e git+https://github.com/desecho/django-countries.git@fix#egg=django-countries
 django-countries[pyuca]
+django-cacheops==6.1
 
 # Django debug
 django-debug-toolbar
