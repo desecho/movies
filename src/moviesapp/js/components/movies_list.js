@@ -13,12 +13,12 @@ const template = `
           <a
             href="javascript:void(0)"
             @click="addToListFromDb(movie, listWatchedId)"
-            title="{% translate 'Add to the list' %} {% translate 'Watched' %}"
+            :title="addToWatchedListTitle"
             v-show="movie.isReleased"
           >
             <font-awesome-icon icon="fa-solid fa-eye" />
           </a>
-          <a href="javascript:void(0)" title="{% translate 'Add to the list' %} {% translate 'To Watch' %}"
+          <a href="javascript:void(0)" :title="addToToWatchListTitle"
             @click="addToListFromDb(movie, listToWatchId)"><font-awesome-icon icon="fa-solid fa-eye-slash" /></a>
         </div>
         <a :href="movie.tmdbLink" target="_blank">
@@ -51,6 +51,14 @@ export default {
       listWatchedId: listWatchedId,
       listToWatchId: listToWatchId,
     };
+  },
+  computed: {
+    addToWatchedListTitle() {
+      return gettext('Add to the list') + ' ' + gettext('Watched');
+    },
+    addToToWatchListTitle() {
+      return gettext('Add to the list') + ' ' + gettext('To Watch');
+    },
   },
   methods: {
     getSrcSet: getSrcSet,

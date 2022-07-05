@@ -4,3 +4,6 @@
 
 gettext('Actor');
 gettext('Director');
+gettext('Watched');
+gettext('Add to the list');
+gettext('To Watch');
