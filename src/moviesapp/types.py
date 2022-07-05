@@ -2,8 +2,9 @@
 from __future__ import annotations
 
 from datetime import date, time
-from typing import Any, Dict, List, Literal, Optional, Tuple, TypeAlias
+from typing import Any, Dict, List, Literal, Optional, Tuple, TypeAlias, Union
 
+from django.urls import URLPattern, URLResolver
 from typing_extensions import NotRequired, TypedDict
 
 
@@ -118,3 +119,5 @@ SearchType = Literal["movie", "actor", "director"]
 
 # UntypedObject means it is a loaded JSON object
 UntypedObject: TypeAlias = Dict[str, Any]
+
+URL: TypeAlias = Union[URLPattern, URLResolver]

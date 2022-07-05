@@ -1,17 +1,18 @@
 """URL Configuration."""
 
-from typing import List, Union
+from typing import List
 
 import debug_toolbar
 from django.conf import settings
 from django.conf.urls import include
 from django.contrib import admin
 from django.contrib.auth.views import LoginView
-from django.urls import URLPattern, URLResolver, path, register_converter
+from django.urls import path, register_converter
 from django.views.defaults import page_not_found
 from django.views.i18n import JavaScriptCatalog
 
 from moviesapp.converters import FeedConverter, ListConverter
+from moviesapp.types import URL
 from moviesapp.views.about import AboutView
 from moviesapp.views.common import SaveRecordsOrderView
 from moviesapp.views.gallery import GalleryView
@@ -33,10 +34,8 @@ admin.autodiscover()
 register_converter(ListConverter, "list")
 register_converter(FeedConverter, "feed")
 
-URL = Union[URLPattern, URLResolver]
-URLList = List[URL]
 
-urlpatterns: URLList = []
+urlpatterns: List[URL] = []
 
 
 def path_404(url_path: str, name: str) -> URL:
