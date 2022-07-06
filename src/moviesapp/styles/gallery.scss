@@ -28,5 +28,11 @@
         opacity: 0.7;
       }
     }
+
+    @media (min-width: 320px) and (max-width: 576px) {
+      .poster-big {
+        width: 92px;
+      }
+    }
   }
 }
