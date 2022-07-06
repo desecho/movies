@@ -6,7 +6,7 @@ import {newApp} from './app';
 import {listWatchedId, listToWatchId} from './constants';
 
 const starSizeNormal = 35;
-const starSizeMinimal = 20;
+const starSizeMinimal = 15;
 
 newApp({
   data() {
