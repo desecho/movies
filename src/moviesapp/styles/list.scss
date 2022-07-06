@@ -49,17 +49,6 @@
     margin-left: 10px;
   }
 
-  @media (max-width: 768px) {
-    .search {
-      margin-top: 10px;
-    }
-
-    #movie-count {
-      min-height: 50px;
-      float: none;
-    }
-  }
-
   .urls {
     .tmdb {
       background: url("../images/tmdb.svg");
@@ -120,6 +109,29 @@
     .imdb-rating {
       float: right;
       margin-right: 10px;
+    }
+  }
+
+  .form-control {
+    width: auto;
+  }
+
+  @media (max-width: 768px) {
+    .search {
+      margin-top: 10px;
+    }
+  }
+
+  @media (min-width: 320px) and (max-width: 576px) {
+    .movie {
+      max-width: 350px;
+    }
+
+    .review-minimal {
+      .vue-star-rating {
+        display: block;
+        left: 0;
+      }
     }
   }
 }

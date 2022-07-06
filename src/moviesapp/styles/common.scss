@@ -2,6 +2,7 @@
 .results {
   clear: both;
   margin-top: 20px;
+  padding: 0;
 }
 
 .title {
@@ -36,6 +37,12 @@
 
   img {
     margin-top: 10px;
+  }
+}
+
+@media (min-width: 320px) and (max-width: 576px) {
+  #movie-count {
+    float: none;
   }
 }
 

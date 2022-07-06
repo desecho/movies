@@ -1,9 +1,6 @@
 <footer class="container-fluid py-3">
-  Powered by
-  <a href="https://www.themoviedb.org" target="_blank"><span class="powered-by-tmdb"></span></a>
-  &amp; <a href="https://www.omdbapi.com/" target="_blank">OMDb</a>
-  <br>
-  <a href="{% url 'about' %}">{% translate 'About Movies' %}</a>
-  <br>
+  Powered by <a href="https://www.themoviedb.org" target="_blank"><span class="powered-by-tmdb"></span></a>
+  &amp; <a href="https://www.omdbapi.com/" target="_blank">OMDb</a><br>
+  <a href="{% url 'about' %}">{% translate 'About Movies' %}</a><br>
   Copyright © {% now 'Y' %} <a href="mailto:{{ ADMIN_EMAIL }}">{{ ADMIN_EMAIL }}</a>
 </footer>
