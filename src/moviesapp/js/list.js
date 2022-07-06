@@ -31,7 +31,7 @@ newApp({
     isSortable() {
       const vm = this;
 
-      return vm.listId == vm.listToWatchId && !vm.isAnothersAccount && vm.sort == 'custom';
+      return vm.listId == vm.listToWatchId && !vm.isAnothersAccount && vm.sort == 'custom' && vm.mode == 'minimal';
     },
     starSize() {
       const vm = this;
