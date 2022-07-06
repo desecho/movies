@@ -26,15 +26,6 @@ class PeopleViewContextData(TypedDict):
     users: Page["User"] | List["User"]
 
 
-class GalleryViewContextData(TypedDict):
-    """Gallery view context data."""
-
-    records: str
-    anothers_account: Optional["User"]
-    list: ListKeyName
-    list_id: int
-
-
 class ListViewContextData(TypedDict):
     """List view context data."""
 
@@ -53,29 +44,16 @@ class TrendingViewContextData(TypedDict):
     movies: str
 
 
-class MovieGalleryObject(TypedDict):
-    """Movie gallery object."""
-
-    title: str
-    titleOriginal: str
-    posterNormal: Optional[str]
-    posterBig: Optional[str]
-
-
-class RecordGalleryObject(TypedDict):
-    """Record gallery object."""
-
-    id: int
-    order: int
-    movie: MovieGalleryObject
-
-
-class MovieObject(MovieGalleryObject):
+class MovieObject(TypedDict):
     """Movie object."""
 
     id: int
-    isReleased: bool
+    title: str
+    titleOriginal: str
     posterSmall: Optional[str]
+    posterNormal: Optional[str]
+    posterBig: Optional[str]
+    isReleased: bool
     imdbRating: Optional[float]
     releaseDate: Optional[str]
     country: Optional[str]

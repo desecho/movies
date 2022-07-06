@@ -1,13 +1,12 @@
 'use strict';
 
 import axios from 'axios';
-import {getSrcSet, initAxios, openUrl, saveRecordsOrder} from './helpers';
+import {getSrcSet, initAxios} from './helpers';
 import {newApp} from './app';
 import {listWatchedId, listToWatchId} from './constants';
 
 const starSizeNormal = 35;
 const starSizeMinimal = 25;
-
 
 newApp({
   data() {
@@ -31,7 +30,10 @@ newApp({
     isSortable() {
       const vm = this;
 
-      return vm.listId == vm.listToWatchId && !vm.isAnothersAccount && vm.sort == 'custom' && vm.mode == 'minimal';
+      return (vm.listId == vm.listToWatchId &&
+        !vm.isAnothersAccount &&
+        vm.sort == 'custom' &&
+        (vm.mode == 'minimal' || vm.mode == 'gallery'));
     },
     starSize() {
       const vm = this;
@@ -58,8 +60,31 @@ newApp({
         vm.$toast.error(gettext('Error applying the settings'));
       });
     },
-    saveRecordsOrder: saveRecordsOrder,
-    openUrl: openUrl,
+    saveRecordsOrder() {
+      function getSortData() {
+        const data = [];
+        vm.records.forEach((record, index) => {
+          const sortData = {'id': record.id, 'order': index + 1};
+          data.push(sortData);
+        });
+        return data;
+      }
+
+      function success() {
+        vm.recordsOriginal = vm.records;
+      }
+
+      function fail() {
+        vm.records = vm.recordsOriginal;
+        vm.$toast.error(gettext('Error saving movie order'));
+      }
+
+      const vm = this; // eslint-disable-line no-invalid-this
+      axios.put(vm.urls.saveRecordsOrder, {'records': getSortData()}).then(success).catch(fail);
+    },
+    openUrl(url) {
+      location.href = url;
+    },
     getSrcSet: getSrcSet,
     changeRating(record, rating) {
       function success() {
@@ -171,6 +196,18 @@ newApp({
       }).catch(function() {
         vm.$toast.error(gettext('Error saving a comment'));
       });
+    },
+    moveToTop(record, index) {
+      const vm = this;
+      vm.records.splice(index, 1);
+      vm.records.unshift(record);
+      vm.saveRecordsOrder();
+    },
+    moveToBottom(record, index) {
+      const vm = this;
+      vm.records.splice(index, 1);
+      vm.records.push(record);
+      vm.saveRecordsOrder();
     },
   },
   mounted() {

@@ -21,7 +21,7 @@ from .types import (
     RecordObject,
     SortType,
 )
-from .utils import add_movie_to_list, get_records, paginate, sort_by_rating
+from .utils import add_movie_to_list, paginate
 
 
 class ChangeRatingView(AjaxView):
@@ -163,14 +163,21 @@ class ListView(TemplateAnonymousView):
         return records.filter(Q(movie__title_en__icontains=query) | Q(movie__title_ru__icontains=query))
 
     @staticmethod
+    def _sort_by_rating(records: QuerySet[Record], username: Optional[str], list_name: str) -> QuerySet[Record]:
+        """Sort records by rating."""
+        if not username and list_name == "to-watch":
+            # Sorting is changing here because there is no user rating yet.
+            return records.order_by("-movie__imdb_rating", "-movie__release_date")
+        return records.order_by("-rating", "-movie__release_date")
+
     def _sort_records(
-        records: QuerySet[Record], sort: SortType, username: Optional[str], list_name: str
+        self, records: QuerySet[Record], sort: SortType, username: Optional[str], list_name: str
     ) -> QuerySet[Record]:
         """Sort records."""
         if sort == "releaseDate":
             return records.order_by("-movie__release_date")
         if sort == "rating":
-            return sort_by_rating(records, username, list_name)
+            return self._sort_by_rating(records, username, list_name)
         if sort == "additionDate":
             return records.order_by("-date")
         if sort == "custom":
@@ -220,7 +227,7 @@ class ListView(TemplateAnonymousView):
         or if the code changes resulted in invalid values.
         """
         SORT_TYPES: ListType[SortType] = ["releaseDate", "rating", "additionDate", "custom"]
-        MODES = ["full", "compact", "minimal"]
+        MODES = ["full", "compact", "minimal", "gallery"]
         LIST_NAMES = ["watched", "to-watch"]
         session = self.request.session
 
@@ -342,6 +349,11 @@ class ListView(TemplateAnonymousView):
         for record_object in record_objects:
             record_object["listId"] = list_data.get(record_object["id"])
 
+    @staticmethod
+    def _get_records(list_name: str, user: Union[User, UserAnonymous]) -> QuerySet[Record]:
+        """Get records for certain user and list."""
+        return user.get_records().filter(list__key_name=list_name).select_related("movie")
+
     def get_context_data(self, **kwargs: Any) -> ListViewContextData:  # type: ignore
         """Get context data."""
         list_name: ListKeyName = kwargs["list_name"]
@@ -350,7 +362,7 @@ class ListView(TemplateAnonymousView):
         request: HttpRequest = self.request  # type: ignore
         anothers_account = self.anothers_account
         user = request.user if anothers_account is None else anothers_account
-        records = get_records(list_name, user)
+        records = self._get_records(list_name, user)
         # Session is supposed to be initialized at that point.
         session = self.request.session
         query = request.GET.get("query", "")
@@ -392,3 +404,24 @@ class ListView(TemplateAnonymousView):
         self._sanitize_session_values()
         self._initialize_session_values()
         return super().get(request, *args, **kwargs)
+
+
+class SaveRecordsOrderView(AjaxView):
+    """
+    Save records order view.
+
+    This view is used on the list and gallery pages.
+    """
+
+    def put(self, request: AuthenticatedAjaxHttpRequest) -> (HttpResponse | HttpResponseBadRequest):
+        """Save records order."""
+        try:
+            records = request.PUT["records"]
+        except KeyError:
+            response: HttpResponseBadRequest = self.render_bad_request_response()
+            return response
+
+        for record in records:
+            # If record id is not found we silently ignore it
+            Record.objects.filter(pk=record["id"], user=request.user).update(order=record["order"])
+        return self.success()

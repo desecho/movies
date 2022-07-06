@@ -27,7 +27,6 @@ module.exports = {
     search: getBundle('search.js'),
     trending: getBundle('trending.js'),
     list: getBundle('list.js'),
-    gallery: getBundle('gallery.js'),
     registration: getBundleWithEmptyApp('registration.js'),
     passwordChange: getBundleWithEmptyApp('password_change.js'),
     emptyApp: getBundle('empty_app.js'),

@@ -7,7 +7,7 @@ from django.core.paginator import EmptyPage, Page, PageNotAnInteger, Paginator
 from django.db.models import QuerySet
 from django.shortcuts import get_object_or_404
 
-from ..models import Action, ActionRecord, Record, User, UserAnonymous
+from ..models import Action, ActionRecord, Record, User
 from ..tmdb import get_poster_url, get_tmdb_url
 from ..types import TmdbMovieListResultProcessed
 from ..utils import is_movie_released
@@ -61,19 +61,6 @@ def get_anothers_account(username: Optional[str]) -> Optional[User]:
     if username:
         return get_object_or_404(User, username=username)
     return None
-
-
-def get_records(list_name: str, user: Union[User, UserAnonymous]) -> QuerySet[Record]:
-    """Get records for certain user and list."""
-    return user.get_records().filter(list__key_name=list_name).select_related("movie")
-
-
-def sort_by_rating(records: QuerySet[Record], username: Optional[str], list_name: str) -> QuerySet[Record]:
-    """Sort records by rating."""
-    if not username and list_name == "to-watch":
-        # Sorting is changing here because there is no user rating yet.
-        return records.order_by("-movie__imdb_rating", "-movie__release_date")
-    return records.order_by("-rating", "-movie__release_date")
 
 
 def _format_date(date_: Optional[date], lang: str) -> Optional[str]:
