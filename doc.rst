@@ -10,9 +10,14 @@ Celery
 ---------
 Celery is used to load watch data of a movie that was just added to the database with a delay in the background.
 
-Redis
+Cache
 --------
 Redis is used for caching.
+
+The following is being cached:
+
+* ``has_friends`` method of the ``UserBase`` class
+* ``self.vk.friends.get()`` call of the ``get_friends`` method of the ``Vk`` class
 
 Avatars
 -----------
