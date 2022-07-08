@@ -3,16 +3,6 @@
 import {loadProgressBar} from 'axios-progress-bar';
 import axios from 'axios';
 
-export function param(params) {
-  const paramsOutput = new URLSearchParams();
-  for (const key in params) {
-    if (Object.prototype.hasOwnProperty.call(params, key)) {
-      paramsOutput.append(key, params[key]);
-    }
-  }
-  return paramsOutput;
-}
-
 export function removeItemOnce(arr, value) {
   const index = arr.indexOf(value);
   if (index > -1) {

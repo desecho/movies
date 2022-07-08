@@ -1,7 +1,7 @@
 'use strict';
 
 import axios from 'axios';
-import {param, initAxios} from './helpers';
+import {initAxios} from './helpers';
 import {newApp} from './app';
 import MoviesList from './components/movies_list.js';
 
@@ -40,8 +40,8 @@ newApp({
         type: vm.searchTypeCode,
         options: JSON.stringify(options),
       };
-      const url = vm.urls.searchMovie + '?' + param(data);
-      axios.get(url).then(function(response) {
+      const url = vm.urls.searchMovie;
+      axios.get(url, {params: data}).then(function(response) {
         const movies = response.data.movies;
         if (movies.length === 0) {
           vm.$toast.info(gettext('Nothing has been found'));
