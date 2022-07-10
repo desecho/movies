@@ -22,7 +22,7 @@ Development
 5. Run ``make createsuperuser`` to create a superadmin user
 6. Edit files ``env_custom.sh`` and ``env_secrets.sh``
 
-For development run :
+For development run:
 
 ```bash
 make run
