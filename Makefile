@@ -96,10 +96,10 @@ create-db:
 .PHONY: load-initial-fixtures
 ## Load initial fixtures
 load-initial-fixtures:
-	$(MAKE) loaddata lists
-	$(MAKE) loaddata actions
-	$(MAKE) loaddata providers
-	$(MAKE) loaddata vk_countries
+	$(MAKE) manage arguments="loaddata lists"
+	$(MAKE) manage arguments="loaddata actions"
+	$(MAKE) manage arguments="loaddata providers"
+	$(MAKE) manage arguments="loaddata vk_countries"
 
 .PHONY: bootstrap
 ## Bootstrap project
@@ -402,19 +402,6 @@ migrate:
 	${SOURCE_CMDS} && \
 	${MANAGE_CMD} migrate
 
-ifeq (loaddata,$(firstword $(MAKECMDGOALS)))
-  # Use the rest as arguments
-  LOADDATA_ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
-  # Turn them into do-nothing targets
-  $(eval $(LOADDATA_ARGS):;@:)
-endif
-
-.PHONY: loaddata
-## Load fixtures. Usage: [fixture]
-loaddata:
-	${SOURCE_CMDS} && \
-	${MANAGE_CMD} loaddata ${LOADDATA_ARGS}
-
 .PHONY: collectstatic
 ## Collect static files
 collectstatic:
@@ -514,6 +501,18 @@ endif
 prod-manage:
 	scripts/run_management_command_prod.sh ${PROD_MANAGE_ARGS} $(arguments)
 
+ifeq (prod-manage-interactive,$(firstword $(MAKECMDGOALS)))
+  # Use the rest as arguments
+  PROD_MANAGE_INTERACTIVE_ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
+  # Turn them into do-nothing targets
+  $(eval $(PROD_MANAGE_INTERACTIVE_ARGS):;@:)
+endif
+
+.PHONY: prod-manage-interactive
+## Run management command in prod (interactive). Usage: make prod-manage [command] arguments="[arguments]"
+prod-manage-interactive:
+	scripts/run_management_command_interactive_prod.sh ${PROD_MANAGE_INTERACTIVE_ARGS} $(arguments)
+
 .PHONY: prod-shell
 ## Run shell in prod
 prod-shell:
@@ -529,4 +528,12 @@ prod-migrate:
 prod-enable-debug:
 	yq eval '.data.DEBUG="True"' deployment/configmap.yaml | kubectl apply -f -
 	kubectl rollout restart "deployment/${PROJECT}"
+
+.PHONY: prod-load-initial-fixtures
+## Load initial fixtures in prod
+prod-load-initial-fixtures:
+	$(MAKE) prod-manage arguments="loaddata lists"
+	$(MAKE) prod-manage arguments="loaddata actions"
+	$(MAKE) prod-manage arguments="loaddata providers"
+	$(MAKE) prod-manage arguments="loaddata vk_countries"
 #------------------------------------
