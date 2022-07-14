@@ -1,7 +1,7 @@
 """Types for views."""
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, List, Literal, Optional
+from typing import TYPE_CHECKING, Literal, Optional
 
 from django.core.paginator import Page
 from django.db.models import QuerySet
@@ -23,13 +23,13 @@ class FeedViewContextData(TypedDict):
 class PeopleViewContextData(TypedDict):
     """People view context data."""
 
-    users: Page["User"] | List["User"]
+    users: Page["User"] | list["User"]
 
 
 class ListViewContextData(TypedDict):
-    """List view context data."""
+    """list view context data."""
 
-    records: Page["Record"] | List["Record"]
+    records: Page["Record"] | list["Record"]
     record_objects: str
     anothers_account: Optional["User"]
     list_id: int
@@ -66,7 +66,7 @@ class MovieObject(TypedDict):
     runtime: Optional[str]
     imdbUrl: str
     tmdbUrl: str
-    trailers: List[Trailer]
+    trailers: list[Trailer]
     hasPoster: bool
 
 
@@ -104,7 +104,7 @@ class RecordObject(TypedDict):
     comment: str
     commentArea: bool
     rating: int
-    providerRecords: List[ProviderRecordObject]
+    providerRecords: list[ProviderRecordObject]
     options: OptionsObject
     listId: NotRequired[Optional[int]]
 

@@ -1,6 +1,6 @@
 """Update watch data."""
 import sys
-from typing import Any, List as ListType, Optional
+from typing import Any, Optional
 
 from django.conf import settings
 from django.core.management.base import CommandParser
@@ -40,7 +40,7 @@ class Command(BaseCommand):
         )
 
     @staticmethod
-    def _filter_out_movies_not_requiring_update(movies: ListType[Movie]) -> None:
+    def _filter_out_movies_not_requiring_update(movies: list[Movie]) -> None:
         """
         Filter out movies that don't need an update.
 
@@ -52,8 +52,8 @@ class Command(BaseCommand):
 
     @staticmethod
     def _remove_no_longer_available_provider_records(
-        existing_provider_records: ListType[ProviderRecordType],
-        watch_data: ListType[WatchDataRecord],
+        existing_provider_records: list[ProviderRecordType],
+        watch_data: list[WatchDataRecord],
     ) -> bool:
         """Remove provider records that are no longer available."""
         removed = False
@@ -67,8 +67,8 @@ class Command(BaseCommand):
 
     @staticmethod
     def _filter_out_already_existing_provider_records(
-        existing_provider_records: ListType[ProviderRecordType],
-        watch_data: ListType[WatchDataRecord],
+        existing_provider_records: list[ProviderRecordType],
+        watch_data: list[WatchDataRecord],
     ) -> None:
         """
         Filter out already existing provider records.

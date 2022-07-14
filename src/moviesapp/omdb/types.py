@@ -1,7 +1,7 @@
 """OMDb types."""
 from __future__ import annotations
 
-from typing import List, Literal, Optional
+from typing import Literal, Optional
 
 from typing_extensions import NotRequired, TypedDict
 
@@ -27,7 +27,7 @@ class OmdbMovie(TypedDict):
     Country: str
     Awards: str
     Poster: str
-    Ratings: List[UntypedObject]  # We can set better type for this but it is not used so that is not necessary.
+    Ratings: list[UntypedObject]  # We can set better type for this but it is not used so that is not necessary.
     Metascore: str
     imdbRating: str
     imdbVotes: str

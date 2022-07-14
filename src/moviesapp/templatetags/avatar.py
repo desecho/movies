@@ -1,7 +1,7 @@
 """Template tags for avatar."""
 
 import hashlib
-from typing import Optional, Tuple
+from typing import Optional
 from urllib import parse  # pylint: disable=no-name-in-module
 
 from django import template
@@ -13,7 +13,7 @@ from ..models import User
 register = template.Library()
 
 
-def _get_social_avatar_urls(user: User, size_type: str) -> Optional[Tuple[str, Optional[str]]]:
+def _get_social_avatar_urls(user: User, size_type: str) -> Optional[tuple[str, Optional[str]]]:
     """Get avatar URLs from social accounts."""
     if not user.avatar_small:
         return None
@@ -23,8 +23,8 @@ def _get_social_avatar_urls(user: User, size_type: str) -> Optional[Tuple[str, O
 
 
 def _get_avatar_urls(
-    user: User, size: float, social_avatars_urls: Optional[Tuple[str, Optional[str]]]
-) -> Tuple[str, Optional[str]]:
+    user: User, size: float, social_avatars_urls: Optional[tuple[str, Optional[str]]]
+) -> tuple[str, Optional[str]]:
     """Get avatar URLs."""
     if social_avatars_urls is None:
         return _get_gravatar_urls(user, size)
@@ -38,7 +38,7 @@ def _get_gravatar_url(user: User, size: float) -> str:
     return f"https://www.gravatar.com/avatar/{hash_}?{params}"
 
 
-def _get_gravatar_urls(user: User, size: float) -> Tuple[str, str]:
+def _get_gravatar_urls(user: User, size: float) -> tuple[str, str]:
     """Get Gravatar URLs."""
     url = _get_gravatar_url(user, size)
     url_2x = _get_gravatar_url(user, size * 2)

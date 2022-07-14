@@ -1,7 +1,7 @@
 """Search views."""
 import json
 from operator import itemgetter
-from typing import List as ListType, Optional
+from typing import Optional
 
 from django.conf import settings
 from django.http import Http404, HttpResponse, HttpResponseBadRequest
@@ -33,7 +33,7 @@ class SearchMovieView(AjaxAnonymousView):
         return popularity >= settings.MIN_POPULARITY
 
     @staticmethod
-    def _sort_by_date(movies: ListType[TmdbMovieListResultProcessed]) -> ListType[TmdbMovieListResultProcessed]:
+    def _sort_by_date(movies: list[TmdbMovieListResultProcessed]) -> list[TmdbMovieListResultProcessed]:
         """Sort movies by date."""
         movies_with_date = []
         movies_without_date = []
@@ -46,14 +46,14 @@ class SearchMovieView(AjaxAnonymousView):
         movies = movies_with_date + movies_without_date
         return movies
 
-    def _filter_out_unpopular_movies(self, tmdb_movies: ListType[TmdbMovieListResultProcessed]) -> None:
+    def _filter_out_unpopular_movies(self, tmdb_movies: list[TmdbMovieListResultProcessed]) -> None:
         for tmdb_movie in list(tmdb_movies):
             if not self._is_popular_movie(tmdb_movie["popularity"]):
                 tmdb_movies.remove(tmdb_movie)
 
     def _get_movies_from_tmdb(
         self, query: str, search_type: SearchType, sort_by_date: bool, popular_only: bool
-    ) -> ListType[MovieListResult]:
+    ) -> list[MovieListResult]:
         """Get movies from TMDB."""
         request: AjaxHttpRequest = self.request  # type: ignore
         lang = request.LANGUAGE_CODE

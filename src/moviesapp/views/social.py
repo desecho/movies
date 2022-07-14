@@ -1,7 +1,7 @@
 """Social views."""
 
 from datetime import datetime
-from typing import Any, List
+from typing import Any
 
 from dateutil.relativedelta import relativedelta
 from django.conf import settings
@@ -43,11 +43,11 @@ class PeopleView(TemplateAnonymousView):
     """People view."""
 
     template_name = "social/people.html"
-    users: List[User] = list(User.objects.none())
+    users: list[User] = list(User.objects.none())
 
     def get_context_data(self, **kwargs: Any) -> PeopleViewContextData:  # type: ignore  # pylint: disable=unused-argument
         """Get context data."""
-        users: Page[User] | List[User] = paginate(  # type: ignore
+        users: Page[User] | list[User] = paginate(  # type: ignore
             self.users, self.request.GET.get("page"), settings.PEOPLE_ON_PAGE
         )
         return {"users": users}

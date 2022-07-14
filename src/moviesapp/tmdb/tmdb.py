@@ -2,7 +2,7 @@
 
 from collections import abc
 from datetime import date, datetime, time, timedelta
-from typing import List, Optional
+from typing import Optional
 from urllib.parse import urljoin
 
 import requests
@@ -57,7 +57,7 @@ def _remove_trailing_slash_from_tmdb_poster(poster: Optional[str]) -> Optional[s
     return None
 
 
-def _filter_movies_only(entries: List[TmdbCast] | List[TmdbCrew]) -> List[TmdbCast | TmdbCrew]:
+def _filter_movies_only(entries: list[TmdbCast] | list[TmdbCrew]) -> list[TmdbCast | TmdbCrew]:
     return [e for e in entries if e.get("media_type") == "movie"]
 
 
@@ -69,10 +69,10 @@ def _get_date(date_str: Optional[str]) -> Optional[date]:
 
 
 def _get_processed_movie_data(
-    entries: List[TmdbCast] | List[TmdbCrew] | List[TmdbMovieListResult],
-) -> List[TmdbMovieListResultProcessed]:
+    entries: list[TmdbCast] | list[TmdbCrew] | list[TmdbMovieListResult],
+) -> list[TmdbMovieListResultProcessed]:
     """Return processed movie data."""
-    movies: List[TmdbMovieListResultProcessed] = []
+    movies: list[TmdbMovieListResultProcessed] = []
     for entry in entries:
         movie: TmdbMovieListResultProcessed = {
             "poster_path": _remove_trailing_slash_from_tmdb_poster(entry.get("poster_path")),
@@ -86,7 +86,7 @@ def _get_processed_movie_data(
     return movies
 
 
-def search_movies(query_str: str, search_type: SearchType, lang: str) -> List[TmdbMovieListResultProcessed]:
+def search_movies(query_str: str, search_type: SearchType, lang: str) -> list[TmdbMovieListResultProcessed]:
     """
     Search Movies.
 
@@ -103,11 +103,11 @@ def search_movies(query_str: str, search_type: SearchType, lang: str) -> List[Tm
     params = {"query": query, "language": lang, "include_adult": settings.INCLUDE_ADULT}
     search = tmdb.Search()
     if search_type == "movie":
-        movies: List[TmdbMovieListResult] = search.movie(**params)["results"]
+        movies: list[TmdbMovieListResult] = search.movie(**params)["results"]
         return _get_processed_movie_data(movies)
 
     # search_type == "actor" or "director"
-    persons: List[TmdbPerson] = search.person(**params)["results"]
+    persons: list[TmdbPerson] = search.person(**params)["results"]
     # We only select the first found actor/director.
     if persons:
         person_id = persons[0]["id"]
@@ -116,10 +116,10 @@ def search_movies(query_str: str, search_type: SearchType, lang: str) -> List[Tm
     person = tmdb.People(person_id)
     combined_credits: TmdbCombinedCredits = person.combined_credits(language=lang)
     if search_type == "actor":
-        cast_entries: List[TmdbCast] = _filter_movies_only(combined_credits["cast"])  # type: ignore
+        cast_entries: list[TmdbCast] = _filter_movies_only(combined_credits["cast"])  # type: ignore
         movies_processed = _get_processed_movie_data(cast_entries)
     else:  # search_type == "director"
-        crew_entries: List[TmdbCrew] = _filter_movies_only(combined_credits["crew"])  # type: ignore
+        crew_entries: list[TmdbCrew] = _filter_movies_only(combined_credits["crew"])  # type: ignore
         crew_entries = [e for e in crew_entries if e["job"] == "Director"]
         movies_processed = _get_processed_movie_data(crew_entries)
     return movies_processed
@@ -130,7 +130,7 @@ def _is_valid_trailer_site(site: str) -> bool:
     return site in settings.TRAILER_SITES.keys()
 
 
-def _get_trailers(tmdb_movie: tmdb.Movies, lang: str) -> List[TmdbTrailer]:
+def _get_trailers(tmdb_movie: tmdb.Movies, lang: str) -> list[TmdbTrailer]:
     """Get trailers."""
     trailers = []
     videos = tmdb_movie.videos(language=lang)
@@ -150,9 +150,9 @@ def _get_trailers(tmdb_movie: tmdb.Movies, lang: str) -> List[TmdbTrailer]:
     return trailers
 
 
-def get_watch_data(tmdb_id: int) -> List[WatchDataRecord]:
+def get_watch_data(tmdb_id: int) -> list[WatchDataRecord]:
     """Get watch data."""
-    watch_data: List[WatchDataRecord] = []
+    watch_data: list[WatchDataRecord] = []
     results: TmdbWatchData = tmdb.Movies(tmdb_id).watch_providers()["results"]
     items: abc.ItemsView[str, TmdbWatchDataCountry] = results.items()  # type: ignore
     for country, data in items:
@@ -203,7 +203,7 @@ def get_tmdb_movie_data(tmdb_id: int) -> TmdbMovieProcessed:
     }
 
 
-def get_tmdb_providers() -> List[TmdbProvider]:
+def get_tmdb_providers() -> list[TmdbProvider]:
     """
     Get TMDB providers.
 
@@ -211,11 +211,11 @@ def get_tmdb_providers() -> List[TmdbProvider]:
     """
     params = {"api_key": settings.TMDB_KEY}
     response = requests.get(urljoin(settings.TMDB_API_BASE_URL, "watch/providers/movie"), params=params)
-    providers: List[TmdbProvider] = response.json()["results"]
+    providers: list[TmdbProvider] = response.json()["results"]
     return providers
 
 
-def get_trending() -> List[TmdbMovieListResultProcessed]:
+def get_trending() -> list[TmdbMovieListResultProcessed]:
     """Get trending movies."""
     tmdb_rending = tmdb.Trending(media_type="movie", time_window="week")
     return _get_processed_movie_data(tmdb_rending.info()["results"])

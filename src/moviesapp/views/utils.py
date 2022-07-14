@@ -1,6 +1,6 @@
 """Utils for views."""
 from datetime import date, datetime
-from typing import List, Optional, Union
+from typing import Optional, Union
 
 from babel.dates import format_date
 from django.core.paginator import EmptyPage, Page, PageNotAnInteger, Paginator
@@ -15,8 +15,8 @@ from .types import MovieListResult
 
 
 def paginate(
-    objects_to_paginate: Union[QuerySet[Record], List[User]], page: Optional[Union[str, int]], objects_on_page: int
-) -> Union[Page[Record], Page[User] | List[Record | User]]:
+    objects_to_paginate: Union[QuerySet[Record], list[User]], page: Optional[Union[str, int]], objects_on_page: int
+) -> Union[Page[Record], Page[User] | list[Record | User]]:
     """
     Paginate objects.
 
@@ -87,7 +87,7 @@ def get_movie_list_result(tmdb_movie: TmdbMovieListResultProcessed, lang: str) -
     )
 
 
-def filter_out_movies_user_already_has_in_lists(movies: List[MovieListResult], user: User) -> None:
+def filter_out_movies_user_already_has_in_lists(movies: list[MovieListResult], user: User) -> None:
     """Filter out movies user already has in lists."""
     user_movies_tmdb_ids = list(user.get_records().values_list("movie__tmdb_id", flat=True))
     for movie in list(movies):

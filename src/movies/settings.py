@@ -2,7 +2,6 @@
 
 from os import getenv
 from os.path import abspath, dirname, join
-from typing import List
 from urllib.parse import urljoin
 
 import django_stubs_ext
@@ -85,7 +84,7 @@ LOCALE_PATHS = (join(SRC_DIR, "locale"),)
 TIME_ZONE = "US/Eastern"
 USE_TZ = True
 
-TEMPLATES: List[TemplatesSettings] = [
+TEMPLATES: list[TemplatesSettings] = [
     {
         "NAME": "Main",
         "BACKEND": "django.template.backends.django.DjangoTemplates",

@@ -1,5 +1,5 @@
 """VK."""
-from typing import TYPE_CHECKING, Dict, List, Optional
+from typing import TYPE_CHECKING, Optional
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
@@ -66,14 +66,14 @@ class Vk:
             social_auth__provider=settings.VK_BACKEND, social_auth__uid__in=friends_ids
         ).exclude(hidden=True)
 
-    def get_data(self, fields: List[str]) -> UntypedObject:
+    def get_data(self, fields: list[str]) -> UntypedObject:
         """Get data."""
         if self.vk is None:
             return {}
-        data: List[UntypedObject] = self.vk.users.get(fields=fields)
+        data: list[UntypedObject] = self.vk.users.get(fields=fields)
         return data[0]
 
-    def get_countries(self, country_codes: List[str]) -> Dict[str, int]:
+    def get_countries(self, country_codes: list[str]) -> dict[str, int]:
         """
         Get countries.
 

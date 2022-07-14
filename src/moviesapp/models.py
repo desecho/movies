@@ -1,7 +1,7 @@
 """Models."""
 import json
 from datetime import timedelta
-from typing import Any, List as ListType, Optional
+from typing import Any, Optional
 from urllib.parse import urljoin
 
 from django.conf import settings
@@ -45,7 +45,7 @@ from .vk import Vk, VkError
 class UserBase:
     """User base class."""
 
-    def get_movie_ids(self) -> ListType[int]:
+    def get_movie_ids(self) -> list[int]:
         """Get movie IDs."""
         return list(self.get_records().values_list("movie__pk", flat=True))
 
@@ -102,13 +102,13 @@ class UserBase:
             return self.social_auth.exists()  # type: ignore
         return False
 
-    def get_users(self, friends: bool = False, sort: bool = False) -> ListType["User"]:
+    def get_users(self, friends: bool = False, sort: bool = False) -> list["User"]:
         """Get users."""
         if friends:
             return list(self.get_friends(sort=sort))
         return self._get_available_users_and_friends(sort=sort)
 
-    def _get_available_users_and_friends(self, sort: bool = False) -> ListType["User"]:
+    def _get_available_users_and_friends(self, sort: bool = False) -> list["User"]:
         """Get available users and friends."""
         user: User | UserAnonymous = self  # type: ignore
         available_users = User.objects.exclude(only_for_friends=True).exclude(hidden=True)
@@ -296,7 +296,7 @@ class Movie(Model):  # type: ignore
 
     # Hack to make tests work
     @staticmethod
-    def _get_real_trailers(trailers: ListType[TmdbTrailer]) -> ListType[TmdbTrailer]:
+    def _get_real_trailers(trailers: list[TmdbTrailer]) -> list[TmdbTrailer]:
         """
         Get "real" trailers.
 
@@ -308,7 +308,7 @@ class Movie(Model):  # type: ignore
             trailers_real = json.loads(trailers_str)
         return trailers_real
 
-    def _pre_get_trailers(self) -> ListType[TmdbTrailer]:
+    def _pre_get_trailers(self) -> list[TmdbTrailer]:
         """Pre-get trailers."""
         if self.trailers:
             trailers = self._get_real_trailers(self.trailers)
@@ -324,9 +324,9 @@ class Movie(Model):  # type: ignore
         base_url = TRAILER_SITES[site]
         return f"{base_url}{key}"
 
-    def get_trailers(self) -> ListType[Trailer]:
+    def get_trailers(self) -> list[Trailer]:
         """Get trailers."""
-        trailers: ListType[Trailer] = []
+        trailers: list[Trailer] = []
         for t in self._pre_get_trailers():
             trailer: Trailer = {
                 "url": self._get_trailer_url(t["site"], t["key"]),
@@ -335,7 +335,7 @@ class Movie(Model):  # type: ignore
             trailers.append(trailer)
         return trailers
 
-    def save_watch_data(self, watch_data: ListType[WatchDataRecord]) -> None:
+    def save_watch_data(self, watch_data: list[WatchDataRecord]) -> None:
         """Save watch data for a movie."""
         for provider_record in watch_data:
             provider_id = provider_record["provider_id"]

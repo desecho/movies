@@ -1,6 +1,6 @@
 """List views."""
 import json
-from typing import Any, Dict, List as ListType, Optional, Tuple, Union
+from typing import Any, Optional, Union
 
 from django.conf import settings
 from django.core.paginator import Page
@@ -186,18 +186,18 @@ class ListView(TemplateAnonymousView):
 
     @staticmethod
     def _get_record_movie_data(
-        record_ids_and_movie_ids_list: ListType[Tuple[int, int]]
-    ) -> Tuple[ListType[int], Dict[int, int]]:
+        record_ids_and_movie_ids_list: list[tuple[int, int]]
+    ) -> tuple[list[int], dict[int, int]]:
         """
         Get record's movie data.
 
-        Returns a Tuple of movie ids and a dictionary of record ids and movies ids.
+        Returns a tuple of movie ids and a dictionary of record ids and movies ids.
         """
         movie_ids = [x[1] for x in record_ids_and_movie_ids_list]
         record_ids_and_movie_ids = {x[0]: x[1] for x in record_ids_and_movie_ids_list}
         return (movie_ids, record_ids_and_movie_ids)
 
-    def _get_list_data(self, records: QuerySet[Record]) -> Dict[int, int]:
+    def _get_list_data(self, records: QuerySet[Record]) -> dict[int, int]:
         """
         Get list data.
 
@@ -205,14 +205,14 @@ class ListView(TemplateAnonymousView):
         """
         movie_ids, record_and_movie_ids = self._get_record_movie_data(list(records.values_list("id", "movie_id")))
         user: Union[User, UserAnonymous] = self.request.user  # type: ignore
-        movie_ids_and_list_ids_list: ListType[Tuple[int, int]] = list(
+        movie_ids_and_list_ids_list: list[tuple[int, int]] = list(
             user.get_records().filter(movie_id__in=movie_ids).values_list("movie_id", "list_id")
         )
-        movie_and_list_ids: Dict[int, int] = {}
+        movie_and_list_ids: dict[int, int] = {}
         for movie_id, list_id in movie_ids_and_list_ids_list:
             movie_and_list_ids[movie_id] = list_id
 
-        list_data: Dict[int, int] = {}
+        list_data: dict[int, int] = {}
         for record_id, movie_id in record_and_movie_ids.items():
             # 0 means no list id.
             list_data[record_id] = movie_and_list_ids.get(movie_id, 0)
@@ -226,7 +226,7 @@ class ListView(TemplateAnonymousView):
         We need to do this in case a user manually set the wrong session values
         or if the code changes resulted in invalid values.
         """
-        SORT_TYPES: ListType[SortType] = ["releaseDate", "rating", "additionDate", "custom"]
+        SORT_TYPES: list[SortType] = ["releaseDate", "rating", "additionDate", "custom"]
         MODES = ["full", "compact", "minimal", "gallery"]
         LIST_NAMES = ["watched", "to-watch"]
         session = self.request.session
@@ -257,13 +257,13 @@ class ListView(TemplateAnonymousView):
         if "mode" not in session:
             session["mode"] = "full"
 
-    def _filter_out_provider_records_for_other_countries(self, provider_records: ListType[ProviderRecord]) -> None:
+    def _filter_out_provider_records_for_other_countries(self, provider_records: list[ProviderRecord]) -> None:
         request: AuthenticatedHttpRequest = self.request  # type: ignore
         for provider_record in list(provider_records):
             if request.user.country != provider_record.country:
                 provider_records.remove(provider_record)
 
-    def _get_provider_records(self, movie: Movie) -> ListType[ProviderRecord]:
+    def _get_provider_records(self, movie: Movie) -> list[ProviderRecord]:
         request: HttpRequest = self.request  # type: ignore
         if request.user.is_authenticated and request.user.is_country_supported and movie.is_released:
             provider_records = list(movie.provider_records.all())
@@ -272,8 +272,8 @@ class ListView(TemplateAnonymousView):
         return []
 
     @staticmethod
-    def _get_provider_record_objects(provider_records: ListType[ProviderRecord]) -> ListType[ProviderRecordObject]:
-        provider_record_objects: ListType[ProviderRecordObject] = []
+    def _get_provider_record_objects(provider_records: list[ProviderRecord]) -> list[ProviderRecordObject]:
+        provider_record_objects: list[ProviderRecordObject] = []
         for provider_record in provider_records:
             provider_object: ProviderObject = {
                 "logo": provider_record.provider.logo,
@@ -326,9 +326,9 @@ class ListView(TemplateAnonymousView):
             "ultraHd": record.watched_in_4k,
         }
 
-    def _get_record_objects(self, records: QuerySet[Record]) -> ListType[RecordObject]:
+    def _get_record_objects(self, records: QuerySet[Record]) -> list[RecordObject]:
         """Get record objects."""
-        record_objects: ListType[RecordObject] = []
+        record_objects: list[RecordObject] = []
         for record in records:
             provider_records = self._get_provider_records(record.movie)
             record_object: RecordObject = {
@@ -344,7 +344,7 @@ class ListView(TemplateAnonymousView):
             record_objects.append(record_object)
         return record_objects
 
-    def _inject_list_ids(self, records: QuerySet[Record], record_objects: ListType[RecordObject]) -> None:
+    def _inject_list_ids(self, records: QuerySet[Record], record_objects: list[RecordObject]) -> None:
         list_data = self._get_list_data(records)
         for record_object in record_objects:
             record_object["listId"] = list_data.get(record_object["id"])
@@ -382,7 +382,7 @@ class ListView(TemplateAnonymousView):
             records_on_page = records.count()
         else:  # List - watched
             records_on_page = settings.RECORDS_ON_PAGE
-        records_paginated: Page[Record] | ListType[Record] = paginate(  # type: ignore
+        records_paginated: Page[Record] | list[Record] = paginate(  # type: ignore
             records, request.GET.get("page"), records_on_page
         )
         records_paginated_ids = [record.pk for record in records_paginated]

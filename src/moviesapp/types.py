@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 from datetime import date, time
-from typing import Any, Dict, List, Literal, Optional, Tuple, TypeAlias, Union
+from typing import Any, Literal, Optional, TypeAlias
 
 from django.urls import URLPattern, URLResolver
 from typing_extensions import NotRequired, TypedDict
@@ -11,9 +11,9 @@ from typing_extensions import NotRequired, TypedDict
 class TemplatesSettingsOptions(TypedDict):
     """Templates settings options."""
 
-    context_processors: List[str]
-    loaders: List[str | Tuple[str, List[str]]]
-    builtins: List[str]
+    context_processors: list[str]
+    loaders: list[str | tuple[str, list[str]]]
+    builtins: list[str]
 
 
 class TemplatesSettings(TypedDict):
@@ -21,7 +21,7 @@ class TemplatesSettings(TypedDict):
 
     NAME: str
     BACKEND: str
-    DIRS: NotRequired[List[str]]
+    DIRS: NotRequired[list[str]]
     OPTIONS: NotRequired[TemplatesSettingsOptions]
     APP_DIRS: NotRequired[Optional[bool]]
 
@@ -90,8 +90,8 @@ class TmdbMovieProcessed(TypedDict):
     poster_ru: Optional[str]
     poster_en: Optional[str]
     homepage: Optional[str]
-    trailers_en: List[TmdbTrailer]
-    trailers_ru: List[TmdbTrailer]
+    trailers_en: list[TmdbTrailer]
+    trailers_ru: list[TmdbTrailer]
     title_en: str
     title_ru: str
     overview_en: Optional[str]
@@ -118,6 +118,6 @@ TrailerSite = Literal["YouTube", "Vimeo"]
 SearchType = Literal["movie", "actor", "director"]
 
 # UntypedObject means it is a loaded JSON object
-UntypedObject: TypeAlias = Dict[str, Any]
+UntypedObject: TypeAlias = dict[str, Any]
 
-URL: TypeAlias = Union[URLPattern, URLResolver]
+URL: TypeAlias = URLPattern | URLResolver

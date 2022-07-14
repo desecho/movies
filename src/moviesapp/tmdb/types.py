@@ -1,5 +1,5 @@
 """TMDB types."""
-from typing import List, Optional
+from typing import Optional
 
 from typing_extensions import TypedDict
 
@@ -40,15 +40,15 @@ class TmdbMovie(TmdbMovieBase, total=False):
 
     belongs_to_collection: Optional[UntypedObject]  # TMDB does not provide a type for this
     budget: int
-    genres: List[TmdbGenre]
+    genres: list[TmdbGenre]
     homepage: Optional[str]
     imdb_id: Optional[str]
     overview: Optional[str]
-    production_companies: List[UntypedObject]  # TMDB provides a type for this. Set as untyped because it is not used.
-    production_countries: List[UntypedObject]  # TMDB provides a type for this. Set as untyped because it is not used.
+    production_companies: list[UntypedObject]  # TMDB provides a type for this. Set as untyped because it is not used.
+    production_countries: list[UntypedObject]  # TMDB provides a type for this. Set as untyped because it is not used.
     revenue: int
     runtime: Optional[int]
-    spoken_languages: List[UntypedObject]  # TMDB provides a type for this. Set as untyped because it is not used.
+    spoken_languages: list[UntypedObject]  # TMDB provides a type for this. Set as untyped because it is not used.
     status: str
     tagline: Optional[str]
 
@@ -57,7 +57,7 @@ class TmdbMovieListResult(TmdbMovieBase, total=False):
     """TMDB movie search result."""
 
     overview: str
-    genre_ids: List[int]
+    genre_ids: list[int]
 
 
 class TmdbPerson(TmdbBase, total=False):
@@ -76,7 +76,7 @@ class TmdbCastCrewBase(TmdbMovieListResult, total=False):
     first_air_date: str
     media_type: str
     name: str
-    origin_country: List[str]
+    origin_country: list[str]
     original_name: str
 
 
@@ -98,8 +98,8 @@ class TmdbCombinedCredits(TypedDict):
     """TMDB combined credits."""
 
     id: int
-    cast: List[TmdbCast]
-    crew: List[TmdbCrew]
+    cast: list[TmdbCast]
+    crew: list[TmdbCrew]
 
 
 class TmdbProvider(TypedDict, total=False):
@@ -115,11 +115,11 @@ class TmdbWatchDataCountry(TypedDict, total=False):
     """TMDB watch data country."""
 
     link: str
-    flatrate: List[TmdbProvider]
-    free: List[TmdbProvider]
-    ads: List[TmdbProvider]
-    rent: List[TmdbProvider]
-    buy: List[TmdbProvider]
+    flatrate: list[TmdbProvider]
+    free: list[TmdbProvider]
+    ads: list[TmdbProvider]
+    rent: list[TmdbProvider]
+    buy: list[TmdbProvider]
 
 
 class TmdbWatchData(TypedDict, total=False):

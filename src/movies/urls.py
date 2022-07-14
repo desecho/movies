@@ -1,7 +1,5 @@
 """URL Configuration."""
 
-from typing import List
-
 import debug_toolbar
 from django.conf import settings
 from django.conf.urls import include
@@ -34,7 +32,7 @@ register_converter(ListConverter, "list")
 register_converter(FeedConverter, "feed")
 
 
-urlpatterns: List[URL] = []
+urlpatterns: list[URL] = []
 
 
 def path_404(url_path: str, name: str) -> URL:

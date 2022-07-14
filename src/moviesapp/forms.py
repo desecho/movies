@@ -1,5 +1,5 @@
 """Forms."""
-from typing import Any, List
+from typing import Any
 
 from django.forms import ModelForm
 from django_countries.widgets import CountrySelectWidget
@@ -45,4 +45,4 @@ class UserDeleteForm(ModelForm[User]):  # pylint:disable=unsubscriptable-object
         """Meta."""
 
         model = User
-        fields: List[str] = []
+        fields: list[str] = []

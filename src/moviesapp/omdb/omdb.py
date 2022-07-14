@@ -1,6 +1,4 @@
 """OMDb."""
-from typing import List, Tuple
-
 import requests
 from django.conf import settings
 from requests.exceptions import RequestException
@@ -21,7 +19,7 @@ def _get_processed_omdb_movie_data(data_raw: OmdbMovie) -> OmdbMovieProcessed:
         "Country": None,
         "imdbRating": None,
     }
-    items: List[Tuple[OmdbMoviePreprocessedKey, str]] = [
+    items: list[tuple[OmdbMoviePreprocessedKey, str]] = [
         (key, value) for (key, value) in data_raw.items() if key in data and value != "N/A"  # type: ignore
     ]
     for key, value in items:
