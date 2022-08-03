@@ -1,4 +1,4 @@
-Django==4.0.6
+Django==4.1
 
 # Django related packages
 # django-annoying is only used in existing migrations.
