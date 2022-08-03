@@ -5,9 +5,6 @@ Movies
 
 | The web application on Django_ 4, Vue.js_ 3, Bootstrap_ 4, `Font Awesome`_ 6. Create movie lists "Watched" and "To Watch", rate movies, and add comments.
 | See more information here - https://movies.samarchyan.me/about/
-
-| Share your lists with your VK friends.
-
 | The website is live here - https://movies.samarchyan.me.
 | The interface is available in English and Russian.
 
