@@ -27,6 +27,7 @@ safety
 autoflake
 black
 restructuredtext_lint
+Pygments # requirement for restructuredtext_lint
 mypy
 djhtml
 
