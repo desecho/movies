@@ -21,11 +21,11 @@ Development
 
 For development run:
 
-```bash
-make run
-make celery
-make build
-```
+.. code-block:: bash
+
+  make run
+  make celery
+  make build
 
 Run ``make help`` to get a list of all available commands.
 
