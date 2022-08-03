@@ -81,6 +81,6 @@ Used images
 .. _mysql-docker: https://github.com/desecho/mysql-docker
 .. _redis-docker: https://github.com/desecho/redis-docker
 
-.. _IMDb logo: https://commons.wikimedia.org/wiki/File:IMDB_Logo_2016.svg
+.. _IMDb logo: https://www.imdb.com/pressroom/brand-guidelines/
 .. _Down arrow icon: https://www.iconfinder.com/icons/211614/arrow_b_down_icon
 .. _TMDB Logos: https://www.themoviedb.org/about/logos-attribution
