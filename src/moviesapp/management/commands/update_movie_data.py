@@ -26,7 +26,7 @@ class Command(BaseCommand):
             action="store_true",
             dest="start_from_id",
             default=False,
-            help="Start running the script fom provided movie id",
+            help="Start running the script from provided movie id",
         )
 
     @staticmethod
