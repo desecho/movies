@@ -119,7 +119,8 @@ jobs:
       - name: Collect static files
         run: make collectstatic
 
-      - uses: BetaHuhn/do-spaces-action@v2
+      - name: Upload static files
+        uses: BetaHuhn/do-spaces-action@v2
         with:
           access_key: ${{ secrets.SPACES_ACCESS_KEY }}
           secret_key: ${{ secrets.SPACES_SECRET_KEY }}
