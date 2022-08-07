@@ -11,7 +11,9 @@ jobs:
     name: DB backup
     runs-on: ubuntu-latest
     env:
+      PROJECT: movies
       DB_HOST: mysql.samarchyan.me
+      SPACE_NAME: scrap-db-backups
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -25,13 +27,12 @@ jobs:
         env:
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
 
-      - name: Install s3cmd
-        run: |
-          pip install s3cmd==2.2.0
-          cp .github/workflows/.s3cfg ~/.s3cfg
-          sed "s/\[access_key\]/${{ secrets.SPACES_ACCESS_KEY }}/g" ~/.s3cfg -i
-          SPACES_SECRET_KEY=$(echo ${{ secrets.SPACES_SECRET_KEY }} | sed 's;/;\\/;g')
-          sed "s/\[secret_key\]/$SPACES_SECRET_KEY/g" ~/.s3cfg -i
-
       - name: Upload backup
-        run: make upload-backup
+        uses: BetaHuhn/do-spaces-action@v2
+        with:
+          access_key: ${{ secrets.SPACES_ACCESS_KEY }}
+          secret_key: ${{ secrets.SPACES_SECRET_KEY }}
+          space_name: ${{ env.SPACE_NAME }}
+          space_region: nyc3
+          out_dir: ${{ env.PROJECT }}
+          source: upload

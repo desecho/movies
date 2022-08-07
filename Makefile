@@ -138,10 +138,6 @@ djhtml-script:
 backup-db:
 	scripts/backup_db.sh
 
-.PHONY: upload-backup
-upload-backup:
-	scripts/upload_backup.sh
-
 .PHONY: flush-cdn-cache
 flush-cdn-cache:
 	scripts/flush_cdn_cache.sh
