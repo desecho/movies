@@ -109,11 +109,15 @@ jobs:
       - name: Run yarn build
         run: make yarn-build-prod
 
+      # This is needed to avoid errors when running collectstatic command
+      - name: Create env files
+        run: make create-env-files
+
+      - name: Create venv
+        run: make create-venv
+
       - name: Collect static files
-        run: |
-          make create-env-files
-          make create-venv
-          make collectstatic
+        run: make collectstatic
 
       - uses: BetaHuhn/do-spaces-action@v2
         with:
