@@ -1,7 +1,7 @@
 Movies
 ==============
 
-|Deployment Status| |Requirements Status| |Codecov|
+|Deployment Status| |Codecov|
 
 | The web application on Django_ 4, Vue.js_ 3, Bootstrap_ 4, `Font Awesome`_ 6. Create movie lists "Watched" and "To Watch", rate movies, and add comments.
 | See more information here - https://movies.samarchyan.me/about/
@@ -60,9 +60,6 @@ Used images
 * `Down arrow icon`_
 * `TMDB Logos`_
 
-
-.. |Requirements Status| image:: https://requires.io/github/desecho/movies/requirements.svg?branch=master
-   :target: https://requires.io/github/desecho/movies/requirements/?branch=master
 
 .. |Codecov| image:: https://codecov.io/gh/desecho/movies/branch/master/graph/badge.svg
    :target: https://codecov.io/gh/desecho/movies
