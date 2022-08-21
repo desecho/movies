@@ -16,9 +16,9 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3.0.2
-        with:
-          # Access token with `workflow` scope is required
-          token: ${{ secrets.WORKFLOW_GITHUB_TOKEN }}
+        # with:
+        #   # Access token with `workflow` scope is required
+        #   token: ${{ secrets.WORKFLOW_GITHUB_TOKEN }}
 
       - name: Run GitHub Actions Version Updater
         uses: saadmk11/github-actions-version-updater@main
