@@ -56,6 +56,7 @@ Cron jobs are run with `GitHub Actions`_. Time zone is UTC.
 - ``Update IMDb ratings`` runs at 06:00 UTC (02:00 EDT) on Mondays
 - ``Update watch data`` runs at 07:00 UTC (03:00 EDT) on Mondays
 - ``Update watch data minimal`` runs at 00:00 UTC (20:00 EDT) daily
+- ``Update GitHub actions`` runs at 04:00 UTC (00:00 EDT) on the first day of the month
 
 CI/CD
 ----------
@@ -79,6 +80,7 @@ The following GitHub Actions are used:
 * Cache_
 * `Docker Setup Buildx`_
 * `Set Timezone`_
+* `GitHub Actions Version Updater`_
 
 .. _VK Docs: https://dev.vk.com/method/account.getInfo
 .. _GitHub Actions: https://github.com/features/actions
@@ -95,3 +97,4 @@ The following GitHub Actions are used:
 .. _Cache: https://github.com/marketplace/actions/cache
 .. _Docker Setup Buildx: https://github.com/marketplace/actions/docker-setup-buildx
 .. _Set Timezone: https://github.com/marketplace/actions/set-timezone
+.. _GitHub Actions Version Updater: https://github.com/marketplace/actions/github-actions-version-updater
