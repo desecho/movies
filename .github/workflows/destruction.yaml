@@ -11,10 +11,10 @@ jobs:
       PROJECT: movies
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v3.0.2
 
       - name: Install kubectl
-        uses: azure/setup-kubectl@v3
+        uses: azure/setup-kubectl@v3.0
 
       - name: Configure kubectl
         run: |
