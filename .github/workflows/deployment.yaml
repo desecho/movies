@@ -21,17 +21,17 @@ jobs:
       cancel-in-progress: true
     steps:
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
+        uses: docker/setup-buildx-action@v2.0.0
 
       - name: Login to GitHub registry
-        uses: docker/login-action@v2
+        uses: docker/login-action@v2.0.0
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ github.token }}
 
       - name: Build and push docker image
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v3.1.1
         with:
           push: true
           tags: ghcr.io/${{ github.repository }}:latest
@@ -48,21 +48,21 @@ jobs:
       SPACE_NAME: cdn.movies.samarchyan.me
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v3.0.2
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v4.2.0
         with:
           python-version: "3.10"
 
       - name: Set up Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v3.4.1
         with:
           node-version: 18.x
           registry-url: https://registry.npmjs.org
 
       - name: Use npm cache
-        uses: actions/cache@v3
+        uses: actions/cache@v3.0.7
         with:
           path: ~/.npm
           key: npm
@@ -75,7 +75,7 @@ jobs:
         run: echo "::set-output name=dir::$(yarn cache dir)"
 
       - name: Use yarn cache
-        uses: actions/cache@v3
+        uses: actions/cache@v3.0.7
         with:
           path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
           key: yarn-${{ hashFiles('yarn.lock') }}
@@ -83,14 +83,14 @@ jobs:
             yarn-
 
       - name: Use pip cache
-        uses: actions/cache@v3
+        uses: actions/cache@v3.0.7
         with:
           path: ~/.cache/pip
           key: pip
 
       # Need to use this because yarn cache is not working properly
       - name: Use node_modules cache
-        uses: actions/cache@v3
+        uses: actions/cache@v3.0.7
         with:
           path: node_modules
           key: node_modules-${{ hashFiles('yarn.lock') }}
@@ -98,7 +98,7 @@ jobs:
             node_modules-
 
       - name: Use venv cache
-        uses: actions/cache@v3
+        uses: actions/cache@v3.0.7
         with:
           path: venv
           key: venv-${{ hashFiles('requirements.txt', 'requirements-dev.txt', 'requirements-additional.txt') }}
@@ -120,7 +120,7 @@ jobs:
         run: make collectstatic
 
       - name: Upload static files
-        uses: BetaHuhn/do-spaces-action@v2
+        uses: BetaHuhn/do-spaces-action@v2.0.68
         with:
           access_key: ${{ secrets.SPACES_ACCESS_KEY }}
           secret_key: ${{ secrets.SPACES_SECRET_KEY }}
@@ -129,7 +129,7 @@ jobs:
           source: static
 
       - name: Install doctl
-        uses: digitalocean/action-doctl@v2
+        uses: digitalocean/action-doctl@v2.1.1
         with:
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
@@ -151,10 +151,10 @@ jobs:
       group: ${{ github.workflow }}-${{ github.ref }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v3.0.2
 
       - name: Install kubectl
-        uses: azure/setup-kubectl@v3
+        uses: azure/setup-kubectl@v3.0
 
       - name: Configure kubectl
         run: |
