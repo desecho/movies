@@ -1,4 +1,4 @@
-FROM python:3.10-alpine
+FROM python:3.10.6-alpine3.16
 
 ARG REQUIREMENTS=requirements.txt
 
