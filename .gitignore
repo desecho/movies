@@ -170,7 +170,9 @@ src/moviesapp/static/*.svg
 src/moviesapp/static/*.woff
 src/moviesapp/static/*.ttf
 src/moviesapp/static/*.eot
+src/moviesapp/static/*.png
 !src/moviesapp/static/favicon.svg
+!src/moviesapp/static/favicon.png
 env_custom.sh
 env_secrets.sh
 /static
