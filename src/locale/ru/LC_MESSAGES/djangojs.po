@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-05 20:57-0400\n"
+"POT-Creation-Date: 2022-08-28 01:45-0400\n"
 "PO-Revision-Date: 2022-07-05 19:53-0400\n"
 "Last-Translator:   <>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -64,35 +64,35 @@ msgstr "Хорошо"
 msgid "Awesome"
 msgstr "Отлично"
 
-#: src/moviesapp/js/helpers.js:39
+#: src/moviesapp/js/helpers.js:29
 msgid "You need to login to add a movie to your list"
 msgstr "Вам необходимо авторизоваться для того чтобы добавить фильм в список"
 
-#: src/moviesapp/js/list.js:60
+#: src/moviesapp/js/list.js:68
 msgid "Error applying the settings"
 msgstr "Ошибка применения настроек"
 
-#: src/moviesapp/js/list.js:79
+#: src/moviesapp/js/list.js:87
 msgid "Error saving movie order"
 msgstr "Ошибка сохранения порядка фильмов"
 
-#: src/moviesapp/js/list.js:96
+#: src/moviesapp/js/list.js:104
 msgid "Error saving the rating"
 msgstr "Ошибка сохранения рейтинга"
 
-#: src/moviesapp/js/list.js:106
+#: src/moviesapp/js/list.js:114
 msgid "Error saving options"
 msgstr "Ошибка сохранения опций"
 
-#: src/moviesapp/js/list.js:166
+#: src/moviesapp/js/list.js:174
 msgid "Error removing the movie"
 msgstr "Ошибка удаления фильма"
 
-#: src/moviesapp/js/list.js:181
+#: src/moviesapp/js/list.js:189
 msgid "Error adding the movie to the list"
 msgstr "Ошибка добавления фильма в список"
 
-#: src/moviesapp/js/list.js:197
+#: src/moviesapp/js/list.js:205
 msgid "Error saving a comment"
 msgstr "Ошибка сохранения комментария"
 
