@@ -46,6 +46,14 @@ newApp({
     },
   },
   methods: {
+    isRatingVisible(rating) {
+      const vm = this;
+      if (vm.isAnothersAccount && rating === 0) {
+        return false;
+      }
+
+      return true;
+    },
     applySettings(settings, reload = true) {
       const vm = this;
       const data = {

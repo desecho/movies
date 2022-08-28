@@ -292,6 +292,7 @@
                   :clearable=true
                   @update:rating="changeRating(element, $event)"
                   v-model:rating="element.rating"
+                  v-show="isRatingVisible(element.rating)"
                 >
                 </star-rating>
                 <div class="comment" v-show="(element.comment || element.commentArea) && mode != 'minimal'">
