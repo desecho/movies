@@ -28,7 +28,7 @@ jobs:
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
 
       - name: Upload backup
-        uses: BetaHuhn/do-spaces-action@v2.0.68
+        uses: BetaHuhn/do-spaces-action@v2.0.70
         with:
           access_key: ${{ secrets.SPACES_ACCESS_KEY }}
           secret_key: ${{ secrets.SPACES_SECRET_KEY }}
