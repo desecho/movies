@@ -135,7 +135,7 @@
       :disabled="!isSortable"
     >
       <template #item="{element, index}">
-        <div class="movie" :class="{'movie-minimal': mode == 'minimal', draggable: isSortable}">
+        <div class="movie" :class="{'movie-minimal': mode == 'minimal', 'movie-full': mode == 'full', draggable: isSortable}">
           <div class="title">
             <span :title="element.movie.titleOriginal">[[ element.movie.title ]]</span>
             {% if not anothers_account %}
