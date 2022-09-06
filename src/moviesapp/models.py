@@ -546,3 +546,9 @@ class VkCountry(Model):
     def __str__(self) -> str:
         """Return string representation."""
         return str(self.country)
+
+    class Meta:
+        """Meta."""
+
+        verbose_name = "VK country"
+        verbose_name_plural = "VK countries"
