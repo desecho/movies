@@ -40,7 +40,7 @@ def get_omdb_movie_data(imdb_id: str) -> OmdbMovieProcessed:
     """Get movie data from OMDB."""
     try:
         params = {"apikey": settings.OMDB_KEY, "i": imdb_id}
-        response = requests.get(settings.OMDB_BASE_URL, params=params)
+        response = requests.get(settings.OMDB_BASE_URL, params=params, timeout=settings.REQUESTS_TIMEOUT)
     except RequestException as e:
         if settings.DEBUG:
             raise

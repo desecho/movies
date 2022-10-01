@@ -334,6 +334,7 @@ CELERY_TIMEZONE = TIME_ZONE
 # --== Project settings ==--
 
 GOOGLE_ANALYTICS_ID = getenv("GOOGLE_ANALYTICS_ID")
+REQUESTS_TIMEOUT = 5
 
 # Social
 VK_BACKEND = "vk-oauth2"

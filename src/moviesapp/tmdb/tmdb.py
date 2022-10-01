@@ -210,7 +210,9 @@ def get_tmdb_providers() -> list[TmdbProvider]:
     The functionality is not supported by tmdbsimple so we have to use the API directly.
     """
     params = {"api_key": settings.TMDB_KEY}
-    response = requests.get(urljoin(settings.TMDB_API_BASE_URL, "watch/providers/movie"), params=params)
+    response = requests.get(
+        urljoin(settings.TMDB_API_BASE_URL, "watch/providers/movie"), params=params, timeout=settings.REQUESTS_TIMEOUT
+    )
     providers: list[TmdbProvider] = response.json()["results"]
     return providers
 
