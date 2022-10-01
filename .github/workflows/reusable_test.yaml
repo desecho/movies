@@ -16,19 +16,19 @@ jobs:
           python-version: "3.10"
 
       - name: Set up Node.js
-        uses: actions/setup-node@v3.4.1
+        uses: actions/setup-node@v3.5.0
         with:
           node-version: 18.x
           registry-url: https://registry.npmjs.org
 
       - name: Use npm cache
-        uses: actions/cache@v3.0.8
+        uses: actions/cache@v3.0.9
         with:
           path: ~/.npm
           key: npm
 
       - name: Use node_modules cache
-        uses: actions/cache@v3.0.8
+        uses: actions/cache@v3.0.9
         with:
           path: node_modules
           key: node_modules-${{ hashFiles('package-test.json') }}
@@ -36,13 +36,13 @@ jobs:
             node_modules-
 
       - name: Use pip cache
-        uses: actions/cache@v3.0.8
+        uses: actions/cache@v3.0.9
         with:
           path: ~/.cache/pip
           key: pip
 
       - name: Use tox cache
-        uses: actions/cache@v3.0.8
+        uses: actions/cache@v3.0.9
         with:
           path: .tox
           key: tox-${{ hashFiles('requirements.txt', 'requirements-dev.txt', 'requirements-additional.txt') }}
@@ -68,4 +68,4 @@ jobs:
         run: make test
 
       - name: Run codecov
-        uses: codecov/codecov-action@v3.1.0
+        uses: codecov/codecov-action@v3.1.1
