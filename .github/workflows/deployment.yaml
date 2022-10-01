@@ -56,13 +56,13 @@ jobs:
           python-version: "3.10"
 
       - name: Set up Node.js
-        uses: actions/setup-node@v3.4.1
+        uses: actions/setup-node@v3.5.0
         with:
           node-version: 18.x
           registry-url: https://registry.npmjs.org
 
       - name: Use npm cache
-        uses: actions/cache@v3.0.8
+        uses: actions/cache@v3.0.9
         with:
           path: ~/.npm
           key: npm
@@ -75,7 +75,7 @@ jobs:
         run: echo "::set-output name=dir::$(yarn cache dir)"
 
       - name: Use yarn cache
-        uses: actions/cache@v3.0.8
+        uses: actions/cache@v3.0.9
         with:
           path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
           key: yarn-${{ hashFiles('yarn.lock') }}
@@ -83,14 +83,14 @@ jobs:
             yarn-
 
       - name: Use pip cache
-        uses: actions/cache@v3.0.8
+        uses: actions/cache@v3.0.9
         with:
           path: ~/.cache/pip
           key: pip
 
       # Need to use this because yarn cache is not working properly
       - name: Use node_modules cache
-        uses: actions/cache@v3.0.8
+        uses: actions/cache@v3.0.9
         with:
           path: node_modules
           key: node_modules-${{ hashFiles('yarn.lock') }}
@@ -98,7 +98,7 @@ jobs:
             node_modules-
 
       - name: Use venv cache
-        uses: actions/cache@v3.0.8
+        uses: actions/cache@v3.0.9
         with:
           path: venv
           key: venv-${{ hashFiles('requirements.txt', 'requirements-dev.txt', 'requirements-additional.txt') }}
@@ -120,7 +120,7 @@ jobs:
         run: make collectstatic
 
       - name: Upload static files
-        uses: BetaHuhn/do-spaces-action@v2.0.70
+        uses: BetaHuhn/do-spaces-action@v2.0.74
         with:
           access_key: ${{ secrets.SPACES_ACCESS_KEY }}
           secret_key: ${{ secrets.SPACES_SECRET_KEY }}
