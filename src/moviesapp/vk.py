@@ -1,9 +1,9 @@
 """VK."""
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING, List, Optional
 
+# from django.core.cache import cache
 from django.conf import settings
 from django.contrib.auth import get_user_model
-from django.core.cache import cache
 from django.db.models import QuerySet
 from vk_api import VkApi
 from vk_api.vk_api import VkApiMethod
@@ -52,15 +52,16 @@ class Vk:
 
     def get_friends(self) -> QuerySet["User"]:  # pylint: disable=no-self-use
         """Get friends."""
-        cache_id = f"vk_friends_{self.vk_id}"
-        vk_friends = cache.get(cache_id)
-        if vk_friends is None:
-            if self.vk is not None:
-                friends_ids = self.vk.friends.get()["items"]
-                cache.set(cache_id, vk_friends)
-            else:
-                friends_ids = []
-
+        # Disabling friends functionality for now.
+        # cache_id = f"vk_friends_{self.vk_id}"
+        # vk_friends = cache.get(cache_id)
+        # if vk_friends is None:
+        #     if self.vk is not None:
+        #         friends_ids = self.vk.friends.get()["items"]
+        #         cache.set(cache_id, vk_friends)
+        #     else:
+        #         friends_ids = []
+        friends_ids: List["User"] = []
         user_model: "User" = get_user_model()  # type: ignore
         return user_model.objects.filter(
             social_auth__provider=settings.VK_BACKEND, social_auth__uid__in=friends_ids
