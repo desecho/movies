@@ -182,7 +182,7 @@ class ListView(TemplateAnonymousView):
             return records.order_by("-date")
         if sort == "custom":
             return records.order_by("order")
-        raise Exception("Unsupported sort type")
+        raise Exception("Unsupported sort type")  # pylint: disable=broad-exception-raised
 
     @staticmethod
     def _get_record_movie_data(
