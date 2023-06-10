@@ -15,6 +15,6 @@ fi
 
 if [ "$action" == "format" ]; then
     for file in $htmlFiles; do
-        djhtml -i -t 2 "$file"
+        djhtml -t 2 "$file"
     done
 fi
