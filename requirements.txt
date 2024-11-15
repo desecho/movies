@@ -15,8 +15,7 @@ django-modeltranslation==0.18.4
 django-modeladmin-reorder==0.3.1
 django-stubs-ext==0.5.0
 django-celery-results==2.4.0
-# Contains types support not released yet
--e git+https://github.com/desecho/django-countries.git@fix#egg=django-countries
+django-countries==7.6.1
 django-countries[pyuca]
 django-timezone-field==5.0
 
