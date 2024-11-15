@@ -20,7 +20,7 @@ CONTENT_TYPE = "application/json"
 class BaseClient(Client):
     """Base client class."""
 
-    def post_ajax(
+    def post_ajax(  # pylint:disable=too-many-positional-arguments
         self,
         path,
         data=None,
@@ -32,7 +32,7 @@ class BaseClient(Client):
         """Perform an AJAX POST request."""
         return self.post(path, data, content_type, follow, secure, **extra)
 
-    def put_ajax(
+    def put_ajax(  # pylint:disable=too-many-positional-arguments
         self,
         path,
         data="",
