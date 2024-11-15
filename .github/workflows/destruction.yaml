@@ -23,6 +23,11 @@ jobs:
         env:
           KUBECONFIG: ${{ secrets.KUBECONFIG }} # Done as a variable because it doesn't work in place.
 
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2.1.1
+        with:
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+
       - name: Destroy
         run: |
           kubectl delete -f deployment/configmap.yaml --ignore-not-found
