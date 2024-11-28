@@ -49,9 +49,10 @@ Cron jobs
 ------------
 Cron jobs are run with `GitHub Actions`_. Time zone is UTC.
 
-- ``Remove unused movies`` runs at 07:00 UTC (03:00 EDT) on the first day of the month
 - ``Update movie data`` runs at 04:00 UTC (00:00 EDT) on the first day of the month
 - ``Update VK Avatars`` runs at 05:00 UTC (01:00 EDT) on the first day of the month
+- ``Load providers`` runs at 06:00 UTC (02:00 EDT) on the first day of the month
+- ``Remove unused movies`` runs at 07:00 UTC (03:00 EDT) on the first day of the month
 - ``DB backup`` runs at 09:00 UTC (05:00 EDT) daily
 - ``Update IMDb ratings`` runs at 06:00 UTC (02:00 EDT) on Mondays
 - ``Update watch data`` runs at 07:00 UTC (03:00 EDT) on Mondays
