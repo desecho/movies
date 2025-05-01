@@ -22,13 +22,13 @@ jobs:
           registry-url: https://registry.npmjs.org
 
       - name: Use npm cache
-        uses: actions/cache@v3.0.9
+        uses: actions/cache@v4.2.3
         with:
           path: ~/.npm
           key: npm
 
       - name: Use node_modules cache
-        uses: actions/cache@v3.0.9
+        uses: actions/cache@v4.2.3
         with:
           path: node_modules
           key: node_modules-${{ hashFiles('package-test.json') }}
@@ -36,13 +36,13 @@ jobs:
             node_modules-
 
       - name: Use pip cache
-        uses: actions/cache@v3.0.9
+        uses: actions/cache@v4.2.3
         with:
           path: ~/.cache/pip
           key: pip
 
       - name: Use tox cache
-        uses: actions/cache@v3.0.9
+        uses: actions/cache@v4.2.3
         with:
           path: .tox
           key: tox-${{ hashFiles('requirements.txt', 'requirements-dev.txt', 'requirements-additional.txt') }}

@@ -62,7 +62,7 @@ jobs:
           registry-url: https://registry.npmjs.org
 
       - name: Use npm cache
-        uses: actions/cache@v3.0.9
+        uses: actions/cache@v4.2.3
         with:
           path: ~/.npm
           key: npm
@@ -75,7 +75,7 @@ jobs:
         run: echo "dir=$(yarn cache dir)" >> "$GITHUB_OUTPUT"
 
       - name: Use yarn cache
-        uses: actions/cache@v3.0.9
+        uses: actions/cache@v4.2.3
         with:
           path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
           key: yarn-${{ hashFiles('yarn.lock') }}
@@ -83,14 +83,14 @@ jobs:
             yarn-
 
       - name: Use pip cache
-        uses: actions/cache@v3.0.9
+        uses: actions/cache@v4.2.3
         with:
           path: ~/.cache/pip
           key: pip
 
       # Need to use this because yarn cache is not working properly
       - name: Use node_modules cache
-        uses: actions/cache@v3.0.9
+        uses: actions/cache@v4.2.3
         with:
           path: node_modules
           key: node_modules-${{ hashFiles('yarn.lock') }}
@@ -98,7 +98,7 @@ jobs:
             node_modules-
 
       - name: Use venv cache
-        uses: actions/cache@v3.0.9
+        uses: actions/cache@v4.2.3
         with:
           path: venv
           key: venv-${{ hashFiles('requirements.txt', 'requirements-dev.txt', 'requirements-additional.txt') }}
