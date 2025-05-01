@@ -21,7 +21,7 @@ jobs:
           token: ${{ secrets.WORKFLOW_GITHUB_TOKEN }}
 
       - name: Run GitHub Actions Version Updater
-        uses: saadmk11/github-actions-version-updater@main
+        uses: saadmk11/github-actions-version-updater@v0.8.1
         with:
           committer_username: ${{ env.COMMITTER_USERNAME }}
           committer_email: ${{ env.COMMITTER_EMAIL }}
