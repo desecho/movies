@@ -13,7 +13,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4.2.0
         with:
-          python-version: "3.10"
+          python-version: "3.11"
 
       - name: Set up Node.js
         uses: actions/setup-node@v3.5.0
@@ -53,16 +53,21 @@ jobs:
       - name: Install shellcheck
         run: sudo apt install shellcheck -y
 
+      - name: Install Poetry
+        run: pip3 install poetry
+
       - name: Install tox
         run: pip install tox
 
       - name: Install python requirements
         run: tox -e py-requirements
 
+      - name: Install yarn
+        run: sudo npm install yarn@2.4.3 --location=global
+
       - name: Install js dependencies
         run: |
-          mv package-test.json package.json
-          npm install
+          make yarn-install-locked
 
       - name: Run tests
         run: make test

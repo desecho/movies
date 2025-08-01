@@ -1,4 +1,5 @@
 """Download provider logos."""
+
 from os.path import exists, join
 from typing import Any
 from urllib.parse import urljoin

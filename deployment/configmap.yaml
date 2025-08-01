@@ -4,13 +4,13 @@ kind: ConfigMap
 metadata:
   name: movies
 data:
-  PROJECT_DOMAIN: movies.samarchyan.me
+  PROJECT_DOMAIN: api.movies.samarchyan.me
   ADMIN_EMAIL: desecho@gmail.com
   EMAIL_HOST: smtp.gmail.com
   EMAIL_HOST_USER: desecho@gmail.com
   DB_HOST: mysql
   DB_USER: movies
   STATIC_URL: https://cdn.movies.samarchyan.me/
-  GOOGLE_ANALYTICS_ID: G-6WPPD6FEVM
   DJANGO_SETTINGS_MODULE: movies.settings
   REDIS_URL: redis://redis:6379/
+  FRONTEND_URL: https://movies.samarchyan.me

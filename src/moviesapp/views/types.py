@@ -1,4 +1,5 @@
 """Types for views."""
+
 from __future__ import annotations
 
 from typing import TYPE_CHECKING, Literal, Optional
@@ -56,6 +57,7 @@ class MovieObject(TypedDict):
     isReleased: bool
     imdbRating: Optional[float]
     releaseDate: Optional[str]
+    releaseDateTimestamp: float
     country: Optional[str]
     director: Optional[str]
     writer: Optional[str]
@@ -107,6 +109,7 @@ class RecordObject(TypedDict):
     providerRecords: list[ProviderRecordObject]
     options: OptionsObject
     listId: NotRequired[Optional[int]]
+    additionDate: float
 
 
 class SearchOptions(TypedDict):

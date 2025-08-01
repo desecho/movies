@@ -1,4 +1,5 @@
 """HTTP classes."""
+
 from typing import TYPE_CHECKING, Union
 
 from django.http import HttpRequest as DjangoHttpRequest

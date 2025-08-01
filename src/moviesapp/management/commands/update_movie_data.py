@@ -1,4 +1,5 @@
 """Update movie data."""
+
 from typing import Any, Optional
 
 from django.core.management.base import CommandParser

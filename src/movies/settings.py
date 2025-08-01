@@ -1,5 +1,6 @@
 """Django settings."""
 
+from datetime import timedelta
 from os import getenv
 from os.path import abspath, dirname, join
 from urllib.parse import urljoin
@@ -44,7 +45,7 @@ DEBUG = bool(getenv("DEBUG"))
 INTERNAL_IPS = [getenv("INTERNAL_IP")]
 
 ADMIN_EMAIL = getenv("ADMIN_EMAIL")
-SECRET_KEY = getenv("SECRET_KEY")
+SECRET_KEY = getenv("SECRET_KEY", "key")
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",
@@ -99,8 +100,8 @@ TEMPLATES: list[TemplatesSettings] = [
                 "django.template.context_processors.i18n",
                 "django.template.context_processors.media",
                 # social_django
-                "social_django.context_processors.backends",
-                "social_django.context_processors.login_redirect",
+                # "social_django.context_processors.backends",
+                # "social_django.context_processors.login_redirect",
                 # Movies
                 "moviesapp.context_processors.variables",
             ],
@@ -124,6 +125,7 @@ if IS_DEV:  # pragma: no cover
     ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -134,15 +136,15 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     # Custom
     "django.middleware.gzip.GZipMiddleware",
-    "social_django.middleware.SocialAuthExceptionMiddleware",
+    # "social_django.middleware.SocialAuthExceptionMiddleware",
     "custom_anonymous.middleware.AuthenticationMiddleware",
     "admin_reorder.middleware.ModelAdminReorder",
     "moviesapp.middleware.AjaxHandlerMiddleware",
     "moviesapp.middleware.language_middleware",
     "moviesapp.middleware.TimezoneMiddleware",
 ]
-if DEBUG:  # pragma: no cover
-    MIDDLEWARE.append("debug_toolbar.middleware.DebugToolbarMiddleware")
+# if DEBUG:  # pragma: no cover
+# MIDDLEWARE.append("debug_toolbar.middleware.DebugToolbarMiddleware")
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -151,21 +153,16 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     # Custom
-    "registration",
-    "menu",
     "admin_reorder",
-    "bootstrap_pagination",
-    "rosetta",
-    "modeltranslation",
-    "social_django",
     "django_countries",
     "django_celery_results",
+    "rest_framework",
+    "corsheaders",
+    "rest_registration",
     APP,
 ]
 if DEBUG:  # pragma: no cover
-    INSTALLED_APPS += [
-        "debug_toolbar",
-    ]
+    INSTALLED_APPS += []
 
 if IS_DEV or COLLECT_STATIC:  # pragma: no cover
     INSTALLED_APPS.append("django.contrib.staticfiles")
@@ -186,8 +183,8 @@ AUTH_ANONYMOUS_MODEL = "moviesapp.models.UserAnonymous"
 AUTHENTICATION_BACKENDS = (
     "django.contrib.auth.backends.ModelBackend",
     # social_core
-    "social_core.backends.vk.VKOAuth2",
-    "social_core.backends.facebook.FacebookOAuth2",
+    # "social_core.backends.vk.VKOAuth2",
+    # "social_core.backends.facebook.FacebookOAuth2",
 )
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -235,66 +232,99 @@ DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 # --== Modules settings ==--
 
 # django-registration-redux
-ACCOUNT_ACTIVATION_DAYS = 7
-REGISTRATION_FORM = "registration.forms.RegistrationFormUniqueEmail"
-REGISTRATION_AUTO_LOGIN = True
+# ACCOUNT_ACTIVATION_DAYS = 7
+# REGISTRATION_FORM = "registration.forms.RegistrationFormUniqueEmail"
+# REGISTRATION_AUTO_LOGIN = True
 
 # social-auth-app-django
-SOCIAL_AUTH_VK_OAUTH2_KEY = getenv("SOCIAL_AUTH_VK_OAUTH2_KEY")
-SOCIAL_AUTH_VK_OAUTH2_SECRET = getenv("SOCIAL_AUTH_VK_OAUTH2_SECRET")
-SOCIAL_AUTH_VK_OAUTH2_SCOPE = ["friends", "email", "offline"]
+# SOCIAL_AUTH_VK_OAUTH2_KEY = getenv("SOCIAL_AUTH_VK_OAUTH2_KEY")
+# SOCIAL_AUTH_VK_OAUTH2_SECRET = getenv("SOCIAL_AUTH_VK_OAUTH2_SECRET")
+# SOCIAL_AUTH_VK_OAUTH2_SCOPE = ["friends", "email", "offline"]
 
-SOCIAL_AUTH_FACEBOOK_KEY = getenv("SOCIAL_AUTH_FACEBOOK_KEY")
-SOCIAL_AUTH_FACEBOOK_SECRET = getenv("SOCIAL_AUTH_FACEBOOK_SECRET")
-SOCIAL_AUTH_FACEBOOK_SCOPE = ["email", "user_friends", "public_profile"]
+# SOCIAL_AUTH_FACEBOOK_KEY = getenv("SOCIAL_AUTH_FACEBOOK_KEY")
+# SOCIAL_AUTH_FACEBOOK_SECRET = getenv("SOCIAL_AUTH_FACEBOOK_SECRET")
+# SOCIAL_AUTH_FACEBOOK_SCOPE = ["email", "user_friends", "public_profile"]
 
-SOCIAL_AUTH_USER_MODEL = AUTH_USER_MODEL
-SOCIAL_AUTH_PIPELINE = (
-    # Get the information we can about the user and return it in a simple
-    # format to create the user instance later. On some cases the details are
-    # already part of the auth response from the provider, but sometimes this
-    # could hit a provider API.
-    "social_core.pipeline.social_auth.social_details",
-    # Get the social uid from whichever service we're authing thru. The uid is
-    # the unique identifier of the given user in the provider.
-    "social_core.pipeline.social_auth.social_uid",
-    # Verifies that the current auth process is valid within the current
-    # project, this is where emails and domains whitelists are applied (if
-    # defined).
-    "social_core.pipeline.social_auth.auth_allowed",
-    # Checks if the current social-account is already associated in the site.
-    "social_core.pipeline.social_auth.social_user",
-    # Make up a username for this person, appends a random string at the end if
-    # there's any collision.
-    "social_core.pipeline.user.get_username",
-    # Associates the current social details with another user account with
-    # a similar email address. Disabled by default.
-    "social_core.pipeline.social_auth.associate_by_email",
-    # Create a user account if we haven't found one yet.
-    "social_core.pipeline.user.create_user",
-    # Create the record that associates the social account with the user.
-    "social_core.pipeline.social_auth.associate_user",
-    # Populate the extra_data field in the social record with the values
-    # specified by settings (and the default ones like access_token, etc).
-    "social_core.pipeline.social_auth.load_extra_data",
-    # We might want to enable it
-    # # Update the user record with any changed info from the auth service.
-    # 'social_core.pipeline.user.user_details',
-    # Custom
-    # We do this only if the user get's created for the first time.
-    "moviesapp.social.load_user_data",
-)
+# SOCIAL_AUTH_USER_MODEL = AUTH_USER_MODEL
+# SOCIAL_AUTH_PIPELINE = (
+#     # Get the information we can about the user and return it in a simple
+#     # format to create the user instance later. On some cases the details are
+#     # already part of the auth response from the provider, but sometimes this
+#     # could hit a provider API.
+#     "social_core.pipeline.social_auth.social_details",
+#     # Get the social uid from whichever service we're authing thru. The uid is
+#     # the unique identifier of the given user in the provider.
+#     "social_core.pipeline.social_auth.social_uid",
+#     # Verifies that the current auth process is valid within the current
+#     # project, this is where emails and domains whitelists are applied (if
+#     # defined).
+#     "social_core.pipeline.social_auth.auth_allowed",
+#     # Checks if the current social-account is already associated in the site.
+#     "social_core.pipeline.social_auth.social_user",
+#     # Make up a username for this person, appends a random string at the end if
+#     # there's any collision.
+#     "social_core.pipeline.user.get_username",
+#     # Associates the current social details with another user account with
+#     # a similar email address. Disabled by default.
+#     "social_core.pipeline.social_auth.associate_by_email",
+#     # Create a user account if we haven't found one yet.
+#     "social_core.pipeline.user.create_user",
+#     # Create the record that associates the social account with the user.
+#     "social_core.pipeline.social_auth.associate_user",
+#     # Populate the extra_data field in the social record with the values
+#     # specified by settings (and the default ones like access_token, etc).
+#     "social_core.pipeline.social_auth.load_extra_data",
+#     # We might want to enable it
+#     # # Update the user record with any changed info from the auth service.
+#     # 'social_core.pipeline.user.user_details',
+#     # Custom
+#     # We do this only if the user get's created for the first time.
+#     "moviesapp.social.load_user_data",
+# )
 
 # django-simple-menu
-MENU_SELECT_PARENTS = True
+# MENU_SELECT_PARENTS = True
 
 # django-debug-toolbar
-DEBUG_TOOLBAR_PANELS = [
-    "debug_toolbar.panels.timer.TimerPanel",
-    "debug_toolbar.panels.sql.SQLPanel",
-    "debug_toolbar.panels.signals.SignalsPanel",
-    "debug_toolbar.panels.profiling.ProfilingPanel",
-]
+# DEBUG_TOOLBAR_PANELS = [
+#     "debug_toolbar.panels.timer.TimerPanel",
+#     "debug_toolbar.panels.sql.SQLPanel",
+#     "debug_toolbar.panels.signals.SignalsPanel",
+#     "debug_toolbar.panels.profiling.ProfilingPanel",
+# ]
+
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ],
+    "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.IsAuthenticated"],
+    "DEFAULT_RENDERER_CLASSES": [
+        "rest_framework.renderers.JSONRenderer",
+    ],
+    "DEFAULT_PARSER_CLASSES": [
+        "rest_framework.parsers.JSONParser",
+    ],
+}
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(hours=24),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=365),
+}
+
+FRONTEND_URL = getenv("FRONTEND_URL")
+CORS_ALLOWED_ORIGINS = [FRONTEND_URL]
+FRONTEND_URL2 = getenv("FRONTEND_URL2")
+if FRONTEND_URL2:
+    CORS_ALLOWED_ORIGINS.append(FRONTEND_URL2)
+
+REST_REGISTRATION = {
+    "VERIFICATION_FROM_EMAIL": ADMIN_EMAIL,
+    "REGISTER_EMAIL_VERIFICATION_ENABLED": False,
+    "RESET_PASSWORD_VERIFICATION_URL": f"{FRONTEND_URL}/reset-password/",
+    "REGISTER_VERIFICATION_URL": f"{FRONTEND_URL}/verify-user/",
+    "REGISTER_SERIALIZER_PASSWORD_CONFIRM": False,
+    "CHANGE_PASSWORD_SERIALIZER_PASSWORD_CONFIRM": False,
+}
 
 # django-modeladmin-reorder
 ADMIN_REORDER = [
@@ -312,8 +342,8 @@ ADMIN_REORDER = [
             "moviesapp.VkCountry",
         ),
     },
-    {"app": "social_django", "models": ("social_django.UserSocialAuth",)},
-    "registration",
+    # {"app": "social_django", "models": ("social_django.UserSocialAuth",)},
+    # "registration",
 ]
 
 if IS_CELERY_DEBUG:  # pragma: no cover
@@ -333,7 +363,6 @@ CELERY_TIMEZONE = TIME_ZONE
 
 # --== Project settings ==--
 
-GOOGLE_ANALYTICS_ID = getenv("GOOGLE_ANALYTICS_ID")
 REQUESTS_TIMEOUT = 5
 
 # Social
@@ -346,15 +375,15 @@ MAX_RESULTS = 50
 MIN_POPULARITY = 1.5
 
 # Posters
-NO_POSTER_SMALL_IMAGE_URL = STATIC_URL + "img/no_poster_small.png"
-NO_POSTER_NORMAL_IMAGE_URL = STATIC_URL + "img/no_poster_normal.png"
-NO_POSTER_BIG_IMAGE_URL = STATIC_URL + "img/no_poster_big.png"
+NO_POSTER_SMALL_IMAGE_URL = "img/no_poster_small.png"
+NO_POSTER_NORMAL_IMAGE_URL = "img/no_poster_normal.png"
+NO_POSTER_BIG_IMAGE_URL = "img/no_poster_big.png"
 POSTER_SIZE_SMALL = "w92"
 POSTER_SIZE_NORMAL = "w185"
 POSTER_SIZE_BIG = "w500"
 POSTER_BASE_URL = "https://image.tmdb.org/t/p/"
 
-PROVIDERS_IMG_DIR = join(STATICFILES_DIR, "img", "providers")
+PROVIDERS_IMG_DIR = join(PROJECT_DIR, "frontend", "public", "img", "providers")
 TMDB_BASE_URL = "https://www.themoviedb.org/"
 TMDB_MOVIE_BASE_URL = urljoin(TMDB_BASE_URL, "movie/")
 TMDB_PROVIDER_BASE_URL = urljoin(TMDB_BASE_URL, "t/p/original/")

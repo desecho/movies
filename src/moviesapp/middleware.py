@@ -1,4 +1,5 @@
 """Middlewares."""
+
 import json
 import zoneinfo
 from typing import Callable

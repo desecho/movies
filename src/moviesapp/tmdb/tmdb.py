@@ -184,21 +184,17 @@ def get_tmdb_movie_data(tmdb_id: int) -> TmdbMovieProcessed:
     if not imdb_id:
         raise TmdbNoImdbIdError(tmdb_id)
     release_date = _get_date(movie_info_en.get("release_date"))
-    movie_info_ru = _get_movie_data(tmdb_movie, lang=settings.LANGUAGE_RU)
+    # movie_info_ru = _get_movie_data(tmdb_movie, lang=settings.LANGUAGE_RU)
     return {
         "tmdb_id": tmdb_id,
         "imdb_id": imdb_id,
         "release_date": release_date,
         "title_original": movie_info_en["original_title"],
-        "poster_ru": _remove_trailing_slash_from_tmdb_poster(movie_info_ru.get("poster_path")),
-        "poster_en": _remove_trailing_slash_from_tmdb_poster(movie_info_en.get("poster_path")),
+        "poster": _remove_trailing_slash_from_tmdb_poster(movie_info_en.get("poster_path")),
         "homepage": movie_info_en.get("homepage"),
-        "trailers_en": _get_trailers(tmdb_movie, lang=settings.LANGUAGE_EN),
-        "trailers_ru": _get_trailers(tmdb_movie, lang=settings.LANGUAGE_RU),
-        "title_en": movie_info_en["title"],
-        "title_ru": movie_info_ru["title"],
-        "overview_en": movie_info_en.get("overview"),
-        "overview_ru": movie_info_ru.get("overview"),
+        "trailers": _get_trailers(tmdb_movie, lang=settings.LANGUAGE_EN),
+        "title": movie_info_en["title"],
+        "overview": movie_info_en.get("overview"),
         "runtime": _get_time_from_min(movie_info_en.get("runtime")),
     }
 

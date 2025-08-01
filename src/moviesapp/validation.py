@@ -1,4 +1,5 @@
 """Validation."""
+
 from django.conf import settings
 
 from .exceptions import UnsupportedLanguageError

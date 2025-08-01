@@ -1,4 +1,5 @@
 """Remove unused movies."""
+
 from typing import Any
 
 from django_tqdm import BaseCommand

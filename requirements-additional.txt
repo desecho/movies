@@ -1,2 +1,0 @@
-# This file is used to signify versions of projects not used directly.
-django-countries==7.3.2

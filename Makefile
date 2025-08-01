@@ -1,6 +1,8 @@
 .DEFAULT_GOAL := help
 
-include help.mk
+include makefiles/colors.mk
+include makefiles/help.mk
+include makefiles/macros.mk
 
 export PROJECT := movies
 export APP := moviesapp
@@ -13,8 +15,12 @@ ENV_SECRETS_FILE := env_secrets.sh
 DB_ENV_PROD_FILE := db_env_prod.sh
 
 SHELL := /bin/bash
-SOURCE_CMDS := source venv/bin/activate && source $(ENV_FILE) && source $(ENV_CUSTOM_FILE) && source $(ENV_SECRETS_FILE)
-PYTHON := python3.10
+
+VENV_DIR := .venv
+SOURCE_CMDS := source $(VENV_DIR)/bin/activate && source $(ENV_FILE) && source $(ENV_CUSTOM_FILE) && source $(ENV_SECRETS_FILE)
+CMD_FRONTEND := cd frontend && source $(ENV_FILE)
+PYTHON_VERSION := 3.11
+PYTHON := python$(PYTHON_VERSION)
 
 #------------------------------------
 # Installation
@@ -58,25 +64,40 @@ install-linters-binaries: install-shfmt install-hadolint install-actionlint
 
 .PHONY: install-deps
 ## Install dependencies
-install-deps: install-linters-binaries
-	# Install Python
-	sudo apt install ${PYTHON} ${PYTHON}-venv ${PYTHON}-dev -y
-	# Install MySQL dependencies
-	sudo apt install libmysqlclient-dev -y
-	# Install dependency for makemessages
-	sudo apt install gettext -y
+install-deps: install-linters-binaries install-python install-mysql-client
+
+.PHONY: install-python
+install-python:
+	$(call print,Installing Python)
+	@sudo apt install ${PYTHON} ${PYTHON}-venv ${PYTHON}-dev -y
+
+.PHONY: install-mysql-client-apt
+install-mysql-client-apt:
+	$(call print,Installing MySQL client)
+	@sudo apt install libmysqlclient-dev -y
+
+.PHONY: install-mysql-client
+install-mysql-client:
+	$(call print,Installing MySQL client)
+	@brew install mysql-client pkg-config
+
+.PHONY: install-main-python-deps
+## Install main Python dependencies
+install-main-python-deps:
+	@pip3 install poetry
+	@pip3 install tox
 
 .PHONY: create-venv
 ## Create venv and install requirements
 create-venv:
-	${PYTHON} -m venv venv
-	${SOURCE_CMDS} && \
-		pip install -r requirements-dev.txt
+	$(call print,Creating venv)
+	@poetry env use ${PYTHON_VERSION}
+	@poetry install --no-root
 
 .PHONY: create-tox-venv
-## Create tox venv and install requirements
 create-tox-venv:
-	tox -e py-requirements
+	$(call print,Creating tox venv and installing requirements)
+	@tox -e py-requirements
 
 .PHONY: create-venvs
 ## Create venv and tox venv and install requirements
@@ -85,17 +106,21 @@ create-venvs: create-venv create-tox-venv
 .PHONY: yarn-install-locked
 ## Run yarn install using lockfile
 yarn-install-locked:
-	yarn install --frozen-lockfile
+	$(call print,Installing yarn dependencies using lockfile)
+	@${CMD_FRONTEND} && \
+	yarn install --immutable
 
 .PHONY: create-db
-## Create db
+## Create DB
 create-db:
-	source $(ENV_FILE) && \
+	$(call print,Creating DB)
+	@source $(ENV_FILE) && \
 	scripts/create_db.sh
 
 .PHONY: load-initial-fixtures
 ## Load initial fixtures
 load-initial-fixtures:
+	$(call print,Loading initial fixtures)
 	$(MAKE) manage arguments="loaddata lists"
 	$(MAKE) manage arguments="loaddata actions"
 	$(MAKE) manage arguments="loaddata providers"
@@ -103,23 +128,28 @@ load-initial-fixtures:
 
 .PHONY: bootstrap
 ## Bootstrap project
-bootstrap: yarn-install-locked create-env-files create-venvs create-db migrate load-initial-fixtures yarn-build
+bootstrap: yarn-install-locked create-env-files create-venvs create-db migrate \
+	load-initial-fixtures build
 
 .PHONY: create-env-files
 ## Create env files
 create-env-files: $(ENV_CUSTOM_FILE) $(ENV_SECRETS_FILE) $(DB_ENV_PROD_FILE) $(DOCKER_SECRETS_ENV_FILE)
 
 $(DOCKER_SECRETS_ENV_FILE):
-	cp "${DOCKER_SECRETS_ENV_FILE}.tpl" $(DOCKER_SECRETS_ENV_FILE)
+	$(call print,Creating docker secrets env file)
+	@cp "${DOCKER_SECRETS_ENV_FILE}.tpl" $(DOCKER_SECRETS_ENV_FILE)
 
 $(ENV_CUSTOM_FILE):
-	cp $(ENV_CUSTOM_FILE).tpl $(ENV_CUSTOM_FILE)
+	$(call print,Creating env custom file)
+	@cp $(ENV_CUSTOM_FILE).tpl $(ENV_CUSTOM_FILE)
 
 $(ENV_SECRETS_FILE):
-	cp $(ENV_SECRETS_FILE).tpl $(ENV_SECRETS_FILE)
+	$(call print,Creating env secrets file)
+	@cp $(ENV_SECRETS_FILE).tpl $(ENV_SECRETS_FILE)
 
 $(DB_ENV_PROD_FILE):
-	cp $(DB_ENV_PROD_FILE).tpl $(DB_ENV_PROD_FILE)
+	$(call print,Creating DB env prod file)
+	@cp $(DB_ENV_PROD_FILE).tpl $(DB_ENV_PROD_FILE)
 
 #------------------------------------
 
@@ -129,10 +159,6 @@ $(DB_ENV_PROD_FILE):
 .PHONY: pydiatra-script
 pydiatra-script:
 	scripts/pydiatra.sh
-
-.PHONY: djhtml-script
-djhtml-script:
-	scripts/djhtml.sh lint
 
 .PHONY: backup-db
 backup-db:
@@ -148,117 +174,158 @@ flush-cdn-cache:
 #------------------------------------
 .PHONY: test
 ## Run tests | Tests
-test: shellcheck hadolint shfmt actionlint tox eslint prettier-json-lint prettier-scss-lint prettier-yaml-lint
+test: shellcheck hadolint shfmt actionlint tox eslint prettier-json-lint prettier-scss-lint \
+	prettier-yaml-lint prettier-ts-lint prettier-html-lint prettier-vue-lint
+
+.PHONY: test2
+## Run tests 2 | Tests
+test2: eslint prettier-json-lint prettier-scss-lint \
+	prettier-yaml-lint prettier-ts-lint prettier-html-lint prettier-vue-lint
 
 .PHONY: tox
 ## Run tox
 tox:
-	tox
+	$(call print,Running tox)
+	@tox
 
 .PHONY: pydiatra
 ## Run pydiatra linter
 pydiatra:
-	tox -e py-pydiatra
+	$(call print,Running pydiatra)
+	@tox -e py-pydiatra
 
 .PHONY: pylint
 ## Run pylint linter
 pylint:
-	tox -e py-pylint
+	$(call print,Running pylint)
+	@tox -e py-pylint
 
 .PHONY: flake8
 ## Run flake8 linter
 flake8:
-	tox -e py-flake8
+	$(call print,Running flake8)
+	@tox -e py-flake8
 
 .PHONY: isort
 ## Run isort linter
 isort:
-	tox -e py-isort
+	$(call print,Running isort linter)
+	@tox -e py-isort
 
 .PHONY: bandit
 ## Run bandit linter
 bandit:
-	tox -e py-bandit
+	$(call print,Running bandit)
+	@tox -e py-bandit
 
 .PHONY: rstlint
 ## Run rstlint linter
 rstlint:
-	tox -e py-rstlint
+	$(call print,Running rstlint)
+	@tox -e py-rstlint
 
 .PHONY: pydocstyle
 ## Run pydocstyle linter
 pydocstyle:
-	tox -e py-pydocstyle
+	$(call print,Running pydocstyle)
+	@tox -e py-pydocstyle
 
 .PHONY: safety
 ## Run safety linter
 safety:
-	tox -e py-safety
+	$(call print,Running safety)
+	@tox -e py-safety
 
 .PHONY: pytest
 ## Run pytest
 pytest:
-	tox -e py-pytest
+	$(call print,Running pytest)
+	@tox -e py-pytest
 
 .PHONY: black
 ## Run black linter
 black:
-	tox -e py-black
+	$(call print,Running black linter)
+	@tox -e py-black
 
 .PHONY: mypy
 ## Run mypy linter
 mypy:
-	tox -e py-mypy
+	$(call print,Running mypy)
+	@tox -e py-mypy
 
 .PHONY: eslint
 ## Run eslint linter
 eslint:
-	yarn run eslint ./*.js src/${APP}/js/*.js src/${APP}/js/components/*.js
+	$(call print,Running eslint linter)
+	@${CMD_FRONTEND} && \
+	yarn run eslint src/**/*.ts src/*.ts ./*.ts src/App.vue src/components/*.vue src/views/*.vue
 
 .PHONY: shfmt
 ## Run shfmt linter
 shfmt:
-	shfmt -l -d .
+	$(call print,Running shfmt linter)
+	@shfmt -l -d ./*.sh scripts/*.sh
 
 .PHONY: shellcheck
 ## Run shellcheck linter
 shellcheck:
-	shellcheck scripts/*.sh ./*.sh
+	$(call print,Running shellcheck)
+	@shellcheck scripts/*.sh ./*.sh
 
 .PHONY: hadolint
 ## Run hadolint linter
 hadolint:
-	hadolint Dockerfile
+	$(call print,Running hadolint)
+	@hadolint Dockerfile
 
 .PHONY: actionlint
 ## Run actionlint linter
 actionlint:
-	actionlint
-
-.PHONY: djhtml-lint
-## Run djhtml linter
-djhtml-lint:
-	tox -e py-djhtml
+	$(call print,Running actionlint)
+	@actionlint
 
 .PHONY: prettier-html-lint
-## Run html linter. This linter is used manually to verify that html is valid. It is not used in CI.
+## Run html linter
 prettier-html-lint:
-	yarn run prettier --check ./**/*.html
+	$(call print,Running prettier check for html)
+	@${CMD_FRONTEND} && \
+	yarn run prettier --check ./*.html
+
+.PHONY: prettier-ts-lint
+## Run ts linter
+prettier-ts-lint:
+	$(call print,Running prettier check for ts)
+	@${CMD_FRONTEND} && \
+	yarn run prettier --check src/**/*.ts src/*.ts ./*.ts
 
 .PHONY: prettier-scss-lint
 ## Run scss linter
 prettier-scss-lint:
-	yarn run prettier --check ./**/*.scss
+	$(call print,Running prettier check for scss)
+	@${CMD_FRONTEND} && \
+	yarn run prettier --check ./src/styles/*.scss
 
 .PHONY: prettier-json-lint
 ## Run json linter
 prettier-json-lint:
-	yarn run prettier --check ./**/*.json
+	$(call print,Running prettier check for json)
+	@${CMD_FRONTEND} && \
+	yarn run prettier --check ../**/*.json ../**/.*.json
 
 .PHONY: prettier-yaml-lint
 ## Run yaml linter
 prettier-yaml-lint:
-	yarn run prettier --check ./deployment/*.yaml ./.github/**/*.yaml
+	$(call print,Running prettier check for yaml)
+	@${CMD_FRONTEND} && \
+	yarn run prettier --check ../deployment/*.yaml ../.github/**/*.yaml
+
+.PHONY: prettier-vue-lint
+## Run vue linter
+prettier-vue-lint:
+	$(call print,Running prettier check for vue)
+	@${CMD_FRONTEND} && \
+	yarn run prettier --check src/App.vue src/components/*.vue src/views/*.vue
 #------------------------------------
 
 #------------------------------------
@@ -275,45 +342,74 @@ update-venvs:
 
 .PHONY: delete-venvs
 delete-venvs:
-	rm -rf venv
-	rm -rf .tox
+	$(call print,Deleting venvs)
+	@rm -rf $(VENV_DIR)
+	@rm -rf .tox
 
 .PHONY: recreate-venvs
-## Recreate venvs
+## Recreate venvs | Development
 recreate-venvs: delete-venvs create-venvs
 
-.PHONY: yarn-install-refresh
-## Run yarn install (refresh)
-yarn-install-refresh:
-	rm yarn.lock
+.PHONY: yarn-install
+## Run yarn install
+yarn-install:
+	$(call print,Running yarn install)
+	@${CMD_FRONTEND} && \
 	yarn install
 
-.PHONY: yarn-build
-## Run yarn build
-yarn-build:
-	yarn build
+.PHONY: yarn-upgrade
+## Run yarn upgrade
+yarn-upgrade:
+	$(call print,Running yarn upgrade)
+	@${CMD_FRONTEND} && \
+	yarn upgrade-interactive
 
-.PHONY: yarn-build-prod
-## Run yarn build for prod
-yarn-build-prod:
-	yarn build-prod
+.PHONY: dev
+## Run yarn dev
+dev:
+	$(call print,Running yarn dev)
+	@${CMD_FRONTEND} && \
+	yarn dev
+
+.PHONY: serve
+## Run yarn serve
+serve:
+	$(call print,Running yarn serve)
+	@${CMD_FRONTEND} && \
+	yarn serve
 
 .PHONY: build
-## Run yarn build for development
+## Run yarn build
 build:
-	yarn build --watch
+	$(call print,Running yarn build)
+	@${CMD_FRONTEND} && \
+	yarn build
 
 .PHONY: drop-db
-## Drop db
+## Drop DB
 drop-db:
-	source $(ENV_FILE) && \
+	$(call print,Dropping DB)
+	@source $(ENV_FILE) && \
 	scripts/drop_db.sh
 
 .PHONY: load-db
-## Load db from today's backup
+## Load DB from today's backup
 load-db: drop-db create-db
-	source $(ENV_FILE) && \
+	$(call print,Loading DB)
+	@source $(ENV_FILE) && \
 	scripts/load_db.sh
+
+.PHONY: poetry-update
+## Update python packages
+poetry-update:
+	$(call print,Updating python packages)
+	@poetry update
+
+.PHONY: poetry-show-outdated
+## Show outdated python packages (outside of ranges)
+poetry-show-outdated:
+	$(call print,Showing outdated python packages)
+	@poetry show --outdated | { grep --file=<(poetry show --tree | grep '^\w' | cut -d' ' -f1 | sed 's/.*/^&\\s/') || true; }
 
 .PHONY: celery
 ## Run Celery
@@ -324,50 +420,107 @@ celery:
 #------------------------------------
 
 #------------------------------------
-# Formatting
+# Formatting backend
 #------------------------------------
-
 .PHONY: format
-## Format python code | Formatting
+## Format python code | Formatting backend
 format:
-	${SOURCE_CMDS} && \
+	$(call print,Formatting python code)
+	@${SOURCE_CMDS} && \
 	autoflake --remove-all-unused-imports --in-place -r src && \
 	isort src && \
 	black .
 
-.PHONY: format-json
-## Format json files
-format-json:
-	yarn run prettier --write ./**/*.json
+.PHONY: f
+## Format python code (format alias)
+f: format
+#------------------------------------
 
-.PHONY: format-js
-## Format js files
-format-js:
-	yarn run eslint ./*.js src/${APP}/js/*.js src/${APP}/js/components/*.js --fix
+
+#------------------------------------
+# Formatting miscellaneous
+#------------------------------------
+.PHONY: format-misc
+## Format sh, json, yaml files | Formatting miscellaneous
+format-misc: format-sh format-json format-yaml
 
 .PHONY: format-sh
 ## Format sh files
 format-sh:
-	shfmt -l -w .
+	$(call print,Formatting sh files)
+	@shfmt -l -w ./*.sh scripts/*.sh
 
-.PHONY: format-html
-## Format html files
-format-html:
-	scripts/djhtml.sh format
-
-.PHONY: format-scss
-## Format scss files
-format-scss:
-	yarn run prettier --write ./**/*.scss
+.PHONY: format-json
+## Format json files
+format-json:
+	$(call print,Formatting json files)
+	@${CMD_FRONTEND} && \
+	yarn run prettier --write ../**/*.json ../**/.*.json
 
 .PHONY: format-yaml
 ## Format yaml files
 format-yaml:
-	yarn run prettier --write ./deployment/*.yaml ./.github/**/*.yaml
+	$(call print,Formatting yaml files)
+	@${CMD_FRONTEND} && \
+	yarn run prettier --write ../deployment/*.yaml ../.github/**/*.yaml
+#------------------------------------
 
+#------------------------------------
+# Formatting frontend
+#------------------------------------
+.PHONY: format-frontend
+## Format files for frontend (vue, ts, scss, html) | Formatting frontend
+format-frontend: format-html format-ts format-scss format-vue eslint-fix
+
+.PHONY: ff
+## Format files for frontend (vue, ts, scss, html) (format-frontend alias)
+ff: format-frontend
+
+.PHONY: format-ts
+## Format ts files
+format-ts:
+	$(call print,Formatting ts files)
+	@${CMD_FRONTEND} && \
+	yarn run prettier --write src/**/*.ts src/*.ts ./*.ts
+
+.PHONY: eslint-fix
+## Run eslint formatter
+eslint-fix:
+	@${CMD_FRONTEND} && \
+	yarn run eslint src/**/*.ts src/*.ts ./*.ts src/App.vue src/components/*.vue src/views/*.vue --fix
+
+.PHONY: format-scss
+## Format scss files
+format-scss:
+	$(call print,Formatting scss files)
+	@${CMD_FRONTEND} && \
+	yarn run prettier --write ./src/styles/*.scss
+
+.PHONY: format-vue
+## Format vue files
+format-vue:
+	$(call print,Formatting vue files)
+	@${CMD_FRONTEND} && \
+	yarn run prettier --write src/App.vue src/components/*.vue src/views/*.vue
+
+.PHONY: format-html
+## Format html files
+format-html:
+	$(call print,Formatting html files)
+	@${CMD_FRONTEND} && \
+	yarn run prettier --write ./*.html
+#------------------------------------
+
+#------------------------------------
+# Formatting all
+#------------------------------------
 .PHONY: format-all
-## Format code
-format-all: format format-html format-js format-scss format-sh format-json format-yaml
+## Format code | Formatting all
+format-all: format format-sh format-json format-yaml format-frontend
+
+.PHONY: fa
+## Format code (format-all alias)
+fa: format-all
 #------------------------------------
 
 #------------------------------------
@@ -375,16 +528,10 @@ format-all: format format-html format-js format-scss format-sh format-json forma
 #------------------------------------
 MANAGE_CMD := src/manage.py
 
-.PHONY: makemessages
-## Run makemessages | Django
-makemessages:
-	${SOURCE_CMDS} && \
-	${MANAGE_CMD} makemessages -a --ignore=venv --ignore=.tox --ignore=static && \
-	${MANAGE_CMD} makemessages -a -d djangojs --ignore=src/${APP}/static --ignore=node_modules --ignore=venv --ignore=.tox --ignore=static
-
 .PHONY: runserver
-## Run server for development
+## Run server for development | Django
 runserver:
+	$(call print,Running development server)
 	${SOURCE_CMDS} && \
 	${MANAGE_CMD} runserver 0.0.0.0:8000
 
@@ -395,31 +542,36 @@ run: runserver
 .PHONY: migrate
 ## Run data migration
 migrate:
+	$(call print,Running data migration)
 	${SOURCE_CMDS} && \
 	${MANAGE_CMD} migrate
 
 .PHONY: collectstatic
 ## Collect static files
 collectstatic:
-	${SOURCE_CMDS} && \
+	$(call print,Collecting static files)
+	@${SOURCE_CMDS} && \
 	export IS_DEV= && \
 	${MANAGE_CMD} collectstatic --no-input
 
 .PHONY: createsuperuser
 ## Create super user
 createsuperuser:
+	$(call print,Creating super user)
 	${SOURCE_CMDS} && \
 	${MANAGE_CMD} createsuperuser
 
 .PHONY: shell
 ## Run shell
 shell:
+	$(call print,Running Django shell)
 	${SOURCE_CMDS} && \
 	${MANAGE_CMD} shell
 
 .PHONY: makemigrations
 ## Run makemigrations command. Usage: make makemigrations arguments="[arguments]"
 makemigrations:
+	$(call print,Running makemigrations command with arguments `${arguments}`)
 	${SOURCE_CMDS} && \
 	${MANAGE_CMD} makemigrations $(arguments) ${APP}
 
@@ -433,6 +585,7 @@ endif
 .PHONY: manage
 ## Run management command. Usage: make manage [command] arguments="[arguments]"
 manage:
+	$(call print, Running management command `${MANAGE_ARGS} ${arguments}`)
 	${SOURCE_CMDS} && \
 	${MANAGE_CMD} ${MANAGE_ARGS} $(arguments)
 #------------------------------------
@@ -442,20 +595,44 @@ manage:
 #------------------------------------
 export DOCKER_ENV_FILE := docker.env
 
-.PHONY: docker-build
-## Build image | Docker
-docker-build:
-	docker build -t ${PROJECT} .
+#------------------------------------
+# Docker commands
+#------------------------------------
+export DOCKER_ENV_FILE := docker.env
+
+.PHONY: docker-build-dev
+## Build docker images | Docker
+docker-build-dev: docker-build-backend docker-build-frontend-dev
+
+.PHONY: docker-build-backend
+## Build docker backend image
+docker-build-backend:
+	$(call print,Building Docker backend image)
+	@docker build -t "${PROJECT}:backend" .
+
+.PHONY: docker-build-frontend-dev
+## Build docker frontend image
+docker-build-frontend-dev:
+	$(call print,Building Docker frontend image)
+	docker build --build-arg VITE_BACKEND_URL="http://localhost:8000/" -t "${PROJECT}:frontend" ./frontend
 
 .PHONY: docker-run
 ## Run server in docker
 docker-run: collectstatic
-	docker-compose up
+	$(call print,Running server in docker)
+	@docker-compose up
 
 .PHONY: docker-sh
 ## Run docker shell
 docker-sh:
-	docker run -ti --env-file ${DOCKER_ENV_FILE} --env-file $(DOCKER_SECRETS_ENV_FILE) ${PROJECT} sh
+	$(call print,Running docker shell)
+	@docker run -ti --env-file ${DOCKER_ENV_FILE} --env-file $(DOCKER_SECRETS_ENV_FILE) ${PROJECT}:backend sh
+
+.PHONY: docker-mypy
+## Run mypy in docker
+docker-mypy:
+	$(call print,Running mypy in docker)
+	@docker run -v .:/app ${PROJECT}:backend /app/scripts/docker_test.sh
 #------------------------------------
 
 #------------------------------------

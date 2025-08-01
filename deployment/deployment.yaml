@@ -17,7 +17,7 @@ spec:
       restartPolicy: Always
       containers:
         - name: movies
-          image: ghcr.io/desecho/movies:latest
+          image: ghcr.io/desecho/movies-backend:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 8000
@@ -26,3 +26,8 @@ spec:
                 name: movies
             - configMapRef:
                 name: movies
+        - name: frontend
+          image: ghcr.io/desecho/movies-frontend:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 9000

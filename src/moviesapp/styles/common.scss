@@ -21,6 +21,33 @@
   }
 }
 
+.poster-big {
+  width: 185px;
+}
+
+#movie-count {
+  font-size: 25px;
+  float: right;
+  text-align: right;
+  color: #707070;
+
+  img {
+    margin-top: 10px;
+  }
+}
+
+@media (min-width: 320px) and (max-width: 576px) {
+  #movie-count {
+    float: none;
+  }
+}
+
+.movie-count {
+  display: inline;
+  margin-left: 10px;
+}
+
+
 /* ----------- */
 
 /* Gallery & List */

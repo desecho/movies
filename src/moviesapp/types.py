@@ -1,4 +1,5 @@
 """Custom Types."""
+
 from __future__ import annotations
 
 from datetime import date, time
@@ -44,7 +45,6 @@ class ContextVariables(TypedDict):
 
     DEBUG: bool
     ADMIN_EMAIL: str
-    GOOGLE_ANALYTICS_ID: str
 
 
 class Trailer(TypedDict):
@@ -87,15 +87,11 @@ class TmdbMovieProcessed(TypedDict):
     imdb_id: str
     release_date: Optional[date]
     title_original: str
-    poster_ru: Optional[str]
-    poster_en: Optional[str]
+    poster: Optional[str]
     homepage: Optional[str]
-    trailers_en: list[TmdbTrailer]
-    trailers_ru: list[TmdbTrailer]
-    title_en: str
-    title_ru: str
-    overview_en: Optional[str]
-    overview_ru: Optional[str]
+    trailers: list[TmdbTrailer]
+    title: str
+    overview: Optional[str]
     runtime: Optional[time]
 
 

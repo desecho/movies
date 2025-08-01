@@ -1,4 +1,5 @@
 """Tasks."""
+
 from celery import shared_task
 from django.conf import settings
 from sentry_sdk import capture_exception

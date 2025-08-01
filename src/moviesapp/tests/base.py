@@ -1,4 +1,5 @@
 """Base code for tests."""
+
 import json
 import os
 from datetime import datetime

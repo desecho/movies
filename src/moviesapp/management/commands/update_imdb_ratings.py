@@ -1,4 +1,5 @@
 """Update the IMDb ratings."""
+
 from typing import Any
 
 from django_tqdm import BaseCommand

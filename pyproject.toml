@@ -15,7 +15,96 @@ exclude = '''
     | \.vscode
     | migrations
     | node_modules
-    | venv
     | htmlcov
 /)
 '''
+
+[tool.poetry]
+name = "movies"
+version = "0.0.0"
+description = ""
+authors = ["Anton Samarchyan <desecho@gmail.com>"]
+license = "MIT"
+readme = "README.rst"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+
+# Django
+Django = "^4.2.11"
+# django-annoying is only used in existing migrations.
+django-annoying = "^0.10.6"
+django-braces = "^1.15.0"
+django-tqdm = "^1.3.1"
+django-custom-anonymous = "^0.5.0"
+django-modeladmin-reorder = "^0.3.1"
+django-stubs-ext = "^5.2.2"
+django-celery-results = "^2.4.0"
+django-countries = {extras = ["pyuca"], version = "^7.6.1"}
+django-timezone-field = "^5.0"
+djangorestframework = "^3.13.1"
+djangorestframework-simplejwt = "^5.5.1"
+django-cors-headers = "^4.4.0"
+django-rest-registration = "^0.9.0"
+
+# Requests
+requests = "^2.31.0"
+requests-toolbelt = "^0.9.1"
+
+# Dates
+python-dateutil = "^2.8.2"
+Babel = "^2.10.3"
+
+mysqlclient = "^2.2.0"
+sentry-sdk = "^2.14.0"
+gunicorn = "^23.0.0"
+typing-extensions = "^4.3.0"
+Authlib = "^1.0.1"
+pip = "^24.2"
+wget = "^3.2"
+tmdbsimple = "^2.9.1"
+celery = {extras = ["redis"], version = "^5.2.7"}
+# This seems to be required for django-timezone-field
+tzdata = "^2025.2"
+
+[tool.poetry.dev-dependencies]
+# Pytest
+pytest = "*"
+pytest-cov = "*"
+pytest-sugar = "*"
+pytest-mock = "*"
+pytest-django = "*"
+
+# Django
+django-test-without-migrations = "*"
+
+# Linting
+pylint = "*"
+isort = "*"
+flake8 = "*"
+bandit = "*"
+pydiatra = "*"
+pydocstyle = "*"
+safety = "*"
+autoflake = "*"
+black = "*"
+restructuredtext_lint = "*"
+mypy = "*"
+pygments = "*" # For syntax highlighting in code examples
+
+# Stubs
+# Setting version manually because it wouldn't install the latest version for whatever reason
+django-stubs = "^5.2.2"
+djangorestframework-stubs = "*"
+types-python-dateutil = "*"
+types-requests = "*"
+types-babel = "*"
+celery-types = "*"
+
+beautifulsoup4 = "*"
+
+requests-mock = "*"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

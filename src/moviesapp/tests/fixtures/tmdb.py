@@ -1,4 +1,5 @@
 """TMDB Fixtures."""
+
 from datetime import date, time
 
 tmdb_provider_data = {

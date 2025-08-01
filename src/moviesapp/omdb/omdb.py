@@ -1,4 +1,5 @@
 """OMDb."""
+
 import requests
 from django.conf import settings
 from requests.exceptions import RequestException

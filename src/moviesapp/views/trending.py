@@ -1,28 +1,24 @@
 """Trending view."""
-import json
-from typing import Any
 
-from ..http import HttpRequest
+from rest_framework.request import Request
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
 from ..models import User
 from ..tmdb import get_trending
-from .mixins import TemplateAnonymousView
-from .types import TrendingViewContextData
 from .utils import filter_out_movies_user_already_has_in_lists, get_movie_list_result
 
 
-class TrendingView(TemplateAnonymousView):
+class TrendingView(APIView):
     """Trending view."""
 
     template_name = "trending.html"
 
-    def get_context_data(self, **kwargs: Any) -> TrendingViewContextData:  # type: ignore
-        """Get context data."""
+    def get(self, request: Request) -> Response:  # pylint: disable=no-self-use
+        """Return a list of trending movies."""
         tmdb_movies = get_trending()
-        request: HttpRequest = self.request  # type: ignore
         movies = [get_movie_list_result(tmdb_movie, request.LANGUAGE_CODE) for tmdb_movie in tmdb_movies]
         if request.user.is_authenticated:
-            user: User = request.user
+            user: User = request.user  # type: ignore
             filter_out_movies_user_already_has_in_lists(movies, user)
-        return {
-            "movies": json.dumps(movies),
-        }
+        return Response(movies)

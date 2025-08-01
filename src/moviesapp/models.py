@@ -1,12 +1,13 @@
 """Models."""
+
 import json
-from datetime import timedelta
+from datetime import datetime, time, timedelta
 from typing import Any, Optional
 from urllib.parse import urljoin
 
+from dateutil.relativedelta import relativedelta
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser, AnonymousUser
-from django.core.cache import cache
 from django.db.models import (
     CASCADE,
     BooleanField,
@@ -30,16 +31,13 @@ from django.utils import formats
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 from django_countries.fields import CountryField
-from social_django.models import AbstractUserSocialAuth
 from timezone_field import TimeZoneField
 
 from .exceptions import ProviderNotFoundError
-from .fb import Fb
 from .http import HttpRequest
 from .tmdb import get_poster_url, get_tmdb_url
 from .types import TmdbTrailer, Trailer, TrailerSite, WatchDataRecord
 from .utils import is_movie_released
-from .vk import Vk, VkError
 
 
 class UserBase:
@@ -60,99 +58,99 @@ class UserBase:
         """Get record."""
         return self.get_records().get(pk=id_)
 
-    def _get_fb_accounts(self) -> QuerySet[AbstractUserSocialAuth]:
-        """Get FB accounts."""
-        return self.social_auth.filter(provider="facebook")  # type: ignore
+    # def _get_fb_accounts(self) -> QuerySet[AbstractUserSocialAuth]:
+    #     """Get FB accounts."""
+    #     return self.social_auth.filter(provider="facebook")  # type: ignore
 
-    def is_fb_user(self) -> bool:
-        """Return True if user has FB account."""
-        if self.is_authenticated:  # type: ignore
-            return self._get_fb_accounts().exists()
-        return False
+    # def is_fb_user(self) -> bool:
+    #     """Return True if user has FB account."""
+    #     if self.is_authenticated:  # type: ignore
+    #         return self._get_fb_accounts().exists()
+    #     return False
 
-    # It is requried that `is_fb_user` is run before running this.
-    def get_fb_account(self) -> AbstractUserSocialAuth:  # 2DO possibly remove it from this class.
-        """Get FB account."""
-        return self._get_fb_accounts()[0]
+    # # It is requried that `is_fb_user` is run before running this.
+    # def get_fb_account(self) -> AbstractUserSocialAuth:  # 2DO possibly remove it from this class.
+    #     """Get FB account."""
+    #     return self._get_fb_accounts()[0]
 
-    def _get_vk_accounts(self) -> QuerySet[AbstractUserSocialAuth]:
-        """Get VK accounts."""
-        return self.social_auth.filter(provider=settings.VK_BACKEND)  # type: ignore
+    # def _get_vk_accounts(self) -> QuerySet[AbstractUserSocialAuth]:
+    #     """Get VK accounts."""
+    #     return self.social_auth.filter(provider=settings.VK_BACKEND)  # type: ignore
 
-    # It is requried that `is_vk_user` is run before running this.
-    def get_vk_account(self) -> Optional[AbstractUserSocialAuth]:  # 2DO possibly remove it from this class.
-        """Get VK account."""
-        vk_accounts = self._get_vk_accounts()
-        if len(vk_accounts) == 1:
-            return vk_accounts[0]
+    # # It is requried that `is_vk_user` is run before running this.
+    # def get_vk_account(self) -> Optional[AbstractUserSocialAuth]:  # 2DO possibly remove it from this class.
+    #     """Get VK account."""
+    #     vk_accounts = self._get_vk_accounts()
+    #     if len(vk_accounts) == 1:
+    #         return vk_accounts[0]
 
-        raise VkError
+    #     raise VkError
 
-    @property
-    def is_vk_user(self) -> bool:
-        """Return True if a user has a VK account."""
-        if self.is_authenticated:  # type: ignore
-            return self._get_vk_accounts().exists()
-        return False
+    # @property
+    # def is_vk_user(self) -> bool:
+    #     """Return True if a user has a VK account."""
+    #     if self.is_authenticated:  # type: ignore
+    #         return self._get_vk_accounts().exists()
+    #     return False
 
-    @property
-    def is_linked(self) -> bool:
-        """Return True if user is linked."""
-        if self.is_authenticated:  # type: ignore
-            return self.social_auth.exists()  # type: ignore
-        return False
+    # @property
+    # def is_linked(self) -> bool:
+    #     """Return True if user is linked."""
+    #     if self.is_authenticated:  # type: ignore
+    #         return self.social_auth.exists()  # type: ignore
+    #     return False
 
-    def get_users(self, friends: bool = False, sort: bool = False) -> list["User"]:
-        """Get users."""
-        if friends:
-            return list(self.get_friends(sort=sort))
-        return self._get_available_users_and_friends(sort=sort)
+    # def get_users(self, friends: bool = False, sort: bool = False) -> list["User"]:
+    #     """Get users."""
+    #     if friends:
+    #         return list(self.get_friends(sort=sort))
+    #     return self._get_available_users_and_friends(sort=sort)
 
-    def _get_available_users_and_friends(self, sort: bool = False) -> list["User"]:
-        """Get available users and friends."""
-        user: User | UserAnonymous = self  # type: ignore
-        available_users = User.objects.exclude(only_for_friends=True).exclude(hidden=True)
-        if user.is_authenticated:
-            available_users = available_users.exclude(pk=user.pk)
-        users = available_users | self.get_friends()
-        if sort:
-            users = users.order_by("first_name")
-        return list(set(users))
+    # def _get_available_users_and_friends(self, sort: bool = False) -> list["User"]:
+    #     """Get available users and friends."""
+    #     user: User | UserAnonymous = self  # type: ignore
+    #     available_users = User.objects.exclude(only_for_friends=True).exclude(hidden=True)
+    #     if user.is_authenticated:
+    #         available_users = available_users.exclude(pk=user.pk)
+    #     users = available_users | self.get_friends()
+    #     if sort:
+    #         users = users.order_by("first_name")
+    #     return list(set(users))
 
-    def get_vk(self) -> Optional[Vk]:
-        """Get VK."""
-        if self.is_vk_user:
-            return Vk(self)  # type: ignore
-        return None
+    # def get_vk(self) -> Optional[Vk]:
+    #     """Get VK."""
+    #     if self.is_vk_user:
+    #         return Vk(self)  # type: ignore
+    #     return None
 
-    def get_friends(self, sort: bool = False) -> QuerySet["User"]:
-        """Get friends."""
-        friends = User.objects.none()
-        if self.is_linked:
-            if self.is_vk_user:  # 2DO possibly refactor this (this check is run twice)
-                vk = self.get_vk()
-                if vk is not None:
-                    friends |= vk.get_friends()
-            if self.is_fb_user():
-                friends |= Fb(self).get_friends()  # type: ignore
-            if sort:
-                friends = friends.order_by("first_name")
-        return friends
+    # def get_friends(self, sort: bool = False) -> QuerySet["User"]:
+    #     """Get friends."""
+    #     friends = User.objects.none()
+    #     if self.is_linked:
+    #         if self.is_vk_user:  # 2DO possibly refactor this (this check is run twice)
+    #             vk = self.get_vk()
+    #             if vk is not None:
+    #                 friends |= vk.get_friends()
+    #         if self.is_fb_user():
+    #             friends |= Fb(self).get_friends()  # type: ignore
+    #         if sort:
+    #             friends = friends.order_by("first_name")
+    #     return friends
 
-    def has_friends(self) -> bool:
-        """Return True if user has friends."""
-        if self.is_authenticated:  # type: ignore
-            user: User = self  # type: ignore
-            cache_id = f"has_friends_{user.pk}"
-            has_friends: Optional[bool] = cache.get(cache_id)
-            if has_friends is None:
-                has_friends = user.get_friends().exists()
-                cache.set(cache_id, has_friends)
-            return has_friends
-        return False
+    # def has_friends(self) -> bool:
+    #     """Return True if user has friends."""
+    #     if self.is_authenticated:  # type: ignore
+    #         user: User = self  # type: ignore
+    #         cache_id = f"has_friends_{user.pk}"
+    #         has_friends: Optional[bool] = cache.get(cache_id)
+    #         if has_friends is None:
+    #             has_friends = user.get_friends().exists()
+    #             cache.set(cache_id, has_friends)
+    #         return has_friends
+    #     return False
 
 
-class User(AbstractUser, UserBase):  # type: ignore
+class User(AbstractUser, UserBase):
     """User class."""
 
     only_for_friends = BooleanField(
@@ -203,7 +201,7 @@ class UserAnonymous(AnonymousUser, UserBase):
         super().__init__()
 
 
-class List(Model):  # type: ignore
+class List(Model):
     """List."""
 
     WATCHED = 1
@@ -221,7 +219,7 @@ class List(Model):  # type: ignore
         return list_id in [cls.WATCHED, cls.TO_WATCH]
 
 
-class Movie(Model):  # type: ignore
+class Movie(Model):
     """Movie."""
 
     title = CharField(max_length=255)
@@ -257,6 +255,15 @@ class Movie(Model):  # type: ignore
         if self.release_date:
             return formats.date_format(self.release_date, "DATE_FORMAT")
         return None
+
+    @property
+    def release_date_timestamp(self) -> float:
+        """Return release date timestamp."""
+        if self.release_date:
+            dt = datetime.combine(self.release_date, time())
+            return dt.timestamp()
+        next_year = now() + relativedelta(years=1)
+        return next_year.timestamp()
 
     @property
     def imdb_rating_float(self) -> Optional[float]:
@@ -314,7 +321,7 @@ class Movie(Model):  # type: ignore
             trailers = self._get_real_trailers(self.trailers)
             return trailers
         # Fallback to English trailers when localized trailers are not available.
-        trailers = self._get_real_trailers(self.trailers_en)  # type: ignore
+        trailers = self._get_real_trailers(self.trailers)  # type: ignore
         return trailers
 
     @staticmethod
@@ -443,7 +450,7 @@ class Record(Model):
     watched_in_hd = BooleanField(default=False)
     watched_in_full_hd = BooleanField(default=False)
     watched_in_4k = BooleanField(default=False)
-    objects: Manager["Record"] = RecordQuerySet.as_manager()  # type: ignore
+    objects: Manager["Record"] = RecordQuerySet.as_manager()
 
     class Meta:
         """Meta."""
@@ -466,7 +473,7 @@ class Record(Model):
         super().save(*args, **kwargs)
 
 
-class Action(Model):  # type: ignore
+class Action(Model):
     """Action."""
 
     ADDED_MOVIE = 1
@@ -509,7 +516,7 @@ class Provider(Model):
     @property
     def logo(self) -> str:
         """Return logo."""
-        return f"{settings.STATIC_URL}img/providers/{self.id}.jpg"
+        return f"/img/providers/{self.id}.jpg"
 
 
 class ProviderRecord(Model):

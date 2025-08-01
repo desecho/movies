@@ -1,4 +1,5 @@
 """Update watch data."""
+
 import sys
 from typing import Any, Optional
 

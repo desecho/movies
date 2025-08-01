@@ -1,85 +1,76 @@
 """List views."""
-import json
-from typing import Any, Optional, Union
 
-from django.conf import settings
-from django.core.paginator import Page
+from http import HTTPStatus
+from typing import Optional, Union
+
 from django.db.models import Q, QuerySet, prefetch_related_objects
 from django.http import Http404, HttpResponse, HttpResponseBadRequest
 from django.shortcuts import get_object_or_404
+from rest_framework.request import Request
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
-from ..http import AjaxHttpRequest, AuthenticatedAjaxHttpRequest, AuthenticatedHttpRequest, HttpRequest
+from ..http import AjaxHttpRequest, AuthenticatedHttpRequest, HttpRequest
 from ..models import Action, ActionRecord, List, Movie, ProviderRecord, Record, User, UserAnonymous
-from .mixins import AjaxAnonymousView, AjaxView, TemplateAnonymousView
-from .types import (
-    ListKeyName,
-    ListViewContextData,
-    MovieObject,
-    OptionsObject,
-    ProviderObject,
-    ProviderRecordObject,
-    RecordObject,
-    SortType,
-)
-from .utils import add_movie_to_list, paginate
+from .mixins import AjaxAnonymousView
+from .types import MovieObject, OptionsObject, ProviderObject, ProviderRecordObject, RecordObject, SortType
+from .utils import add_movie_to_list
 
 
-class ChangeRatingView(AjaxView):
+class ChangeRatingView(APIView):
     """Change rating view."""
 
-    def put(self, request: AuthenticatedAjaxHttpRequest, record_id: int) -> (HttpResponse | HttpResponseBadRequest):
+    def put(self, request: Request, record_id: int) -> Response:  # pylint: disable=no-self-use
         """Change rating."""
         try:
             rating = int(request.PUT["rating"])
         except (KeyError, ValueError):
-            response: HttpResponseBadRequest = self.render_bad_request_response()
-            return response
+            return Response(status=HTTPStatus.BAD_REQUEST)
 
         record = get_object_or_404(Record, user=request.user, pk=record_id)
 
+        user: User = request.user  # type: ignore
         if record.rating != rating:
             if not record.rating:
-                ActionRecord(
-                    action_id=Action.ADDED_RATING, user=request.user, movie=record.movie, rating=rating
-                ).save()
+                ActionRecord(action_id=Action.ADDED_RATING, user=user, movie=record.movie, rating=rating).save()
             record.rating = rating
             record.save()
-        return self.success()
+        return Response()
 
 
-class AddToListView(AjaxView):
+class AddToListView(APIView):
     """Add to list view."""
 
-    def post(self, request: AuthenticatedAjaxHttpRequest, movie_id: int) -> (HttpResponse | HttpResponseBadRequest):
+    def post(self, request: Request, movie_id: int) -> Response:  # pylint: disable=no-self-use
         """Add movie to list."""
-        try:
-            list_id = int(request.POST["listId"])
-        except (KeyError, ValueError):
-            response: HttpResponseBadRequest = self.render_bad_request_response()
-            return response
+        try:  # pylint: disable=duplicate-code
+            list_id = int(request.data["listId"])  # pylint: disable=duplicate-code
+        except (KeyError, ValueError):  # pylint: disable=duplicate-code
+            return Response(status=HTTPStatus.BAD_REQUEST)  # pylint: disable=duplicate-code
 
-        if not List.is_valid_id(list_id):
-            raise Http404
+        if not List.is_valid_id(list_id):  # pylint: disable=duplicate-code
+            raise Http404  # pylint: disable=duplicate-code
 
         get_object_or_404(Movie, pk=movie_id)
-        add_movie_to_list(movie_id, list_id, request.user)
-        return self.success()
+        user: User = request.user  # type: ignore
+        add_movie_to_list(movie_id, list_id, user)
+        return Response()
 
 
-class RemoveRecordView(AjaxView):
+class RemoveRecordView(APIView):
     """Remove record view."""
 
-    def delete(self, request: AuthenticatedAjaxHttpRequest, record_id: int) -> HttpResponse:
+    def delete(self, request: Request, record_id: int) -> Response:  # pylint: disable=no-self-use
         """Remove record."""
         record = get_object_or_404(Record, user=request.user, pk=record_id)
         record.delete()
-        return self.success()
+        return Response()
 
 
 class SaveSettingsView(AjaxAnonymousView):
     """Save settings view."""
 
-    def put(self, request: AjaxHttpRequest) -> (HttpResponse | HttpResponseBadRequest):
+    def put(self, request: AjaxHttpRequest) -> HttpResponse | HttpResponseBadRequest:
         """Save settings."""
         try:
             session_settings = request.PUT["settings"]
@@ -97,10 +88,10 @@ class SaveSettingsView(AjaxAnonymousView):
         return self.success()
 
 
-class SaveOptionsView(AjaxView):
+class SaveOptionsView(APIView):
     """Save options view."""
 
-    def put(self, request: AuthenticatedAjaxHttpRequest, record_id: int) -> (HttpResponse | HttpResponseBadRequest):
+    def put(self, request: Request, record_id: int) -> Response:  # pylint: disable=no-self-use
         """Save options."""
         get_object_or_404(Record, user=request.user, pk=record_id)
 
@@ -115,40 +106,37 @@ class SaveOptionsView(AjaxView):
                 "watched_in_full_hd": options_object["fullHd"],
             }
         except KeyError:
-            response: HttpResponseBadRequest = self.render_bad_request_response()
-            return response
+            return Response(status=HTTPStatus.BAD_REQUEST)
 
         Record.objects.filter(pk=record_id).update(**options)
-        return self.success()
+        return Response()
 
 
-class SaveCommentView(AjaxView):
+class SaveCommentView(APIView):
     """Save comment view."""
 
-    def put(self, request: AuthenticatedAjaxHttpRequest, record_id: int) -> (HttpResponse | HttpResponseBadRequest):
+    def put(self, request: Request, record_id: int) -> Response:  # pylint: disable=no-self-use
         """Save comment."""
         record = get_object_or_404(Record, user=request.user, pk=record_id)
 
         try:
             comment = request.PUT["comment"]
         except KeyError:
-            response: HttpResponseBadRequest = self.render_bad_request_response()
-            return response
+            return Response(status=HTTPStatus.BAD_REQUEST)
 
+        user: User = request.user  # type: ignore
         if record.comment != comment:
             if not record.comment:
-                ActionRecord(
-                    action_id=Action.ADDED_COMMENT, user=request.user, movie=record.movie, comment=comment
-                ).save()
+                ActionRecord(action_id=Action.ADDED_COMMENT, user=user, movie=record.movie, comment=comment).save()
             record.comment = comment
             record.save()
-        return self.success()
+        return Response()
 
 
-class ListView(TemplateAnonymousView):
-    """List view."""
+class RecordsView(APIView):
+    """Records view."""
 
-    template_name = "list.html"
+    anothers_account: Optional[User] = None
 
     @staticmethod
     def _filter_records_for_recommendations(
@@ -170,23 +158,14 @@ class ListView(TemplateAnonymousView):
             return records.order_by("-movie__imdb_rating", "-movie__release_date")
         return records.order_by("-rating", "-movie__release_date")
 
-    def _sort_records(
-        self, records: QuerySet[Record], sort: SortType, username: Optional[str], list_name: str
-    ) -> QuerySet[Record]:
+    @staticmethod
+    def _sort_records(records: QuerySet[Record]) -> QuerySet[Record]:
         """Sort records."""
-        if sort == "releaseDate":
-            return records.order_by("-movie__release_date")
-        if sort == "rating":
-            return self._sort_by_rating(records, username, list_name)
-        if sort == "additionDate":
-            return records.order_by("-date")
-        if sort == "custom":
-            return records.order_by("order")
-        raise Exception("Unsupported sort type")  # pylint: disable=broad-exception-raised
+        return records.order_by("-date")
 
     @staticmethod
     def _get_record_movie_data(
-        record_ids_and_movie_ids_list: list[tuple[int, int]]
+        record_ids_and_movie_ids_list: list[tuple[int, int]],
     ) -> tuple[list[int], dict[int, int]]:
         """
         Get record's movie data.
@@ -300,6 +279,7 @@ class ListView(TemplateAnonymousView):
             "posterSmall": movie.poster_small,
             "imdbRating": movie.imdb_rating_float,
             "releaseDate": movie.release_date_formatted,
+            "releaseDateTimestamp": movie.release_date_timestamp,
             "country": movie.country,
             "director": movie.director,
             "writer": movie.writer,
@@ -340,6 +320,8 @@ class ListView(TemplateAnonymousView):
                 "providerRecords": self._get_provider_record_objects(provider_records),
                 "movie": self._get_movie_object(record.movie),
                 "options": self._get_options_object(record),
+                "listId": record.list.pk,
+                "additionDate": record.date.timestamp(),
             }
             record_objects.append(record_object)
         return record_objects
@@ -350,78 +332,79 @@ class ListView(TemplateAnonymousView):
             record_object["listId"] = list_data.get(record_object["id"])
 
     @staticmethod
-    def _get_records(list_name: str, user: Union[User, UserAnonymous]) -> QuerySet[Record]:
-        """Get records for certain user and list."""
-        return user.get_records().filter(list__key_name=list_name).select_related("movie")
+    def _get_records(user: Union[User, UserAnonymous]) -> QuerySet[Record]:
+        """Get records for certain user."""
+        return user.get_records().select_related("movie")
 
-    def get_context_data(self, **kwargs: Any) -> ListViewContextData:  # type: ignore
-        """Get context data."""
-        list_name: ListKeyName = kwargs["list_name"]
-        username: Optional[str] = kwargs.get("username")
-        self.check_if_allowed(username)
-        request: HttpRequest = self.request  # type: ignore
+    # def check_if_allowed(self, request: Request, username: Optional[str] = None) -> None:
+    #     """Check if user is allowed to see the page."""
+    #     if username is None and request.user.is_anonymous:  # pylint: disable=duplicate-code
+    #         raise Http404  # pylint: disable=duplicate-code
+    #     user: User = request.user  # type: ignore  # pylint: disable=duplicate-code
+    #     if user.username == username:  # pylint: disable=duplicate-code
+    #         return  # pylint: disable=duplicate-code
+    #     self.anothers_account = get_anothers_account(username)
+    #     if self.anothers_account:
+    #         if User.objects.get(username=username) not in user.get_users():
+    #             raise PermissionDenied
+
+    def get(self, request: Request) -> Response:
+        """Get data for the list view."""
+        # self._sanitize_session_values()
+        # self._initialize_session_values()
+
+        # username: Optional[str] = kwargs.get("username")
+        # self.check_if_allowed(request, username)
         anothers_account = self.anothers_account
-        user = request.user if anothers_account is None else anothers_account
-        records = self._get_records(list_name, user)
+        user: User = request.user if anothers_account is None else anothers_account  # type: ignore
+        records = self._get_records(user)
         # Session is supposed to be initialized at that point.
-        session = self.request.session
-        query = request.GET.get("query", "")
-        if query:
-            query = query.strip()
-            records = self._filter_records(records, query)
-        records = self._sort_records(records, session["sort"][list_name], username, list_name)
+        # session = self.request.session
+        # query = request.GET.get("query", "")
+        # if query:
+        #     query = query.strip()
+        #     records = self._filter_records(records, query)
+        records = self._sort_records(records)
 
-        if anothers_account and session["recommendations"]:
-            records = self._filter_records_for_recommendations(records, request.user)
-
-        if request.user.is_authenticated and request.user.is_country_supported:
+        # if anothers_account and session["recommendations"]:
+        #     records = self._filter_records_for_recommendations(records, request.user)
+        actual_user: User = request.user  # type: ignore
+        if actual_user.is_authenticated and actual_user.is_country_supported:
             prefetch_related_objects(records, "movie__provider_records__provider")
 
-        list_id = List.objects.get(key_name=list_name).pk
-        if list_id == List.TO_WATCH:
-            records_on_page = records.count()
-        else:  # List - watched
-            records_on_page = settings.RECORDS_ON_PAGE
-        records_paginated: Page[Record] | list[Record] = paginate(  # type: ignore
-            records, request.GET.get("page"), records_on_page
-        )
-        records_paginated_ids = [record.pk for record in records_paginated]
-        record_objects = self._get_record_objects(records.filter(pk__in=records_paginated_ids))
-        if anothers_account:
-            self._inject_list_ids(records, record_objects)
-        return {
-            "records": records_paginated,
-            "record_objects": json.dumps(record_objects),
-            "list_id": list_id,
-            "list": list_name,
-            "anothers_account": anothers_account,
-            "sort": session["sort"][list_name],
-            "query": query,
-        }
+        # list_id = List.objects.get(key_name=list_name).pk
+        # if list_id == List.TO_WATCH:
+        #     records_on_page = records.count()
+        # else:  # List - watched
+        #     records_on_page = settings.RECORDS_ON_PAGE
+        # records_paginated: Page[Record] | list[Record] = paginate(  # type: ignore
+        #     records, request.GET.get("page"), records_on_page
+        # )
+        # records_paginated_ids = [record.pk for record in records_paginated]
+        # record_objects = self._get_record_objects(records.filter(pk__in=records_paginated_ids))
+        # if anothers_account:
+        #     self._inject_list_ids(records, record_objects)
+        record_objects = self._get_record_objects(records)
 
-    def get(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:  # type: ignore
-        """Get."""
-        self._sanitize_session_values()
-        self._initialize_session_values()
-        return super().get(request, *args, **kwargs)
+        return Response(record_objects)
 
 
-class SaveRecordsOrderView(AjaxView):
+class SaveRecordsOrderView(APIView):
     """
     Save records order view.
 
     This view is used on the list and gallery pages.
     """
 
-    def put(self, request: AuthenticatedAjaxHttpRequest) -> (HttpResponse | HttpResponseBadRequest):
+    def put(self, request: Request) -> Response:  # pylint: disable=no-self-use
         """Save records order."""
         try:
-            records = request.PUT["records"]
+            records = request.data["records"]
         except KeyError:
-            response: HttpResponseBadRequest = self.render_bad_request_response()
-            return response
+            return Response(status=HTTPStatus.BAD_REQUEST)
 
+        user: User = request.user  # type: ignore
         for record in records:
             # If record id is not found we silently ignore it
-            Record.objects.filter(pk=record["id"], user=request.user).update(order=record["order"])
-        return self.success()
+            Record.objects.filter(pk=record["id"], user=user).update(order=record["order"])
+        return Response()

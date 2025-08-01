@@ -42,7 +42,9 @@ jobs:
             --from-literal=EMAIL_HOST_PASSWORD=${{ secrets.EMAIL_HOST_PASSWORD }} \
             --dry-run=client -o yaml | kubectl apply -f -
           kubectl apply -f deployment/deployment.yaml
-          kubectl apply -f deployment/ingress.yaml
-          kubectl apply -f deployment/service.yaml
+          kubectl apply -f deployment/ingress_backend.yaml
+          kubectl apply -f deployment/ingress_frontend.yaml
+          kubectl apply -f deployment/service_backend.yaml
+          kubectl apply -f deployment/service_frontend.yaml
           kubectl rollout restart "deployment/$PROJECT"
           kubectl rollout status "deployment/$PROJECT"

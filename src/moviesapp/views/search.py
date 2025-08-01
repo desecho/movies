@@ -1,31 +1,31 @@
 """Search views."""
+
 import json
+from http import HTTPStatus
 from operator import itemgetter
 from typing import Optional
 
 from django.conf import settings
-from django.http import Http404, HttpResponse, HttpResponseBadRequest
+from django.http import Http404
+from rest_framework.request import Request
+from rest_framework.response import Response
+from rest_framework.views import APIView
 from sentry_sdk import capture_exception
 
-from ..http import AjaxHttpRequest, AuthenticatedAjaxHttpRequest
+from ..http import AjaxHttpRequest
 from ..models import List, Movie, User
 from ..tasks import load_and_save_watch_data_task
 from ..tmdb import TmdbInvalidSearchTypeError, TmdbNoImdbIdError, search_movies
 from ..types import SearchType, TmdbMovieListResultProcessed
 from ..utils import load_movie_data
-from .mixins import AjaxAnonymousView, AjaxView, TemplateAnonymousView
 from .types import MovieListResult, SearchOptions
 from .utils import add_movie_to_list, filter_out_movies_user_already_has_in_lists, get_movie_list_result
 
 
-class SearchView(TemplateAnonymousView):
-    """Search view."""
-
-    template_name = "search.html"
-
-
-class SearchMovieView(AjaxAnonymousView):
+class SearchMovieView(APIView):
     """Search movie view."""
+
+    permission_classes: list[str] = []  # type: ignore
 
     @staticmethod
     def _is_popular_movie(popularity: float) -> bool:
@@ -66,10 +66,8 @@ class SearchMovieView(AjaxAnonymousView):
 
         return [get_movie_list_result(tmdb_movie, lang) for tmdb_movie in tmdb_movies]
 
-    def get(self, request: AjaxHttpRequest) -> (HttpResponse | HttpResponseBadRequest):
+    def get(self, request: Request) -> Response:
         """Return a list of movies based on the search query."""
-        response_bad_request: HttpResponseBadRequest = self.render_bad_request_response()
-
         try:
             GET = request.GET
             query = GET["query"]
@@ -77,18 +75,19 @@ class SearchMovieView(AjaxAnonymousView):
             type_ = GET["type"]
             search_type: SearchType = type_  # type: ignore
         except KeyError:
-            return response_bad_request
+            return Response(status=HTTPStatus.BAD_REQUEST)
         try:
             movies = self._get_movies_from_tmdb(query, search_type, options["sortByDate"], options["popularOnly"])
         except TmdbInvalidSearchTypeError:
-            return response_bad_request
+            return Response(status=HTTPStatus.BAD_REQUEST)
         if request.user.is_authenticated:
-            filter_out_movies_user_already_has_in_lists(movies, request.user)
+            user: User = request.user  # type: ignore
+            filter_out_movies_user_already_has_in_lists(movies, user)
         movies = movies[: settings.MAX_RESULTS]
-        return self.success(movies=movies)
+        return Response(movies)
 
 
-class AddToListFromDbView(AjaxView):
+class AddToListFromDbView(APIView):
     """Add to list from DB view."""
 
     @staticmethod
@@ -134,23 +133,20 @@ class AddToListFromDbView(AjaxView):
         add_movie_to_list(movie_id, list_id, user)
         return True
 
-    def post(self, request: AuthenticatedAjaxHttpRequest) -> (HttpResponse | HttpResponseBadRequest):
+    def post(self, request: Request) -> Response:
         """Add a movie to a list."""
         try:
-            POST = request.POST
-            tmdb_id = int(POST["movieId"])
-            list_id = int(POST["listId"])
+            tmdb_id = int(request.data["movieId"])
+            list_id = int(request.data["listId"])
         except (KeyError, ValueError):
-            response_bad: HttpResponseBadRequest = self.render_bad_request_response()
-            return response_bad
+            return Response(status=HTTPStatus.BAD_REQUEST)
 
         if not List.is_valid_id(list_id):
             raise Http404
 
         movie_id = self._get_movie_id(tmdb_id)
-        result = self._add_to_list_from_db(movie_id, tmdb_id, list_id, request.user)
+        user: User = request.user  # type: ignore
+        result = self._add_to_list_from_db(movie_id, tmdb_id, list_id, user)
         if not result:
-            output = {"status": "not_found"}
-            response: HttpResponse = self.render_json_response(output)
-            return response
-        return self.success()
+            return Response({"status": "not_found"})
+        return Response()
