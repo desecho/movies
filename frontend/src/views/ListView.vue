@@ -493,6 +493,7 @@ function addToList(movieId: number, listId: number, record: RecordType): void {
     })
     .then(() => {
       record.listId = listId;
+      record.additionDate = Date.now();
     })
     .catch(() => {
       $toast.error("Error adding the movie to the list");
