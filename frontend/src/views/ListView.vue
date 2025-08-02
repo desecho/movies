@@ -3,24 +3,19 @@
         <v-row>
             <v-col cols="12">
                 <v-btn-toggle v-model="mode" density="compact" mandatory>
-                    <v-btn value="full"> Full </v-btn>
-
-                    <v-btn value="compact"> Compact </v-btn>
-
-                    <v-btn value="minimal"> Minimal </v-btn>
-
-                    <v-btn value="gallery"> Gallery </v-btn>
+                    <v-btn value="full">Full</v-btn>
+                    <v-btn value="compact">Compact</v-btn>
+                    <v-btn value="minimal">Minimal</v-btn>
+                    <v-btn value="gallery">Gallery</v-btn>
                 </v-btn-toggle>
             </v-col>
         </v-row>
         <v-row>
             <v-col cols="5">
                 <v-btn-toggle v-model="sort" density="compact" mandatory>
-                    <v-btn value="releaseDate"> Release date </v-btn>
-
-                    <v-btn value="rating"> Rating </v-btn>
-
-                    <v-btn value="additionDate"> Date added </v-btn>
+                    <v-btn value="releaseDate">Release date</v-btn>
+                    <v-btn value="rating">Rating</v-btn>
+                    <v-btn value="additionDate">Date added</v-btn>
                     <v-btn v-if="listId == listToWatchId" value="custom">
                         Custom
                     </v-btn>
@@ -56,11 +51,7 @@
                 >
                     <template #item="{ element, index }">
                         <div
-                            v-if="
-                                element.listId == listId &&
-                                paginatedRecords.includes(element) &&
-                                filteredRecords.includes(element)
-                            "
+                            v-if="paginatedRecords.includes(element)"
                             class="movie"
                             :class="{
                                 'movie-minimal': mode == 'minimal',
@@ -82,32 +73,6 @@
                                     </a>
                                 </div>
                                 <div class="add-to-list-buttons">
-                                    <!-- {% if anothers_account %}
-                <div class="inline">
-                  <div class="inline" v-if="!element.listId">
-                    <a
-                      href="javascript:void(0)"
-                      @click="addToList(element.movie.id, listWatchedId, element)"
-                      title="{% translate 'Add to &quot;Watched&quot; list' %}"
-                      v-show="element.movie.isReleased"
-                    >
-                      <v-icon icon="mdi-eye" />
-                    </a>
-                    <a href="javascript:void(0)"
-                       @click="addToList(element.movie.id, listToWatchId, element)"
-                       title="{% translate 'Add to &quot;To Watch&quot; list' %}"
-                    >
-                      <v-icon icon="mdi-eye-off" />
-                    </a>
-                  </div>
-                  <span v-show="element.listId == listWatchedId" >
-                    <v-icon icon="mdi-eye" title="Watched"/>
-                  </span>
-                  <span v-show="element.listId == listToWatchId">
-                    <v-icon icon="mdi-eye-off" title="To Watch" />
-                  </span>
-                </div>
-              {% else %} -->
                                     <div class="inline">
                                         <div
                                             v-if="listId == listToWatchId"
@@ -470,11 +435,7 @@
                 >
                     <template #item="{ element, index }">
                         <div
-                            v-if="
-                                element.listId == listId &&
-                                paginatedRecords.includes(element) &&
-                                filteredRecords.includes(element)
-                            "
+                            v-if="paginatedRecords.includes(element)"
                             class="gallery-record"
                         >
                             <div class="buttons">
@@ -540,6 +501,10 @@ import { getSrcSet, getUrl } from "../helpers";
 import { useRecordsStore } from "../stores/records";
 import { $toast } from "../toast";
 
+const props = defineProps<{
+    listId: number;
+}>();
+
 const recordsStore = useRecordsStore();
 
 const mode = ref("full");
@@ -551,14 +516,12 @@ const page = ref(1);
 const perPage = 50;
 
 const filteredRecords = computed(() => {
-    if (!query.value.trim()) {
-        return records.value;
-    }
     const q = query.value.trim().toLowerCase();
     return records.value.filter((record) => {
         return (
-            record.movie.title.toLowerCase().includes(q) ||
-            record.movie.titleOriginal.toLowerCase().includes(q)
+            (record.movie.title.toLowerCase().includes(q) ||
+                record.movie.titleOriginal.toLowerCase().includes(q)) &&
+            record.listId === props.listId
         );
     });
 });
@@ -571,9 +534,6 @@ const paginatedRecords = computed(() => {
     const start = (page.value - 1) * perPage;
     return filteredRecords.value.slice(start, start + perPage);
 });
-const props = defineProps<{
-    listId: number;
-}>();
 
 function sortRecords(): void {
     const recordsCopy = cloneDeep(records.value);
