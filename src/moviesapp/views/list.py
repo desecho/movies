@@ -3,17 +3,15 @@
 from http import HTTPStatus
 from typing import Optional, Union
 
-from django.db.models import Q, QuerySet, prefetch_related_objects
-from django.http import Http404, HttpResponse, HttpResponseBadRequest
+from django.db.models import QuerySet, prefetch_related_objects
+from django.http import Http404
 from django.shortcuts import get_object_or_404
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from ..http import AjaxHttpRequest, AuthenticatedHttpRequest, HttpRequest
 from ..models import Action, ActionRecord, List, Movie, ProviderRecord, Record, User, UserAnonymous
-from .mixins import AjaxAnonymousView
-from .types import MovieObject, OptionsObject, ProviderObject, ProviderRecordObject, RecordObject, SortType
+from .types import MovieObject, OptionsObject, ProviderObject, ProviderRecordObject, RecordObject
 from .utils import add_movie_to_list
 
 
@@ -67,27 +65,6 @@ class RemoveRecordView(APIView):
         return Response()
 
 
-class SaveSettingsView(AjaxAnonymousView):
-    """Save settings view."""
-
-    def put(self, request: AjaxHttpRequest) -> HttpResponse | HttpResponseBadRequest:
-        """Save settings."""
-        try:
-            session_settings = request.PUT["settings"]
-        except KeyError:
-            response: HttpResponseBadRequest = self.render_bad_request_response()
-            return response
-
-        sort_settings = session_settings.pop("sort", {})
-        if "sort" not in request.session:
-            request.session["sort"] = {}
-        for list_name, sort_type in sort_settings.items():
-            request.session["sort"][list_name] = sort_type
-        for setting in session_settings:
-            request.session[setting] = session_settings[setting]
-        return self.success()
-
-
 class SaveOptionsView(APIView):
     """Save options view."""
 
@@ -139,26 +116,6 @@ class RecordsView(APIView):
     anothers_account: Optional[User] = None
 
     @staticmethod
-    def _filter_records_for_recommendations(
-        records: QuerySet[Record], user: Union[User, UserAnonymous]
-    ) -> QuerySet[Record]:
-        """Keep movies only with 3+ rating, remove watched movies."""
-        return records.filter(rating__gte=3).exclude(movie__in=user.get_movie_ids())
-
-    @staticmethod
-    def _filter_records(records: QuerySet[Record], query: str) -> QuerySet[Record]:
-        """Filter records."""
-        return records.filter(Q(movie__title_en__icontains=query) | Q(movie__title_ru__icontains=query))
-
-    @staticmethod
-    def _sort_by_rating(records: QuerySet[Record], username: Optional[str], list_name: str) -> QuerySet[Record]:
-        """Sort records by rating."""
-        if not username and list_name == "to-watch":
-            # Sorting is changing here because there is no user rating yet.
-            return records.order_by("-movie__imdb_rating", "-movie__release_date")
-        return records.order_by("-rating", "-movie__release_date")
-
-    @staticmethod
     def _sort_records(records: QuerySet[Record]) -> QuerySet[Record]:
         """Sort records."""
         return records.order_by("-date")
@@ -197,54 +154,15 @@ class RecordsView(APIView):
             list_data[record_id] = movie_and_list_ids.get(movie_id, 0)
         return list_data
 
-    def _sanitize_session_values(self) -> None:
-        """
-        Sanitize session values.
-
-        We want to make sure that the session values are valid.
-        We need to do this in case a user manually set the wrong session values
-        or if the code changes resulted in invalid values.
-        """
-        SORT_TYPES: list[SortType] = ["releaseDate", "rating", "additionDate", "custom"]
-        MODES = ["full", "compact", "minimal", "gallery"]
-        LIST_NAMES = ["watched", "to-watch"]
-        session = self.request.session
-
-        sort = session.get("sort", {})
-        if isinstance(sort, dict):
-            for list_, sort_type in dict(sort).items():
-                if list_ not in LIST_NAMES or sort_type not in SORT_TYPES:
-                    session["sort"].pop(list_)
-        else:
-            session.pop("sort")
-
-        mode = session.get("mode")
-        if mode not in MODES:
-            session.pop("mode", None)
-
-    def _initialize_session_values(self) -> None:
-        """Initialize session values."""
-        session = self.request.session
-        if "sort" not in session:
-            session["sort"] = {}
-        if "watched" not in session["sort"]:
-            session["sort"]["watched"] = "additionDate"
-        if "to-watch" not in session["sort"]:
-            session["sort"]["to-watch"] = "custom"
-        if "recommendations" not in session:
-            session["recommendations"] = False
-        if "mode" not in session:
-            session["mode"] = "full"
-
     def _filter_out_provider_records_for_other_countries(self, provider_records: list[ProviderRecord]) -> None:
-        request: AuthenticatedHttpRequest = self.request  # type: ignore
         for provider_record in list(provider_records):
-            if request.user.country != provider_record.country:
+            user: User = self.request.user  # type: ignore
+            if user.country != provider_record.country:
                 provider_records.remove(provider_record)
 
     def _get_provider_records(self, movie: Movie) -> list[ProviderRecord]:
-        request: HttpRequest = self.request  # type: ignore
-        if request.user.is_authenticated and request.user.is_country_supported and movie.is_released:
+        user: User = self.request.user  # type: ignore
+        if user.is_authenticated and user.is_country_supported and movie.is_released:
             provider_records = list(movie.provider_records.all())
             self._filter_out_provider_records_for_other_countries(provider_records)
             return provider_records
@@ -350,38 +268,17 @@ class RecordsView(APIView):
 
     def get(self, request: Request) -> Response:
         """Get data for the list view."""
-        # self._sanitize_session_values()
-        # self._initialize_session_values()
-
         # username: Optional[str] = kwargs.get("username")
         # self.check_if_allowed(request, username)
         anothers_account = self.anothers_account
         user: User = request.user if anothers_account is None else anothers_account  # type: ignore
         records = self._get_records(user)
-        # Session is supposed to be initialized at that point.
-        # session = self.request.session
-        # query = request.GET.get("query", "")
-        # if query:
-        #     query = query.strip()
-        #     records = self._filter_records(records, query)
         records = self._sort_records(records)
 
-        # if anothers_account and session["recommendations"]:
-        #     records = self._filter_records_for_recommendations(records, request.user)
         actual_user: User = request.user  # type: ignore
         if actual_user.is_authenticated and actual_user.is_country_supported:
             prefetch_related_objects(records, "movie__provider_records__provider")
 
-        # list_id = List.objects.get(key_name=list_name).pk
-        # if list_id == List.TO_WATCH:
-        #     records_on_page = records.count()
-        # else:  # List - watched
-        #     records_on_page = settings.RECORDS_ON_PAGE
-        # records_paginated: Page[Record] | list[Record] = paginate(  # type: ignore
-        #     records, request.GET.get("page"), records_on_page
-        # )
-        # records_paginated_ids = [record.pk for record in records_paginated]
-        # record_objects = self._get_record_objects(records.filter(pk__in=records_paginated_ids))
         # if anothers_account:
         #     self._inject_list_ids(records, record_objects)
         record_objects = self._get_record_objects(records)

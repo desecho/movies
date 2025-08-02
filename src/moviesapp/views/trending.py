@@ -12,8 +12,6 @@ from .utils import filter_out_movies_user_already_has_in_lists, get_movie_list_r
 class TrendingView(APIView):
     """Trending view."""
 
-    template_name = "trending.html"
-
     def get(self, request: Request) -> Response:  # pylint: disable=no-self-use
         """Return a list of trending movies."""
         tmdb_movies = get_trending()

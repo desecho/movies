@@ -1,44 +1,15 @@
 """Utils for views."""
 
 from datetime import date, datetime
-from typing import Optional, Union
+from typing import Optional
 
 from babel.dates import format_date
-from django.core.paginator import EmptyPage, Page, PageNotAnInteger, Paginator
-from django.db.models import QuerySet
-from django.shortcuts import get_object_or_404
 
 from ..models import Action, ActionRecord, Record, User
 from ..tmdb import get_poster_url, get_tmdb_url
 from ..types import TmdbMovieListResultProcessed
 from ..utils import is_movie_released
 from .types import MovieListResult
-
-
-def paginate(
-    objects_to_paginate: Union[QuerySet[Record], list[User]], page: Optional[Union[str, int]], objects_on_page: int
-) -> Union[Page[Record], Page[User] | list[Record | User]]:
-    """
-    Paginate objects.
-
-    Return Page object or empty list if object list is empty.
-    """
-    if not objects_to_paginate:
-        return []
-    paginator = Paginator(objects_to_paginate, objects_on_page)
-    objects: Union[Page[Record], Page[User]]
-    if page is None:
-        objects = paginator.page(1)  # type: ignore
-    else:
-        try:
-            objects = paginator.page(page)  # type: ignore
-        except PageNotAnInteger:
-            # If page is not an integer, deliver first page.
-            objects = paginator.page(1)  # type: ignore
-        except EmptyPage:
-            # If page is out of range (e.g. 9999), deliver last page of results.
-            objects = paginator.page(paginator.num_pages)  # type: ignore
-    return objects
 
 
 def add_movie_to_list(movie_id: int, list_id: int, user: User) -> None:
@@ -57,11 +28,11 @@ def add_movie_to_list(movie_id: int, list_id: int, user: User) -> None:
         ActionRecord(action_id=Action.ADDED_MOVIE, user=user, movie_id=movie_id, list_id=list_id).save()
 
 
-def get_anothers_account(username: Optional[str]) -> Optional[User]:
-    """Get another's account."""
-    if username:
-        return get_object_or_404(User, username=username)
-    return None
+# def get_anothers_account(username: Optional[str]) -> Optional[User]:
+#     """Get another's account."""
+#     if username:
+#         return get_object_or_404(User, username=username)
+#     return None
 
 
 def _format_date(date_: Optional[date], lang: str) -> Optional[str]:

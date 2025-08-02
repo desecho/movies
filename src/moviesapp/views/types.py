@@ -2,47 +2,11 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Literal, Optional
+from typing import Optional
 
-from django.core.paginator import Page
-from django.db.models import QuerySet
 from typing_extensions import NotRequired, TypedDict
 
 from ..types import Trailer
-
-if TYPE_CHECKING:
-    from ..models import ActionRecord, Record, User
-
-
-class FeedViewContextData(TypedDict):
-    """Feed view context data."""
-
-    feed_name: str
-    action_records: QuerySet["ActionRecord"]
-
-
-class PeopleViewContextData(TypedDict):
-    """People view context data."""
-
-    users: Page["User"] | list["User"]
-
-
-class ListViewContextData(TypedDict):
-    """list view context data."""
-
-    records: Page["Record"] | list["Record"]
-    record_objects: str
-    anothers_account: Optional["User"]
-    list_id: int
-    list: ListKeyName
-    sort: SortType
-    query: str
-
-
-class TrendingViewContextData(TypedDict):
-    """Trending view context data."""
-
-    movies: str
 
 
 class MovieObject(TypedDict):
@@ -130,7 +94,3 @@ class MovieListResult(TypedDict):
     poster: Optional[str]
     poster2x: Optional[str]
     isReleased: bool
-
-
-ListKeyName = Literal["watched", "to-watch"]
-SortType = Literal["releaseDate", "rating", "additionDate", "custom"]

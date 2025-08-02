@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from datetime import date, time
-from typing import Any, Literal, Optional, TypeAlias
+from typing import Any, Literal, Optional, TypeAlias  # pylint: disable=unused-import
 
 from django.urls import URLPattern, URLResolver
 from typing_extensions import NotRequired, TypedDict
@@ -38,13 +38,6 @@ class ProviderRecordType(WatchDataRecord, total=False):
     """Provider record."""
 
     id: int
-
-
-class ContextVariables(TypedDict):
-    """Context variables."""
-
-    DEBUG: bool
-    ADMIN_EMAIL: str
 
 
 class Trailer(TypedDict):

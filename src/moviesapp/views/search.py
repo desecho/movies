@@ -12,7 +12,6 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from sentry_sdk import capture_exception
 
-from ..http import AjaxHttpRequest
 from ..models import List, Movie, User
 from ..tasks import load_and_save_watch_data_task
 from ..tmdb import TmdbInvalidSearchTypeError, TmdbNoImdbIdError, search_movies
@@ -55,8 +54,7 @@ class SearchMovieView(APIView):
         self, query: str, search_type: SearchType, sort_by_date: bool, popular_only: bool
     ) -> list[MovieListResult]:
         """Get movies from TMDB."""
-        request: AjaxHttpRequest = self.request  # type: ignore
-        lang = request.LANGUAGE_CODE
+        lang = self.request.LANGUAGE_CODE
         tmdb_movies = search_movies(query, search_type, lang)
         if sort_by_date:
             tmdb_movies = self._sort_by_date(tmdb_movies)

@@ -27,6 +27,7 @@ from django.db.models import (
     UniqueConstraint,
     URLField,
 )
+from django.http import HttpRequest
 from django.utils import formats
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
@@ -34,7 +35,6 @@ from django_countries.fields import CountryField
 from timezone_field import TimeZoneField
 
 from .exceptions import ProviderNotFoundError
-from .http import HttpRequest
 from .tmdb import get_poster_url, get_tmdb_url
 from .types import TmdbTrailer, Trailer, TrailerSite, WatchDataRecord
 from .utils import is_movie_released
