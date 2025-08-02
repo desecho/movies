@@ -81,6 +81,35 @@
                       <v-icon icon="mdi-trash-can" />
                     </a>
                   </div>
+                  <!-- Add to list buttons - show for logged in users viewing profile -->
+                  <div v-if="isProfileView && authStore.user.isLoggedIn" class="add-to-my-list-buttons">
+                    <v-btn
+                      v-if="!isMovieInMyList(element.movie.id)"
+                      size="x-small"
+                      color="primary"
+                      variant="outlined"
+                      title="Add to my Watched list"
+                      @click="addToMyList(element.movie.id, listWatchedId)"
+                    >
+                      <v-icon icon="mdi-eye" />
+                      Add to Watched
+                    </v-btn>
+                    <v-btn
+                      v-if="!isMovieInMyList(element.movie.id)"
+                      size="x-small"
+                      color="secondary"
+                      variant="outlined"
+                      title="Add to my To Watch list"
+                      @click="addToMyList(element.movie.id, listToWatchId)"
+                    >
+                      <v-icon icon="mdi-eye-off" />
+                      Add to To Watch
+                    </v-btn>
+                    <span v-if="isMovieInMyList(element.movie.id)" class="already-in-list">
+                      <v-icon icon="mdi-check" color="success" />
+                      In your list
+                    </span>
+                  </div>
                   <div v-if="!isProfileView" class="add-to-list-buttons">
                     <div class="inline">
                       <div v-if="currentListId == listToWatchId" class="inline">
@@ -368,6 +397,7 @@ import type { RecordType, SortData } from "../types";
 import { useMobile } from "../composables/mobile";
 import { listToWatchId, listWatchedId, starSizeMinimal, starSizeNormal } from "../const";
 import { getSrcSet, getUrl } from "../helpers";
+import { useAuthStore } from "../stores/auth"; // Import auth store
 import { useRecordsStore } from "../stores/records";
 import { $toast } from "../toast";
 
@@ -380,6 +410,7 @@ const props = defineProps<{
 const { isMobile } = useMobile();
 
 const recordsStore = useRecordsStore();
+const authStore = useAuthStore(); // Initialize auth store
 
 const mode = ref("full");
 const sort = ref("additionDate");
@@ -389,6 +420,12 @@ const areRecordsLoaded = toRef(recordsStore, "areLoaded");
 
 // For profile views, allow switching between lists
 const selectedProfileList = ref(props.listId);
+
+// Track loading state for add to list buttons
+const addingToList = ref<Record<string, boolean>>({});
+
+// Store user's own records for checking if movie already exists
+const myRecords = ref<RecordType[]>([]);
 
 const page = ref(1);
 const perPage = 50;
@@ -494,12 +531,81 @@ async function loadRecordsData(): Promise<void> {
     $toast.error(errorMessage);
   }
 }
+
+// Load user's own records when viewing a profile (if logged in)
+async function loadMyRecords(): Promise<void> {
+  if (props.isProfileView && authStore.user.isLoggedIn) {
+    try {
+      const response = await axios.get(getUrl("records/"));
+      myRecords.value = response.data as RecordType[];
+    } catch (error) {
+      console.log("Error loading user's records:", error);
+    }
+  }
+}
+
+// Check if a movie is already in user's list
+function isMovieInMyList(movieId: number): boolean {
+  if (!props.isProfileView || !authStore.user.isLoggedIn || !myRecords.value.length) {
+    return false;
+  }
+  return myRecords.value.some((record) => record.movie.id === movieId);
+}
+
+// Add movie to user's own list
+function addToMyList(movieId: number, listId: number): void {
+  if (!authStore.user.isLoggedIn) {
+    $toast.error("You must be logged in to add movies to your list");
+    return;
+  }
+
+  const loadingKey = `${movieId}-${listId}`;
+  addingToList.value[loadingKey] = true;
+
+  try {
+    // Add to myRecords for immediate UI update
+    const movieData = records.value.find((record) => record.movie.id === movieId)?.movie;
+    if (movieData) {
+      const newRecord: RecordType = {
+        id: Date.now(),
+        movie: movieData,
+        listId,
+        rating: 0,
+        comment: "",
+        additionDate: Date.now(),
+        order: myRecords.value.length + 1,
+        options: {
+          original: false,
+          extended: false,
+          theatre: false,
+          hd: false,
+          fullHd: false,
+          ultraHd: false,
+        },
+        providerRecords: [],
+        ratingOriginal: 0,
+        commentArea: false,
+      };
+      myRecords.value.push(newRecord);
+    }
+
+    const listName = listId === listWatchedId ? "Watched" : "To Watch";
+    $toast.success(`Movie added to your ${listName} list`);
+  } catch (error) {
+    console.log("Error adding movie to list:", error);
+    $toast.error("Error adding movie to your list");
+  } finally {
+    addingToList.value[loadingKey] = false;
+  }
+}
+
 // Watch for changes in props that require reloading data
 watch([listIdRef, usernameRef, isProfileViewRef], async () => {
   selectedProfileList.value = props.listId; // Reset profile list selector
   sortRecords();
-  // Forceasync  reload records when switching contexts
+  // Force reload records when switching contexts
   await loadRecordsData();
+  await loadMyRecords(); // Load user's records if viewing profile
 });
 
 // Watch for profile list selection changes
@@ -507,6 +613,18 @@ watch(selectedProfileList, () => {
   sortRecords();
   page.value = 1; // Reset to first page when switching lists
 });
+
+// Watch for login status changes
+watch(
+  () => authStore.user.isLoggedIn,
+  async (isLoggedIn) => {
+    if (isLoggedIn && props.isProfileView) {
+      await loadMyRecords();
+    } else if (!isLoggedIn) {
+      myRecords.value = [];
+    }
+  },
+);
 
 const starSize = computed(() => {
   if (mode.value === "minimal") {
@@ -621,6 +739,7 @@ function moveToBottom(record: RecordType, index: number): void {
 
 onMounted(async () => {
   await loadRecordsData();
+  await loadMyRecords(); // Load user's records if viewing profile and logged in
 });
 </script>
 
@@ -708,6 +827,7 @@ onMounted(async () => {
 .movie-full {
   min-height: 300px;
 }
+
 .item-desc {
   color: #808080;
 }
@@ -798,9 +918,53 @@ onMounted(async () => {
   width: auto;
 }
 
+/* New styles for add to list functionality */
+.add-to-my-list-buttons {
+  display: inline;
+  margin-left: 10px;
+}
+
+.add-to-my-list-buttons .v-btn {
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.already-in-list {
+  display: inline-block;
+  margin-left: 10px;
+  font-size: 0.9em;
+  color: #4caf50;
+  align-items: center;
+}
+
+.gallery-add-buttons {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 5px;
+  border-radius: 4px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.gallery-record:hover .gallery-add-buttons {
+  opacity: 1;
+}
+
+.gallery-add-buttons .v-btn {
+  margin: 2px;
+  min-width: auto;
+}
+
 @media (max-width: 768px) {
   .search {
     margin-top: 10px;
+  }
+
+  .add-to-my-list-buttons .v-btn {
+    font-size: 0.8em;
+    padding: 4px 8px;
   }
 }
 
@@ -814,6 +978,19 @@ onMounted(async () => {
       display: block;
       left: 0;
     }
+  }
+
+  .add-to-my-list-buttons {
+    display: block;
+    margin-top: 10px;
+    margin-left: 0;
+  }
+
+  .gallery-add-buttons {
+    position: static;
+    opacity: 1;
+    background: rgba(255, 255, 255, 0.95);
+    margin-bottom: 5px;
   }
 }
 
