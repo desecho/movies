@@ -3,28 +3,37 @@
     <v-row>
       <v-col cols="12">
         <v-btn-toggle v-model="mode" density="compact" mandatory>
-          <v-btn value="full">Full</v-btn>
-          <v-btn value="compact">Compact</v-btn>
-          <v-btn value="minimal">Minimal</v-btn>
-          <v-btn value="gallery">Gallery</v-btn>
+          <v-btn value="full" :size="modeButtonSize">Full</v-btn>
+          <v-btn value="compact" :size="modeButtonSize">Compact</v-btn>
+          <v-btn value="minimal" :size="modeButtonSize">Minimal</v-btn>
+          <v-btn value="gallery" :size="modeButtonSize">Gallery</v-btn>
         </v-btn-toggle>
       </v-col>
     </v-row>
     <v-row>
-      <v-col cols="5">
+      <v-col cols="12">
         <v-btn-toggle v-model="sort" density="compact" mandatory>
-          <v-btn value="releaseDate">Release date</v-btn>
-          <v-btn value="rating">Rating</v-btn>
-          <v-btn value="additionDate">Date added</v-btn>
-          <v-btn v-if="listId == listToWatchId" value="custom"> Custom </v-btn>
+          <v-btn value="releaseDate" :size="sortButtonSize">Release date</v-btn>
+          <v-btn value="rating" :size="sortButtonSize">Rating</v-btn>
+          <v-btn value="additionDate" :size="sortButtonSize">Date added</v-btn>
+          <v-btn v-if="listId == listToWatchId" value="custom" :size="sortButtonSize"> Custom </v-btn>
         </v-btn-toggle>
-      </v-col>
-      <v-col cols="3">
-        <v-text-field v-model="query" label="Search" variant="solo" :hide-details="true" class="mr-5"></v-text-field>
       </v-col>
     </v-row>
     <v-row>
-      <v-col cols="5">
+      <v-col cols="6">
+        <v-text-field
+          v-model="query"
+          label="Search"
+          variant="solo"
+          :hide-details="true"
+          class="mr-5"
+          density="compact"
+        ></v-text-field>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col cols="10">
         <v-pagination v-model="page" :pages="totalPages" :range-size="1" active-color="#DCEDFF" />
       </v-col>
     </v-row>
@@ -318,6 +327,7 @@ import Draggable from "vuedraggable";
 import type { RecordType, SortData } from "../types";
 import type { AxiosError } from "axios";
 
+import { useMobile } from "../composables/mobile";
 import { listToWatchId, listWatchedId, starSizeMinimal, starSizeNormal } from "../const";
 import { getSrcSet, getUrl } from "../helpers";
 import { useRecordsStore } from "../stores/records";
@@ -326,6 +336,8 @@ import { $toast } from "../toast";
 const props = defineProps<{
   listId: number;
 }>();
+
+const { isMobile } = useMobile();
 
 const recordsStore = useRecordsStore();
 
@@ -348,6 +360,21 @@ const filteredRecords = computed(() => {
 });
 
 const totalPages = computed(() => Math.ceil(filteredRecords.value.length / perPage));
+const modeButtonSize = computed(() => {
+  if (isMobile.value) {
+    return "small";
+  } 
+    return "default";
+  
+});
+
+const sortButtonSize = computed(() => {
+  if (isMobile.value) {
+    return "x-small";
+  } 
+    return "default";
+  
+});
 
 const paginatedRecords = computed(() => {
   const start = (page.value - 1) * perPage;
