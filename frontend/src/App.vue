@@ -1,11 +1,11 @@
 <template>
-    <v-app>
-        <v-main>
-            <MenuComponent />
-            <RouterView />
-        </v-main>
-        <FooterComponent />
-    </v-app>
+  <v-app>
+    <v-main>
+      <MenuComponent />
+      <RouterView />
+    </v-main>
+    <FooterComponent />
+  </v-app>
 </template>
 
 <script lang="ts" setup>
