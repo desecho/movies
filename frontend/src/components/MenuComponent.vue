@@ -10,7 +10,7 @@
         <MenuItem title="Trending" icon="trending-up" to="/trending" />
         <MenuItem v-if="user.isLoggedIn" title="Watched" icon="eye" to="/list/watched" />
         <MenuItem v-if="user.isLoggedIn" title="ToWatch" icon="eye-off" to="/list/to-watch" />
-        <!-- <MenuItem title="People" icon="account-group" to="/people" /> -->
+        <MenuItem title="Users" icon="account-group" to="/users" />
       </v-list>
       <template #append>
         <v-list>

@@ -3,7 +3,7 @@
     <v-row>
       <v-col cols="12">
         <div v-for="(user, index) in users" :key="index">
-          <router-link :to="`/users/${user}`">{{ user }}</router-link
+          <router-link :to="`/users/${user}/list/watched`">{{ user }}</router-link
           ><br />
         </div>
       </v-col>

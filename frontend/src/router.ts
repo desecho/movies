@@ -17,6 +17,7 @@ import ResetPasswordView from "./views/ResetPasswordView.vue";
 import SearchView from "./views/SearchView.vue";
 import TrendingView from "./views/TrendingView.vue";
 import UserPreferencesView from "./views/UserPreferencesView.vue";
+import UsersView from "./views/UsersView.vue";
 import VerifyUserView from "./views/VerifyUserView.vue";
 
 function authProps(route: RouteLocationNormalized): AuthProps {
@@ -45,6 +46,7 @@ export const router = createRouter({
             component: ListView,
             props: { listId: listToWatchId },
         },
+        { path: "/users", component: UsersView },
         {
             path: "/users/:username/list/watched",
             component: ListView,
