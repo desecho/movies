@@ -678,18 +678,18 @@ function changeRating(record: RecordType, rating: number): void {
         });
 }
 
-function saveOptions(record: RecordType, field: keyof RecordType["options"]): void {
+function saveOptions(
+    record: RecordType,
+    field: keyof RecordType["options"],
+): void {
     const data = {
         options: record.options,
     };
 
-    axios
-        .put(getUrl(`record/${record.id}/options/`), data)
-        .then(() => {})
-        .catch(() => {
-            record.options[field] = !record.options[field];
-            $toast.error("Error saving options");
-        });
+    axios.put(getUrl(`record/${record.id}/options/`), data).catch(() => {
+        record.options[field] = !record.options[field];
+        $toast.error("Error saving options");
+    });
 }
 
 function removeRecord(record: RecordType, index: number): void {
