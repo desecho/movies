@@ -29,277 +29,279 @@
       </v-col>
     </v-row>
     <v-row>
-      <div v-cloak v-if="mode != 'gallery'">
-        <draggable v-model="records" item-key="id" :disabled="!isSortable" @sort="saveRecordsOrder">
-          <template #item="{ element, index }">
-            <div
-              v-if="paginatedRecords.includes(element)"
-              class="movie"
-              :class="{
-                'movie-minimal': mode == 'minimal',
-                'movie-full': mode == 'full',
-                draggable: isSortable,
-              }"
-            >
-              <div class="title">
-                <span :title="element.movie.titleOriginal">{{ element.movie.title }}</span>
-                <div class="remove-button">
-                  <a href="javascript:void(0)" title="Delete" @click="removeRecord(element, index)">
-                    <v-icon icon="mdi-trash-can" />
-                  </a>
-                </div>
-                <div class="add-to-list-buttons">
-                  <div class="inline">
-                    <div v-if="listId == listToWatchId" class="inline">
-                      <a
-                        v-show="element.movie.isReleased && element.listId != listWatchedId"
-                        href="javascript:void(0)"
-                        title='Add to "Watched" list'
-                        @click="addToList(element.movie.id, listWatchedId, element)"
-                      >
-                        <v-icon icon="mdi-eye" />
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div v-show="mode != 'minimal'" class="poster">
-                <span v-if="mode == 'full'">
-                  <v-lazy-image
-                    class="poster-big"
-                    :srcset="getSrcSet(element.movie.posterNormal, element.movie.posterBig)"
-                    :src="element.movie.posterBig"
-                    :title="element.movie.titleOriginal"
-                    :alt="element.movie.title"
-                  />
-                </span>
-                <span v-else>
-                  <v-lazy-image
-                    class="poster-small"
-                    :srcset="getSrcSet(element.movie.posterSmall, element.movie.posterNormal)"
-                    :src="element.movie.posterNormal"
-                    :title="element.movie.titleOriginal"
-                    :alt="element.movie.title"
-                  />
-                </span>
-              </div>
+      <v-col cols="12">
+        <div v-cloak v-if="mode != 'gallery'">
+          <draggable v-model="records" item-key="id" :disabled="!isSortable" @sort="saveRecordsOrder">
+            <template #item="{ element, index }">
               <div
-                class="details"
+                v-if="paginatedRecords.includes(element)"
+                class="movie"
                 :class="{
-                  'details-minimal': mode == 'minimal',
+                  'movie-minimal': mode == 'minimal',
+                  'movie-full': mode == 'full',
+                  draggable: isSortable,
                 }"
               >
-                <div v-show="element.movie.imdbRating" class="imdb-rating">
-                  <span class="item-desc">IMDb Rating:</span>
-                  {{ element.movie.imdbRating }}
-                </div>
-                <div v-show="element.movie.isReleased" class="release-date">
-                  <span v-show="mode != 'minimal'" class="item-desc">Release Date:</span>
-                  {{ element.movie.releaseDate }}
-                </div>
-                <div v-show="mode == 'full'">
-                  <div v-show="element.movie.country">
-                    <span class="item-desc">Country:</span>
-                    {{ element.movie.country }}
+                <div class="title">
+                  <span :title="element.movie.titleOriginal">{{ element.movie.title }}</span>
+                  <div class="remove-button">
+                    <a href="javascript:void(0)" title="Delete" @click="removeRecord(element, index)">
+                      <v-icon icon="mdi-trash-can" />
+                    </a>
                   </div>
-                  <div v-show="element.movie.director">
-                    <span class="item-desc">Director:</span>
-                    {{ element.movie.director }}
-                  </div>
-                  <div v-show="element.movie.writer">
-                    <span class="item-desc">Writer:</span>
-                    {{ element.movie.writer }}
-                  </div>
-                  <div v-show="element.movie.genre">
-                    <span class="item-desc">Genre:</span>
-                    {{ element.movie.genre }}
-                  </div>
-                  <div v-show="element.movie.actors">
-                    <span class="item-desc">Actors:</span>
-                    {{ element.movie.actors }}
-                  </div>
-                  <div v-show="element.movie.runtime">
-                    <span class="item-desc">Runtime:</span>
-                    {{ element.movie.runtime }}
-                  </div>
-                  <div v-show="element.movie.overview">
-                    <span class="item-desc">Overview:</span>
-                    {{ element.movie.overview }}
-                  </div>
-                  <div v-show="element.movie.homepage">
-                    <a :href="element.movie.homepage" target="_blank">Website</a>
-                  </div>
-                  <div class="urls">
-                    <a :href="element.movie.imdbUrl" target="_blank"><span class="imdb"></span></a>
-                    <a :href="element.movie.tmdbUrl" target="_blank"><span class="tmdb"></span></a>
-                  </div>
-                  <div v-show="element.movie.trailers.length">
-                    <span class="item-desc">Trailers:</span>
-                    <div class="trailers">
-                      <a
-                        v-for="trailer in element.movie.trailers"
-                        :key="trailer.name"
-                        :href="trailer.url"
-                        target="_blank"
-                        >{{ trailer.name }}</a
-                      >
-                    </div>
-                  </div>
-                  <div v-show="element.providerRecords.length">
-                    <span class="item-desc">Stream on:</span>
-                    <div>
-                      <a
-                        v-for="providerRecord in element.providerRecords"
-                        :key="providerRecord.provider"
-                        :href="providerRecord.tmdbWatchUrl"
-                        target="_blank"
-                      >
-                        <v-lazy-image
-                          class="provider"
-                          :src="providerRecord.provider.logo"
-                          :title="providerRecord.provider.name"
-                          :alt="providerRecord.provider.name"
-                        />
-                      </a>
+                  <div class="add-to-list-buttons">
+                    <div class="inline">
+                      <div v-if="listId == listToWatchId" class="inline">
+                        <a
+                          v-show="element.movie.isReleased && element.listId != listWatchedId"
+                          href="javascript:void(0)"
+                          title='Add to "Watched" list'
+                          @click="addToList(element.movie.id, listWatchedId, element)"
+                        >
+                          <v-icon icon="mdi-eye" />
+                        </a>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-              <div
-                class="review"
-                :class="{
-                  'review-minimal': mode == 'minimal',
-                }"
-              >
-                <div v-if="listId == listWatchedId">
-                  <star-rating
-                    v-model:rating="element.rating"
-                    :star-size="starSize"
-                    :show-rating="false"
-                    :clearable="true"
-                    @update:rating="changeRating(element, $event)"
-                  >
-                  </star-rating>
-                  <div v-show="(element.comment || element.commentArea) && mode != 'minimal'" class="comment">
-                    <!-- {% if anothers_account %}
+                <div v-show="mode != 'minimal'" class="poster">
+                  <span v-if="mode == 'full'">
+                    <v-lazy-image
+                      class="poster-big"
+                      :srcset="getSrcSet(element.movie.posterNormal, element.movie.posterBig)"
+                      :src="element.movie.posterBig"
+                      :title="element.movie.titleOriginal"
+                      :alt="element.movie.title"
+                    />
+                  </span>
+                  <span v-else>
+                    <v-lazy-image
+                      class="poster-small"
+                      :srcset="getSrcSet(element.movie.posterSmall, element.movie.posterNormal)"
+                      :src="element.movie.posterNormal"
+                      :title="element.movie.titleOriginal"
+                      :alt="element.movie.title"
+                    />
+                  </span>
+                </div>
+                <div
+                  class="details"
+                  :class="{
+                    'details-minimal': mode == 'minimal',
+                  }"
+                >
+                  <div v-show="element.movie.imdbRating" class="imdb-rating">
+                    <span class="item-desc">IMDb Rating:</span>
+                    {{ element.movie.imdbRating }}
+                  </div>
+                  <div v-show="element.movie.isReleased" class="release-date">
+                    <span v-show="mode != 'minimal'" class="item-desc">Release Date:</span>
+                    {{ element.movie.releaseDate }}
+                  </div>
+                  <div v-show="mode == 'full'">
+                    <div v-show="element.movie.country">
+                      <span class="item-desc">Country:</span>
+                      {{ element.movie.country }}
+                    </div>
+                    <div v-show="element.movie.director">
+                      <span class="item-desc">Director:</span>
+                      {{ element.movie.director }}
+                    </div>
+                    <div v-show="element.movie.writer">
+                      <span class="item-desc">Writer:</span>
+                      {{ element.movie.writer }}
+                    </div>
+                    <div v-show="element.movie.genre">
+                      <span class="item-desc">Genre:</span>
+                      {{ element.movie.genre }}
+                    </div>
+                    <div v-show="element.movie.actors">
+                      <span class="item-desc">Actors:</span>
+                      {{ element.movie.actors }}
+                    </div>
+                    <div v-show="element.movie.runtime">
+                      <span class="item-desc">Runtime:</span>
+                      {{ element.movie.runtime }}
+                    </div>
+                    <div v-show="element.movie.overview">
+                      <span class="item-desc">Overview:</span>
+                      {{ element.movie.overview }}
+                    </div>
+                    <div v-show="element.movie.homepage">
+                      <a :href="element.movie.homepage" target="_blank">Website</a>
+                    </div>
+                    <div class="urls">
+                      <a :href="element.movie.imdbUrl" target="_blank"><span class="imdb"></span></a>
+                      <a :href="element.movie.tmdbUrl" target="_blank"><span class="tmdb"></span></a>
+                    </div>
+                    <div v-show="element.movie.trailers.length">
+                      <span class="item-desc">Trailers:</span>
+                      <div class="trailers">
+                        <a
+                          v-for="trailer in element.movie.trailers"
+                          :key="trailer.name"
+                          :href="trailer.url"
+                          target="_blank"
+                          >{{ trailer.name }}</a
+                        >
+                      </div>
+                    </div>
+                    <div v-show="element.providerRecords.length">
+                      <span class="item-desc">Stream on:</span>
+                      <div>
+                        <a
+                          v-for="providerRecord in element.providerRecords"
+                          :key="providerRecord.provider"
+                          :href="providerRecord.tmdbWatchUrl"
+                          target="_blank"
+                        >
+                          <v-lazy-image
+                            class="provider"
+                            :src="providerRecord.provider.logo"
+                            :title="providerRecord.provider.name"
+                            :alt="providerRecord.provider.name"
+                          />
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="review"
+                  :class="{
+                    'review-minimal': mode == 'minimal',
+                  }"
+                >
+                  <div v-if="listId == listWatchedId">
+                    <star-rating
+                      v-model:rating="element.rating"
+                      :star-size="starSize"
+                      :show-rating="false"
+                      :clearable="true"
+                      @update:rating="changeRating(element, $event)"
+                    >
+                    </star-rating>
+                    <div v-show="(element.comment || element.commentArea) && mode != 'minimal'" class="comment">
+                      <!-- {% if anothers_account %}
                     <p>{{ element.comment }}</p>
                   {% else %} -->
-                    <div>
-                      <v-textarea v-model="element.comment" class="form-control" title="Comment"> </v-textarea>
+                      <div>
+                        <v-textarea v-model="element.comment" class="form-control" title="Comment"> </v-textarea>
+                      </div>
+                      <button type="button" class="btn btn-secondary" title="Save" @click="saveComment(element)">
+                        <v-icon icon="mdi-content-save" />
+                      </button>
                     </div>
-                    <button type="button" class="btn btn-secondary" title="Save" @click="saveComment(element)">
-                      <v-icon icon="mdi-content-save" />
+                    <button
+                      v-show="element.comment == '' && !element.commentArea && mode != 'minimal'"
+                      type="button"
+                      class="btn btn-secondary"
+                      title="Add comment"
+                      @click="showCommentArea(element)"
+                    >
+                      <v-icon icon="mdi-comment" />
                     </button>
+                    <div v-show="mode == 'full'" class="option-buttons">
+                      <div>
+                        <label :for="'original_' + element.id">Watched original version</label>
+                        <input
+                          :id="'original_' + element.id"
+                          v-model="element.options.original"
+                          type="checkbox"
+                          @change="saveOptions(element, 'original')"
+                        />
+                      </div>
+                      <div>
+                        <label :for="'extended_' + element.id">Watched extended version</label>
+                        <input
+                          :id="'extended_' + element.id"
+                          v-model="element.options.extended"
+                          type="checkbox"
+                          @change="saveOptions(element, 'extended')"
+                        />
+                      </div>
+                      <div>
+                        <label :for="'theatre_' + element.id">Watched in theatre</label>
+                        <input
+                          :id="'theatre_' + element.id"
+                          v-model="element.options.theatre"
+                          type="checkbox"
+                          @change="saveOptions(element, 'theatre')"
+                        />
+                      </div>
+                      <div>
+                        <label :for="'hd_' + element.id">Watched in HD</label>
+                        <input
+                          :id="'hd_' + element.id"
+                          v-model="element.options.hd"
+                          type="checkbox"
+                          @change="saveOptions(element, 'hd')"
+                        />
+                      </div>
+                      <div>
+                        <label :for="'full_hd_' + element.id">Watched in FullHD</label>
+                        <input
+                          :id="'full_hd_' + element.id"
+                          v-model="element.options.fullHd"
+                          type="checkbox"
+                          @change="saveOptions(element, 'fullHd')"
+                        />
+                      </div>
+                      <div>
+                        <label :for="'4k_' + element.id">Watched in 4K</label>
+                        <input
+                          :id="'4k_' + element.id"
+                          v-model="element.options.ultraHd"
+                          type="checkbox"
+                          @change="saveOptions(element, 'ultraHd')"
+                        />
+                      </div>
+                    </div>
+                    <div></div>
                   </div>
-                  <button
-                    v-show="element.comment == '' && !element.commentArea && mode != 'minimal'"
-                    type="button"
-                    class="btn btn-secondary"
-                    title="Add comment"
-                    @click="showCommentArea(element)"
-                  >
-                    <v-icon icon="mdi-comment" />
-                  </button>
-                  <div v-show="mode == 'full'" class="option-buttons">
-                    <div>
-                      <label :for="'original_' + element.id">Watched original version</label>
-                      <input
-                        :id="'original_' + element.id"
-                        v-model="element.options.original"
-                        type="checkbox"
-                        @change="saveOptions(element, 'original')"
-                      />
-                    </div>
-                    <div>
-                      <label :for="'extended_' + element.id">Watched extended version</label>
-                      <input
-                        :id="'extended_' + element.id"
-                        v-model="element.options.extended"
-                        type="checkbox"
-                        @change="saveOptions(element, 'extended')"
-                      />
-                    </div>
-                    <div>
-                      <label :for="'theatre_' + element.id">Watched in theatre</label>
-                      <input
-                        :id="'theatre_' + element.id"
-                        v-model="element.options.theatre"
-                        type="checkbox"
-                        @change="saveOptions(element, 'theatre')"
-                      />
-                    </div>
-                    <div>
-                      <label :for="'hd_' + element.id">Watched in HD</label>
-                      <input
-                        :id="'hd_' + element.id"
-                        v-model="element.options.hd"
-                        type="checkbox"
-                        @change="saveOptions(element, 'hd')"
-                      />
-                    </div>
-                    <div>
-                      <label :for="'full_hd_' + element.id">Watched in FullHD</label>
-                      <input
-                        :id="'full_hd_' + element.id"
-                        v-model="element.options.fullHd"
-                        type="checkbox"
-                        @change="saveOptions(element, 'fullHd')"
-                      />
-                    </div>
-                    <div>
-                      <label :for="'4k_' + element.id">Watched in 4K</label>
-                      <input
-                        :id="'4k_' + element.id"
-                        v-model="element.options.ultraHd"
-                        type="checkbox"
-                        @change="saveOptions(element, 'ultraHd')"
-                      />
-                    </div>
-                  </div>
-                  <div></div>
+                  <div class="clearfix"></div>
                 </div>
-                <div class="clearfix"></div>
               </div>
-            </div>
-          </template>
-        </draggable>
-      </div>
-      <div v-cloak v-if="mode === 'gallery'" id="gallery">
-        <draggable v-model="records" item-key="id" :disabled="!isSortable" @sort="saveRecordsOrder">
-          <template #item="{ element, index }">
-            <div v-if="paginatedRecords.includes(element)" class="gallery-record">
-              <div class="buttons">
-                <button
-                  v-show="isSortable"
-                  type="button"
-                  class="up-button"
-                  title="Move to the top"
-                  @click="moveToTop(element, index)"
-                >
-                  <v-icon icon="mdi-arrow-up" />
-                </button>
-                <button
-                  v-show="isSortable"
-                  type="button"
-                  class="down-button"
-                  title="Move to the bottom"
-                  @click="moveToBottom(element, index)"
-                >
-                  <v-icon icon="mdi-arrow-down" />
-                </button>
+            </template>
+          </draggable>
+        </div>
+        <div v-cloak v-if="mode === 'gallery'" id="gallery">
+          <draggable v-model="records" item-key="id" :disabled="!isSortable" @sort="saveRecordsOrder">
+            <template #item="{ element, index }">
+              <div v-if="paginatedRecords.includes(element)" class="gallery-record">
+                <div class="buttons">
+                  <button
+                    v-show="isSortable"
+                    type="button"
+                    class="up-button"
+                    title="Move to the top"
+                    @click="moveToTop(element, index)"
+                  >
+                    <v-icon icon="mdi-arrow-up" />
+                  </button>
+                  <button
+                    v-show="isSortable"
+                    type="button"
+                    class="down-button"
+                    title="Move to the bottom"
+                    @click="moveToBottom(element, index)"
+                  >
+                    <v-icon icon="mdi-arrow-down" />
+                  </button>
+                </div>
+                <v-lazy-image
+                  class="poster-big"
+                  :class="{ draggable: isSortable }"
+                  :srcset="getSrcSet(element.movie.posterNormal, element.movie.posterBig)"
+                  :src="element.movie.posterBig"
+                  :title="element.movie.title"
+                  :alt="element.movie.title"
+                />
               </div>
-              <v-lazy-image
-                class="poster-big"
-                :class="{ draggable: isSortable }"
-                :srcset="getSrcSet(element.movie.posterNormal, element.movie.posterBig)"
-                :src="element.movie.posterBig"
-                :title="element.movie.title"
-                :alt="element.movie.title"
-              />
-            </div>
-          </template>
-        </draggable>
-      </div>
+            </template>
+          </draggable>
+        </div>
+      </v-col>
     </v-row>
   </v-container>
 </template>
