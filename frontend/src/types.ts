@@ -71,7 +71,7 @@ export interface RecordOptions {
     ultraHd: boolean;
 }
 
-export interface Record {
+export interface RecordType {
     id: number;
     order: number;
     comment: string;

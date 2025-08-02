@@ -526,7 +526,7 @@ import { computed, onMounted, ref, toRef, watch } from "vue";
 import StarRating from "vue-star-rating";
 import Draggable from "vuedraggable";
 
-import type { Record, SortData } from "../types";
+import type { RecordType, SortData } from "../types";
 import type { AxiosError } from "axios";
 import type { Ref } from "vue";
 
@@ -542,8 +542,8 @@ import { $toast } from "../toast";
 const mode = ref("full");
 const sort = ref("additionDate");
 const query = ref("");
-const records: Ref<Record[]> = ref([]);
-const recordsOriginal: Ref<Record[]> = ref([]);
+const records: Ref<RecordType[]> = ref([]);
+const recordsOriginal: Ref<RecordType[]> = ref([]);
 
 const page = ref(1);
 const perPage = 50;
@@ -632,7 +632,7 @@ function loadRecords(): void {
     axios
         .get(getUrl("records/"))
         .then((response) => {
-            const recs: Record[] = response.data as Record[];
+            const recs: RecordType[] = response.data as RecordType[];
             recs.forEach((record) => {
                 record.ratingOriginal = record.rating;
             });
@@ -666,7 +666,7 @@ function saveRecordsOrder(): void {
         });
 }
 
-function changeRating(record: Record, rating: number): void {
+function changeRating(record: RecordType, rating: number): void {
     axios
         .put(getUrl(`change-rating/${record.id}/`), { rating })
         .then(() => {
@@ -678,7 +678,7 @@ function changeRating(record: Record, rating: number): void {
         });
 }
 
-function saveOptions(record: Record, field: keyof Record["options"]): void {
+function saveOptions(record: RecordType, field: keyof RecordType["options"]): void {
     const data = {
         options: record.options,
     };
@@ -692,7 +692,7 @@ function saveOptions(record: Record, field: keyof Record["options"]): void {
         });
 }
 
-function removeRecord(record: Record, index: number): void {
+function removeRecord(record: RecordType, index: number): void {
     axios
         .delete(getUrl(`remove-record/${record.id}/`))
         .then(() => {
@@ -703,7 +703,7 @@ function removeRecord(record: Record, index: number): void {
         });
 }
 
-function addToList(movieId: number, listId: number, record: Record): void {
+function addToList(movieId: number, listId: number, record: RecordType): void {
     axios
         .post(getUrl(`add-to-list/${movieId}/`), {
             listId,
@@ -716,11 +716,11 @@ function addToList(movieId: number, listId: number, record: Record): void {
         });
 }
 
-function showCommentArea(record: Record): void {
+function showCommentArea(record: RecordType): void {
     record.commentArea = true;
 }
 
-function saveComment(record: Record): void {
+function saveComment(record: RecordType): void {
     const data = {
         comment: record.comment,
     };
@@ -735,13 +735,13 @@ function saveComment(record: Record): void {
             $toast.error("Error saving a comment");
         });
 }
-function moveToTop(record: Record, index: number): void {
+function moveToTop(record: RecordType, index: number): void {
     records.value.splice(index, 1);
     records.value.unshift(record);
     saveRecordsOrder();
 }
 
-function moveToBottom(record: Record, index: number): void {
+function moveToBottom(record: RecordType, index: number): void {
     records.value.splice(index, 1);
     records.value.push(record);
     saveRecordsOrder();
