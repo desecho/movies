@@ -853,6 +853,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/lodash@npm:^4.17.20":
+  version: 4.17.20
+  resolution: "@types/lodash@npm:4.17.20"
+  checksum: dc7bb4653514dd91117a4c4cec2c37e2b5a163d7643445e4757d76a360fabe064422ec7a42dde7450c5e7e0e7e678d5e6eae6d2a919abcddf581d81e63e63839
+  languageName: node
+  linkType: hard
+
 "@types/webfontloader@npm:^1.6.38":
   version: 1.6.38
   resolution: "@types/webfontloader@npm:1.6.38"
@@ -3764,6 +3771,7 @@ __metadata:
     "@eslint/js": ^9.24.0
     "@hennge/vue3-pagination": ^1.0.17
     "@mdi/font": ^7.4.47
+    "@types/lodash": ^4.17.20
     "@types/webfontloader": ^1.6.38
     "@types/x-axios-progress-bar": ^1.2.4
     "@typescript-eslint/eslint-plugin": ^8.29.1
@@ -3778,6 +3786,7 @@ __metadata:
     eslint-plugin-vue: ^10.0.0
     globals: ^16.0.0
     jwt-decode: ^4.0.0
+    lodash: ^4.17.21
     pinia: ^3.0.2
     pinia-plugin-persist: ^1.0.0
     prettier: ^3.5.3

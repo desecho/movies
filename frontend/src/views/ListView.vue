@@ -521,6 +521,7 @@
 <script lang="ts" setup>
 import VPagination from "@hennge/vue3-pagination";
 import axios from "axios";
+import { cloneDeep } from "lodash";
 import VLazyImage from "v-lazy-image";
 import { computed, onMounted, ref, toRef, watch } from "vue";
 import StarRating from "vue-star-rating";
@@ -528,7 +529,6 @@ import Draggable from "vuedraggable";
 
 import type { RecordType, SortData } from "../types";
 import type { AxiosError } from "axios";
-import type { Ref } from "vue";
 
 import {
     listToWatchId,
@@ -537,13 +537,15 @@ import {
     starSizeNormal,
 } from "../const";
 import { getSrcSet, getUrl } from "../helpers";
+import { useRecordsStore } from "../stores/records";
 import { $toast } from "../toast";
+
+const recordsStore = useRecordsStore();
 
 const mode = ref("full");
 const sort = ref("additionDate");
 const query = ref("");
-const records: Ref<RecordType[]> = ref([]);
-const recordsOriginal: Ref<RecordType[]> = ref([]);
+const records = toRef(recordsStore, "records");
 
 const page = ref(1);
 const perPage = 50;
@@ -574,14 +576,16 @@ const props = defineProps<{
 }>();
 
 function sortRecords(): void {
+    const recordsCopy = cloneDeep(records.value);
+
     switch (sort.value) {
         case "custom":
-            records.value.sort((a, b) => {
+            recordsCopy.sort((a, b) => {
                 return a.order - b.order;
             });
             break;
         case "releaseDate":
-            records.value.sort((a, b) => {
+            recordsCopy.sort((a, b) => {
                 return (
                     b.movie.releaseDateTimestamp - a.movie.releaseDateTimestamp
                 );
@@ -589,20 +593,22 @@ function sortRecords(): void {
             break;
         case "rating":
             if (props.listId === listWatchedId) {
-                records.value.sort((a, b) => {
+                recordsCopy.sort((a, b) => {
                     return b.rating - a.rating;
                 });
             } else {
-                records.value.sort((a, b) => {
+                recordsCopy.sort((a, b) => {
                     return b.movie.imdbRating - a.movie.imdbRating;
                 });
             }
             break;
         default:
-            records.value.sort((a, b) => {
+            recordsCopy.sort((a, b) => {
                 return b.additionDate - a.additionDate;
             });
     }
+
+    records.value = recordsCopy;
 }
 
 watch(sort, () => {
@@ -629,23 +635,6 @@ const isSortable = computed(() => {
     );
 });
 
-function loadRecords(): void {
-    axios
-        .get(getUrl("records/"))
-        .then((response) => {
-            const recs: RecordType[] = response.data as RecordType[];
-            recs.forEach((record) => {
-                record.ratingOriginal = record.rating;
-            });
-            records.value = recs;
-            recordsOriginal.value = recs;
-        })
-        .catch((error: AxiosError) => {
-            console.log(error);
-            $toast.error("Error loading movies");
-        });
-}
-
 function saveRecordsOrder(): void {
     function getSortData(): SortData[] {
         const data: SortData[] = [];
@@ -658,11 +647,7 @@ function saveRecordsOrder(): void {
 
     axios
         .put(getUrl("save-records-order/"), { records: getSortData() })
-        .then(() => {
-            recordsOriginal.value = records.value;
-        })
         .catch(() => {
-            records.value = recordsOriginal.value;
             $toast.error("Error saving movie order");
         });
 }
@@ -749,7 +734,11 @@ function moveToBottom(record: RecordType, index: number): void {
 }
 
 onMounted(() => {
-    loadRecords();
+    const { loadRecords } = useRecordsStore();
+    loadRecords().catch((error: AxiosError) => {
+        console.log(error);
+        $toast.error("Error loading movies");
+    });
 });
 </script>
 

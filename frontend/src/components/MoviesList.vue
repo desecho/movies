@@ -49,9 +49,11 @@ import axios from "axios";
 import VLazyImage from "v-lazy-image";
 
 import type { AddToListFromDbResponseData, MoviePreview } from "../types";
+import type { AxiosError } from "axios";
 
 import { listToWatchId, listWatchedId } from "../const";
 import { getSrcSet, getUrl } from "../helpers";
+import { useRecordsStore } from "../stores/records";
 import { $toast } from "../toast";
 
 defineProps<{
@@ -77,6 +79,15 @@ async function addToListFromDb(
         })
         .catch(() => {
             $toast.error("Error adding a movie");
+        });
+    const { reloadRecords } = useRecordsStore();
+    reloadRecords()
+        .then(() => {
+            console.log("Records reloaded");
+        })
+        .catch((error: AxiosError) => {
+            console.log(error);
+            $toast.error("Error reloading records");
         });
 }
 </script>
