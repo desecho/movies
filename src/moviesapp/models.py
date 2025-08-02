@@ -100,23 +100,6 @@ class UserBase:
     #         return self.social_auth.exists()  # type: ignore
     #     return False
 
-    # def get_users(self, friends: bool = False, sort: bool = False) -> list["User"]:
-    #     """Get users."""
-    #     if friends:
-    #         return list(self.get_friends(sort=sort))
-    #     return self._get_available_users_and_friends(sort=sort)
-
-    # def _get_available_users_and_friends(self, sort: bool = False) -> list["User"]:
-    #     """Get available users and friends."""
-    #     user: User | UserAnonymous = self  # type: ignore
-    #     available_users = User.objects.exclude(only_for_friends=True).exclude(hidden=True)
-    #     if user.is_authenticated:
-    #         available_users = available_users.exclude(pk=user.pk)
-    #     users = available_users | self.get_friends()
-    #     if sort:
-    #         users = users.order_by("first_name")
-    #     return list(set(users))
-
     # def get_vk(self) -> Optional[Vk]:
     #     """Get VK."""
     #     if self.is_vk_user:

@@ -102,8 +102,6 @@ TEMPLATES: list[TemplatesSettings] = [
                 # social_django
                 # "social_django.context_processors.backends",
                 # "social_django.context_processors.login_redirect",
-                # Movies
-                "moviesapp.context_processors.variables",
             ],
             "loaders": [
                 (

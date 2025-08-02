@@ -1,8 +1,9 @@
 """List views."""
 
 from http import HTTPStatus
-from typing import Optional, Union
+from typing import Any, Optional, Union
 
+from django.core.exceptions import PermissionDenied
 from django.db.models import QuerySet, prefetch_related_objects
 from django.http import Http404
 from django.shortcuts import get_object_or_404
@@ -12,7 +13,7 @@ from rest_framework.views import APIView
 
 from ..models import Action, ActionRecord, List, Movie, ProviderRecord, Record, User, UserAnonymous
 from .types import MovieObject, OptionsObject, ProviderObject, ProviderRecordObject, RecordObject
-from .utils import add_movie_to_list
+from .utils import add_movie_to_list, get_anothers_account
 
 
 class ChangeRatingView(APIView):
@@ -97,7 +98,7 @@ class SaveCommentView(APIView):
         record = get_object_or_404(Record, user=request.user, pk=record_id)
 
         try:
-            comment = request.PUT["comment"]
+            comment = request.data["comment"]
         except KeyError:
             return Response(status=HTTPStatus.BAD_REQUEST)
 
@@ -114,6 +115,7 @@ class RecordsView(APIView):
     """Records view."""
 
     anothers_account: Optional[User] = None
+    permission_classes: list[str] = []  # type: ignore
 
     @staticmethod
     def _sort_records(records: QuerySet[Record]) -> QuerySet[Record]:
@@ -254,22 +256,28 @@ class RecordsView(APIView):
         """Get records for certain user."""
         return user.get_records().select_related("movie")
 
-    # def check_if_allowed(self, request: Request, username: Optional[str] = None) -> None:
-    #     """Check if user is allowed to see the page."""
-    #     if username is None and request.user.is_anonymous:  # pylint: disable=duplicate-code
-    #         raise Http404  # pylint: disable=duplicate-code
-    #     user: User = request.user  # type: ignore  # pylint: disable=duplicate-code
-    #     if user.username == username:  # pylint: disable=duplicate-code
-    #         return  # pylint: disable=duplicate-code
-    #     self.anothers_account = get_anothers_account(username)
-    #     if self.anothers_account:
-    #         if User.objects.get(username=username) not in user.get_users():
-    #             raise PermissionDenied
+    @staticmethod
+    def _get_users() -> list["User"]:
+        """Get users."""
+        users = User.objects.exclude(hidden=True)
+        return list(users)
 
-    def get(self, request: Request) -> Response:
+    def check_if_allowed(self, request: Request, username: Optional[str] = None) -> None:
+        """Check if user is allowed to see the page."""
+        if username is None and request.user.is_anonymous:  # pylint: disable=duplicate-code
+            raise Http404  # pylint: disable=duplicate-code
+        user: User = request.user  # type: ignore  # pylint: disable=duplicate-code
+        if user.username == username:  # pylint: disable=duplicate-code
+            return  # pylint: disable=duplicate-code
+        self.anothers_account = get_anothers_account(username)
+        if self.anothers_account:
+            if User.objects.get(username=username) not in self._get_users():
+                raise PermissionDenied
+
+    def get(self, request: Request, **kwargs: Any) -> Response:
         """Get data for the list view."""
-        # username: Optional[str] = kwargs.get("username")
-        # self.check_if_allowed(request, username)
+        username: Optional[str] = kwargs.get("username")
+        self.check_if_allowed(request, username)
         anothers_account = self.anothers_account
         user: User = request.user if anothers_account is None else anothers_account  # type: ignore
         records = self._get_records(user)

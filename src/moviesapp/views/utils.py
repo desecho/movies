@@ -4,6 +4,7 @@ from datetime import date, datetime
 from typing import Optional
 
 from babel.dates import format_date
+from django.shortcuts import get_object_or_404
 
 from ..models import Action, ActionRecord, Record, User
 from ..tmdb import get_poster_url, get_tmdb_url
@@ -28,11 +29,11 @@ def add_movie_to_list(movie_id: int, list_id: int, user: User) -> None:
         ActionRecord(action_id=Action.ADDED_MOVIE, user=user, movie_id=movie_id, list_id=list_id).save()
 
 
-# def get_anothers_account(username: Optional[str]) -> Optional[User]:
-#     """Get another's account."""
-#     if username:
-#         return get_object_or_404(User, username=username)
-#     return None
+def get_anothers_account(username: Optional[str]) -> Optional[User]:
+    """Get another's account."""
+    if username:
+        return get_object_or_404(User, username=username)
+    return None
 
 
 def _format_date(date_: Optional[date], lang: str) -> Optional[str]:

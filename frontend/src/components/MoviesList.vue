@@ -3,7 +3,7 @@
     <div v-for="movie in movies" v-show="!movie.hidden" :key="movie.id" class="movie">
       <div class="poster-wrapper">
         <div class="poster">
-          <div class="add-to-list-buttons">
+          <div v-if="isLoggedIn" class="add-to-list-buttons">
             <a
               v-show="movie.isReleased"
               href="javascript:void(0)"
@@ -43,17 +43,22 @@
 import axios from "axios";
 import VLazyImage from "v-lazy-image";
 
+
 import type { AddToListFromDbResponseData, MoviePreview } from "../types";
 import type { AxiosError } from "axios";
 
 import { listToWatchId, listWatchedId } from "../const";
 import { getSrcSet, getUrl } from "../helpers";
+import { useAuthStore } from "../stores/auth";
 import { useRecordsStore } from "../stores/records";
 import { $toast } from "../toast";
 
 defineProps<{
   movies: MoviePreview[];
 }>();
+
+const { user } = useAuthStore();
+const isLoggedIn = user.isLoggedIn;
 
 async function addToListFromDb(movie: MoviePreview, listId: number): Promise<void> {
   await axios

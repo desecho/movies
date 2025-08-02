@@ -32,6 +32,7 @@ export const useRecordsStore = defineStore("records", {
                 record.ratingOriginal = record.rating;
             });
             this.records = response.data as RecordType[];
+            console.log("Records loaded");
         },
         async reloadRecords() {
             await this.loadRecords(true);

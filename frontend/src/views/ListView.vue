@@ -32,7 +32,7 @@
         ></v-text-field>
       </v-col>
       <v-col cols="1"></v-col>
-      <v-col cols="5" v-if="areRecordsLoaded">
+      <v-col v-if="areRecordsLoaded" cols="5">
         <v-icon icon="mdi-eye" /> {{ watchedCount }} <v-icon icon="mdi-eye-off" /> {{ toWatchCount }}
       </v-col>
     </v-row>
