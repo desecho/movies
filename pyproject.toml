@@ -31,7 +31,7 @@ readme = "README.rst"
 python = "^3.11"
 
 # Django
-Django = "^4.2.11"
+Django = "^5.2.4"
 # django-annoying is only used in existing migrations.
 django-annoying = "^0.10.6"
 django-braces = "^1.15.0"

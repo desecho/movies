@@ -79,7 +79,7 @@ class SearchMovieView(APIView):
         except TmdbInvalidSearchTypeError:
             return Response(status=HTTPStatus.BAD_REQUEST)
         if request.user.is_authenticated:
-            user: User = request.user  # type: ignore
+            user: User = request.user
             filter_out_movies_user_already_has_in_lists(movies, user)
         movies = movies[: settings.MAX_RESULTS]
         return Response(movies)

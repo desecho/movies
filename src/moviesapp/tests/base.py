@@ -2,10 +2,9 @@
 
 import json
 import os
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Optional
 
-import pytz
 from bs4 import BeautifulSoup
 from django.conf import settings
 from django.core.serializers.json import DjangoJSONEncoder
@@ -77,7 +76,7 @@ class BaseTestCase(TestCase):
         # Make sure we have current dates in action
         action_records = ActionRecord.objects.all()
         for action_record in action_records:
-            action_record.date = datetime.now(pytz.utc)
+            action_record.date = datetime.now(timezone.utc)
             action_record.save()
 
     def login(self, username: Optional[str] = None):

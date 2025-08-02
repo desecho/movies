@@ -17,6 +17,6 @@ class TrendingView(APIView):
         tmdb_movies = get_trending()
         movies = [get_movie_list_result(tmdb_movie, request.LANGUAGE_CODE) for tmdb_movie in tmdb_movies]
         if request.user.is_authenticated:
-            user: User = request.user  # type: ignore
+            user: User = request.user
             filter_out_movies_user_already_has_in_lists(movies, user)
         return Response(movies)
