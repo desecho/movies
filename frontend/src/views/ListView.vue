@@ -685,7 +685,6 @@ function saveOptions(record: RecordType, field: keyof RecordType["options"]): vo
 
     axios
         .put(getUrl(`record/${record.id}/options/`), data)
-        .then(() => {})
         .catch(() => {
             record.options[field] = !record.options[field];
             $toast.error("Error saving options");
