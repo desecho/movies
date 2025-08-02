@@ -548,11 +548,6 @@ const recordsOriginal: Ref<RecordType[]> = ref([]);
 const page = ref(1);
 const perPage = 50;
 
-const paginatedRecords = computed(() => {
-    const start = (page.value - 1) * perPage;
-    return records.value.slice(start, start + perPage);
-});
-
 const filteredRecords = computed(() => {
     if (!query.value.trim()) {
         return records.value;
@@ -566,8 +561,14 @@ const filteredRecords = computed(() => {
     });
 });
 
-const totalPages = computed(() => Math.ceil(records.value.length / perPage));
+const totalPages = computed(() =>
+    Math.ceil(filteredRecords.value.length / perPage),
+);
 
+const paginatedRecords = computed(() => {
+    const start = (page.value - 1) * perPage;
+    return filteredRecords.value.slice(start, start + perPage);
+});
 const props = defineProps<{
     listId: number;
 }>();
