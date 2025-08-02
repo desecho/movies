@@ -43,7 +43,6 @@
 import axios from "axios";
 import VLazyImage from "v-lazy-image";
 
-
 import type { AddToListFromDbResponseData, MoviePreview } from "../types";
 import type { AxiosError } from "axios";
 

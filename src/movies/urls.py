@@ -73,43 +73,9 @@ urlpatterns: list[URL] = [
     path("save-comment/<int:record_id>/", SaveCommentView.as_view()),
 ]
 
-
-# if settings.DEBUG:  # pragma: no cover
-#     urlpatterns += [
-#         # path("__debug__/", include(debug_toolbar.urls)),
-#     ]
-
 # urlpatterns += [
-#     path("about/", AboutView.as_view(), name="about"),
-#     #
 #     # User
-#     path("preferences/", PreferencesView.as_view(), name="preferences"),
 #     path("account/delete/", AccountDeleteView.as_view(), name="delete_account"),
 #     path("account/deleted/", AccountDeletedView.as_view(), name="account_deleted"),
 #     #
-#     # Search
-#     path("", SearchView.as_view(), name="search"),
-#     #
-#     # Login
-#     path("login/", LoginView.as_view(template_name="user/login.html"), name="login"),
-#     path("logout/", logout_view, name="logout"),
-#     path("login-error/", LoginErrorView.as_view(), name="login_error"),
-#     #
-#     # Trending
-#     #
-#     #
-#     # Social
-#     # path("feed/<feed:feed_name>/", FeedView.as_view(), name="feed"),
-#     path("people/", PeopleView.as_view(), name="people"),
-#     # path("friends/", FriendsView.as_view(), name="friends"),
-#     #
-#     # Admin
-#     path("admin/", admin.site.urls),
-#     #
-#     # Services
-#     # path("accounts/", include("registration.backends.default.urls")),
-#     # path("", include("social_django.urls", namespace="social")),
-#     path("", include("django.contrib.auth.urls")),
-#     # path("rosetta/", include("rosetta.urls")),
-#     # path("i18n/", include("django.conf.urls.i18n")),
 # ]
