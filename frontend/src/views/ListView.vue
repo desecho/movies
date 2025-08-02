@@ -528,7 +528,6 @@ import Draggable from "vuedraggable";
 
 import type { RecordType, SortData } from "../types";
 import type { AxiosError } from "axios";
-import type { Ref } from "vue";
 
 import {
     listToWatchId,
@@ -537,13 +536,15 @@ import {
     starSizeNormal,
 } from "../const";
 import { getSrcSet, getUrl } from "../helpers";
+import { useRecordsStore } from "../stores/records";
 import { $toast } from "../toast";
+
+const recordsStore = useRecordsStore();
 
 const mode = ref("full");
 const sort = ref("additionDate");
 const query = ref("");
-const records: Ref<RecordType[]> = ref([]);
-const recordsOriginal: Ref<RecordType[]> = ref([]);
+const records = toRef(recordsStore, "records");
 
 const page = ref(1);
 const perPage = 50;
@@ -628,23 +629,6 @@ const isSortable = computed(() => {
     );
 });
 
-function loadRecords(): void {
-    axios
-        .get(getUrl("records/"))
-        .then((response) => {
-            const recs: RecordType[] = response.data as RecordType[];
-            recs.forEach((record) => {
-                record.ratingOriginal = record.rating;
-            });
-            records.value = recs;
-            recordsOriginal.value = recs;
-        })
-        .catch((error: AxiosError) => {
-            console.log(error);
-            $toast.error("Error loading movies");
-        });
-}
-
 function saveRecordsOrder(): void {
     function getSortData(): SortData[] {
         const data: SortData[] = [];
@@ -657,11 +641,7 @@ function saveRecordsOrder(): void {
 
     axios
         .put(getUrl("save-records-order/"), { records: getSortData() })
-        .then(() => {
-            recordsOriginal.value = records.value;
-        })
         .catch(() => {
-            records.value = recordsOriginal.value;
             $toast.error("Error saving movie order");
         });
 }
@@ -678,17 +658,18 @@ function changeRating(record: RecordType, rating: number): void {
         });
 }
 
-function saveOptions(record: RecordType, field: keyof RecordType["options"]): void {
+function saveOptions(
+    record: RecordType,
+    field: keyof RecordType["options"],
+): void {
     const data = {
         options: record.options,
     };
 
-    axios
-        .put(getUrl(`record/${record.id}/options/`), data)
-        .catch(() => {
-            record.options[field] = !record.options[field];
-            $toast.error("Error saving options");
-        });
+    axios.put(getUrl(`record/${record.id}/options/`), data).catch(() => {
+        record.options[field] = !record.options[field];
+        $toast.error("Error saving options");
+    });
 }
 
 function removeRecord(record: RecordType, index: number): void {
@@ -747,7 +728,11 @@ function moveToBottom(record: RecordType, index: number): void {
 }
 
 onMounted(() => {
-    loadRecords();
+    const { loadRecords } = useRecordsStore();
+    loadRecords().catch((error: AxiosError) => {
+        console.log(error);
+        $toast.error("Error loading movies");
+    });
 });
 </script>
 
