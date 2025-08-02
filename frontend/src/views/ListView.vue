@@ -31,6 +31,10 @@
           density="compact"
         ></v-text-field>
       </v-col>
+      <v-col cols="1"></v-col>
+      <v-col cols="5">
+        <v-icon icon="mdi-eye" /> {{ watchedCount }} <v-icon icon="mdi-eye-off" /> {{ toWatchCount }}
+      </v-col>
     </v-row>
     <v-row>
       <v-col cols="10">
@@ -359,21 +363,27 @@ const filteredRecords = computed(() => {
   });
 });
 
+const watchedCount = computed(() => {
+  return records.value.filter((record) => record.listId === listWatchedId).length;
+});
+
+const toWatchCount = computed(() => {
+  return records.value.filter((record) => record.listId === listToWatchId).length;
+});
+
 const totalPages = computed(() => Math.ceil(filteredRecords.value.length / perPage));
 const modeButtonSize = computed(() => {
   if (isMobile.value) {
     return "small";
-  } 
-    return "default";
-  
+  }
+  return "default";
 });
 
 const sortButtonSize = computed(() => {
   if (isMobile.value) {
     return "x-small";
-  } 
-    return "default";
-  
+  }
+  return "default";
 });
 
 const paginatedRecords = computed(() => {
