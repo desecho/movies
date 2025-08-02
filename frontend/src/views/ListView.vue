@@ -316,6 +316,11 @@
         </div>
       </v-col>
     </v-row>
+    <v-row v-if="areRecordsLoaded">
+      <v-col cols="10">
+        <v-pagination v-model="page" :pages="totalPages" :range-size="1" active-color="#DCEDFF" />
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
