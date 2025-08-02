@@ -45,22 +45,24 @@ export const router = createRouter({
             component: ListView,
             props: { listId: listToWatchId },
         },
-        /* {
-               path: "/users/:username/list/watched",
-               component: ListView,
-               props: (route) => ({
-                   username: route.params.username,
-                   listId: listWatchedId,
-               }),
-           },
-           {
-               path: "/users/:username/list/to-watch",
-               component: ListView,
-               props: (route) => ({
-                   username: route.params.username,
-                   listId: listToWatchId,
-               }),
-           }, */
+        {
+            path: "/users/:username/list/watched",
+            component: ListView,
+            props: (route): Record<string, unknown> => ({
+                username: route.params.username as string,
+                listId: listWatchedId,
+                isProfileView: true,
+            }),
+        },
+        {
+            path: "/users/:username/list/to-watch",
+            component: ListView,
+            props: (route): Record<string, unknown> => ({
+                username: route.params.username as string,
+                listId: listToWatchId,
+                isProfileView: true,
+            }),
+        },
         { path: "/login", component: LoginView },
         { path: "/logout", component: LogoutView },
         { path: "/register", component: RegistrationView },

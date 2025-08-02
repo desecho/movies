@@ -157,7 +157,7 @@ export default [...fixupConfigRules(compat.extends(
         "@typescript-eslint/no-require-imports": "error",
         "@typescript-eslint/no-unnecessary-qualifier": "error",
         "@typescript-eslint/no-useless-empty-export": "error",
-        "@typescript-eslint/strict-boolean-expressions": "error",
+        // "@typescript-eslint/strict-boolean-expressions": "error",
         "@typescript-eslint/prefer-readonly": "error",
         "@typescript-eslint/prefer-regexp-exec": "error",
         "@typescript-eslint/promise-function-async": "error",

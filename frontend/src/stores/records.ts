@@ -14,28 +14,61 @@ export const useRecordsStore = defineStore("records", {
     state: () => ({
         records: recordsInitialState,
         areLoaded: false,
+        currentUsername: null as string | null,
     }),
     actions: {
-        async loadRecords(reload = false) {
-            const { user } = useAuthStore();
-            if (!user.isLoggedIn) {
-                void router.push("/login");
+        async loadRecords(username?: string, reload = false) {
+            // If loading profile records, we don't need authentication
+            if (!username) {
+                const { user } = useAuthStore();
+                if (!user.isLoggedIn) {
+                    void router.push("/login");
+                    return;
+                }
             }
-            if (this.areLoaded && !reload) {
+
+            // Force reload if switching between different contexts (profile vs personal, or different users)
+            const contextChanged = this.currentUsername !== (username || null);
+            const shouldReload = reload || contextChanged;
+
+            // Check if we already have the right data loaded
+            if (this.areLoaded && !shouldReload) {
                 return;
             }
 
-            const response = await axios.get(getUrl("records/"));
+            // Clear existing records when context changes
+            if (contextChanged) {
+                this.records = [];
+                this.areLoaded = false;
+            }
+
+            let url: string;
+            if (username) {
+                // Load records for a specific user's profile
+                url = getUrl(`users/${username}/records/`);
+                this.currentUsername = username;
+            } else {
+                // Load records for the current logged-in user
+                url = getUrl("records/");
+                this.currentUsername = null;
+            }
+
+            const response = await axios.get(url);
             this.areLoaded = true;
             const recs: RecordType[] = response.data as RecordType[];
             recs.forEach((record) => {
                 record.ratingOriginal = record.rating;
             });
             this.records = response.data as RecordType[];
-            console.log("Records loaded");
+
+            if (username) {
+                console.log(`Records loaded for user: ${username}`);
+            } else {
+                console.log("Records loaded");
+            }
         },
         async reloadRecords() {
-            await this.loadRecords(true);
+            await this.loadRecords(this.currentUsername || undefined, true);
         },
     },
 });

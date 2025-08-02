@@ -1,5 +1,21 @@
 <template>
   <v-container>
+    <!-- Profile header (only show when viewing another user's profile) -->
+    <v-row v-if="isProfileView">
+      <v-col cols="12">
+        <div class="profile-header">
+          <h2>{{ username }}'s Movies</h2>
+          <!-- List selector for profile views -->
+          <div class="profile-list-selector">
+            <v-btn-toggle v-model="selectedProfileList" density="compact" mandatory>
+              <v-btn :value="listWatchedId" :size="modeButtonSize"> Watched </v-btn>
+              <v-btn :value="listToWatchId" :size="modeButtonSize"> To Watch </v-btn>
+            </v-btn-toggle>
+          </div>
+        </div>
+      </v-col>
+    </v-row>
+
     <v-row>
       <v-col cols="12">
         <v-btn-toggle v-model="mode" density="compact" mandatory>
@@ -16,7 +32,9 @@
           <v-btn value="releaseDate" :size="sortButtonSize">Release date</v-btn>
           <v-btn value="rating" :size="sortButtonSize">Rating</v-btn>
           <v-btn value="additionDate" :size="sortButtonSize">Date added</v-btn>
-          <v-btn v-if="listId == listToWatchId" value="custom" :size="sortButtonSize"> Custom </v-btn>
+          <v-btn v-if="currentListId == listToWatchId && !isProfileView" value="custom" :size="sortButtonSize">
+            Custom
+          </v-btn>
         </v-btn-toggle>
       </v-col>
     </v-row>
@@ -57,14 +75,15 @@
               >
                 <div class="title">
                   <span :title="element.movie.titleOriginal">{{ element.movie.title }}</span>
-                  <div class="remove-button">
+                  <!-- Only show action buttons for own lists -->
+                  <div v-if="!isProfileView" class="remove-button">
                     <a href="javascript:void(0)" title="Delete" @click="removeRecord(element, index)">
                       <v-icon icon="mdi-trash-can" />
                     </a>
                   </div>
-                  <div class="add-to-list-buttons">
+                  <div v-if="!isProfileView" class="add-to-list-buttons">
                     <div class="inline">
-                      <div v-if="listId == listToWatchId" class="inline">
+                      <div v-if="currentListId == listToWatchId" class="inline">
                         <a
                           v-show="element.movie.isReleased && element.listId != listWatchedId"
                           href="javascript:void(0)"
@@ -185,19 +204,23 @@
                     'review-minimal': mode == 'minimal',
                   }"
                 >
-                  <div v-if="listId == listWatchedId">
+                  <div v-if="currentListId == listWatchedId">
+                    <!-- Show ratings for profile views, but make them read-only -->
                     <star-rating
                       v-model:rating="element.rating"
                       :star-size="starSize"
                       :show-rating="false"
-                      :clearable="true"
+                      :clearable="!isProfileView"
+                      :read-only="isProfileView"
                       @update:rating="changeRating(element, $event)"
                     >
                     </star-rating>
-                    <div v-show="(element.comment || element.commentArea) && mode != 'minimal'" class="comment">
-                      <!-- {% if anothers_account %}
-                    <p>{{ element.comment }}</p>
-                  {% else %} -->
+                    <!-- Only show comment editing for own lists -->
+                    <div
+                      v-if="!isProfileView"
+                      v-show="(element.comment || element.commentArea) && mode != 'minimal'"
+                      class="comment"
+                    >
                       <div>
                         <v-textarea v-model="element.comment" class="form-control" title="Comment"> </v-textarea>
                       </div>
@@ -205,7 +228,12 @@
                         <v-icon icon="mdi-content-save" />
                       </button>
                     </div>
+                    <!-- Show comments read-only for profile views -->
+                    <div v-if="isProfileView && element.comment && mode != 'minimal'" class="comment-readonly">
+                      <p>{{ element.comment }}</p>
+                    </div>
                     <button
+                      v-if="!isProfileView"
                       v-show="element.comment == '' && !element.commentArea && mode != 'minimal'"
                       type="button"
                       class="btn btn-secondary"
@@ -214,7 +242,8 @@
                     >
                       <v-icon icon="mdi-comment" />
                     </button>
-                    <div v-show="mode == 'full'" class="option-buttons">
+                    <!-- Only show options for own lists -->
+                    <div v-if="!isProfileView" v-show="mode == 'full'" class="option-buttons">
                       <div>
                         <label :for="'original_' + element.id">Watched original version</label>
                         <input
@@ -282,7 +311,8 @@
           <draggable v-model="records" item-key="id" :disabled="!isSortable" @sort="saveRecordsOrder">
             <template #item="{ element, index }">
               <div v-if="paginatedRecords.includes(element)" class="gallery-record">
-                <div class="buttons">
+                <!-- Only show move buttons for own lists -->
+                <div v-if="!isProfileView" class="buttons">
                   <button
                     v-show="isSortable"
                     type="button"
@@ -334,7 +364,6 @@ import StarRating from "vue-star-rating";
 import Draggable from "vuedraggable";
 
 import type { RecordType, SortData } from "../types";
-import type { AxiosError } from "axios";
 
 import { useMobile } from "../composables/mobile";
 import { listToWatchId, listWatchedId, starSizeMinimal, starSizeNormal } from "../const";
@@ -344,6 +373,8 @@ import { $toast } from "../toast";
 
 const props = defineProps<{
   listId: number;
+  username?: string;
+  isProfileView?: boolean;
 }>();
 
 const { isMobile } = useMobile();
@@ -356,15 +387,23 @@ const query = ref("");
 const records = toRef(recordsStore, "records");
 const areRecordsLoaded = toRef(recordsStore, "areLoaded");
 
+// For profile views, allow switching between lists
+const selectedProfileList = ref(props.listId);
+
 const page = ref(1);
 const perPage = 50;
+
+// Computed property to get the current list ID (either from props or selected in profile)
+const currentListId = computed(() => {
+  return props.isProfileView ? selectedProfileList.value : props.listId;
+});
 
 const filteredRecords = computed(() => {
   const q = query.value.trim().toLowerCase();
   return records.value.filter((record) => {
     return (
       (record.movie.title.toLowerCase().includes(q) || record.movie.titleOriginal.toLowerCase().includes(q)) &&
-      record.listId === props.listId
+      record.listId === currentListId.value
     );
   });
 });
@@ -412,7 +451,7 @@ function sortRecords(): void {
       });
       break;
     case "rating":
-      if (props.listId === listWatchedId) {
+      if (currentListId.value === listWatchedId) {
         recordsCopy.sort((a, b) => {
           return b.rating - a.rating;
         });
@@ -436,8 +475,37 @@ watch(sort, () => {
 });
 
 const listIdRef = toRef(props, "listId");
-watch(listIdRef, () => {
+const usernameRef = toRef(props, "username");
+const isProfileViewRef = toRef(props, "isProfileView");
+
+async function loadRecordsData(): Promise<void> {
+  const { loadRecords } = useRecordsStore();
+
+  try {
+    if (props.isProfileView && props.username) {
+      await loadRecords(props.username);
+    } else {
+      await loadRecords();
+    }
+  } catch (error: unknown) {
+    console.log(error);
+    const errorMessage =
+      props.isProfileView && props.username ? `Error loading ${props.username}'s movies` : "Error loading movies";
+    $toast.error(errorMessage);
+  }
+}
+// Watch for changes in props that require reloading data
+watch([listIdRef, usernameRef, isProfileViewRef], async () => {
+  selectedProfileList.value = props.listId; // Reset profile list selector
   sortRecords();
+  // Forceasync  reload records when switching contexts
+  await loadRecordsData();
+});
+
+// Watch for profile list selection changes
+watch(selectedProfileList, () => {
+  sortRecords();
+  page.value = 1; // Reset to first page when switching lists
 });
 
 const starSize = computed(() => {
@@ -449,7 +517,10 @@ const starSize = computed(() => {
 
 const isSortable = computed(() => {
   return (
-    props.listId === listToWatchId && sort.value === "custom" && (mode.value === "minimal" || mode.value === "gallery")
+    currentListId.value === listToWatchId &&
+    sort.value === "custom" &&
+    (mode.value === "minimal" || mode.value === "gallery") &&
+    !props.isProfileView // Disable sorting for profile views
   );
 });
 
@@ -535,6 +606,7 @@ function saveComment(record: RecordType): void {
       $toast.error("Error saving a comment");
     });
 }
+
 function moveToTop(record: RecordType, index: number): void {
   records.value.splice(index, 1);
   records.value.unshift(record);
@@ -547,17 +619,49 @@ function moveToBottom(record: RecordType, index: number): void {
   saveRecordsOrder();
 }
 
-onMounted(() => {
-  const { loadRecords } = useRecordsStore();
-  loadRecords().catch((error: AxiosError) => {
-    console.log(error);
-    $toast.error("Error loading movies");
-  });
+onMounted(async () => {
+  await loadRecordsData();
 });
 </script>
 
 <style src="@hennge/vue3-pagination/dist/vue3-pagination.css"></style>
 <style scoped>
+.profile-header {
+  margin-bottom: 20px;
+  padding: 20px;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+}
+
+.profile-header h2 {
+  margin: 0 0 15px 0;
+  color: #333;
+}
+
+.profile-list-selector {
+  display: flex;
+  justify-content: center;
+}
+
+.comment-readonly {
+  margin-top: 10px;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border-radius: 4px;
+  border-left: 3px solid #ddd;
+  max-width: 400px;
+}
+
+.option-buttons-readonly {
+  margin-top: 10px;
+  font-size: 0.9em;
+  color: #666;
+}
+
+.option-buttons-readonly div {
+  margin: 5px 0;
+}
+
 .option-buttons {
   input {
     margin-left: 5px;
