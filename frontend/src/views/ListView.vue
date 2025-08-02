@@ -32,11 +32,11 @@
         ></v-text-field>
       </v-col>
       <v-col cols="1"></v-col>
-      <v-col cols="5">
+      <v-col cols="5" v-if="areRecordsLoaded">
         <v-icon icon="mdi-eye" /> {{ watchedCount }} <v-icon icon="mdi-eye-off" /> {{ toWatchCount }}
       </v-col>
     </v-row>
-    <v-row>
+    <v-row v-if="areRecordsLoaded">
       <v-col cols="10">
         <v-pagination v-model="page" :pages="totalPages" :range-size="1" active-color="#DCEDFF" />
       </v-col>
@@ -349,6 +349,7 @@ const mode = ref("full");
 const sort = ref("additionDate");
 const query = ref("");
 const records = toRef(recordsStore, "records");
+const areRecordsLoaded = toRef(recordsStore, "areLoaded");
 
 const page = ref(1);
 const perPage = 50;
