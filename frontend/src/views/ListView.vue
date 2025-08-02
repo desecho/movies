@@ -584,7 +584,7 @@ onMounted(() => {
 
 .movie {
   clear: both;
-  min-height: 160px;
+  min-height: 185px;
   margin-bottom: 10px;
   padding: 10px;
   border-width: 1px;
