@@ -5,4 +5,31 @@
   height: 18px;
   display: inline-block;
   background-size: contain;
+  opacity: 0.8;
+  transition: opacity 0.3s ease;
+  
+  &:hover {
+    opacity: 1;
+  }
+}
+
+// Enhanced footer styling
+.footer {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  padding: 2rem 0;
+  margin-top: 3rem;
+  
+  .footer-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+  }
+  
+  .footer-text {
+    color: #6c757d;
+    font-size: 0.9rem;
+    margin: 0;
+  }
 }

@@ -1,15 +1,102 @@
+// Toast styling improvements
 .v-toast {
   padding: 0 8px 0 0;
+  
+  .toast {
+    border-radius: 8px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  }
 }
 
+// Progress bar hiding
 #nprogress .spinner {
   display: none;
 }
 
+// Vue cloak utility
 [v-cloak] {
   display: none !important;
 }
 
+// Layout utilities
 .inline {
   display: inline;
+}
+
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+// Spacing utilities
+.mt-xs { margin-top: 0.5rem; }
+.mt-sm { margin-top: 1rem; }
+.mt-md { margin-top: 1.5rem; }
+.mt-lg { margin-top: 2rem; }
+.mt-xl { margin-top: 3rem; }
+
+.mb-xs { margin-bottom: 0.5rem; }
+.mb-sm { margin-bottom: 1rem; }
+.mb-md { margin-bottom: 1.5rem; }
+.mb-lg { margin-bottom: 2rem; }
+.mb-xl { margin-bottom: 3rem; }
+
+.p-xs { padding: 0.5rem; }
+.p-sm { padding: 1rem; }
+.p-md { padding: 1.5rem; }
+.p-lg { padding: 2rem; }
+.p-xl { padding: 3rem; }
+
+// Text utilities
+.text-muted {
+  color: #6c757d;
+}
+
+.text-primary {
+  color: #667eea;
+}
+
+.text-success {
+  color: #28a745;
+}
+
+.text-warning {
+  color: #ffc107;
+}
+
+.text-danger {
+  color: #dc3545;
+}
+
+// Modern glass effect
+.glass {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+}
+
+// Improved shadows
+.shadow-sm {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.shadow-md {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
+}
+
+.shadow-lg {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.shadow-xl {
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
 }
