@@ -174,6 +174,18 @@
                         :alt="element.movie.title"
                       />
                     </span>
+                    <!-- Star rating under poster -->
+                    <div v-if="currentListId == listWatchedId" class="poster-rating">
+                      <star-rating
+                        v-model:rating="element.rating"
+                        :star-size="starSize"
+                        :show-rating="false"
+                        :clearable="!isProfileView"
+                        :read-only="isProfileView"
+                        @update:rating="changeRating(element, $event)"
+                      >
+                      </star-rating>
+                    </div>
                   </div>
                   <div
                     class="details"
@@ -268,16 +280,6 @@
                     }"
                   >
                     <div v-if="currentListId == listWatchedId">
-                      <!-- Show ratings for profile views, but make them read-only -->
-                      <star-rating
-                        v-model:rating="element.rating"
-                        :star-size="starSize"
-                        :show-rating="false"
-                        :clearable="!isProfileView"
-                        :read-only="isProfileView"
-                        @update:rating="changeRating(element, $event)"
-                      >
-                      </star-rating>
                       <!-- Only show comment editing for own lists -->
                       <div
                         v-if="!isProfileView"
@@ -2012,6 +2014,25 @@ onMounted(async () => {
     font-size: 0.85rem;
     gap: 6px;
   }
+}
+
+/* Poster Rating Styling */
+.poster-rating {
+  margin-top: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.poster .poster-rating .vue-star-rating {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 /* Watch Count Component Styling */
