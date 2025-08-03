@@ -2039,7 +2039,6 @@ onMounted(async () => {
   padding: 8px;
   background: rgba(255, 255, 255, 0.9);
   border-radius: 8px;
-  border: 1px solid rgba(0, 0, 0, 0.05);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
