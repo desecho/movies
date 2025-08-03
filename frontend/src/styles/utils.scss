@@ -1,7 +1,7 @@
 // Toast styling improvements
 .v-toast {
   padding: 0 8px 0 0;
-  
+
   .toast {
     border-radius: 8px;
     backdrop-filter: blur(10px);
@@ -37,23 +37,53 @@
 }
 
 // Spacing utilities
-.mt-xs { margin-top: 0.5rem; }
-.mt-sm { margin-top: 1rem; }
-.mt-md { margin-top: 1.5rem; }
-.mt-lg { margin-top: 2rem; }
-.mt-xl { margin-top: 3rem; }
+.mt-xs {
+  margin-top: 0.5rem;
+}
+.mt-sm {
+  margin-top: 1rem;
+}
+.mt-md {
+  margin-top: 1.5rem;
+}
+.mt-lg {
+  margin-top: 2rem;
+}
+.mt-xl {
+  margin-top: 3rem;
+}
 
-.mb-xs { margin-bottom: 0.5rem; }
-.mb-sm { margin-bottom: 1rem; }
-.mb-md { margin-bottom: 1.5rem; }
-.mb-lg { margin-bottom: 2rem; }
-.mb-xl { margin-bottom: 3rem; }
+.mb-xs {
+  margin-bottom: 0.5rem;
+}
+.mb-sm {
+  margin-bottom: 1rem;
+}
+.mb-md {
+  margin-bottom: 1.5rem;
+}
+.mb-lg {
+  margin-bottom: 2rem;
+}
+.mb-xl {
+  margin-bottom: 3rem;
+}
 
-.p-xs { padding: 0.5rem; }
-.p-sm { padding: 1rem; }
-.p-md { padding: 1.5rem; }
-.p-lg { padding: 2rem; }
-.p-xl { padding: 3rem; }
+.p-xs {
+  padding: 0.5rem;
+}
+.p-sm {
+  padding: 1rem;
+}
+.p-md {
+  padding: 1.5rem;
+}
+.p-lg {
+  padding: 2rem;
+}
+.p-xl {
+  padding: 3rem;
+}
 
 // Text utilities
 .text-muted {
