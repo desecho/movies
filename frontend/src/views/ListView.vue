@@ -1220,6 +1220,7 @@ onMounted(async () => {
 
 .review {
   padding-top: 16px;
+  width: 670px;
 
   button {
     background: rgba(102, 126, 234, 0.1);
