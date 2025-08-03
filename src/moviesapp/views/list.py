@@ -22,7 +22,7 @@ class ChangeRatingView(APIView):
     def put(self, request: Request, record_id: int) -> Response:  # pylint: disable=no-self-use
         """Change rating."""
         try:
-            rating = int(request.PUT["rating"])
+            rating = int(request.data["rating"])
         except (KeyError, ValueError):
             return Response(status=HTTPStatus.BAD_REQUEST)
 
