@@ -79,280 +79,286 @@
                   draggable: isSortable,
                 }"
               >
-                <div class="movie-header">
-                  <div class="title" :title="element.movie.titleOriginal">
+                <!-- Movie title banner spanning full width at the very top -->
+                <div class="movie-title-banner">
+                  <h2 class="movie-title" :title="element.movie.titleOriginal">
                     {{ element.movie.title }}
-                  </div>
+                  </h2>
                 </div>
-                <div v-show="mode != 'minimal'" class="poster">
-                  <!-- Action buttons overlay on poster -->
-                  <div class="poster-overlay-buttons">
-                    <!-- Only show action buttons for own lists -->
-                    <div v-if="!isProfileView" class="remove-button">
-                      <a href="javascript:void(0)" title="Delete" @click="removeRecord(element, index)">
-                        <v-icon icon="mdi-trash-can" />
-                      </a>
-                    </div>
-                    <!-- Add to list buttons - show for logged in users viewing profile -->
-                    <div v-if="isProfileView && authStore.user.isLoggedIn" class="add-to-my-list-buttons">
-                      <v-btn
-                        v-if="!isMovieInMyList(element.movie.id)"
-                        size="x-small"
-                        color="primary"
-                        variant="outlined"
-                        title="Add to my Watched list"
-                        @click="addToMyList(element.movie.id, listWatchedId)"
-                      >
-                        <v-icon icon="mdi-eye" />
-                      </v-btn>
-                      <v-btn
-                        v-if="!isMovieInMyList(element.movie.id)"
-                        size="x-small"
-                        color="secondary"
-                        variant="outlined"
-                        title="Add to my To Watch list"
-                        @click="addToMyList(element.movie.id, listToWatchId)"
-                      >
-                        <v-icon icon="mdi-eye-off" />
-                      </v-btn>
-                      <span v-if="isMovieInMyList(element.movie.id)" class="already-in-list">
-                        <v-icon icon="mdi-check" color="success" />
-                        In your list
-                      </span>
-                    </div>
-                    <div v-if="!isProfileView" class="add-to-list-buttons">
-                      <div v-if="currentListId == listToWatchId">
-                        <a
-                          v-show="element.movie.isReleased && element.listId != listWatchedId"
-                          href="javascript:void(0)"
-                          title='Add to "Watched" list'
-                          @click="addToList(element.movie.id, listWatchedId, element)"
+
+                <!-- Movie card content below title -->
+                <div class="movie-card-content">
+                  <div v-show="mode != 'minimal'" class="poster">
+                    <!-- Action buttons overlay on poster -->
+                    <div class="poster-overlay-buttons">
+                      <!-- Only show action buttons for own lists -->
+                      <div v-if="!isProfileView" class="remove-button">
+                        <a href="javascript:void(0)" title="Delete" @click="removeRecord(element, index)">
+                          <v-icon icon="mdi-trash-can" />
+                        </a>
+                      </div>
+                      <!-- Add to list buttons - show for logged in users viewing profile -->
+                      <div v-if="isProfileView && authStore.user.isLoggedIn" class="add-to-my-list-buttons">
+                        <v-btn
+                          v-if="!isMovieInMyList(element.movie.id)"
+                          size="x-small"
+                          color="primary"
+                          variant="outlined"
+                          title="Add to my Watched list"
+                          @click="addToMyList(element.movie.id, listWatchedId)"
                         >
                           <v-icon icon="mdi-eye" />
-                        </a>
-                      </div>
-                      <div v-if="currentListId == listWatchedId">
-                        <a
-                          v-show="element.listId != listToWatchId"
-                          href="javascript:void(0)"
-                          title='Add to "To Watch" list'
-                          @click="addToList(element.movie.id, listToWatchId, element)"
+                        </v-btn>
+                        <v-btn
+                          v-if="!isMovieInMyList(element.movie.id)"
+                          size="x-small"
+                          color="secondary"
+                          variant="outlined"
+                          title="Add to my To Watch list"
+                          @click="addToMyList(element.movie.id, listToWatchId)"
                         >
                           <v-icon icon="mdi-eye-off" />
-                        </a>
+                        </v-btn>
+                        <span v-if="isMovieInMyList(element.movie.id)" class="already-in-list">
+                          <v-icon icon="mdi-check" color="success" />
+                          In your list
+                        </span>
+                      </div>
+                      <div v-if="!isProfileView" class="add-to-list-buttons">
+                        <div v-if="currentListId == listToWatchId">
+                          <a
+                            v-show="element.movie.isReleased && element.listId != listWatchedId"
+                            href="javascript:void(0)"
+                            title='Add to "Watched" list'
+                            @click="addToList(element.movie.id, listWatchedId, element)"
+                          >
+                            <v-icon icon="mdi-eye" />
+                          </a>
+                        </div>
+                        <div v-if="currentListId == listWatchedId">
+                          <a
+                            v-show="element.listId != listToWatchId"
+                            href="javascript:void(0)"
+                            title='Add to "To Watch" list'
+                            @click="addToList(element.movie.id, listToWatchId, element)"
+                          >
+                            <v-icon icon="mdi-eye-off" />
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                    <span v-if="mode == 'full'">
+                      <v-lazy-image
+                        class="poster-big"
+                        :srcset="getSrcSet(element.movie.posterNormal, element.movie.posterBig)"
+                        :src="element.movie.posterBig"
+                        :title="element.movie.titleOriginal"
+                        :alt="element.movie.title"
+                      />
+                    </span>
+                    <span v-else>
+                      <v-lazy-image
+                        class="poster-small"
+                        :srcset="getSrcSet(element.movie.posterSmall, element.movie.posterNormal)"
+                        :src="element.movie.posterNormal"
+                        :title="element.movie.titleOriginal"
+                        :alt="element.movie.title"
+                      />
+                    </span>
+                  </div>
+                  <div
+                    class="details"
+                    :class="{
+                      'details-minimal': mode == 'minimal',
+                    }"
+                  >
+                    <div v-show="element.movie.imdbRating" class="imdb-rating">
+                      <span class="item-desc">IMDb Rating:</span>
+                      {{ element.movie.imdbRating }}
+                    </div>
+                    <div v-show="element.movie.isReleased" class="release-date">
+                      <span v-show="mode != 'minimal'" class="item-desc">Release Date:</span>
+                      {{ element.movie.releaseDate }}
+                    </div>
+                    <div v-show="mode == 'full'">
+                      <div v-show="element.movie.country">
+                        <span class="item-desc">Country:</span>
+                        {{ element.movie.country }}
+                      </div>
+                      <div v-show="element.movie.director">
+                        <span class="item-desc">Director:</span>
+                        {{ element.movie.director }}
+                      </div>
+                      <div v-show="element.movie.writer">
+                        <span class="item-desc">Writer:</span>
+                        {{ element.movie.writer }}
+                      </div>
+                      <div v-show="element.movie.genre">
+                        <span class="item-desc">Genre:</span>
+                        {{ element.movie.genre }}
+                      </div>
+                      <div v-show="element.movie.actors">
+                        <span class="item-desc">Actors:</span>
+                        {{ element.movie.actors }}
+                      </div>
+                      <div v-show="element.movie.runtime">
+                        <span class="item-desc">Runtime:</span>
+                        {{ element.movie.runtime }}
+                      </div>
+                      <div v-show="element.movie.overview">
+                        <span class="item-desc">Overview:</span>
+                        {{ element.movie.overview }}
+                      </div>
+                      <div class="urls">
+                        <div v-show="element.movie.homepage" class="website-link-container">
+                          <a :href="element.movie.homepage" target="_blank" class="website-link">
+                            <v-icon icon="mdi-web" size="small" class="website-icon" />
+                            Website
+                            <v-icon icon="mdi-open-in-new" size="x-small" class="external-icon" />
+                          </a>
+                        </div>
+                        <a :href="element.movie.imdbUrl" target="_blank"><span class="imdb"></span></a>
+                        <a :href="element.movie.tmdbUrl" target="_blank"><span class="tmdb"></span></a>
+                      </div>
+                      <div v-show="element.movie.trailers.length">
+                        <span class="item-desc">Trailers:</span>
+                        <div class="trailers">
+                          <a
+                            v-for="trailer in element.movie.trailers"
+                            :key="trailer.name"
+                            :href="trailer.url"
+                            target="_blank"
+                            >{{ trailer.name }}</a
+                          >
+                        </div>
+                      </div>
+                      <div v-show="element.providerRecords.length">
+                        <span class="item-desc">Stream on:</span>
+                        <div>
+                          <a
+                            v-for="providerRecord in element.providerRecords"
+                            :key="providerRecord.provider"
+                            :href="providerRecord.tmdbWatchUrl"
+                            target="_blank"
+                          >
+                            <v-lazy-image
+                              class="provider"
+                              :src="providerRecord.provider.logo"
+                              :title="providerRecord.provider.name"
+                              :alt="providerRecord.provider.name"
+                            />
+                          </a>
+                        </div>
                       </div>
                     </div>
                   </div>
-                  <span v-if="mode == 'full'">
-                    <v-lazy-image
-                      class="poster-big"
-                      :srcset="getSrcSet(element.movie.posterNormal, element.movie.posterBig)"
-                      :src="element.movie.posterBig"
-                      :title="element.movie.titleOriginal"
-                      :alt="element.movie.title"
-                    />
-                  </span>
-                  <span v-else>
-                    <v-lazy-image
-                      class="poster-small"
-                      :srcset="getSrcSet(element.movie.posterSmall, element.movie.posterNormal)"
-                      :src="element.movie.posterNormal"
-                      :title="element.movie.titleOriginal"
-                      :alt="element.movie.title"
-                    />
-                  </span>
-                </div>
-                <div
-                  class="details"
-                  :class="{
-                    'details-minimal': mode == 'minimal',
-                  }"
-                >
-                  <div v-show="element.movie.imdbRating" class="imdb-rating">
-                    <span class="item-desc">IMDb Rating:</span>
-                    {{ element.movie.imdbRating }}
-                  </div>
-                  <div v-show="element.movie.isReleased" class="release-date">
-                    <span v-show="mode != 'minimal'" class="item-desc">Release Date:</span>
-                    {{ element.movie.releaseDate }}
-                  </div>
-                  <div v-show="mode == 'full'">
-                    <div v-show="element.movie.country">
-                      <span class="item-desc">Country:</span>
-                      {{ element.movie.country }}
-                    </div>
-                    <div v-show="element.movie.director">
-                      <span class="item-desc">Director:</span>
-                      {{ element.movie.director }}
-                    </div>
-                    <div v-show="element.movie.writer">
-                      <span class="item-desc">Writer:</span>
-                      {{ element.movie.writer }}
-                    </div>
-                    <div v-show="element.movie.genre">
-                      <span class="item-desc">Genre:</span>
-                      {{ element.movie.genre }}
-                    </div>
-                    <div v-show="element.movie.actors">
-                      <span class="item-desc">Actors:</span>
-                      {{ element.movie.actors }}
-                    </div>
-                    <div v-show="element.movie.runtime">
-                      <span class="item-desc">Runtime:</span>
-                      {{ element.movie.runtime }}
-                    </div>
-                    <div v-show="element.movie.overview">
-                      <span class="item-desc">Overview:</span>
-                      {{ element.movie.overview }}
-                    </div>
-                    <div class="urls">
-                      <div v-show="element.movie.homepage" class="website-link-container">
-                        <a :href="element.movie.homepage" target="_blank" class="website-link">
-                          <v-icon icon="mdi-web" size="small" class="website-icon" />
-                          Website
-                          <v-icon icon="mdi-open-in-new" size="x-small" class="external-icon" />
-                        </a>
+                  <div
+                    class="review"
+                    :class="{
+                      'review-minimal': mode == 'minimal',
+                    }"
+                  >
+                    <div v-if="currentListId == listWatchedId">
+                      <!-- Show ratings for profile views, but make them read-only -->
+                      <star-rating
+                        v-model:rating="element.rating"
+                        :star-size="starSize"
+                        :show-rating="false"
+                        :clearable="!isProfileView"
+                        :read-only="isProfileView"
+                        @update:rating="changeRating(element, $event)"
+                      >
+                      </star-rating>
+                      <!-- Only show comment editing for own lists -->
+                      <div
+                        v-if="!isProfileView"
+                        v-show="(element.comment || element.commentArea) && mode != 'minimal'"
+                        class="comment"
+                      >
+                        <div>
+                          <v-textarea v-model="element.comment" class="form-control" title="Comment"> </v-textarea>
+                        </div>
+                        <button type="button" class="btn btn-secondary" title="Save" @click="saveComment(element)">
+                          <v-icon icon="mdi-content-save" />
+                        </button>
                       </div>
-                      <a :href="element.movie.imdbUrl" target="_blank"><span class="imdb"></span></a>
-                      <a :href="element.movie.tmdbUrl" target="_blank"><span class="tmdb"></span></a>
-                    </div>
-                    <div v-show="element.movie.trailers.length">
-                      <span class="item-desc">Trailers:</span>
-                      <div class="trailers">
-                        <a
-                          v-for="trailer in element.movie.trailers"
-                          :key="trailer.name"
-                          :href="trailer.url"
-                          target="_blank"
-                          >{{ trailer.name }}</a
-                        >
+                      <!-- Show comments read-only for profile views -->
+                      <div v-if="isProfileView && element.comment && mode != 'minimal'" class="comment-readonly">
+                        <p>{{ element.comment }}</p>
                       </div>
-                    </div>
-                    <div v-show="element.providerRecords.length">
-                      <span class="item-desc">Stream on:</span>
-                      <div>
-                        <a
-                          v-for="providerRecord in element.providerRecords"
-                          :key="providerRecord.provider"
-                          :href="providerRecord.tmdbWatchUrl"
-                          target="_blank"
-                        >
-                          <v-lazy-image
-                            class="provider"
-                            :src="providerRecord.provider.logo"
-                            :title="providerRecord.provider.name"
-                            :alt="providerRecord.provider.name"
-                          />
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div
-                  class="review"
-                  :class="{
-                    'review-minimal': mode == 'minimal',
-                  }"
-                >
-                  <div v-if="currentListId == listWatchedId">
-                    <!-- Show ratings for profile views, but make them read-only -->
-                    <star-rating
-                      v-model:rating="element.rating"
-                      :star-size="starSize"
-                      :show-rating="false"
-                      :clearable="!isProfileView"
-                      :read-only="isProfileView"
-                      @update:rating="changeRating(element, $event)"
-                    >
-                    </star-rating>
-                    <!-- Only show comment editing for own lists -->
-                    <div
-                      v-if="!isProfileView"
-                      v-show="(element.comment || element.commentArea) && mode != 'minimal'"
-                      class="comment"
-                    >
-                      <div>
-                        <v-textarea v-model="element.comment" class="form-control" title="Comment"> </v-textarea>
-                      </div>
-                      <button type="button" class="btn btn-secondary" title="Save" @click="saveComment(element)">
-                        <v-icon icon="mdi-content-save" />
+                      <button
+                        v-if="!isProfileView"
+                        v-show="element.comment == '' && !element.commentArea && mode != 'minimal'"
+                        type="button"
+                        class="btn btn-secondary"
+                        title="Add comment"
+                        @click="showCommentArea(element)"
+                      >
+                        <v-icon icon="mdi-comment" />
                       </button>
+                      <!-- Only show options for own lists -->
+                      <div v-if="!isProfileView" v-show="mode == 'full'" class="option-buttons">
+                        <div>
+                          <label :for="'original_' + element.id">Watched original version</label>
+                          <input
+                            :id="'original_' + element.id"
+                            v-model="element.options.original"
+                            type="checkbox"
+                            @change="saveOptions(element, 'original')"
+                          />
+                        </div>
+                        <div>
+                          <label :for="'extended_' + element.id">Watched extended version</label>
+                          <input
+                            :id="'extended_' + element.id"
+                            v-model="element.options.extended"
+                            type="checkbox"
+                            @change="saveOptions(element, 'extended')"
+                          />
+                        </div>
+                        <div>
+                          <label :for="'theatre_' + element.id">Watched in theatre</label>
+                          <input
+                            :id="'theatre_' + element.id"
+                            v-model="element.options.theatre"
+                            type="checkbox"
+                            @change="saveOptions(element, 'theatre')"
+                          />
+                        </div>
+                        <div>
+                          <label :for="'hd_' + element.id">Watched in HD</label>
+                          <input
+                            :id="'hd_' + element.id"
+                            v-model="element.options.hd"
+                            type="checkbox"
+                            @change="saveOptions(element, 'hd')"
+                          />
+                        </div>
+                        <div>
+                          <label :for="'full_hd_' + element.id">Watched in FullHD</label>
+                          <input
+                            :id="'full_hd_' + element.id"
+                            v-model="element.options.fullHd"
+                            type="checkbox"
+                            @change="saveOptions(element, 'fullHd')"
+                          />
+                        </div>
+                        <div>
+                          <label :for="'4k_' + element.id">Watched in 4K</label>
+                          <input
+                            :id="'4k_' + element.id"
+                            v-model="element.options.ultraHd"
+                            type="checkbox"
+                            @change="saveOptions(element, 'ultraHd')"
+                          />
+                        </div>
+                      </div>
+                      <div></div>
                     </div>
-                    <!-- Show comments read-only for profile views -->
-                    <div v-if="isProfileView && element.comment && mode != 'minimal'" class="comment-readonly">
-                      <p>{{ element.comment }}</p>
-                    </div>
-                    <button
-                      v-if="!isProfileView"
-                      v-show="element.comment == '' && !element.commentArea && mode != 'minimal'"
-                      type="button"
-                      class="btn btn-secondary"
-                      title="Add comment"
-                      @click="showCommentArea(element)"
-                    >
-                      <v-icon icon="mdi-comment" />
-                    </button>
-                    <!-- Only show options for own lists -->
-                    <div v-if="!isProfileView" v-show="mode == 'full'" class="option-buttons">
-                      <div>
-                        <label :for="'original_' + element.id">Watched original version</label>
-                        <input
-                          :id="'original_' + element.id"
-                          v-model="element.options.original"
-                          type="checkbox"
-                          @change="saveOptions(element, 'original')"
-                        />
-                      </div>
-                      <div>
-                        <label :for="'extended_' + element.id">Watched extended version</label>
-                        <input
-                          :id="'extended_' + element.id"
-                          v-model="element.options.extended"
-                          type="checkbox"
-                          @change="saveOptions(element, 'extended')"
-                        />
-                      </div>
-                      <div>
-                        <label :for="'theatre_' + element.id">Watched in theatre</label>
-                        <input
-                          :id="'theatre_' + element.id"
-                          v-model="element.options.theatre"
-                          type="checkbox"
-                          @change="saveOptions(element, 'theatre')"
-                        />
-                      </div>
-                      <div>
-                        <label :for="'hd_' + element.id">Watched in HD</label>
-                        <input
-                          :id="'hd_' + element.id"
-                          v-model="element.options.hd"
-                          type="checkbox"
-                          @change="saveOptions(element, 'hd')"
-                        />
-                      </div>
-                      <div>
-                        <label :for="'full_hd_' + element.id">Watched in FullHD</label>
-                        <input
-                          :id="'full_hd_' + element.id"
-                          v-model="element.options.fullHd"
-                          type="checkbox"
-                          @change="saveOptions(element, 'fullHd')"
-                        />
-                      </div>
-                      <div>
-                        <label :for="'4k_' + element.id">Watched in 4K</label>
-                        <input
-                          :id="'4k_' + element.id"
-                          v-model="element.options.ultraHd"
-                          type="checkbox"
-                          @change="saveOptions(element, 'ultraHd')"
-                        />
-                      </div>
-                    </div>
-                    <div></div>
+                    <div class="clearfix"></div>
                   </div>
-                  <div class="clearfix"></div>
                 </div>
+                <!-- Close movie-card-content -->
               </div>
             </template>
           </draggable>
@@ -856,8 +862,8 @@ onMounted(async () => {
   overflow: hidden;
   backdrop-filter: blur(10px);
   display: flex;
-  align-items: flex-start;
-  gap: 20px;
+  flex-direction: column;
+  align-items: stretch;
 
   &::before {
     content: "";
@@ -936,7 +942,6 @@ onMounted(async () => {
 .movie-full {
   min-height: 350px;
   padding: 32px;
-  gap: 24px;
 }
 
 /* Enhanced movie header layout */
@@ -956,22 +961,55 @@ onMounted(async () => {
 }
 
 /* Enhanced typography and content styling */
-.title {
+.movie-title-banner {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 20px 24px;
+  margin: -24px -24px 0 -24px;
+  border-radius: 16px 16px 0 0;
+  position: relative;
+  width: calc(100% + 48px);
+  margin-bottom: 0;
+  order: -1;
+
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
+  }
+}
+
+.movie-title {
   font-size: 1.8rem;
   font-weight: 800;
-  color: #1a202c;
+  color: white;
   line-height: 1.3;
-  flex: 1;
-  min-width: 0;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  margin: 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   letter-spacing: -0.025em;
 
   &:hover {
-    color: #667eea;
-    text-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
     transform: translateY(-1px);
     transition: all 0.2s ease;
   }
+}
+
+.movie-card-content {
+  background: white;
+  border-radius: 0 0 16px 16px;
+  padding: 24px;
+  margin: -24px -24px -24px -24px;
+  margin-top: 0;
+  position: relative;
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  width: calc(100% + 48px);
 }
 
 .item-desc {
@@ -988,7 +1026,6 @@ onMounted(async () => {
   backdrop-filter: blur(10px);
   border-radius: 8px;
   padding: 16px;
-  margin-top: 12px;
   border: 1px solid rgba(0, 0, 0, 0.05);
 
   > div {
