@@ -179,3 +179,4 @@ env_secrets.sh
 /media
 db_env_prod.sh
 docker_secrets.env
+.claude

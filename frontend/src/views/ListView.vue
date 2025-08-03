@@ -81,7 +81,7 @@
     </v-row>
     <v-row v-if="areRecordsLoaded">
       <v-col cols="10">
-        <v-pagination v-model="page" :pages="totalPages" :range-size="1" active-color="#DCEDFF" />
+        <v-pagination v-model="page" :pages="totalPages" :range-size="1" :active-color="paginationActiveColor" />
       </v-col>
     </v-row>
     <v-row>
@@ -415,7 +415,7 @@
     </v-row>
     <v-row v-if="areRecordsLoaded">
       <v-col cols="10">
-        <v-pagination v-model="page" :pages="totalPages" :range-size="1" active-color="#DCEDFF" />
+        <v-pagination v-model="page" :pages="totalPages" :range-size="1" :active-color="paginationActiveColor" />
       </v-col>
     </v-row>
   </v-container>
@@ -437,6 +437,7 @@ import { listToWatchId, listWatchedId, starSizeMinimal, starSizeNormal } from ".
 import { getSrcSet, getUrl } from "../helpers";
 import { useAuthStore } from "../stores/auth"; // Import auth store
 import { useRecordsStore } from "../stores/records";
+import { useThemeStore } from "../stores/theme"; // Import theme store
 import { $toast } from "../toast";
 
 const props = defineProps<{
@@ -449,6 +450,7 @@ const { isMobile } = useMobile();
 
 const recordsStore = useRecordsStore();
 const authStore = useAuthStore(); // Initialize auth store
+const themeStore = useThemeStore(); // Initialize theme store
 
 const mode = ref("full");
 const sort = ref("additionDate");
@@ -509,6 +511,10 @@ const sortButtonSize = computed(() => {
 const paginatedRecords = computed(() => {
   const start = (page.value - 1) * perPage;
   return filteredRecords.value.slice(start, start + perPage);
+});
+
+const paginationActiveColor = computed(() => {
+  return themeStore.isDark ? "#667eea" : "#DCEDFF";
 });
 
 function sortRecords(): void {
@@ -2222,5 +2228,34 @@ onMounted(async () => {
 :global(.dark-theme) .details-minimal .imdb-rating {
   background: rgba(102, 126, 234, 0.2) !important;
   color: #e0e7ff !important;
+}
+
+/* Dark theme styles for pagination */
+:global(.dark-theme) .v-pagination .v-pagination__item {
+  background: rgba(55, 65, 81, 0.8) !important;
+  color: #f9fafb !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+:global(.dark-theme) .v-pagination .v-pagination__item:hover {
+  background: rgba(102, 126, 234, 0.3) !important;
+}
+
+:global(.dark-theme) .v-pagination .v-pagination__item.v-pagination__item--is-active {
+  background: #667eea !important;
+  color: white !important;
+  border-color: #667eea !important;
+}
+
+:global(.dark-theme) .v-pagination .v-pagination__prev,
+:global(.dark-theme) .v-pagination .v-pagination__next {
+  background: rgba(55, 65, 81, 0.8) !important;
+  color: #f9fafb !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+:global(.dark-theme) .v-pagination .v-pagination__prev:hover,
+:global(.dark-theme) .v-pagination .v-pagination__next:hover {
+  background: rgba(102, 126, 234, 0.3) !important;
 }
 </style>
