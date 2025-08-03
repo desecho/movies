@@ -5,6 +5,9 @@
       <v-app-bar-title class="app-title">
         <span class="title-gradient">Movies</span>
       </v-app-bar-title>
+      <template #append>
+        <ThemeToggle />
+      </template>
     </v-app-bar>
     <v-navigation-drawer v-model="drawer" width="200" elevation="0" class="modern-drawer" touchless>
       <div class="drawer-header">
@@ -20,6 +23,11 @@
       <template #append>
         <div class="drawer-footer">
           <v-divider class="mb-3"></v-divider>
+          <div class="theme-toggle-container">
+            <ThemeToggle />
+            <span class="theme-label">{{ themeStore.isDark ? "Dark Mode" : "Light Mode" }}</span>
+          </div>
+          <v-divider class="my-3"></v-divider>
           <v-list class="nav-list" density="comfortable">
             <MenuItem v-if="!user.isLoggedIn" title="Login" icon="login" to="/login" />
             <MenuItem v-if="user.isLoggedIn" title="Settings" icon="cog" to="/preferences" />
@@ -36,12 +44,15 @@ import { onMounted, ref, toRef } from "vue";
 
 import { useMobile } from "../composables/mobile";
 import { useAuthStore } from "../stores/auth";
+import { useThemeStore } from "../stores/theme";
 
 import MenuItem from "./MenuItem.vue";
+import ThemeToggle from "./ThemeToggle.vue";
 
 const drawer = ref(false);
 const userStore = useAuthStore();
 const user = toRef(userStore, "user");
+const themeStore = useThemeStore();
 
 function toggleDrawer(): void {
   drawer.value = !drawer.value;
@@ -139,6 +150,21 @@ onMounted(() => {
   .v-divider {
     background-color: rgba(0, 0, 0, 0.08);
   }
+}
+
+.theme-toggle-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 8px 16px;
+  margin: 0 -4px;
+}
+
+.theme-label {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #6b7280;
 }
 
 /* Mobile adjustments */

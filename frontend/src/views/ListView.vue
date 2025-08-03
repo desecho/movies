@@ -2201,4 +2201,26 @@ onMounted(async () => {
     font-size: 0.65rem;
   }
 }
+
+/* Dark mode specific overrides for better text contrast */
+:global(.dark-theme) .details > div {
+  color: #f3f4f6 !important;
+  font-weight: 400;
+}
+
+:global(.dark-theme) .details .item-desc {
+  color: #9ca3af !important;
+  font-weight: 600 !important;
+}
+
+:global(.dark-theme) .imdb-rating,
+:global(.dark-theme) .release-date {
+  color: #f3f4f6 !important;
+}
+
+:global(.dark-theme) .details-minimal .release-date,
+:global(.dark-theme) .details-minimal .imdb-rating {
+  background: rgba(102, 126, 234, 0.2) !important;
+  color: #e0e7ff !important;
+}
 </style>
