@@ -79,46 +79,48 @@
                   draggable: isSortable,
                 }"
               >
-                <div class="title">
-                  <span :title="element.movie.titleOriginal">{{ element.movie.title }}</span>
-                  <!-- Only show action buttons for own lists -->
-                  <div v-if="!isProfileView" class="remove-button">
-                    <a href="javascript:void(0)" title="Delete" @click="removeRecord(element, index)">
-                      <v-icon icon="mdi-trash-can" />
-                    </a>
+                <div class="movie-header">
+                  <div class="title" :title="element.movie.titleOriginal">
+                    {{ element.movie.title }}
                   </div>
-                  <!-- Add to list buttons - show for logged in users viewing profile -->
-                  <div v-if="isProfileView && authStore.user.isLoggedIn" class="add-to-my-list-buttons">
-                    <v-btn
-                      v-if="!isMovieInMyList(element.movie.id)"
-                      size="x-small"
-                      color="primary"
-                      variant="outlined"
-                      title="Add to my Watched list"
-                      @click="addToMyList(element.movie.id, listWatchedId)"
-                    >
-                      <v-icon icon="mdi-eye" />
-                      Add to Watched
-                    </v-btn>
-                    <v-btn
-                      v-if="!isMovieInMyList(element.movie.id)"
-                      size="x-small"
-                      color="secondary"
-                      variant="outlined"
-                      title="Add to my To Watch list"
-                      @click="addToMyList(element.movie.id, listToWatchId)"
-                    >
-                      <v-icon icon="mdi-eye-off" />
-                      Add to To Watch
-                    </v-btn>
-                    <span v-if="isMovieInMyList(element.movie.id)" class="already-in-list">
-                      <v-icon icon="mdi-check" color="success" />
-                      In your list
-                    </span>
-                  </div>
-                  <div v-if="!isProfileView" class="add-to-list-buttons">
-                    <div class="inline">
-                      <div v-if="currentListId == listToWatchId" class="inline">
+                  <div class="action-buttons">
+                    <!-- Only show action buttons for own lists -->
+                    <div v-if="!isProfileView" class="remove-button">
+                      <a href="javascript:void(0)" title="Delete" @click="removeRecord(element, index)">
+                        <v-icon icon="mdi-trash-can" />
+                      </a>
+                    </div>
+                    <!-- Add to list buttons - show for logged in users viewing profile -->
+                    <div v-if="isProfileView && authStore.user.isLoggedIn" class="add-to-my-list-buttons">
+                      <v-btn
+                        v-if="!isMovieInMyList(element.movie.id)"
+                        size="x-small"
+                        color="primary"
+                        variant="outlined"
+                        title="Add to my Watched list"
+                        @click="addToMyList(element.movie.id, listWatchedId)"
+                      >
+                        <v-icon icon="mdi-eye" />
+                        Add to Watched
+                      </v-btn>
+                      <v-btn
+                        v-if="!isMovieInMyList(element.movie.id)"
+                        size="x-small"
+                        color="secondary"
+                        variant="outlined"
+                        title="Add to my To Watch list"
+                        @click="addToMyList(element.movie.id, listToWatchId)"
+                      >
+                        <v-icon icon="mdi-eye-off" />
+                        Add to To Watch
+                      </v-btn>
+                      <span v-if="isMovieInMyList(element.movie.id)" class="already-in-list">
+                        <v-icon icon="mdi-check" color="success" />
+                        In your list
+                      </span>
+                    </div>
+                    <div v-if="!isProfileView" class="add-to-list-buttons">
+                      <div v-if="currentListId == listToWatchId">
                         <a
                           v-show="element.movie.isReleased && element.listId != listWatchedId"
                           href="javascript:void(0)"
@@ -194,8 +196,12 @@
                       <span class="item-desc">Overview:</span>
                       {{ element.movie.overview }}
                     </div>
-                    <div v-show="element.movie.homepage">
-                      <a :href="element.movie.homepage" target="_blank">Website</a>
+                    <div v-show="element.movie.homepage" class="website-link-container">
+                      <a :href="element.movie.homepage" target="_blank" class="website-link">
+                        <v-icon icon="mdi-web" size="small" class="website-icon" />
+                        Website
+                        <v-icon icon="mdi-open-in-new" size="x-small" class="external-icon" />
+                      </a>
                     </div>
                     <div class="urls">
                       <a :href="element.movie.imdbUrl" target="_blank"><span class="imdb"></span></a>
@@ -794,12 +800,30 @@ onMounted(async () => {
 }
 
 .poster {
-  float: left;
-  margin-right: 10px;
-  margin-bottom: 10px;
+  flex-shrink: 0;
+  margin-right: 0;
+  margin-bottom: 0;
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
 
   img {
-    border-radius: 5px;
+    border-radius: 12px;
+    transition: transform 0.3s ease;
+    width: auto;
+    height: auto;
+    display: block;
+  }
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+
+    img {
+      transform: scale(1.03);
+    }
   }
 }
 
@@ -812,52 +836,300 @@ onMounted(async () => {
 }
 
 .movie {
-  clear: both;
-  min-height: 185px;
-  margin-bottom: 10px;
-  padding: 10px;
-  border-width: 1px;
-  border-style: solid;
-  border-color: #ddd;
-  border-radius: 4px;
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  margin-bottom: 20px;
+  padding: 24px;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  }
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+    border-color: rgba(102, 126, 234, 0.2);
+  }
+
+  .movie-content {
+    flex: 1;
+    min-width: 0;
+  }
 }
 
 .movie-minimal {
-  min-height: 0;
-  margin: 10px 0 0 0;
-  padding: 0;
-  border-width: 0 0 1px 0;
-  border-radius: 0;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  border-radius: 12px;
+  margin: 12px 0;
+  padding: 16px 20px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  min-height: auto;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+
+  &::before {
+    height: 2px;
+  }
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.9);
+    transform: translateX(4px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  .movie-content {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    min-width: 0;
+  }
+
+  .movie-header {
+    flex: 1;
+    align-items: center;
+    margin-bottom: 0;
+    gap: 16px;
+    min-width: 0;
+  }
+
+  .title {
+    font-size: 1.1rem;
+    margin-right: 16px;
+  }
+
+  .action-buttons {
+    gap: 12px;
+    flex-shrink: 0;
+  }
 }
 
 .movie-full {
-  min-height: 300px;
+  min-height: 350px;
+  padding: 32px;
+  gap: 24px;
+}
+
+/* Enhanced movie header layout */
+.movie-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  gap: 16px;
+}
+
+.action-buttons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+/* Enhanced typography and content styling */
+.title {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #1a202c;
+  line-height: 1.3;
+  flex: 1;
+  min-width: 0;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  letter-spacing: -0.025em;
+
+  &:hover {
+    color: #667eea;
+    text-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+    transform: translateY(-1px);
+    transition: all 0.2s ease;
+  }
 }
 
 .item-desc {
-  color: #808080;
+  color: #6b7280;
+  font-weight: 500;
+  font-size: 0.875rem;
+  margin-right: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.details {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  border-radius: 8px;
+  padding: 16px;
+  margin-top: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+
+  > div {
+    margin-bottom: 8px;
+    font-size: 0.95rem;
+    color: #4a5568;
+    line-height: 1.5;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.details-minimal {
+  background: transparent;
+  padding: 0;
+  margin-top: 0;
+  border: none;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-shrink: 0;
+
+  .release-date,
+  .imdb-rating {
+    background: rgba(102, 126, 234, 0.1);
+    color: #667eea;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin: 0;
+    white-space: nowrap;
+  }
 }
 
 .comment {
-  margin-top: 10px;
-  width: 400px;
+  margin-top: 16px;
+  width: 100%;
+  max-width: 500px;
+
   textarea {
-    display: inline;
+    width: 100%;
+    border-radius: 8px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 12px;
+    font-family: inherit;
+    resize: vertical;
+    min-height: 80px;
+    transition: border-color 0.2s ease;
+
+    &:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
   }
+
+  button {
+    margin-top: 8px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    }
+  }
+}
+
+.comment-readonly {
+  background: rgba(248, 250, 252, 0.8);
+  border-left: 4px solid #667eea;
+  border-radius: 0 8px 8px 0;
+  padding: 16px;
+  margin-top: 12px;
+  font-style: italic;
+  color: #4a5568;
+  line-height: 1.6;
 }
 
 .review {
-  padding-top: 10px;
+  padding-top: 16px;
+
   button {
-    margin: 10px 0;
+    background: rgba(102, 126, 234, 0.1);
+    color: #667eea;
+    border: 1px solid rgba(102, 126, 234, 0.2);
+    border-radius: 8px;
+    padding: 8px 12px;
+    margin: 8px 4px 8px 0;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: rgba(102, 126, 234, 0.2);
+      transform: translateY(-1px);
+    }
   }
 }
 
-.trailers a {
-  margin-left: 10px;
+.trailers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+
+  a {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    text-decoration: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+
+    &:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+    }
+  }
 }
 
 .urls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 12px;
+
+  a {
+    transition: all 0.2s ease;
+    border-radius: 6px;
+    overflow: hidden;
+    display: inline-block;
+
+    &:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    }
+  }
+
   .tmdb {
     background: url("/img/tmdb.svg");
     background-repeat: no-repeat;
@@ -878,21 +1150,115 @@ onMounted(async () => {
   }
 }
 
+/* Enhanced provider and button styling */
 .provider {
   width: 50px;
   height: 50px;
-  margin-left: 10px;
-  border-radius: 5px;
+  margin: 4px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
 }
 
 .remove-button {
-  display: inline;
-  margin-left: 10px;
+  display: flex;
+  align-items: center;
+
+  a {
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+    padding: 8px;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+
+    &:hover {
+      background: rgba(239, 68, 68, 0.2);
+      transform: translateY(-1px);
+    }
+
+    .v-icon {
+      font-size: 16px;
+    }
+  }
+}
+
+.add-to-list-buttons {
+  display: flex;
+  align-items: center;
+
+  a {
+    background: rgba(34, 197, 94, 0.1);
+    color: #22c55e;
+    padding: 8px;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+
+    &:hover {
+      background: rgba(34, 197, 94, 0.2);
+      transform: translateY(-1px);
+    }
+
+    .v-icon {
+      font-size: 16px;
+    }
+  }
+}
+
+.add-to-my-list-buttons {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+
+  .v-btn {
+    font-size: 0.75rem;
+    padding: 4px 8px;
+    height: auto;
+    min-width: auto;
+    border-radius: 6px;
+    text-transform: none;
+    font-weight: 500;
+
+    .v-icon {
+      font-size: 12px;
+      margin-right: 2px;
+    }
+  }
+}
+
+.already-in-list {
+  background: rgba(34, 197, 94, 0.1);
+  color: #16a34a;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+
+  .v-icon {
+    font-size: 14px;
+    margin-right: 4px;
+  }
 }
 
 .review-minimal {
-  padding-top: 0;
-  display: inline;
+  padding-top: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
 
   .cancel-on-png,
   .cancel-off-png,
@@ -903,10 +1269,8 @@ onMounted(async () => {
   }
 
   .vue-star-rating {
-    display: inline;
-    top: -2px;
-    position: relative;
-    left: 5px;
+    display: inline-flex;
+    align-items: center;
   }
 }
 
@@ -1006,14 +1370,6 @@ onMounted(async () => {
   padding: 0;
 }
 
-.title {
-  /* copied mostly from bootstrap h4 */
-  font-size: 1em;
-  font-weight: bold;
-  line-height: 20px;
-  display: inline;
-}
-
 .add-to-list-buttons {
   display: inline;
   a,
@@ -1049,44 +1405,103 @@ onMounted(async () => {
 }
 
 #gallery {
-  margin-left: 8px;
+  margin: 0;
+  padding: 12px;
 
   .gallery-record {
     display: inline-block;
     position: relative;
+    margin: 8px;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.3s ease;
 
     img {
-      box-shadow:
-        0 4px 8px 0 rgba(0, 0, 0, 0.2),
-        0 6px 20px 0 rgba(0, 0, 0, 0.19);
-      margin: 7px;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+      transition: all 0.3s ease;
+
+      &.draggable {
+        cursor: grab;
+
+        &:active {
+          cursor: grabbing;
+          transform: rotate(2deg);
+        }
+      }
     }
 
     button {
       opacity: 0;
       position: absolute;
-      right: 15px;
-      background-color: white;
-      border-radius: 5px;
+      right: 12px;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      padding: 8px;
+      transition: all 0.2s ease;
+      cursor: pointer;
+
+      &:hover {
+        background: white;
+        transform: scale(1.05);
+      }
+
+      .v-icon {
+        color: #667eea;
+        font-size: 18px;
+      }
     }
 
     .up-button {
-      bottom: 60px;
+      bottom: 70px;
     }
 
     .down-button {
-      bottom: 20px;
+      bottom: 25px;
     }
 
     &:hover {
+      transform: translateY(-4px);
+
+      img {
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.16);
+        transform: scale(1.02);
+      }
+
       button {
-        opacity: 0.7;
+        opacity: 1;
+      }
+    }
+
+    @media (max-width: 768px) {
+      button {
+        opacity: 1;
+        background: rgba(255, 255, 255, 0.9);
       }
     }
 
     @media (min-width: 320px) and (max-width: 576px) {
       .poster-big {
         width: 92px;
+      }
+
+      .up-button {
+        bottom: 50px;
+      }
+
+      .down-button {
+        bottom: 15px;
+      }
+
+      button {
+        padding: 6px;
+        right: 8px;
+
+        .v-icon {
+          font-size: 16px;
+        }
       }
     }
   }
@@ -1126,7 +1541,7 @@ onMounted(async () => {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(10px);
   border: 1px solid rgba(0, 0, 0, 0.05);
-  
+
   .v-btn {
     border-radius: 8px !important;
     text-transform: none !important;
@@ -1137,24 +1552,24 @@ onMounted(async () => {
     background: transparent !important;
     border: none !important;
     box-shadow: none !important;
-    
+
     &:hover {
       background: rgba(102, 126, 234, 0.1) !important;
       color: #667eea !important;
       transform: translateY(-1px);
     }
-    
+
     &.v-btn--active {
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
       color: white !important;
       box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3) !important;
     }
-    
+
     &.v-btn--size-small {
       font-size: 0.875rem !important;
       padding: 8px 12px !important;
     }
-    
+
     &.v-btn--size-x-small {
       font-size: 0.75rem !important;
       padding: 6px 10px !important;
@@ -1168,28 +1583,28 @@ onMounted(async () => {
     padding: 16px;
     margin-bottom: 20px;
   }
-  
+
   .control-group {
     gap: 6px;
   }
-  
+
   .control-label {
     font-size: 0.8rem;
   }
-  
+
   :deep(.v-btn-toggle) {
     padding: 2px;
-    
+
     .v-btn {
       margin: 1px !important;
       font-size: 0.8rem !important;
       padding: 6px 8px !important;
-      
+
       &.v-btn--size-small {
         font-size: 0.75rem !important;
         padding: 6px 8px !important;
       }
-      
+
       &.v-btn--size-x-small {
         font-size: 0.7rem !important;
         padding: 4px 6px !important;
@@ -1203,9 +1618,130 @@ onMounted(async () => {
     padding: 12px;
     margin-bottom: 16px;
   }
-  
+
   .control-label {
     font-size: 0.75rem;
+  }
+}
+
+/* Movie layout responsive fixes */
+@media (max-width: 768px) {
+  .movie {
+    flex-direction: column;
+    gap: 16px;
+
+    .poster {
+      align-self: center;
+    }
+
+    .movie-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+
+      .action-buttons {
+        align-self: flex-end;
+      }
+    }
+  }
+
+  .movie-minimal {
+    flex-direction: row;
+    gap: 12px;
+
+    .movie-content {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .movie-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+
+      .action-buttons {
+        align-self: flex-start;
+      }
+    }
+
+    .details-minimal {
+      gap: 8px;
+
+      .release-date,
+      .imdb-rating {
+        font-size: 0.75rem;
+        padding: 3px 6px;
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .movie {
+    padding: 16px;
+
+    .poster {
+      align-self: flex-start;
+    }
+  }
+
+  .movie-minimal {
+    padding: 12px 16px;
+
+    .poster {
+      display: none;
+    }
+  }
+}
+
+/* Enhanced website link styling */
+.website-link-container {
+  margin: 12px 0;
+}
+
+.website-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white !important;
+  text-decoration: none !important;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(102, 126, 234, 0.4);
+    color: white !important;
+    text-decoration: none !important;
+    background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
+  }
+
+  &:focus {
+    outline: 2px solid rgba(102, 126, 234, 0.5);
+    outline-offset: 2px;
+  }
+
+  .website-icon {
+    color: rgba(255, 255, 255, 0.9);
+  }
+
+  .external-icon {
+    color: rgba(255, 255, 255, 0.7);
+    margin-left: auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .website-link {
+    padding: 8px 12px;
+    font-size: 0.85rem;
+    gap: 6px;
   }
 }
 </style>
