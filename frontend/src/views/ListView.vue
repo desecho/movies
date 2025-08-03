@@ -83,7 +83,10 @@
                   <div class="title" :title="element.movie.titleOriginal">
                     {{ element.movie.title }}
                   </div>
-                  <div class="action-buttons">
+                </div>
+                <div v-show="mode != 'minimal'" class="poster">
+                  <!-- Action buttons overlay on poster -->
+                  <div class="poster-overlay-buttons">
                     <!-- Only show action buttons for own lists -->
                     <div v-if="!isProfileView" class="remove-button">
                       <a href="javascript:void(0)" title="Delete" @click="removeRecord(element, index)">
@@ -101,7 +104,6 @@
                         @click="addToMyList(element.movie.id, listWatchedId)"
                       >
                         <v-icon icon="mdi-eye" />
-                        Add to Watched
                       </v-btn>
                       <v-btn
                         v-if="!isMovieInMyList(element.movie.id)"
@@ -112,7 +114,6 @@
                         @click="addToMyList(element.movie.id, listToWatchId)"
                       >
                         <v-icon icon="mdi-eye-off" />
-                        Add to To Watch
                       </v-btn>
                       <span v-if="isMovieInMyList(element.movie.id)" class="already-in-list">
                         <v-icon icon="mdi-check" color="success" />
@@ -130,10 +131,18 @@
                           <v-icon icon="mdi-eye" />
                         </a>
                       </div>
+                      <div v-if="currentListId == listWatchedId">
+                        <a
+                          v-show="element.listId != listToWatchId"
+                          href="javascript:void(0)"
+                          title='Add to "To Watch" list'
+                          @click="addToList(element.movie.id, listToWatchId, element)"
+                        >
+                          <v-icon icon="mdi-eye-off" />
+                        </a>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div v-show="mode != 'minimal'" class="poster">
                   <span v-if="mode == 'full'">
                     <v-lazy-image
                       class="poster-big"
@@ -1696,6 +1705,125 @@ onMounted(async () => {
 }
 
 /* Enhanced website link styling */
+.poster {
+  position: relative;
+  overflow: hidden;
+  
+  &:hover {
+    .poster-overlay-buttons {
+      opacity: 1;
+    }
+  }
+}
+
+.poster-overlay-buttons {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 8px;
+  padding: 6px;
+  opacity: 0;
+  transition: all 0.3s ease;
+  display: flex;
+  gap: 4px;
+  z-index: 10;
+  
+  .remove-button a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    cursor: pointer;
+    
+    &:hover {
+      background: rgba(239, 68, 68, 0.2);
+      transform: scale(1.1);
+    }
+    
+    &:active {
+      transform: scale(0.95);
+    }
+    
+    .v-icon {
+      font-size: 16px;
+      pointer-events: none;
+    }
+  }
+  
+  .add-to-list-buttons {
+    display: flex;
+    gap: 4px;
+    
+    a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 6px;
+      background: rgba(34, 197, 94, 0.1);
+      color: #22c55e;
+      transition: all 0.2s ease;
+      text-decoration: none;
+      cursor: pointer;
+      
+      &:hover {
+        background: rgba(34, 197, 94, 0.2);
+        transform: scale(1.1);
+      }
+      
+      &:active {
+        transform: scale(0.95);
+      }
+      
+      .v-icon {
+        font-size: 16px;
+        pointer-events: none;
+      }
+    }
+  }
+  
+  .add-to-my-list-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    
+    .v-btn {
+      font-size: 0.6rem;
+      padding: 2px 4px;
+      min-width: auto;
+      height: 24px;
+    }
+    
+    .already-in-list {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      font-size: 0.65rem;
+      color: #22c55e;
+      padding: 2px 4px;
+      background: rgba(34, 197, 94, 0.1);
+      border-radius: 4px;
+    }
+  }
+}
+
+/* Touch device support */
+@media (hover: none) and (pointer: coarse) {
+  .poster-overlay-buttons {
+    opacity: 1;
+    background: rgba(255, 255, 255, 0.9);
+  }
+}
+
 .urls {
   .website-link-container {
     margin-bottom: 8px;
