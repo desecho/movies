@@ -15,7 +15,7 @@
         </v-chip>
       </div>
     </div>
-    
+
     <v-row v-if="movies.length > 0">
       <v-col cols="12">
         <div class="movies-section">
@@ -27,15 +27,11 @@
         </div>
       </v-col>
     </v-row>
-    
+
     <v-row v-else>
       <v-col cols="12" class="text-center">
         <div class="loading-state">
-          <v-progress-circular
-            indeterminate
-            color="primary"
-            size="48"
-          ></v-progress-circular>
+          <v-progress-circular indeterminate color="primary" size="48"></v-progress-circular>
           <p class="loading-text">Loading trending movies...</p>
         </div>
       </v-col>
@@ -95,7 +91,7 @@ onMounted(() => {
 }
 
 .trending-header::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -172,7 +168,7 @@ onMounted(() => {
   .trending-container {
     padding-top: 1rem;
   }
-  
+
   .trending-header {
     flex-direction: column;
     text-align: center;
@@ -180,31 +176,31 @@ onMounted(() => {
     padding: 1.5rem;
     margin-bottom: 2rem;
   }
-  
+
   .page-title {
     font-size: 2rem;
     flex-direction: column;
     gap: 0.5rem;
   }
-  
+
   .title-icon {
     font-size: 2rem;
   }
-  
+
   .page-subtitle {
     font-size: 1rem;
   }
-  
+
   .section-header {
     flex-direction: column;
     align-items: flex-start;
     margin-bottom: 1.5rem;
   }
-  
+
   .section-title {
     font-size: 1.5rem;
   }
-  
+
   .loading-state {
     padding: 3rem 1rem;
   }
@@ -214,11 +210,11 @@ onMounted(() => {
   .page-title {
     font-size: 1.8rem;
   }
-  
+
   .trending-header {
     padding: 1rem;
   }
-  
+
   .loading-text {
     font-size: 1rem;
   }

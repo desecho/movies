@@ -860,7 +860,7 @@ onMounted(async () => {
   gap: 20px;
 
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     left: 0;
@@ -1708,7 +1708,7 @@ onMounted(async () => {
 .poster {
   position: relative;
   overflow: hidden;
-  
+
   &:hover {
     .poster-overlay-buttons {
       opacity: 1;
@@ -1729,7 +1729,7 @@ onMounted(async () => {
   display: flex;
   gap: 4px;
   z-index: 10;
-  
+
   .remove-button a {
     display: flex;
     align-items: center;
@@ -1742,26 +1742,26 @@ onMounted(async () => {
     transition: all 0.2s ease;
     text-decoration: none;
     cursor: pointer;
-    
+
     &:hover {
       background: rgba(239, 68, 68, 0.2);
       transform: scale(1.1);
     }
-    
+
     &:active {
       transform: scale(0.95);
     }
-    
+
     .v-icon {
       font-size: 16px;
       pointer-events: none;
     }
   }
-  
+
   .add-to-list-buttons {
     display: flex;
     gap: 4px;
-    
+
     a {
       display: flex;
       align-items: center;
@@ -1774,35 +1774,35 @@ onMounted(async () => {
       transition: all 0.2s ease;
       text-decoration: none;
       cursor: pointer;
-      
+
       &:hover {
         background: rgba(34, 197, 94, 0.2);
         transform: scale(1.1);
       }
-      
+
       &:active {
         transform: scale(0.95);
       }
-      
+
       .v-icon {
         font-size: 16px;
         pointer-events: none;
       }
     }
   }
-  
+
   .add-to-my-list-buttons {
     display: flex;
     flex-direction: column;
     gap: 2px;
-    
+
     .v-btn {
       font-size: 0.6rem;
       padding: 2px 4px;
       min-width: auto;
       height: 24px;
     }
-    
+
     .already-in-list {
       display: flex;
       align-items: center;

@@ -6,13 +6,7 @@
         <span class="title-gradient">Movies</span>
       </v-app-bar-title>
     </v-app-bar>
-    <v-navigation-drawer 
-      v-model="drawer" 
-      width="200" 
-      elevation="0"
-      class="modern-drawer"
-      touchless
-    >
+    <v-navigation-drawer v-model="drawer" width="200" elevation="0" class="modern-drawer" touchless>
       <div class="drawer-header">
         <h3 class="drawer-title">Navigation</h3>
       </div>
@@ -104,34 +98,34 @@ onMounted(() => {
 
 .nav-list {
   padding: 8px 12px;
-  
+
   :deep(.v-list-item) {
     border-radius: 8px;
     margin-bottom: 4px;
     transition: all 0.2s ease;
-    
+
     &:hover {
       background-color: rgba(102, 126, 234, 0.1);
       transform: translateX(4px);
     }
-    
+
     &.v-list-item--active {
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       color: white;
-      
+
       .v-list-item__prepend .v-icon,
       .v-list-item-title {
         color: white;
       }
     }
-    
+
     .v-list-item__prepend {
       .v-icon {
         font-size: 20px;
         opacity: 0.8;
       }
     }
-    
+
     .v-list-item-title {
       font-weight: 500;
       font-size: 0.95rem;
@@ -141,7 +135,7 @@ onMounted(() => {
 
 .drawer-footer {
   padding: 0 12px 16px;
-  
+
   .v-divider {
     background-color: rgba(0, 0, 0, 0.08);
   }
@@ -152,11 +146,11 @@ onMounted(() => {
   .modern-drawer {
     width: 280px !important;
   }
-  
+
   .drawer-header {
     padding: 20px 16px 12px;
   }
-  
+
   .drawer-title {
     font-size: 1rem;
   }

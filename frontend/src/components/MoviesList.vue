@@ -115,11 +115,11 @@ async function addToListFromDb(movie: MoviePreview, listId: number): Promise<voi
   &:hover {
     transform: translateY(-4px);
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-    
+
     .add-to-list-buttons {
       opacity: 1;
     }
-    
+
     .poster img {
       transform: scale(1.02);
     }
@@ -179,11 +179,11 @@ async function addToListFromDb(movie: MoviePreview, listId: number): Promise<voi
       background: rgba(0, 0, 0, 0.2);
       transform: scale(1.1);
     }
-    
+
     &:active {
       transform: scale(0.95);
     }
-    
+
     .v-icon {
       font-size: 18px;
       pointer-events: none;
@@ -236,33 +236,33 @@ async function addToListFromDb(movie: MoviePreview, listId: number): Promise<voi
     gap: 16px;
     margin-top: 20px;
   }
-  
+
   .poster-wrapper {
     height: 210px;
   }
-  
+
   .movie-content {
     padding: 12px;
   }
-  
+
   .title {
     font-size: 0.9rem;
   }
-  
+
   .details {
     font-size: 0.8rem;
   }
-  
+
   .add-to-list-buttons {
     opacity: 1; /* Always visible on mobile/touch devices */
     right: 8px;
     bottom: 8px;
     padding: 4px;
-    
+
     a {
       width: 28px;
       height: 28px;
-      
+
       .v-icon {
         font-size: 16px;
       }
@@ -275,7 +275,7 @@ async function addToListFromDb(movie: MoviePreview, listId: number): Promise<voi
     grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
     gap: 12px;
   }
-  
+
   .poster-wrapper {
     height: 180px;
   }

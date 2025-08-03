@@ -4,7 +4,7 @@
       <h1 class="page-title">Discover Movies</h1>
       <p class="page-subtitle">Search for movies, actors, and directors</p>
     </div>
-    
+
     <v-card class="search-card" elevation="2">
       <v-card-text class="pa-6">
         <v-row align="center">
@@ -23,16 +23,9 @@
             </v-form>
           </v-col>
           <v-col cols="12" md="3">
-            <v-btn 
-              color="primary" 
-              :disabled="!isFormValid" 
-              @click="search"
-              size="large"
-              class="search-btn"
-              block
-            > 
+            <v-btn color="primary" :disabled="!isFormValid" @click="search" size="large" class="search-btn" block>
               <v-icon left>mdi-magnify</v-icon>
-              Search 
+              Search
             </v-btn>
           </v-col>
           <v-col cols="12" md="3">
@@ -47,7 +40,7 @@
             </v-select>
           </v-col>
         </v-row>
-        
+
         <v-row class="mt-2">
           <v-col cols="12">
             <div class="filter-options">
@@ -70,7 +63,7 @@
         </v-row>
       </v-card-text>
     </v-card>
-    
+
     <v-row v-if="movies.length > 0">
       <v-col cols="12">
         <div class="results-header">
@@ -198,7 +191,7 @@ async function search(): Promise<void> {
   :deep(.v-field) {
     border-radius: 12px;
   }
-  
+
   :deep(.v-field__input) {
     font-size: 1.1rem;
   }
@@ -210,7 +203,7 @@ async function search(): Promise<void> {
   text-transform: none;
   font-size: 1rem;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  
+
   &:hover {
     transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
@@ -229,7 +222,7 @@ async function search(): Promise<void> {
     font-weight: 500;
     color: #495057;
   }
-  
+
   :deep(.v-selection-control__input) {
     .v-icon {
       color: #667eea;
@@ -258,30 +251,30 @@ async function search(): Promise<void> {
   .search-container {
     padding-top: 1rem;
   }
-  
+
   .page-title {
     font-size: 2rem;
   }
-  
+
   .page-subtitle {
     font-size: 1rem;
   }
-  
+
   .search-card :deep(.v-card-text) {
     padding: 1.5rem !important;
   }
-  
+
   .filter-options {
     flex-direction: column;
     align-items: flex-start;
     gap: 1rem;
   }
-  
+
   .results-header {
     flex-direction: column;
     align-items: flex-start;
   }
-  
+
   .results-title {
     font-size: 1.5rem;
   }
@@ -291,7 +284,7 @@ async function search(): Promise<void> {
   .page-title {
     font-size: 1.8rem;
   }
-  
+
   .search-card :deep(.v-card-text) {
     padding: 1rem !important;
   }
