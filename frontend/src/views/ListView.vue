@@ -196,14 +196,14 @@
                       <span class="item-desc">Overview:</span>
                       {{ element.movie.overview }}
                     </div>
-                    <div v-show="element.movie.homepage" class="website-link-container">
-                      <a :href="element.movie.homepage" target="_blank" class="website-link">
-                        <v-icon icon="mdi-web" size="small" class="website-icon" />
-                        Website
-                        <v-icon icon="mdi-open-in-new" size="x-small" class="external-icon" />
-                      </a>
-                    </div>
                     <div class="urls">
+                      <div v-show="element.movie.homepage" class="website-link-container">
+                        <a :href="element.movie.homepage" target="_blank" class="website-link">
+                          <v-icon icon="mdi-web" size="small" class="website-icon" />
+                          Website
+                          <v-icon icon="mdi-open-in-new" size="x-small" class="external-icon" />
+                        </a>
+                      </div>
                       <a :href="element.movie.imdbUrl" target="_blank"><span class="imdb"></span></a>
                       <a :href="element.movie.tmdbUrl" target="_blank"><span class="tmdb"></span></a>
                     </div>
@@ -1696,8 +1696,10 @@ onMounted(async () => {
 }
 
 /* Enhanced website link styling */
-.website-link-container {
-  margin: 12px 0;
+.urls {
+  .website-link-container {
+    margin-bottom: 8px;
+  }
 }
 
 .website-link {
