@@ -23,7 +23,7 @@
             </v-form>
           </v-col>
           <v-col cols="12" md="3">
-            <v-btn color="primary" :disabled="!isFormValid" @click="search" size="large" class="search-btn" block>
+            <v-btn color="primary" :disabled="!isFormValid" size="large" class="search-btn" block @click="search">
               <v-icon left>mdi-magnify</v-icon>
               Search
             </v-btn>

@@ -84,69 +84,69 @@
                   <h2 class="movie-title" :title="element.movie.titleOriginal">
                     {{ element.movie.title }}
                   </h2>
+                  <!-- Action buttons in title banner -->
+                  <div class="title-action-buttons">
+                    <!-- Only show action buttons for own lists -->
+                    <div v-if="!isProfileView" class="remove-button">
+                      <a href="javascript:void(0)" title="Delete" @click="removeRecord(element, index)">
+                        <v-icon icon="mdi-trash-can" />
+                      </a>
+                    </div>
+                    <!-- Add to list buttons - show for logged in users viewing profile -->
+                    <div v-if="isProfileView && authStore.user.isLoggedIn" class="add-to-my-list-buttons">
+                      <v-btn
+                        v-if="!isMovieInMyList(element.movie.id)"
+                        size="x-small"
+                        color="primary"
+                        variant="outlined"
+                        title="Add to my Watched list"
+                        @click="addToMyList(element.movie.id, listWatchedId)"
+                      >
+                        <v-icon icon="mdi-eye" />
+                      </v-btn>
+                      <v-btn
+                        v-if="!isMovieInMyList(element.movie.id)"
+                        size="x-small"
+                        color="secondary"
+                        variant="outlined"
+                        title="Add to my To Watch list"
+                        @click="addToMyList(element.movie.id, listToWatchId)"
+                      >
+                        <v-icon icon="mdi-eye-off" />
+                      </v-btn>
+                      <span v-if="isMovieInMyList(element.movie.id)" class="already-in-list">
+                        <v-icon icon="mdi-check" color="success" />
+                        In your list
+                      </span>
+                    </div>
+                    <div v-if="!isProfileView" class="add-to-list-buttons">
+                      <div v-if="currentListId == listToWatchId">
+                        <a
+                          v-show="element.movie.isReleased && element.listId != listWatchedId"
+                          href="javascript:void(0)"
+                          title='Add to "Watched" list'
+                          @click="addToList(element.movie.id, listWatchedId, element)"
+                        >
+                          <v-icon icon="mdi-eye" />
+                        </a>
+                      </div>
+                      <div v-if="currentListId == listWatchedId">
+                        <a
+                          v-show="element.listId != listToWatchId"
+                          href="javascript:void(0)"
+                          title='Add to "To Watch" list'
+                          @click="addToList(element.movie.id, listToWatchId, element)"
+                        >
+                          <v-icon icon="mdi-eye-off" />
+                        </a>
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
                 <!-- Movie card content below title -->
                 <div class="movie-card-content">
                   <div v-show="mode != 'minimal'" class="poster">
-                    <!-- Action buttons overlay on poster -->
-                    <div class="poster-overlay-buttons">
-                      <!-- Only show action buttons for own lists -->
-                      <div v-if="!isProfileView" class="remove-button">
-                        <a href="javascript:void(0)" title="Delete" @click="removeRecord(element, index)">
-                          <v-icon icon="mdi-trash-can" />
-                        </a>
-                      </div>
-                      <!-- Add to list buttons - show for logged in users viewing profile -->
-                      <div v-if="isProfileView && authStore.user.isLoggedIn" class="add-to-my-list-buttons">
-                        <v-btn
-                          v-if="!isMovieInMyList(element.movie.id)"
-                          size="x-small"
-                          color="primary"
-                          variant="outlined"
-                          title="Add to my Watched list"
-                          @click="addToMyList(element.movie.id, listWatchedId)"
-                        >
-                          <v-icon icon="mdi-eye" />
-                        </v-btn>
-                        <v-btn
-                          v-if="!isMovieInMyList(element.movie.id)"
-                          size="x-small"
-                          color="secondary"
-                          variant="outlined"
-                          title="Add to my To Watch list"
-                          @click="addToMyList(element.movie.id, listToWatchId)"
-                        >
-                          <v-icon icon="mdi-eye-off" />
-                        </v-btn>
-                        <span v-if="isMovieInMyList(element.movie.id)" class="already-in-list">
-                          <v-icon icon="mdi-check" color="success" />
-                          In your list
-                        </span>
-                      </div>
-                      <div v-if="!isProfileView" class="add-to-list-buttons">
-                        <div v-if="currentListId == listToWatchId">
-                          <a
-                            v-show="element.movie.isReleased && element.listId != listWatchedId"
-                            href="javascript:void(0)"
-                            title='Add to "Watched" list'
-                            @click="addToList(element.movie.id, listWatchedId, element)"
-                          >
-                            <v-icon icon="mdi-eye" />
-                          </a>
-                        </div>
-                        <div v-if="currentListId == listWatchedId">
-                          <a
-                            v-show="element.listId != listToWatchId"
-                            href="javascript:void(0)"
-                            title='Add to "To Watch" list'
-                            @click="addToList(element.movie.id, listToWatchId, element)"
-                          >
-                            <v-icon icon="mdi-eye-off" />
-                          </a>
-                        </div>
-                      </div>
-                    </div>
                     <span v-if="mode == 'full'">
                       <v-lazy-image
                         class="poster-big"
@@ -971,6 +971,9 @@ onMounted(async () => {
   width: calc(100% + 48px);
   margin-bottom: 0;
   order: -1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 
   &::after {
     content: "";
@@ -980,6 +983,94 @@ onMounted(async () => {
     right: 0;
     height: 3px;
     background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
+  }
+}
+
+.title-action-buttons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+
+  .remove-button a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    cursor: pointer;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.25);
+      transform: scale(1.1);
+    }
+
+    .v-icon {
+      font-size: 16px;
+    }
+  }
+
+  .add-to-list-buttons {
+    display: flex;
+    gap: 4px;
+
+    a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.15);
+      color: white;
+      transition: all 0.2s ease;
+      text-decoration: none;
+      cursor: pointer;
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.25);
+        transform: scale(1.1);
+      }
+
+      .v-icon {
+        font-size: 16px;
+      }
+    }
+  }
+
+  .add-to-my-list-buttons {
+    display: flex;
+    flex-direction: row;
+    gap: 4px;
+
+    .v-btn {
+      font-size: 0.7rem;
+      padding: 2px 6px;
+      min-width: auto;
+      height: 28px;
+      border-color: rgba(255, 255, 255, 0.3);
+      color: white;
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.1);
+      }
+    }
+
+    .already-in-list {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      font-size: 0.7rem;
+      color: white;
+      padding: 2px 6px;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 4px;
+    }
   }
 }
 
