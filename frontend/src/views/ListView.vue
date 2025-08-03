@@ -657,16 +657,21 @@ function addToMyList(movieId: number, listId: number): void {
 // Watch for changes in props that require reloading data
 watch([listIdRef, usernameRef, isProfileViewRef], async () => {
   selectedProfileList.value = props.listId; // Reset profile list selector
-  sortRecords();
   // Force reload records when switching contexts
   await loadRecordsData();
   await loadMyRecords(); // Load user's records if viewing profile
+  // Sort records after data is loaded
+  sortRecords();
 });
 
 // Watch for profile list selection changes
-watch(selectedProfileList, () => {
-  sortRecords();
+watch(selectedProfileList, async () => {
   page.value = 1; // Reset to first page when switching lists
+  // Re-load data to ensure we have the latest order values
+  if (props.isProfileView && props.username) {
+    await loadRecordsData();
+  }
+  sortRecords();
 });
 
 // Watch for login status changes
@@ -702,6 +707,8 @@ function saveRecordsOrder(): void {
     const data: SortData[] = [];
     records.value.forEach((record, index) => {
       const sortData = { id: record.id, order: index + 1 };
+      // Update the local order value to match the new position
+      record.order = index + 1;
       data.push(sortData);
     });
     return data;
