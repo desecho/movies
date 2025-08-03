@@ -149,16 +149,6 @@
                           <v-icon icon="mdi-eye" />
                         </a>
                       </div>
-                      <div v-if="currentListId == listWatchedId">
-                        <a
-                          v-show="element.listId != listToWatchId"
-                          href="javascript:void(0)"
-                          title='Add to "To Watch" list'
-                          @click="addToList(element.movie.id, listToWatchId, element)"
-                        >
-                          <v-icon icon="mdi-eye-off" />
-                        </a>
-                      </div>
                     </div>
                   </div>
                 </div>
@@ -598,6 +588,22 @@ function isMovieInMyList(movieId: number): boolean {
   return myRecords.value.some((record) => record.movie.id === movieId);
 }
 
+function addToList(movieId: number, listId: number, record?: RecordType): void {
+  axios
+    .post(getUrl(`add-to-list/${movieId}/`), {
+      listId,
+    })
+    .then(() => {
+      if (record !== undefined) {
+        record.listId = listId;
+        record.additionDate = Date.now();
+      }
+    })
+    .catch(() => {
+      $toast.error("Error adding the movie to the list");
+    });
+}
+
 // Add movie to user's own list
 function addToMyList(movieId: number, listId: number): void {
   if (!authStore.user.isLoggedIn) {
@@ -611,6 +617,7 @@ function addToMyList(movieId: number, listId: number): void {
   try {
     // Add to myRecords for immediate UI update
     const movieData = records.value.find((record) => record.movie.id === movieId)?.movie;
+    addToList(movieId, listId); // Call the existing addToList function
     if (movieData) {
       const newRecord: RecordType = {
         id: Date.now(),
@@ -736,21 +743,6 @@ function removeRecord(record: RecordType, index: number): void {
       $toast.error("Error removing the movie");
     });
 }
-
-function addToList(movieId: number, listId: number, record: RecordType): void {
-  axios
-    .post(getUrl(`add-to-list/${movieId}/`), {
-      listId,
-    })
-    .then(() => {
-      record.listId = listId;
-      record.additionDate = Date.now();
-    })
-    .catch(() => {
-      $toast.error("Error adding the movie to the list");
-    });
-}
-
 function showCommentArea(record: RecordType): void {
   record.commentArea = true;
 }
