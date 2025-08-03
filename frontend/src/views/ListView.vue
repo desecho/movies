@@ -941,7 +941,7 @@ onMounted(async () => {
 
 .movie-full {
   min-height: 350px;
-  padding: 32px;
+  padding: 22px;
 }
 
 /* Enhanced movie header layout */
