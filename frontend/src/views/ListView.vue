@@ -1161,7 +1161,6 @@ onMounted(async () => {
   border: 1px solid rgba(0, 0, 0, 0.05);
 
   > div {
-    margin-bottom: 8px;
     font-size: 0.95rem;
     color: #4a5568;
     line-height: 1.5;
