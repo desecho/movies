@@ -111,9 +111,14 @@ onMounted(() => {
   background: var(--background-card) !important;
 }
 
+.dark-theme .title {
+  color: var(--text-primary) !important;
+}
+
 .dark-theme .details {
   background: rgba(55, 65, 81, 0.8) !important;
   border-color: var(--border-color) !important;
+  color: var(--text-secondary) !important;
 }
 
 .dark-theme .user-card {
