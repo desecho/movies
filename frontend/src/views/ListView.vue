@@ -1697,6 +1697,11 @@ onMounted(async () => {
   margin-bottom: 4px;
 }
 
+/* Dark theme control labels */
+.dark-theme .control-label {
+  color: var(--text-primary) !important;
+}
+
 /* Enhanced button toggle styling */
 :deep(.v-btn-toggle) {
   background: rgba(255, 255, 255, 0.8);
