@@ -10,9 +10,6 @@
       </template>
     </v-app-bar>
     <v-navigation-drawer v-model="drawer" width="200" elevation="0" class="modern-drawer" touchless>
-      <div class="drawer-header">
-        <h3 class="drawer-title">Navigation</h3>
-      </div>
       <v-list class="nav-list" density="comfortable">
         <MenuItem title="Search" icon="magnify" to="/" />
         <MenuItem title="Trending" icon="trending-up" to="/trending" />
@@ -92,21 +89,6 @@ onMounted(() => {
   border-right: 1px solid rgba(0, 0, 0, 0.08);
 }
 
-.drawer-header {
-  padding: 24px 16px 16px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  margin-bottom: 8px;
-}
-
-.drawer-title {
-  color: white;
-  font-size: 1.1rem;
-  font-weight: 600;
-  margin: 0;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
 .nav-list {
   padding: 8px 12px;
 
@@ -171,14 +153,6 @@ onMounted(() => {
 @media (max-width: 768px) {
   .modern-drawer {
     width: 280px !important;
-  }
-
-  .drawer-header {
-    padding: 20px 16px 12px;
-  }
-
-  .drawer-title {
-    font-size: 1rem;
   }
 }
 </style>
