@@ -220,6 +220,68 @@ onMounted(() => {
   font-weight: 500 !important;
 }
 
+/* Dark theme pagination styles for @hennge/vue3-pagination */
+.dark-theme .pagination {
+  --pagination-bg: rgba(55, 65, 81, 0.8);
+  --pagination-text: #f9fafb;
+  --pagination-hover-bg: rgba(102, 126, 234, 0.3);
+  --pagination-border: rgba(255, 255, 255, 0.1);
+}
+
+.dark-theme .pagination .page-item {
+  background: var(--pagination-bg) !important;
+  color: var(--pagination-text) !important;
+  border: 1px solid var(--pagination-border) !important;
+}
+
+.dark-theme .pagination .page-item:hover {
+  background: var(--pagination-hover-bg) !important;
+  border-color: #667eea !important;
+  color: white !important;
+}
+
+.dark-theme .pagination .page-item.active {
+  background: #667eea !important;
+  color: white !important;
+  border-color: #667eea !important;
+}
+
+.dark-theme .pagination .page-item.disabled {
+  background: rgba(55, 65, 81, 0.5) !important;
+  color: rgba(249, 250, 251, 0.5) !important;
+  border-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+/* Navigation arrows for @hennge/vue3-pagination */
+.dark-theme .Pagination .Control {
+  fill: white !important;
+  opacity: 0.8;
+}
+
+.dark-theme .Pagination .Control-active {
+  fill: white !important;
+  opacity: 1;
+}
+
+.dark-theme .Pagination .Control-active:hover {
+  fill: #667eea !important;
+  opacity: 1;
+}
+
+/* Enhanced pagination control styling */
+.dark-theme .PaginationControl {
+  background: rgba(55, 65, 81, 0.8) !important;
+  border-radius: 6px !important;
+  padding: 4px !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  transition: all 0.2s ease !important;
+}
+
+.dark-theme .PaginationControl:hover {
+  background: rgba(102, 126, 234, 0.3) !important;
+  border-color: #667eea !important;
+}
+
 /* Smooth transitions for theme changes */
 * {
   transition:
