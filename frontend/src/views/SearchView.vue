@@ -230,6 +230,25 @@ async function search(): Promise<void> {
   }
 }
 
+/* Dark mode styles */
+:deep(.v-theme--dark) {
+  .page-subtitle {
+    color: #a1a1aa !important;
+  }
+
+  .search-card {
+    background: linear-gradient(135deg, #1e293b 0%, #334155 100%) !important;
+  }
+
+  .filter-checkbox .v-label {
+    color: #e2e8f0 !important;
+  }
+
+  .results-title {
+    color: #f1f5f9 !important;
+  }
+}
+
 .results-header {
   display: flex;
   align-items: center;

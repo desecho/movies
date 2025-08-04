@@ -224,6 +224,47 @@
   }
 }
 
+// Dark theme dropdown overrides
+.dark-theme {
+  .v-overlay__content .v-list {
+    background-color: #334155 !important;
+    border: 1px solid #475569 !important;
+  }
+
+  .v-overlay__content .v-list-item {
+    color: #f1f5f9 !important;
+
+    &:hover {
+      background-color: #475569 !important;
+    }
+
+    &.v-list-item--active {
+      background-color: #667eea !important;
+      color: white !important;
+    }
+
+    .v-list-item__content {
+      color: inherit !important;
+    }
+  }
+
+  // v-select field dark mode
+  .v-select {
+    .v-field {
+      background-color: #334155 !important;
+      border: 1px solid #475569 !important;
+    }
+
+    .v-field__input {
+      color: #f1f5f9 !important;
+    }
+
+    .v-field__append-inner .v-icon {
+      color: #94a3b8 !important;
+    }
+  }
+}
+
 // Responsive typography
 @media (max-width: 768px) {
   :root {
