@@ -804,21 +804,6 @@ Django = ">=1.11"
 six = "*"
 
 [[package]]
-name = "django-braces"
-version = "1.17.0"
-description = "Reusable, generic mixins for Django"
-optional = false
-python-versions = "*"
-groups = ["main"]
-files = [
-    {file = "django_braces-1.17.0-py3-none-any.whl", hash = "sha256:18c9fe889bc673bddee6110f23a8c57fefe99663c8c683a7c2ac4f8f8743674d"},
-    {file = "django_braces-1.17.0.tar.gz", hash = "sha256:3a6fe630d3d91fef0711bfe1088d14af00c245559f79f6298040ed2b2f757337"},
-]
-
-[package.dependencies]
-Django = ">=2.2"
-
-[[package]]
 name = "django-celery-results"
 version = "2.6.0"
 description = "Celery result backends for Django."
@@ -2904,4 +2889,4 @@ files = [
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.11"
-content-hash = "097f6f35411c09554fa5255b23bc77c454f952f69baf9ca4c17630703e02239e"
+content-hash = "5cd3cd801d1da327b5ab4ee33f1bad33621a4781874d6ae4d2e0e000f1ed96f2"
