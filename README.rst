@@ -3,10 +3,9 @@ Movies
 
 |Deployment Status| |Codecov|
 
-| The web application on Django_ 4, Vue.js_ 3, Bootstrap_ 4, `Font Awesome`_ 6. Create movie lists "Watched" and "To Watch", rate movies, and add comments.
+| The web application on Django_ 5, Vue.js_ 3, Vuetify_ 3, `Material Design Icons`_ 7.. Create movie lists "Watched" and "To Watch", rate movies, and add comments.
 | See more information here - https://movies.samarchyan.me/about/
 | The website is live here - https://movies.samarchyan.me.
-| The interface is available in English and Russian.
 
 See more documentation_.
 
@@ -34,7 +33,6 @@ Run ``make help`` to get a list of all available commands.
 
 | Open http://localhost:8000/ to access the web application.
 | Open http://localhost:8000/admin to access the admin section.
-| Open http://localhost:8000/rosetta to access Rosetta.
 
 Run in Docker:
 
@@ -73,9 +71,9 @@ Used images
 .. _documentation: https://github.com/desecho/movies/blob/master/doc.rst
 
 .. _Vue.js: https://vuejs.org/
-.. _Bootstrap: https://getbootstrap.com/
+.. _Vuetify: https://vuetifyjs.com/
+.. _Material Design Icons: https://materialdesignicons.com/
 .. _Django: https://www.djangoproject.com/
-.. _Font Awesome: https://fontawesome.com/
 
 .. _ubuntu-vm: https://github.com/desecho/ubuntu-vm
 .. _macos-setup: https://github.com/desecho/macos-setup
