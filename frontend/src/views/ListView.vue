@@ -815,13 +815,14 @@ onMounted(async () => {
 .profile-header {
   margin-bottom: 20px;
   padding: 20px;
-  background-color: #f5f5f5;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   border-radius: 8px;
+  color: white;
 }
 
 .profile-header h2 {
   margin: 0 0 15px 0;
-  color: #333;
+  color: white;
 }
 
 .profile-list-selector {
