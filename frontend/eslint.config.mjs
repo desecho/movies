@@ -106,7 +106,8 @@ export default [...fixupConfigRules(compat.extends(
         "no-undef-init": "error",
         "no-unneeded-ternary": "error",
         "no-return-assign": "error",
-        "quote-props": ["error", "consistent-as-needed"],
+        // conflicts with Prettier
+        // "quote-props": ["error", "consistent-as-needed"],
         "spaced-comment": "error",
         "symbol-description": "error",
         yoda: "error",
