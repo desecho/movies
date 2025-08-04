@@ -59,7 +59,6 @@ class BaseTestCase(TestCase):
         "lists.json",
         "actions.json",
         "users.json",
-        "vk_countries.json",
         "providers.json",
     ]
 

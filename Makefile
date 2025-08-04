@@ -124,7 +124,6 @@ load-initial-fixtures:
 	$(MAKE) manage arguments="loaddata lists"
 	$(MAKE) manage arguments="loaddata actions"
 	$(MAKE) manage arguments="loaddata providers"
-	$(MAKE) manage arguments="loaddata vk_countries"
 
 .PHONY: bootstrap
 ## Bootstrap project

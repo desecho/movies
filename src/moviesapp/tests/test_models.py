@@ -1,16 +1,19 @@
 """Test models."""
 
+# pylint: disable=duplicate-code
+
 import json
-from datetime import date
-from unittest.mock import patch
+import random
+from datetime import date, time, timedelta
+from unittest.mock import Mock
 
-from django.core.exceptions import ValidationError
 from django.test import TestCase
+from django.utils.timezone import now
 
-from moviesapp.models import Action, ActionRecord, List, Movie, Provider, ProviderRecord, Record, User
+from moviesapp.models import Action, ActionRecord, List, Movie, Provider, ProviderRecord, Record, User, UserAnonymous
 from moviesapp.types import WatchDataRecord
 
-from .base import BaseTestCase, BaseTestLoginCase
+from .base import BaseTestCase
 
 
 class UserModelTestCase(BaseTestCase):
@@ -46,17 +49,11 @@ class UserModelTestCase(BaseTestCase):
         """Test get_records for authenticated user."""
         # Create a test record first
         movie = Movie.objects.create(
-            tmdb_id=123,
-            title="Test Movie",
-            title_original="Test Movie Original", 
-            release_date="2020-01-01"
+            tmdb_id=123, title="Test Movie", title_original="Test Movie Original", release_date="2020-01-01"
         )
-        watched_list, _ = List.objects.get_or_create(
-            key_name="watched",
-            defaults={"name": "Watched", "id": 1}
-        )
+        watched_list, _ = List.objects.get_or_create(key_name="watched", defaults={"name": "Watched", "id": 1})
         Record.objects.create(user=self.user, movie=movie, list=watched_list)
-        
+
         records = self.user.get_records()
         self.assertTrue(records.exists())
         # Verify all records belong to this user
@@ -65,9 +62,7 @@ class UserModelTestCase(BaseTestCase):
 
     def test_get_records_anonymous(self):
         """Test get_records for anonymous user."""
-        from moviesapp.models import UserAnonymous
-        from unittest.mock import Mock
-        
+
         # Create a mock request since UserAnonymous needs it
         mock_request = Mock()
         anon_user = UserAnonymous(mock_request)
@@ -88,7 +83,7 @@ class MovieModelTestCase(BaseTestCase):
             title_original="Test Movie Original",
             release_date="2020-01-01",
             poster="/test-poster.jpg",
-            imdb_id="tt1234567"
+            imdb_id="tt1234567",
         )
 
     def test_string_representation(self):
@@ -108,7 +103,7 @@ class MovieModelTestCase(BaseTestCase):
         self.movie.release_date = date(2020, 1, 1)
         self.movie.save()
         self.assertTrue(self.movie.is_released)
-        
+
         # Set release date to future
         self.movie.release_date = date(2030, 1, 1)
         self.movie.save()
@@ -116,17 +111,11 @@ class MovieModelTestCase(BaseTestCase):
 
     def test_get_trailers_with_data(self):
         """Test get_trailers with trailer data."""
-        import json
-        trailer_data = [
-            {
-                "name": "Official Trailer",
-                "key": "abc123",
-                "site": "YouTube"
-            }
-        ]
+
+        trailer_data = [{"name": "Official Trailer", "key": "abc123", "site": "YouTube"}]
         self.movie.trailers = json.dumps(trailer_data)
         self.movie.save()
-        
+
         trailers = self.movie.get_trailers()
         self.assertEqual(len(trailers), 1)
         self.assertEqual(trailers[0]["name"], "Official Trailer")
@@ -134,19 +123,19 @@ class MovieModelTestCase(BaseTestCase):
 
     def test_get_trailers_empty(self):
         """Test get_trailers with no data."""
-        import json
+
         self.movie.trailers = json.dumps([])
         self.movie.save()
-        
+
         trailers = self.movie.get_trailers()
         self.assertEqual(len(trailers), 0)
 
     def test_get_trailers_invalid_data(self):
         """Test get_trailers with invalid data."""
-        import json
+
         self.movie.trailers = json.dumps([{"invalid": "data"}])
         self.movie.save()
-        
+
         try:
             trailers = self.movie.get_trailers()
             self.assertEqual(len(trailers), 0)
@@ -158,21 +147,15 @@ class MovieModelTestCase(BaseTestCase):
         """Test save_watch_data method."""
         # Create a provider first
         provider = Provider.objects.create(id=1, name="Netflix")
-        
+
         # Create proper watch data with provider_id
-        from moviesapp.types import WatchDataRecord
         watch_data = WatchDataRecord(
             tmdb_id=self.movie.tmdb_id,
+            provider_id=provider.id,
             country="US",
-            providers=[{"provider_id": provider.id, "provider_name": "Netflix"}]
         )
-        
-        # This should not raise an exception  
-        try:
-            self.movie.save_watch_data([watch_data])
-        except Exception:
-            # The method might have complex dependencies, just test it doesn't crash
-            pass
+
+        self.movie.save_watch_data([watch_data])
 
     def test_tmdb_url_property(self):
         """Test tmdb_url property."""
@@ -204,30 +187,24 @@ class RecordModelTestCase(BaseTestCase):
         super().setUp()
         # Create test objects instead of relying on fixtures
         # Use unique tmdb_id to avoid conflicts
-        import random
+
         unique_id = random.randint(1000, 9999)
         self.movie = Movie.objects.create(
             tmdb_id=unique_id,
             title=f"Test Movie {unique_id}",
             title_original=f"Test Movie Original {unique_id}",
-            release_date="2020-01-01"
+            release_date="2020-01-01",
         )
         # Create lists with unique IDs to avoid UNIQUE constraint failures
         watched_id = random.randint(100, 999)
         to_watch_id = random.randint(1000, 1999)
         self.watched_list, _ = List.objects.get_or_create(
-            key_name=f"watched_{unique_id}",
-            defaults={"name": f"Watched {unique_id}", "id": watched_id}
+            key_name=f"watched_{unique_id}", defaults={"name": f"Watched {unique_id}", "id": watched_id}
         )
         self.to_watch_list, _ = List.objects.get_or_create(
-            key_name=f"to_watch_{unique_id}", 
-            defaults={"name": f"To Watch {unique_id}", "id": to_watch_id}
+            key_name=f"to_watch_{unique_id}", defaults={"name": f"To Watch {unique_id}", "id": to_watch_id}
         )
-        self.record, _ = Record.objects.get_or_create(
-            user=self.user,
-            movie=self.movie,
-            list=self.watched_list
-        )
+        self.record, _ = Record.objects.get_or_create(user=self.user, movie=self.movie, list=self.watched_list)
 
     def test_string_representation(self):
         """Test __str__ method."""
@@ -238,25 +215,20 @@ class RecordModelTestCase(BaseTestCase):
     def test_hd_resolution_cascading_save(self):
         """Test HD resolution cascading in save method."""
         # Create a new unique movie to avoid UNIQUE constraint violation
-        import random
+
         cascade_movie_id = random.randint(10000, 19999)
         cascade_movie = Movie.objects.create(
             tmdb_id=cascade_movie_id,
             title=f"Cascade Test Movie {cascade_movie_id}",
             title_original=f"Cascade Test Movie Original {cascade_movie_id}",
             release_date="2020-01-01",
-            imdb_id=f"tt{cascade_movie_id:07d}"
+            imdb_id=f"tt{cascade_movie_id:07d}",
         )
-        
+
         # Create a new record
-        record = Record(
-            user=self.user,
-            movie=cascade_movie,
-            list=self.watched_list,
-            watched_in_4k=True
-        )
+        record = Record(user=self.user, movie=cascade_movie, list=self.watched_list, watched_in_4k=True)
         record.save()
-        
+
         # Check that lower resolutions are automatically set
         self.assertTrue(record.watched_in_full_hd)
         self.assertTrue(record.watched_in_hd)
@@ -264,24 +236,19 @@ class RecordModelTestCase(BaseTestCase):
     def test_save_without_hd_cascading(self):
         """Test save without HD cascading."""
         # Create a new unique movie to avoid UNIQUE constraint violation
-        import random
+
         hd_movie_id = random.randint(20000, 29999)
         hd_movie = Movie.objects.create(
             tmdb_id=hd_movie_id,
             title=f"HD Test Movie {hd_movie_id}",
             title_original=f"HD Test Movie Original {hd_movie_id}",
             release_date="2020-01-01",
-            imdb_id=f"tt{hd_movie_id:07d}"
+            imdb_id=f"tt{hd_movie_id:07d}",
         )
-        
-        record = Record(
-            user=self.user,
-            movie=hd_movie,
-            list=self.watched_list,
-            watched_in_hd=True
-        )
+
+        record = Record(user=self.user, movie=hd_movie, list=self.watched_list, watched_in_hd=True)
         record.save()
-        
+
         # Check that higher resolutions are not set
         self.assertFalse(record.watched_in_full_hd)
         self.assertFalse(record.watched_in_4k)
@@ -289,25 +256,21 @@ class RecordModelTestCase(BaseTestCase):
     def test_record_ordering(self):
         """Test record ordering functionality."""
         # Get records for to-watch list
-        records = Record.objects.filter(user=self.user, list=self.to_watch_list).order_by('order')
-        
+        records = Record.objects.filter(user=self.user, list=self.to_watch_list).order_by("order")
+
         if records.exists():
             # Verify ordering is maintained
-            orders = list(records.values_list('order', flat=True))
+            orders = list(records.values_list("order", flat=True))
             self.assertEqual(orders, sorted(orders))
 
     def test_record_unique_constraint(self):
         """Test unique constraint on user, movie, list."""
         movie = self.record.movie
         list_obj = self.record.list
-        
+
         # Try to create duplicate record
         with self.assertRaises(Exception):  # Should raise IntegrityError
-            duplicate_record = Record(
-                user=self.user,
-                movie=movie,
-                list=list_obj
-            )
+            duplicate_record = Record(user=self.user, movie=movie, list=list_obj)
             duplicate_record.save()
 
 
@@ -319,27 +282,16 @@ class ActionRecordModelTestCase(BaseTestCase):
         super().setUp()
         self.login()  # Login to get user data
         # Create test data
-        self.action, _ = Action.objects.get_or_create(
-            id=1,
-            defaults={"name": "Test Action"}
-        )
+        self.action, _ = Action.objects.get_or_create(id=1, defaults={"name": "Test Action"})
         self.movie = Movie.objects.create(
-            tmdb_id=123,
-            title="Test Movie",
-            title_original="Test Movie Original",
-            release_date="2020-01-01"
+            tmdb_id=123, title="Test Movie", title_original="Test Movie Original", release_date="2020-01-01"
         )
 
     def test_action_record_creation(self):
         """Test ActionRecord creation."""
-        action_record = ActionRecord(
-            action=self.action,
-            user=self.user,
-            movie=self.movie,
-            rating=5
-        )
+        action_record = ActionRecord(action=self.action, user=self.user, movie=self.movie, rating=5)
         action_record.save()
-        
+
         self.assertEqual(action_record.action, self.action)
         self.assertEqual(action_record.user, self.user)
         self.assertEqual(action_record.movie, self.movie)
@@ -358,12 +310,9 @@ class ProviderModelTestCase(TestCase):
 
     def test_provider_creation(self):
         """Test Provider creation."""
-        provider = Provider(
-            id=123,
-            name="Test Provider"
-        )
+        provider = Provider(id=123, name="Test Provider")
         provider.save()
-        
+
         self.assertEqual(provider.id, 123)
         self.assertEqual(provider.name, "Test Provider")
         self.assertIn("providers", provider.logo)  # logo is a property
@@ -381,25 +330,15 @@ class ProviderRecordModelTestCase(BaseTestCase):
         """Set up test environment."""
         super().setUp()
         self.movie = Movie.objects.create(
-            tmdb_id=123,
-            title="Test Movie",
-            title_original="Test Movie Original",
-            release_date="2020-01-01"
+            tmdb_id=123, title="Test Movie", title_original="Test Movie Original", release_date="2020-01-01"
         )
-        self.provider = Provider.objects.create(
-            id=1,
-            name="Test Provider"
-        )
+        self.provider = Provider.objects.create(id=1, name="Test Provider")
 
     def test_provider_record_creation(self):
         """Test ProviderRecord creation."""
-        provider_record = ProviderRecord(
-            movie=self.movie,
-            provider=self.provider,
-            country="US"
-        )
+        provider_record = ProviderRecord(movie=self.movie, provider=self.provider, country="US")
         provider_record.save()
-        
+
         self.assertEqual(provider_record.movie, self.movie)
         self.assertEqual(provider_record.provider, self.provider)
         self.assertEqual(provider_record.country, "US")
@@ -419,16 +358,8 @@ class ListModelTestCase(TestCase):
 
     def setUp(self):
         """Set up test environment."""
-        self.watched_list = List.objects.create(
-            id=1,
-            key_name="watched",
-            name="Watched"
-        )
-        self.to_watch_list = List.objects.create(
-            id=2,
-            key_name="to_watch",
-            name="To Watch"
-        )
+        self.watched_list = List.objects.create(id=1, key_name="watched", name="Watched")
+        self.to_watch_list = List.objects.create(id=2, key_name="to_watch", name="To Watch")
 
     def test_is_valid_id(self):
         """Test is_valid_id class method."""
@@ -453,11 +384,7 @@ class UserAdditionalTestCase(BaseTestCase):
 
     def test_user_str_with_numeric_username(self):
         """Test __str__ method with numeric username."""
-        user = User.objects.create(
-            username="12345",
-            first_name="John",
-            last_name="Doe"
-        )
+        user = User.objects.create(username="12345", first_name="John", last_name="Doe")
         str_repr = str(user)
         self.assertEqual(str_repr, "John Doe")
 
@@ -479,17 +406,13 @@ class UserAdditionalTestCase(BaseTestCase):
         """Test get_record method."""
         # Create a test record
         movie = Movie.objects.create(
-            tmdb_id=456,
-            title="Test Movie for Record",
-            title_original="Test Movie Original",
-            release_date="2020-01-01"
+            tmdb_id=456, title="Test Movie for Record", title_original="Test Movie Original", release_date="2020-01-01"
         )
         watched_list, _ = List.objects.get_or_create(
-            key_name="watched_test",
-            defaults={"name": "Watched Test", "id": 100}
+            key_name="watched_test", defaults={"name": "Watched Test", "id": 100}
         )
         record = Record.objects.create(user=self.user, movie=movie, list=watched_list)
-        
+
         # Test get_record method
         retrieved_record = self.user.get_record(record.id)
         self.assertEqual(retrieved_record, record)
@@ -501,7 +424,7 @@ class MovieAdditionalTestCase(BaseTestCase):
     def setUp(self):
         """Set up test environment."""
         super().setUp()
-        from datetime import date, time
+
         self.movie = Movie.objects.create(
             tmdb_id=789,
             title="Test Movie Additional",
@@ -509,7 +432,7 @@ class MovieAdditionalTestCase(BaseTestCase):
             release_date=date(2020, 1, 1),
             poster="/test-poster.jpg",
             imdb_id="tt7890123",
-            runtime=time(2, 30, 0)
+            runtime=time(2, 30, 0),
         )
 
     def test_release_date_formatted_property(self):
@@ -567,19 +490,17 @@ class MovieAdditionalTestCase(BaseTestCase):
 
     def test_is_watch_data_updated_recently_property(self):
         """Test is_watch_data_updated_recently property."""
-        from django.utils.timezone import now
-        from datetime import timedelta
-        
+
         # Test with recent update
         self.movie.watch_data_update_date = now()
         self.movie.save()
         self.assertTrue(self.movie.is_watch_data_updated_recently)
-        
+
         # Test with old update
         self.movie.watch_data_update_date = now() - timedelta(days=100)
         self.movie.save()
         self.assertFalse(self.movie.is_watch_data_updated_recently)
-        
+
         # Test with None
         self.movie.watch_data_update_date = None
         self.movie.save()
@@ -588,7 +509,7 @@ class MovieAdditionalTestCase(BaseTestCase):
     def test_has_poster_property(self):
         """Test has_poster property."""
         self.assertTrue(self.movie.has_poster)
-        
+
         self.movie.poster = None
         self.movie.save()
         self.assertFalse(self.movie.has_poster)
@@ -610,35 +531,11 @@ class MovieAdditionalTestCase(BaseTestCase):
         # Test with movie_id
         movies = Movie.filter(movie_id=self.movie.pk)
         self.assertIn(self.movie, movies)
-        
+
         # Test with start_from_id
         movies = Movie.filter(movie_id=self.movie.pk, start_from_id=True)
         self.assertTrue(movies.exists())
-        
+
         # Test without movie_id
         movies = Movie.filter(movie_id=None)
         self.assertTrue(movies.exists())
-
-
-class VkCountryModelTestCase(TestCase):
-    """Test VkCountry model."""
-
-    def test_vk_country_creation_and_str(self):
-        """Test VkCountry creation and string representation."""
-        from moviesapp.models import VkCountry
-        
-        vk_country = VkCountry.objects.create(
-            id=1,
-            country="US"
-        )
-        
-        self.assertEqual(vk_country.id, 1)
-        self.assertEqual(str(vk_country.country), "US")
-        self.assertEqual(str(vk_country), "US")
-
-    def test_vk_country_meta(self):
-        """Test VkCountry meta options."""
-        from moviesapp.models import VkCountry
-        
-        self.assertEqual(VkCountry._meta.verbose_name, "VK country")
-        self.assertEqual(VkCountry._meta.verbose_name_plural, "VK countries")

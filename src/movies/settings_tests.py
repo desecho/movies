@@ -1,5 +1,7 @@
 """Settings for tests."""
 
+# pylint: disable=duplicate-code
+
 from .settings import *  # noqa pylint: disable=unused-wildcard-import,wildcard-import
 
 DATABASES["default"] = {  # noqa

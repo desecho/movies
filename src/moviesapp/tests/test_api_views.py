@@ -1,91 +1,77 @@
 """Test API views."""
 
+# pylint: disable=duplicate-code
+
 import json
+import random
 from http import HTTPStatus
-from unittest.mock import patch
 
-from django.urls import reverse
 from rest_framework.test import APITestCase
-
-from .base import BaseClient
 
 from moviesapp.models import Action, ActionRecord, List, Movie, Record, User
 
-from .base import BaseTestCase, BaseTestLoginCase
+from .base import BaseClient
 
 
-def create_test_data(test_case):
+def create_test_data():
     """Helper function to create common test data."""
-    import random
     unique_id = random.randint(1000, 9999)
     movie = Movie.objects.create(
         tmdb_id=unique_id,
         title=f"Test Movie {unique_id}",
         title_original=f"Test Movie Original {unique_id}",
-        release_date="2020-01-01"
+        release_date="2020-01-01",
     )
     watched_id = random.randint(100, 999)
     to_watch_id = random.randint(1000, 1999)
     watched_list, _ = List.objects.get_or_create(
-        key_name=f"watched_{unique_id}",
-        defaults={"name": f"Watched {unique_id}", "id": watched_id}
+        key_name=f"watched_{unique_id}", defaults={"name": f"Watched {unique_id}", "id": watched_id}
     )
     to_watch_list, _ = List.objects.get_or_create(
-        key_name=f"to_watch_{unique_id}",
-        defaults={"name": f"To Watch {unique_id}", "id": to_watch_id}
+        key_name=f"to_watch_{unique_id}", defaults={"name": f"To Watch {unique_id}", "id": to_watch_id}
     )
     return movie, watched_list, to_watch_list
 
 
 def setup_api_test_case(test_case):
     """Helper function to set up API test case with authentication."""
-    from django.contrib.auth import get_user_model
-    User = get_user_model()
-    import random
     unique_username = f"testuser{random.randint(1000, 9999)}"
     test_case.user = User.objects.create_user(
-        username=unique_username,
-        email=f"{unique_username}@example.com", 
-        password="testpass123"
+        username=unique_username, email=f"{unique_username}@example.com", password="testpass123"
     )
-    
+
     # Create required Actions
     Action.objects.get_or_create(id=Action.ADDED_RATING, defaults={"name": "Added Rating"})
     Action.objects.get_or_create(id=Action.ADDED_MOVIE, defaults={"name": "Added Movie"})
     Action.objects.get_or_create(id=Action.ADDED_COMMENT, defaults={"name": "Added Comment"})
     Action.objects.get_or_create(id=Action.CHANGED_LIST, defaults={"name": "Changed List"})
-    
-    test_case.movie, test_case.watched_list, test_case.to_watch_list = create_test_data(test_case)
+
+    test_case.movie, test_case.watched_list, test_case.to_watch_list = create_test_data()
     # Use login instead of force_authenticate for BaseClient
     test_case.client.login(username=unique_username, password="testpass123")
 
 
 class ChangeRatingViewTestCase(APITestCase):
     """Test ChangeRatingView."""
-    
+
     client_class = BaseClient
 
     def setUp(self):
         """Set up test environment."""
         super().setUp()
         setup_api_test_case(self)
-        self.record, _ = Record.objects.get_or_create(
-            user=self.user,
-            movie=self.movie,
-            list=self.watched_list
-        )
+        self.record, _ = Record.objects.get_or_create(user=self.user, movie=self.movie, list=self.watched_list)
         self.url = f"/change-rating/{self.record.id}/"
 
     def test_change_rating_success(self):
         """Test successful rating change."""
-        original_rating = self.record.rating
-        new_rating = 8
-        
+        new_rating = 5
+
         data = {"rating": new_rating}
         response = self.client.put_ajax(self.url, json.dumps(data))
-        
+
         self.assertEqual(response.status_code, HTTPStatus.OK)
-        
+
         # Verify rating was updated
         self.record.refresh_from_db()
         self.assertEqual(self.record.rating, new_rating)
@@ -95,19 +81,19 @@ class ChangeRatingViewTestCase(APITestCase):
         # Start with no rating
         self.record.rating = 0
         self.record.save()
-        
-        new_rating = 7
+
+        new_rating = 4
         data = {"rating": new_rating}
-        
+
         action_count_before = ActionRecord.objects.count()
         response = self.client.put_ajax(self.url, json.dumps(data))
         action_count_after = ActionRecord.objects.count()
-        
+
         self.assertEqual(response.status_code, HTTPStatus.OK)
         self.assertEqual(action_count_after, action_count_before + 1)
-        
+
         # Verify action record details
-        action_record = ActionRecord.objects.latest('date')
+        action_record = ActionRecord.objects.latest("date")
         self.assertEqual(action_record.user, self.user)
         self.assertEqual(action_record.movie, self.record.movie)
         self.assertEqual(action_record.rating, new_rating)
@@ -116,11 +102,11 @@ class ChangeRatingViewTestCase(APITestCase):
         """Test no action record created if rating unchanged."""
         current_rating = self.record.rating
         data = {"rating": current_rating}
-        
+
         action_count_before = ActionRecord.objects.count()
         response = self.client.put_ajax(self.url, json.dumps(data))
         action_count_after = ActionRecord.objects.count()
-        
+
         self.assertEqual(response.status_code, HTTPStatus.OK)
         self.assertEqual(action_count_after, action_count_before)
 
@@ -129,7 +115,7 @@ class ChangeRatingViewTestCase(APITestCase):
         # Missing rating field
         response = self.client.put_ajax(self.url, json.dumps({}))
         self.assertEqual(response.status_code, HTTPStatus.BAD_REQUEST)
-        
+
         # Invalid rating type
         response = self.client.put_ajax(self.url, json.dumps({"rating": "invalid"}))
         self.assertEqual(response.status_code, HTTPStatus.BAD_REQUEST)
@@ -144,13 +130,9 @@ class ChangeRatingViewTestCase(APITestCase):
     def test_change_rating_wrong_user(self):
         """Test rating change for another user's record."""
         # Create another user and authenticate as them
-        other_user = User.objects.create_user(
-            username="otheruser", 
-            email="other@example.com", 
-            password="testpass123"
-        )
+        User.objects.create_user(username="otheruser", email="other@example.com", password="testpass123")
         self.client.login(username="otheruser", password="testpass123")
-        
+
         data = {"rating": 5}
         response = self.client.put_ajax(self.url, json.dumps(data))
         self.assertEqual(response.status_code, HTTPStatus.NOT_FOUND)
@@ -158,7 +140,7 @@ class ChangeRatingViewTestCase(APITestCase):
 
 class AddToListViewTestCase(APITestCase):
     """Test AddToListView."""
-    
+
     client_class = BaseClient
 
     def setUp(self):
@@ -171,12 +153,12 @@ class AddToListViewTestCase(APITestCase):
         """Test successful movie addition to list."""
         # Remove any existing records for this movie
         Record.objects.filter(user=self.user, movie=self.movie).delete()
-        
+
         data = {"listId": self.watched_list.id}
         response = self.client.post_ajax(self.url, json.dumps(data))
-        
+
         self.assertIn(response.status_code, [HTTPStatus.OK, HTTPStatus.NOT_FOUND])
-        
+
         # Only verify record was created if we got OK response
         if response.status_code == HTTPStatus.OK:
             record = Record.objects.get(user=self.user, movie=self.movie, list=self.watched_list)
@@ -216,27 +198,23 @@ class AddToListViewTestCase(APITestCase):
 
 class RemoveRecordViewTestCase(APITestCase):
     """Test RemoveRecordView."""
-    
+
     client_class = BaseClient
 
     def setUp(self):
         """Set up test environment."""
         super().setUp()
         setup_api_test_case(self)
-        self.record, _ = Record.objects.get_or_create(
-            user=self.user,
-            movie=self.movie,
-            list=self.watched_list
-        )
+        self.record, _ = Record.objects.get_or_create(user=self.user, movie=self.movie, list=self.watched_list)
         self.url = f"/remove-record/{self.record.id}/"
 
     def test_remove_record_success(self):
         """Test successful record removal."""
         record_id = self.record.id
         response = self.client.delete(self.url)
-        
+
         self.assertEqual(response.status_code, HTTPStatus.OK)
-        
+
         # Verify record was deleted
         with self.assertRaises(Record.DoesNotExist):
             Record.objects.get(id=record_id)
@@ -250,13 +228,9 @@ class RemoveRecordViewTestCase(APITestCase):
     def test_remove_record_wrong_user(self):
         """Test removing another user's record."""
         # Create another user and authenticate as them
-        other_user = User.objects.create_user(
-            username="deleteuser", 
-            email="delete@example.com", 
-            password="testpass123"
-        )
+        User.objects.create_user(username="deleteuser", email="delete@example.com", password="testpass123")
         self.client.login(username="deleteuser", password="testpass123")
-        
+
         response = self.client.delete(self.url)
         self.assertEqual(response.status_code, HTTPStatus.NOT_FOUND)
 
@@ -269,18 +243,14 @@ class RemoveRecordViewTestCase(APITestCase):
 
 class SaveOptionsViewTestCase(APITestCase):
     """Test SaveOptionsView."""
-    
+
     client_class = BaseClient
 
     def setUp(self):
         """Set up test environment."""
         super().setUp()
         setup_api_test_case(self)
-        self.record, _ = Record.objects.get_or_create(
-            user=self.user,
-            movie=self.movie,
-            list=self.watched_list
-        )
+        self.record, _ = Record.objects.get_or_create(user=self.user, movie=self.movie, list=self.watched_list)
         self.url = f"/record/{self.record.id}/options/"
 
     def test_save_options_success(self):
@@ -292,13 +262,13 @@ class SaveOptionsViewTestCase(APITestCase):
                 "original": False,
                 "extended": False,
                 "ultraHd": False,
-                "fullHd": False
+                "fullHd": False,
             }
         }
-        
+
         response = self.client.put_ajax(self.url, json.dumps(options_data))
         self.assertEqual(response.status_code, HTTPStatus.OK)
-        
+
         # Verify options were saved
         self.record.refresh_from_db()
         self.assertTrue(self.record.watched_in_hd)
@@ -314,13 +284,13 @@ class SaveOptionsViewTestCase(APITestCase):
                 "theatre": False,
                 "original": False,
                 "extended": False,
-                "fullHd": False
+                "fullHd": False,
             }
         }
-        
+
         response = self.client.put_ajax(self.url, json.dumps(options_data))
         self.assertEqual(response.status_code, HTTPStatus.OK)
-        
+
         # Verify cascading worked
         self.record.refresh_from_db()
         self.assertTrue(self.record.watched_in_4k)
@@ -330,46 +300,56 @@ class SaveOptionsViewTestCase(APITestCase):
     def test_save_options_unauthorized(self):
         """Test saving options without authentication."""
         self.client.logout()
-        options_data = {"options": {"hd": True, "theatre": False, "original": False, "extended": False, "ultraHd": False, "fullHd": False}}
+        options_data = {
+            "options": {
+                "hd": True,
+                "theatre": False,
+                "original": False,
+                "extended": False,
+                "ultraHd": False,
+                "fullHd": False,
+            }
+        }
         response = self.client.put_ajax(self.url, json.dumps(options_data))
         self.assertIn(response.status_code, [HTTPStatus.UNAUTHORIZED, HTTPStatus.FORBIDDEN])
 
     def test_save_options_wrong_user(self):
         """Test saving options for another user's record."""
-        other_user = User.objects.create_user(
-            username="optionsuser", 
-            email="options@example.com", 
-            password="testpass123"
-        )
+        User.objects.create_user(username="optionsuser", email="options@example.com", password="testpass123")
         self.client.login(username="optionsuser", password="testpass123")
-        options_data = {"options": {"hd": True, "theatre": False, "original": False, "extended": False, "ultraHd": False, "fullHd": False}}
+        options_data = {
+            "options": {
+                "hd": True,
+                "theatre": False,
+                "original": False,
+                "extended": False,
+                "ultraHd": False,
+                "fullHd": False,
+            }
+        }
         response = self.client.put_ajax(self.url, json.dumps(options_data))
         self.assertEqual(response.status_code, HTTPStatus.NOT_FOUND)
 
 
 class SaveCommentViewTestCase(APITestCase):
     """Test SaveCommentView."""
-    
+
     client_class = BaseClient
 
     def setUp(self):
         """Set up test environment."""
         super().setUp()
         setup_api_test_case(self)
-        self.record, _ = Record.objects.get_or_create(
-            user=self.user,
-            movie=self.movie,
-            list=self.watched_list
-        )
+        self.record, _ = Record.objects.get_or_create(user=self.user, movie=self.movie, list=self.watched_list)
         self.url = f"/save-comment/{self.record.id}/"
 
     def test_save_comment_success(self):
         """Test successful comment save."""
         comment_data = {"comment": "Great movie!"}
         response = self.client.put_ajax(self.url, json.dumps(comment_data))
-        
+
         self.assertEqual(response.status_code, HTTPStatus.OK)
-        
+
         # Verify comment was saved
         self.record.refresh_from_db()
         self.assertEqual(self.record.comment, "Great movie!")
@@ -378,9 +358,9 @@ class SaveCommentViewTestCase(APITestCase):
         """Test saving empty comment."""
         comment_data = {"comment": ""}
         response = self.client.put_ajax(self.url, json.dumps(comment_data))
-        
+
         self.assertEqual(response.status_code, HTTPStatus.OK)
-        
+
         # Verify comment was cleared
         self.record.refresh_from_db()
         self.assertEqual(self.record.comment, "")
@@ -394,11 +374,7 @@ class SaveCommentViewTestCase(APITestCase):
 
     def test_save_comment_wrong_user(self):
         """Test saving comment for another user's record."""
-        other_user = User.objects.create_user(
-            username="commentuser", 
-            email="comment@example.com", 
-            password="testpass123"
-        )
+        User.objects.create_user(username="commentuser", email="comment@example.com", password="testpass123")
         self.client.login(username="commentuser", password="testpass123")
         comment_data = {"comment": "Test comment"}
         response = self.client.put_ajax(self.url, json.dumps(comment_data))
@@ -407,7 +383,7 @@ class SaveCommentViewTestCase(APITestCase):
 
 class RecordsViewTestCase(APITestCase):
     """Test RecordsView."""
-    
+
     client_class = BaseClient
 
     def setUp(self):
@@ -420,29 +396,27 @@ class RecordsViewTestCase(APITestCase):
         """Test getting own records."""
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, HTTPStatus.OK)
-        
+
         data = response.json()
         self.assertIsInstance(data, list)
-        
+
         # Verify all records belong to authenticated user
         for record_data in data:
             # Records should have required fields
-            self.assertIn('id', record_data)
-            self.assertIn('movie', record_data)
-            self.assertIn('rating', record_data)
+            self.assertIn("id", record_data)
+            self.assertIn("movie", record_data)
+            self.assertIn("rating", record_data)
 
     def test_get_other_user_records(self):
         """Test getting another user's records."""
         other_user = User.objects.create_user(
-            username="recordsuser", 
-            email="records@example.com", 
-            password="testpass123"
+            username="recordsuser", email="records@example.com", password="testpass123"
         )
         url = f"{self.url}?username={other_user.username}"
-        
+
         response = self.client.get(url)
         self.assertEqual(response.status_code, HTTPStatus.OK)
-        
+
         data = response.json()
         self.assertIsInstance(data, list)
 
@@ -462,7 +436,7 @@ class RecordsViewTestCase(APITestCase):
 
 class SaveRecordsOrderViewTestCase(APITestCase):
     """Test SaveRecordsOrderView."""
-    
+
     client_class = BaseClient
 
     def setUp(self):
@@ -472,7 +446,7 @@ class SaveRecordsOrderViewTestCase(APITestCase):
         self.url = "/save-records-order/"
         # Create 3 test records with unique movies to avoid UNIQUE constraint violations
         self.records = []
-        import random
+
         base_id = random.randint(50000, 59999)
         for i in range(3):
             # Create unique movie for each record
@@ -481,14 +455,9 @@ class SaveRecordsOrderViewTestCase(APITestCase):
                 title=f"Order Test Movie {base_id + i}",
                 title_original=f"Order Test Movie Original {base_id + i}",
                 release_date="2020-01-01",
-                imdb_id=f"tt{base_id + i:07d}"
+                imdb_id=f"tt{base_id + i:07d}",
             )
-            record = Record.objects.create(
-                user=self.user,
-                movie=movie,
-                list=self.watched_list,
-                order=i + 1
-            )
+            record = Record.objects.create(user=self.user, movie=movie, list=self.watched_list, order=i + 1)
             self.records.append(record)
 
     def test_save_records_order_success(self):
@@ -500,10 +469,10 @@ class SaveRecordsOrderViewTestCase(APITestCase):
                 {"id": self.records[2].id, "order": 2},
             ]
         }
-        
+
         response = self.client.put_ajax(self.url, json.dumps(order_data))
         self.assertEqual(response.status_code, HTTPStatus.OK)
-        
+
         # Verify order was updated
         for record_order in order_data["records"]:
             record = Record.objects.get(id=record_order["id"])
@@ -521,7 +490,7 @@ class SaveRecordsOrderViewTestCase(APITestCase):
         # Missing records field
         response = self.client.put_ajax(self.url, json.dumps({}))
         self.assertEqual(response.status_code, HTTPStatus.BAD_REQUEST)
-        
+
         # Invalid record structure - should cause KeyError when trying to access record["id"]
         order_data = {"records": [{"invalid": "data"}]}
         response = self.client.put_ajax(self.url, json.dumps(order_data))
@@ -531,15 +500,15 @@ class SaveRecordsOrderViewTestCase(APITestCase):
 
 class HealthViewTestCase(APITestCase):
     """Test HealthView."""
-    
+
     client_class = BaseClient
 
     def test_health_check(self):
         """Test health check endpoint."""
         url = "/health/"
         response = self.client.get(url)
-        
+
         self.assertEqual(response.status_code, HTTPStatus.OK)
         data = response.json()
-        self.assertIn('status', data)
-        self.assertEqual(data['status'], 'ok')
+        self.assertIn("status", data)
+        self.assertEqual(data["status"], "ok")

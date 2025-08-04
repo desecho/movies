@@ -527,18 +527,18 @@ class ProviderRecord(Model):
         return f"{self.movie.tmdb_url}watch?locale={self.country}"
 
 
-class VkCountry(Model):
-    """VK country."""
+# class VkCountry(Model):
+#     """VK country."""
 
-    id = PositiveSmallIntegerField(primary_key=True)
-    country = CountryField(verbose_name=_("Country"), unique=True)
+#     id = PositiveSmallIntegerField(primary_key=True)
+#     country = CountryField(verbose_name=_("Country"), unique=True)
 
-    def __str__(self) -> str:
-        """Return string representation."""
-        return str(self.country)
+#     def __str__(self) -> str:
+#         """Return string representation."""
+#         return str(self.country)
 
-    class Meta:
-        """Meta."""
+#     class Meta:
+#         """Meta."""
 
-        verbose_name = "VK country"
-        verbose_name_plural = "VK countries"
+#         verbose_name = "VK country"
+#         verbose_name_plural = "VK countries"

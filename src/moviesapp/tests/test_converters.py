@@ -2,7 +2,7 @@
 
 from django.test import TestCase
 
-from moviesapp.converters import ConverterBase, ListConverter, FeedConverter
+from moviesapp.converters import ConverterBase, FeedConverter, ListConverter
 
 
 class ConverterBaseTestCase(TestCase):

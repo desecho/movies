@@ -26,6 +26,9 @@ class ChangeRatingView(APIView):
         except (KeyError, ValueError):
             return Response(status=HTTPStatus.BAD_REQUEST)
 
+        if rating < 0 or rating > 5:
+            return Response(status=HTTPStatus.BAD_REQUEST)
+
         record = get_object_or_404(Record, user=request.user, pk=record_id)
 
         user: User = request.user  # type: ignore
