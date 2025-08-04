@@ -1716,9 +1716,12 @@ onMounted(async () => {
   color: var(--text-primary) !important;
 }
 
+.dark-theme .v-btn-toggle {
+  background: rgba(31, 41, 55, 0.9);
+}
+
 /* Enhanced button toggle styling */
 :deep(.v-btn-toggle) {
-  background: rgba(31, 41, 55, 0.9);
   border-radius: 12px !important;
   padding: 4px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
