@@ -67,7 +67,7 @@ celery = {extras = ["redis"], version = "^5.2.7"}
 # This seems to be required for django-timezone-field
 tzdata = "^2025.2"
 
-[tool.poetry.dev-dependencies]
+[tool.poetry.group.dev.dependencies]
 # Pytest
 pytest = "*"
 pytest-cov = "*"
