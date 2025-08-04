@@ -144,3 +144,7 @@ source env.sh && source env_custom.sh && source env_secrets.sh
 2. **Database changes**: Create migrations with `make makemigrations`, then `make migrate`
 3. **API changes**: Update both backend serializers and frontend TypeScript types
 4. **External API updates**: Modify TMDB/OMDb clients in respective modules
+
+## Development Memories
+
+- Always run tests with `make pytest` command
