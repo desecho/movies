@@ -75,38 +75,3 @@ onMounted(() => {
   loadPreferences();
 });
 </script>
-
-<style scoped>
-.profile-label {
-  color: var(--text-primary);
-  font-weight: 500;
-}
-
-.profile-link,
-.change-password-link {
-  color: #667eea;
-  text-decoration: none;
-  transition: color 0.3s ease;
-}
-
-.profile-link:hover,
-.change-password-link:hover {
-  color: #5a6fd8;
-  text-decoration: underline;
-}
-
-/* Dark theme specific styles */
-:global(.dark-theme) .profile-label {
-  color: var(--text-primary);
-}
-
-:global(.dark-theme) .profile-link,
-:global(.dark-theme) .change-password-link {
-  color: #93c5fd;
-}
-
-:global(.dark-theme) .profile-link:hover,
-:global(.dark-theme) .change-password-link:hover {
-  color: #bfdbfe;
-}
-</style>
