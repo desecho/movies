@@ -35,6 +35,7 @@
               variant="outlined"
               label="Type"
               density="comfortable"
+              hide-details
               @update:model-value="onTypeChange"
             >
             </v-select>
