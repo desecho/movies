@@ -1,17 +1,34 @@
 import { defineStore } from "pinia";
 import { ref, watch } from "vue";
+import { useTheme } from "vuetify";
 
 export const useThemeStore = defineStore("theme", () => {
     const isDark = ref(false);
+    let vuetifyTheme: ReturnType<typeof useTheme> | null = null;
 
-    // Apply theme to document
+    // Initialize Vuetify theme after app is mounted
+    function initVuetifyTheme(): void {
+        try {
+            vuetifyTheme = useTheme();
+        } catch {
+            // Vuetify theme not available yet, will retry later
+        }
+    }
+
+    // Apply theme to both document and Vuetify
     function applyTheme(): void {
+        // Apply CSS class-based theme (for custom styles)
         if (isDark.value) {
             document.documentElement.classList.add("dark-theme");
             document.documentElement.classList.remove("light-theme");
         } else {
             document.documentElement.classList.add("light-theme");
             document.documentElement.classList.remove("dark-theme");
+        }
+
+        // Apply Vuetify native theme
+        if (vuetifyTheme) {
+            vuetifyTheme.global.name.value = isDark.value ? "dark" : "light";
         }
     }
 
@@ -26,6 +43,12 @@ export const useThemeStore = defineStore("theme", () => {
                 "(prefers-color-scheme: dark)",
             ).matches;
         }
+
+        // Initialize Vuetify theme if not already done
+        if (!vuetifyTheme) {
+            initVuetifyTheme();
+        }
+
         applyTheme();
     }
 
@@ -54,5 +77,6 @@ export const useThemeStore = defineStore("theme", () => {
         initTheme,
         toggleTheme,
         applyTheme,
+        initVuetifyTheme,
     };
 });

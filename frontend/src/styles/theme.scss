@@ -1,20 +1,26 @@
 // Modern theme variables and global styles
+// These work alongside Vuetify's native theme system
 
-// Color palette
+// Enhanced color palette that complements Vuetify themes
 :root {
-  --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  // Custom gradients (preserved from original design)
+  --primary-gradient: linear-gradient(135deg, rgb(var(--v-theme-primary)) 0%, rgb(var(--v-theme-secondary)) 100%);
   --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-  --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-  --background-gradient: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  --success-gradient: linear-gradient(135deg, rgb(var(--v-theme-success)) 0%, #00f2fe 100%);
+  --background-gradient: linear-gradient(
+    135deg,
+    rgb(var(--v-theme-surface)) 0%,
+    rgb(var(--v-theme-surface-variant)) 100%
+  );
 
-  // Colors
-  --primary-color: #667eea;
-  --primary-dark: #5a67d8;
-  --secondary-color: #764ba2;
-  --text-primary: #2d3748;
-  --text-secondary: #6c757d;
-  --text-muted: #9ca3af;
-  --border-color: rgba(0, 0, 0, 0.08);
+  // Colors that integrate with Vuetify theme
+  --primary-color: rgb(var(--v-theme-primary));
+  --primary-dark: rgb(var(--v-theme-primary-darken-1));
+  --secondary-color: rgb(var(--v-theme-secondary));
+  --text-primary: rgb(var(--v-theme-on-surface));
+  --text-secondary: rgb(var(--v-theme-on-surface-variant));
+  --text-muted: rgba(var(--v-theme-on-surface), 0.6);
+  --border-color: rgba(var(--v-border-color), var(--v-border-opacity));
   --shadow-light: rgba(0, 0, 0, 0.1);
   --shadow-medium: rgba(0, 0, 0, 0.15);
   --shadow-dark: rgba(0, 0, 0, 0.2);
@@ -106,25 +112,25 @@
   }
 }
 
-// Custom scrollbar styling
+// Custom scrollbar styling integrated with Vuetify themes
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: rgb(var(--v-theme-surface-variant));
   border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--primary-gradient);
   border-radius: 10px;
   transition: background var(--transition-base);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
+  background: linear-gradient(135deg, var(--primary-dark) 0%, rgb(var(--v-theme-secondary-darken-1)) 100%);
 }
 
 // Enhanced animations

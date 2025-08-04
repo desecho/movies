@@ -1720,6 +1720,13 @@ onMounted(async () => {
   background: rgba(31, 41, 55, 0.9);
 }
 
+.dark-theme {
+  .add-to-list-buttons {
+    background: none !important;
+    border: 0 !important;
+  }
+}
+
 /* Enhanced button toggle styling */
 :deep(.v-btn-toggle) {
   border-radius: 12px !important;

@@ -3,7 +3,7 @@
     <v-btn
       :icon="themeStore.isDark ? 'mdi-weather-sunny' : 'mdi-weather-night'"
       variant="text"
-      :title="themeStore.isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode'"
+      :title="`${themeStore.isDark ? 'Light' : 'Dark'} Mode (Vuetify Native + Custom)`"
       class="theme-toggle-btn"
       @click="themeStore.toggleTheme"
     >

@@ -18,6 +18,9 @@ import { useThemeStore } from "./stores/theme";
 const themeStore = useThemeStore();
 
 onMounted(() => {
+  // Initialize Vuetify theme integration
+  themeStore.initVuetifyTheme();
+  // Initialize theme preferences
   themeStore.initTheme();
 });
 </script>
@@ -269,18 +272,6 @@ onMounted(() => {
 }
 
 /* Enhanced pagination control styling */
-.dark-theme .PaginationControl {
-  background: rgba(55, 65, 81, 0.8) !important;
-  border-radius: 6px !important;
-  padding: 4px !important;
-  border: 1px solid rgba(255, 255, 255, 0.1) !important;
-  transition: all 0.2s ease !important;
-}
-
-.dark-theme .PaginationControl:hover {
-  background: rgba(102, 126, 234, 0.3) !important;
-  border-color: #667eea !important;
-}
 
 /* Smooth transitions for theme changes */
 * {
