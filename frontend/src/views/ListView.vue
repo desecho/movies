@@ -56,7 +56,7 @@
         ></v-text-field>
       </v-col>
       <v-col cols="1"></v-col>
-      <v-col v-if="areRecordsLoaded" cols="5">
+      <v-col v-if="areRecordsLoaded && !isRecordsLoading" cols="5">
         <div class="watch-count-container">
           <div class="watch-count-item watched">
             <div class="count-icon-wrapper watched-icon">
@@ -79,12 +79,23 @@
         </div>
       </v-col>
     </v-row>
-    <v-row v-if="areRecordsLoaded">
+    <v-row v-if="areRecordsLoaded && !isRecordsLoading">
       <v-col cols="10">
         <v-pagination v-model="page" :pages="totalPages" :range-size="1" :active-color="paginationActiveColor" />
       </v-col>
     </v-row>
-    <v-row>
+    <!-- Loading state -->
+    <v-row v-if="isRecordsLoading">
+      <v-col cols="12" class="text-center">
+        <div class="loading-container">
+          <v-progress-circular :size="60" :width="4" color="primary" indeterminate></v-progress-circular>
+          <div class="loading-text">Loading movies...</div>
+        </div>
+      </v-col>
+    </v-row>
+
+    <!-- Content when not loading -->
+    <v-row v-if="!isRecordsLoading">
       <v-col cols="12">
         <div v-cloak v-if="mode != 'gallery'">
           <draggable v-model="records" item-key="id" :disabled="!isSortable" @sort="saveRecordsOrder">
@@ -413,7 +424,9 @@
         </div>
       </v-col>
     </v-row>
-    <v-row v-if="areRecordsLoaded">
+
+    <!-- Pagination when not loading -->
+    <v-row v-if="areRecordsLoaded && !isRecordsLoading">
       <v-col cols="10">
         <v-pagination v-model="page" :pages="totalPages" :range-size="1" :active-color="paginationActiveColor" />
       </v-col>
@@ -457,6 +470,7 @@ const sort = ref("additionDate");
 const query = ref("");
 const records = toRef(recordsStore, "records");
 const areRecordsLoaded = toRef(recordsStore, "areLoaded");
+const isRecordsLoading = toRef(recordsStore, "isLoading");
 
 // For profile views, allow switching between lists
 const selectedProfileList = ref(props.listId);
@@ -2210,5 +2224,22 @@ onMounted(async () => {
   .count-label {
     font-size: 0.65rem;
   }
+}
+
+/* Loading State Styling */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  gap: 24px;
+}
+
+.loading-text {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #6b7280;
+  text-align: center;
 }
 </style>

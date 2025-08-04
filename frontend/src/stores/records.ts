@@ -14,6 +14,7 @@ export const useRecordsStore = defineStore("records", {
     state: () => ({
         records: recordsInitialState,
         areLoaded: false,
+        isLoading: false,
         currentUsername: null as string | null,
     }),
     actions: {
@@ -36,35 +37,42 @@ export const useRecordsStore = defineStore("records", {
                 return;
             }
 
+            // Set loading state
+            this.isLoading = true;
+
             // Clear existing records when context changes
             if (contextChanged) {
                 this.records = [];
                 this.areLoaded = false;
             }
 
-            let url: string;
-            if (username) {
-                // Load records for a specific user's profile
-                url = getUrl(`users/${username}/records/`);
-                this.currentUsername = username;
-            } else {
-                // Load records for the current logged-in user
-                url = getUrl("records/");
-                this.currentUsername = null;
-            }
+            try {
+                let url: string;
+                if (username) {
+                    // Load records for a specific user's profile
+                    url = getUrl(`users/${username}/records/`);
+                    this.currentUsername = username;
+                } else {
+                    // Load records for the current logged-in user
+                    url = getUrl("records/");
+                    this.currentUsername = null;
+                }
 
-            const response = await axios.get(url);
-            this.areLoaded = true;
-            const recs: RecordType[] = response.data as RecordType[];
-            recs.forEach((record) => {
-                record.ratingOriginal = record.rating;
-            });
-            this.records = response.data as RecordType[];
+                const response = await axios.get(url);
+                this.areLoaded = true;
+                const recs: RecordType[] = response.data as RecordType[];
+                recs.forEach((record) => {
+                    record.ratingOriginal = record.rating;
+                });
+                this.records = response.data as RecordType[];
 
-            if (username) {
-                console.log(`Records loaded for user: ${username}`);
-            } else {
-                console.log("Records loaded");
+                if (username) {
+                    console.log(`Records loaded for user: ${username}`);
+                } else {
+                    console.log("Records loaded");
+                }
+            } finally {
+                this.isLoading = false;
             }
         },
         async reloadRecords() {
