@@ -19,10 +19,10 @@
                 </v-form> -->
 
         <v-checkbox v-model="hidden" label="Hide profile" hide-details @change="savePreferences()"></v-checkbox>
-        Profile link:
-        <router-link :to="profileLink">{{ absoluteProfileLink }}</router-link>
+        <span class="profile-label">Profile link: </span>
+        <router-link :to="profileLink" class="profile-link">{{ absoluteProfileLink }}</router-link>
         <br /><br />
-        <router-link to="/change-password">Change password</router-link>
+        <router-link to="/change-password" class="change-password-link">Change password</router-link>
       </v-col>
     </v-row>
   </v-container>
@@ -75,3 +75,38 @@ onMounted(() => {
   loadPreferences();
 });
 </script>
+
+<style scoped>
+.profile-label {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.profile-link,
+.change-password-link {
+  color: #667eea;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.profile-link:hover,
+.change-password-link:hover {
+  color: #5a6fd8;
+  text-decoration: underline;
+}
+
+/* Dark theme specific styles */
+:global(.dark-theme) .profile-label {
+  color: var(--text-primary);
+}
+
+:global(.dark-theme) .profile-link,
+:global(.dark-theme) .change-password-link {
+  color: #93c5fd;
+}
+
+:global(.dark-theme) .profile-link:hover,
+:global(.dark-theme) .change-password-link:hover {
+  color: #bfdbfe;
+}
+</style>
