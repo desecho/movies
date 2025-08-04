@@ -263,6 +263,51 @@
       color: #94a3b8 !important;
     }
   }
+
+  // MoviesList component dark mode
+  .movie {
+    background: linear-gradient(135deg, #334155 0%, #475569 100%) !important;
+    border: 1px solid #475569 !important;
+  }
+
+  .movie .title {
+    color: #f1f5f9 !important;
+  }
+
+  .movie .details {
+    color: #94a3b8 !important;
+    background: rgba(148, 163, 184, 0.1) !important;
+    padding: 4px 8px !important;
+    border-radius: 6px !important;
+    font-weight: 600 !important;
+    text-align: center !important;
+    border: 1px solid rgba(148, 163, 184, 0.2) !important;
+  }
+
+  .add-to-list-buttons {
+    background: rgba(51, 65, 85, 0.95) !important;
+    border: 1px solid #475569 !important;
+
+    a {
+      background: rgba(148, 163, 184, 0.2) !important;
+      color: #f1f5f9 !important;
+
+      &:hover,
+      &:focus {
+        background: rgba(148, 163, 184, 0.3) !important;
+        color: white !important;
+      }
+    }
+  }
+
+  // TrendingView dark mode
+  .section-title {
+    color: #f1f5f9 !important;
+  }
+
+  .loading-text {
+    color: #94a3b8 !important;
+  }
 }
 
 // Responsive typography
