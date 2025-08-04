@@ -20,6 +20,10 @@ CONTENT_TYPE = "application/json"
 class BaseClient(Client):
     """Base client class."""
 
+    def __init__(self, enforce_csrf_checks=False, **defaults):
+        """Initialize client with CSRF disabled by default for tests."""
+        super().__init__(enforce_csrf_checks=enforce_csrf_checks, **defaults)
+
     def post_ajax(  # pylint:disable=too-many-positional-arguments
         self,
         path,

@@ -74,7 +74,7 @@ class SaveOptionsView(APIView):
         get_object_or_404(Record, user=request.user, pk=record_id)
 
         try:
-            options_object: OptionsObject = request.PUT["options"]
+            options_object: OptionsObject = request.data["options"]
             options = {
                 "watched_original": options_object["original"],
                 "watched_extended": options_object["extended"],
@@ -310,6 +310,10 @@ class SaveRecordsOrderView(APIView):
 
         user: User = request.user  # type: ignore
         for record in records:
-            # If record id is not found we silently ignore it
-            Record.objects.filter(pk=record["id"], user=user).update(order=record["order"])
+            try:
+                # If record id is not found we silently ignore it
+                Record.objects.filter(pk=record["id"], user=user).update(order=record["order"])
+            except KeyError:
+                # Handle invalid record structure gracefully
+                return Response(status=HTTPStatus.BAD_REQUEST)
         return Response()

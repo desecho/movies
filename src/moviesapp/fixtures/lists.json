@@ -1,9 +1,7 @@
 [
   {
     "fields": {
-      "name_ru": "\\u041f\\u0440\\u043e\\u0441\\u043c\\u043e\\u0442\\u0440\\u0435\\u043d\\u043e",
       "key_name": "watched",
-      "name_en": "Watched",
       "name": "Watched"
     },
     "model": "moviesapp.list",
@@ -11,9 +9,7 @@
   },
   {
     "fields": {
-      "name_ru": "\\u041a \\u041f\\u0440\\u043e\\u0441\\u043c\\u043e\\u0442\\u0440\\u0443",
       "key_name": "to-watch",
-      "name_en": "To Watch",
       "name": "To Watch"
     },
     "model": "moviesapp.list",
