@@ -15,38 +15,13 @@ This is a Django 5.2.4 and Vue.js 3 web application for movie management. Users 
 
 ## Development Commands
 
-### Initial Setup
-```bash
-make bootstrap          # Full project setup (dependencies, DB, migrations, build)
-make createsuperuser   # Create Django admin user
-```
-
-### Development Servers
-```bash
-make run               # Start Django development server (localhost:8000)
-make dev               # Start frontend development server (Vite)
-make celery            # Start Celery worker for background tasks
-```
-
 ### Building and Dependencies
 ```bash
 make build             # Build frontend assets with Vite
-make yarn-install      # Install frontend dependencies
-make poetry-update     # Update Python dependencies
-```
-
-### Database Operations
-```bash
-make migrate           # Run Django migrations
-make create-db         # Create database
-make drop-db           # Drop database
-make load-db           # Load database from backup
 ```
 
 ### Testing and Linting
 ```bash
-make test              # Run all tests (Python + frontend linting)
-make tox               # Run Python tests via tox
 make pytest            # Run pytest specifically
 make eslint            # Run ESLint on frontend
 ```
@@ -55,24 +30,12 @@ make eslint            # Run ESLint on frontend
 ```bash
 make format            # Format Python code (autoflake, isort, black)
 make format-frontend   # Format frontend code (prettier, eslint --fix)
-make format-all        # Format all code (backend + frontend + misc)
 ```
 
 ### Python Linting (Individual Tools)
 ```bash
 make pylint            # Python linting
-make flake8            # Style checking
 make mypy              # Type checking
-make bandit            # Security analysis
-make black             # Code formatting check
-make isort             # Import sorting check
-```
-
-### Management Commands
-```bash
-make manage [command] arguments="[args]"  # Run Django management commands
-make shell                                # Django shell
-make makemigrations arguments="[args]"    # Create migrations
 ```
 
 ## Architecture
@@ -82,7 +45,7 @@ make makemigrations arguments="[args]"    # Create migrations
 - **Django App**: `src/moviesapp/` - Core application logic
 - **Models**: User, Movie, Record (watch status), List, Action, Provider
 - **APIs**: REST API using Django REST Framework with JWT authentication
-- **External Integrations**: 
+- **External Integrations**:
   - `src/moviesapp/tmdb/` - TMDB API client
   - `src/moviesapp/omdb/` - OMDb API client
 - **Background Tasks**: Celery tasks in `src/moviesapp/tasks.py`
@@ -102,19 +65,6 @@ make makemigrations arguments="[args]"    # Create migrations
 - `frontend/src/components/` - Reusable Vue components
 - `deployment/` - Kubernetes manifests
 
-## Environment Configuration
-
-The project uses multiple environment files:
-- `env.sh` - Base environment variables
-- `env_custom.sh` - Local customizations (created from template)
-- `env_secrets.sh` - Secret keys and tokens (created from template)
-- `docker_secrets.env` - Docker secrets (created from template)
-
-Always source environment files before running commands:
-```bash
-source env.sh && source env_custom.sh && source env_secrets.sh
-```
-
 ## Database Models
 
 **Core Models:**
@@ -132,12 +82,6 @@ source env.sh && source env_custom.sh && source env_secrets.sh
 - **Frontend**: ESLint for code quality, Prettier for formatting
 - **Type Checking**: MyPy for Python, TypeScript for frontend
 
-## Deployment
-
-- **Development**: `make run` + `make dev` + `make celery`
-- **Docker**: `make docker-build-dev` and `make docker-run`
-- **Production**: Kubernetes deployment with separate backend/frontend containers
-
 ## Common Workflows
 
 1. **Adding a new feature**: Update both Django views/models and Vue components
@@ -145,6 +89,8 @@ source env.sh && source env_custom.sh && source env_secrets.sh
 3. **API changes**: Update both backend serializers and frontend TypeScript types
 4. **External API updates**: Modify TMDB/OMDb clients in respective modules
 
-## Development Memories
+## Additional instructions
 
-- Always run tests with `make pytest` command
+- Always run backend tests with `make pytest` command
+- Always run frontend tests with `make eslint` command
+- Before running tests and after you complete the coding - always run `make format` for backend changes and `make format-frontend` for frontend changes
