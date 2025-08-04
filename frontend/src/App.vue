@@ -195,6 +195,10 @@ onMounted(() => {
   color: var(--text-primary) !important;
 }
 
+.dark-theme .results-title {
+  color: var(--text-primary) !important;
+}
+
 /* Improve readability for all text in dark mode */
 .dark-theme {
   color: #f9fafb !important;
