@@ -1719,7 +1719,7 @@ onMounted(async () => {
 
 /* Enhanced button toggle styling */
 :deep(.v-btn-toggle) {
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(31, 41, 55, 0.9);
   border-radius: 12px !important;
   padding: 4px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
