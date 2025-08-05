@@ -44,7 +44,7 @@ const email = ADMIN_EMAIL;
 .footer-content {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 24px 0 80px;
+  padding: 0 24px 0 145px;
   display: flex;
   justify-content: space-between;
   align-items: center;
