@@ -9,7 +9,7 @@
         <ThemeToggle />
       </template>
     </v-app-bar>
-    <v-navigation-drawer v-model="drawer" width="200" elevation="0" class="modern-drawer" touchless>
+    <v-navigation-drawer v-model="drawer" elevation="0" touchless>
       <div class="drawer-header">
         <LogoComponent size="large" variant="default" clickable navigate-to="/" />
       </div>
@@ -77,11 +77,6 @@ onMounted(() => {
 
 .app-title {
   font-weight: 700;
-}
-
-.modern-drawer {
-  background: linear-gradient(180deg, #ffffff 0%, #f8f9fa 100%) !important;
-  border-right: 1px solid rgba(0, 0, 0, 0.08);
 }
 
 .drawer-header {
@@ -167,10 +162,6 @@ onMounted(() => {
 
 /* Mobile adjustments */
 @media (max-width: 768px) {
-  .modern-drawer {
-    width: 280px !important;
-  }
-
   .drawer-header {
     padding: 16px 12px 12px;
   }
