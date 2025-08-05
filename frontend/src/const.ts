@@ -8,7 +8,7 @@ export const starSizeNormal = 35;
 export const starSizeMinimal = 15;
 
 // AI Recommendations constants
-export const AI_MAX_RECOMMENDATIONS = 10;
+export const AI_MAX_RECOMMENDATIONS = 50;
 export const AI_MIN_RECOMMENDATIONS = 1;
 export const AI_MIN_RATING = 0;
 export const AI_MAX_RATING = 5;

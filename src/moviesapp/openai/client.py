@@ -18,10 +18,10 @@ If the user has specific preferences, tailor recommendations to those preference
 Ensure recommendations are diverse in genre and style if the user doesn't specify genre.
 Avoid recommending movies that the user has already seen.
 If the user has a minimum rating preference, ensure all recommendations meet that threshold.
-ensure all recommendations meet that threshold.
 If the user has a preferred year range, recommend movies within that range.
 If the user has preferred genres, prioritize those genres in recommendations.
 If the user has liked or disliked specific movies, use that information to refine recommendations.
+If the user has neutral/unrated movies, use them as context for what they've watched but don't treat them as positive or negative preferences - they provide viewing history context without preference signals.
 If the user has a specific number of recommendations in mind, provide that many.
 Focus on movies that match their preferences while introducing some variety.
 
@@ -66,7 +66,6 @@ class OpenAIClient:
         try:
             OpenAIClient._validate_user_preferences(user_preferences)
             prompt = OpenAIClient._build_recommendation_prompt(user_preferences)
-            print(prompt)
 
             response = self.client.chat.completions.create(
                 model=self.model,
@@ -76,7 +75,6 @@ class OpenAIClient:
             )
 
             content = response.choices[0].message.content
-            print(content)
             if content is None:
                 raise OpenAIError("OpenAI API returned empty content")
             parsed_content = OpenAIClient._parse_recommendation_response(content)
@@ -108,6 +106,7 @@ class OpenAIClient:
         OpenAIClient._validate_rating(preferences.min_rating)
         OpenAIClient._validate_movie_list(preferences.liked_movies, "liked")
         OpenAIClient._validate_movie_list(preferences.disliked_movies, "disliked")
+        OpenAIClient._validate_movie_list(preferences.unrated_movies, "unrated")
         OpenAIClient._validate_genre(preferences.preferred_genre)
         OpenAIClient._validate_year_range(preferences.year_range)
 
@@ -194,6 +193,10 @@ class OpenAIClient:
             disliked_movies_str = ", ".join(preferences.disliked_movies)
             prompt_parts.append(f"Movies they disliked: {disliked_movies_str}")
 
+        if preferences.unrated_movies:
+            unrated_movies_str = ", ".join(preferences.unrated_movies)
+            prompt_parts.append(f"Movies they watched but didn't rate (neutral): {unrated_movies_str}")
+
         if preferences.preferred_genre:
             prompt_parts.append(f"Preferred genre: {preferences.preferred_genre}")
 
@@ -235,19 +238,19 @@ class OpenAIClient:
     def _filter_out_duplicated_ids(recommendations: RecommendationResponse) -> None:
         """
         Remove duplicate IMDb IDs from recommendations list in-place.
-        
+
         Args:
             recommendations: List of recommendation items to filter
         """
         seen_ids = set()
         filtered_recommendations = []
-        
+
         for item in recommendations:
             imdb_id = item.get("imdb_id")
             if imdb_id and imdb_id not in seen_ids:
                 seen_ids.add(imdb_id)
                 filtered_recommendations.append(item)
-        
+
         # Clear and update the original list in-place
         recommendations.clear()
         recommendations.extend(filtered_recommendations)

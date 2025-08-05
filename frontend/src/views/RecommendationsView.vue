@@ -41,7 +41,7 @@
             <!-- Number of Recommendations -->
             <v-col cols="12" md="6">
               <div class="slider-section">
-                <label class="slider-label">Number of Recommendations</label>
+                <label class="slider-label" title="Choose a number that is more than your actual desired recommendations. You won't get exactly that many">Desired Number of Recommendations</label>
                 <v-slider
                   v-model="preferences.recommendationsNumber"
                   :min="AI_MIN_RECOMMENDATIONS"
@@ -52,6 +52,7 @@
                   tick-size="4"
                   color="primary"
                   class="mt-2"
+                  title="Choose a number that is more than your actual desired recommendations. You won't get exactly that many"
                 ></v-slider>
               </div>
             </v-col>

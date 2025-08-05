@@ -12,6 +12,7 @@ class RecommendationRequest:
 
     liked_movies: Optional[List[str]] = None
     disliked_movies: Optional[List[str]] = None
+    unrated_movies: Optional[List[str]] = None
     preferred_genre: Optional[str] = None
     year_range: Optional[Dict[str, int]] = None  # {"start": 2000, "end": 2023}
     min_rating: Optional[int] = None  # Rating on a 5-star scale

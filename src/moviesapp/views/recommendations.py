@@ -111,13 +111,14 @@ class RecommendationsView(APIView):
             raise ValueError("Invalid recommendations number value") from exc
 
     @staticmethod
-    def _get_user_movie_preferences(user: User) -> tuple[list[str], list[str]]:
-        """Get user's liked and disliked movies based on ratings.
+    def _get_user_movie_preferences(user: User) -> tuple[list[str], list[str], list[str]]:
+        """Get user's liked, disliked, and unrated movies based on ratings.
 
         Returns:
-            tuple: (liked_movies, disliked_movies) where:
+            tuple: (liked_movies, disliked_movies, unrated_movies) where:
             - liked_movies: Movies with rating >= 3
             - disliked_movies: Movies with rating <= 2 and > 0
+            - unrated_movies: Movies with rating = 0 (watched but not rated)
         """
         # Get liked movies (rating >= 3)
         liked_records = user.records.filter(list_id=List.WATCHED, rating__gte=3).select_related("movie")
@@ -129,7 +130,11 @@ class RecommendationsView(APIView):
         )
         disliked_movies = [record.movie.title for record in disliked_records]
 
-        return liked_movies, disliked_movies
+        # Get unrated movies (rating = 0)
+        unrated_records = user.records.filter(list_id=List.WATCHED, rating=0).select_related("movie")
+        unrated_movies = [record.movie.title for record in unrated_records]
+
+        return liked_movies, disliked_movies, unrated_movies
 
     @staticmethod
     def _convert_recommendations_to_movies(
@@ -169,12 +174,13 @@ class RecommendationsView(APIView):
 
             # Get user's movie preferences based on ratings
             user = cast(User, request.user)
-            liked_movies, disliked_movies = self._get_user_movie_preferences(user)
+            liked_movies, disliked_movies, unrated_movies = self._get_user_movie_preferences(user)
 
             # Build recommendation request
             recommendation_request = RecommendationRequest(
                 liked_movies=liked_movies or None,
                 disliked_movies=disliked_movies or None,
+                unrated_movies=unrated_movies or None,
                 preferred_genre=preferred_genre,
                 year_range=year_range,
                 min_rating=min_rating_int,
