@@ -535,7 +535,10 @@ const filteredRecords = computed(() => {
   const q = query.value.trim().toLowerCase();
   return records.value.filter((record) => {
     const matchesSearch =
-      record.movie.title.toLowerCase().includes(q) || record.movie.titleOriginal.toLowerCase().includes(q);
+      record.movie.title.toLowerCase().includes(q) ||
+      record.movie.titleOriginal.toLowerCase().includes(q) ||
+      (record.movie.director && record.movie.director.toLowerCase().includes(q)) ||
+      (record.movie.actors && record.movie.actors.toLowerCase().includes(q));
     const matchesList = record.listId === currentListId.value;
 
     // Apply "To Rewatch" filter if enabled
