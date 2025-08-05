@@ -31,8 +31,27 @@
           <v-divider class="my-3"></v-divider>
           <v-list class="nav-list" density="comfortable">
             <MenuItem v-if="!user.isLoggedIn" title="Login" icon="login" to="/login" />
-            <MenuItem v-if="user.isLoggedIn" title="Settings" icon="cog" to="/preferences" />
-            <MenuItem v-if="user.isLoggedIn" title="Logout" icon="logout" to="/logout" />
+            <template v-if="user.isLoggedIn">
+              <!-- User Profile Section -->
+              <v-list-item class="user-profile-item mb-2">
+                <template #prepend>
+                  <UserAvatarComponent
+                    :avatar-url="user.avatarUrl"
+                    :username="user.username"
+                    :size="40"
+                    variant="outlined"
+                  />
+                </template>
+                <v-list-item-title class="text-body-1 font-weight-medium">
+                  {{ user.username }}
+                </v-list-item-title>
+              </v-list-item>
+
+              <v-divider class="my-2"></v-divider>
+
+              <MenuItem title="Settings" icon="cog" to="/preferences" />
+              <MenuItem title="Logout" icon="logout" to="/logout" />
+            </template>
           </v-list>
         </div>
       </template>
@@ -50,6 +69,7 @@ import { useThemeStore } from "../stores/theme";
 import LogoComponent from "./LogoComponent.vue";
 import MenuItem from "./MenuItem.vue";
 import ThemeToggle from "./ThemeToggle.vue";
+import UserAvatarComponent from "./UserAvatarComponent.vue";
 
 const drawer = ref(false);
 const userStore = useAuthStore();
@@ -157,6 +177,27 @@ onMounted(() => {
 
 :deep(.dark-theme) .header-divider {
   background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* User profile section */
+.user-profile-item {
+  border-radius: 8px;
+  background-color: rgba(102, 126, 234, 0.05);
+  border: 1px solid rgba(102, 126, 234, 0.1);
+
+  :deep(.v-list-item__prepend) {
+    margin-right: 12px;
+  }
+
+  .v-list-item-title {
+    font-weight: 600;
+    color: rgb(var(--v-theme-on-surface));
+  }
+}
+
+:deep(.dark-theme) .user-profile-item {
+  background-color: rgba(102, 126, 234, 0.1);
+  border-color: rgba(102, 126, 234, 0.2);
 }
 
 /* Mobile adjustments */

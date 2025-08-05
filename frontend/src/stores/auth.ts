@@ -4,6 +4,7 @@ import { defineStore } from "pinia";
 
 import type { JWTDecoded } from "../types";
 import type { TokenData, TokenRefreshData, UserStore } from "./types";
+import type { AvatarUploadResponse } from "../views/types";
 
 import { initAxios } from "../axios";
 import { getUrl } from "../helpers";
@@ -59,6 +60,32 @@ export const useAuthStore = defineStore("auth", {
             const data = response.data as TokenRefreshData;
             this.user.accessToken = data.access;
             initAxios();
+        },
+        async uploadAvatar(file: File) {
+            const formData = new FormData();
+            formData.append("avatar", file);
+
+            const response = await axios.post(
+                getUrl("user/avatar/"),
+                formData,
+                {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
+                },
+            );
+
+            // Update user store with new avatar URL
+            const data = response.data as AvatarUploadResponse;
+            if (data.avatar_url) {
+                this.user.avatarUrl = data.avatar_url;
+            }
+        },
+        async deleteAvatar() {
+            await axios.delete(getUrl("user/avatar/"));
+
+            // Remove avatar URL from user store
+            this.user.avatarUrl = undefined;
         },
         logout() {
             this.user = userDefault;

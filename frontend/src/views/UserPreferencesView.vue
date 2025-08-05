@@ -1,28 +1,42 @@
 <template>
   <v-container>
     <v-row>
-      <v-col v-cloak cols="12">
-        <!-- <v-form
-                    ref="form"
-                    v-model="isFormValid"
-                    lazy-validation
-                    @submit.prevent="savePreferences"
-                >
-                    <v-text-field
-                        v-model="username"
-                        label="Username"
-                        variant="solo"
-                        :hide-details="true"
-                        :rules="[rules.required]"
-                        class="mr-5"
-                    ></v-text-field>
-                </v-form> -->
+      <v-col cols="12" md="8" lg="6" class="mx-auto">
+        <h1 class="text-h4 mb-6">User Preferences</h1>
 
-        <v-checkbox v-model="hidden" label="Hide profile" hide-details @change="savePreferences()"></v-checkbox>
-        <span class="profile-label">Profile link: </span>
-        <router-link :to="profileLink" class="profile-link">{{ absoluteProfileLink }}</router-link>
-        <br /><br />
-        <router-link to="/change-password" class="change-password-link">Change password</router-link>
+        <!-- Avatar Upload Section -->
+        <div class="mb-8">
+          <AvatarUploadComponent />
+        </div>
+
+        <!-- Privacy Settings -->
+        <v-card class="elevation-2 mb-6">
+          <v-card-title class="text-h6">Privacy Settings</v-card-title>
+          <v-card-text>
+            <v-checkbox
+              v-model="hidden"
+              label="Hide profile from other users"
+              hide-details
+              @change="savePreferences()"
+            ></v-checkbox>
+            <div class="mt-4">
+              <div class="text-body-2 text-medium-emphasis mb-1">Your profile link:</div>
+              <router-link :to="profileLink" class="profile-link text-primary">
+                {{ absoluteProfileLink }}
+              </router-link>
+            </div>
+          </v-card-text>
+        </v-card>
+
+        <!-- Account Settings -->
+        <v-card class="elevation-2">
+          <v-card-title class="text-h6">Account Settings</v-card-title>
+          <v-card-text>
+            <v-btn color="primary" variant="outlined" :to="'/change-password'" prepend-icon="mdi-lock">
+              Change Password
+            </v-btn>
+          </v-card-text>
+        </v-card>
       </v-col>
     </v-row>
   </v-container>
@@ -35,6 +49,7 @@ import { computed, onMounted, ref } from "vue";
 import type { GetUserPreferencesData } from "./types";
 import type { AxiosError } from "axios";
 
+import AvatarUploadComponent from "../components/AvatarUploadComponent.vue";
 import { getUrl } from "../helpers";
 import { useAuthStore } from "../stores/auth";
 import { $toast } from "../toast";

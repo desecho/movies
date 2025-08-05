@@ -334,6 +334,7 @@ DO_SPACES_REGION = getenv("DO_SPACES_REGION")
 
 # Storage configuration for avatars
 if DO_SPACES_ACCESS_KEY_ID and DO_SPACES_SECRET_ACCESS_KEY:
+    print("Using Digital Ocean Spaces for avatar storage")
     DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
     AWS_ACCESS_KEY_ID = DO_SPACES_ACCESS_KEY_ID
     AWS_SECRET_ACCESS_KEY = DO_SPACES_SECRET_ACCESS_KEY

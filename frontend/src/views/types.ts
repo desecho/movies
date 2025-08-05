@@ -20,3 +20,12 @@ export interface ChangePasswordErrorData {
     old_password?: string[];
     password?: string[];
 }
+
+export interface AvatarUploadResponse {
+    avatar_url: string;
+}
+
+export interface AvatarUploadError {
+    avatar?: string[];
+    detail?: string;
+}

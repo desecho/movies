@@ -3,6 +3,7 @@ export interface UserStore {
     refreshToken?: string;
     accessToken?: string;
     username?: string;
+    avatarUrl?: string;
 }
 
 export interface TokenData {
