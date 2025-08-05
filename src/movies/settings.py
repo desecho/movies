@@ -324,6 +324,59 @@ WATCH_DATA_UPDATE_MIN_DAYS = 3
 # API Keys
 TMDB_KEY = getenv("TMDB_KEY")
 OMDB_KEY = getenv("OMDB_KEY")
+OPENAI_API_KEY = getenv("OPENAI_API_KEY")
+
+# AI Recommendations
+AI_MAX_RECOMMENDATIONS = 5
+AI_MIN_RECOMMENDATIONS = 1
+AI_MIN_RATING = 2
+AI_MAX_RATING = 5
+AI_MAX_MOVIE_TITLE_LENGTH = 100
+OPENAI_MODEL = "gpt-4.1"
+OPENAI_TEMPERATURE = 0.7
+OPENAI_MAX_TOKENS = 1000
+
+# Movie Genres
+MAIN_GENRES = [
+    "Action",
+    "Adventure",
+    "Animation",
+    "Biography",
+    "Comedy",
+    "Crime",
+    "Documentary",
+    "Drama",
+    "Family",
+    "Fantasy",
+    "History",
+    "Horror",
+    "Musical",
+    "Mystery",
+    "Romance",
+    "Sci-Fi",
+    "Sport",
+    "Thriller",
+    "War",
+    "Western",
+]
+
+SUBGENRES = [
+    "Action-Comedy",
+    "Romantic Comedy",
+    "Psychological Thriller",
+    "Dark Comedy",
+    "Superhero",
+    "Post-Apocalyptic",
+    "Coming-of-Age",
+    "Noir",
+    "Neo-Noir",
+    "Slasher",
+    "Found Footage",
+    "Cyberpunk",
+    "Steampunk",
+    "Zombie",
+    "Mockumentary",
+]
 
 # Digital Ocean Spaces Configuration
 DO_SPACES_ACCESS_KEY_ID = getenv("DO_SPACES_ACCESS_KEY_ID")
