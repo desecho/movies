@@ -13,15 +13,22 @@ import { onMounted } from "vue";
 
 import FooterComponent from "./components/FooterComponent.vue";
 import MenuComponent from "./components/MenuComponent.vue";
+import { useAuthStore } from "./stores/auth";
 import { useThemeStore } from "./stores/theme";
 
 const themeStore = useThemeStore();
+const authStore = useAuthStore();
 
-onMounted(() => {
+onMounted(async () => {
   // Initialize Vuetify theme integration
   themeStore.initVuetifyTheme();
   // Initialize theme preferences
   themeStore.initTheme();
+
+  // Load avatar for already logged-in users
+  if (authStore.user.isLoggedIn && !authStore.user.avatarUrl) {
+    await authStore.loadAvatar();
+  }
 });
 </script>
 

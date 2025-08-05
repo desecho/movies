@@ -4,7 +4,16 @@
     <v-row v-if="isProfileView">
       <v-col cols="12">
         <div class="profile-header">
-          <h2>{{ username }}'s Movies</h2>
+          <div class="profile-user-info">
+            <UserAvatarComponent
+              :avatar-url="userAvatarUrl"
+              :username="username"
+              :size="80"
+              variant="elevated"
+              class="profile-avatar"
+            />
+            <h2>{{ username }}'s Movies</h2>
+          </div>
           <!-- List selector for profile views -->
           <div class="profile-list-selector">
             <v-btn-toggle v-model="selectedProfileList" density="compact" mandatory class="profile-btn-toggle">
@@ -489,6 +498,7 @@ import Draggable from "vuedraggable";
 
 import type { RecordType, SortData } from "../types";
 
+import UserAvatarComponent from "../components/UserAvatarComponent.vue";
 import { useMobile } from "../composables/mobile";
 import { listToWatchId, listWatchedId, starSizeMinimal, starSizeNormal } from "../const";
 import { getSrcSet, getUrl } from "../helpers";
@@ -521,6 +531,9 @@ const isRecordsLoading = toRef(recordsStore, "isLoading");
 
 // For profile views, allow switching between lists
 const selectedProfileList = ref(props.listId);
+
+// User avatar for profile views
+const userAvatarUrl = ref<string | null>(null);
 
 // Track loading state for add to list buttons
 const addingToList = ref<Record<string, boolean>>({});
@@ -685,6 +698,21 @@ async function loadMyRecords(): Promise<void> {
   }
 }
 
+// Load user avatar for profile views
+async function loadUserAvatar(): Promise<void> {
+  if (props.isProfileView && props.username) {
+    try {
+      const response = await axios.get(getUrl("users/"));
+      const users = response.data as Array<{ username: string; avatar_url: string | null }>;
+      const user = users.find((u) => u.username === props.username);
+      userAvatarUrl.value = user?.avatar_url || null;
+    } catch (error) {
+      console.log("Error loading user avatar:", error);
+      userAvatarUrl.value = null;
+    }
+  }
+}
+
 // Check if a movie is already in user's list
 function isMovieInMyList(movieId: number): boolean {
   if (!props.isProfileView || !authStore.user.isLoggedIn || !myRecords.value.length) {
@@ -761,6 +789,7 @@ function addToMyList(movieId: number, listId: number): void {
 watch([listIdRef, usernameRef, isProfileViewRef], async () => {
   selectedProfileList.value = props.listId; // Reset profile list selector
   // Force reload records when switching contexts
+  await loadUserAvatar(); // Load user's avatar if viewing profile
   await loadRecordsData();
   await loadMyRecords(); // Load user's records if viewing profile
   // Sort records after data is loaded
@@ -890,6 +919,7 @@ function moveToBottom(record: RecordType, index: number): void {
 onMounted(async () => {
   await loadRecordsData();
   await loadMyRecords(); // Load user's records if viewing profile and logged in
+  await loadUserAvatar(); // Load user's avatar if viewing profile
 });
 </script>
 
@@ -903,9 +933,22 @@ onMounted(async () => {
   color: white;
 }
 
-.profile-header h2 {
-  margin: 0 0 15px 0;
+.profile-user-info {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.profile-user-info h2 {
+  margin: 0;
   color: white;
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.profile-avatar {
+  flex-shrink: 0;
 }
 
 .profile-list-selector {

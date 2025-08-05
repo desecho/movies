@@ -41,6 +41,10 @@ export const useAuthStore = defineStore("auth", {
                 username,
             };
             initAxios();
+
+            // Load user's avatar after successful login
+            await this.loadAvatar();
+
             void router.push("/");
         },
         // This function needs to be called only when user is logged in
@@ -86,6 +90,20 @@ export const useAuthStore = defineStore("auth", {
 
             // Remove avatar URL from user store
             this.user.avatarUrl = undefined;
+        },
+        async loadAvatar() {
+            try {
+                const response = await axios.get(getUrl("user/avatar/"));
+                const data = response.data as AvatarUploadResponse;
+                if (data.avatar_url) {
+                    this.user.avatarUrl = data.avatar_url;
+                } else {
+                    this.user.avatarUrl = undefined;
+                }
+            } catch {
+                // If avatar loading fails, just set to undefined
+                this.user.avatarUrl = undefined;
+            }
         },
         logout() {
             this.user = userDefault;
