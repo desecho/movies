@@ -43,13 +43,23 @@
           </div>
         </v-col>
       </v-row>
-      <!-- Filter Controls (only for watched movies) -->
-      <v-row v-if="currentListId === listWatchedId && !isProfileView">
-        <v-col cols="12" md="6">
+      <!-- Filter Controls -->
+      <v-row v-if="!isProfileView && (currentListId === listWatchedId || currentListId === listToWatchId)">
+        <!-- To Rewatch filter (only for watched movies) -->
+        <v-col v-if="currentListId === listWatchedId" cols="12" md="6">
           <div class="control-group">
             <label class="control-label">Filter</label>
             <v-btn-toggle v-model="toRewatchFilter" density="compact">
               <v-btn :value="true" :size="modeButtonSize">To Rewatch</v-btn>
+            </v-btn-toggle>
+          </div>
+        </v-col>
+        <!-- Hide Unreleased filter (only for to-watch movies) -->
+        <v-col v-if="currentListId === listToWatchId" cols="12" md="6">
+          <div class="control-group">
+            <label class="control-label">Filter</label>
+            <v-btn-toggle v-model="hideUnreleasedMovies" density="compact">
+              <v-btn :value="true" :size="modeButtonSize">Hide Unreleased</v-btn>
             </v-btn-toggle>
           </div>
         </v-col>
@@ -480,6 +490,7 @@ const mode = ref("full");
 const sort = ref("additionDate");
 const query = ref("");
 const toRewatchFilter = ref(false);
+const hideUnreleasedMovies = ref(false);
 const records = toRef(recordsStore, "records");
 const areRecordsLoaded = toRef(recordsStore, "areLoaded");
 const isRecordsLoading = toRef(recordsStore, "isLoading");
@@ -515,7 +526,13 @@ const filteredRecords = computed(() => {
         record.rating === 5 && ((!record.options.ultraHd && !record.options.theatre) || !record.options.original);
     }
 
-    return matchesSearch && matchesList && matchesRewatchFilter;
+    // Apply "Hide Unreleased" filter if enabled
+    let matchesReleasedFilter = true;
+    if (hideUnreleasedMovies.value && currentListId.value === listToWatchId) {
+      matchesReleasedFilter = record.movie.isReleased;
+    }
+
+    return matchesSearch && matchesList && matchesRewatchFilter && matchesReleasedFilter;
   });
 });
 
