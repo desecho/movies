@@ -63,6 +63,15 @@
             </v-btn-toggle>
           </div>
         </v-col>
+        <!-- Recent Releases filter (only for to-watch movies) -->
+        <v-col v-if="currentListId === listToWatchId" cols="12" md="6">
+          <div class="control-group">
+            <label class="control-label">Recent Filter</label>
+            <v-btn-toggle v-model="recentReleasesFilter" density="compact">
+              <v-btn :value="true" :size="modeButtonSize">Recent Releases</v-btn>
+            </v-btn-toggle>
+          </div>
+        </v-col>
       </v-row>
     </div>
     <v-row>
@@ -500,6 +509,7 @@ const sort = ref("additionDate");
 const query = ref("");
 const toRewatchFilter = ref(false);
 const hideUnreleasedMovies = ref(false);
+const recentReleasesFilter = ref(false);
 const records = toRef(recordsStore, "records");
 const areRecordsLoaded = toRef(recordsStore, "areLoaded");
 const isRecordsLoading = toRef(recordsStore, "isLoading");
@@ -543,7 +553,24 @@ const filteredRecords = computed(() => {
       matchesReleasedFilter = record.movie.isReleased;
     }
 
-    return matchesSearch && matchesList && matchesRewatchFilter && matchesReleasedFilter;
+    // Apply "Recent Releases" filter if enabled (only for to-watch movies)
+    let matchesRecentReleasesFilter = true;
+    if (recentReleasesFilter.value && currentListId.value === listToWatchId) {
+      // Exclude movies with no release date
+      if (!record.movie.releaseDate || !record.movie.releaseDateTimestamp) {
+        matchesRecentReleasesFilter = false;
+      } else {
+        // Check if movie was released in the last 6 months
+        const sixMonthsAgo = new Date();
+        sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
+        const movieReleaseDate = new Date(record.movie.releaseDateTimestamp * 1000);
+        matchesRecentReleasesFilter = movieReleaseDate >= sixMonthsAgo;
+      }
+    }
+
+    return (
+      matchesSearch && matchesList && matchesRewatchFilter && matchesReleasedFilter && matchesRecentReleasesFilter
+    );
   });
 });
 
