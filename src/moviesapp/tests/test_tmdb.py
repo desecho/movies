@@ -5,6 +5,7 @@ import requests_mock
 import tmdbsimple as tmdb
 from django.conf import settings
 
+from moviesapp.exceptions import TrailerSiteNotFoundError
 from moviesapp.tmdb import (
     TmdbInvalidSearchTypeError,
     TmdbNoImdbIdError,
@@ -12,6 +13,7 @@ from moviesapp.tmdb import (
     get_tmdb_movie_data,
     get_tmdb_providers,
     get_tmdb_url,
+    get_trending,
     get_watch_data,
     search_movies,
 )
@@ -186,3 +188,177 @@ def test_search_movies_invalid_search_type():
         search_movies("matrix", "blah", "en")
 
     assert excinfo.match("blah")
+
+
+@patch.object(tmdb.Movies, "videos")
+@patch.object(tmdb.Movies, "info")
+def test_get_tmdb_movie_data_with_trailers(info_mock, videos_mock):
+    """Test getting movie data with trailers."""
+    info_mock.return_value = {
+        "imdb_id": "tt0133093",
+        "original_title": "The Matrix",
+        "title": "The Matrix",
+        "overview": "A hacker discovers reality is a simulation.",
+        "release_date": "1999-03-31",
+        "runtime": 136,
+        "poster_path": "/f89U3ADr1oiB1s9GkdPOEpXUk5H.jpg",
+        "homepage": "http://www.warnerbros.com/matrix",
+    }
+    videos_mock.return_value = {
+        "results": [{"type": "Trailer", "site": "YouTube", "key": "vKQi3bBA1y8", "name": "Official Trailer"}]
+    }
+
+    result = get_tmdb_movie_data(603)
+
+    assert result["trailers"]
+    assert len(result["trailers"]) == 1
+    assert result["trailers"][0]["site"] == "YouTube"
+
+
+@patch.object(tmdb.Movies, "videos")
+@patch.object(tmdb.Movies, "info")
+@patch("moviesapp.tmdb.tmdb.settings")
+@patch("moviesapp.tmdb.tmdb.capture_exception")
+def test_get_tmdb_movie_data_invalid_trailer_site_production(capture_mock, settings_mock, info_mock, videos_mock):
+    """Test handling invalid trailer site in production mode."""
+    settings_mock.DEBUG = False
+    settings_mock.LANGUAGE_EN = "en"
+    settings_mock.TRAILER_SITES = {"YouTube": "youtube.com", "Vimeo": "vimeo.com"}
+
+    info_mock.return_value = {
+        "imdb_id": "tt0133093",
+        "original_title": "The Matrix",
+        "title": "The Matrix",
+        "overview": "A hacker discovers reality is a simulation.",
+        "release_date": "1999-03-31",
+        "runtime": 136,
+        "poster_path": "/f89U3ADr1oiB1s9GkdPOEpXUk5H.jpg",
+        "homepage": "http://www.warnerbros.com/matrix",
+    }
+    videos_mock.return_value = {
+        "results": [{"type": "Trailer", "site": "InvalidSite", "key": "vKQi3bBA1y8", "name": "Official Trailer"}]
+    }
+
+    result = get_tmdb_movie_data(603)
+
+    # Should capture the exception and continue without the invalid trailer
+    capture_mock.assert_called_once()
+    assert len(result["trailers"]) == 0
+
+
+@patch.object(tmdb.Movies, "videos")
+@patch.object(tmdb.Movies, "info")
+@patch("moviesapp.tmdb.tmdb.settings")
+def test_get_tmdb_movie_data_invalid_trailer_site_debug(settings_mock, info_mock, videos_mock):
+    """Test handling invalid trailer site in debug mode."""
+
+    settings_mock.DEBUG = True
+    settings_mock.LANGUAGE_EN = "en"
+    settings_mock.TRAILER_SITES = {"YouTube": "youtube.com", "Vimeo": "vimeo.com"}
+
+    info_mock.return_value = {
+        "imdb_id": "tt0133093",
+        "original_title": "The Matrix",
+        "title": "The Matrix",
+        "overview": "A hacker discovers reality is a simulation.",
+        "release_date": "1999-03-31",
+        "runtime": 136,
+        "poster_path": "/f89U3ADr1oiB1s9GkdPOEpXUk5H.jpg",
+        "homepage": "http://www.warnerbros.com/matrix",
+    }
+    videos_mock.return_value = {
+        "results": [{"type": "Trailer", "site": "InvalidSite", "key": "vKQi3bBA1y8", "name": "Official Trailer"}]
+    }
+
+    with pytest.raises(TrailerSiteNotFoundError):
+        get_tmdb_movie_data(603)
+
+
+@patch.object(tmdb.Movies, "videos")
+@patch.object(tmdb.Movies, "info")
+def test_get_tmdb_movie_data_with_runtime(info_mock, videos_mock):
+    """Test getting movie data with runtime conversion."""
+    info_mock.return_value = {
+        "imdb_id": "tt0133093",
+        "original_title": "The Matrix",
+        "title": "The Matrix",
+        "overview": "A hacker discovers reality is a simulation.",
+        "release_date": "1999-03-31",
+        "runtime": 136,  # Should be converted to time object
+        "poster_path": "/f89U3ADr1oiB1s9GkdPOEpXUk5H.jpg",
+        "homepage": "http://www.warnerbros.com/matrix",
+    }
+    videos_mock.return_value = {"results": []}
+
+    result = get_tmdb_movie_data(603)
+
+    assert result["runtime"] is not None
+    # 136 minutes should convert to 2:16:00
+    assert result["runtime"].hour == 2
+    assert result["runtime"].minute == 16
+
+
+@patch.object(tmdb.Movies, "videos")
+@patch.object(tmdb.Movies, "info")
+def test_get_tmdb_movie_data_no_runtime(info_mock, videos_mock):
+    """Test getting movie data without runtime."""
+    info_mock.return_value = {
+        "imdb_id": "tt0133093",
+        "original_title": "The Matrix",
+        "title": "The Matrix",
+        "overview": "A hacker discovers reality is a simulation.",
+        "release_date": "1999-03-31",
+        "runtime": None,
+        "poster_path": "/f89U3ADr1oiB1s9GkdPOEpXUk5H.jpg",
+        "homepage": "http://www.warnerbros.com/matrix",
+    }
+    videos_mock.return_value = {"results": []}
+
+    result = get_tmdb_movie_data(603)
+
+    assert result["runtime"] is None
+
+
+@patch.object(tmdb.Movies, "videos")
+@patch.object(tmdb.Movies, "info")
+def test_get_tmdb_movie_data_no_release_date(info_mock, videos_mock):
+    """Test getting movie data without release date."""
+    info_mock.return_value = {
+        "imdb_id": "tt0133093",
+        "original_title": "The Matrix",
+        "title": "The Matrix",
+        "overview": "A hacker discovers reality is a simulation.",
+        "release_date": None,
+        "runtime": 136,
+        "poster_path": "/f89U3ADr1oiB1s9GkdPOEpXUk5H.jpg",
+        "homepage": "http://www.warnerbros.com/matrix",
+    }
+    videos_mock.return_value = {"results": []}
+
+    result = get_tmdb_movie_data(603)
+
+    assert result["release_date"] is None
+
+
+@patch.object(tmdb.Trending, "info")
+def test_get_trending(trending_mock):
+    """Test getting trending movies."""
+    trending_mock.return_value = {
+        "results": [
+            {
+                "id": 603,
+                "title": "The Matrix",
+                "original_title": "The Matrix",
+                "overview": "A hacker discovers reality is a simulation.",
+                "release_date": "1999-03-31",
+                "poster_path": "/f89U3ADr1oiB1s9GkdPOEpXUk5H.jpg",
+                "vote_average": 8.7,
+            }
+        ]
+    }
+
+    result = get_trending()
+
+    assert len(result) == 1
+    assert result[0]["id"] == 603
+    assert result[0]["title"] == "The Matrix"
