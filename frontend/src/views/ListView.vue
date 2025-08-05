@@ -227,7 +227,7 @@
                   >
                     <div v-show="element.movie.imdbRating" class="imdb-rating">
                       <span class="item-desc">IMDb Rating:</span>
-                      {{ element.movie.imdbRating }}
+                      {{ element.movie.imdbRating }} ({{ element.movie.imdbRatingConverted }})
                     </div>
                     <div v-show="element.movie.isReleased" class="release-date">
                       <span v-show="mode != 'minimal'" class="item-desc">Release Date:</span>

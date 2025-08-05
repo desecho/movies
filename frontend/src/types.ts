@@ -36,6 +36,7 @@ export interface Movie {
     posterBig: string;
     posterSmall: string;
     imdbRating: number;
+    imdbRatingConverted: number;
     releaseDate: string;
     releaseDateTimestamp: number;
     country: string;

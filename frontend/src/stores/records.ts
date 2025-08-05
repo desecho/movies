@@ -63,6 +63,9 @@ export const useRecordsStore = defineStore("records", {
                 const recs: RecordType[] = response.data as RecordType[];
                 recs.forEach((record) => {
                     record.ratingOriginal = record.rating;
+                    record.movie.imdbRatingConverted = Number(
+                        ((record.movie.imdbRating / 10) * 5).toFixed(1),
+                    ); // Convert IMDb rating to a 0-5 scale
                 });
                 this.records = response.data as RecordType[];
 
