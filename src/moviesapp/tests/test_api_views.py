@@ -263,6 +263,7 @@ class SaveOptionsViewTestCase(APITestCase):
                 "extended": False,
                 "ultraHd": False,
                 "fullHd": False,
+                "ignoreRewatch": False,
             }
         }
 
@@ -285,6 +286,7 @@ class SaveOptionsViewTestCase(APITestCase):
                 "original": False,
                 "extended": False,
                 "fullHd": False,
+                "ignoreRewatch": False,
             }
         }
 

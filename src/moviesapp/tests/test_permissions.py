@@ -142,6 +142,7 @@ class RecordOwnershipTestCase(BaseTestCase):
                 "extended": False,
                 "ultraHd": False,
                 "fullHd": False,
+                "ignoreRewatch": True,
             }
         }
         response = self.client.put_ajax(url, json.dumps(data))

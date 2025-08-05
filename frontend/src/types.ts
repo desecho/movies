@@ -69,6 +69,7 @@ export interface RecordOptions {
     hd: boolean;
     fullHd: boolean;
     ultraHd: boolean;
+    ignoreRewatch: boolean;
 }
 
 export interface RecordType {

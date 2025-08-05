@@ -85,6 +85,7 @@ class SaveOptionsView(APIView):
                 "watched_in_4k": options_object["ultraHd"],
                 "watched_in_hd": options_object["hd"],
                 "watched_in_full_hd": options_object["fullHd"],
+                "ignore_rewatch": options_object["ignoreRewatch"],
             }
         except KeyError:
             return Response(status=HTTPStatus.BAD_REQUEST)
@@ -227,6 +228,7 @@ class RecordsView(APIView):
             "hd": record.watched_in_hd,
             "fullHd": record.watched_in_full_hd,
             "ultraHd": record.watched_in_4k,
+            "ignoreRewatch": record.ignore_rewatch,
         }
 
     def _get_record_objects(self, records: QuerySet[Record]) -> list[RecordObject]:

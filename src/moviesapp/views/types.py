@@ -59,6 +59,7 @@ class OptionsObject(TypedDict):
     hd: bool
     fullHd: bool
     ultraHd: bool
+    ignoreRewatch: bool
 
 
 class RecordObject(TypedDict):

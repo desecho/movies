@@ -433,6 +433,7 @@ class Record(Model):
     watched_in_hd = BooleanField(default=False)
     watched_in_full_hd = BooleanField(default=False)
     watched_in_4k = BooleanField(default=False)
+    ignore_rewatch = BooleanField(default=False)
     objects: Manager["Record"] = RecordQuerySet.as_manager()
 
     class Meta:

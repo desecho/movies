@@ -395,6 +395,15 @@
                             @change="saveOptions(element, 'ultraHd')"
                           />
                         </div>
+                        <div>
+                          <label :for="'ignoreRewatch_' + element.id">Ignore rewatch filter</label>
+                          <input
+                            :id="'ignoreRewatch_' + element.id"
+                            v-model="element.options.ignoreRewatch"
+                            type="checkbox"
+                            @change="saveOptions(element, 'ignoreRewatch')"
+                          />
+                        </div>
                       </div>
                       <div></div>
                     </div>
@@ -523,7 +532,9 @@ const filteredRecords = computed(() => {
     let matchesRewatchFilter = true;
     if (toRewatchFilter.value && currentListId.value === listWatchedId) {
       matchesRewatchFilter =
-        record.rating === 5 && ((!record.options.ultraHd && !record.options.theatre) || !record.options.original);
+        record.rating === 5 &&
+        ((!record.options.ultraHd && !record.options.theatre) || !record.options.original) &&
+        !record.options.ignoreRewatch;
     }
 
     // Apply "Hide Unreleased" filter if enabled
