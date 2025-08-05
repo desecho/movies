@@ -139,10 +139,9 @@ onMounted(() => {
 .theme-toggle-container {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 12px;
+  gap: 25px;
   padding: 8px 16px;
-  margin: 0 -4px;
+  margin: 0 -9px;
 }
 
 .theme-label {
