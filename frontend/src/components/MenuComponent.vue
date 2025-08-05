@@ -3,13 +3,17 @@
     <v-app-bar v-if="isMobile" class="modern-app-bar" elevation="0">
       <v-app-bar-nav-icon variant="text" @click="toggleDrawer()"></v-app-bar-nav-icon>
       <v-app-bar-title class="app-title">
-        <span class="title-gradient">Movies</span>
+        <LogoComponent size="medium" variant="white" clickable navigate-to="/" />
       </v-app-bar-title>
       <template #append>
         <ThemeToggle />
       </template>
     </v-app-bar>
     <v-navigation-drawer v-model="drawer" width="200" elevation="0" class="modern-drawer" touchless>
+      <div class="drawer-header">
+        <LogoComponent size="large" variant="default" clickable navigate-to="/" />
+      </div>
+      <v-divider class="header-divider"></v-divider>
       <v-list class="nav-list" density="comfortable">
         <MenuItem title="Search" icon="magnify" to="/" />
         <MenuItem title="Trending" icon="trending-up" to="/trending" />
@@ -43,6 +47,7 @@ import { useMobile } from "../composables/mobile";
 import { useAuthStore } from "../stores/auth";
 import { useThemeStore } from "../stores/theme";
 
+import LogoComponent from "./LogoComponent.vue";
 import MenuItem from "./MenuItem.vue";
 import ThemeToggle from "./ThemeToggle.vue";
 
@@ -74,19 +79,21 @@ onMounted(() => {
   font-weight: 700;
 }
 
-.title-gradient {
-  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  font-size: 1.5rem;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-}
-
 .modern-drawer {
   background: linear-gradient(180deg, #ffffff 0%, #f8f9fa 100%) !important;
   border-right: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.drawer-header {
+  padding: 20px 16px 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.header-divider {
+  background-color: rgba(0, 0, 0, 0.08);
+  margin: 0 12px 8px;
 }
 
 .nav-list {
@@ -149,10 +156,23 @@ onMounted(() => {
   color: #6b7280;
 }
 
+/* Dark theme drawer header */
+:deep(.dark-theme) .drawer-header {
+  background: rgba(55, 65, 81, 0.1);
+}
+
+:deep(.dark-theme) .header-divider {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
 /* Mobile adjustments */
 @media (max-width: 768px) {
   .modern-drawer {
     width: 280px !important;
+  }
+
+  .drawer-header {
+    padding: 16px 12px 12px;
   }
 }
 </style>
