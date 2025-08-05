@@ -112,13 +112,17 @@ class RecommendationsView(APIView):
 
     @staticmethod
     def _get_user_movie_preferences(user: User) -> tuple[list[str], list[str], list[str]]:
-        """Get user's liked, disliked, and unrated movies based on ratings.
+        """
+        Get user's liked, disliked, and unrated movies based on ratings.
 
-        Returns:
-            tuple: (liked_movies, disliked_movies, unrated_movies) where:
+        Returns
+        -------
+        tuple
+            (liked_movies, disliked_movies, unrated_movies) where:
             - liked_movies: Movies with rating >= 3
             - disliked_movies: Movies with rating <= 2 and > 0
             - unrated_movies: Movies with rating = 0 (watched but not rated)
+
         """
         # Get liked movies (rating >= 3)
         liked_records = user.records.filter(list_id=List.WATCHED, rating__gte=3).select_related("movie")

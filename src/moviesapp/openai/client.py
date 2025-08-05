@@ -51,14 +51,21 @@ class OpenAIClient:
         """
         Get movie recommendations based on user preferences.
 
-        Args:
-            user_preferences: User's movie preferences and history
+        Args
+        ----
+        user_preferences : RecommendationRequest
+            User's movie preferences and history
 
-        Returns:
+        Returns
+        -------
+        RecommendationResponse
             RecommendationResponse with recommended movies
 
-        Raises:
-            OpenAIError: If API call fails
+        Raises
+        ------
+        OpenAIError
+            If API call fails
+
         """
         try:
             OpenAIClient._validate_user_preferences(user_preferences)
@@ -93,11 +100,16 @@ class OpenAIClient:
         """
         Validate user preferences against settings constraints.
 
-        Args:
-            preferences: User's movie preferences to validate
+        Args
+        ----
+        preferences : RecommendationRequest
+            User's movie preferences to validate
 
-        Raises:
-            ValueError: If preferences are invalid
+        Raises
+        ------
+        ValueError
+            If preferences are invalid
+
         """
         OpenAIClient._validate_recommendations_number(preferences.recommendations_number)
         OpenAIClient._validate_rating(preferences.min_rating)
@@ -237,7 +249,10 @@ class OpenAIClient:
         Remove duplicate IMDb IDs from recommendations list in-place.
 
         Args:
-            recommendations: List of recommendation items to filter
+        ----
+        recommendations : RecommendationResponse
+            List of recommendation items to filter
+
         """
         seen_ids = set()
         filtered_recommendations = []

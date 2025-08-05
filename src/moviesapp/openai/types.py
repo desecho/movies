@@ -30,6 +30,16 @@ class MovieRecommendation:
 
 @dataclass
 class IMDbItem(TypedDict):
+    """
+    Represents an IMDb item with its identifier.
+
+    Attributes
+    ----------
+    imdb_id : str
+        The IMDb identifier for the movie
+
+    """
+
     imdb_id: str
 
 
