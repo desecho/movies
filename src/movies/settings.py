@@ -328,21 +328,42 @@ OMDB_KEY = getenv("OMDB_KEY")
 # Digital Ocean Spaces Configuration
 DO_SPACES_ACCESS_KEY_ID = getenv("DO_SPACES_ACCESS_KEY_ID")
 DO_SPACES_SECRET_ACCESS_KEY = getenv("DO_SPACES_SECRET_ACCESS_KEY")
-DO_SPACES_ENDPOINT_URL = getenv("DO_SPACES_ENDPOINT_URL")
+DO_SPACES_ENDPOINT_URL = getenv("DO_SPACES_ENDPOINT_URL", "https://nyc3.digitaloceanspaces.com")
 DO_SPACES_BUCKET_NAME = getenv("DO_SPACES_BUCKET_NAME")
 DO_SPACES_REGION = getenv("DO_SPACES_REGION")
+DO_SPACES_CUSTOM_DOMAIN = getenv("DO_SPACES_BUCKET_NAME")
 
-# Storage configuration for avatars
+# Storage configuration for avatars using modern Django 5.2+ STORAGES setting
 if DO_SPACES_ACCESS_KEY_ID and DO_SPACES_SECRET_ACCESS_KEY:
-    print("Using Digital Ocean Spaces for avatar storage")
-    DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
-    AWS_ACCESS_KEY_ID = DO_SPACES_ACCESS_KEY_ID
-    AWS_SECRET_ACCESS_KEY = DO_SPACES_SECRET_ACCESS_KEY
-    AWS_STORAGE_BUCKET_NAME = DO_SPACES_BUCKET_NAME
-    AWS_S3_ENDPOINT_URL = DO_SPACES_ENDPOINT_URL
-    AWS_S3_REGION_NAME = DO_SPACES_REGION
-    AWS_DEFAULT_ACL = "public-read"
-    AWS_S3_OBJECT_PARAMETERS = {
-        "CacheControl": "max-age=86400",
+    STORAGES = {
+        "default": {
+            "BACKEND": "storages.backends.s3.S3Storage",
+            "OPTIONS": {
+                "access_key": DO_SPACES_ACCESS_KEY_ID,
+                "secret_key": DO_SPACES_SECRET_ACCESS_KEY,
+                "bucket_name": DO_SPACES_BUCKET_NAME,
+                "endpoint_url": DO_SPACES_ENDPOINT_URL,
+                "region_name": DO_SPACES_REGION,
+                "custom_domain": DO_SPACES_CUSTOM_DOMAIN,
+                "default_acl": "public-read",
+                "location": "",
+                "object_parameters": {
+                    "CacheControl": "max-age=86400",
+                },
+                "querystring_auth": False,  # Don't use query string authentication for public files
+            },
+        },
+        "staticfiles": {
+            "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+        },
     }
-    AWS_LOCATION = "avatars/"
+else:
+    # Fallback to local storage when Digital Ocean Spaces is not configured
+    STORAGES = {
+        "default": {
+            "BACKEND": "django.core.files.storage.FileSystemStorage",
+        },
+        "staticfiles": {
+            "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+        },
+    }
