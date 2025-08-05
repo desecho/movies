@@ -122,9 +122,10 @@ export default [...fixupConfigRules(compat.extends(
         "accessor-pairs": "error",
         "capitalized-comments": "error",
 
-        "max-len": ["error", {
-            code: 119,
-        }],
+        // conflicts with Prettier
+        // "max-len": ["error", {
+        //     code: 119,
+        // }],
 
         "sort-imports": ["error", {
             ignoreCase: true,
