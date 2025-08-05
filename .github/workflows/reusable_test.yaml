@@ -41,12 +41,6 @@ jobs:
           path: ~/.cache/pip
           key: pip
 
-      - name: Use tox cache
-        uses: actions/cache@v4.2.3
-        with:
-          path: .tox
-          key: tox-${{ hashFiles('requirements.txt', 'requirements-dev.txt', 'requirements-additional.txt') }}
-
       - name: Install linters binaries
         run: make install-linters-binaries
 
