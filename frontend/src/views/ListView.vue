@@ -43,6 +43,17 @@
           </div>
         </v-col>
       </v-row>
+      <!-- Filter Controls (only for watched movies) -->
+      <v-row v-if="currentListId === listWatchedId && !isProfileView">
+        <v-col cols="12" md="6">
+          <div class="control-group">
+            <label class="control-label">Filter</label>
+            <v-btn-toggle v-model="toRewatchFilter" density="compact">
+              <v-btn :value="true" :size="modeButtonSize">To Rewatch</v-btn>
+            </v-btn-toggle>
+          </div>
+        </v-col>
+      </v-row>
     </div>
     <v-row>
       <v-col cols="6">
@@ -468,6 +479,7 @@ const themeStore = useThemeStore(); // Initialize theme store
 const mode = ref("full");
 const sort = ref("additionDate");
 const query = ref("");
+const toRewatchFilter = ref(false);
 const records = toRef(recordsStore, "records");
 const areRecordsLoaded = toRef(recordsStore, "areLoaded");
 const isRecordsLoading = toRef(recordsStore, "isLoading");
@@ -492,10 +504,18 @@ const currentListId = computed(() => {
 const filteredRecords = computed(() => {
   const q = query.value.trim().toLowerCase();
   return records.value.filter((record) => {
-    return (
-      (record.movie.title.toLowerCase().includes(q) || record.movie.titleOriginal.toLowerCase().includes(q)) &&
-      record.listId === currentListId.value
-    );
+    const matchesSearch =
+      record.movie.title.toLowerCase().includes(q) || record.movie.titleOriginal.toLowerCase().includes(q);
+    const matchesList = record.listId === currentListId.value;
+
+    // Apply "To Rewatch" filter if enabled
+    let matchesRewatchFilter = true;
+    if (toRewatchFilter.value && currentListId.value === listWatchedId) {
+      matchesRewatchFilter =
+        record.rating === 5 && ((!record.options.ultraHd && !record.options.theatre) || !record.options.original);
+    }
+
+    return matchesSearch && matchesList && matchesRewatchFilter;
   });
 });
 
