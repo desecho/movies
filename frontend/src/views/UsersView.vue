@@ -29,13 +29,19 @@
 
         <div v-else class="users-grid">
           <div v-for="(user, index) in users" :key="index" class="user-card">
-            <router-link :to="`/users/${user}/list/watched`" class="user-link">
+            <router-link :to="`/users/${user.username}/list/watched`" class="user-link">
               <div class="user-card-content">
                 <div class="user-avatar">
-                  <v-icon icon="mdi-account-circle" class="avatar-icon" />
+                  <img
+                    v-if="user.avatar_url"
+                    :src="user.avatar_url"
+                    :alt="`${user.username}'s avatar`"
+                    class="avatar-image"
+                  />
+                  <v-icon v-else icon="mdi-account-circle" class="avatar-icon" />
                 </div>
                 <div class="user-info">
-                  <h3 class="username">{{ user }}</h3>
+                  <h3 class="username">{{ user.username }}</h3>
                   <p class="user-subtitle">View movie collection</p>
                 </div>
                 <div class="user-actions">
@@ -60,7 +66,12 @@ import type { Ref } from "vue";
 import { getUrl } from "../helpers";
 import { $toast } from "../toast";
 
-const users: Ref<string[]> = ref([]);
+interface User {
+  username: string;
+  avatar_url: string | null;
+}
+
+const users: Ref<User[]> = ref([]);
 const loading = ref(true);
 
 function loadUsers(): void {
@@ -68,7 +79,7 @@ function loadUsers(): void {
   axios
     .get(getUrl("users/"))
     .then((response) => {
-      users.value = response.data as string[];
+      users.value = response.data as User[];
     })
     .catch((error: AxiosError) => {
       console.log(error);
@@ -228,6 +239,13 @@ onMounted(() => {
 .avatar-icon {
   font-size: 2.5rem;
   color: white;
+}
+
+.avatar-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
 }
 
 /* User Info */
