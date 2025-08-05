@@ -11,7 +11,6 @@
           <li>Add custom order for the "To Watch" list</li>
           <li>Share your lists online</li>
           <li>See where you can stream a movie</li>
-          <li>Link your VK account and see your friends' lists</li>
           <li>Privacy settings.</li>
           <li>
             Add additional information such as if you watched a movie in the original version, in a theatre, an

@@ -1,11 +1,6 @@
 Documentation
 ==============
 
-Npm module dependencies
-------------------------
-* ``tether``, ``jquery`` and ``popper.js`` are ``bootstrap`` dependencies
-* ``sass`` is  a dependency of ``sass-loader``
-
 Celery
 ---------
 Celery is used to load watch data of a movie that was just added to the database with a delay in the background.
@@ -14,43 +9,11 @@ Cache
 --------
 Redis is used for caching.
 
-The following is being cached:
-
-* ``has_friends`` method of the ``UserBase`` class
-* ``self.vk.friends.get()`` call of the ``get_friends`` method of the ``Vk`` class
-
-Avatars
------------
-Priority:
-
-- VK
-- FB
-- Gravatar
-
-oAuth
------------
-Users can login with their VK or FB accounts. **FB is temporarily disabled**.
-
-When a user logs in with an oAuth account, the user is automatically created if the user with the email address
-linked to oAuth account does not exist already. If it does exist - the user is automatically linked to the oAuth account.
-
-VK
-----------
-For a VK account, first name, last name, avatar and country data is loaded.
-
-Language data is only available for Standalone applications only and we are not getting
-the language information at this point due to the difficulty related to obtaining it.
-See details in `VK docs`_.
-
-For VK logins we assume that the language is Russian.
-We also assume that the timezone is Europe/Moscow.
-
 Cron jobs
 ------------
 Cron jobs are run with `GitHub Actions`_. Time zone is UTC.
 
 - ``Update movie data`` runs at 04:00 UTC (00:00 EDT) on the first day of the month
-- ``Update VK Avatars`` runs at 05:00 UTC (01:00 EDT) on the first day of the month
 - ``Load providers`` runs at 06:00 UTC (02:00 EDT) on the first day of the month
 - ``Remove unused movies`` runs at 07:00 UTC (03:00 EDT) on the first day of the month
 - ``DB backup`` runs at 09:00 UTC (05:00 EDT) daily
@@ -83,7 +46,6 @@ The following GitHub Actions are used:
 * `Set Timezone`_
 * `GitHub Actions Version Updater`_
 
-.. _VK Docs: https://dev.vk.com/method/account.getInfo
 .. _GitHub Actions: https://github.com/features/actions
 
 .. _Checkout: https://github.com/marketplace/actions/checkout

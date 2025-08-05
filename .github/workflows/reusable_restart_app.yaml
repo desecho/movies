@@ -32,10 +32,6 @@ jobs:
           kubectl apply -f deployment/configmap.yaml
           kubectl create secret generic "$PROJECT" --from-literal=DB_PASSWORD="${{ secrets.DB_PASSWORD }}" \
             --from-literal=SECRET_KEY="${{ secrets.SECRET_KEY }}" \
-            --from-literal=SOCIAL_AUTH_VK_OAUTH2_KEY=${{ secrets.SOCIAL_AUTH_VK_OAUTH2_KEY }} \
-            --from-literal=SOCIAL_AUTH_VK_OAUTH2_SECRET=${{ secrets.SOCIAL_AUTH_VK_OAUTH2_SECRET }} \
-            --from-literal=SOCIAL_AUTH_FACEBOOK_KEY=${{ secrets.SOCIAL_AUTH_FACEBOOK_KEY }} \
-            --from-literal=SOCIAL_AUTH_FACEBOOK_SECRET=${{ secrets.SOCIAL_AUTH_FACEBOOK_SECRET }} \
             --from-literal=TMDB_KEY=${{ secrets.TMDB_KEY }} \
             --from-literal=OMDB_KEY=${{ secrets.OMDB_KEY }} \
             --from-literal=SENTRY_DSN=${{ secrets.SENTRY_DSN }} \

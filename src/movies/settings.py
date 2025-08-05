@@ -97,11 +97,7 @@ TEMPLATES: list[TemplatesSettings] = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
                 # Custom
-                "django.template.context_processors.i18n",
                 "django.template.context_processors.media",
-                # social_django
-                # "social_django.context_processors.backends",
-                # "social_django.context_processors.login_redirect",
             ],
             "loaders": [
                 (
@@ -112,7 +108,7 @@ TEMPLATES: list[TemplatesSettings] = [
                     ],
                 )
             ],
-            "builtins": ["django.templatetags.static", "django.templatetags.i18n"],
+            "builtins": ["django.templatetags.static"],
         },
     },
 ]
@@ -134,14 +130,10 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     # Custom
     "django.middleware.gzip.GZipMiddleware",
-    # "social_django.middleware.SocialAuthExceptionMiddleware",
     "custom_anonymous.middleware.AuthenticationMiddleware",
     "admin_reorder.middleware.ModelAdminReorder",
     "moviesapp.middleware.TimezoneMiddleware",
 ]
-# if DEBUG:  # pragma: no cover
-# MIDDLEWARE.append("debug_toolbar.middleware.DebugToolbarMiddleware")
-
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -178,9 +170,6 @@ AUTH_USER_MODEL = "moviesapp.User"
 AUTH_ANONYMOUS_MODEL = "moviesapp.models.UserAnonymous"
 AUTHENTICATION_BACKENDS = (
     "django.contrib.auth.backends.ModelBackend",
-    # social_core
-    # "social_core.backends.vk.VKOAuth2",
-    # "social_core.backends.facebook.FacebookOAuth2",
 )
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -226,68 +215,6 @@ MEDIA_URL = "/media/"
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
 # --== Modules settings ==--
-
-# django-registration-redux
-# ACCOUNT_ACTIVATION_DAYS = 7
-# REGISTRATION_FORM = "registration.forms.RegistrationFormUniqueEmail"
-# REGISTRATION_AUTO_LOGIN = True
-
-# social-auth-app-django
-# SOCIAL_AUTH_VK_OAUTH2_KEY = getenv("SOCIAL_AUTH_VK_OAUTH2_KEY")
-# SOCIAL_AUTH_VK_OAUTH2_SECRET = getenv("SOCIAL_AUTH_VK_OAUTH2_SECRET")
-# SOCIAL_AUTH_VK_OAUTH2_SCOPE = ["friends", "email", "offline"]
-
-# SOCIAL_AUTH_FACEBOOK_KEY = getenv("SOCIAL_AUTH_FACEBOOK_KEY")
-# SOCIAL_AUTH_FACEBOOK_SECRET = getenv("SOCIAL_AUTH_FACEBOOK_SECRET")
-# SOCIAL_AUTH_FACEBOOK_SCOPE = ["email", "user_friends", "public_profile"]
-
-# SOCIAL_AUTH_USER_MODEL = AUTH_USER_MODEL
-# SOCIAL_AUTH_PIPELINE = (
-#     # Get the information we can about the user and return it in a simple
-#     # format to create the user instance later. On some cases the details are
-#     # already part of the auth response from the provider, but sometimes this
-#     # could hit a provider API.
-#     "social_core.pipeline.social_auth.social_details",
-#     # Get the social uid from whichever service we're authing thru. The uid is
-#     # the unique identifier of the given user in the provider.
-#     "social_core.pipeline.social_auth.social_uid",
-#     # Verifies that the current auth process is valid within the current
-#     # project, this is where emails and domains whitelists are applied (if
-#     # defined).
-#     "social_core.pipeline.social_auth.auth_allowed",
-#     # Checks if the current social-account is already associated in the site.
-#     "social_core.pipeline.social_auth.social_user",
-#     # Make up a username for this person, appends a random string at the end if
-#     # there's any collision.
-#     "social_core.pipeline.user.get_username",
-#     # Associates the current social details with another user account with
-#     # a similar email address. Disabled by default.
-#     "social_core.pipeline.social_auth.associate_by_email",
-#     # Create a user account if we haven't found one yet.
-#     "social_core.pipeline.user.create_user",
-#     # Create the record that associates the social account with the user.
-#     "social_core.pipeline.social_auth.associate_user",
-#     # Populate the extra_data field in the social record with the values
-#     # specified by settings (and the default ones like access_token, etc).
-#     "social_core.pipeline.social_auth.load_extra_data",
-#     # We might want to enable it
-#     # # Update the user record with any changed info from the auth service.
-#     # 'social_core.pipeline.user.user_details',
-#     # Custom
-#     # We do this only if the user get's created for the first time.
-#     "moviesapp.social.load_user_data",
-# )
-
-# django-simple-menu
-# MENU_SELECT_PARENTS = True
-
-# django-debug-toolbar
-# DEBUG_TOOLBAR_PANELS = [
-#     "debug_toolbar.panels.timer.TimerPanel",
-#     "debug_toolbar.panels.sql.SQLPanel",
-#     "debug_toolbar.panels.signals.SignalsPanel",
-#     "debug_toolbar.panels.profiling.ProfilingPanel",
-# ]
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
@@ -335,11 +262,8 @@ ADMIN_REORDER = [
             "moviesapp.ActionRecord",
             "moviesapp.Provider",
             "moviesapp.ProviderRecord",
-            "moviesapp.VkCountry",
         ),
     },
-    # {"app": "social_django", "models": ("social_django.UserSocialAuth",)},
-    # "registration",
 ]
 
 if IS_CELERY_DEBUG:  # pragma: no cover
@@ -361,11 +285,6 @@ CELERY_TIMEZONE = TIME_ZONE
 
 REQUESTS_TIMEOUT = 5
 
-# Social
-VK_BACKEND = "vk-oauth2"
-VK_DEFAULT_TIMEZONE = "Europe/Moscow"
-VK_DEFAULT_LANGUAGE = LANGUAGE_RU
-
 # Search settings
 MAX_RESULTS = 50
 MIN_POPULARITY = 1.5
@@ -384,7 +303,6 @@ TMDB_BASE_URL = "https://www.themoviedb.org/"
 TMDB_MOVIE_BASE_URL = urljoin(TMDB_BASE_URL, "movie/")
 TMDB_PROVIDER_BASE_URL = urljoin(TMDB_BASE_URL, "t/p/original/")
 TMDB_API_BASE_URL = "https://api.themoviedb.org/3/"
-AVATAR_SIZES = {"small": 100, "big": 200}
 IMDB_BASE_URL = "http://www.imdb.com/title/"
 RECORDS_ON_PAGE = 50
 PEOPLE_ON_PAGE = 25
@@ -394,7 +312,6 @@ TRAILER_SITES: TrailerSitesSettings = {
     "YouTube": "https://www.youtube.com/watch?v=",
     "Vimeo": "https://vimeo.com/",
 }
-VK_NO_AVATAR = ("https://vk.com/images/camera_100.png", "https://vk.com/images/camera_200.png")
 IS_TEST = False
 INCLUDE_ADULT = False
 

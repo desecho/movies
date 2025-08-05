@@ -58,80 +58,6 @@ class UserBase:
         """Get record."""
         return self.get_records().get(pk=id_)
 
-    # def _get_fb_accounts(self) -> QuerySet[AbstractUserSocialAuth]:
-    #     """Get FB accounts."""
-    #     return self.social_auth.filter(provider="facebook")  # type: ignore
-
-    # def is_fb_user(self) -> bool:
-    #     """Return True if user has FB account."""
-    #     if self.is_authenticated:  # type: ignore
-    #         return self._get_fb_accounts().exists()
-    #     return False
-
-    # # It is requried that `is_fb_user` is run before running this.
-    # def get_fb_account(self) -> AbstractUserSocialAuth:  # 2DO possibly remove it from this class.
-    #     """Get FB account."""
-    #     return self._get_fb_accounts()[0]
-
-    # def _get_vk_accounts(self) -> QuerySet[AbstractUserSocialAuth]:
-    #     """Get VK accounts."""
-    #     return self.social_auth.filter(provider=settings.VK_BACKEND)  # type: ignore
-
-    # # It is requried that `is_vk_user` is run before running this.
-    # def get_vk_account(self) -> Optional[AbstractUserSocialAuth]:  # 2DO possibly remove it from this class.
-    #     """Get VK account."""
-    #     vk_accounts = self._get_vk_accounts()
-    #     if len(vk_accounts) == 1:
-    #         return vk_accounts[0]
-
-    #     raise VkError
-
-    # @property
-    # def is_vk_user(self) -> bool:
-    #     """Return True if a user has a VK account."""
-    #     if self.is_authenticated:  # type: ignore
-    #         return self._get_vk_accounts().exists()
-    #     return False
-
-    # @property
-    # def is_linked(self) -> bool:
-    #     """Return True if user is linked."""
-    #     if self.is_authenticated:  # type: ignore
-    #         return self.social_auth.exists()  # type: ignore
-    #     return False
-
-    # def get_vk(self) -> Optional[Vk]:
-    #     """Get VK."""
-    #     if self.is_vk_user:
-    #         return Vk(self)  # type: ignore
-    #     return None
-
-    # def get_friends(self, sort: bool = False) -> QuerySet["User"]:
-    #     """Get friends."""
-    #     friends = User.objects.none()
-    #     if self.is_linked:
-    #         if self.is_vk_user:  # 2DO possibly refactor this (this check is run twice)
-    #             vk = self.get_vk()
-    #             if vk is not None:
-    #                 friends |= vk.get_friends()
-    #         if self.is_fb_user():
-    #             friends |= Fb(self).get_friends()  # type: ignore
-    #         if sort:
-    #             friends = friends.order_by("first_name")
-    #     return friends
-
-    # def has_friends(self) -> bool:
-    #     """Return True if user has friends."""
-    #     if self.is_authenticated:  # type: ignore
-    #         user: User = self  # type: ignore
-    #         cache_id = f"has_friends_{user.pk}"
-    #         has_friends: Optional[bool] = cache.get(cache_id)
-    #         if has_friends is None:
-    #             has_friends = user.get_friends().exists()
-    #             cache.set(cache_id, has_friends)
-    #         return has_friends
-    #     return False
-
 
 class User(AbstractUser, UserBase):
     """User class."""
@@ -526,20 +452,3 @@ class ProviderRecord(Model):
     def tmdb_watch_url(self) -> str:
         """Return TMDb watch URL."""
         return f"{self.movie.tmdb_url}watch?locale={self.country}"
-
-
-# class VkCountry(Model):
-#     """VK country."""
-
-#     id = PositiveSmallIntegerField(primary_key=True)
-#     country = CountryField(verbose_name=_("Country"), unique=True)
-
-#     def __str__(self) -> str:
-#         """Return string representation."""
-#         return str(self.country)
-
-#     class Meta:
-#         """Meta."""
-
-#         verbose_name = "VK country"
-#         verbose_name_plural = "VK countries"

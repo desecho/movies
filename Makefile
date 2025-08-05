@@ -707,5 +707,4 @@ prod-load-initial-fixtures:
 	$(MAKE) prod-manage arguments="loaddata lists"
 	$(MAKE) prod-manage arguments="loaddata actions"
 	$(MAKE) prod-manage arguments="loaddata providers"
-	$(MAKE) prod-manage arguments="loaddata vk_countries"
 #------------------------------------
