@@ -102,6 +102,15 @@
               <span class="count-label">To Watch</span>
             </div>
           </div>
+          <div class="watch-count-item filtered">
+            <div class="count-icon-wrapper filtered-icon">
+              <v-icon icon="mdi-filter" />
+            </div>
+            <div class="count-info">
+              <span class="count-number">{{ filteredRecords.length }}</span>
+              <span class="count-label">Displayed</span>
+            </div>
+          </div>
         </div>
       </v-col>
     </v-row>
@@ -2186,6 +2195,10 @@ onMounted(async () => {
   &.to-watch {
     border-left: 3px solid #3b82f6;
   }
+
+  &.filtered {
+    border-left: 3px solid #8b5cf6;
+  }
 }
 
 .count-icon-wrapper {
@@ -2211,6 +2224,11 @@ onMounted(async () => {
   &.to-watch-icon {
     background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
     box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+  }
+
+  &.filtered-icon {
+    background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+    box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3);
   }
 }
 
@@ -2246,6 +2264,10 @@ onMounted(async () => {
 
 .watch-count-item.to-watch:hover .count-icon-wrapper.to-watch-icon {
   box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+}
+
+.watch-count-item.filtered:hover .count-icon-wrapper.filtered-icon {
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4);
 }
 
 /* Responsive Design for Watch Count */
