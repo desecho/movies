@@ -10,6 +10,10 @@ import { useAuthStore } from "./auth";
 
 const recordsInitialState: RecordType[] = [];
 
+function roundToHalfStar(rating: number): number {
+    return Math.round(rating * 2) / 2;
+}
+
 export const useRecordsStore = defineStore("records", {
     state: () => ({
         records: recordsInitialState,
@@ -63,9 +67,10 @@ export const useRecordsStore = defineStore("records", {
                 const recs: RecordType[] = response.data as RecordType[];
                 recs.forEach((record) => {
                     record.ratingOriginal = record.rating;
-                    record.movie.imdbRatingConverted = Number(
-                        ((record.movie.imdbRating / 10) * 5).toFixed(1),
-                    ); // Convert IMDb rating to a 0-5 scale
+                    // Convert IMDb rating to a 0-5 scale
+                    const convertedRating = (record.movie.imdbRating / 10) * 5;
+                    record.movie.imdbRatingConverted =
+                        roundToHalfStar(convertedRating);
                 });
                 this.records = response.data as RecordType[];
 
