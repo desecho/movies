@@ -11,6 +11,7 @@ import ChangePasswordView from "./views/ChangePasswordView.vue";
 import ListView from "./views/ListView.vue";
 import LoginView from "./views/LoginView.vue";
 import LogoutView from "./views/LogoutView.vue";
+import RecommendationsView from "./views/RecommendationsView.vue";
 import RegistrationView from "./views/RegistrationView.vue";
 import ResetPasswordRequestView from "./views/ResetPasswordRequestView.vue";
 import ResetPasswordView from "./views/ResetPasswordView.vue";
@@ -36,6 +37,7 @@ export const router = createRouter({
         { path: "/about", component: AboutView },
         { path: "/preferences", component: UserPreferencesView },
         { path: "/trending", component: TrendingView },
+        { path: "/recommendations", component: RecommendationsView },
         {
             path: "/list/watched",
             component: ListView,
