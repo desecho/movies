@@ -3,7 +3,7 @@
 import json
 from http import HTTPStatus
 from operator import itemgetter
-from typing import Optional
+from typing import Optional, cast
 
 from django.conf import settings
 from django.http import Http404
@@ -71,7 +71,9 @@ class SearchMovieView(APIView):
             query = GET["query"]
             options: SearchOptions = json.loads(GET["options"])
             type_ = GET["type"]
-            search_type: SearchType = type_  # type: ignore
+            if type_ not in ("movie", "actor", "director"):
+                return Response(status=HTTPStatus.BAD_REQUEST)
+            search_type: SearchType = cast(SearchType, type_)
         except KeyError:
             return Response(status=HTTPStatus.BAD_REQUEST)
         try:
