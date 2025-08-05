@@ -1,5 +1,6 @@
 """Users view tests."""
 
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
 from rest_framework.test import APIClient
 
@@ -23,23 +24,27 @@ class UsersViewTestCase(TestCase):
         response = self.client.get("/users/")
 
         self.assertEqual(response.status_code, 200)
-        usernames = response.data
+        users = response.data
+        usernames = [user["username"] for user in users]
 
         # Should include visible users but not hidden users
         self.assertIn("visible1", usernames)
         self.assertIn("visible2", usernames)
         self.assertNotIn("hidden", usernames)
 
-    def test_get_users_returns_usernames_only(self):
-        """Test that only usernames are returned."""
+    def test_get_users_returns_user_objects(self):
+        """Test that user objects with username and avatar_url are returned."""
         response = self.client.get("/users/")
 
         self.assertEqual(response.status_code, 200)
-        usernames = response.data
+        users = response.data
 
-        # Should be a list of strings (usernames)
-        for username in usernames:
-            self.assertIsInstance(username, str)
+        # Should be a list of dictionaries with username and avatar_url
+        for user in users:
+            self.assertIsInstance(user, dict)
+            self.assertIn("username", user)
+            self.assertIn("avatar_url", user)
+            self.assertIsInstance(user["username"], str)
 
     def test_get_users_no_authentication_required(self):
         """Test that no authentication is required."""
@@ -57,3 +62,34 @@ class UsersViewTestCase(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.data), 0)
+
+    def test_get_users_with_and_without_avatars(self):
+        """Test that users with and without avatars return correct avatar_url values."""
+        # Create a test image file
+        test_image = SimpleUploadedFile(
+            name="test_avatar.jpg", content=b"fake_image_content", content_type="image/jpeg"
+        )
+
+        # Create user with avatar
+        user_with_avatar = User.objects.create_user(username="with_avatar", hidden=False)
+        user_with_avatar.avatar = test_image
+        user_with_avatar.save()
+
+        # Create user without avatar (already exists from setUp)
+        response = self.client.get("/users/")
+
+        self.assertEqual(response.status_code, 200)
+        users = response.data
+
+        # Find users in response
+        user_with_avatar_data = next((u for u in users if u["username"] == "with_avatar"), None)
+        user_without_avatar_data = next((u for u in users if u["username"] == "visible1"), None)
+
+        # User with avatar should have avatar_url
+        self.assertIsNotNone(user_with_avatar_data)
+        self.assertIsNotNone(user_with_avatar_data["avatar_url"])
+        self.assertIn("avatars/", user_with_avatar_data["avatar_url"])
+
+        # User without avatar should have None avatar_url
+        self.assertIsNotNone(user_without_avatar_data)
+        self.assertIsNone(user_without_avatar_data["avatar_url"])

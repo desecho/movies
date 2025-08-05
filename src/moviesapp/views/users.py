@@ -19,5 +19,8 @@ class UsersView(APIView):
 
     def get(self, request: Request) -> Response:  # pylint: disable=no-self-use,unused-argument
         """Return a list of users."""
-        users = User.objects.all().exclude(hidden=True).values_list("username", flat=True)
+        users = []
+        for user in User.objects.all().exclude(hidden=True):
+            avatar_url = user.avatar.url if user.avatar else None
+            users.append({"username": user.username, "avatar_url": avatar_url})
         return Response(users)
