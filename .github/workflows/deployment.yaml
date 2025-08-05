@@ -66,6 +66,7 @@ jobs:
       cancel-in-progress: true
     env:
       SPACE_NAME: cdn.movies.samarchyan.me
+      SPACE_REGION: nyc3
     steps:
       - name: Checkout code
         uses: actions/checkout@v3.0.2
@@ -142,7 +143,7 @@ jobs:
           access_key: ${{ secrets.SPACES_ACCESS_KEY }}
           secret_key: ${{ secrets.SPACES_SECRET_KEY }}
           space_name: ${{ env.SPACE_NAME }}
-          space_region: nyc3
+          space_region: ${{ env.SPACE_REGION }}
           source: static
 
       - name: Install doctl

@@ -5,9 +5,6 @@ from http import HTTPStatus
 from operator import itemgetter
 from typing import TYPE_CHECKING, Optional, cast
 
-if TYPE_CHECKING:
-    from rest_framework.permissions import BasePermission
-
 from django.conf import settings
 from django.http import Http404
 from rest_framework.request import Request
@@ -22,6 +19,9 @@ from ..types import SearchType, TmdbMovieListResultProcessed
 from ..utils import load_movie_data
 from .types import MovieListResult, SearchOptions
 from .utils import add_movie_to_list, filter_out_movies_user_already_has_in_lists, get_movie_list_result
+
+if TYPE_CHECKING:
+    from rest_framework.permissions import BasePermission
 
 
 class SearchMovieView(APIView):

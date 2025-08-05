@@ -594,11 +594,6 @@ manage:
 #------------------------------------
 export DOCKER_ENV_FILE := docker.env
 
-#------------------------------------
-# Docker commands
-#------------------------------------
-export DOCKER_ENV_FILE := docker.env
-
 .PHONY: docker-build-dev
 ## Build docker images | Docker
 docker-build-dev: docker-build-backend docker-build-frontend-dev

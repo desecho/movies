@@ -14,3 +14,6 @@ data:
   DJANGO_SETTINGS_MODULE: movies.settings
   REDIS_URL: redis://redis:6379/
   FRONTEND_URL: https://movies.samarchyan.me
+  DO_SPACES_ENDPOINT_URL: https://nyc3.digitaloceanspaces.com
+  DO_SPACES_BUCKET_NAME: cdn.movies.samarchyan.me
+  DO_SPACES_REGION: nyc3

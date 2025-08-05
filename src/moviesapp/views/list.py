@@ -3,9 +3,6 @@
 from http import HTTPStatus
 from typing import TYPE_CHECKING, Any, Optional, Union, cast
 
-if TYPE_CHECKING:
-    from rest_framework.permissions import BasePermission
-
 from django.core.exceptions import PermissionDenied
 from django.db.models import QuerySet, prefetch_related_objects
 from django.http import Http404
@@ -17,6 +14,9 @@ from rest_framework.views import APIView
 from ..models import Action, ActionRecord, List, Movie, ProviderRecord, Record, User, UserAnonymous
 from .types import MovieObject, OptionsObject, ProviderObject, ProviderRecordObject, RecordObject
 from .utils import add_movie_to_list, get_anothers_account
+
+if TYPE_CHECKING:
+    from rest_framework.permissions import BasePermission
 
 
 class ChangeRatingView(APIView):

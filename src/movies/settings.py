@@ -147,6 +147,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "corsheaders",
     "rest_registration",
+    "storages",
     APP,
 ]
 if DEBUG:  # pragma: no cover
@@ -168,9 +169,7 @@ if not DISABLE_CSRF:  # pragma: no cover
 # Authentication
 AUTH_USER_MODEL = "moviesapp.User"
 AUTH_ANONYMOUS_MODEL = "moviesapp.models.UserAnonymous"
-AUTHENTICATION_BACKENDS = (
-    "django.contrib.auth.backends.ModelBackend",
-)
+AUTHENTICATION_BACKENDS = ("django.contrib.auth.backends.ModelBackend",)
 AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
@@ -315,6 +314,8 @@ TRAILER_SITES: TrailerSitesSettings = {
 IS_TEST = False
 INCLUDE_ADULT = False
 
+AVATAR_MAX_DIMENSION = 4096
+
 # Watch data
 PROVIDERS_SUPPORTED_COUNTRIES = ("RU", "CA", "US")
 # Number of min days that need to pass before the next watch data update
@@ -323,3 +324,24 @@ WATCH_DATA_UPDATE_MIN_DAYS = 3
 # API Keys
 TMDB_KEY = getenv("TMDB_KEY")
 OMDB_KEY = getenv("OMDB_KEY")
+
+# Digital Ocean Spaces Configuration
+DO_SPACES_ACCESS_KEY_ID = getenv("DO_SPACES_ACCESS_KEY_ID")
+DO_SPACES_SECRET_ACCESS_KEY = getenv("DO_SPACES_SECRET_ACCESS_KEY")
+DO_SPACES_ENDPOINT_URL = getenv("DO_SPACES_ENDPOINT_URL")
+DO_SPACES_BUCKET_NAME = getenv("DO_SPACES_BUCKET_NAME")
+DO_SPACES_REGION = getenv("DO_SPACES_REGION")
+
+# Storage configuration for avatars
+if DO_SPACES_ACCESS_KEY_ID and DO_SPACES_SECRET_ACCESS_KEY:
+    DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+    AWS_ACCESS_KEY_ID = DO_SPACES_ACCESS_KEY_ID
+    AWS_SECRET_ACCESS_KEY = DO_SPACES_SECRET_ACCESS_KEY
+    AWS_STORAGE_BUCKET_NAME = DO_SPACES_BUCKET_NAME
+    AWS_S3_ENDPOINT_URL = DO_SPACES_ENDPOINT_URL
+    AWS_S3_REGION_NAME = DO_SPACES_REGION
+    AWS_DEFAULT_ACL = "public-read"
+    AWS_S3_OBJECT_PARAMETERS = {
+        "CacheControl": "max-age=86400",
+    }
+    AWS_LOCATION = "avatars/"

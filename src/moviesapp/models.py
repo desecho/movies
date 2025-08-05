@@ -16,6 +16,7 @@ from django.db.models import (
     DateTimeField,
     DecimalField,
     ForeignKey,
+    ImageField,
     JSONField,
     Manager,
     Model,
@@ -71,6 +72,7 @@ class User(AbstractUser, UserBase):
     )
     avatar_small = URLField(null=True, blank=True)
     avatar_big = URLField(null=True, blank=True)
+    avatar = ImageField(upload_to="avatars/", null=True, blank=True)
     loaded_initial_data = BooleanField(default=False)
     country = CountryField(verbose_name=_("Country"), null=True, blank=True)
     timezone = TimeZoneField(default=settings.TIME_ZONE)

@@ -36,6 +36,8 @@ jobs:
             --from-literal=OMDB_KEY=${{ secrets.OMDB_KEY }} \
             --from-literal=SENTRY_DSN=${{ secrets.SENTRY_DSN }} \
             --from-literal=EMAIL_HOST_PASSWORD=${{ secrets.EMAIL_HOST_PASSWORD }} \
+            --from-literal=DO_SPACES_ACCESS_KEY_ID=${{ secrets.SPACES_ACCESS_KEY }} \
+            --from-literal=DO_SPACES_SECRET_ACCESS_KEY=${{ secrets.SPACES_SECRET_KEY }} \
             --dry-run=client -o yaml | kubectl apply -f -
           kubectl apply -f deployment/deployment.yaml
           kubectl apply -f deployment/ingress_backend.yaml

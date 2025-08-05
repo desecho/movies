@@ -1,5 +1,8 @@
 #!/bin/bash
 
+export DO_SPACES_ACCESS_KEY_ID=
+export DO_SPACES_SECRET_ACCESS_KEY=
+
 export TMDB_KEY=
 export OMDB_KEY=
 

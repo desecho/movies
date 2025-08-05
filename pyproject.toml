@@ -66,6 +66,10 @@ celery = {extras = ["redis"], version = "^5.2.7"}
 # This seems to be required for django-timezone-field
 tzdata = "^2025.2"
 
+# File storage and image processing
+django-storages = {extras = ["boto3"], version = "^1.14.4"}
+Pillow = "^11.0.0"
+
 [tool.poetry.group.dev.dependencies]
 # Pytest
 pytest = "*"

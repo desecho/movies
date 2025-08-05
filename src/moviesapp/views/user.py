@@ -3,11 +3,13 @@
 from http import HTTPStatus
 from typing import TYPE_CHECKING, cast
 
+from rest_framework.parsers import MultiPartParser
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from ..models import User
+from ..serializers import AvatarUploadSerializer
 
 if TYPE_CHECKING:
     from rest_framework.permissions import BasePermission
@@ -90,3 +92,31 @@ class UserPreferencesView(APIView):
         user: User = cast(User, request.user)
         preferences = {"hidden": user.hidden}
         return Response(preferences)
+
+
+class AvatarUploadView(APIView):
+    """Avatar upload view."""
+
+    parser_classes = [MultiPartParser]
+
+    def post(self, request: Request) -> Response:
+        """Upload avatar."""
+        user: User = cast(User, request.user)
+        serializer = AvatarUploadSerializer(user, data=request.data, partial=True)
+
+        if serializer.is_valid():
+            serializer.save()
+            avatar_url = user.avatar.url if user.avatar else None
+            return Response({"avatar_url": avatar_url}, status=HTTPStatus.OK)
+
+        return Response(serializer.errors, status=HTTPStatus.BAD_REQUEST)
+
+    def delete(self, request: Request) -> Response:
+        """Delete avatar."""
+        user: User = cast(User, request.user)
+
+        if user.avatar:
+            user.avatar.delete(save=True)
+            return Response(status=HTTPStatus.NO_CONTENT)
+
+        return Response({"error": "No avatar to delete"}, status=HTTPStatus.NOT_FOUND)

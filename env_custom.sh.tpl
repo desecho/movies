@@ -8,3 +8,7 @@ export EMAIL_HOST=
 export EMAIL_HOST_USER=
 # int
 export EMAIL_PORT=25
+
+export DO_SPACES_ENDPOINT_URL=
+export DO_SPACES_BUCKET_NAME=
+export DO_SPACES_REGION=

@@ -20,7 +20,7 @@ from moviesapp.views.list import (
 )
 from moviesapp.views.search import AddToListFromDbView, SearchMovieView
 from moviesapp.views.trending import TrendingView
-from moviesapp.views.user import UserCheckEmailAvailabilityView, UserPreferencesView
+from moviesapp.views.user import AvatarUploadView, UserCheckEmailAvailabilityView, UserPreferencesView
 from moviesapp.views.users import UsersView
 
 # from moviesapp.views.user import AccountDeletedView, AccountDeleteView, LoginErrorView, PreferencesView, logout_view
@@ -51,6 +51,7 @@ urlpatterns: list[URL] = [
     # User
     path("user/", include("rest_registration.api.urls")),
     path("user/preferences/", UserPreferencesView.as_view()),
+    path("user/avatar/", AvatarUploadView.as_view()),
     path("user/check-email-availability/", UserCheckEmailAvailabilityView.as_view()),
     path("users/", UsersView.as_view()),
     path("search/", SearchMovieView.as_view()),
