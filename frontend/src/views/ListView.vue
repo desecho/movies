@@ -54,22 +54,18 @@
             </v-btn-toggle>
           </div>
         </v-col>
-        <!-- Hide Unreleased filter (only for to-watch movies) -->
+        <!-- Filters (only for to-watch movies) -->
         <v-col v-if="currentListId === listToWatchId" cols="12" md="6">
           <div class="control-group">
             <label class="control-label">Filter</label>
-            <v-btn-toggle v-model="hideUnreleasedMovies" density="compact">
-              <v-btn :value="true" :size="modeButtonSize">Hide Unreleased</v-btn>
-            </v-btn-toggle>
-          </div>
-        </v-col>
-        <!-- Recent Releases filter (only for to-watch movies) -->
-        <v-col v-if="currentListId === listToWatchId" cols="12" md="6">
-          <div class="control-group">
-            <label class="control-label">Recent Filter</label>
-            <v-btn-toggle v-model="recentReleasesFilter" density="compact">
-              <v-btn :value="true" :size="modeButtonSize">Recent Releases</v-btn>
-            </v-btn-toggle>
+            <div style="display: flex; gap: 8px">
+              <v-btn-toggle v-model="hideUnreleasedMovies" density="compact">
+                <v-btn :value="true" :size="modeButtonSize">Hide Unreleased</v-btn>
+              </v-btn-toggle>
+              <v-btn-toggle v-model="recentReleasesFilter" density="compact">
+                <v-btn :value="true" :size="modeButtonSize">Recent Releases</v-btn>
+              </v-btn-toggle>
+            </div>
           </div>
         </v-col>
       </v-row>
