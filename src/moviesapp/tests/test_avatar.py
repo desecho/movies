@@ -140,3 +140,39 @@ class AvatarUploadTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         # Should have deleted the old avatar
         mock_delete.assert_called_once()
+
+    def test_get_avatar_with_avatar(self) -> None:
+        """Test getting avatar information when user has an avatar."""
+        # First upload an avatar
+        image_file = self.create_test_image("JPEG")
+
+        with patch("storages.backends.s3boto3.S3Boto3Storage.save") as mock_save:
+            mock_save.return_value = "avatars/test_avatar.jpg"
+            self.client.post(self.upload_url, {"avatar": image_file}, format="multipart")
+
+        # Get avatar information
+        response = self.client.get(self.upload_url)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertIn("avatar_url", response.data)
+        self.assertIn("has_avatar", response.data)
+        self.assertTrue(response.data["has_avatar"])
+        self.assertIsNotNone(response.data["avatar_url"])
+
+    def test_get_avatar_without_avatar(self) -> None:
+        """Test getting avatar information when user has no avatar."""
+        response = self.client.get(self.upload_url)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertIn("avatar_url", response.data)
+        self.assertIn("has_avatar", response.data)
+        self.assertFalse(response.data["has_avatar"])
+        self.assertIsNone(response.data["avatar_url"])
+
+    def test_get_avatar_without_authentication(self) -> None:
+        """Test getting avatar information without authentication."""
+        self.client.force_authenticate(user=None)
+        response = self.client.get(self.upload_url)
+
+        # Django REST Framework returns 403 for permission denied
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)

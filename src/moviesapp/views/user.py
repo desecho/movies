@@ -94,10 +94,17 @@ class UserPreferencesView(APIView):
         return Response(preferences)
 
 
-class AvatarUploadView(APIView):
-    """Avatar upload view."""
+class AvatarView(APIView):
+    """Avatar view."""
 
     parser_classes = [MultiPartParser]
+
+    def get(self, request: Request) -> Response:
+        """Get current avatar information."""
+        user: User = cast(User, request.user)
+        avatar_url = user.avatar.url if user.avatar else None
+
+        return Response({"avatar_url": avatar_url, "has_avatar": bool(user.avatar)}, status=HTTPStatus.OK)
 
     def post(self, request: Request) -> Response:
         """Upload avatar."""
