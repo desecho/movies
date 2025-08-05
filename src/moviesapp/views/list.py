@@ -1,7 +1,10 @@
 """List views."""
 
 from http import HTTPStatus
-from typing import Any, Optional, Union
+from typing import TYPE_CHECKING, Any, Optional, Union, cast
+
+if TYPE_CHECKING:
+    from rest_framework.permissions import BasePermission
 
 from django.core.exceptions import PermissionDenied
 from django.db.models import QuerySet, prefetch_related_objects
@@ -31,7 +34,7 @@ class ChangeRatingView(APIView):
 
         record = get_object_or_404(Record, user=request.user, pk=record_id)
 
-        user: User = request.user  # type: ignore
+        user: User = cast(User, request.user)
         if record.rating != rating:
             if not record.rating:
                 ActionRecord(action_id=Action.ADDED_RATING, user=user, movie=record.movie, rating=rating).save()
@@ -54,7 +57,7 @@ class AddToListView(APIView):
             raise Http404  # pylint: disable=duplicate-code
 
         get_object_or_404(Movie, pk=movie_id)
-        user: User = request.user  # type: ignore
+        user: User = cast(User, request.user)
         add_movie_to_list(movie_id, list_id, user)
         return Response()
 
@@ -106,7 +109,7 @@ class SaveCommentView(APIView):
         except KeyError:
             return Response(status=HTTPStatus.BAD_REQUEST)
 
-        user: User = request.user  # type: ignore
+        user: User = cast(User, request.user)
         if record.comment != comment:
             if not record.comment:
                 ActionRecord(action_id=Action.ADDED_COMMENT, user=user, movie=record.movie, comment=comment).save()
@@ -119,7 +122,7 @@ class RecordsView(APIView):
     """Records view."""
 
     anothers_account: Optional[User] = None
-    permission_classes: list[str] = []  # type: ignore
+    permission_classes: list[type["BasePermission"]] = []
 
     @staticmethod
     def _sort_records(records: QuerySet[Record]) -> QuerySet[Record]:
@@ -146,7 +149,7 @@ class RecordsView(APIView):
         Returns a dictionary with record ids as keys and list ids as values.
         """
         movie_ids, record_and_movie_ids = self._get_record_movie_data(list(records.values_list("id", "movie_id")))
-        user: Union[User, UserAnonymous] = self.request.user  # type: ignore
+        user: Union[User, UserAnonymous] = cast(Union[User, UserAnonymous], self.request.user)
         movie_ids_and_list_ids_list: list[tuple[int, int]] = list(
             user.get_records().filter(movie_id__in=movie_ids).values_list("movie_id", "list_id")
         )
@@ -162,12 +165,12 @@ class RecordsView(APIView):
 
     def _filter_out_provider_records_for_other_countries(self, provider_records: list[ProviderRecord]) -> None:
         for provider_record in list(provider_records):
-            user: User = self.request.user  # type: ignore
+            user: User = cast(User, self.request.user)
             if user.country != provider_record.country:
                 provider_records.remove(provider_record)
 
     def _get_provider_records(self, movie: Movie) -> list[ProviderRecord]:
-        user: User = self.request.user  # type: ignore
+        user: User = cast(User, self.request.user)
         if user.is_authenticated and user.is_country_supported and movie.is_released:
             provider_records = list(movie.provider_records.all())
             self._filter_out_provider_records_for_other_countries(provider_records)
@@ -271,7 +274,7 @@ class RecordsView(APIView):
         """Check if user is allowed to see the page."""
         if username is None and request.user.is_anonymous:  # pylint: disable=duplicate-code
             raise Http404  # pylint: disable=duplicate-code
-        user: User = request.user  # type: ignore  # pylint: disable=duplicate-code
+        user: User = cast(User, request.user)  # pylint: disable=duplicate-code
         if user.username == username:  # pylint: disable=duplicate-code
             return  # pylint: disable=duplicate-code
         self.anothers_account = get_anothers_account(username)
@@ -284,11 +287,11 @@ class RecordsView(APIView):
         username: Optional[str] = kwargs.get("username")
         self.check_if_allowed(request, username)
         anothers_account = self.anothers_account
-        user: User = request.user if anothers_account is None else anothers_account  # type: ignore
+        user: User = cast(User, request.user) if anothers_account is None else anothers_account
         records = self._get_records(user)
         records = self._sort_records(records)
 
-        actual_user: User = request.user  # type: ignore
+        actual_user: User = cast(User, request.user)
         if actual_user.is_authenticated and actual_user.is_country_supported:
             prefetch_related_objects(records, "movie__provider_records__provider")
 
@@ -313,7 +316,7 @@ class SaveRecordsOrderView(APIView):
         except KeyError:
             return Response(status=HTTPStatus.BAD_REQUEST)
 
-        user: User = request.user  # type: ignore
+        user: User = cast(User, request.user)
         for record in records:
             try:
                 # If record id is not found we silently ignore it

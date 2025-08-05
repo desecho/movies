@@ -3,7 +3,10 @@
 import json
 from http import HTTPStatus
 from operator import itemgetter
-from typing import Optional, cast
+from typing import TYPE_CHECKING, Optional, cast
+
+if TYPE_CHECKING:
+    from rest_framework.permissions import BasePermission
 
 from django.conf import settings
 from django.http import Http404
@@ -24,7 +27,7 @@ from .utils import add_movie_to_list, filter_out_movies_user_already_has_in_list
 class SearchMovieView(APIView):
     """Search movie view."""
 
-    permission_classes: list[str] = []  # type: ignore
+    permission_classes: list[type["BasePermission"]] = []
 
     @staticmethod
     def _is_popular_movie(popularity: float) -> bool:
@@ -145,7 +148,7 @@ class AddToListFromDbView(APIView):
             raise Http404
 
         movie_id = self._get_movie_id(tmdb_id)
-        user: User = request.user  # type: ignore
+        user: User = cast(User, request.user)
         result = self._add_to_list_from_db(movie_id, tmdb_id, list_id, user)
         if not result:
             return Response({"status": "not_found"})

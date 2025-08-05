@@ -1,12 +1,16 @@
 """User views."""
 
 from http import HTTPStatus
+from typing import TYPE_CHECKING, cast
 
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from ..models import User
+
+if TYPE_CHECKING:
+    from rest_framework.permissions import BasePermission
 
 # from django.contrib.auth import logout
 # from django.contrib.auth.decorators import login_required
@@ -55,7 +59,7 @@ from ..models import User
 class UserCheckEmailAvailabilityView(APIView):
     """Check email availability view."""
 
-    permission_classes: list[str] = []  # type: ignore
+    permission_classes: list[type["BasePermission"]] = []
 
     def post(self, request: Request) -> Response:  # pylint: disable=no-self-use
         """Return True if email is available."""
@@ -72,7 +76,7 @@ class UserPreferencesView(APIView):
 
     def put(self, request: Request) -> Response:  # pylint: disable=no-self-use
         """Save preferences."""
-        user: User = request.user  # type: ignore
+        user: User = cast(User, request.user)
         try:
             hidden = bool(request.data["hidden"])
         except (KeyError, ValueError):
@@ -83,6 +87,6 @@ class UserPreferencesView(APIView):
 
     def get(self, request: Request) -> Response:  # pylint: disable=no-self-use
         """Load preferences."""
-        user: User = request.user  # type: ignore
+        user: User = cast(User, request.user)
         preferences = {"hidden": user.hidden}
         return Response(preferences)

@@ -2,7 +2,7 @@
 
 from collections import abc
 from datetime import date, datetime, time, timedelta
-from typing import Optional
+from typing import Optional, cast
 from urllib.parse import urljoin
 
 import requests
@@ -116,10 +116,10 @@ def search_movies(query_str: str, search_type: SearchType, lang: str) -> list[Tm
     person = tmdb.People(person_id)
     combined_credits: TmdbCombinedCredits = person.combined_credits(language=lang)
     if search_type == "actor":
-        cast_entries: list[TmdbCast] = _filter_movies_only(combined_credits["cast"])  # type: ignore
+        cast_entries: list[TmdbCast] = cast(list[TmdbCast], _filter_movies_only(combined_credits["cast"]))
         movies_processed = _get_processed_movie_data(cast_entries)
     else:  # search_type == "director"
-        crew_entries: list[TmdbCrew] = _filter_movies_only(combined_credits["crew"])  # type: ignore
+        crew_entries: list[TmdbCrew] = cast(list[TmdbCrew], _filter_movies_only(combined_credits["crew"]))
         crew_entries = [e for e in crew_entries if e["job"] == "Director"]
         movies_processed = _get_processed_movie_data(crew_entries)
     return movies_processed
@@ -154,7 +154,7 @@ def get_watch_data(tmdb_id: int) -> list[WatchDataRecord]:
     """Get watch data."""
     watch_data: list[WatchDataRecord] = []
     results: TmdbWatchData = tmdb.Movies(tmdb_id).watch_providers()["results"]
-    items: abc.ItemsView[str, TmdbWatchDataCountry] = results.items()  # type: ignore
+    items: abc.ItemsView[str, TmdbWatchDataCountry] = cast(abc.ItemsView[str, TmdbWatchDataCountry], results.items())
     for country, data in items:
         if country in settings.PROVIDERS_SUPPORTED_COUNTRIES and "flatrate" in data:
             for provider in data["flatrate"]:
