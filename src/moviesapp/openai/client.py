@@ -66,6 +66,7 @@ class OpenAIClient:
         try:
             OpenAIClient._validate_user_preferences(user_preferences)
             prompt = OpenAIClient._build_recommendation_prompt(user_preferences)
+            print(prompt)
 
             response = self.client.chat.completions.create(
                 model=self.model,
@@ -75,9 +76,12 @@ class OpenAIClient:
             )
 
             content = response.choices[0].message.content
+            print(content)
             if content is None:
                 raise OpenAIError("OpenAI API returned empty content")
-            return OpenAIClient._parse_recommendation_response(content)
+            parsed_content = OpenAIClient._parse_recommendation_response(content)
+            self._filter_out_duplicated_ids(parsed_content)
+            return parsed_content
 
         except Exception as e:
             if hasattr(e, "__module__") and "openai" in e.__module__:
@@ -208,7 +212,7 @@ class OpenAIClient:
         else:
             prompt_parts.append(f"Number of recommendations: {settings.AI_MAX_RECOMMENDATIONS}")
 
-        return "\n".join(prompt_parts)
+        return "\n\n".join(prompt_parts)
 
     @staticmethod
     def _parse_recommendation_response(content: str) -> RecommendationResponse:
@@ -226,3 +230,24 @@ class OpenAIClient:
             return parsed_data
         except json.JSONDecodeError as e:
             raise ValueError(f"Invalid JSON response from OpenAI: {str(e)}") from e
+
+    @staticmethod
+    def _filter_out_duplicated_ids(recommendations: RecommendationResponse) -> None:
+        """
+        Remove duplicate IMDb IDs from recommendations list in-place.
+        
+        Args:
+            recommendations: List of recommendation items to filter
+        """
+        seen_ids = set()
+        filtered_recommendations = []
+        
+        for item in recommendations:
+            imdb_id = item.get("imdb_id")
+            if imdb_id and imdb_id not in seen_ids:
+                seen_ids.add(imdb_id)
+                filtered_recommendations.append(item)
+        
+        # Clear and update the original list in-place
+        recommendations.clear()
+        recommendations.extend(filtered_recommendations)

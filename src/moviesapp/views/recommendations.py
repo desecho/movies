@@ -2,16 +2,17 @@
 
 from datetime import datetime
 from http import HTTPStatus
-from typing import TYPE_CHECKING, Dict, List, Optional
+from typing import TYPE_CHECKING, Dict, Optional, cast
 
 import tmdbsimple as tmdb
 from django.conf import settings
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from sentry_sdk import capture_exception
 
-from ..models import User
+from ..models import List, User
 from ..openai.client import OpenAIClient
 from ..openai.exceptions import OpenAIError
 from ..openai.types import RecommendationRequest, RecommendationResponse
@@ -63,7 +64,7 @@ def _get_tmdb_movie_from_imdb_id(imdb_id: str) -> Optional[TmdbMovieListResultPr
 class RecommendationsView(APIView):
     """AI Recommendations view."""
 
-    permission_classes: list[type["BasePermission"]] = []
+    permission_classes: list[type["BasePermission"]] = [IsAuthenticated]
 
     @staticmethod
     def _parse_year_range(year_start: Optional[str], year_end: Optional[str]) -> Optional[Dict[str, int]]:
@@ -110,9 +111,30 @@ class RecommendationsView(APIView):
             raise ValueError("Invalid recommendations number value") from exc
 
     @staticmethod
+    def _get_user_movie_preferences(user: User) -> tuple[list[str], list[str]]:
+        """Get user's liked and disliked movies based on ratings.
+
+        Returns:
+            tuple: (liked_movies, disliked_movies) where:
+            - liked_movies: Movies with rating >= 3
+            - disliked_movies: Movies with rating <= 2 and > 0
+        """
+        # Get liked movies (rating >= 3)
+        liked_records = user.records.filter(list_id=List.WATCHED, rating__gte=3).select_related("movie")
+        liked_movies = [record.movie.title for record in liked_records]
+
+        # Get disliked movies (rating <= 2 and > 0)
+        disliked_records = user.records.filter(list_id=List.WATCHED, rating__lte=2, rating__gt=0).select_related(
+            "movie"
+        )
+        disliked_movies = [record.movie.title for record in disliked_records]
+
+        return liked_movies, disliked_movies
+
+    @staticmethod
     def _convert_recommendations_to_movies(
         recommendations: RecommendationResponse, lang: str
-    ) -> List[MovieListResult]:
+    ) -> list[MovieListResult]:
         """Convert IMDB recommendations to movie list results."""
         movies = []
         for recommendation in recommendations:
@@ -145,8 +167,14 @@ class RecommendationsView(APIView):
             except ValueError as exc:
                 return Response({"error": str(exc)}, status=HTTPStatus.BAD_REQUEST)
 
+            # Get user's movie preferences based on ratings
+            user = cast(User, request.user)
+            liked_movies, disliked_movies = self._get_user_movie_preferences(user)
+
             # Build recommendation request
             recommendation_request = RecommendationRequest(
+                liked_movies=liked_movies or None,
+                disliked_movies=disliked_movies or None,
                 preferred_genre=preferred_genre,
                 year_range=year_range,
                 min_rating=min_rating_int,
@@ -167,10 +195,8 @@ class RecommendationsView(APIView):
             # Convert IMDB IDs to movie list results
             movies = RecommendationsView._convert_recommendations_to_movies(recommendations, request.LANGUAGE_CODE)
 
-            # Filter out movies user already has in lists if authenticated
-            if request.user.is_authenticated:
-                user: User = request.user
-                filter_out_movies_user_already_has_in_lists(movies, user)
+            # Filter out movies user already has in lists
+            filter_out_movies_user_already_has_in_lists(movies, user)
 
             return Response(movies)
 

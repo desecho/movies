@@ -213,6 +213,14 @@ async function getRecommendations(): Promise<void> {
     const axiosError = error as AxiosError;
     console.error("Error getting AI recommendations:", axiosError);
 
+    // Handle authentication errors
+    if (axiosError.response?.status === 401) {
+      $toast.error("Please log in to get AI recommendations.");
+      // The axios interceptor should handle redirecting to login
+      movies.value = [];
+      return;
+    }
+
     if (
       axiosError.response?.data &&
       typeof axiosError.response.data === "object" &&
