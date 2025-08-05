@@ -522,6 +522,10 @@ format-all: format format-sh format-json format-yaml format-frontend
 fa: format-all
 #------------------------------------
 
+.PHONY: fl
+## Format and mostly lint all code
+fl: format format-frontend pylint mypy
+
 #------------------------------------
 # Django management commands
 #------------------------------------
