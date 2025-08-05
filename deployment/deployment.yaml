@@ -33,18 +33,18 @@ spec:
             limits:
               memory: "512Mi"
               cpu: "500m"
-          # livenessProbe:
-          #   httpGet:
-          #     path: /health/
-          #     port: 8000
-          #   initialDelaySeconds: 30
-          #   periodSeconds: 10
-          # readinessProbe:
-          #   httpGet:
-          #     path: /health/
-          #     port: 8000
-          #   initialDelaySeconds: 5
-          #   periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /health/
+              port: 80
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /health/
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 5
         - name: frontend
           image: ghcr.io/desecho/movies-frontend:latest
           imagePullPolicy: Always
@@ -57,15 +57,15 @@ spec:
             limits:
               memory: "256Mi"
               cpu: "200m"
-          # livenessProbe:
-          #   httpGet:
-          #     path: /health/
-          #     port: 9000
-          #   initialDelaySeconds: 10
-          #   periodSeconds: 10
-          # readinessProbe:
-          #   httpGet:
-          #     path: /health/
-          #     port: 9000
-          #   initialDelaySeconds: 5
-          #   periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /health/
+              port: 80
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /health/
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 5
