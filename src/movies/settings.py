@@ -236,7 +236,7 @@ SIMPLE_JWT = {
 FRONTEND_URL = getenv("FRONTEND_URL")
 CORS_ALLOWED_ORIGINS = [FRONTEND_URL]
 FRONTEND_URL2 = getenv("FRONTEND_URL2")
-if FRONTEND_URL2:
+if FRONTEND_URL2:  # pragma: no cover
     CORS_ALLOWED_ORIGINS.append(FRONTEND_URL2)
 
 REST_REGISTRATION = {
@@ -388,7 +388,7 @@ DO_SPACES_REGION = getenv("DO_SPACES_REGION")
 DO_SPACES_CUSTOM_DOMAIN = getenv("DO_SPACES_BUCKET_NAME")
 
 # Storage configuration for avatars using modern Django 5.2+ STORAGES setting
-if DO_SPACES_ACCESS_KEY_ID and DO_SPACES_SECRET_ACCESS_KEY:
+if DO_SPACES_ACCESS_KEY_ID and DO_SPACES_SECRET_ACCESS_KEY:  # pragma: no cover
     STORAGES = {
         "default": {
             "BACKEND": "storages.backends.s3.S3Storage",
