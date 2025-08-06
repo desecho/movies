@@ -11,6 +11,7 @@
 <script lang="ts" setup>
 import { onMounted } from "vue";
 
+import { initAxios } from "./axios";
 import FooterComponent from "./components/FooterComponent.vue";
 import MenuComponent from "./components/MenuComponent.vue";
 import { useAuthStore } from "./stores/auth";
@@ -25,9 +26,14 @@ onMounted(async () => {
   // Initialize theme preferences
   themeStore.initTheme();
 
-  // Load avatar for already logged-in users
-  if (authStore.user.isLoggedIn && !authStore.user.avatarUrl) {
-    await authStore.loadAvatar();
+  // Initialize axios with authentication headers first
+  if (authStore.user.isLoggedIn) {
+    initAxios();
+
+    // Now load avatar if user is logged in and doesn't have one
+    if (!authStore.user.avatarUrl) {
+      await authStore.loadAvatar();
+    }
   }
 });
 </script>

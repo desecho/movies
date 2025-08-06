@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { isAxiosError } from "axios";
 import { jwtDecode } from "jwt-decode";
 import { defineStore } from "pinia";
 
@@ -92,6 +92,12 @@ export const useAuthStore = defineStore("auth", {
             this.user.avatarUrl = undefined;
         },
         async loadAvatar() {
+            // Only attempt to load avatar if user is logged in and has access token
+            if (!this.user.isLoggedIn || !this.user.accessToken) {
+                this.user.avatarUrl = undefined;
+                return;
+            }
+
             try {
                 const response = await axios.get(getUrl("user/avatar/"));
                 const data = response.data as AvatarUploadResponse;
@@ -100,8 +106,16 @@ export const useAuthStore = defineStore("auth", {
                 } else {
                     this.user.avatarUrl = undefined;
                 }
-            } catch {
-                // If avatar loading fails, just set to undefined
+            } catch (error) {
+                // Log authentication errors for debugging
+                if (isAxiosError(error) && error.response?.status === 401) {
+                    console.warn(
+                        "Avatar loading failed due to authentication:",
+                        error.response.status,
+                        error.response.statusText,
+                    );
+                }
+                // If avatar loading fails, set to undefined
                 this.user.avatarUrl = undefined;
             }
         },

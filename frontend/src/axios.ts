@@ -24,11 +24,24 @@ export function initAxios(): void {
             return response;
         },
         async (error: AxiosError) => {
-            if (error.response.status === 401) {
+            if (error.response?.status === 401) {
                 if (user.isLoggedIn) {
-                    if (error.response.code === "token_not_valid") {
+                    // Check if the error response contains token_not_valid in the data
+                    const errorData = error.response.data as {
+                        code?: string;
+                        detail?: string;
+                    };
+                    if (
+                        errorData?.code === "token_not_valid" ||
+                        errorData?.detail ===
+                            "Given token not valid for any token type"
+                    ) {
                         try {
                             await refreshToken();
+                            // Retry the original request with the new token
+                            if (error.config) {
+                                return axios.request(error.config);
+                            }
                         } catch (err) {
                             // eslint-disable-next-line @typescript-eslint/prefer-promise-reject-errors
                             return Promise.reject(err);
