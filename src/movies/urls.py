@@ -22,7 +22,7 @@ from moviesapp.views.recommendations import RecommendationsView
 from moviesapp.views.search import AddToListFromDbView, SearchMovieView
 from moviesapp.views.trending import TrendingView
 from moviesapp.views.user import AvatarView, UserCheckEmailAvailabilityView, UserPreferencesView
-from moviesapp.views.users import UsersView
+from moviesapp.views.users import UserAvatarView, UsersView
 
 # from moviesapp.views.user import AccountDeletedView, AccountDeleteView, LoginErrorView, PreferencesView, logout_view
 
@@ -55,6 +55,7 @@ urlpatterns: list[URL] = [
     path("user/avatar/", AvatarView.as_view()),
     path("user/check-email-availability/", UserCheckEmailAvailabilityView.as_view()),
     path("users/", UsersView.as_view()),
+    path("users/<str:username>/avatar/", UserAvatarView.as_view()),
     path("search/", SearchMovieView.as_view()),
     path("trending/", TrendingView.as_view(), name="trending"),
     path("recommendations/", RecommendationsView.as_view(), name="recommendations"),

@@ -702,10 +702,9 @@ async function loadMyRecords(): Promise<void> {
 async function loadUserAvatar(): Promise<void> {
   if (props.isProfileView && props.username) {
     try {
-      const response = await axios.get(getUrl("users/"));
-      const users = response.data as Array<{ username: string; avatar_url: string | null }>;
-      const user = users.find((u) => u.username === props.username);
-      userAvatarUrl.value = user?.avatar_url || null;
+      const response = await axios.get(getUrl(`users/${props.username}/avatar/`));
+      const userData = response.data as { username: string; avatar_url: string | null };
+      userAvatarUrl.value = userData.avatar_url;
     } catch (error) {
       console.log("Error loading user avatar:", error);
       userAvatarUrl.value = null;
@@ -788,10 +787,12 @@ function addToMyList(movieId: number, listId: number): void {
 // Watch for changes in props that require reloading data
 watch([listIdRef, usernameRef, isProfileViewRef], async () => {
   selectedProfileList.value = props.listId; // Reset profile list selector
-  // Force reload records when switching contexts
-  await loadUserAvatar(); // Load user's avatar if viewing profile
-  await loadRecordsData();
-  await loadMyRecords(); // Load user's records if viewing profile
+  // Force reload records when switching contexts - run in parallel for better performance
+  await Promise.all([
+    loadUserAvatar(), // Load user's avatar if viewing profile
+    loadRecordsData(),
+    loadMyRecords(), // Load user's records if viewing profile
+  ]);
   // Sort records after data is loaded
   sortRecords();
 });
@@ -917,9 +918,12 @@ function moveToBottom(record: RecordType, index: number): void {
 }
 
 onMounted(async () => {
-  await loadRecordsData();
-  await loadMyRecords(); // Load user's records if viewing profile and logged in
-  await loadUserAvatar(); // Load user's avatar if viewing profile
+  // Run all data loading functions in parallel for better performance
+  await Promise.all([
+    loadRecordsData(),
+    loadMyRecords(), // Load user's records if viewing profile and logged in
+    loadUserAvatar(), // Load user's avatar if viewing profile
+  ]);
 });
 </script>
 

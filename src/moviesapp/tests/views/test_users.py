@@ -93,3 +93,67 @@ class UsersViewTestCase(TestCase):
         # User without avatar should have None avatar_url
         self.assertIsNotNone(user_without_avatar_data)
         self.assertIsNone(user_without_avatar_data["avatar_url"])
+
+
+class UserAvatarViewTestCase(TestCase):
+    """User avatar view test case."""
+
+    def setUp(self):
+        """Set up test fixtures."""
+        self.client = APIClient()
+
+        # Create test users
+        self.visible_user = User.objects.create_user(username="testuser", hidden=False)
+        self.hidden_user = User.objects.create_user(username="hiddenuser", hidden=True)
+
+    def test_get_user_avatar_success(self):
+        """Test successful retrieval of user avatar information."""
+        response = self.client.get(f"/users/{self.visible_user.username}/avatar/")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data["username"], self.visible_user.username)
+        self.assertIsNone(response.data["avatar_url"])  # No avatar uploaded
+
+    def test_get_user_avatar_with_avatar(self):
+        """Test retrieval of user avatar information when user has avatar."""
+        # Create a test image file
+        test_image = SimpleUploadedFile(
+            name="test_avatar.jpg", content=b"fake_image_content", content_type="image/jpeg"
+        )
+
+        self.visible_user.avatar = test_image
+        self.visible_user.save()
+
+        response = self.client.get(f"/users/{self.visible_user.username}/avatar/")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data["username"], self.visible_user.username)
+        self.assertIsNotNone(response.data["avatar_url"])
+        self.assertIn("avatars/", response.data["avatar_url"])
+
+    def test_get_user_avatar_hidden_user(self):
+        """Test that hidden users return 404."""
+        response = self.client.get(f"/users/{self.hidden_user.username}/avatar/")
+
+        self.assertEqual(response.status_code, 404)
+
+    def test_get_user_avatar_nonexistent_user(self):
+        """Test that nonexistent users return 404."""
+        response = self.client.get("/users/nonexistent/avatar/")
+
+        self.assertEqual(response.status_code, 404)
+
+    def test_get_user_avatar_cache_headers(self):
+        """Test that appropriate cache headers are set."""
+        response = self.client.get(f"/users/{self.visible_user.username}/avatar/")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("Cache-Control", response)
+        self.assertIn("max-age=3600", response["Cache-Control"])
+        self.assertIn("ETag", response)
+
+    def test_get_user_avatar_no_authentication_required(self):
+        """Test that no authentication is required."""
+        response = self.client.get(f"/users/{self.visible_user.username}/avatar/")
+
+        self.assertEqual(response.status_code, 200)
