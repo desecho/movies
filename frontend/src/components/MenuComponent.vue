@@ -9,7 +9,14 @@
         <ThemeToggle />
       </template>
     </v-app-bar>
-    <v-navigation-drawer v-model="drawer" elevation="0" touchless>
+    <v-navigation-drawer
+      v-model="drawerModel"
+      elevation="0"
+      :rail="false"
+      :temporary="isMobile"
+      :permanent="!isMobile"
+      width="280"
+    >
       <div class="drawer-header">
         <LogoComponent size="large" variant="default" clickable navigate-to="/" />
       </div>
@@ -61,7 +68,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref, toRef } from "vue";
+import { computed, onMounted, ref, toRef } from "vue";
 
 import { useMobile } from "../composables/mobile";
 import { useAuthStore } from "../stores/auth";
@@ -77,16 +84,34 @@ const userStore = useAuthStore();
 const user = toRef(userStore, "user");
 const themeStore = useThemeStore();
 
-function toggleDrawer(): void {
-  drawer.value = !drawer.value;
-}
-
 const { isMobile } = useMobile();
 
-onMounted(() => {
-  if (!isMobile.value) {
-    drawer.value = true;
+// Computed property to control drawer state
+const drawerModel = computed({
+  get: () => {
+    // For non-mobile devices (tablets/desktop), always show drawer
+    if (!isMobile.value) {
+      return true;
+    }
+    // For mobile devices, use the drawer ref value
+    return drawer.value;
+  },
+  set: (value: boolean) => {
+    // Only allow manual control on mobile devices
+    if (isMobile.value) {
+      drawer.value = value;
+    }
+  },
+});
+
+function toggleDrawer(): void {
+  if (isMobile.value) {
+    drawer.value = !drawer.value;
   }
+}
+
+onMounted(() => {
+  // Component mounted - mobile detection and drawer state handled by computed property
 });
 </script>
 
@@ -202,9 +227,31 @@ onMounted(() => {
 }
 
 /* Mobile adjustments */
-@media (max-width: 768px) {
+@media (max-width: 599px) {
   .drawer-header {
     padding: 16px 12px 12px;
+  }
+}
+
+/* Tablet adjustments - ensure navigation drawer shows properly */
+@media (min-width: 600px) {
+  :deep(.v-navigation-drawer) {
+    display: block !important;
+    visibility: visible !important;
+    transform: translateX(0) !important;
+    left: 0 !important;
+  }
+
+  /* Ensure content area adjusts for drawer on tablets */
+  :deep(.v-main) {
+    margin-left: 280px !important;
+  }
+}
+
+/* Override for actual mobile devices */
+@media (max-width: 599px) {
+  :deep(.v-main) {
+    margin-left: 0 !important;
   }
 }
 </style>
