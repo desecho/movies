@@ -257,6 +257,13 @@ class OpenAIClientPromptBuildingTestCase(TestCase):
 
         self.assertIn("Number of recommendations: 5", prompt)
 
+    def test_build_recommendation_prompt_without_recommendations_number(self):
+        """Test building prompt without recommendations number uses default."""
+        preferences = RecommendationRequest(recommendations_number=None)
+        prompt = OpenAIClient._build_recommendation_prompt(preferences)
+
+        self.assertIn(f"Number of recommendations: {settings.AI_MAX_RECOMMENDATIONS}", prompt)
+
     def test_build_recommendation_prompt_comprehensive(self):
         """Test building prompt with all preferences."""
         preferences = RecommendationRequest(
