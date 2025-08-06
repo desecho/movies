@@ -91,5 +91,6 @@ make mypy              # Type checking
 
 ## Additional instructions
 
-- Run pytest individually like this if you have to: `.tox/py/bin/python -m pytest`
+- Run pytest individually like this if you have to: `.tox/py-pytest/bin/python -m pytest`
+- To run pytest - run `make pytest`
 - After you done coding, in the testing phase - always run command `make fl`. It will format the code and also lint it.
