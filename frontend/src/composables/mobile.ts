@@ -22,9 +22,9 @@ export function useMobile(): {
         return (sm.value || (md.value && width.value < 1280)) && !xs.value;
     });
 
-    /* Only treat actual phones (< 600px) as "mobile" for navigation
-       Everything else gets desktop-style navigation */
-    const isMobile = computed((): boolean => xs.value);
+    /* Treat phones and tablets as "mobile" for hamburger navigation
+       Only desktop (md+) gets permanent navigation drawer */
+    const isMobile = computed((): boolean => isPhone.value || isTablet.value);
 
     return {
         isPhone,

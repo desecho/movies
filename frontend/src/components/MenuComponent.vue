@@ -233,21 +233,6 @@ onMounted(() => {
   }
 }
 
-/* Tablet adjustments - ensure navigation drawer shows properly */
-@media (min-width: 600px) {
-  :deep(.v-navigation-drawer) {
-    display: block !important;
-    visibility: visible !important;
-    transform: translateX(0) !important;
-    left: 0 !important;
-  }
-
-  /* Ensure content area adjusts for drawer on tablets */
-  :deep(.v-main) {
-    margin-left: 280px !important;
-  }
-}
-
 /* Override for actual mobile devices */
 @media (max-width: 599px) {
   :deep(.v-main) {
