@@ -28,6 +28,7 @@ jobs:
         uses: digitalocean/action-doctl@v2.5.1
         with:
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+          version: "1.135.0"
 
       - name: Update watch data
         run: make prod-manage update_watch_data

@@ -31,6 +31,7 @@ jobs:
         uses: digitalocean/action-doctl@v2.5.1
         with:
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+          version: "1.135.0"
 
       - name: Update all movies starting from selected movie ID
         run: make prod-manage update_movie_data arguments="-s ${{ github.event.inputs.movie_id }}"

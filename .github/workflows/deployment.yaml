@@ -150,6 +150,7 @@ jobs:
         uses: digitalocean/action-doctl@v2.5.1
         with:
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+          version: "1.135.0"
 
       - name: Flush CDN cache
         run: make flush-cdn-cache
@@ -175,6 +176,7 @@ jobs:
         uses: digitalocean/action-doctl@v2.5.1
         with:
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+          version: "1.135.0"
 
       - name: Install kubectl
         uses: azure/setup-kubectl@v3.0
