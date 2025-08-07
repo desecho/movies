@@ -70,8 +70,6 @@ class User(AbstractUser, UserBase):
     language = CharField(
         max_length=2, choices=settings.LANGUAGES, default=settings.LANGUAGE_CODE, verbose_name=_("Language")
     )
-    avatar_small = URLField(null=True, blank=True)
-    avatar_big = URLField(null=True, blank=True)
     avatar = ImageField(upload_to="avatars/", null=True, blank=True)
     loaded_initial_data = BooleanField(default=False)
     country = CountryField(verbose_name=_("Country"), null=True, blank=True)
