@@ -3,7 +3,7 @@
     <v-app-bar v-if="isMobile" class="modern-app-bar" elevation="0">
       <v-app-bar-nav-icon variant="text" @click="toggleDrawer()"></v-app-bar-nav-icon>
       <v-app-bar-title class="app-title">
-        <LogoComponent size="medium" variant="white" clickable navigate-to="/" />
+        <LogoComponent size="medium" variant="white" clickable navigate-to="/" show-text />
       </v-app-bar-title>
       <template #append>
         <ThemeToggle />
@@ -18,7 +18,7 @@
       width="280"
     >
       <div class="drawer-header">
-        <LogoComponent size="large" variant="default" clickable navigate-to="/" />
+        <LogoComponent size="large" variant="default" clickable navigate-to="/" show-text />
       </div>
       <v-divider class="header-divider"></v-divider>
       <v-list class="nav-list" density="comfortable">

@@ -30,7 +30,7 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   size: "medium",
   showText: false,
-  text: "Movies",
+  text: "MovieMunch",
   clickable: false,
   navigateTo: "/",
   variant: "default",
@@ -45,7 +45,7 @@ const logoSrc = computed(() => {
   return themeStore.isDark ? "/img/logo-dark.png" : "/img/logo.png";
 });
 
-const altText = "Movies Logo";
+const altText = "MovieMunch Logo";
 
 const logoClass = computed(() => [
   "logo-image",
@@ -79,6 +79,7 @@ function onImageError(): void {
 <style scoped>
 .logo-container {
   display: flex;
+  flex-direction: column;
   align-items: center;
   gap: 8px;
   transition: all 0.3s ease;

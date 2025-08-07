@@ -4,7 +4,7 @@ kind: ConfigMap
 metadata:
   name: movies
 data:
-  PROJECT_DOMAIN: api.movies.samarchyan.me
+  PROJECT_DOMAIN: api.moviemunch.org
   ADMIN_EMAIL: desecho@gmail.com
   EMAIL_HOST: smtp.gmail.com
   EMAIL_HOST_USER: desecho@gmail.com
@@ -13,7 +13,7 @@ data:
   STATIC_URL: https://cdn.movies.samarchyan.me/
   DJANGO_SETTINGS_MODULE: movies.settings
   REDIS_URL: redis://redis:6379/
-  FRONTEND_URL: https://movies.samarchyan.me
+  FRONTEND_URL: https://moviemunch.org/
   DO_SPACES_ENDPOINT_URL: https://nyc3.digitaloceanspaces.com
   DO_SPACES_BUCKET_NAME: cdn.movies.samarchyan.me
   DO_SPACES_REGION: nyc3

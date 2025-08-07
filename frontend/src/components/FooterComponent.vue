@@ -11,7 +11,7 @@
       </div>
       <div class="footer-right">
         <div class="footer-links">
-          <router-link to="/about">About Movies</router-link>
+          <router-link to="/about">About MovieMunch</router-link>
         </div>
         <div class="footer-copyright">© 2013 - {{ new Date().getFullYear() }} {{ email }}. All rights reserved.</div>
       </div>

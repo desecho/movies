@@ -9,10 +9,10 @@ metadata:
 spec:
   tls:
     - hosts:
-        - movies.samarchyan.me
+        - moviemunch.org
       secretName: movies-frontend-tls
   rules:
-    - host: movies.samarchyan.me
+    - host: moviemunch.org
       http:
         paths:
           - pathType: Prefix

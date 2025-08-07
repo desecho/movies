@@ -4,8 +4,8 @@ Movies
 |Deployment Status| |Codecov|
 
 | The web application on Django_ 5, Vue.js_ 3, Vuetify_ 3, `Material Design Icons`_ 7.. Create movie lists "Watched" and "To Watch", rate movies, and add comments.
-| See more information here - https://movies.samarchyan.me/about/
-| The website is live here - https://movies.samarchyan.me.
+| See more information here - https://moviemunch.org/about/
+| The website is live here - https://moviemunch.org/
 
 See more documentation_.
 

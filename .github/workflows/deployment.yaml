@@ -21,7 +21,7 @@ jobs:
       cancel-in-progress: true
     env:
       VITE_GOOGLE_ANALYTICS_ID: G-6WPPD6FEVM
-      VITE_BACKEND_URL: https://api.movies.samarchyan.me/
+      VITE_BACKEND_URL: https://api.moviemunch.org/
       VITE_ADMIN_EMAIL: desecho@gmail.com
     steps:
       - name: Set up Docker Buildx
