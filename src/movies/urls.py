@@ -20,6 +20,7 @@ from moviesapp.views.list import (
 )
 from moviesapp.views.recommendations import RecommendationsView
 from moviesapp.views.search import AddToListFromDbView, SearchMovieView
+from moviesapp.views.stats import StatsView
 from moviesapp.views.trending import TrendingView
 from moviesapp.views.user import AvatarView, UserCheckEmailAvailabilityView, UserPreferencesView
 from moviesapp.views.users import UserAvatarView, UsersView
@@ -59,6 +60,7 @@ urlpatterns: list[URL] = [
     path("search/", SearchMovieView.as_view()),
     path("trending/", TrendingView.as_view(), name="trending"),
     path("recommendations/", RecommendationsView.as_view(), name="recommendations"),
+    path("stats/", StatsView.as_view(), name="stats"),
     path("add-to-list-from-db/", AddToListFromDbView.as_view()),
     # List
     path("records/", RecordsView.as_view()),
