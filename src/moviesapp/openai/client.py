@@ -1,6 +1,7 @@
 """OpenAI client for movie recommendations."""
 
 import json
+import logging
 from datetime import datetime
 from typing import Dict, List, Optional
 
@@ -9,6 +10,8 @@ from openai import OpenAI
 
 from .exceptions import OpenAIConfigurationError, OpenAIError
 from .types import RecommendationRequest, RecommendationResponse
+
+logger = logging.getLogger(__name__)
 
 SYSTEM_PROMPT = """You are a movie recommendation expert.
 
@@ -19,6 +22,10 @@ Provide personalized movie recommendations based on the user's preferences and v
         "imdb_id": "tt1234567"
     }
 ]
+
+The list should contain ONLY IMDb IDs of recommended movies, NOT the titles. Each movie should be relevant to the user's preferences, avoiding duplicates and ensuring variety in genre and style.
+The list should contain movies ONLY. TV Series or other media should not be included.
+Include both streaming-only releases (Netflix/Prime/Apple/etc.) as well as theatrical releases.
 
 Recommendation logic:
 - If the user has no specific preferences, recommend popular and critically acclaimed movies.
@@ -31,6 +38,8 @@ Recommendation logic:
 - If the user requests a specific number of movies, return exactly that many.
 - If genre is not specified, ensure diversity in genre and style.
 - Always aim to match user preferences while introducing some variety.
+
+IMPORTANT: Do NOT ask any questions or seek clarification. Give the results to your best ability. If there are no suitable recommendations, return at least something - you can relax user's preferences in this case.
 """
 
 MIN_YEAR = 1888  # The year the first movie was made
@@ -67,25 +76,47 @@ class OpenAIClient:
             If API call fails
 
         """
+        logger.info("Starting movie recommendation request")
+        logger.debug("User preferences: %s", user_preferences)
         try:
+            logger.debug("Validating user preferences")
             OpenAIClient._validate_user_preferences(user_preferences)
-            prompt = OpenAIClient._build_recommendation_prompt(user_preferences)
 
+            logger.debug("Building recommendation prompt")
+            prompt = OpenAIClient._build_recommendation_prompt(user_preferences)
+            logger.debug("Generated prompt: %s", prompt)
+
+            logger.info("Calling OpenAI API with model: %s", self.model)
             response = self.client.chat.completions.create(
                 model=self.model,
                 messages=[{"role": "system", "content": SYSTEM_PROMPT}, {"role": "user", "content": prompt}],
-                max_tokens=settings.OPENAI_MAX_TOKENS,
-                temperature=settings.OPENAI_TEMPERATURE,
+                max_completion_tokens=settings.OPENAI_MAX_TOKENS,
             )
+            logger.info("OpenAI API call completed successfully")
+            logger.info("Raw response received from OpenAI - %s", response)
 
             content = response.choices[0].message.content
             if content is None:
+                logger.error("OpenAI API returned empty content")
                 raise OpenAIError("OpenAI API returned empty content")
+
+            logger.debug("Raw OpenAI response: %s", content)
+            logger.debug("Parsing recommendation response")
             parsed_content = OpenAIClient._parse_recommendation_response(content)
+
+            logger.debug("Filtering out duplicate IMDb IDs")
+            original_count = len(parsed_content)
             self._filter_out_duplicated_ids(parsed_content)
+            final_count = len(parsed_content)
+
+            if original_count != final_count:
+                logger.info("Filtered out %d duplicate recommendations", original_count - final_count)
+
+            logger.info("Successfully generated %d movie recommendations", final_count)
             return parsed_content
 
         except Exception as e:
+            logger.error("Error during movie recommendation: %s", str(e), exc_info=True)
             if hasattr(e, "__module__") and "openai" in e.__module__:
                 raise OpenAIError(f"OpenAI API error: {str(e)}") from e
             raise OpenAIError(f"Unexpected error: {str(e)}") from e

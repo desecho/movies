@@ -428,7 +428,6 @@ class OpenAIClientIntegrationTestCase(TestCase):
         OPENAI_API_KEY="test-api-key",
         OPENAI_MODEL="gpt-4",
         OPENAI_MAX_TOKENS=1000,
-        OPENAI_TEMPERATURE=0.7,
         AI_MIN_RECOMMENDATIONS=1,
         AI_MAX_RECOMMENDATIONS=10,
         AI_MIN_RATING=1,
@@ -465,8 +464,7 @@ class OpenAIClientIntegrationTestCase(TestCase):
         call_args = mock_client_instance.chat.completions.create.call_args
 
         self.assertEqual(call_args.kwargs["model"], "gpt-4")
-        self.assertEqual(call_args.kwargs["max_tokens"], 1000)
-        self.assertEqual(call_args.kwargs["temperature"], 0.7)
+        self.assertEqual(call_args.kwargs["max_completion_tokens"], 1000)
 
         messages = call_args.kwargs["messages"]
         self.assertEqual(len(messages), 2)
