@@ -116,7 +116,7 @@ function onImageError(): void {
 }
 
 .logo-large {
-  height: 135px;
+  height: 100px;
   width: auto;
 }
 
