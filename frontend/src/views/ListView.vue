@@ -29,10 +29,11 @@
 
     <!-- Search and Counts -->
     <SearchAndCountsComponent
-      v-model:query="query"
+      :query="query"
+      @update:query="setQuery"
       :watched-count="watchedCount"
       :to-watch-count="toWatchCount"
-      :filtered-count="filteredRecords.length"
+      :filtered-count="sortedFilteredRecords.length"
       :are-records-loaded="areRecordsLoaded"
       :is-records-loading="isRecordsLoading"
     />
@@ -54,35 +55,32 @@
       <v-col cols="12">
         <!-- Regular view modes (non-gallery) -->
         <div v-cloak v-if="mode != 'gallery'">
-          <draggable v-model="records" item-key="id" :disabled="!isSortable" @sort="saveRecordsOrder">
-            <template #item="{ element, index }">
-              <MovieItemComponent
-                v-if="paginatedRecords.includes(element)"
-                :record="element"
-                :record-index="index"
-                :mode="mode"
-                :current-list-id="currentListId"
-                :is-profile-view="isProfileView"
-                :is-sortable="isSortable"
-                :is-logged-in="authStore.user.isLoggedIn"
-                :my-records="myRecords"
-                @remove="removeRecord"
-                @add-to-my-list="addToMyList"
-                @add-to-list="addToList"
-                @rating-changed="changeRating"
-                @save-comment="saveComment"
-                @show-comment-area="showCommentArea"
-                @save-options="saveOptions"
-                @update-comment="updateRecordComment"
-              />
-            </template>
-          </draggable>
+          <template v-for="(record, index) in paginatedRecords" :key="record.id">
+            <MovieItemComponent
+              :record="record"
+              :record-index="index"
+              :mode="mode"
+              :current-list-id="currentListId"
+              :is-profile-view="isProfileView"
+              :is-sortable="isSortable"
+              :is-logged-in="authStore.user.isLoggedIn"
+              :my-records="myRecords"
+              @remove="removeRecord"
+              @add-to-my-list="addToMyList"
+              @add-to-list="addToList"
+              @rating-changed="changeRating"
+              @save-comment="saveComment"
+              @show-comment-area="showCommentArea"
+              @save-options="saveOptions"
+              @update-comment="updateRecordComment"
+            />
+          </template>
         </div>
 
         <!-- Gallery view -->
         <GalleryViewComponent
           v-if="mode === 'gallery'"
-          v-model:records="records"
+          v-model:records="sortedFilteredRecords"
           :paginated-records="paginatedRecords"
           :is-sortable="isSortable"
           :is-profile-view="isProfileView"
@@ -106,7 +104,6 @@
 
 <script lang="ts" setup>
 import axios from "axios";
-import { cloneDeep } from "lodash";
 import { computed, onMounted, ref, toRef, watch } from "vue";
 import { useRouter } from "vue-router";
 import Draggable from "vuedraggable";
@@ -122,6 +119,10 @@ import MovieListPaginationComponent from "../components/ListView/MovieListPagina
 import ProfileHeaderComponent from "../components/ListView/ProfileHeaderComponent.vue";
 import SearchAndCountsComponent from "../components/ListView/SearchAndCountsComponent.vue";
 import UserListSelectorComponent from "../components/ListView/UserListSelectorComponent.vue";
+// Import composables
+import { useRecordFilters } from "../composables/useRecordFilters";
+import { useRecordSorting } from "../composables/useRecordSorting";
+import { useRequestDeduplication } from "../composables/useRequestDeduplication";
 import { listToWatchId, listWatchedId } from "../const";
 import { getUrl } from "../helpers";
 import { useAuthStore } from "../stores/auth";
@@ -140,14 +141,15 @@ const recordsStore = useRecordsStore();
 const authStore = useAuthStore();
 
 const mode = ref("full");
-const sort = ref("additionDate");
-const query = ref("");
 const toRewatchFilter = ref(false);
 const hideUnreleasedMovies = ref(false);
 const recentReleasesFilter = ref(false);
 const records = toRef(recordsStore, "records");
 const areRecordsLoaded = toRef(recordsStore, "areLoaded");
 const isRecordsLoading = toRef(recordsStore, "isLoading");
+
+// Request deduplication composable
+const { deduplicateRequest } = useRequestDeduplication();
 
 // For profile views, allow switching between lists
 const selectedProfileList = ref(props.listId);
@@ -164,111 +166,62 @@ const addingToList = ref<Record<string, boolean>>({});
 // Store user's own records for checking if movie already exists
 const myRecords = ref<RecordType[]>([]);
 
-const page = ref(1);
-const perPage = 50;
-
 // Computed property to get the current list ID (either from props or selected by user)
 const currentListId = computed(() => {
   return props.isProfileView ? selectedProfileList.value : selectedUserList.value;
 });
 
-const filteredRecords = computed(() => {
-  const q = query.value.trim().toLowerCase();
-  return records.value.filter((record) => {
-    const matchesSearch =
-      record.movie.title.toLowerCase().includes(q) ||
-      record.movie.titleOriginal.toLowerCase().includes(q) ||
-      (record.movie.director && record.movie.director.toLowerCase().includes(q)) ||
-      (record.movie.actors && record.movie.actors.toLowerCase().includes(q));
-    const matchesList = record.listId === currentListId.value;
+// Initialize composables
+const filterComposable = useRecordFilters(records, currentListId, "");
+const { query, setQuery } = filterComposable;
+const sortingComposable = useRecordSorting(records, currentListId);
+const { sort } = sortingComposable;
 
-    // Apply "To Rewatch" filter if enabled
-    let matchesRewatchFilter = true;
-    if (toRewatchFilter.value && currentListId.value === listWatchedId) {
-      matchesRewatchFilter =
-        record.rating === 5 &&
-        ((!record.options.ultraHd && !record.options.theatre) || !record.options.original) &&
-        !record.options.ignoreRewatch;
-    }
-
-    // Apply "Hide Unreleased" filter if enabled
-    let matchesReleasedFilter = true;
-    if (hideUnreleasedMovies.value && currentListId.value === listToWatchId) {
-      matchesReleasedFilter = record.movie.isReleased;
-    }
-
-    // Apply "Recent Releases" filter if enabled (only for to-watch movies)
-    let matchesRecentReleasesFilter = true;
-    if (recentReleasesFilter.value && currentListId.value === listToWatchId) {
-      // Exclude movies with no release date
-      if (!record.movie.releaseDate || !record.movie.releaseDateTimestamp) {
-        matchesRecentReleasesFilter = false;
-      } else {
-        // Check if movie was released in the last 6 months
-        const sixMonthsAgo = new Date();
-        sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
-        const movieReleaseDate = new Date(record.movie.releaseDateTimestamp * 1000);
-        matchesRecentReleasesFilter = movieReleaseDate >= sixMonthsAgo;
-      }
-    }
-
-    return (
-      matchesSearch && matchesList && matchesRewatchFilter && matchesReleasedFilter && matchesRecentReleasesFilter
-    );
-  });
+// Get filtered records using the composable
+const filteredRecords = filterComposable.getFilteredRecords({
+  toRewatchFilter,
+  hideUnreleasedMovies,
+  recentReleasesFilter,
 });
 
-const watchedCount = computed(() => {
-  return records.value.filter((record) => record.listId === listWatchedId).length;
-});
-
-const toWatchCount = computed(() => {
-  return records.value.filter((record) => record.listId === listToWatchId).length;
-});
-
-const totalPages = computed(() => Math.ceil(filteredRecords.value.length / perPage));
-
-const paginatedRecords = computed(() => {
-  const start = (page.value - 1) * perPage;
-  return filteredRecords.value.slice(start, start + perPage);
-});
-
-function sortRecords(): void {
-  const recordsCopy = cloneDeep(records.value);
+// Apply sorting to filtered records
+const sortedFilteredRecords = computed(() => {
+  if (!filteredRecords.value.length) return [];
+  
+  const recordsCopy = [...filteredRecords.value];
 
   switch (sort.value) {
     case "custom":
-      recordsCopy.sort((a, b) => {
-        return a.order - b.order;
-      });
-      break;
+      return recordsCopy.sort((a, b) => a.order - b.order);
     case "releaseDate":
-      recordsCopy.sort((a, b) => {
-        return b.movie.releaseDateTimestamp - a.movie.releaseDateTimestamp;
-      });
-      break;
+      return recordsCopy.sort((a, b) => b.movie.releaseDateTimestamp - a.movie.releaseDateTimestamp);
     case "rating":
       if (currentListId.value === listWatchedId) {
-        recordsCopy.sort((a, b) => {
-          return b.rating - a.rating;
-        });
+        return recordsCopy.sort((a, b) => b.rating - a.rating);
       } else {
-        recordsCopy.sort((a, b) => {
-          return b.movie.imdbRating - a.movie.imdbRating;
-        });
+        return recordsCopy.sort((a, b) => b.movie.imdbRating - a.movie.imdbRating);
       }
-      break;
-    default:
-      recordsCopy.sort((a, b) => {
-        return b.additionDate - a.additionDate;
-      });
+    default: // additionDate
+      return recordsCopy.sort((a, b) => b.additionDate - a.additionDate);
   }
+});
 
-  records.value = recordsCopy;
-}
+// Get optimized count computations
+const watchedCount = filterComposable.getWatchedCount();
+const toWatchCount = filterComposable.getToWatchCount();
 
-watch(sort, () => {
-  sortRecords();
+// Get pagination utilities
+const page = ref(1);
+const perPage = 50;
+const totalPages = computed(() => Math.ceil(sortedFilteredRecords.value.length / perPage));
+const paginatedRecords = computed(() => {
+  const start = (page.value - 1) * perPage;
+  return sortedFilteredRecords.value.slice(start, start + perPage);
+});
+
+// Watch for query changes and update the composable
+watch(query, (newQuery) => {
+  setQuery(newQuery);
 });
 
 const listIdRef = toRef(props, "listId");
@@ -277,44 +230,58 @@ const isProfileViewRef = toRef(props, "isProfileView");
 
 async function loadRecordsData(): Promise<void> {
   const { loadRecords } = useRecordsStore();
+  
+  const cacheKey = props.isProfileView && props.username 
+    ? `records-profile-${props.username}` 
+    : 'records-user';
 
-  try {
-    if (props.isProfileView && props.username) {
-      await loadRecords(props.username);
-    } else {
-      await loadRecords();
+  return deduplicateRequest(cacheKey, async () => {
+    try {
+      if (props.isProfileView && props.username) {
+        await loadRecords(props.username);
+      } else {
+        await loadRecords();
+      }
+    } catch (error: unknown) {
+      console.log(error);
+      const errorMessage =
+        props.isProfileView && props.username ? `Error loading ${props.username}'s movies` : "Error loading movies";
+      $toast.error(errorMessage);
+      throw error; // Re-throw to prevent caching failed requests
     }
-  } catch (error: unknown) {
-    console.log(error);
-    const errorMessage =
-      props.isProfileView && props.username ? `Error loading ${props.username}'s movies` : "Error loading movies";
-    $toast.error(errorMessage);
-  }
+  });
 }
 
 // Load user's own records when viewing a profile (if logged in)
 async function loadMyRecords(): Promise<void> {
   if (props.isProfileView && authStore.user.isLoggedIn) {
-    try {
-      const response = await axios.get(getUrl("records/"));
-      myRecords.value = response.data as RecordType[];
-    } catch (error) {
-      console.log("Error loading user's records:", error);
-    }
+    return deduplicateRequest('my-records', async () => {
+      try {
+        const response = await axios.get(getUrl("records/"));
+        myRecords.value = response.data as RecordType[];
+      } catch (error) {
+        console.log("Error loading user's records:", error);
+        throw error;
+      }
+    });
   }
 }
 
 // Load user avatar for profile views
 async function loadUserAvatar(): Promise<void> {
   if (props.isProfileView && props.username) {
-    try {
-      const response = await axios.get(getUrl(`users/${props.username}/avatar/`));
-      const userData = response.data as { username: string; avatar_url: string | null };
-      userAvatarUrl.value = userData.avatar_url;
-    } catch (error) {
-      console.log("Error loading user avatar:", error);
-      userAvatarUrl.value = null;
-    }
+    const cacheKey = `avatar-${props.username}`;
+    return deduplicateRequest(cacheKey, async () => {
+      try {
+        const response = await axios.get(getUrl(`users/${props.username}/avatar/`));
+        const userData = response.data as { username: string; avatar_url: string | null };
+        userAvatarUrl.value = userData.avatar_url;
+      } catch (error) {
+        console.log("Error loading user avatar:", error);
+        userAvatarUrl.value = null;
+        throw error;
+      }
+    });
   }
 }
 
