@@ -94,7 +94,7 @@
             :show-rating="false"
             :clearable="!isProfileView"
             :read-only="isProfileView"
-            @rating-selected="$emit('rating-changed', record, $event)"
+            @update:rating="handleRatingChange($event)"
           >
           </star-rating>
         </div>
@@ -352,6 +352,10 @@ function isMovieInMyList(movieId: number): boolean {
 
 function updateComment(comment: string): void {
   emit("update-comment", props.record, comment);
+}
+
+function handleRatingChange(rating: number): void {
+  emit("rating-changed", props.record, rating);
 }
 </script>
 
