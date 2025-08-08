@@ -6,3 +6,5 @@ export const $toast = useToast({
     position: "bottom-right",
     duration: 1500,
 });
+
+export const toast = $toast;

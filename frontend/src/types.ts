@@ -97,3 +97,11 @@ export interface AuthProps {
     timestamp: number;
     signature: string;
 }
+
+export interface ShareResponse {
+    share_url: string;
+}
+
+export interface ShareRequest {
+    platform?: string;
+}

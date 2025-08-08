@@ -17,6 +17,7 @@ from moviesapp.views.list import (
     SaveCommentView,
     SaveOptionsView,
     SaveRecordsOrderView,
+    ShareToSocialMediaView,
 )
 from moviesapp.views.recommendations import RecommendationsView
 from moviesapp.views.search import AddToListFromDbView, SearchMovieView
@@ -76,6 +77,8 @@ urlpatterns: list[URL] = [
     path("change-rating/<int:record_id>/", ChangeRatingView.as_view()),
     path_404("save-comment/", "save_comment"),
     path("save-comment/<int:record_id>/", SaveCommentView.as_view()),
+    path_404("share/", "share"),
+    path("share/<int:record_id>/", ShareToSocialMediaView.as_view()),
 ]
 
 # urlpatterns += [

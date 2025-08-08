@@ -13,6 +13,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from ..models import Action, ActionRecord, List, Movie, ProviderRecord, Record, User, UserAnonymous
+from ..utils import generate_x_share_url
 from .types import MovieObject, OptionsObject, ProviderObject, ProviderRecordObject, RecordObject
 from .utils import add_movie_to_list, get_anothers_account
 
@@ -119,6 +120,28 @@ class SaveCommentView(APIView):
             record.comment = comment
             record.save()
         return Response()
+
+
+class ShareToSocialMediaView(APIView):
+    """Share to social media view."""
+
+    def post(self, request: Request, record_id: int) -> Response:  # pylint: disable=no-self-use
+        """Generate social media share URL."""
+        record = get_object_or_404(Record, user=request.user, pk=record_id)
+
+        # Only allow sharing for watched movies with ratings or comments
+        if record.list_id != List.WATCHED or (not record.rating and not record.comment.strip()):
+            return Response(
+                {"error": "Only watched movies with ratings or comments can be shared"}, status=HTTPStatus.BAD_REQUEST
+            )
+
+        platform = request.data.get("platform", "twitter")
+
+        if platform == "twitter":
+            share_url = generate_x_share_url(record)
+            return Response({"share_url": share_url})
+
+        return Response({"error": "Unsupported platform"}, status=HTTPStatus.BAD_REQUEST)
 
 
 class RecordsView(APIView):

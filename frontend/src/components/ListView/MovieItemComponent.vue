@@ -225,6 +225,10 @@
           >
             <v-icon icon="mdi-comment" />
           </button>
+          <!-- Share button - show for any watched movie with rating or comment -->
+          <div v-if="mode != 'minimal'" class="share-button-container">
+            <ShareButton :record="record" />
+          </div>
           <!-- Only show options for own lists -->
           <div v-if="!isProfileView" v-show="mode == 'full'" class="option-buttons">
             <div>
@@ -304,6 +308,7 @@
 import { computed } from "vue";
 import VLazyImage from "v-lazy-image";
 import StarRating from "vue-star-rating";
+import ShareButton from "../ShareButton.vue";
 import type { RecordType } from "../../types";
 import type { ViewMode, ListContextProps, ViewModeProps } from "../../types/listView";
 import { getSrcSet } from "../../helpers";
@@ -870,6 +875,11 @@ function updateComment(comment: string): void {
     display: inline-flex;
     align-items: center;
   }
+}
+
+.share-button-container {
+  display: inline-block;
+  margin: 8px 4px 8px 0;
 }
 
 .option-buttons {
