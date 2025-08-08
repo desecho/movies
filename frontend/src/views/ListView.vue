@@ -1428,7 +1428,8 @@ onMounted(async () => {
   border-radius: 8px;
   padding: 16px;
   border: 1px solid rgba(0, 0, 0, 0.05);
-  flex: 1;
+  flex: 2;
+  min-width: 600px;
 
   > div {
     font-size: 0.95rem;
@@ -1445,6 +1446,8 @@ onMounted(async () => {
   .details {
     width: 100%;
     padding: 12px;
+    min-width: auto;
+    flex: 1;
   }
 }
 
