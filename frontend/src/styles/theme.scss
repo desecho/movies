@@ -288,18 +288,18 @@
     border: 1px solid rgba(148, 163, 184, 0.2) !important;
   }
 
-  .add-to-list-buttons {
-    background: rgba(51, 65, 85, 0.95) !important;
-    border: 1px solid #475569 !important;
-
-    a {
-      background: rgba(148, 163, 184, 0.2) !important;
-      color: #f1f5f9 !important;
+  .title-action-buttons {
+    .remove-button a,
+    .add-to-list-buttons a {
+      background: rgba(255, 255, 255, 0.15) !important;
+      color: white !important;
+      border: none !important;
 
       &:hover,
       &:focus {
-        background: rgba(148, 163, 184, 0.3) !important;
+        background: rgba(255, 255, 255, 0.25) !important;
         color: white !important;
+        transform: scale(1.1) !important;
       }
     }
   }
