@@ -23,10 +23,12 @@
       <v-divider class="header-divider"></v-divider>
       <v-list class="nav-list" density="comfortable">
         <MenuItem title="Search" icon="magnify" to="/search" />
+        <MenuItem v-if="user.isLoggedIn" title="My Movies" icon="eye" to="/list/watched" />
         <MenuItem title="Trending" icon="trending-up" to="/trending" />
         <MenuItem title="AI Recommendations" icon="robot" to="/recommendations" />
+        <MenuItem title="Activity Feed" icon="timeline" to="/feed" />
         <MenuItem v-if="user.isLoggedIn" title="Stats" icon="chart-box" to="/stats" />
-        <MenuItem v-if="user.isLoggedIn" title="My Movies" icon="eye" to="/list/watched" />
+        <MenuItem v-if="user.isLoggedIn" title="My Network" icon="account-network" to="/network" />
         <MenuItem title="Users" icon="account-group" to="/users" />
       </v-list>
       <template #append>
@@ -41,7 +43,7 @@
             <MenuItem v-if="!user.isLoggedIn" title="Login" icon="login" to="/login" />
             <template v-if="user.isLoggedIn">
               <!-- User Profile Section -->
-              <v-list-item class="user-profile-item mb-2">
+              <!-- <v-list-item class="user-profile-item mb-2">
                 <template #prepend>
                   <UserAvatarComponent
                     :avatar-url="user.avatarUrl"
@@ -53,7 +55,7 @@
                 <v-list-item-title class="text-body-1 font-weight-medium">
                   {{ user.username }}
                 </v-list-item-title>
-              </v-list-item>
+              </v-list-item> -->
 
               <v-divider class="my-2"></v-divider>
 
@@ -77,7 +79,6 @@ import { useThemeStore } from "../stores/theme";
 import LogoComponent from "./LogoComponent.vue";
 import MenuItem from "./MenuItem.vue";
 import ThemeToggle from "./ThemeToggle.vue";
-import UserAvatarComponent from "./UserAvatarComponent.vue";
 
 const drawer = ref(false);
 const userStore = useAuthStore();

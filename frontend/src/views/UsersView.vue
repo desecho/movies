@@ -29,8 +29,8 @@
 
         <div v-else class="users-grid">
           <div v-for="(user, index) in users" :key="index" class="user-card">
-            <router-link :to="`/users/${user.username}/list/watched`" class="user-link">
-              <div class="user-card-content">
+            <div class="user-card-content">
+              <router-link :to="`/users/${user.username}/list/watched`" class="user-link">
                 <div class="user-avatar">
                   <img
                     v-if="user.avatar_url"
@@ -43,12 +43,33 @@
                 <div class="user-info">
                   <h3 class="username">{{ user.username }}</h3>
                   <p class="user-subtitle">View movie collection</p>
+                  <div v-if="user.followersCount !== undefined" class="follow-stats">
+                    {{ user.followersCount }} followers • {{ user.followingCount }} following
+                  </div>
                 </div>
                 <div class="user-actions">
                   <v-icon icon="mdi-chevron-right" class="action-icon" />
                 </div>
+              </router-link>
+
+              <!-- Follow Button -->
+              <div
+                v-if="authStore.user.isLoggedIn && authStore.user.username !== user.username"
+                class="follow-button-container"
+              >
+                <v-btn
+                  :loading="user.followLoading"
+                  :color="user.isFollowing ? 'success' : 'primary'"
+                  :variant="user.isFollowing ? 'outlined' : 'elevated'"
+                  size="small"
+                  class="follow-btn"
+                  @click.stop="toggleFollow(user)"
+                >
+                  <v-icon :icon="user.isFollowing ? 'mdi-account-check' : 'mdi-account-plus'" start />
+                  {{ user.isFollowing ? "Following" : "Follow" }}
+                </v-btn>
               </div>
-            </router-link>
+            </div>
           </div>
         </div>
       </v-col>
@@ -60,38 +81,128 @@
 import axios from "axios";
 import { onMounted, ref } from "vue";
 
-import type { AxiosError } from "axios";
 import type { Ref } from "vue";
 
 import { getUrl } from "../helpers";
+import { useAuthStore } from "../stores/auth";
 import { $toast } from "../toast";
 
 interface User {
   username: string;
   avatar_url: string | null;
+  isFollowing?: boolean;
+  followersCount?: number;
+  followingCount?: number;
+  followLoading?: boolean;
+}
+
+const authStore = useAuthStore();
+interface FollowStatusResponse {
+  is_following: boolean;
+  followers_count: number;
+  following_count: number;
 }
 
 const users: Ref<User[]> = ref([]);
 const loading = ref(true);
 
-function loadUsers(): void {
+async function loadFollowStatuses(): Promise<void> {
+  const followPromises = users.value.map(async (user) => {
+    try {
+      const response = await axios.get<FollowStatusResponse>(getUrl(`follow/${user.username}/`));
+      const newUser = {
+        ...user,
+        isFollowing: response.data.is_following,
+        followersCount: response.data.followers_count,
+        followingCount: response.data.following_count,
+        followLoading: false,
+      };
+      const index = users.value.findIndex((u) => u.username === user.username);
+      if (index > -1) {
+        users.value[index] = newUser;
+      }
+    } catch {
+      // Ignore errors for follow status
+      const newUser = {
+        ...user,
+        isFollowing: false,
+        followLoading: false,
+      };
+      const index = users.value.findIndex((u) => u.username === user.username);
+      if (index > -1) {
+        users.value[index] = newUser;
+      }
+    }
+  });
+
+  await Promise.all(followPromises);
+}
+
+async function loadUsers(): Promise<void> {
   loading.value = true;
-  axios
-    .get(getUrl("users/"))
-    .then((response) => {
-      users.value = response.data as User[];
-    })
-    .catch((error: AxiosError) => {
-      console.log(error);
-      $toast.error("Error loading users");
-    })
-    .finally(() => {
-      loading.value = false;
-    });
+  try {
+    const response = await axios.get(getUrl("users/"));
+    users.value = response.data as User[];
+
+    // Load follow status for each user if logged in
+    if (authStore.user.isLoggedIn) {
+      void loadFollowStatuses();
+    }
+  } catch (error: unknown) {
+    console.log(error);
+    $toast.error("Error loading users");
+  } finally {
+    loading.value = false;
+  }
+}
+
+async function toggleFollow(user: User): Promise<void> {
+  if (!authStore.user.isLoggedIn) {
+    $toast.error("Please log in to follow users");
+    return;
+  }
+
+  const index = users.value.findIndex((u) => u.username === user.username);
+  if (index === -1) {
+    return;
+  }
+
+  const updatedUser = { ...users.value[index], followLoading: true };
+  users.value[index] = updatedUser;
+
+  try {
+    if (user.isFollowing) {
+      // Unfollow
+      const response = await axios.delete<FollowStatusResponse>(getUrl(`follow/${user.username}/`));
+      users.value[index] = {
+        ...users.value[index],
+        isFollowing: response.data.is_following,
+        followersCount: response.data.followers_count,
+        followingCount: response.data.following_count,
+        followLoading: false,
+      };
+      $toast.success(`Unfollowed ${user.username}`);
+    } else {
+      // Follow
+      const response = await axios.post<FollowStatusResponse>(getUrl(`follow/${user.username}/`));
+      users.value[index] = {
+        ...users.value[index],
+        isFollowing: response.data.is_following,
+        followersCount: response.data.followers_count,
+        followingCount: response.data.following_count,
+        followLoading: false,
+      };
+      $toast.success(`Now following ${user.username}`);
+    }
+  } catch (error: unknown) {
+    console.log(error);
+    users.value[index] = { ...users.value[index], followLoading: false };
+    $toast.error("Error updating follow status");
+  }
 }
 
 onMounted(() => {
-  loadUsers();
+  void loadUsers();
 });
 </script>
 
@@ -210,16 +321,17 @@ onMounted(() => {
 .user-link {
   text-decoration: none;
   color: inherit;
-  display: block;
-  width: 100%;
-  height: 100%;
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: 20px;
 }
 
 .user-card-content {
   padding: 32px 24px;
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 0px;
   min-height: 120px;
 }
 
@@ -266,7 +378,13 @@ onMounted(() => {
 .user-subtitle {
   font-size: 0.95rem;
   color: #6b7280;
-  margin: 0;
+  margin: 0 0 4px 0;
+  font-weight: 500;
+}
+
+.follow-stats {
+  font-size: 0.85rem;
+  color: #9ca3af;
   font-weight: 500;
 }
 
@@ -296,6 +414,18 @@ onMounted(() => {
 
 .user-card:hover .action-icon {
   transform: translateX(2px);
+}
+
+/* Follow Button */
+.follow-button-container {
+  display: flex;
+  align-items: center;
+  margin-left: 16px;
+}
+
+.follow-btn {
+  min-width: 100px;
+  font-weight: 600;
 }
 
 /* Responsive Design */

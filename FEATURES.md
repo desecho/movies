@@ -7,7 +7,7 @@ A concise guide to everything the site does and how to use it. This document foc
 - **Two personal lists**: `Watched` and `To‑Watch` for every user
 - **Search and discovery**: Search, Trending, and AI Recommendations
 - **Organization tools**: Sorting, filtering, view modes, pagination, and custom drag‑and‑drop order
-- **Social**: Public profile pages and a user directory (with privacy controls)
+- **Social**: Follow users, Activity feed, public profile pages, and a user directory (with privacy controls)
 - **Streaming availability**: See where a movie is available to stream (by country)
 
 ---
@@ -133,6 +133,24 @@ A concise guide to everything the site does and how to use it. This document foc
 
 ---
 
+## Following and Activity Feed
+
+- **Follow users**
+  - Follow or unfollow anyone with a public profile
+  - API:
+    - `GET /follow/<username>/` – Follow status for current user + follower/following counts (anonymous: `is_following` only)
+    - `POST /follow/<username>/` – Follow a user (auth required)
+    - `DELETE /follow/<username>/` – Unfollow a user (auth required)
+
+- **Activity feed**
+  - Page: `/feed`
+  - Anonymous users: See recent public activity
+  - Logged‑in users with no follows: See recent public activity (same as anonymous)
+  - Logged‑in users with follows: See activity from followed users only
+  - API: `GET /feed/`
+
+---
+
 ## Stats and Insights
 
 - **Page**: `/stats` (logged‑in only)
@@ -202,6 +220,8 @@ A concise guide to everything the site does and how to use it. This document foc
 /search/                     – Search movies (GET)
 /trending/                   – Trending movies (GET)
 /recommendations/            – AI recommendations (GET, auth required)
+/feed/                       – Activity feed (GET)
+/follow/<username>/          – Follow status (GET), follow (POST), unfollow (DELETE)
 /stats/                      – User stats (GET, auth required)
 
 /records/                    – Current user’s records (GET)

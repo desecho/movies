@@ -10,7 +10,42 @@
             variant="elevated"
             class="profile-avatar"
           />
-          <h2>{{ username }}'s Movies</h2>
+          <div class="profile-text-info">
+            <h2>{{ username }}'s Movies</h2>
+            <div v-if="followStatus" class="follow-stats">
+              <router-link 
+                :to="`/users/${username}/followers`"
+                class="follow-stat-link"
+              >
+                {{ followStatus.followers_count }} followers
+              </router-link>
+              •
+              <router-link 
+                :to="`/users/${username}/following`"
+                class="follow-stat-link"
+              >
+                {{ followStatus.following_count }} following
+              </router-link>
+            </div>
+          </div>
+          
+          <!-- Follow Button -->
+          <div v-if="authStore.user.isLoggedIn && authStore.user.username !== username" class="follow-button-wrapper">
+            <v-btn
+              :loading="followLoading"
+              :color="followStatus?.is_following ? 'success' : 'white'"
+              :variant="followStatus?.is_following ? 'outlined' : 'elevated'"
+              size="large"
+              @click="toggleFollow"
+              class="follow-btn-profile"
+            >
+              <v-icon 
+                :icon="followStatus?.is_following ? 'mdi-account-check' : 'mdi-account-plus'" 
+                start 
+              />
+              {{ followStatus?.is_following ? 'Following' : 'Follow' }}
+            </v-btn>
+          </div>
         </div>
         <!-- List selector for profile views -->
         <div class="profile-list-selector">
@@ -31,10 +66,23 @@
 </template>
 
 <script lang="ts" setup>
-import { computed } from "vue";
+import axios from "axios";
+import { computed, onMounted, ref } from "vue";
+
+import type { Ref } from "vue";
+
 import { useMobile } from "../../composables/mobile";
 import { listToWatchId, listWatchedId } from "../../const";
+import { getUrl } from "../../helpers";
+import { useAuthStore } from "../../stores/auth";
+import { $toast } from "../../toast";
 import UserAvatarComponent from "../UserAvatarComponent.vue";
+
+interface FollowStatus {
+  is_following: boolean;
+  followers_count: number;
+  following_count: number;
+}
 
 interface Props {
   username: string;
@@ -48,13 +96,71 @@ const emit = defineEmits<{
   "update:selectedList": [listId: number];
 }>();
 
+const authStore = useAuthStore();
 const { isMobile } = useMobile();
+
+const followStatus: Ref<FollowStatus | null> = ref(null);
+const followLoading = ref(false);
 
 const modeButtonSize = computed(() => {
   if (isMobile.value) {
     return "small";
   }
   return "default";
+});
+
+async function loadFollowStatus(): Promise<void> {
+  if (!authStore.user.isLoggedIn || authStore.user.username === props.username) {
+    return;
+  }
+  
+  try {
+    const response = await axios.get(getUrl(`follow/${props.username}/`));
+    followStatus.value = response.data;
+  } catch (error) {
+    // Don't show error for follow status fetch
+    console.log("Error loading follow status:", error);
+  }
+}
+
+async function toggleFollow(): Promise<void> {
+  if (!authStore.user.isLoggedIn) {
+    $toast.error("Please log in to follow users");
+    return;
+  }
+  
+  followLoading.value = true;
+  
+  try {
+    if (followStatus.value?.is_following) {
+      // Unfollow
+      const response = await axios.delete(getUrl(`follow/${props.username}/`));
+      followStatus.value = {
+        is_following: response.data.is_following,
+        followers_count: response.data.followers_count,
+        following_count: response.data.following_count,
+      };
+      $toast.success(`Unfollowed ${props.username}`);
+    } else {
+      // Follow
+      const response = await axios.post(getUrl(`follow/${props.username}/`));
+      followStatus.value = {
+        is_following: response.data.is_following,
+        followers_count: response.data.followers_count,
+        following_count: response.data.following_count,
+      };
+      $toast.success(`Now following ${props.username}`);
+    }
+  } catch (error) {
+    console.log(error);
+    $toast.error("Error updating follow status");
+  } finally {
+    followLoading.value = false;
+  }
+}
+
+onMounted(() => {
+  loadFollowStatus();
 });
 </script>
 
@@ -74,15 +180,49 @@ const modeButtonSize = computed(() => {
   margin-bottom: 20px;
 }
 
-.profile-user-info h2 {
-  margin: 0;
+.profile-text-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.profile-text-info h2 {
+  margin: 0 0 8px 0;
   color: white;
   font-size: 2rem;
   font-weight: 700;
 }
 
+.follow-stats {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.follow-stat-link {
+  color: rgba(255, 255, 255, 0.9);
+  text-decoration: none;
+  transition: all 0.2s ease;
+  border-radius: 4px;
+  padding: 2px 4px;
+}
+
+.follow-stat-link:hover {
+  color: white;
+  background-color: rgba(255, 255, 255, 0.1);
+  text-decoration: none;
+}
+
 .profile-avatar {
   flex-shrink: 0;
+}
+
+.follow-button-wrapper {
+  flex-shrink: 0;
+}
+
+.follow-btn-profile {
+  min-width: 120px;
+  font-weight: 600;
 }
 
 .profile-list-selector {

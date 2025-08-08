@@ -8,7 +8,7 @@ from django.contrib.auth.models import Group
 from django.http import HttpRequest
 from django_celery_results.models import GroupResult
 
-from .models import Action, ActionRecord, List, Movie, Provider, ProviderRecord, Record, User
+from .models import Action, ActionRecord, Follow, List, Movie, Provider, ProviderRecord, Record, User
 
 
 @register(Record)
@@ -25,6 +25,15 @@ class ActionRecordAdmin(ModelAdmin[ActionRecord]):  # pylint:disable=unsubscript
 
     list_display = ("user", "movie", "action", "date")
     search_fields = ("movie__title", "user__username", "user__first_name", "user__last_name")
+
+
+@register(Follow)
+class FollowAdmin(ModelAdmin[Follow]):  # pylint:disable=unsubscriptable-object
+    """Follow admin."""
+
+    list_display = ("follower", "followed", "date")
+    search_fields = ("follower__username", "followed__username")
+    list_filter = ("date",)
 
 
 @register(Movie)

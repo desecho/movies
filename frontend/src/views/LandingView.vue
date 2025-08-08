@@ -20,6 +20,10 @@
         <p>Stay updated with currently trending movies curated just for you.</p>
       </div>
       <div class="feature">
+        <h3>👥 Follow & Feed</h3>
+        <p>Follow users and see a personalized activity feed of what they’re watching and rating.</p>
+      </div>
+      <div class="feature">
         <h3>🤖 AI Recommendations</h3>
         <p>Get personalized movie suggestions based on your taste and watch history.</p>
       </div>

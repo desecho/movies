@@ -7,12 +7,15 @@ from typing import Optional
 
 from bs4 import BeautifulSoup
 from django.conf import settings
+from django.contrib.auth import get_user_model
 from django.core.serializers.json import DjangoJSONEncoder
 from django.forms.models import model_to_dict
 from django.test import TestCase
 from django.test.client import Client
 
-from moviesapp.models import ActionRecord, User
+from moviesapp.models import ActionRecord
+
+User = get_user_model()
 
 CONTENT_TYPE = "application/json"
 

@@ -75,6 +75,11 @@ class User(AbstractUser, UserBase):
     country = CountryField(verbose_name=_("Country"), null=True, blank=True)
     timezone = TimeZoneField(default=settings.TIME_ZONE)
 
+    class Meta:
+        """Meta options for User model."""
+
+        app_label = "moviesapp"
+
     def __str__(self) -> str:
         """Return string representation."""
         if self.username and not self.username.isnumeric():
@@ -452,3 +457,30 @@ class ProviderRecord(Model):
     def tmdb_watch_url(self) -> str:
         """Return TMDb watch URL."""
         return f"{self.movie.tmdb_url}watch?locale={self.country}"
+
+
+class Follow(Model):
+    """Follow relationship between users."""
+
+    follower = ForeignKey(User, CASCADE, related_name="following")
+    followed = ForeignKey(User, CASCADE, related_name="followers")
+    date = DateTimeField(auto_now_add=True)
+
+    class Meta:
+        """Meta."""
+
+        constraints = [
+            # A user should not follow the same user twice
+            UniqueConstraint(fields=("follower", "followed"), name="unique_follower_followed"),
+        ]
+
+    def __str__(self) -> str:
+        """Return string representation."""
+        return f"{self.follower} follows {self.followed}"
+
+    def save(self, *args: Any, **kwargs: Any) -> None:
+        """Save."""
+        # Prevent users from following themselves
+        if self.follower == self.followed:
+            raise ValueError("Users cannot follow themselves")
+        super().save(*args, **kwargs)

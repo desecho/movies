@@ -9,6 +9,7 @@
           <li>Search for movies by title, actor, or director</li>
           <li>Get a list of currently trending movies</li>
           <li>AI-powered recommendations</li>
+          <li>Follow users and see an activity feed</li>
           <li>Stats</li>
           <li>Add custom order for the "To Watch" list</li>
           <li>Share your lists online</li>

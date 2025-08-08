@@ -8,6 +8,8 @@ from django.views.defaults import page_not_found
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 from moviesapp.types import URL
+from moviesapp.views.feed import FeedView
+from moviesapp.views.follow import FollowView
 from moviesapp.views.health import HealthView
 from moviesapp.views.list import (
     AddToListView,
@@ -24,6 +26,12 @@ from moviesapp.views.search import AddToListFromDbView, SearchMovieView
 from moviesapp.views.stats import StatsView
 from moviesapp.views.trending import TrendingView
 from moviesapp.views.user import AvatarView, UserCheckEmailAvailabilityView, UserPreferencesView
+from moviesapp.views.user_follows import (
+    PublicUserFollowersView,
+    PublicUserFollowingView,
+    UserFollowersView,
+    UserFollowingView,
+)
 from moviesapp.views.users import UserAvatarView, UsersView
 
 # from moviesapp.views.user import AccountDeletedView, AccountDeleteView, LoginErrorView, PreferencesView, logout_view
@@ -56,12 +64,18 @@ urlpatterns: list[URL] = [
     path("user/preferences/", UserPreferencesView.as_view()),
     path("user/avatar/", AvatarView.as_view()),
     path("user/check-email-availability/", UserCheckEmailAvailabilityView.as_view()),
+    path("user/following/", UserFollowingView.as_view(), name="user_following"),
+    path("user/followers/", UserFollowersView.as_view(), name="user_followers"),
     path("users/", UsersView.as_view()),
     path("users/<str:username>/avatar/", UserAvatarView.as_view()),
+    path("users/<str:username>/following/", PublicUserFollowingView.as_view(), name="public_user_following"),
+    path("users/<str:username>/followers/", PublicUserFollowersView.as_view(), name="public_user_followers"),
     path("search/", SearchMovieView.as_view()),
     path("trending/", TrendingView.as_view(), name="trending"),
     path("recommendations/", RecommendationsView.as_view(), name="recommendations"),
     path("stats/", StatsView.as_view(), name="stats"),
+    path("feed/", FeedView.as_view(), name="feed"),
+    path("follow/<str:username>/", FollowView.as_view(), name="follow"),
     path("add-to-list-from-db/", AddToListFromDbView.as_view()),
     # List
     path("records/", RecordsView.as_view()),

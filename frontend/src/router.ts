@@ -8,10 +8,14 @@ import { listToWatchId, listWatchedId } from "./const";
 import { useAuthStore } from "./stores/auth";
 import AboutView from "./views/AboutView.vue";
 import ChangePasswordView from "./views/ChangePasswordView.vue";
+import FeedView from "./views/FeedView.vue";
+import FollowersView from "./views/FollowersView.vue";
+import FollowingView from "./views/FollowingView.vue";
 import LandingView from "./views/LandingView.vue";
 import ListView from "./views/ListView.vue";
 import LoginView from "./views/LoginView.vue";
 import LogoutView from "./views/LogoutView.vue";
+import NetworkView from "./views/NetworkView.vue";
 import RecommendationsView from "./views/RecommendationsView.vue";
 import RegisterSuccessView from "./views/RegisterSuccessView.vue";
 import RegistrationView from "./views/RegistrationView.vue";
@@ -43,6 +47,8 @@ export const router = createRouter({
         { path: "/about", component: AboutView },
         { path: "/preferences", component: UserPreferencesView },
         { path: "/stats", component: StatsView },
+        { path: "/network", component: NetworkView },
+        { path: "/feed", component: FeedView },
         { path: "/trending", component: TrendingView },
         { path: "/recommendations", component: RecommendationsView },
         {
@@ -56,6 +62,24 @@ export const router = createRouter({
             props: { listId: listToWatchId },
         },
         { path: "/users", component: UsersView },
+        { path: "/following", component: FollowingView },
+        { path: "/followers", component: FollowersView },
+        {
+            path: "/users/:username/following",
+            component: FollowingView,
+            props: (route): Record<string, unknown> => ({
+                username: route.params.username as string,
+                isPublicView: true,
+            }),
+        },
+        {
+            path: "/users/:username/followers",
+            component: FollowersView,
+            props: (route): Record<string, unknown> => ({
+                username: route.params.username as string,
+                isPublicView: true,
+            }),
+        },
         {
             path: "/users/:username/list/watched",
             component: ListView,
@@ -101,7 +125,12 @@ export const router = createRouter({
 });
 
 router.beforeEach(async (to) => {
-    const privatePages = ["/preferences", "/change-password", "/stats"];
+    const privatePages = [
+        "/preferences",
+        "/change-password",
+        "/stats",
+        "/network",
+    ];
     const authRequired = privatePages.includes(to.path);
     const { user, refreshToken } = useAuthStore();
 
