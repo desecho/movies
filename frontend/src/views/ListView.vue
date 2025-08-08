@@ -819,13 +819,21 @@ watch([listIdRef, usernameRef, isProfileViewRef], async () => {
 });
 
 // Watch for profile list selection changes
-watch(selectedProfileList, async () => {
-  page.value = 1; // Reset to first page when switching lists
-  // Re-load data to ensure we have the latest order values
+watch(selectedProfileList, async (newListId) => {
   if (props.isProfileView && props.username) {
+    page.value = 1; // Reset to first page when switching lists
+
+    // Navigate to the appropriate profile route
+    const newPath =
+      newListId === listWatchedId ? `/users/${props.username}/list/watched` : `/users/${props.username}/list/to-watch`;
+    if (router.currentRoute.value.path !== newPath) {
+      await router.push(newPath);
+    }
+
+    // Re-load data to ensure we have the latest order values
     await loadRecordsData();
+    sortRecords();
   }
-  sortRecords();
 });
 
 // Watch for user list selection changes (for regular users)
