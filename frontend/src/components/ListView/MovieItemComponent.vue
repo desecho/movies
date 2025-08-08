@@ -225,8 +225,8 @@
           >
             <v-icon icon="mdi-comment" />
           </button>
-          <!-- Share button - show for any watched movie with rating or comment -->
-          <div v-if="mode != 'minimal'" class="share-button-container">
+          <!-- Share button - hidden on profile pages; show for watched movies with rating or comment -->
+          <div v-if="!isProfileView && mode != 'minimal'" class="share-button-container">
             <ShareButton :record="record" />
           </div>
           <!-- Only show options for own lists -->
