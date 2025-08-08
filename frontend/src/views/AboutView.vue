@@ -15,6 +15,7 @@
           <li>See where you can stream a movie</li>
           <li>Privacy settings.</li>
           <li>Dark mode</li>
+          <li>Mobile-friendly responsive design</li>
           <li>
             Add additional information such as if you watched a movie in the original version, in a theatre, an
             extended version, in 4K, etc.
