@@ -5,27 +5,38 @@ import type { AxiosError, AxiosRequestHeaders } from "axios";
 import { router } from "./router";
 import { useAuthStore } from "./stores/auth";
 
+// Keep track of the active response interceptor so we can eject it
+let responseInterceptorId: number | null = null;
+
 export function initAxios(): void {
     const headers: AxiosRequestHeaders = {
         "Content-Type": "application/json; charset=UTF-8",
         "X-Requested-With": "XMLHttpRequest",
     };
 
-    const { user, refreshToken } = useAuthStore();
-    if (user.isLoggedIn) {
+    const auth = useAuthStore();
+    if (auth.user.isLoggedIn) {
         // Use `!` because we know that access token is not null when user is logged in
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        headers.Authorization = `Bearer ${user.accessToken!}`;
+        headers.Authorization = `Bearer ${auth.user.accessToken!}`;
     }
 
     axios.defaults.headers.common = headers;
-    axios.interceptors.response.use(
+
+    // Eject previously registered interceptor to avoid leaks and stale closures
+    if (responseInterceptorId !== null) {
+        axios.interceptors.response.eject(responseInterceptorId);
+        responseInterceptorId = null;
+    }
+
+    responseInterceptorId = axios.interceptors.response.use(
         (response) => {
             return response;
         },
         async (error: AxiosError) => {
             if (error.response?.status === 401) {
-                if (user.isLoggedIn) {
+                const currentAuth = useAuthStore();
+                if (currentAuth.user.isLoggedIn) {
                     // Check if the error response contains token_not_valid in the data
                     const errorData = error.response.data as {
                         code?: string;
@@ -37,7 +48,7 @@ export function initAxios(): void {
                             "Given token not valid for any token type"
                     ) {
                         try {
-                            await refreshToken();
+                            await currentAuth.refreshToken();
                             // Retry the original request with the new token
                             if (error.config) {
                                 return axios.request(error.config);

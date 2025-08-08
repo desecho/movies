@@ -120,8 +120,11 @@ export const useAuthStore = defineStore("auth", {
             }
         },
         logout() {
-            this.user = userDefault;
+            // Reset to a fresh object to avoid shared reference issues
+            this.user = { isLoggedIn: false };
             localStorage.removeItem("user");
+            // Clear Authorization header explicitly
+            delete axios.defaults.headers.common["Authorization"];
             initAxios();
             void router.push("/");
         },
