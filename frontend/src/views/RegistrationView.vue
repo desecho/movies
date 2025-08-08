@@ -42,6 +42,7 @@
 <script lang="ts" setup>
 import axios from "axios";
 import { ref } from "vue";
+import { useRouter } from "vue-router";
 
 import type { CheckEmailAvailabilityErrorData } from "./types";
 import type { AxiosError } from "axios";
@@ -63,6 +64,7 @@ const { user } = useAuthStore();
 const isLoggedIn = user.isLoggedIn;
 
 const { form, isValid } = useFormValidation();
+const router = useRouter();
 
 async function onSubmit(): Promise<void> {
   if (!(await isValid())) {
@@ -81,6 +83,7 @@ async function onSubmit(): Promise<void> {
           })
           .then(() => {
             $toast.success("You should receive an email to confirm registration");
+            void router.push("/register/success");
           })
           .catch((error: AxiosError) => {
             console.log(error);

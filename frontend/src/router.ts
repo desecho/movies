@@ -13,6 +13,7 @@ import ListView from "./views/ListView.vue";
 import LoginView from "./views/LoginView.vue";
 import LogoutView from "./views/LogoutView.vue";
 import RecommendationsView from "./views/RecommendationsView.vue";
+import RegisterSuccessView from "./views/RegisterSuccessView.vue";
 import RegistrationView from "./views/RegistrationView.vue";
 import ResetPasswordRequestView from "./views/ResetPasswordRequestView.vue";
 import ResetPasswordView from "./views/ResetPasswordView.vue";
@@ -76,6 +77,11 @@ export const router = createRouter({
         { path: "/login", component: LoginView },
         { path: "/logout", component: LogoutView },
         { path: "/register", component: RegistrationView },
+        {
+            path: "/register/success",
+            alias: "/register/success/",
+            component: RegisterSuccessView,
+        },
         {
             path: "/verify-user",
             component: VerifyUserView,
