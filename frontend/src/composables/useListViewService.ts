@@ -8,7 +8,6 @@
 import type { RecordType } from "../types";
 import type { ComputedRef } from "vue";
 
-
 import {
     createListViewService,
     type IListViewDependencies,

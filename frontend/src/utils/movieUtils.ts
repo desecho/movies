@@ -244,35 +244,45 @@ export const filterPredicates = {
     /**
      * Filter by list ID
      */
-    byListId: (listId: number) => (record: RecordType): boolean => {
-        return record.listId === listId;
-    },
+    byListId:
+        (listId: number) =>
+        (record: RecordType): boolean => {
+            return record.listId === listId;
+        },
 
     /**
      * Filter by search query
      */
-    bySearchQuery: (query: string) => (record: RecordType): boolean => {
-        return matchesSearchQuery(record, query);
-    },
+    bySearchQuery:
+        (query: string) =>
+        (record: RecordType): boolean => {
+            return matchesSearchQuery(record, query);
+        },
 
     /**
      * Filter for rewatch candidates (watched list only)
      */
-    forRewatch: (listId: number) => (record: RecordType): boolean => {
-        return listId !== 1 || matchesRewatchCriteria(record);
-    },
+    forRewatch:
+        (listId: number) =>
+        (record: RecordType): boolean => {
+            return listId !== 1 || matchesRewatchCriteria(record);
+        },
 
     /**
      * Filter out unreleased movies (to-watch list only)
      */
-    hideUnreleased: (listId: number) => (record: RecordType): boolean => {
-        return listId !== 2 || isMovieReleased(record);
-    },
+    hideUnreleased:
+        (listId: number) =>
+        (record: RecordType): boolean => {
+            return listId !== 2 || isMovieReleased(record);
+        },
 
     /**
      * Filter for recent releases (to-watch list only)
      */
-    recentReleases: (listId: number, monthsBack = 6) => (record: RecordType): boolean => {
+    recentReleases:
+        (listId: number, monthsBack = 6) =>
+        (record: RecordType): boolean => {
             return (
                 listId !== 2 ||
                 isRecentRelease(record.movie?.releaseDateTimestamp, monthsBack)
