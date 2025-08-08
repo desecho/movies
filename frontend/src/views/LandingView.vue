@@ -47,6 +47,20 @@
         <h3>🎥 Viewing Details</h3>
         <p>Track whether you watched a movie in the theatre, in 4K, in original version, etc.</p>
       </div>
+      <div class="feature">
+        <h3>📊 Stats & Insights</h3>
+        <p>
+          See your movie habits at a glance: totals watched/to‑watch, time watched, average rating, quality
+          preferences, top genres/directors/actors, and monthly watch trends.
+        </p>
+      </div>
+      <div class="feature">
+        <h3>📱 Mobile‑friendly</h3>
+        <p>
+          Built with a responsive, mobile‑first layout for a great experience on phones, tablets, and desktops — with
+          fast navigation and accessible controls.
+        </p>
+      </div>
     </section>
   </section>
 </template>
