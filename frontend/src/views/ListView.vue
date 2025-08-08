@@ -1342,6 +1342,14 @@ onMounted(async () => {
   width: calc(100% + 48px);
 }
 
+@media (max-width: 768px) {
+  .movie-card-content {
+    flex-direction: column;
+    gap: 16px;
+    align-items: center;
+  }
+}
+
 .item-desc {
   color: #6b7280;
   font-weight: 500;
@@ -1357,6 +1365,7 @@ onMounted(async () => {
   border-radius: 8px;
   padding: 16px;
   border: 1px solid rgba(0, 0, 0, 0.05);
+  flex: 1;
 
   > div {
     font-size: 0.95rem;
@@ -1366,6 +1375,13 @@ onMounted(async () => {
     &:last-child {
       margin-bottom: 0;
     }
+  }
+}
+
+@media (max-width: 768px) {
+  .details {
+    width: 100%;
+    padding: 12px;
   }
 }
 
@@ -1446,6 +1462,7 @@ onMounted(async () => {
 .review {
   padding-top: 16px;
   width: 670px;
+  max-width: 100%;
 
   button {
     background: rgba(102, 126, 234, 0.1);
@@ -1462,6 +1479,13 @@ onMounted(async () => {
       background: rgba(102, 126, 234, 0.2);
       transform: translateY(-1px);
     }
+  }
+}
+
+@media (max-width: 768px) {
+  .review {
+    width: 100%;
+    padding-top: 12px;
   }
 }
 
@@ -2036,6 +2060,45 @@ onMounted(async () => {
     }
   }
 
+  .movie-full {
+    padding: 18px;
+
+    .movie-card-content {
+      padding: 18px;
+
+      .poster {
+        align-self: center;
+        margin-bottom: 16px;
+      }
+
+      .details {
+        order: 1;
+      }
+
+      .review {
+        order: 2;
+        align-self: stretch;
+      }
+    }
+
+    .movie-title-banner {
+      padding: 16px 18px;
+      margin: -18px -18px 0 -18px;
+      width: calc(100% + 36px);
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 12px;
+
+      .movie-title {
+        font-size: 1.5rem;
+      }
+
+      .title-action-buttons {
+        align-self: flex-end;
+      }
+    }
+  }
+
   .movie-minimal {
     flex-direction: row;
     gap: 12px;
@@ -2074,6 +2137,39 @@ onMounted(async () => {
 
     .poster {
       align-self: flex-start;
+    }
+  }
+
+  .movie-full {
+    padding: 14px;
+
+    .movie-card-content {
+      padding: 14px;
+    }
+
+    .movie-title-banner {
+      padding: 14px;
+      margin: -14px -14px 0 -14px;
+      width: calc(100% + 28px);
+
+      .movie-title {
+        font-size: 1.3rem;
+        line-height: 1.2;
+      }
+
+      .title-action-buttons {
+        gap: 6px;
+
+        .remove-button a,
+        .add-to-list-buttons a {
+          width: 28px;
+          height: 28px;
+
+          .v-icon {
+            font-size: 14px;
+          }
+        }
+      }
     }
   }
 
