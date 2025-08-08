@@ -147,6 +147,14 @@ const emit = defineEmits<{
       }
     }
 
+    /* Always show buttons on touch devices (e.g., iPads/phones with no hover) */
+    @media (hover: none), (pointer: coarse) {
+      button {
+        opacity: 1;
+        background: rgba(255, 255, 255, 0.9);
+      }
+    }
+
     @media (min-width: 320px) and (max-width: 576px) {
       .poster-big {
         width: 92px;
