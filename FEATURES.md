@@ -143,7 +143,13 @@ A concise guide to everything the site does and how to use it. This document foc
   - Preferences: Counts for Theatre, HD, Full HD, 4K, Extended, Original
   - Top 5: Genres, Directors, Actors
   - Trends: Monthly watch counts (last 12 months) and rating distribution
-- **API**: `GET /stats/`
+  - Year in Review: Per‑year overview (movies watched, hours watched, peak month), milestones (first/last movie, highest rated, longest), and top items
+- **Yearly view**
+  - Year selector to browse historical stats
+  - Available years are provided by the API
+- **API**
+  - `GET /stats/` (current aggregate)
+  - `GET /stats/?year=<YYYY>` (yearly stats with `yearlyOverview`, `yearlyMilestones`, `availableYears`)
 
 ---
 

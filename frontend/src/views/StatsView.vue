@@ -8,6 +8,157 @@
     </div>
 
     <v-container fluid>
+      <!-- Year Selector -->
+      <div v-if="!loading && !error && stats.availableYears && stats.availableYears.length > 0" class="mb-6">
+        <div class="d-flex justify-space-between align-center mb-4">
+          <h2 class="text-h5 font-weight-bold">View Statistics</h2>
+          <YearSelectorComponent
+            :available-years="stats.availableYears"
+            :current-year="selectedYear"
+            @year-changed="handleYearChange"
+          />
+        </div>
+      </div>
+
+      <!-- Year in Review Section -->
+      <div v-if="!loading && !error && selectedYear && stats.yearlyOverview" class="mb-6">
+        <v-card class="year-review-card">
+          <v-card-title class="year-review-title">
+            <v-icon class="mr-3" size="32" color="primary">mdi-calendar-star</v-icon>
+            <div>
+              <h2 class="text-h4 font-weight-bold">{{ selectedYear }} Year in Review</h2>
+              <p class="text-subtitle-1 mb-0 mt-1">Your movie watching journey this year</p>
+            </div>
+          </v-card-title>
+
+          <v-card-text>
+            <!-- Year Overview Stats -->
+            <v-row class="mb-4">
+              <v-col cols="12" sm="6" md="3">
+                <div class="yearly-stat-item">
+                  <v-icon size="40" color="success" class="mb-2">mdi-movie</v-icon>
+                  <h3 class="text-h4 font-weight-bold">{{ stats.yearlyOverview.totalMoviesWatched }}</h3>
+                  <p class="text-body-2">Movies Watched</p>
+                  <div v-if="stats.yearlyOverview.yearOverYearChange !== 0" class="year-change">
+                    <v-chip
+                      :color="stats.yearlyOverview.yearOverYearChange > 0 ? 'success' : 'error'"
+                      size="small"
+                      variant="flat"
+                    >
+                      <v-icon size="14" class="mr-1">
+                        {{ stats.yearlyOverview.yearOverYearChange > 0 ? "mdi-trending-up" : "mdi-trending-down" }}
+                      </v-icon>
+                      {{ Math.abs(stats.yearlyOverview.yearOverYearChangePercent) }}%
+                    </v-chip>
+                  </div>
+                </div>
+              </v-col>
+
+              <v-col cols="12" sm="6" md="3">
+                <div class="yearly-stat-item">
+                  <v-icon size="40" color="info" class="mb-2">mdi-clock</v-icon>
+                  <h3 class="text-h4 font-weight-bold">{{ stats.yearlyOverview.totalHoursWatched }}</h3>
+                  <p class="text-body-2">Hours Watched</p>
+                  <p class="text-caption text-muted">
+                    {{ Math.round((stats.yearlyOverview.totalHoursWatched / 24) * 10) / 10 }} days of content
+                  </p>
+                </div>
+              </v-col>
+
+              <v-col cols="12" sm="6" md="3">
+                <div class="yearly-stat-item">
+                  <v-icon size="40" color="warning" class="mb-2">mdi-chart-line</v-icon>
+                  <h3 class="text-h4 font-weight-bold">{{ getMonthName(stats.yearlyOverview.peakMonth) }}</h3>
+                  <p class="text-body-2">Peak Month</p>
+                  <p class="text-caption text-muted">{{ stats.yearlyOverview.peakMonthCount }} movies</p>
+                </div>
+              </v-col>
+
+              <v-col cols="12" sm="6" md="3">
+                <div class="yearly-stat-item">
+                  <v-icon size="40" color="primary" class="mb-2">mdi-star</v-icon>
+                  <h3 class="text-h4 font-weight-bold">
+                    {{ stats.averageRating ? stats.averageRating : "N/A" }}
+                  </h3>
+                  <p class="text-body-2">Average Rating</p>
+                </div>
+              </v-col>
+            </v-row>
+
+            <!-- Milestones -->
+            <div v-if="stats.yearlyMilestones" class="milestones-section">
+              <h3 class="text-h6 font-weight-bold mb-4">
+                <v-icon class="mr-2">mdi-trophy</v-icon>
+                Year Highlights
+              </h3>
+
+              <v-row>
+                <v-col v-if="stats.yearlyMilestones.firstMovie" cols="12" md="6">
+                  <v-card variant="outlined" class="milestone-card">
+                    <v-card-text>
+                      <div class="d-flex align-center mb-2">
+                        <v-icon color="green" class="mr-2">mdi-play</v-icon>
+                        <span class="font-weight-medium">First Movie</span>
+                      </div>
+                      <p class="text-body-1 mb-1">{{ stats.yearlyMilestones.firstMovie.title }}</p>
+                      <p class="text-caption text-muted">{{ stats.yearlyMilestones.firstMovie.date }}</p>
+                    </v-card-text>
+                  </v-card>
+                </v-col>
+
+                <v-col v-if="stats.yearlyMilestones.highestRatedMovie" cols="12" md="6">
+                  <v-card variant="outlined" class="milestone-card">
+                    <v-card-text>
+                      <div class="d-flex align-center mb-2">
+                        <v-icon color="amber" class="mr-2">mdi-star</v-icon>
+                        <span class="font-weight-medium">Highest Rated</span>
+                      </div>
+                      <p class="text-body-1 mb-1">{{ stats.yearlyMilestones.highestRatedMovie.title }}</p>
+                      <div class="d-flex align-center">
+                        <v-rating
+                          :model-value="stats.yearlyMilestones.highestRatedMovie.rating"
+                          readonly
+                          density="compact"
+                          size="small"
+                          color="amber"
+                        />
+                        <span class="ml-2 text-caption">{{ stats.yearlyMilestones.highestRatedMovie.rating }}/10</span>
+                      </div>
+                    </v-card-text>
+                  </v-card>
+                </v-col>
+
+                <v-col v-if="stats.yearlyMilestones.longestMovie" cols="12" md="6">
+                  <v-card variant="outlined" class="milestone-card">
+                    <v-card-text>
+                      <div class="d-flex align-center mb-2">
+                        <v-icon color="purple" class="mr-2">mdi-timer</v-icon>
+                        <span class="font-weight-medium">Longest Movie</span>
+                      </div>
+                      <p class="text-body-1 mb-1">{{ stats.yearlyMilestones.longestMovie.title }}</p>
+                      <p class="text-caption text-muted">{{ stats.yearlyMilestones.longestMovie.runtime }}</p>
+                    </v-card-text>
+                  </v-card>
+                </v-col>
+
+                <v-col v-if="stats.yearlyMilestones.topGenre" cols="12" md="6">
+                  <v-card variant="outlined" class="milestone-card">
+                    <v-card-text>
+                      <div class="d-flex align-center mb-2">
+                        <v-icon color="teal" class="mr-2">mdi-tag</v-icon>
+                        <span class="font-weight-medium">Top Genre</span>
+                      </div>
+                      <p class="text-body-1 mb-1">{{ stats.yearlyMilestones.topGenre.name }}</p>
+                      <p class="text-caption text-muted">{{ stats.yearlyMilestones.topGenre.count }} movies</p>
+                    </v-card-text>
+                  </v-card>
+                </v-col>
+              </v-row>
+            </div>
+          </v-card-text>
+        </v-card>
+      </div>
+
       <div v-if="loading" class="text-center">
         <v-progress-circular indeterminate color="primary" size="64"></v-progress-circular>
         <p class="mt-4">Loading your stats...</p>
@@ -245,6 +396,7 @@
 import axios from "axios";
 import { onMounted, ref } from "vue";
 
+import YearSelectorComponent from "../components/YearSelectorComponent.vue";
 import { getUrl } from "../helpers";
 
 interface QualityPreferences {
@@ -266,6 +418,38 @@ interface MonthlyTrend {
   count: number;
 }
 
+interface YearlyOverview {
+  totalMoviesWatched: number;
+  totalHoursWatched: number;
+  yearOverYearChange: number;
+  yearOverYearChangePercent: number;
+  peakMonth: number;
+  peakMonthCount: number;
+  monthlyDistribution: { month: number; count: number }[];
+}
+
+interface MovieMilestone {
+  title: string;
+  date?: string;
+  rating?: number;
+  runtime?: string;
+}
+
+interface TopItemMilestone {
+  name: string;
+  count: number;
+}
+
+interface YearlyMilestones {
+  firstMovie?: MovieMilestone;
+  lastMovie?: MovieMilestone;
+  highestRatedMovie?: MovieMilestone;
+  longestMovie?: MovieMilestone;
+  topGenre?: TopItemMilestone;
+  topDirector?: TopItemMilestone;
+  topActor?: TopItemMilestone;
+}
+
 interface Stats {
   totalMoviesWatched: number;
   totalMoviesToWatch: number;
@@ -278,10 +462,17 @@ interface Stats {
   topActors: TopItem[];
   monthlyTrends: MonthlyTrend[];
   ratingDistribution: Record<string, number>;
+  yearlyOverview?: YearlyOverview;
+  yearlyMilestones?: YearlyMilestones;
+  availableYears?: number[];
+  selectedYear?: number;
+  isCurrentYear?: boolean;
 }
 
 const loading = ref(true);
 const error = ref<string | null>(null);
+const selectedYear = ref<number | null>(null);
+
 const stats = ref<Stats>({
   totalMoviesWatched: 0,
   totalMoviesToWatch: 0,
@@ -301,19 +492,44 @@ const stats = ref<Stats>({
   topActors: [],
   monthlyTrends: [],
   ratingDistribution: {},
+  availableYears: [],
 });
 
-async function loadStats(): Promise<void> {
+async function loadStats(year?: number | null): Promise<void> {
   try {
     loading.value = true;
-    const response = await axios.get(getUrl("stats/"));
+    const url = year ? `stats/?year=${year}` : "stats/";
+    const response = await axios.get(getUrl(url));
     stats.value = response.data as Stats;
+    selectedYear.value = year || null;
   } catch (err) {
     error.value = "Failed to load statistics. Please try again later.";
     console.error("Error loading stats:", err);
   } finally {
     loading.value = false;
   }
+}
+
+function handleYearChange(year: number | null): void {
+  void loadStats(year);
+}
+
+function getMonthName(monthNumber: number): string {
+  const months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+  return months[monthNumber - 1] || "Unknown";
 }
 
 function formatQualityLabel(key: string): string {
@@ -455,6 +671,73 @@ onMounted(() => {
   color: rgba(var(--v-theme-on-surface), 0.6);
 }
 
+/* Year in Review Styles */
+.year-review-card {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  margin-bottom: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(102, 126, 234, 0.3);
+}
+
+.year-review-title {
+  padding: 24px 24px 0;
+  color: white;
+}
+
+.yearly-stat-item {
+  text-align: center;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  margin-bottom: 16px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.yearly-stat-item h3 {
+  color: white;
+  margin: 8px 0 4px;
+}
+
+.yearly-stat-item p {
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 8px;
+}
+
+.year-change {
+  margin-top: 8px;
+}
+
+.milestones-section {
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.milestones-section h3 {
+  color: white;
+}
+
+.milestone-card {
+  height: 100%;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(5px);
+}
+
+.milestone-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+.milestone-card .v-card-text {
+  color: white;
+}
+
 /* Dark theme adjustments */
 .dark-theme .stat-card {
   background: var(--background-card);
@@ -467,5 +750,14 @@ onMounted(() => {
 
 .dark-theme .text-muted {
   color: var(--text-secondary);
+}
+
+.dark-theme .year-review-card {
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+}
+
+/* Light theme text muted override */
+.text-muted {
+  color: rgba(255, 255, 255, 0.7) !important;
 }
 </style>
