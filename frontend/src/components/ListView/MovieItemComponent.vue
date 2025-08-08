@@ -302,15 +302,13 @@ import { computed } from "vue";
 import VLazyImage from "v-lazy-image";
 import StarRating from "vue-star-rating";
 import type { RecordType } from "../../types";
+import type { ViewMode, ListContextProps, ViewModeProps } from "../../types/listView";
 import { getSrcSet } from "../../helpers";
 import { listToWatchId, listWatchedId, starSizeMinimal, starSizeNormal } from "../../const";
 
-interface Props {
+interface Props extends ListContextProps, ViewModeProps {
   record: RecordType;
   recordIndex: number;
-  mode: string;
-  currentListId: number;
-  isProfileView: boolean;
   isSortable: boolean;
   isLoggedIn: boolean;
   myRecords?: RecordType[];

@@ -1,20 +1,19 @@
+/**
+ * @fileoverview Pinia store for ListView state management
+ * 
+ * This store manages the state for ListView components including:
+ * - View mode (full, minimal, gallery, compact)
+ * - Sorting preferences (additionDate, releaseDate, rating, custom)
+ * - Search query and filters
+ * - Pagination state
+ * - TTL-based caching for performance optimization
+ * - State persistence to localStorage
+ */
+
 import { defineStore } from "pinia";
 import { ref, computed } from "vue";
 import type { RecordType } from "../types";
-
-export interface ListViewFilters {
-  toRewatch: boolean;
-  hideUnreleased: boolean;
-  recentReleases: boolean;
-}
-
-export interface ListViewState {
-  mode: "full" | "minimal" | "gallery";
-  sort: "additionDate" | "releaseDate" | "rating" | "custom";
-  query: string;
-  filters: ListViewFilters;
-  page: number;
-}
+import type { ViewMode, SortType, ListViewFilters, ListViewState } from "../types/listView";
 
 const defaultState: ListViewState = {
   mode: "full",
@@ -30,8 +29,8 @@ const defaultState: ListViewState = {
 
 export const useListViewStore = defineStore("listView", () => {
   // State
-  const mode = ref<ListViewState["mode"]>(defaultState.mode);
-  const sort = ref<ListViewState["sort"]>(defaultState.sort);
+  const mode = ref<ViewMode>(defaultState.mode);
+  const sort = ref<SortType>(defaultState.sort);
   const query = ref(defaultState.query);
   const filters = ref<ListViewFilters>({ ...defaultState.filters });
   const page = ref(defaultState.page);
@@ -72,29 +71,50 @@ export const useListViewStore = defineStore("listView", () => {
   };
 
   // Actions
-  function setMode(newMode: ListViewState["mode"]) {
+  /**
+   * Sets the current view mode and persists to localStorage
+   * @param newMode - The new view mode to set
+   */
+  function setMode(newMode: ViewMode) {
     mode.value = newMode;
     persistState();
   }
 
-  function setSort(newSort: ListViewState["sort"]) {
+  /**
+   * Sets the current sort type, resets to page 1, and persists to localStorage
+   * @param newSort - The new sort type to set
+   */
+  function setSort(newSort: SortType) {
     sort.value = newSort;
     page.value = 1; // Reset to first page when sorting changes
     persistState();
   }
 
+  /**
+   * Sets the search query, resets to page 1, and persists to localStorage
+   * @param newQuery - The search query string
+   */
   function setQuery(newQuery: string) {
     query.value = newQuery;
     page.value = 1; // Reset to first page when search changes
     persistState();
   }
 
+  /**
+   * Sets a specific filter value, resets to page 1, and persists to localStorage
+   * @param filterName - The name of the filter to update
+   * @param value - The new boolean value for the filter
+   */
   function setFilter(filterName: keyof ListViewFilters, value: boolean) {
     filters.value[filterName] = value;
     page.value = 1; // Reset to first page when filters change
     persistState();
   }
 
+  /**
+   * Sets the current page number (not persisted to localStorage)
+   * @param newPage - The page number to set (1-based)
+   */
   function setPage(newPage: number) {
     page.value = newPage;
     // Don't persist page state - it should reset on navigation

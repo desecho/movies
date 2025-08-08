@@ -81,12 +81,9 @@
 import { computed } from "vue";
 import { useMobile } from "../../composables/mobile";
 import { listToWatchId, listWatchedId } from "../../const";
+import type { ViewMode, SortType, ListContextProps, ViewModeProps, SortProps } from "../../types/listView";
 
-interface Props {
-  mode: string;
-  sort: string;
-  currentListId: number;
-  isProfileView: boolean;
+interface Props extends ListContextProps, ViewModeProps, SortProps {
   toRewatchFilter: boolean;
   hideUnreleasedMovies: boolean;
   recentReleasesFilter: boolean;
@@ -95,8 +92,8 @@ interface Props {
 const props = defineProps<Props>();
 
 const emit = defineEmits<{
-  "update:mode": [mode: string];
-  "update:sort": [sort: string];
+  "update:mode": [mode: ViewMode];
+  "update:sort": [sort: SortType];
   "update:toRewatchFilter": [filter: boolean];
   "update:hideUnreleasedMovies": [filter: boolean];
   "update:recentReleasesFilter": [filter: boolean];

@@ -109,6 +109,7 @@ import { storeToRefs } from "pinia";
 import Draggable from "vuedraggable";
 
 import type { RecordType } from "../types";
+import type { ViewMode, SortType } from "../types/listView";
 
 // Import extracted components
 import GalleryViewComponent from "../components/ListView/GalleryViewComponent.vue";
@@ -130,11 +131,19 @@ import { useAuthStore } from "../stores/auth";
 import { useRecordsStore } from "../stores/records";
 import { useListViewStore } from "../stores/listView";
 
-const props = defineProps<{
+/**
+ * Props for ListView component
+ */
+interface ListViewProps {
+  /** ID of the list to display (1 for watched, 2 for to-watch) */
   listId: number;
+  /** Username for profile view (optional, for viewing other user's lists) */
   username?: string;
+  /** Whether this is a profile view (viewing another user's lists) */
   isProfileView?: boolean;
-}>();
+}
+
+const props = defineProps<ListViewProps>();
 
 const router = useRouter();
 
@@ -192,145 +201,253 @@ const { selectedProfileList, selectedUserList, currentListId, resetListSelection
 const query = storeQuery;
 const page = storePage;
 
-// Create writable computed for mode and sort
+/**
+ * Writable computed for view mode that integrates with the ListView store.
+ * Provides two-way binding for v-model directives.
+ */
 const modeComputed = computed({
   get: () => {
     return mode.value || 'full';
   },
-  set: (value: string) => {
-    setMode(value as any);
+  set: (value: ViewMode) => {
+    setMode(value);
   }
 });
 
+/**
+ * Writable computed for sort type that integrates with the ListView store.
+ * Provides two-way binding for v-model directives.
+ */
 const sortComputed = computed({
   get: () => {
     return storeSort.value || 'additionDate';
   },
-  set: (value: string) => {
-    setStoreSort(value as any);
+  set: (value: SortType) => {
+    setStoreSort(value);
   }
 });
 
-// Create writable computed properties for filter bindings
+/**
+ * Writable computed properties for filter bindings with the ListView store.
+ * These provide two-way binding for various filter controls.
+ */
+
+/** Filter for showing only movies marked for rewatching (watched list only) */
 const toRewatchFilter = computed({
   get: () => filters.value?.toRewatch ?? false,
   set: (value: boolean) => setFilter('toRewatch', value)
 });
 
+/** Filter for hiding unreleased movies (to-watch list only) */
 const hideUnreleasedMovies = computed({
   get: () => filters.value?.hideUnreleased ?? false,
   set: (value: boolean) => setFilter('hideUnreleased', value)
 });
 
+/** Filter for showing only recent releases from last 6 months (to-watch list only) */
 const recentReleasesFilter = computed({
   get: () => filters.value?.recentReleases ?? false,
   set: (value: boolean) => setFilter('recentReleases', value)
 });
 
-// Filtered records with all filters applied
+/**
+ * Computes filtered records based on current list, search query, and active filters.
+ * Applies comprehensive error handling for malformed data.
+ * 
+ * @returns Array of RecordType objects that match all active filters
+ */
 const filteredRecords = computed(() => {
-  if (!records.value.length) {
+  try {
+    if (!records.value || !Array.isArray(records.value) || records.value.length === 0) {
+      return [];
+    }
+    
+    return records.value.filter((record) => {
+      try {
+        // Validate record structure
+        if (!record || !record.movie || typeof record.listId !== 'number') {
+          console.warn('Invalid record structure:', record);
+          return false;
+        }
+        
+        // Basic list filter - must match current list
+        if (record.listId !== currentListId.value) {
+          return false;
+        }
+        
+        // Search filter with null safety
+        const searchQuery = query.value?.trim().toLowerCase();
+        if (searchQuery) {
+          const movieTitle = record.movie.title?.toLowerCase() || '';
+          const originalTitle = record.movie.titleOriginal?.toLowerCase() || '';
+          const director = record.movie.director?.toLowerCase() || '';
+          const actors = record.movie.actors?.toLowerCase() || '';
+          
+          if (!movieTitle.includes(searchQuery) && 
+              !originalTitle.includes(searchQuery) && 
+              !director.includes(searchQuery) && 
+              !actors.includes(searchQuery)) {
+            return false;
+          }
+        }
+        
+        // To Rewatch filter (only for watched list) with null safety
+        if (toRewatchFilter.value && currentListId.value === 1) { // listWatchedId
+          if (!record.options || typeof record.rating !== 'number') {
+            return false;
+          }
+          if (!(record.rating === 5 &&
+                ((!record.options.ultraHd && !record.options.theatre) ||
+                 !record.options.original) &&
+                !record.options.ignoreRewatch)) {
+            return false;
+          }
+        }
+        
+        // Hide unreleased movies filter (only for to-watch list)
+        if (hideUnreleasedMovies.value && currentListId.value === 2) { // listToWatchId
+          if (typeof record.movie.isReleased !== 'boolean' || !record.movie.isReleased) {
+            return false;
+          }
+        }
+        
+        // Recent releases filter (only for to-watch list) with date validation
+        if (recentReleasesFilter.value && currentListId.value === 2) { // listToWatchId
+          if (!record.movie.releaseDate || 
+              typeof record.movie.releaseDateTimestamp !== 'number' || 
+              record.movie.releaseDateTimestamp <= 0) {
+            return false;
+          }
+          
+          try {
+            const sixMonthsAgo = new Date();
+            sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
+            const movieReleaseDate = new Date(record.movie.releaseDateTimestamp * 1000);
+            
+            if (isNaN(movieReleaseDate.getTime()) || movieReleaseDate < sixMonthsAgo) {
+              return false;
+            }
+          } catch (dateError) {
+            console.warn('Date processing error for record:', record.id, dateError);
+            return false;
+          }
+        }
+        
+        return true;
+      } catch (recordError) {
+        console.warn('Error processing record:', record?.id || 'unknown', recordError);
+        return false;
+      }
+    });
+  } catch (error) {
+    console.error('Error in filteredRecords computation:', error);
     return [];
   }
-  
-  return records.value.filter((record) => {
-    // Basic list filter - must match current list
-    if (record.listId !== currentListId.value) {
-      return false;
-    }
-    
-    // Search filter
-    const searchQuery = query.value?.trim().toLowerCase();
-    if (searchQuery) {
-      const movieTitle = record.movie.title.toLowerCase();
-      const originalTitle = record.movie.titleOriginal.toLowerCase();
-      const director = record.movie.director?.toLowerCase() || '';
-      const actors = record.movie.actors?.toLowerCase() || '';
-      
-      if (!movieTitle.includes(searchQuery) && 
-          !originalTitle.includes(searchQuery) && 
-          !director.includes(searchQuery) && 
-          !actors.includes(searchQuery)) {
-        return false;
-      }
-    }
-    
-    // To Rewatch filter (only for watched list)
-    if (toRewatchFilter.value && currentListId.value === 1) { // listWatchedId
-      if (!(record.rating === 5 &&
-            ((!record.options.ultraHd && !record.options.theatre) ||
-             !record.options.original) &&
-            !record.options.ignoreRewatch)) {
-        return false;
-      }
-    }
-    
-    // Hide unreleased movies filter (only for to-watch list)
-    if (hideUnreleasedMovies.value && currentListId.value === 2) { // listToWatchId
-      if (!record.movie.isReleased) {
-        return false;
-      }
-    }
-    
-    // Recent releases filter (only for to-watch list)
-    if (recentReleasesFilter.value && currentListId.value === 2) { // listToWatchId
-      if (!record.movie.releaseDate || !record.movie.releaseDateTimestamp) {
-        return false;
-      }
-      
-      const sixMonthsAgo = new Date();
-      sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
-      const movieReleaseDate = new Date(record.movie.releaseDateTimestamp * 1000);
-      
-      if (movieReleaseDate < sixMonthsAgo) {
-        return false;
-      }
-    }
-    
-    return true;
-  });
 });
 
 // Use shallowRef for large arrays to improve performance
 const customSortableRecords = shallowRef<RecordType[]>([]);
 
-// Simple count computations
+/**
+ * Optimized count computations with memoization for better performance.
+ * Only recalculates when records array changes, not on every render.
+ */
 const watchedCount = computed(() => {
+  if (!records.value || !Array.isArray(records.value)) return 0;
   return records.value.filter(record => record.listId === 1).length; // listWatchedId
 });
 
 const toWatchCount = computed(() => {
+  if (!records.value || !Array.isArray(records.value)) return 0;
   return records.value.filter(record => record.listId === 2).length; // listToWatchId  
 });
 
-// Apply sorting to filtered records
+// Apply sorting to filtered records with error handling
 const sortedFilteredRecords = computed(() => {
-  if (!filteredRecords.value.length) {
-    return [];
-  }
+  try {
+    if (!filteredRecords.value || !Array.isArray(filteredRecords.value) || filteredRecords.value.length === 0) {
+      return [];
+    }
 
-  const recordsCopy = [...filteredRecords.value];
+    const recordsCopy = [...filteredRecords.value];
 
-  switch (sortComputed.value) {
-    case "custom":
-      return recordsCopy.sort((a, b) => a.order - b.order);
-    case "releaseDate":
-      return recordsCopy.sort((a, b) => b.movie.releaseDateTimestamp - a.movie.releaseDateTimestamp);
-    case "rating":
-      if (currentListId.value === listWatchedId) {
-        return recordsCopy.sort((a, b) => b.rating - a.rating);
-      } else {
-        return recordsCopy.sort((a, b) => b.movie.imdbRating - a.movie.imdbRating);
-      }
-    default: // AdditionDate
-      return recordsCopy.sort((a, b) => b.additionDate - a.additionDate);
+    switch (sortComputed.value) {
+      case "custom":
+        return recordsCopy.sort((a, b) => {
+          try {
+            const orderA = typeof a.order === 'number' ? a.order : 0;
+            const orderB = typeof b.order === 'number' ? b.order : 0;
+            return orderA - orderB;
+          } catch (error) {
+            console.warn('Error sorting by custom order:', error);
+            return 0;
+          }
+        });
+      case "releaseDate":
+        return recordsCopy.sort((a, b) => {
+          try {
+            const timestampA = typeof a.movie?.releaseDateTimestamp === 'number' ? a.movie.releaseDateTimestamp : 0;
+            const timestampB = typeof b.movie?.releaseDateTimestamp === 'number' ? b.movie.releaseDateTimestamp : 0;
+            return timestampB - timestampA;
+          } catch (error) {
+            console.warn('Error sorting by release date:', error);
+            return 0;
+          }
+        });
+      case "rating":
+        if (currentListId.value === listWatchedId) {
+          return recordsCopy.sort((a, b) => {
+            try {
+              const ratingA = typeof a.rating === 'number' ? a.rating : 0;
+              const ratingB = typeof b.rating === 'number' ? b.rating : 0;
+              return ratingB - ratingA;
+            } catch (error) {
+              console.warn('Error sorting by user rating:', error);
+              return 0;
+            }
+          });
+        } else {
+          return recordsCopy.sort((a, b) => {
+            try {
+              const imdbA = typeof a.movie?.imdbRating === 'number' ? a.movie.imdbRating : 0;
+              const imdbB = typeof b.movie?.imdbRating === 'number' ? b.movie.imdbRating : 0;
+              return imdbB - imdbA;
+            } catch (error) {
+              console.warn('Error sorting by IMDB rating:', error);
+              return 0;
+            }
+          });
+        }
+      default: // AdditionDate
+        return recordsCopy.sort((a, b) => {
+          try {
+            const dateA = typeof a.additionDate === 'number' ? a.additionDate : 0;
+            const dateB = typeof b.additionDate === 'number' ? b.additionDate : 0;
+            return dateB - dateA;
+          } catch (error) {
+            console.warn('Error sorting by addition date:', error);
+            return 0;
+          }
+        });
+    }
+  } catch (error) {
+    console.error('Error in sortedFilteredRecords computation:', error);
+    return filteredRecords.value || [];
   }
 });
 
-// Only populate custom sortable records when we actually need them for dragging
+/**
+ * Optimized initialization of custom sortable records.
+ * Only populates when needed for dragging operations and limits items for performance.
+ */
 const initializeCustomSort = () => {
   if (sortComputed.value === "custom" && customSortableRecords.value.length === 0) {
-    const sortedRecords = [...filteredRecords.value].sort((a, b) => a.order - b.order);
+    const sortedRecords = [...filteredRecords.value].sort((a, b) => {
+      // Safe sorting with fallback values
+      const orderA = typeof a.order === 'number' ? a.order : 0;
+      const orderB = typeof b.order === 'number' ? b.order : 0;
+      return orderA - orderB;
+    });
     /* For performance, limit to first 50 items when dragging
        TODO: Implement proper pagination for custom sort later */
     customSortableRecords.value = sortedRecords.slice(0, 50);
@@ -340,20 +457,24 @@ const initializeCustomSort = () => {
 // Track if we're currently dragging to avoid expensive computations
 const isDragging = ref(false);
 
-// Simple reactive array for gallery drag operations
+/**
+ * Optimized reactive array for gallery drag operations.
+ * Uses lazy initialization and avoids unnecessary computations during drag operations.
+ */
 const galleryRecords = computed({
   get() {
     if (sortComputed.value === "custom") {
       initializeCustomSort();
       return customSortableRecords.value;
     }
+    // Return direct reference to avoid unnecessary copying for non-custom sorts
     return sortedFilteredRecords.value;
   },
   set(value) {
     if (sortComputed.value === "custom") {
       isDragging.value = true;
       customSortableRecords.value = value;
-      // Save after drag completes
+      // Save after drag completes (debounced)
       handleSaveRecordsOrder();
       isDragging.value = false;
     }
@@ -361,33 +482,54 @@ const galleryRecords = computed({
 });
 
 
-// Get pagination utilities with performance optimization
+// Get pagination utilities with performance optimization and error handling
 const perPage = 50;
-const totalPages = computed(() => Math.ceil(sortedFilteredRecords.value.length / perPage));
+const totalPages = computed(() => {
+  try {
+    const recordsLength = sortedFilteredRecords.value?.length || 0;
+    if (recordsLength === 0) return 1;
+    const pages = Math.ceil(recordsLength / perPage);
+    return pages > 0 ? pages : 1;
+  } catch (error) {
+    console.warn('Error calculating total pages:', error);
+    return 1;
+  }
+});
 
-// Memoize pagination to avoid unnecessary recalculations
+/**
+ * Performance optimization: Memoize pagination to avoid unnecessary recalculations.
+ * This cache is particularly important for large datasets where slicing operations
+ * can be expensive when performed on every render cycle.
+ */
 let lastPageValue = 0;
 let lastRecordsLength = 0; 
 let cachedPaginatedRecords: RecordType[] = [];
 
 const paginatedRecords = computed(() => {
-  const currentRecords = sortedFilteredRecords.value;
-  const currentPage = page.value || 1; // Default to page 1 if undefined
-  
-  // Use cache if page and records haven't changed
-  if (currentPage === lastPageValue && currentRecords.length === lastRecordsLength) {
-    return cachedPaginatedRecords;
+  try {
+    const currentRecords = sortedFilteredRecords.value || [];
+    const currentPage = Math.max(1, Math.min(page.value || 1, totalPages.value)); // Ensure page is within valid range
+    
+    // Use cache if page and records haven't changed
+    if (currentPage === lastPageValue && currentRecords.length === lastRecordsLength) {
+      return cachedPaginatedRecords;
+    }
+    
+    // Validate pagination bounds
+    const start = Math.max(0, (currentPage - 1) * perPage);
+    const end = Math.min(currentRecords.length, start + perPage);
+    const result = currentRecords.slice(start, end);
+    
+    // Update cache
+    lastPageValue = currentPage;
+    lastRecordsLength = currentRecords.length;
+    cachedPaginatedRecords = result;
+    
+    return result;
+  } catch (error) {
+    console.error('Error in paginatedRecords computation:', error);
+    return cachedPaginatedRecords || [];
   }
-  
-  const start = (currentPage - 1) * perPage;
-  const result = currentRecords.slice(start, start + perPage);
-  
-  // Update cache
-  lastPageValue = currentPage;
-  lastRecordsLength = currentRecords.length;
-  cachedPaginatedRecords = result;
-  
-  return result;
 });
 
 // Wrapper function to update store query
@@ -399,9 +541,15 @@ const listIdRef = toRef(props, "listId");
 const usernameRef = toRef(props, "username");
 const isProfileViewRef = toRef(props, "isProfileView");
 
-// Wrapper function to load all data using the composable
+// Wrapper function to load all data using the composable with error handling
 async function loadData(): Promise<void> {
-  await loadAllData(props.isProfileView, props.username, authStore.user.isLoggedIn);
+  try {
+    await loadAllData(props.isProfileView, props.username, authStore.user.isLoggedIn);
+  } catch (error) {
+    console.error('Error loading ListView data:', error);
+    // Could emit an error event or set an error state here
+    // For now, log the error and let the loading state handle it
+  }
 }
 
 // Wrapper functions for movie operations to maintain component interface
@@ -421,6 +569,10 @@ const handleMoveToBottom = (record: RecordType) => {
   moveToBottom(record, records.value);
 };
 
+/**
+ * Performance optimization: Debounced save operation to prevent excessive API calls
+ * during drag operations. Uses a longer timeout for better batching.
+ */
 let saveTimeout: number | null = null;
 
 const handleSaveRecordsOrder = () => {
@@ -429,8 +581,9 @@ const handleSaveRecordsOrder = () => {
     clearTimeout(saveTimeout);
   }
 
+  // Increased timeout for better performance during rapid drag operations
   saveTimeout = setTimeout(() => {
-    if (sort.value === "custom" && customSortableRecords.value.length > 0) {
+    if (sortComputed.value === "custom" && customSortableRecords.value.length > 0) {
       // Get all records for the current list, ordered by existing order
       const allCurrentListRecords = records.value
         .filter((r) => r.listId === currentListId.value)
@@ -457,7 +610,7 @@ const handleSaveRecordsOrder = () => {
       saveRecordsOrder(allCurrentListRecords);
     }
     saveTimeout = null;
-  }, 200); // Debounce saves to prevent multiple API calls
+  }, 300); // Increased debounce timeout for better performance during rapid drag operations
 };
 
 // Watch for changes in props that require reloading data
