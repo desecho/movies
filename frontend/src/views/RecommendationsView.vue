@@ -454,4 +454,41 @@ onMounted(() => {
     box-shadow: 0 0 20px rgba(124, 75, 162, 0.6);
   }
 }
+
+/* Dark mode styles */
+:deep(.v-theme--dark) {
+  .preferences-title {
+    color: #f1f5f9 !important;
+  }
+
+  .preferences-card {
+    background: linear-gradient(145deg, #1e293b 0%, #334155 100%) !important;
+    border-color: #475569 !important;
+  }
+
+  .section-title {
+    color: #f1f5f9 !important;
+  }
+
+  .slider-label {
+    color: #cbd5e1 !important;
+  }
+
+  .empty-state h3 {
+    color: #cbd5e1 !important;
+  }
+
+  .empty-state p {
+    color: #94a3b8 !important;
+  }
+
+  .loading-text {
+    color: #94a3b8 !important;
+  }
+
+  .rating-text,
+  .year-range-text {
+    color: #94a3b8 !important;
+  }
+}
 </style>
