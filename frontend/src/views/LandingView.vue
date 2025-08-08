@@ -50,9 +50,8 @@
       <div class="feature">
         <h3>📊 Stats & Insights</h3>
         <p>
-          See your movie habits at a glance: totals watched/to‑watch, time watched, average rating, quality
-          preferences, top genres/directors/actors, and monthly watch trends — plus a Year‑in‑Review with per‑year
-          stats, milestones, and a year selector.
+          At‑a‑glance totals, time watched, ratings, preferences, top genres/people, monthly trends — plus a
+          Year‑in‑Review with milestones.
         </p>
       </div>
       <div class="feature">
