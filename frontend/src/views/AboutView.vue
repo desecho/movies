@@ -8,10 +8,13 @@
         <ul>
           <li>Search for movies by title, actor, or director</li>
           <li>Get a list of currently trending movies</li>
+          <li>AI-powered recommendations</li>
+          <li>Stats</li>
           <li>Add custom order for the "To Watch" list</li>
           <li>Share your lists online</li>
           <li>See where you can stream a movie</li>
           <li>Privacy settings.</li>
+          <li>Dark mode</li>
           <li>
             Add additional information such as if you watched a movie in the original version, in a theatre, an
             extended version, in 4K, etc.
@@ -31,7 +34,7 @@
         <br />
         <h3>Streaming data</h3>
         <p>
-          Streaming data is currently only available in Canada, the United States, and Russia are supported. You can
+          Streaming data is currently only available in Canada, the United States are supported. You can
           <a href="mailto:{{ ADMIN_EMAIL }}">email me</a> to request support for your country.
         </p>
         <br />
