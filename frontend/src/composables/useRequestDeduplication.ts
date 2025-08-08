@@ -1,24 +1,32 @@
 import { ref } from "vue";
 
 interface RequestCache {
-    [key: string]: Promise<any>;
+    [key: string]: Promise<unknown>;
 }
 
-export function useRequestDeduplication() {
-    const activeRequests = ref<RequestCache>({});
-
-    const deduplicateRequest = async <T>(
+export function useRequestDeduplication(): {
+    deduplicateRequest: <T>(
         key: string,
         requestFn: () => Promise<T>,
-    ): Promise<T> => {
+    ) => Promise<T>;
+    clearCache: () => void;
+    isRequestInProgress: (key: string) => boolean;
+} {
+    const activeRequests = ref<RequestCache>({});
+
+    async function deduplicateRequest<T>(
+        key: string,
+        requestFn: () => Promise<T>,
+    ): Promise<T> {
         // If request is already in progress, return the existing promise
-        if (activeRequests.value[key]) {
-            return activeRequests.value[key];
+        if (key in activeRequests.value) {
+            return activeRequests.value[key] as Promise<T>;
         }
 
         // Create new request promise
         const requestPromise = requestFn().finally(() => {
             // Clean up the request from cache when it completes
+            // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
             delete activeRequests.value[key];
         });
 
@@ -26,15 +34,15 @@ export function useRequestDeduplication() {
         activeRequests.value[key] = requestPromise;
 
         return requestPromise;
-    };
+    }
 
-    const clearCache = () => {
+    function clearCache(): void {
         activeRequests.value = {};
-    };
+    }
 
-    const isRequestInProgress = (key: string): boolean => {
+    function isRequestInProgress(key: string): boolean {
         return Boolean(activeRequests.value[key]);
-    };
+    }
 
     return {
         deduplicateRequest,

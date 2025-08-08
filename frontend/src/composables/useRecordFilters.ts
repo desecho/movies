@@ -1,5 +1,5 @@
 import { debounce } from "lodash";
-import { computed, ref, type Ref } from "vue";
+import { computed, type ComputedRef, ref, type Ref } from "vue";
 
 import type { RecordType } from "../types";
 
@@ -9,7 +9,28 @@ export function useRecordFilters(
     records: Ref<RecordType[]>,
     currentListId: Ref<number>,
     initialQuery = "",
-) {
+): {
+    query: Ref<string>;
+    debouncedQuery: Ref<string>;
+    setQuery: (value: string) => void;
+    getFilteredRecords: (filters: {
+        toRewatchFilter: Ref<boolean>;
+        hideUnreleasedMovies: Ref<boolean>;
+        recentReleasesFilter: Ref<boolean>;
+    }) => ComputedRef<RecordType[]>;
+    filterRecords: (
+        recordsArray: RecordType[],
+        searchQuery: string,
+        listId: number,
+        filters: {
+            toRewatch: boolean;
+            hideUnreleased: boolean;
+            recentReleases: boolean;
+        },
+    ) => RecordType[];
+    getWatchedCount: () => ComputedRef<number>;
+    getToWatchCount: () => ComputedRef<number>;
+} {
     const query = ref(initialQuery);
     const debouncedQuery = ref(initialQuery);
 
@@ -19,17 +40,19 @@ export function useRecordFilters(
     }, 300);
 
     // Watch for query changes and debounce them
-    const setQuery = (value: string) => {
+    function setQuery(value: string): void {
         query.value = value;
         updateDebouncedQuery(value);
-    };
+    }
 
     // Memoized search filter
-    const searchMatchesRecord = (
+    function searchMatchesRecord(
         record: RecordType,
         searchQuery: string,
-    ): boolean => {
-        if (!searchQuery) {return true;}
+    ): boolean {
+        if (!searchQuery) {
+            return true;
+        }
 
         const q = searchQuery.toLowerCase();
         return (
@@ -40,15 +63,17 @@ export function useRecordFilters(
             (record.movie.actors &&
                 record.movie.actors.toLowerCase().includes(q))
         );
-    };
+    }
 
     // Memoized rewatch filter
-    const rewatchMatchesRecord = (
+    function rewatchMatchesRecord(
         record: RecordType,
         filterEnabled: boolean,
         listId: number,
-    ): boolean => {
-        if (!filterEnabled || listId !== listWatchedId) {return true;}
+    ): boolean {
+        if (!filterEnabled || listId !== listWatchedId) {
+            return true;
+        }
 
         return (
             record.rating === 5 &&
@@ -56,26 +81,30 @@ export function useRecordFilters(
                 !record.options.original) &&
             !record.options.ignoreRewatch
         );
-    };
+    }
 
     // Memoized unreleased filter
-    const releasedMatchesRecord = (
+    function releasedMatchesRecord(
         record: RecordType,
         filterEnabled: boolean,
         listId: number,
-    ): boolean => {
-        if (!filterEnabled || listId !== listToWatchId) {return true;}
+    ): boolean {
+        if (!filterEnabled || listId !== listToWatchId) {
+            return true;
+        }
 
         return record.movie.isReleased;
-    };
+    }
 
     // Memoized recent releases filter
-    const recentReleasesMatchesRecord = (
+    function recentReleasesMatchesRecord(
         record: RecordType,
         filterEnabled: boolean,
         listId: number,
-    ): boolean => {
-        if (!filterEnabled || listId !== listToWatchId) {return true;}
+    ): boolean {
+        if (!filterEnabled || listId !== listToWatchId) {
+            return true;
+        }
 
         if (!record.movie.releaseDate || !record.movie.releaseDateTimestamp) {
             return false;
@@ -88,40 +117,45 @@ export function useRecordFilters(
         );
 
         return movieReleaseDate >= sixMonthsAgo;
-    };
+    }
 
     // Main filtered records function - returns raw filtered array for caching
-    const getFilteredRecords = (filters: {
+    function getFilteredRecords(filters: {
         toRewatchFilter: Ref<boolean>;
         hideUnreleasedMovies: Ref<boolean>;
         recentReleasesFilter: Ref<boolean>;
-    }) => {
+    }): ComputedRef<RecordType[]> {
         return computed(() => {
             const searchQuery = debouncedQuery.value.trim();
             const listId = currentListId.value;
 
             const result = records.value.filter((record) => {
                 // List filter - must match current list
-                if (record.listId !== listId) {return false;}
+                if (record.listId !== listId) {
+                    return false;
+                }
 
                 // Apply all filters using memoized functions with null safety
-                const toRewatchValue = (typeof filters.toRewatchFilter?.value === 'boolean') 
-                    ? filters.toRewatchFilter.value 
-                    : (typeof filters.toRewatchFilter === 'boolean') 
-                        ? filters.toRewatchFilter 
-                        : false;
-                        
-                const hideUnreleasedValue = (typeof filters.hideUnreleasedMovies?.value === 'boolean') 
-                    ? filters.hideUnreleasedMovies.value 
-                    : (typeof filters.hideUnreleasedMovies === 'boolean') 
-                        ? filters.hideUnreleasedMovies 
-                        : false;
-                        
-                const recentReleasesValue = (typeof filters.recentReleasesFilter?.value === 'boolean') 
-                    ? filters.recentReleasesFilter.value 
-                    : (typeof filters.recentReleasesFilter === 'boolean') 
-                        ? filters.recentReleasesFilter 
-                        : false;
+                let toRewatchValue = false;
+                if (typeof filters.toRewatchFilter?.value === "boolean") {
+                    toRewatchValue = filters.toRewatchFilter.value;
+                } else if (typeof filters.toRewatchFilter === "boolean") {
+                    toRewatchValue = filters.toRewatchFilter;
+                }
+
+                let hideUnreleasedValue = false;
+                if (typeof filters.hideUnreleasedMovies?.value === "boolean") {
+                    hideUnreleasedValue = filters.hideUnreleasedMovies.value;
+                } else if (typeof filters.hideUnreleasedMovies === "boolean") {
+                    hideUnreleasedValue = filters.hideUnreleasedMovies;
+                }
+
+                let recentReleasesValue = false;
+                if (typeof filters.recentReleasesFilter?.value === "boolean") {
+                    recentReleasesValue = filters.recentReleasesFilter.value;
+                } else if (typeof filters.recentReleasesFilter === "boolean") {
+                    recentReleasesValue = filters.recentReleasesFilter;
+                }
 
                 return (
                     searchMatchesRecord(record, searchQuery) &&
@@ -138,13 +172,13 @@ export function useRecordFilters(
                     )
                 );
             });
-            
+
             return result;
         });
-    };
-    
+    }
+
     // Direct filter function for external caching (non-reactive)
-    const filterRecords = (
+    function filterRecords(
         recordsArray: RecordType[],
         searchQuery: string,
         listId: number,
@@ -152,37 +186,43 @@ export function useRecordFilters(
             toRewatch: boolean;
             hideUnreleased: boolean;
             recentReleases: boolean;
-        }
-    ): RecordType[] => {
+        },
+    ): RecordType[] {
         return recordsArray.filter((record) => {
             // List filter - must match current list
-            if (record.listId !== listId) {return false;}
+            if (record.listId !== listId) {
+                return false;
+            }
 
             return (
                 searchMatchesRecord(record, searchQuery.trim()) &&
                 rewatchMatchesRecord(record, filters.toRewatch, listId) &&
                 releasedMatchesRecord(record, filters.hideUnreleased, listId) &&
-                recentReleasesMatchesRecord(record, filters.recentReleases, listId)
+                recentReleasesMatchesRecord(
+                    record,
+                    filters.recentReleases,
+                    listId,
+                )
             );
         });
-    };
+    }
 
     // Memoized count computations
-    const getWatchedCount = () => {
+    function getWatchedCount(): ComputedRef<number> {
         return computed(() => {
             return records.value.filter(
                 (record) => record.listId === listWatchedId,
             ).length;
         });
-    };
+    }
 
-    const getToWatchCount = () => {
+    function getToWatchCount(): ComputedRef<number> {
         return computed(() => {
             return records.value.filter(
                 (record) => record.listId === listToWatchId,
             ).length;
         });
-    };
+    }
 
     return {
         query,

@@ -12,14 +12,14 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-logger = logging.getLogger(__name__)
-
 from ..models import Action, ActionRecord, List, Movie, ProviderRecord, Record, User, UserAnonymous
 from .types import MovieObject, OptionsObject, ProviderObject, ProviderRecordObject, RecordObject
 from .utils import add_movie_to_list, get_anothers_account
 
 if TYPE_CHECKING:
     from rest_framework.permissions import BasePermission
+
+logger = logging.getLogger(__name__)
 
 
 class ChangeRatingView(APIView):

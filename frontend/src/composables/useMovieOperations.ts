@@ -1,13 +1,35 @@
 import axios from "axios";
-import { ref } from "vue";
+import { ref, type Ref } from "vue";
 
 import type { RecordType, SortData } from "../types";
 
-import { listToWatchId, listWatchedId } from "../const";
+import { listWatchedId } from "../const";
 import { getUrl } from "../helpers";
 import { $toast } from "../toast";
 
-export function useMovieOperations() {
+export function useMovieOperations(): {
+    addingToList: Ref<Record<string, boolean>>;
+    addToList: (movieId: number, listId: number, record?: RecordType) => void;
+    addToMyList: (
+        movieId: number,
+        listId: number,
+        records: RecordType[],
+        myRecords: RecordType[],
+        isLoggedIn: boolean,
+    ) => void;
+    removeRecord: (record: RecordType, records: RecordType[]) => void;
+    changeRating: (record: RecordType, rating: number) => void;
+    saveOptions: (
+        record: RecordType,
+        field: keyof RecordType["options"],
+    ) => void;
+    saveComment: (record: RecordType) => void;
+    showCommentArea: (record: RecordType) => void;
+    updateRecordComment: (record: RecordType, comment: string) => void;
+    saveRecordsOrder: (records: RecordType[]) => void;
+    moveToTop: (record: RecordType, records: RecordType[]) => void;
+    moveToBottom: (record: RecordType, records: RecordType[]) => void;
+} {
     // Track loading state for add to list buttons
     const addingToList = ref<Record<string, boolean>>({});
 

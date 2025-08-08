@@ -1,12 +1,31 @@
-import { computed, ref, watch } from "vue";
+import { computed, type ComputedRef, ref, type Ref, watch } from "vue";
 import { useRouter } from "vue-router";
 
-import { listToWatchId, listWatchedId } from "../const";
+import { listWatchedId } from "../const";
 
 export function useListNavigation(
     initialListId: number,
     isProfileView: boolean = false,
-) {
+): {
+    selectedProfileList: Ref<number>;
+    selectedUserList: Ref<number>;
+    currentListId: ComputedRef<number>;
+    page: Ref<number>;
+    handleProfileListChange: (
+        newListId: number,
+        username: string,
+        onDataReload: () => Promise<void>,
+    ) => Promise<void>;
+    handleUserListChange: (
+        newListId: number,
+        onDataReload: () => Promise<void>,
+    ) => Promise<void>;
+    initializeWatchers: (
+        username: string | undefined,
+        onDataReload: () => Promise<void>,
+    ) => void;
+    resetListSelections: (listId: number) => void;
+} {
     const router = useRouter();
 
     // For profile views, allow switching between lists
@@ -33,7 +52,9 @@ export function useListNavigation(
         username: string,
         onDataReload: () => Promise<void>,
     ): Promise<void> {
-        if (!isProfileView || !username) {return;}
+        if (!isProfileView || !username) {
+            return;
+        }
 
         page.value = 1; // Reset to first page when switching lists
 
@@ -58,7 +79,9 @@ export function useListNavigation(
         newListId: number,
         onDataReload: () => Promise<void>,
     ): Promise<void> {
-        if (isProfileView) {return;}
+        if (isProfileView) {
+            return;
+        }
 
         page.value = 1; // Reset to first page when switching lists
 

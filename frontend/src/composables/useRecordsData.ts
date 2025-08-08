@@ -9,7 +9,11 @@ import { $toast } from "../toast";
 
 import { useRequestDeduplication } from "./useRequestDeduplication";
 
-export function useRecordsData() {
+export function useRecordsData(): {
+    [key: string]: unknown;
+    myRecords: Ref<RecordType[]>;
+    userAvatarUrl: Ref<string | null>;
+} {
     const recordsStore = useRecordsStore();
     const { deduplicateRequest } = useRequestDeduplication();
 

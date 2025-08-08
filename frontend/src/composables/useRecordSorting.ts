@@ -1,5 +1,5 @@
 import { cloneDeep } from "lodash";
-import { computed, ref, type Ref } from "vue";
+import { computed, type ComputedRef, ref, type Ref } from "vue";
 
 import type { RecordType } from "../types";
 
@@ -8,12 +8,25 @@ import { listWatchedId } from "../const";
 export function useRecordSorting(
     records: Ref<RecordType[]>,
     currentListId: Ref<number>,
-) {
+): {
+    sort: Ref<string>;
+    sortedRecords: ComputedRef<RecordType[]>;
+    getPaginatedRecords: (
+        filteredRecords: Ref<RecordType[]>,
+        page: Ref<number>,
+        perPage?: number,
+    ) => {
+        totalPages: ComputedRef<number>;
+        paginatedRecords: ComputedRef<RecordType[]>;
+    };
+} {
     const sort = ref("additionDate");
 
     // Memoized sorting function
     const sortedRecords = computed(() => {
-        if (!records.value.length) {return [];}
+        if (!records.value.length) {
+            return [];
+        }
 
         const recordsCopy = cloneDeep(records.value);
 
@@ -31,11 +44,10 @@ export function useRecordSorting(
             case "rating":
                 if (currentListId.value === listWatchedId) {
                     return recordsCopy.sort((a, b) => b.rating - a.rating);
-                } 
-                    return recordsCopy.sort(
-                        (a, b) => b.movie.imdbRating - a.movie.imdbRating,
-                    );
-                
+                }
+                return recordsCopy.sort(
+                    (a, b) => b.movie.imdbRating - a.movie.imdbRating,
+                );
 
             default: // AdditionDate
                 return recordsCopy.sort(
@@ -45,11 +57,14 @@ export function useRecordSorting(
     });
 
     // Pagination utilities
-    const getPaginatedRecords = (
+    function getPaginatedRecords(
         filteredRecords: Ref<RecordType[]>,
         page: Ref<number>,
         perPage: number = 50,
-    ) => {
+    ): {
+        totalPages: ComputedRef<number>;
+        paginatedRecords: ComputedRef<RecordType[]>;
+    } {
         const totalPages = computed(() =>
             Math.ceil(filteredRecords.value.length / perPage),
         );
@@ -63,7 +78,7 @@ export function useRecordSorting(
             totalPages,
             paginatedRecords,
         };
-    };
+    }
 
     return {
         sort,

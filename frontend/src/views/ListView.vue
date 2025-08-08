@@ -103,13 +103,11 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted, ref, shallowRef, toRef, watch } from "vue";
-import { useRouter } from "vue-router";
 import { storeToRefs } from "pinia";
-import Draggable from "vuedraggable";
+import { computed, onMounted, ref, shallowRef, toRef, watch } from "vue";
 
 import type { RecordType } from "../types";
-import type { ViewMode, SortType } from "../types/listView";
+import type { SortType, ViewMode } from "../types/listView";
 
 // Import extracted components
 import GalleryViewComponent from "../components/ListView/GalleryViewComponent.vue";
@@ -122,18 +120,16 @@ import SearchAndCountsComponent from "../components/ListView/SearchAndCountsComp
 import UserListSelectorComponent from "../components/ListView/UserListSelectorComponent.vue";
 // Import composables
 import { useListNavigation } from "../composables/useListNavigation";
-import { useMovieOperations } from "../composables/useMovieOperations";
-import { useRecordFilters } from "../composables/useRecordFilters";
-import { useRecordsData } from "../composables/useRecordsData";
-import { useRecordSorting } from "../composables/useRecordSorting";
 import { useListViewFiltering } from "../composables/useListViewFiltering";
-import { useListViewSorting } from "../composables/useListViewSorting";
 import { useListViewPagination } from "../composables/useListViewPagination";
+import { useListViewSorting } from "../composables/useListViewSorting";
+import { useMovieOperations } from "../composables/useMovieOperations";
 import { useRecordCounts } from "../composables/useRecordCounts";
-import { listToWatchId, listWatchedId } from "../const";
+import { useRecordsData } from "../composables/useRecordsData";
+import { listToWatchId } from "../const";
 import { useAuthStore } from "../stores/auth";
-import { useRecordsStore } from "../stores/records";
 import { useListViewStore } from "../stores/listView";
+import { useRecordsStore } from "../stores/records";
 
 /**
  * Props for ListView component
@@ -149,8 +145,6 @@ interface ListViewProps {
 
 const props = defineProps<ListViewProps>();
 
-const router = useRouter();
-
 const recordsStore = useRecordsStore();
 const authStore = useAuthStore();
 const listViewStore = useListViewStore();
@@ -160,13 +154,7 @@ const areRecordsLoaded = toRef(recordsStore, "areLoaded");
 const isRecordsLoading = toRef(recordsStore, "isLoading");
 
 // Initialize ListView state from store
-const {
-  mode,
-  sort: storeSort,
-  query: storeQuery,
-  filters,
-  page: storePage,
-} = storeToRefs(listViewStore);
+const { mode, sort: storeSort, query: storeQuery, filters, page: storePage } = storeToRefs(listViewStore);
 
 const {
   setMode,
@@ -183,7 +171,6 @@ const { myRecords, userAvatarUrl, loadAllData, clearUserData } = recordsData;
 
 const movieOperations = useMovieOperations();
 const {
-  addingToList,
   addToList,
   addToMyList,
   removeRecord,
@@ -211,11 +198,11 @@ const page = storePage;
  */
 const modeComputed = computed({
   get: () => {
-    return mode.value || 'full';
+    return mode.value || "full";
   },
   set: (value: ViewMode) => {
     setMode(value);
-  }
+  },
 });
 
 /**
@@ -224,11 +211,11 @@ const modeComputed = computed({
  */
 const sortComputed = computed({
   get: () => {
-    return storeSort.value || 'additionDate';
+    return storeSort.value || "additionDate";
   },
   set: (value: SortType) => {
     setStoreSort(value);
-  }
+  },
 });
 
 /**
@@ -239,28 +226,29 @@ const sortComputed = computed({
 /** Filter for showing only movies marked for rewatching (watched list only) */
 const toRewatchFilter = computed({
   get: () => filters.value?.toRewatch ?? false,
-  set: (value: boolean) => setFilter('toRewatch', value)
+  set: (value: boolean) => {
+    setFilter("toRewatch", value);
+  },
 });
 
 /** Filter for hiding unreleased movies (to-watch list only) */
 const hideUnreleasedMovies = computed({
   get: () => filters.value?.hideUnreleased ?? false,
-  set: (value: boolean) => setFilter('hideUnreleased', value)
+  set: (value: boolean) => {
+    setFilter("hideUnreleased", value);
+  },
 });
 
 /** Filter for showing only recent releases from last 6 months (to-watch list only) */
 const recentReleasesFilter = computed({
   get: () => filters.value?.recentReleases ?? false,
-  set: (value: boolean) => setFilter('recentReleases', value)
+  set: (value: boolean) => {
+    setFilter("recentReleases", value);
+  },
 });
 
 // Use filtering composable for clean separation of concerns
-const { filteredRecords } = useListViewFiltering(
-  records,
-  currentListId,
-  query,
-  filters
-);
+const { filteredRecords } = useListViewFiltering(records, currentListId, query, filters);
 
 // Use shallowRef for large arrays to improve performance
 const customSortableRecords = shallowRef<RecordType[]>([]);
@@ -269,109 +257,32 @@ const customSortableRecords = shallowRef<RecordType[]>([]);
 const { watchedCount, toWatchCount, filteredCount } = useRecordCounts(records, filteredRecords);
 
 // Use sorting composable for clean separation of concerns
-const { sortedRecords: sortedFilteredRecords } = useListViewSorting(
-  filteredRecords,
-  sortComputed,
-  currentListId
-);
+const { sortedRecords: sortedFilteredRecords } = useListViewSorting(filteredRecords, sortComputed, currentListId);
 
 /**
  * Optimized initialization of custom sortable records.
  * Only populates when needed for dragging operations and limits items for performance.
  */
-const initializeCustomSort = () => {
+function initializeCustomSort(): void {
   if (sortComputed.value === "custom" && customSortableRecords.value.length === 0) {
     const sortedRecords = [...filteredRecords.value].sort((a, b) => {
       // Safe sorting with fallback values
-      const orderA = typeof a.order === 'number' ? a.order : 0;
-      const orderB = typeof b.order === 'number' ? b.order : 0;
+      const orderA = typeof a.order === "number" ? a.order : 0;
+      const orderB = typeof b.order === "number" ? b.order : 0;
       return orderA - orderB;
     });
     /* For performance, limit to first 50 items when dragging
        TODO: Implement proper pagination for custom sort later */
     customSortableRecords.value = sortedRecords.slice(0, 50);
   }
-};
+}
 
 // Track if we're currently dragging to avoid expensive computations
 const isDragging = ref(false);
 
-/**
- * Optimized reactive array for gallery drag operations.
- * Uses lazy initialization and avoids unnecessary computations during drag operations.
- */
-const galleryRecords = computed({
-  get() {
-    if (sortComputed.value === "custom") {
-      initializeCustomSort();
-      return customSortableRecords.value;
-    }
-    // Return direct reference to avoid unnecessary copying for non-custom sorts
-    return sortedFilteredRecords.value;
-  },
-  set(value) {
-    if (sortComputed.value === "custom") {
-      isDragging.value = true;
-      customSortableRecords.value = value;
-      // Save after drag completes (debounced)
-      handleSaveRecordsOrder();
-      isDragging.value = false;
-    }
-  },
-});
-
-
-// Use pagination composable for clean separation of concerns
-const { totalPages, paginatedRecords } = useListViewPagination(
-  sortedFilteredRecords,
-  page,
-  50 // items per page
-);
-
-// Wrapper function to update store query
-const handleQueryUpdate = (newQuery: string) => {
-  setStoreQuery(newQuery);
-};
-
-const listIdRef = toRef(props, "listId");
-const usernameRef = toRef(props, "username");
-const isProfileViewRef = toRef(props, "isProfileView");
-
-// Wrapper function to load all data using the composable with error handling
-async function loadData(): Promise<void> {
-  try {
-    await loadAllData(props.isProfileView, props.username, authStore.user.isLoggedIn);
-  } catch (error) {
-    console.error('Error loading ListView data:', error);
-    // Could emit an error event or set an error state here
-    // For now, log the error and let the loading state handle it
-  }
-}
-
-// Wrapper functions for movie operations to maintain component interface
-const handleAddToMyList = (movieId: number, listId: number) => {
-  addToMyList(movieId, listId, records.value, myRecords.value, authStore.user.isLoggedIn);
-};
-
-const handleRemoveRecord = (record: RecordType) => {
-  removeRecord(record, records.value);
-};
-
-const handleMoveToTop = (record: RecordType) => {
-  moveToTop(record, records.value);
-};
-
-const handleMoveToBottom = (record: RecordType) => {
-  moveToBottom(record, records.value);
-};
-
-/**
- * Performance optimization: Debounced save operation to prevent excessive API calls
- * during drag operations. Uses a longer timeout for better batching.
- */
 let saveTimeout: number | null = null;
 
-const handleSaveRecordsOrder = () => {
+function handleSaveRecordsOrder(): void {
   // Prevent duplicate saves with debouncing
   if (saveTimeout) {
     clearTimeout(saveTimeout);
@@ -407,7 +318,80 @@ const handleSaveRecordsOrder = () => {
     }
     saveTimeout = null;
   }, 300); // Increased debounce timeout for better performance during rapid drag operations
-};
+}
+
+/**
+ * Optimized reactive array for gallery drag operations.
+ * Uses lazy initialization and avoids unnecessary computations during drag operations.
+ */
+const galleryRecords = computed({
+  get() {
+    if (sortComputed.value === "custom") {
+      initializeCustomSort();
+      return customSortableRecords.value;
+    }
+    // Return direct reference to avoid unnecessary copying for non-custom sorts
+    return sortedFilteredRecords.value;
+  },
+  set(value) {
+    if (sortComputed.value === "custom") {
+      isDragging.value = true;
+      customSortableRecords.value = value;
+      // Save after drag completes (debounced)
+      handleSaveRecordsOrder();
+      isDragging.value = false;
+    }
+  },
+});
+
+// Use pagination composable for clean separation of concerns
+const { totalPages, paginatedRecords } = useListViewPagination(
+  sortedFilteredRecords,
+  page,
+  50, // Items per page
+);
+
+// Wrapper function to update store query
+function handleQueryUpdate(newQuery: string): void {
+  setStoreQuery(newQuery);
+}
+
+const listIdRef = toRef(props, "listId");
+const usernameRef = toRef(props, "username");
+const isProfileViewRef = toRef(props, "isProfileView");
+
+// Wrapper function to load all data using the composable with error handling
+async function loadData(): Promise<void> {
+  try {
+    await loadAllData(props.isProfileView, props.username, authStore.user.isLoggedIn);
+  } catch (error) {
+    console.error("Error loading ListView data:", error);
+    /* Could emit an error event or set an error state here
+       For now, log the error and let the loading state handle it */
+  }
+}
+
+// Wrapper functions for movie operations to maintain component interface
+function handleAddToMyList(movieId: number, listId: number): void {
+  addToMyList(movieId, listId, records.value, myRecords.value, authStore.user.isLoggedIn);
+}
+
+function handleRemoveRecord(record: RecordType): void {
+  removeRecord(record, records.value);
+}
+
+function handleMoveToTop(record: RecordType): void {
+  moveToTop(record, records.value);
+}
+
+function handleMoveToBottom(record: RecordType): void {
+  moveToBottom(record, records.value);
+}
+
+/**
+ * Performance optimization: Debounced save operation to prevent excessive API calls
+ * during drag operations. Uses a longer timeout for better batching.
+ */
 
 // Watch for changes in props that require reloading data
 watch([listIdRef, usernameRef, isProfileViewRef], async () => {
@@ -446,10 +430,10 @@ onMounted(async () => {
 
   // Initialize defaults if not set
   if (!mode.value) {
-    setMode('full');
+    setMode("full");
   }
   if (!storeSort.value) {
-    setStoreSort('additionDate');
+    setStoreSort("additionDate");
   }
   if (!page.value) {
     setStorePage(1);
