@@ -4,6 +4,7 @@
     :class="{
       'movie-minimal': mode == 'minimal',
       'movie-full': mode == 'full',
+      'movie-compact': mode == 'compact',
     }"
   >
     <!-- Movie title banner spanning full width at the very top -->
@@ -103,6 +104,7 @@
         :class="{
           'details-minimal': mode == 'minimal',
         }"
+        v-show="mode !== 'compact' && mode !== 'minimal'"
       >
         <div v-show="record.movie.imdbRating" class="imdb-rating">
           <span class="item-desc">IMDb Rating:</span>
@@ -328,7 +330,8 @@ const emit = defineEmits<{
 }>();
 
 const starSize = computed(() => {
-  if (props.mode === "minimal") {
+  // Use smaller stars for minimal and compact modes to fit the narrow poster width
+  if (props.mode === "minimal" || props.mode === "compact") {
     return starSizeMinimal;
   }
   return starSizeNormal;
@@ -440,6 +443,28 @@ function updateComment(comment: string): void {
 .movie-full {
   min-height: 350px;
   padding: 22px;
+}
+
+/* Compact mode: center poster and align stars under it */
+.movie-compact {
+  padding: 20px;
+
+  .movie-card-content {
+    justify-content: center;
+    align-items: center;
+  }
+
+  .poster {
+    width: 92px; /* match .poster-small width */
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .poster-rating {
+    width: 100%;
+  }
 }
 
 /* Enhanced movie header layout */
