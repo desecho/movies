@@ -72,7 +72,7 @@ export const useRecordsStore = defineStore("records", {
                     record.movie.imdbRatingConverted =
                         roundToHalfStar(convertedRating);
                 });
-                this.records = response.data as RecordType[];
+                this.records = recs;
 
                 if (username) {
                     console.log(`Records loaded for user: ${username}`);

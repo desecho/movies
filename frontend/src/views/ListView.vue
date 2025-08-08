@@ -30,12 +30,12 @@
     <!-- Search and Counts -->
     <SearchAndCountsComponent
       :query="query"
-      @update:query="setQuery"
       :watched-count="watchedCount"
       :to-watch-count="toWatchCount"
       :filtered-count="sortedFilteredRecords.length"
       :are-records-loaded="areRecordsLoaded"
       :is-records-loading="isRecordsLoading"
+      @update:query="setQuery"
     />
 
     <!-- Top Pagination -->
@@ -65,8 +65,8 @@
               :is-sortable="isSortable"
               :is-logged-in="authStore.user.isLoggedIn"
               :my-records="myRecords"
-              @remove="removeRecord"
-              @add-to-my-list="addToMyList"
+              @remove="handleRemoveRecord"
+              @add-to-my-list="handleAddToMyList"
               @add-to-list="addToList"
               @rating-changed="changeRating"
               @save-comment="saveComment"
@@ -80,13 +80,13 @@
         <!-- Gallery view -->
         <GalleryViewComponent
           v-if="mode === 'gallery'"
-          v-model:records="sortedFilteredRecords"
-          :paginated-records="paginatedRecords"
+          v-model:records="galleryRecords"
+          :paginated-records="sort === 'custom' ? galleryRecords : paginatedRecords"
           :is-sortable="isSortable"
           :is-profile-view="isProfileView"
-          @sort="saveRecordsOrder"
-          @move-to-top="moveToTop"
-          @move-to-bottom="moveToBottom"
+          @sort="handleSaveRecordsOrder"
+          @move-to-top="handleMoveToTop"
+          @move-to-bottom="handleMoveToBottom"
         />
       </v-col>
     </v-row>
@@ -103,12 +103,11 @@
 </template>
 
 <script lang="ts" setup>
-import axios from "axios";
 import { computed, onMounted, ref, toRef, watch } from "vue";
 import { useRouter } from "vue-router";
 import Draggable from "vuedraggable";
 
-import type { RecordType, SortData } from "../types";
+import type { RecordType } from "../types";
 
 // Import extracted components
 import GalleryViewComponent from "../components/ListView/GalleryViewComponent.vue";
@@ -120,14 +119,14 @@ import ProfileHeaderComponent from "../components/ListView/ProfileHeaderComponen
 import SearchAndCountsComponent from "../components/ListView/SearchAndCountsComponent.vue";
 import UserListSelectorComponent from "../components/ListView/UserListSelectorComponent.vue";
 // Import composables
+import { useListNavigation } from "../composables/useListNavigation";
+import { useMovieOperations } from "../composables/useMovieOperations";
 import { useRecordFilters } from "../composables/useRecordFilters";
+import { useRecordsData } from "../composables/useRecordsData";
 import { useRecordSorting } from "../composables/useRecordSorting";
-import { useRequestDeduplication } from "../composables/useRequestDeduplication";
 import { listToWatchId, listWatchedId } from "../const";
-import { getUrl } from "../helpers";
 import { useAuthStore } from "../stores/auth";
 import { useRecordsStore } from "../stores/records";
-import { $toast } from "../toast";
 
 const props = defineProps<{
   listId: number;
@@ -148,30 +147,31 @@ const records = toRef(recordsStore, "records");
 const areRecordsLoaded = toRef(recordsStore, "areLoaded");
 const isRecordsLoading = toRef(recordsStore, "isLoading");
 
-// Request deduplication composable
-const { deduplicateRequest } = useRequestDeduplication();
-
-// For profile views, allow switching between lists
-const selectedProfileList = ref(props.listId);
-
-// For regular users, allow switching between their own lists
-const selectedUserList = ref(props.listId);
-
-// User avatar for profile views
-const userAvatarUrl = ref<string | null>(null);
-
-// Track loading state for add to list buttons
-const addingToList = ref<Record<string, boolean>>({});
-
-// Store user's own records for checking if movie already exists
-const myRecords = ref<RecordType[]>([]);
-
-// Computed property to get the current list ID (either from props or selected by user)
-const currentListId = computed(() => {
-  return props.isProfileView ? selectedProfileList.value : selectedUserList.value;
-});
-
 // Initialize composables
+const recordsData = useRecordsData();
+const { myRecords, userAvatarUrl, loadAllData, clearUserData } = recordsData;
+
+const movieOperations = useMovieOperations();
+const {
+  addingToList,
+  addToList,
+  addToMyList,
+  removeRecord,
+  changeRating,
+  saveOptions,
+  saveComment,
+  showCommentArea,
+  updateRecordComment,
+  saveRecordsOrder,
+  moveToTop,
+  moveToBottom,
+} = movieOperations;
+
+const listNavigation = useListNavigation(props.listId, props.isProfileView);
+const { selectedProfileList, selectedUserList, currentListId, page, resetListSelections, initializeWatchers } =
+  listNavigation;
+
+// Initialize filtering and sorting composables
 const filterComposable = useRecordFilters(records, currentListId, "");
 const { query, setQuery } = filterComposable;
 const sortingComposable = useRecordSorting(records, currentListId);
@@ -184,10 +184,13 @@ const filteredRecords = filterComposable.getFilteredRecords({
   recentReleasesFilter,
 });
 
+// Simplified approach for custom sorting
+const customSortableRecords = ref<RecordType[]>([]);
+
 // Apply sorting to filtered records
 const sortedFilteredRecords = computed(() => {
-  if (!filteredRecords.value.length) return [];
-  
+  if (!filteredRecords.value.length) {return [];}
+
   const recordsCopy = [...filteredRecords.value];
 
   switch (sort.value) {
@@ -198,12 +201,45 @@ const sortedFilteredRecords = computed(() => {
     case "rating":
       if (currentListId.value === listWatchedId) {
         return recordsCopy.sort((a, b) => b.rating - a.rating);
-      } else {
+      } 
         return recordsCopy.sort((a, b) => b.movie.imdbRating - a.movie.imdbRating);
-      }
-    default: // additionDate
+      
+    default: // AdditionDate
       return recordsCopy.sort((a, b) => b.additionDate - a.additionDate);
   }
+});
+
+// Only populate custom sortable records when we actually need them for dragging
+const initializeCustomSort = () => {
+  if (sort.value === "custom" && customSortableRecords.value.length === 0) {
+    const sortedRecords = [...filteredRecords.value].sort((a, b) => a.order - b.order);
+    /* For performance, limit to first 50 items when dragging
+       TODO: Implement proper pagination for custom sort later */
+    customSortableRecords.value = sortedRecords.slice(0, 50);
+  }
+};
+
+// Track if we're currently dragging to avoid expensive computations
+const isDragging = ref(false);
+
+// Simple reactive array for gallery drag operations
+const galleryRecords = computed({
+  get() {
+    if (sort.value === "custom") {
+      initializeCustomSort();
+      return customSortableRecords.value;
+    }
+    return sortedFilteredRecords.value;
+  },
+  set(value) {
+    if (sort.value === "custom") {
+      isDragging.value = true;
+      customSortableRecords.value = value;
+      // Save after drag completes
+      handleSaveRecordsOrder();
+      isDragging.value = false;
+    }
+  },
 });
 
 // Get optimized count computations
@@ -211,7 +247,6 @@ const watchedCount = filterComposable.getWatchedCount();
 const toWatchCount = filterComposable.getToWatchCount();
 
 // Get pagination utilities
-const page = ref(1);
 const perPage = 50;
 const totalPages = computed(() => Math.ceil(sortedFilteredRecords.value.length / perPage));
 const paginatedRecords = computed(() => {
@@ -228,194 +263,89 @@ const listIdRef = toRef(props, "listId");
 const usernameRef = toRef(props, "username");
 const isProfileViewRef = toRef(props, "isProfileView");
 
-async function loadRecordsData(): Promise<void> {
-  const { loadRecords } = useRecordsStore();
-  
-  const cacheKey = props.isProfileView && props.username 
-    ? `records-profile-${props.username}` 
-    : 'records-user';
+// Wrapper function to load all data using the composable
+async function loadData(): Promise<void> {
+  await loadAllData(props.isProfileView, props.username, authStore.user.isLoggedIn);
+}
 
-  return deduplicateRequest(cacheKey, async () => {
-    try {
-      if (props.isProfileView && props.username) {
-        await loadRecords(props.username);
-      } else {
-        await loadRecords();
-      }
-    } catch (error: unknown) {
-      console.log(error);
-      const errorMessage =
-        props.isProfileView && props.username ? `Error loading ${props.username}'s movies` : "Error loading movies";
-      $toast.error(errorMessage);
-      throw error; // Re-throw to prevent caching failed requests
+// Wrapper functions for movie operations to maintain component interface
+const handleAddToMyList = (movieId: number, listId: number) => {
+  addToMyList(movieId, listId, records.value, myRecords.value, authStore.user.isLoggedIn);
+};
+
+const handleRemoveRecord = (record: RecordType) => {
+  removeRecord(record, records.value);
+};
+
+const handleMoveToTop = (record: RecordType) => {
+  moveToTop(record, records.value);
+};
+
+const handleMoveToBottom = (record: RecordType) => {
+  moveToBottom(record, records.value);
+};
+
+let saveTimeout: number | null = null;
+
+const handleSaveRecordsOrder = () => {
+  // Prevent duplicate saves with debouncing
+  if (saveTimeout) {
+    clearTimeout(saveTimeout);
+  }
+
+  saveTimeout = setTimeout(() => {
+    if (sort.value === "custom" && customSortableRecords.value.length > 0) {
+      // Get all records for the current list, ordered by existing order
+      const allCurrentListRecords = records.value
+        .filter((r) => r.listId === currentListId.value)
+        .sort((a, b) => a.order - b.order);
+
+      // Update orders for the dragged items first
+      customSortableRecords.value.forEach((sortedRecord, index) => {
+        const originalRecord = allCurrentListRecords.find((r) => r.id === sortedRecord.id);
+        if (originalRecord) {
+          originalRecord.order = index + 1;
+        }
+      });
+
+      // For items not in the dragged set, keep their relative positions after the dragged items
+      const draggedIds = new Set(customSortableRecords.value.map((r) => r.id));
+      const notDraggedRecords = allCurrentListRecords.filter((r) => !draggedIds.has(r.id));
+
+      // Start numbering after the dragged items
+      let nextOrder = customSortableRecords.value.length + 1;
+      notDraggedRecords.forEach((record) => {
+        record.order = nextOrder++;
+      });
+
+      saveRecordsOrder(allCurrentListRecords);
     }
-  });
-}
-
-// Load user's own records when viewing a profile (if logged in)
-async function loadMyRecords(): Promise<void> {
-  if (props.isProfileView && authStore.user.isLoggedIn) {
-    return deduplicateRequest('my-records', async () => {
-      try {
-        const response = await axios.get(getUrl("records/"));
-        myRecords.value = response.data as RecordType[];
-      } catch (error) {
-        console.log("Error loading user's records:", error);
-        throw error;
-      }
-    });
-  }
-}
-
-// Load user avatar for profile views
-async function loadUserAvatar(): Promise<void> {
-  if (props.isProfileView && props.username) {
-    const cacheKey = `avatar-${props.username}`;
-    return deduplicateRequest(cacheKey, async () => {
-      try {
-        const response = await axios.get(getUrl(`users/${props.username}/avatar/`));
-        const userData = response.data as { username: string; avatar_url: string | null };
-        userAvatarUrl.value = userData.avatar_url;
-      } catch (error) {
-        console.log("Error loading user avatar:", error);
-        userAvatarUrl.value = null;
-        throw error;
-      }
-    });
-  }
-}
-
-function addToList(movieId: number, listId: number, record?: RecordType): void {
-  axios
-    .post(getUrl(`add-to-list/${movieId}/`), {
-      listId,
-    })
-    .then(() => {
-      if (record !== undefined) {
-        record.listId = listId;
-        record.additionDate = Date.now();
-      }
-    })
-    .catch(() => {
-      $toast.error("Error adding the movie to the list");
-    });
-}
-
-// Add movie to user's own list
-function addToMyList(movieId: number, listId: number): void {
-  if (!authStore.user.isLoggedIn) {
-    $toast.error("You must be logged in to add movies to your list");
-    return;
-  }
-
-  const loadingKey = `${movieId}-${listId}`;
-  addingToList.value[loadingKey] = true;
-
-  try {
-    // Add to myRecords for immediate UI update
-    const movieData = records.value.find((record) => record.movie.id === movieId)?.movie;
-    addToList(movieId, listId); // Call the existing addToList function
-    if (movieData) {
-      const newRecord: RecordType = {
-        id: Date.now(),
-        movie: movieData,
-        listId,
-        rating: 0,
-        comment: "",
-        additionDate: Date.now(),
-        order: myRecords.value.length + 1,
-        options: {
-          original: false,
-          extended: false,
-          theatre: false,
-          hd: false,
-          fullHd: false,
-          ultraHd: false,
-          ignoreRewatch: false,
-        },
-        providerRecords: [],
-        ratingOriginal: 0,
-        commentArea: false,
-      };
-      myRecords.value.push(newRecord);
-    }
-
-    const listName = listId === listWatchedId ? "Watched" : "To Watch";
-    $toast.success(`Movie added to your ${listName} list`);
-  } catch (error) {
-    console.log("Error adding movie to list:", error);
-    $toast.error("Error adding movie to your list");
-  } finally {
-    addingToList.value[loadingKey] = false;
-  }
-}
+    saveTimeout = null;
+  }, 200); // Debounce saves to prevent multiple API calls
+};
 
 // Watch for changes in props that require reloading data
 watch([listIdRef, usernameRef, isProfileViewRef], async () => {
-  selectedProfileList.value = props.listId; // Reset profile list selector
-  selectedUserList.value = props.listId; // Reset user list selector
-  // Force reload records when switching contexts - run in parallel for better performance
-  await Promise.all([
-    loadUserAvatar(), // Load user's avatar if viewing profile
-    loadRecordsData(),
-    loadMyRecords(), // Load user's records if viewing profile
-  ]);
-  // Sort records after data is loaded
-  sortRecords();
+  resetListSelections(props.listId);
+  await loadData();
 });
 
-// Watch for profile list selection changes
-watch(selectedProfileList, async (newListId) => {
-  if (props.isProfileView && props.username) {
-    page.value = 1; // Reset to first page when switching lists
-
-    // Navigate to the appropriate profile route
-    const newPath =
-      newListId === listWatchedId ? `/users/${props.username}/list/watched` : `/users/${props.username}/list/to-watch`;
-    if (router.currentRoute.value.path !== newPath) {
-      await router.push(newPath);
-    }
-
-    // Re-load data to ensure we have the latest order values
-    await loadRecordsData();
-    sortRecords();
-  }
-});
-
-// Watch for user list selection changes (for regular users)
-watch(selectedUserList, async (newListId) => {
-  if (!props.isProfileView) {
-    page.value = 1; // Reset to first page when switching lists
-
-    // Navigate to the appropriate route
-    const newPath = newListId === listWatchedId ? "/list/watched" : "/list/to-watch";
-    if (router.currentRoute.value.path !== newPath) {
-      await router.push(newPath);
-    }
-
-    // Re-load data to ensure we have the latest order values
-    await loadRecordsData();
-    sortRecords();
-  }
-});
+// Initialize list navigation watchers
+initializeWatchers(props.username, loadData);
 
 // Watch for login status changes
 watch(
   () => authStore.user.isLoggedIn,
   async (isLoggedIn) => {
     if (isLoggedIn && props.isProfileView) {
-      await loadMyRecords();
+      await recordsData.loadMyRecords(props.isProfileView, isLoggedIn);
     } else if (!isLoggedIn) {
-      myRecords.value = [];
+      clearUserData();
     }
   },
 );
 
-// Update record comment from child component
-function updateRecordComment(record: RecordType, comment: string): void {
-  record.comment = comment;
-}
-
+// Computed properties
 const isSortable = computed(() => {
   return (
     currentListId.value === listToWatchId &&
@@ -425,95 +355,8 @@ const isSortable = computed(() => {
   );
 });
 
-function saveRecordsOrder(): void {
-  function getSortData(): SortData[] {
-    const data: SortData[] = [];
-    records.value.forEach((record, index) => {
-      const sortData = { id: record.id, order: index + 1 };
-      // Update the local order value to match the new position
-      record.order = index + 1;
-      data.push(sortData);
-    });
-    return data;
-  }
-
-  axios.put(getUrl("save-records-order/"), { records: getSortData() }).catch(() => {
-    $toast.error("Error saving movie order");
-  });
-}
-
-function changeRating(record: RecordType, rating: number): void {
-  axios
-    .put(getUrl(`change-rating/${record.id}/`), { rating })
-    .then(() => {
-      record.ratingOriginal = record.rating;
-    })
-    .catch(() => {
-      record.rating = record.ratingOriginal;
-      $toast.error("Error saving the rating");
-    });
-}
-
-function saveOptions(record: RecordType, field: keyof RecordType["options"]): void {
-  const data = {
-    options: record.options,
-  };
-
-  axios.put(getUrl(`record/${record.id}/options/`), data).catch(() => {
-    record.options[field] = !record.options[field];
-    $toast.error("Error saving options");
-  });
-}
-
-function removeRecord(record: RecordType, index: number): void {
-  axios
-    .delete(getUrl(`remove-record/${record.id}/`))
-    .then(() => {
-      records.value.splice(index, 1);
-    })
-    .catch(() => {
-      $toast.error("Error removing the movie");
-    });
-}
-function showCommentArea(record: RecordType): void {
-  record.commentArea = true;
-}
-
-function saveComment(record: RecordType): void {
-  const data = {
-    comment: record.comment,
-  };
-  axios
-    .put(getUrl(`save-comment/${record.id}/`), data)
-    .then(() => {
-      if (record.comment === "") {
-        record.commentArea = false;
-      }
-    })
-    .catch(() => {
-      $toast.error("Error saving a comment");
-    });
-}
-
-function moveToTop(record: RecordType, index: number): void {
-  records.value.splice(index, 1);
-  records.value.unshift(record);
-  saveRecordsOrder();
-}
-
-function moveToBottom(record: RecordType, index: number): void {
-  records.value.splice(index, 1);
-  records.value.push(record);
-  saveRecordsOrder();
-}
-
 onMounted(async () => {
-  // Run all data loading functions in parallel for better performance
-  await Promise.all([
-    loadRecordsData(),
-    loadMyRecords(), // Load user's records if viewing profile and logged in
-    loadUserAvatar(), // Load user's avatar if viewing profile
-  ]);
+  await loadData();
 });
 </script>
 

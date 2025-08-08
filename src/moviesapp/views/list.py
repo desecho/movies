@@ -1,5 +1,6 @@
 """List views."""
 
+import logging
 from http import HTTPStatus
 from typing import TYPE_CHECKING, Any, Optional, Union, cast
 
@@ -10,6 +11,8 @@ from django.shortcuts import get_object_or_404
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
+
+logger = logging.getLogger(__name__)
 
 from ..models import Action, ActionRecord, List, Movie, ProviderRecord, Record, User, UserAnonymous
 from .types import MovieObject, OptionsObject, ProviderObject, ProviderRecordObject, RecordObject
@@ -127,7 +130,9 @@ class RecordsView(APIView):
     @staticmethod
     def _sort_records(records: QuerySet[Record]) -> QuerySet[Record]:
         """Sort records."""
-        return records.order_by("-date")
+        # Sort by custom order first (ascending), then by date (descending) as fallback
+        # This ensures that records with order=0 (default) fall back to date sorting
+        return records.order_by("order", "-date")
 
     @staticmethod
     def _get_record_movie_data(

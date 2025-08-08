@@ -86,12 +86,13 @@
         <!-- Star rating under poster -->
         <div v-if="currentListId == listWatchedId" class="poster-rating">
           <star-rating
-            :model-value="record.rating"
+            :key="`rating-${record.id}-${record.rating}`"
+            :rating="record.rating"
             :star-size="starSize"
             :show-rating="false"
             :clearable="!isProfileView"
             :read-only="isProfileView"
-            @update:rating="$emit('rating-changed', record, $event)"
+            @rating-selected="$emit('rating-changed', record, $event)"
           >
           </star-rating>
         </div>
@@ -227,7 +228,7 @@
               <label :for="'original_' + record.id">Watched original version</label>
               <input
                 :id="'original_' + record.id"
-                :checked="record.options.original"
+                v-model="record.options.original"
                 type="checkbox"
                 @change="$emit('save-options', record, 'original')"
               />
@@ -236,7 +237,7 @@
               <label :for="'extended_' + record.id">Watched extended version</label>
               <input
                 :id="'extended_' + record.id"
-                :checked="record.options.extended"
+                v-model="record.options.extended"
                 type="checkbox"
                 @change="$emit('save-options', record, 'extended')"
               />
@@ -245,7 +246,7 @@
               <label :for="'theatre_' + record.id">Watched in theatre</label>
               <input
                 :id="'theatre_' + record.id"
-                :checked="record.options.theatre"
+                v-model="record.options.theatre"
                 type="checkbox"
                 @change="$emit('save-options', record, 'theatre')"
               />
@@ -254,7 +255,7 @@
               <label :for="'hd_' + record.id">Watched in HD</label>
               <input
                 :id="'hd_' + record.id"
-                :checked="record.options.hd"
+                v-model="record.options.hd"
                 type="checkbox"
                 @change="$emit('save-options', record, 'hd')"
               />
@@ -263,7 +264,7 @@
               <label :for="'full_hd_' + record.id">Watched in FullHD</label>
               <input
                 :id="'full_hd_' + record.id"
-                :checked="record.options.fullHd"
+                v-model="record.options.fullHd"
                 type="checkbox"
                 @change="$emit('save-options', record, 'fullHd')"
               />
@@ -272,7 +273,7 @@
               <label :for="'4k_' + record.id">Watched in 4K</label>
               <input
                 :id="'4k_' + record.id"
-                :checked="record.options.ultraHd"
+                v-model="record.options.ultraHd"
                 type="checkbox"
                 @change="$emit('save-options', record, 'ultraHd')"
               />
@@ -281,7 +282,7 @@
               <label :for="'ignoreRewatch_' + record.id">Ignore rewatch filter</label>
               <input
                 :id="'ignoreRewatch_' + record.id"
-                :checked="record.options.ignoreRewatch"
+                v-model="record.options.ignoreRewatch"
                 type="checkbox"
                 @change="$emit('save-options', record, 'ignoreRewatch')"
               />

@@ -45,7 +45,7 @@
           <v-btn-toggle 
             :model-value="toRewatchFilter" 
             density="compact"
-            @update:model-value="$emit('update:toRewatchFilter', $event)"
+            @update:model-value="$emit('update:toRewatchFilter', $event ?? false)"
           >
             <v-btn :value="true" :size="modeButtonSize">To Rewatch</v-btn>
           </v-btn-toggle>
@@ -59,14 +59,14 @@
             <v-btn-toggle 
               :model-value="hideUnreleasedMovies" 
               density="compact"
-              @update:model-value="$emit('update:hideUnreleasedMovies', $event)"
+              @update:model-value="$emit('update:hideUnreleasedMovies', $event ?? false)"
             >
               <v-btn :value="true" :size="modeButtonSize">Hide Unreleased</v-btn>
             </v-btn-toggle>
             <v-btn-toggle 
               :model-value="recentReleasesFilter" 
               density="compact"
-              @update:model-value="$emit('update:recentReleasesFilter', $event)"
+              @update:model-value="$emit('update:recentReleasesFilter', $event ?? false)"
             >
               <v-btn :value="true" :size="modeButtonSize">Recent Releases</v-btn>
             </v-btn-toggle>

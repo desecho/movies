@@ -8,7 +8,7 @@
       @sort="$emit('sort')"
     >
       <template #item="{ element, index }">
-        <div v-if="paginatedRecords.includes(element)" class="gallery-record">
+        <div class="gallery-record">
           <!-- Only show move buttons for own lists -->
           <div v-if="!isProfileView" class="buttons">
             <button
@@ -16,7 +16,7 @@
               type="button"
               class="up-button"
               title="Move to the top"
-              @click="$emit('move-to-top', element, index)"
+              @click="$emit('move-to-top', element)"
             >
               <v-icon icon="mdi-arrow-up" />
             </button>
@@ -25,7 +25,7 @@
               type="button"
               class="down-button"
               title="Move to the bottom"
-              @click="$emit('move-to-bottom', element, index)"
+              @click="$emit('move-to-bottom', element)"
             >
               <v-icon icon="mdi-arrow-down" />
             </button>
