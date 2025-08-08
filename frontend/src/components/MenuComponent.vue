@@ -24,10 +24,9 @@
       <v-list class="nav-list" density="comfortable">
         <MenuItem title="Search" icon="magnify" to="/search" />
         <MenuItem title="Trending" icon="trending-up" to="/trending" />
-        <MenuItem v-if="user.isLoggedIn" title="AI Recommendations" icon="robot" to="/recommendations" />
+        <MenuItem title="AI Recommendations" icon="robot" to="/recommendations" />
         <MenuItem v-if="user.isLoggedIn" title="Stats" icon="chart-box" to="/stats" />
-        <MenuItem v-if="user.isLoggedIn" title="Watched" icon="eye" to="/list/watched" />
-        <MenuItem v-if="user.isLoggedIn" title="ToWatch" icon="eye-off" to="/list/to-watch" />
+        <MenuItem v-if="user.isLoggedIn" title="My Movies" icon="eye" to="/list/watched" />
         <MenuItem title="Users" icon="account-group" to="/users" />
       </v-list>
       <template #append>
