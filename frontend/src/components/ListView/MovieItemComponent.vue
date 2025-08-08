@@ -26,6 +26,7 @@
             size="x-small"
             color="primary"
             variant="outlined"
+            class="watched-btn"
             title="Add to my Watched list"
             @click="$emit('add-to-my-list', record.movie.id, listWatchedId)"
           >
@@ -36,6 +37,7 @@
             size="x-small"
             color="secondary"
             variant="outlined"
+            class="to-watch-btn"
             title="Add to my To Watch list"
             @click="$emit('add-to-my-list', record.movie.id, listToWatchId)"
           >
@@ -555,6 +557,28 @@ function updateComment(comment: string): void {
       &:hover {
         background: rgba(255, 255, 255, 0.1);
       }
+    }
+
+    /* Make the secondary ("To Watch") button clearly visible on the purple banner */
+    & .to-watch-btn {
+      border-color: rgba(255, 255, 255, 0.55) !important;
+      color: #ffffff !important;
+    }
+
+    & .to-watch-btn .v-icon {
+      color: #ffffff !important;
+      opacity: 1 !important;
+    }
+
+    /* Match the "Watched" button style to the same white treatment */
+    & .watched-btn {
+      border-color: rgba(255, 255, 255, 0.55) !important;
+      color: #ffffff !important;
+    }
+
+    & .watched-btn .v-icon {
+      color: #ffffff !important;
+      opacity: 1 !important;
     }
 
     .already-in-list {
