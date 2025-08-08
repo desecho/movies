@@ -32,7 +32,7 @@
       :query="query"
       :watched-count="watchedCount"
       :to-watch-count="toWatchCount"
-      :filtered-count="sortedFilteredRecords.length"
+      :filtered-count="filteredCount"
       :are-records-loaded="areRecordsLoaded"
       :is-records-loading="isRecordsLoading"
       @update:query="handleQueryUpdate"
@@ -126,6 +126,10 @@ import { useMovieOperations } from "../composables/useMovieOperations";
 import { useRecordFilters } from "../composables/useRecordFilters";
 import { useRecordsData } from "../composables/useRecordsData";
 import { useRecordSorting } from "../composables/useRecordSorting";
+import { useListViewFiltering } from "../composables/useListViewFiltering";
+import { useListViewSorting } from "../composables/useListViewSorting";
+import { useListViewPagination } from "../composables/useListViewPagination";
+import { useRecordCounts } from "../composables/useRecordCounts";
 import { listToWatchId, listWatchedId } from "../const";
 import { useAuthStore } from "../stores/auth";
 import { useRecordsStore } from "../stores/records";
@@ -250,191 +254,26 @@ const recentReleasesFilter = computed({
   set: (value: boolean) => setFilter('recentReleases', value)
 });
 
-/**
- * Computes filtered records based on current list, search query, and active filters.
- * Applies comprehensive error handling for malformed data.
- * 
- * @returns Array of RecordType objects that match all active filters
- */
-const filteredRecords = computed(() => {
-  try {
-    if (!records.value || !Array.isArray(records.value) || records.value.length === 0) {
-      return [];
-    }
-    
-    return records.value.filter((record) => {
-      try {
-        // Validate record structure
-        if (!record || !record.movie || typeof record.listId !== 'number') {
-          console.warn('Invalid record structure:', record);
-          return false;
-        }
-        
-        // Basic list filter - must match current list
-        if (record.listId !== currentListId.value) {
-          return false;
-        }
-        
-        // Search filter with null safety
-        const searchQuery = query.value?.trim().toLowerCase();
-        if (searchQuery) {
-          const movieTitle = record.movie.title?.toLowerCase() || '';
-          const originalTitle = record.movie.titleOriginal?.toLowerCase() || '';
-          const director = record.movie.director?.toLowerCase() || '';
-          const actors = record.movie.actors?.toLowerCase() || '';
-          
-          if (!movieTitle.includes(searchQuery) && 
-              !originalTitle.includes(searchQuery) && 
-              !director.includes(searchQuery) && 
-              !actors.includes(searchQuery)) {
-            return false;
-          }
-        }
-        
-        // To Rewatch filter (only for watched list) with null safety
-        if (toRewatchFilter.value && currentListId.value === 1) { // listWatchedId
-          if (!record.options || typeof record.rating !== 'number') {
-            return false;
-          }
-          if (!(record.rating === 5 &&
-                ((!record.options.ultraHd && !record.options.theatre) ||
-                 !record.options.original) &&
-                !record.options.ignoreRewatch)) {
-            return false;
-          }
-        }
-        
-        // Hide unreleased movies filter (only for to-watch list)
-        if (hideUnreleasedMovies.value && currentListId.value === 2) { // listToWatchId
-          if (typeof record.movie.isReleased !== 'boolean' || !record.movie.isReleased) {
-            return false;
-          }
-        }
-        
-        // Recent releases filter (only for to-watch list) with date validation
-        if (recentReleasesFilter.value && currentListId.value === 2) { // listToWatchId
-          if (!record.movie.releaseDate || 
-              typeof record.movie.releaseDateTimestamp !== 'number' || 
-              record.movie.releaseDateTimestamp <= 0) {
-            return false;
-          }
-          
-          try {
-            const sixMonthsAgo = new Date();
-            sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
-            const movieReleaseDate = new Date(record.movie.releaseDateTimestamp * 1000);
-            
-            if (isNaN(movieReleaseDate.getTime()) || movieReleaseDate < sixMonthsAgo) {
-              return false;
-            }
-          } catch (dateError) {
-            console.warn('Date processing error for record:', record.id, dateError);
-            return false;
-          }
-        }
-        
-        return true;
-      } catch (recordError) {
-        console.warn('Error processing record:', record?.id || 'unknown', recordError);
-        return false;
-      }
-    });
-  } catch (error) {
-    console.error('Error in filteredRecords computation:', error);
-    return [];
-  }
-});
+// Use filtering composable for clean separation of concerns
+const { filteredRecords } = useListViewFiltering(
+  records,
+  currentListId,
+  query,
+  filters
+);
 
 // Use shallowRef for large arrays to improve performance
 const customSortableRecords = shallowRef<RecordType[]>([]);
 
-/**
- * Optimized count computations with memoization for better performance.
- * Only recalculates when records array changes, not on every render.
- */
-const watchedCount = computed(() => {
-  if (!records.value || !Array.isArray(records.value)) return 0;
-  return records.value.filter(record => record.listId === 1).length; // listWatchedId
-});
+// Use record counts composable for clean separation and reusability
+const { watchedCount, toWatchCount, filteredCount } = useRecordCounts(records, filteredRecords);
 
-const toWatchCount = computed(() => {
-  if (!records.value || !Array.isArray(records.value)) return 0;
-  return records.value.filter(record => record.listId === 2).length; // listToWatchId  
-});
-
-// Apply sorting to filtered records with error handling
-const sortedFilteredRecords = computed(() => {
-  try {
-    if (!filteredRecords.value || !Array.isArray(filteredRecords.value) || filteredRecords.value.length === 0) {
-      return [];
-    }
-
-    const recordsCopy = [...filteredRecords.value];
-
-    switch (sortComputed.value) {
-      case "custom":
-        return recordsCopy.sort((a, b) => {
-          try {
-            const orderA = typeof a.order === 'number' ? a.order : 0;
-            const orderB = typeof b.order === 'number' ? b.order : 0;
-            return orderA - orderB;
-          } catch (error) {
-            console.warn('Error sorting by custom order:', error);
-            return 0;
-          }
-        });
-      case "releaseDate":
-        return recordsCopy.sort((a, b) => {
-          try {
-            const timestampA = typeof a.movie?.releaseDateTimestamp === 'number' ? a.movie.releaseDateTimestamp : 0;
-            const timestampB = typeof b.movie?.releaseDateTimestamp === 'number' ? b.movie.releaseDateTimestamp : 0;
-            return timestampB - timestampA;
-          } catch (error) {
-            console.warn('Error sorting by release date:', error);
-            return 0;
-          }
-        });
-      case "rating":
-        if (currentListId.value === listWatchedId) {
-          return recordsCopy.sort((a, b) => {
-            try {
-              const ratingA = typeof a.rating === 'number' ? a.rating : 0;
-              const ratingB = typeof b.rating === 'number' ? b.rating : 0;
-              return ratingB - ratingA;
-            } catch (error) {
-              console.warn('Error sorting by user rating:', error);
-              return 0;
-            }
-          });
-        } else {
-          return recordsCopy.sort((a, b) => {
-            try {
-              const imdbA = typeof a.movie?.imdbRating === 'number' ? a.movie.imdbRating : 0;
-              const imdbB = typeof b.movie?.imdbRating === 'number' ? b.movie.imdbRating : 0;
-              return imdbB - imdbA;
-            } catch (error) {
-              console.warn('Error sorting by IMDB rating:', error);
-              return 0;
-            }
-          });
-        }
-      default: // AdditionDate
-        return recordsCopy.sort((a, b) => {
-          try {
-            const dateA = typeof a.additionDate === 'number' ? a.additionDate : 0;
-            const dateB = typeof b.additionDate === 'number' ? b.additionDate : 0;
-            return dateB - dateA;
-          } catch (error) {
-            console.warn('Error sorting by addition date:', error);
-            return 0;
-          }
-        });
-    }
-  } catch (error) {
-    console.error('Error in sortedFilteredRecords computation:', error);
-    return filteredRecords.value || [];
-  }
-});
+// Use sorting composable for clean separation of concerns  
+const { sortedRecords: sortedFilteredRecords } = useListViewSorting(
+  filteredRecords,
+  sortComputed,
+  currentListId
+);
 
 /**
  * Optimized initialization of custom sortable records.
@@ -482,55 +321,12 @@ const galleryRecords = computed({
 });
 
 
-// Get pagination utilities with performance optimization and error handling
-const perPage = 50;
-const totalPages = computed(() => {
-  try {
-    const recordsLength = sortedFilteredRecords.value?.length || 0;
-    if (recordsLength === 0) return 1;
-    const pages = Math.ceil(recordsLength / perPage);
-    return pages > 0 ? pages : 1;
-  } catch (error) {
-    console.warn('Error calculating total pages:', error);
-    return 1;
-  }
-});
-
-/**
- * Performance optimization: Memoize pagination to avoid unnecessary recalculations.
- * This cache is particularly important for large datasets where slicing operations
- * can be expensive when performed on every render cycle.
- */
-let lastPageValue = 0;
-let lastRecordsLength = 0; 
-let cachedPaginatedRecords: RecordType[] = [];
-
-const paginatedRecords = computed(() => {
-  try {
-    const currentRecords = sortedFilteredRecords.value || [];
-    const currentPage = Math.max(1, Math.min(page.value || 1, totalPages.value)); // Ensure page is within valid range
-    
-    // Use cache if page and records haven't changed
-    if (currentPage === lastPageValue && currentRecords.length === lastRecordsLength) {
-      return cachedPaginatedRecords;
-    }
-    
-    // Validate pagination bounds
-    const start = Math.max(0, (currentPage - 1) * perPage);
-    const end = Math.min(currentRecords.length, start + perPage);
-    const result = currentRecords.slice(start, end);
-    
-    // Update cache
-    lastPageValue = currentPage;
-    lastRecordsLength = currentRecords.length;
-    cachedPaginatedRecords = result;
-    
-    return result;
-  } catch (error) {
-    console.error('Error in paginatedRecords computation:', error);
-    return cachedPaginatedRecords || [];
-  }
-});
+// Use pagination composable for clean separation of concerns
+const { totalPages, paginatedRecords } = useListViewPagination(
+  sortedFilteredRecords,
+  page,
+  50 // items per page
+);
 
 // Wrapper function to update store query
 const handleQueryUpdate = (newQuery: string) => {
