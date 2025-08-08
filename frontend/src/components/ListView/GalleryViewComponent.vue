@@ -1,9 +1,9 @@
 <template>
   <div v-cloak id="gallery">
-    <draggable 
-      :model-value="records" 
-      item-key="id" 
-      :disabled="!isSortable" 
+    <draggable
+      :model-value="records"
+      item-key="id"
+      :disabled="!isSortable"
       @update:model-value="$emit('update:records', $event)"
       @sort="$emit('sort')"
     >
@@ -99,6 +99,7 @@ const emit = defineEmits<{
       opacity: 0;
       position: absolute;
       right: 12px;
+      z-index: 2; /* Ensure buttons render above poster image */
       background: rgba(255, 255, 255, 0.95);
       backdrop-filter: blur(10px);
       border: 1px solid rgba(0, 0, 0, 0.1);

@@ -183,8 +183,6 @@ const {
   showCommentArea,
   updateRecordComment,
   saveRecordsOrder,
-  moveToTop,
-  moveToBottom,
 } = movieOperations;
 
 const listNavigation = useListNavigation(props.listId, props.isProfileView);
@@ -381,12 +379,47 @@ function handleRemoveRecord(record: RecordType): void {
   removeRecord(record, records.value);
 }
 
+function recomputeAndSaveOrderForCurrentList(updatedList: RecordType[]): void {
+  // Re-number orders sequentially starting from 1
+  updatedList.forEach((r, idx) => {
+    r.order = idx + 1;
+  });
+  // Persist to backend
+  saveRecordsOrder(updatedList);
+  // Refresh local draggable source when in custom sort
+  if (sortComputed.value === "custom") {
+    // Sync the visible subset
+    customSortableRecords.value = [...updatedList].slice(0, 50);
+  }
+}
+
 function handleMoveToTop(record: RecordType): void {
-  moveToTop(record, records.value);
+  // Operate on full current-list records to avoid pagination/limit issues
+  const allCurrentListRecords = records.value
+    .filter((r) => r.listId === currentListId.value)
+    .sort((a, b) => (a.order ?? Infinity) - (b.order ?? Infinity));
+
+  const idx = allCurrentListRecords.findIndex((r) => r.id === record.id);
+  if (idx === -1) {
+    return;
+  }
+  allCurrentListRecords.splice(idx, 1);
+  allCurrentListRecords.unshift(record);
+  recomputeAndSaveOrderForCurrentList(allCurrentListRecords);
 }
 
 function handleMoveToBottom(record: RecordType): void {
-  moveToBottom(record, records.value);
+  const allCurrentListRecords = records.value
+    .filter((r) => r.listId === currentListId.value)
+    .sort((a, b) => (a.order ?? Infinity) - (b.order ?? Infinity));
+
+  const idx = allCurrentListRecords.findIndex((r) => r.id === record.id);
+  if (idx === -1) {
+    return;
+  }
+  allCurrentListRecords.splice(idx, 1);
+  allCurrentListRecords.push(record);
+  recomputeAndSaveOrderForCurrentList(allCurrentListRecords);
 }
 
 /**
