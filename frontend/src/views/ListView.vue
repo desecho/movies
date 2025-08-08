@@ -25,6 +25,21 @@
       </v-col>
     </v-row>
 
+    <!-- List selector for regular users (when not viewing profile) -->
+    <v-row v-if="!isProfileView">
+      <v-col cols="12">
+        <div class="user-list-selector">
+          <div class="control-group">
+            <label class="control-label">List</label>
+            <v-btn-toggle v-model="selectedUserList" density="compact" mandatory class="user-list-btn-toggle">
+              <v-btn :value="listWatchedId" :size="modeButtonSize"> Watched </v-btn>
+              <v-btn :value="listToWatchId" :size="modeButtonSize"> To Watch </v-btn>
+            </v-btn-toggle>
+          </div>
+        </div>
+      </v-col>
+    </v-row>
+
     <div class="controls-section">
       <v-row>
         <v-col cols="12" md="6">
@@ -493,6 +508,7 @@ import axios from "axios";
 import { cloneDeep } from "lodash";
 import VLazyImage from "v-lazy-image";
 import { computed, onMounted, ref, toRef, watch } from "vue";
+import { useRouter } from "vue-router";
 import StarRating from "vue-star-rating";
 import Draggable from "vuedraggable";
 
@@ -514,6 +530,7 @@ const props = defineProps<{
 }>();
 
 const { isMobile } = useMobile();
+const router = useRouter();
 
 const recordsStore = useRecordsStore();
 const authStore = useAuthStore(); // Initialize auth store
@@ -532,6 +549,9 @@ const isRecordsLoading = toRef(recordsStore, "isLoading");
 // For profile views, allow switching between lists
 const selectedProfileList = ref(props.listId);
 
+// For regular users, allow switching between their own lists
+const selectedUserList = ref(props.listId);
+
 // User avatar for profile views
 const userAvatarUrl = ref<string | null>(null);
 
@@ -544,9 +564,9 @@ const myRecords = ref<RecordType[]>([]);
 const page = ref(1);
 const perPage = 50;
 
-// Computed property to get the current list ID (either from props or selected in profile)
+// Computed property to get the current list ID (either from props or selected by user)
 const currentListId = computed(() => {
-  return props.isProfileView ? selectedProfileList.value : props.listId;
+  return props.isProfileView ? selectedProfileList.value : selectedUserList.value;
 });
 
 const filteredRecords = computed(() => {
@@ -787,6 +807,7 @@ function addToMyList(movieId: number, listId: number): void {
 // Watch for changes in props that require reloading data
 watch([listIdRef, usernameRef, isProfileViewRef], async () => {
   selectedProfileList.value = props.listId; // Reset profile list selector
+  selectedUserList.value = props.listId; // Reset user list selector
   // Force reload records when switching contexts - run in parallel for better performance
   await Promise.all([
     loadUserAvatar(), // Load user's avatar if viewing profile
@@ -805,6 +826,23 @@ watch(selectedProfileList, async () => {
     await loadRecordsData();
   }
   sortRecords();
+});
+
+// Watch for user list selection changes (for regular users)
+watch(selectedUserList, async (newListId) => {
+  if (!props.isProfileView) {
+    page.value = 1; // Reset to first page when switching lists
+
+    // Navigate to the appropriate route
+    const newPath = newListId === listWatchedId ? "/list/watched" : "/list/to-watch";
+    if (router.currentRoute.value.path !== newPath) {
+      await router.push(newPath);
+    }
+
+    // Re-load data to ensure we have the latest order values
+    await loadRecordsData();
+    sortRecords();
+  }
 });
 
 // Watch for login status changes
@@ -1026,6 +1064,23 @@ onMounted(async () => {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
   font-weight: 700 !important;
   text-shadow: none !important;
+}
+
+/* User list selector styling for regular users */
+.user-list-selector {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 20px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  display: flex;
+  justify-content: center;
+}
+
+.user-list-selector .control-group {
+  align-items: center;
 }
 
 .comment-readonly {
@@ -1943,6 +1998,12 @@ onMounted(async () => {
 }
 
 .dark-theme {
+  .controls-section,
+  .user-list-selector {
+    background: linear-gradient(135deg, #334155 0%, #475569 100%) !important;
+    border: 1px solid #475569 !important;
+  }
+
   .add-to-list-buttons {
     background: none !important;
     border: 0 !important;
