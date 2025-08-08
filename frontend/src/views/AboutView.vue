@@ -24,12 +24,13 @@
         <h3>Tips</h3>
         <ul>
           <li>You can see the original title when you hover over the movie title</li>
-          <li>You can only add custom order in the minimal mode and on the gallery page</li>
-          <li>
-            The best user experience to reorder movies is available on the gallery page for the "To Watch" list. On the
-            gallery page, additional functionality is available to move a movie to the top or bottom of the list.
-          </li>
+          <li>You can only add custom order on the Gallery page for the "To Watch" list</li>
           <li>To be able to see where you can stream a movie, you need to set your country in preferences</li>
+          <li>
+            "To rewatch" filter (Watched list): shows your 5★ movies that are good rewatch candidates — if you didn’t
+            watch them in Ultra HD and in theatre, or not in the original version. Movies marked "Ignore rewatch" are
+            excluded. Changing rating or viewing options updates the filter instantly.
+          </li>
         </ul>
         <br />
         <h3>Streaming data</h3>
