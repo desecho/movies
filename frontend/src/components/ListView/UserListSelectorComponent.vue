@@ -128,7 +128,7 @@ const modeButtonSize = computed(() => {
   }
 }
 
-.dark-theme .v-btn-toggle {
+.dark-theme .user-list-selector .v-btn-toggle {
   background: rgba(31, 41, 55, 0.9);
 }
 
