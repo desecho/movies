@@ -22,7 +22,7 @@
       </div>
       <v-divider class="header-divider"></v-divider>
       <v-list class="nav-list" density="comfortable">
-        <MenuItem title="Search" icon="magnify" to="/" />
+        <MenuItem title="Search" icon="magnify" to="/search" />
         <MenuItem title="Trending" icon="trending-up" to="/trending" />
         <MenuItem v-if="user.isLoggedIn" title="AI Recommendations" icon="robot" to="/recommendations" />
         <MenuItem v-if="user.isLoggedIn" title="Stats" icon="chart-box" to="/stats" />

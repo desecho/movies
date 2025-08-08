@@ -8,6 +8,7 @@ import { listToWatchId, listWatchedId } from "./const";
 import { useAuthStore } from "./stores/auth";
 import AboutView from "./views/AboutView.vue";
 import ChangePasswordView from "./views/ChangePasswordView.vue";
+import LandingView from "./views/LandingView.vue";
 import ListView from "./views/ListView.vue";
 import LoginView from "./views/LoginView.vue";
 import LogoutView from "./views/LogoutView.vue";
@@ -34,7 +35,10 @@ export const router = createRouter({
     history: createWebHistory(),
     linkActiveClass: "active",
     routes: [
-        { path: "/", component: SearchView },
+        // Landing page as home
+        { path: "/", component: LandingView },
+
+        { path: "/search", component: SearchView },
         { path: "/about", component: AboutView },
         { path: "/preferences", component: UserPreferencesView },
         { path: "/stats", component: StatsView },
