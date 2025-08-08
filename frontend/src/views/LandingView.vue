@@ -5,7 +5,8 @@
       <p class="subtitle">Track what you watch. Discover what to watch next.</p>
       <div class="cta">
         <RouterLink class="btn btn-primary" to="/search">Search Movies</RouterLink>
-        <RouterLink class="btn btn-secondary" to="/register">Create account</RouterLink>
+        <RouterLink class="btn btn-primary" to="/trending">Trending Movies</RouterLink>
+        <RouterLink v-if="!user.isLoggedIn" class="btn btn-secondary" to="/register"> Create account </RouterLink>
       </div>
     </div>
 
@@ -50,7 +51,13 @@
   </section>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { storeToRefs } from "pinia";
+
+import { useAuthStore } from "../stores/auth";
+
+const { user } = storeToRefs(useAuthStore());
+</script>
 
 <style scoped>
 .landing {
