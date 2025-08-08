@@ -90,7 +90,7 @@ export function useRecordFilters(
         return movieReleaseDate >= sixMonthsAgo;
     };
 
-    // Main filtered records computed property with memoization
+    // Main filtered records function - returns raw filtered array for caching
     const getFilteredRecords = (filters: {
         toRewatchFilter: Ref<boolean>;
         hideUnreleasedMovies: Ref<boolean>;
@@ -100,16 +100,28 @@ export function useRecordFilters(
             const searchQuery = debouncedQuery.value.trim();
             const listId = currentListId.value;
 
-            return records.value.filter((record) => {
+            const result = records.value.filter((record) => {
                 // List filter - must match current list
                 if (record.listId !== listId) {return false;}
 
                 // Apply all filters using memoized functions with null safety
-                const toRewatchValue = filters.toRewatchFilter?.value ?? false;
-                const hideUnreleasedValue =
-                    filters.hideUnreleasedMovies?.value ?? false;
-                const recentReleasesValue =
-                    filters.recentReleasesFilter?.value ?? false;
+                const toRewatchValue = (typeof filters.toRewatchFilter?.value === 'boolean') 
+                    ? filters.toRewatchFilter.value 
+                    : (typeof filters.toRewatchFilter === 'boolean') 
+                        ? filters.toRewatchFilter 
+                        : false;
+                        
+                const hideUnreleasedValue = (typeof filters.hideUnreleasedMovies?.value === 'boolean') 
+                    ? filters.hideUnreleasedMovies.value 
+                    : (typeof filters.hideUnreleasedMovies === 'boolean') 
+                        ? filters.hideUnreleasedMovies 
+                        : false;
+                        
+                const recentReleasesValue = (typeof filters.recentReleasesFilter?.value === 'boolean') 
+                    ? filters.recentReleasesFilter.value 
+                    : (typeof filters.recentReleasesFilter === 'boolean') 
+                        ? filters.recentReleasesFilter 
+                        : false;
 
                 return (
                     searchMatchesRecord(record, searchQuery) &&
@@ -126,6 +138,32 @@ export function useRecordFilters(
                     )
                 );
             });
+            
+            return result;
+        });
+    };
+    
+    // Direct filter function for external caching (non-reactive)
+    const filterRecords = (
+        recordsArray: RecordType[],
+        searchQuery: string,
+        listId: number,
+        filters: {
+            toRewatch: boolean;
+            hideUnreleased: boolean;
+            recentReleases: boolean;
+        }
+    ): RecordType[] => {
+        return recordsArray.filter((record) => {
+            // List filter - must match current list
+            if (record.listId !== listId) {return false;}
+
+            return (
+                searchMatchesRecord(record, searchQuery.trim()) &&
+                rewatchMatchesRecord(record, filters.toRewatch, listId) &&
+                releasedMatchesRecord(record, filters.hideUnreleased, listId) &&
+                recentReleasesMatchesRecord(record, filters.recentReleases, listId)
+            );
         });
     };
 
@@ -151,6 +189,7 @@ export function useRecordFilters(
         debouncedQuery,
         setQuery,
         getFilteredRecords,
+        filterRecords,
         getWatchedCount,
         getToWatchCount,
     };
