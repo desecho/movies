@@ -153,6 +153,18 @@ A concise guide to everything the site does and how to use it. This document foc
 
 ---
 
+## Social Sharing
+
+- **Share to X**
+  - Share any watched movie that has either a rating or a comment
+  - Available directly from movie cards on your `Watched` list
+  - Opens a pre‑filled post in X with your movie impression and a link
+- **API**
+  - `POST /share/<record_id>/` with body `{ platform: "twitter" }`
+  - Response: `{ share_url: string }` (open in a new window)
+
+---
+
 ## Theme and UX
 
 - **Dark mode**

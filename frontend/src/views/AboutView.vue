@@ -12,6 +12,7 @@
           <li>Stats</li>
           <li>Add custom order for the "To Watch" list</li>
           <li>Share your lists online</li>
+          <li>Share to X (watched movies with a rating or comment)</li>
           <li>See where you can stream a movie</li>
           <li>Privacy settings.</li>
           <li>Dark mode</li>

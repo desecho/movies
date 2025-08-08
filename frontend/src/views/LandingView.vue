@@ -29,7 +29,7 @@
       </div>
       <div class="feature">
         <h3>🔗 Share Lists</h3>
-        <p>Create and share movie lists with friends or publicly online.</p>
+        <p>Publish your lists with shareable links — and share watched movies to X.</p>
       </div>
       <div class="feature">
         <h3>📺 Streaming Availability</h3>
