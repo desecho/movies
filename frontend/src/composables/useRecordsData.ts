@@ -9,11 +9,30 @@ import { $toast } from "../toast";
 
 import { useRequestDeduplication } from "./useRequestDeduplication";
 
-export function useRecordsData(): {
-    [key: string]: unknown;
+export interface UseRecordsData {
     myRecords: Ref<RecordType[]>;
     userAvatarUrl: Ref<string | null>;
-} {
+    loadRecordsData: (
+        isProfileView?: boolean,
+        username?: string,
+    ) => Promise<void>;
+    loadMyRecords: (
+        isProfileView?: boolean,
+        isLoggedIn?: boolean,
+    ) => Promise<void>;
+    loadUserAvatar: (
+        isProfileView?: boolean,
+        username?: string,
+    ) => Promise<void>;
+    loadAllData: (
+        isProfileView?: boolean,
+        username?: string,
+        isLoggedIn?: boolean,
+    ) => Promise<void>;
+    clearUserData: () => void;
+}
+
+export function useRecordsData(): UseRecordsData {
     const recordsStore = useRecordsStore();
     const { deduplicateRequest } = useRequestDeduplication();
 

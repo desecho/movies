@@ -2,8 +2,8 @@
   <v-container>
     <!-- Profile header (only show when viewing another user's profile) -->
     <ProfileHeaderComponent
-      v-if="isProfileView"
-      :username="username"
+      v-if="isProfileView && username"
+      :username="username || ''"
       :user-avatar-url="userAvatarUrl"
       :selected-list="selectedProfileList"
       @update:selected-list="selectedProfileList = $event"
@@ -24,7 +24,7 @@
       v-model:hide-unreleased-movies="hideUnreleasedMovies"
       v-model:recent-releases-filter="recentReleasesFilter"
       :current-list-id="currentListId"
-      :is-profile-view="isProfileView"
+      :is-profile-view="!!isProfileView"
     />
 
     <!-- Search and Counts -->
@@ -50,20 +50,19 @@
     <!-- Loading state -->
     <LoadingStateComponent v-if="isRecordsLoading" />
 
-    <!-- Content when not loading -->
-    <v-row v-if="!isRecordsLoading">
+    <v-row v-else>
       <v-col cols="12">
         <!-- Regular view modes (non-gallery) -->
-        <div v-cloak v-if="modeComputed != 'gallery'">
+        <div v-cloak v-if="modeComputed !== 'gallery'">
           <template v-for="(record, index) in paginatedRecords" :key="record.id">
             <MovieItemComponent
               :record="record"
               :record-index="index"
               :mode="modeComputed"
               :current-list-id="currentListId"
-              :is-profile-view="isProfileView"
+              :is-profile-view="!!isProfileView"
               :is-sortable="isSortable"
-              :is-logged-in="authStore.user.isLoggedIn"
+              :is-logged-in="isLoggedIn"
               :my-records="myRecords"
               @remove="handleRemoveRecord"
               @add-to-my-list="handleAddToMyList"
@@ -83,7 +82,7 @@
           v-model:records="galleryRecords"
           :paginated-records="sortComputed === 'custom' ? galleryRecords : paginatedRecords"
           :is-sortable="isSortable"
-          :is-profile-view="isProfileView"
+          :is-profile-view="!!isProfileView"
           @sort="handleSaveRecordsOrder"
           @move-to-top="handleMoveToTop"
           @move-to-bottom="handleMoveToBottom"
@@ -104,16 +103,13 @@
 
 <script lang="ts" setup>
 import { storeToRefs } from "pinia";
-import { computed, onMounted, ref, shallowRef, toRef, watch } from "vue";
+import { computed, defineAsyncComponent, onMounted, onUnmounted, ref, shallowRef, toRef, watch } from "vue";
 
 import type { RecordType } from "../types";
 import type { SortType, ViewMode } from "../types/listView";
 
-// Import extracted components
-import GalleryViewComponent from "../components/ListView/GalleryViewComponent.vue";
 import ListControlsComponent from "../components/ListView/ListControlsComponent.vue";
 import LoadingStateComponent from "../components/ListView/LoadingStateComponent.vue";
-import MovieItemComponent from "../components/ListView/MovieItemComponent.vue";
 import MovieListPaginationComponent from "../components/ListView/MovieListPaginationComponent.vue";
 import ProfileHeaderComponent from "../components/ListView/ProfileHeaderComponent.vue";
 import SearchAndCountsComponent from "../components/ListView/SearchAndCountsComponent.vue";
@@ -130,6 +126,13 @@ import { listToWatchId } from "../const";
 import { useAuthStore } from "../stores/auth";
 import { useListViewStore } from "../stores/listView";
 import { useRecordsStore } from "../stores/records";
+
+// Import extracted components
+const GalleryViewComponent = defineAsyncComponent(
+  async () => import("../components/ListView/GalleryViewComponent.vue"),
+);
+
+const MovieItemComponent = defineAsyncComponent(async () => import("../components/ListView/MovieItemComponent.vue"));
 
 /**
  * Props for ListView component
@@ -191,6 +194,9 @@ const { selectedProfileList, selectedUserList, currentListId, resetListSelection
 // Use store values for query and sort, with page from navigation
 const query = storeQuery;
 const page = storePage;
+
+// Centralized auth state
+const isLoggedIn = computed(() => authStore.user?.isLoggedIn ?? false);
 
 /**
  * Writable computed for view mode that integrates with the ListView store.
@@ -265,12 +271,7 @@ const { sortedRecords: sortedFilteredRecords } = useListViewSorting(filteredReco
  */
 function initializeCustomSort(): void {
   if (sortComputed.value === "custom" && customSortableRecords.value.length === 0) {
-    const sortedRecords = [...filteredRecords.value].sort((a, b) => {
-      // Safe sorting with fallback values
-      const orderA = typeof a.order === "number" ? a.order : 0;
-      const orderB = typeof b.order === "number" ? b.order : 0;
-      return orderA - orderB;
-    });
+    const sortedRecords = [...filteredRecords.value].sort((a, b) => (a.order ?? Infinity) - (b.order ?? Infinity));
     /* For performance, limit to first 50 items when dragging
        TODO: Implement proper pagination for custom sort later */
     customSortableRecords.value = sortedRecords.slice(0, 50);
@@ -280,7 +281,7 @@ function initializeCustomSort(): void {
 // Track if we're currently dragging to avoid expensive computations
 const isDragging = ref(false);
 
-let saveTimeout: number | null = null;
+let saveTimeout: ReturnType<typeof setTimeout> | null = null;
 
 function handleSaveRecordsOrder(): void {
   // Prevent duplicate saves with debouncing
@@ -294,7 +295,7 @@ function handleSaveRecordsOrder(): void {
       // Get all records for the current list, ordered by existing order
       const allCurrentListRecords = records.value
         .filter((r) => r.listId === currentListId.value)
-        .sort((a, b) => a.order - b.order);
+        .sort((a, b) => (a.order ?? Infinity) - (b.order ?? Infinity));
 
       // Update orders for the dragged items first
       customSortableRecords.value.forEach((sortedRecord, index) => {
@@ -314,7 +315,8 @@ function handleSaveRecordsOrder(): void {
         record.order = nextOrder++;
       });
 
-      saveRecordsOrder(allCurrentListRecords);
+      const payload = allCurrentListRecords.map((r) => ({ ...r }));
+      saveRecordsOrder(payload);
     }
     saveTimeout = null;
   }, 300); // Increased debounce timeout for better performance during rapid drag operations
@@ -337,8 +339,7 @@ const galleryRecords = computed({
     if (sortComputed.value === "custom") {
       isDragging.value = true;
       customSortableRecords.value = value;
-      // Save after drag completes (debounced)
-      handleSaveRecordsOrder();
+      // Rely on explicit @sort event for saving
       isDragging.value = false;
     }
   },
@@ -405,10 +406,10 @@ initializeWatchers(props.username, loadData);
 // Watch for login status changes
 watch(
   () => authStore.user.isLoggedIn,
-  async (isLoggedIn) => {
-    if (isLoggedIn && props.isProfileView) {
-      await recordsData.loadMyRecords(props.isProfileView, isLoggedIn);
-    } else if (!isLoggedIn) {
+  async (loggedIn) => {
+    if (loggedIn && props.isProfileView) {
+      await recordsData.loadMyRecords(props.isProfileView, loggedIn);
+    } else if (!loggedIn) {
       clearUserData();
     }
   },
@@ -417,6 +418,8 @@ watch(
 // Computed properties
 const isSortable = computed(() => {
   return (
+    areRecordsLoaded.value &&
+    paginatedRecords.value.length > 0 &&
     currentListId.value === listToWatchId &&
     sortComputed.value === "custom" &&
     modeComputed.value === "gallery" &&
@@ -439,7 +442,17 @@ onMounted(async () => {
     setStorePage(1);
   }
 
+  // Ensure list selections are aligned before loading
+  resetListSelections(props.listId);
+
   await loadData();
+});
+
+onUnmounted(() => {
+  if (saveTimeout) {
+    clearTimeout(saveTimeout);
+    saveTimeout = null;
+  }
 });
 </script>
 
