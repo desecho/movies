@@ -1,5 +1,6 @@
 export interface GetUserPreferencesData {
     hidden: boolean;
+    country?: string;
 }
 
 export interface TokenErrorData {

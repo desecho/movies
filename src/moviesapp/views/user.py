@@ -9,7 +9,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from ..models import User
-from ..serializers import AvatarUploadSerializer
+from ..serializers import AvatarUploadSerializer, UserPreferencesSerializer
 
 if TYPE_CHECKING:
     from rest_framework.permissions import BasePermission
@@ -79,19 +79,19 @@ class UserPreferencesView(APIView):
     def put(self, request: Request) -> Response:  # pylint: disable=no-self-use
         """Save preferences."""
         user: User = cast(User, request.user)
-        try:
-            hidden = bool(request.data["hidden"])
-        except (KeyError, ValueError):
-            return Response(status=HTTPStatus.BAD_REQUEST)
-        user.hidden = hidden
-        user.save()
-        return Response()
+        serializer = UserPreferencesSerializer(user, data=request.data, partial=True)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(status=HTTPStatus.OK)
+
+        return Response(serializer.errors, status=HTTPStatus.BAD_REQUEST)
 
     def get(self, request: Request) -> Response:  # pylint: disable=no-self-use
         """Load preferences."""
         user: User = cast(User, request.user)
-        preferences = {"hidden": user.hidden}
-        return Response(preferences)
+        serializer = UserPreferencesSerializer(user)
+        return Response(serializer.data)
 
 
 class AvatarView(APIView):

@@ -28,6 +28,37 @@
           </v-card-text>
         </v-card>
 
+        <!-- Location Settings -->
+        <v-card class="elevation-2 mb-6">
+          <v-card-title class="text-h6">Location Settings</v-card-title>
+          <v-card-text>
+            <v-select
+              v-model="country"
+              :items="countryOptions"
+              item-title="name"
+              item-value="code"
+              label="Country"
+              placeholder="Select your country"
+              clearable
+              @update:model-value="onCountryChange"
+            >
+              <template #selection="{ item }">
+                <span class="d-flex align-center">
+                  <span v-if="item.raw.code" class="fi fi-{{ item.raw.code.toLowerCase() }} mr-2"></span>
+                  {{ item.raw.name }}
+                </span>
+              </template>
+              <template #item="{ props, item }">
+                <v-list-item v-bind="props" :title="item.raw.name">
+                  <template #prepend>
+                    <span v-if="item.raw.code" class="fi fi-{{ item.raw.code.toLowerCase() }} mr-2"></span>
+                  </template>
+                </v-list-item>
+              </template>
+            </v-select>
+          </v-card-text>
+        </v-card>
+
         <!-- Account Settings -->
         <v-card class="elevation-2">
           <v-card-title class="text-h6">Account Settings</v-card-title>
@@ -57,6 +88,13 @@ import { $toast } from "../toast";
 const url = getUrl("user/preferences/");
 
 const hidden = ref(false);
+const country = ref<string>("");
+
+// Country options for the dropdown
+const countryOptions = ref([
+  { code: "CA", name: "Canada" },
+  { code: "US", name: "United States" },
+]);
 
 const profileLink = computed(() => {
   const { user } = useAuthStore();
@@ -74,6 +112,7 @@ function loadPreferences(): void {
     .then((response) => {
       const data = response.data as GetUserPreferencesData;
       hidden.value = data.hidden;
+      country.value = data.country || "";
     })
     .catch((error: AxiosError) => {
       console.log(error);
@@ -81,12 +120,21 @@ function loadPreferences(): void {
     });
 }
 function savePreferences(): void {
-  axios.put(url, { hidden: hidden.value }).catch((error: AxiosError) => {
+  axios.put(url, { hidden: hidden.value, country: country.value || null }).catch((error: AxiosError) => {
     console.log(error);
     $toast.error("Error saving preferences");
   });
+}
+
+function onCountryChange(selectedCountryCode: string | null): void {
+  country.value = selectedCountryCode || "";
+  savePreferences();
 }
 onMounted(() => {
   loadPreferences();
 });
 </script>
+
+<style scoped>
+/* Clean, simple styling - let Vuetify handle the rest */
+</style>
