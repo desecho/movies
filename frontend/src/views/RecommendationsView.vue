@@ -190,6 +190,7 @@ function scrollToTop(): void {
 async function getRecommendations(): Promise<void> {
   loading.value = true;
   hasSearched.value = true;
+  movies.value = [];
 
   try {
     const params = new URLSearchParams();
