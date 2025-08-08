@@ -201,7 +201,7 @@ const listNavigation = useListNavigation(props.listId, props.isProfileView);
 const { selectedProfileList, selectedUserList, currentListId, resetListSelections, initializeWatchers } =
   listNavigation;
 
-// Use store values for query and sort, with page from navigation  
+// Use store values for query and sort, with page from navigation
 const query = storeQuery;
 const page = storePage;
 
@@ -268,7 +268,7 @@ const customSortableRecords = shallowRef<RecordType[]>([]);
 // Use record counts composable for clean separation and reusability
 const { watchedCount, toWatchCount, filteredCount } = useRecordCounts(records, filteredRecords);
 
-// Use sorting composable for clean separation of concerns  
+// Use sorting composable for clean separation of concerns
 const { sortedRecords: sortedFilteredRecords } = useListViewSorting(
   filteredRecords,
   sortComputed,
@@ -435,7 +435,7 @@ const isSortable = computed(() => {
   return (
     currentListId.value === listToWatchId &&
     sortComputed.value === "custom" &&
-    (modeComputed.value === "minimal" || modeComputed.value === "gallery") &&
+    modeComputed.value === "gallery" &&
     !props.isProfileView // Disable sorting for profile views
   );
 });
@@ -443,7 +443,7 @@ const isSortable = computed(() => {
 onMounted(async () => {
   // Load persisted ListView state first
   loadPersistedState();
-  
+
   // Initialize defaults if not set
   if (!mode.value) {
     setMode('full');
@@ -454,7 +454,7 @@ onMounted(async () => {
   if (!page.value) {
     setStorePage(1);
   }
-  
+
   await loadData();
 });
 </script>

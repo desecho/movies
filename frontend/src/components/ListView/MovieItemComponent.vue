@@ -4,7 +4,6 @@
     :class="{
       'movie-minimal': mode == 'minimal',
       'movie-full': mode == 'full',
-      draggable: isSortable,
     }"
   >
     <!-- Movie title banner spanning full width at the very top -->
@@ -197,9 +196,9 @@
             class="comment"
           >
             <div>
-              <v-textarea 
-                :model-value="record.comment" 
-                class="form-control" 
+              <v-textarea
+                :model-value="record.comment"
+                class="form-control"
                 title="Comment"
                 @update:model-value="updateComment($event)"
               > </v-textarea>
@@ -309,7 +308,6 @@ import { listToWatchId, listWatchedId, starSizeMinimal, starSizeNormal } from ".
 interface Props extends ListContextProps, ViewModeProps {
   record: RecordType;
   recordIndex: number;
-  isSortable: boolean;
   isLoggedIn: boolean;
   myRecords?: RecordType[];
 }
