@@ -26,9 +26,15 @@
         <MenuItem v-if="user.isLoggedIn" title="My Movies" icon="eye" to="/list/watched" />
         <MenuItem title="Trending" icon="trending-up" to="/trending" />
         <MenuItem title="AI Recommendations" icon="robot" to="/recommendations" />
-        <MenuItem title="Activity Feed" icon="timeline" to="/feed" />
+        <MenuItem v-if="!user.isLoggedIn" title="Activity Feed" icon="timeline" to="/feed" />
         <MenuItem v-if="user.isLoggedIn" title="Stats" icon="chart-box" to="/stats" />
-        <MenuItem v-if="user.isLoggedIn" title="My Network" icon="account-network" to="/network" />
+        <v-list-group v-if="user.isLoggedIn">
+          <template #activator="{ props }">
+            <v-list-item v-bind="props" title="Social" class="social-group"> </v-list-item>
+          </template>
+          <MenuItem title="Network" icon="account-network" to="/network" />
+          <MenuItem title="Feed" icon="timeline" to="/feed" />
+        </v-list-group>
         <MenuItem title="Users" icon="account-group" to="/users" />
       </v-list>
       <template #append>
@@ -171,6 +177,31 @@ onMounted(() => {
     .v-list-item-title {
       font-weight: 500;
       font-size: 0.95rem;
+    }
+  }
+
+  :deep(.v-list-group) {
+    .v-list-item {
+      &.social-group {
+        font-weight: 600;
+        opacity: 0.9;
+
+        &:hover {
+          background-color: rgba(102, 126, 234, 0.08);
+        }
+      }
+    }
+
+    .v-list-group__items {
+      .v-list-item {
+        margin-left: 12px;
+        border-left: 2px solid rgba(102, 126, 234, 0.2);
+        border-radius: 0 8px 8px 0;
+
+        &:hover {
+          border-left-color: rgba(102, 126, 234, 0.4);
+        }
+      }
     }
   }
 }
