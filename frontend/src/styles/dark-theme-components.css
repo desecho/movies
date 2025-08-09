@@ -1,0 +1,50 @@
+/* Dark theme overrides for Vuetify components */
+.dark-theme .v-app-bar {
+  background: var(--gradient-primary) !important;
+}
+
+.dark-theme .v-navigation-drawer {
+  background: var(--gradient-background) !important;
+  border-color: var(--border-color) !important;
+}
+
+.dark-theme .v-list-item {
+  color: var(--text-primary) !important;
+}
+
+.dark-theme .v-list-item:hover {
+  background-color: rgba(102, 126, 234, 0.2) !important;
+}
+
+.dark-theme .v-divider {
+  border-color: var(--border-color) !important;
+}
+
+.dark-theme .v-text-field input {
+  color: var(--text-primary) !important;
+}
+
+.dark-theme .v-text-field .v-field {
+  background: var(--background-card) !important;
+  border-color: var(--border-color) !important;
+}
+
+.dark-theme .v-btn {
+  color: var(--text-primary) !important;
+}
+
+.dark-theme .v-card {
+  background: var(--background-card) !important;
+  color: var(--text-primary) !important;
+}
+
+.dark-theme .v-footer {
+  background: var(--background-secondary) !important;
+  color: var(--text-secondary) !important;
+  border-top: 1px solid var(--border-color) !important;
+}
+
+.dark-theme .v-list-item-title {
+  color: var(--text-primary) !important;
+  font-weight: 500 !important;
+}

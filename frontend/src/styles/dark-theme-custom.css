@@ -1,0 +1,45 @@
+/* Dark theme for custom components */
+.dark-theme .movie {
+  background: var(--gradient-background) !important;
+  border-color: var(--border-color) !important;
+  color: var(--text-primary) !important;
+}
+
+.dark-theme .movie-card-content {
+  background: var(--background-card) !important;
+}
+
+.dark-theme .title {
+  color: var(--text-primary) !important;
+}
+
+.dark-theme .details {
+  background: rgba(55, 65, 81, 0.8) !important;
+  border-color: var(--border-color) !important;
+  color: var(--text-secondary) !important;
+}
+
+.dark-theme .user-card {
+  background: var(--gradient-background) !important;
+  border-color: var(--border-color) !important;
+  color: var(--text-primary) !important;
+}
+
+.dark-theme .page-header {
+  background: var(--gradient-primary) !important;
+}
+
+.dark-theme .watch-count-item {
+  background: rgba(55, 65, 81, 0.8) !important;
+  border-color: var(--border-color) !important;
+}
+
+.dark-theme .controls-section {
+  background: rgba(55, 65, 81, 0.6) !important;
+  border-color: var(--border-color) !important;
+}
+
+.dark-theme .poster-rating {
+  background: rgba(55, 65, 81, 0.9) !important;
+  border-color: var(--border-color) !important;
+}

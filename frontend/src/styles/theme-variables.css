@@ -1,0 +1,30 @@
+/* Global Theme Variables */
+:root {
+  --background-primary: #ffffff;
+  --background-secondary: #f8f9fa;
+  --background-card: #ffffff;
+  --text-primary: #1f2937;
+  --text-secondary: #6b7280;
+  --border-color: rgba(0, 0, 0, 0.05);
+  --shadow-color: rgba(0, 0, 0, 0.08);
+  --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --gradient-background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+}
+
+.dark-theme {
+  --background-primary: #111827;
+  --background-secondary: #1f2937;
+  --background-card: #374151;
+  --text-primary: #f9fafb;
+  --text-secondary: #e5e7eb;
+  --border-color: rgba(255, 255, 255, 0.1);
+  --shadow-color: rgba(0, 0, 0, 0.3);
+  --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --gradient-background: linear-gradient(135deg, #374151 0%, #1f2937 100%);
+}
+
+/* Apply theme variables globally */
+.v-application {
+  background: var(--background-primary) !important;
+  color: var(--text-primary) !important;
+}

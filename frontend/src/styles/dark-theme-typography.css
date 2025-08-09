@@ -1,0 +1,68 @@
+/* Dark theme text colors */
+.dark-theme .username {
+  color: var(--text-primary) !important;
+}
+
+.dark-theme .user-subtitle {
+  color: var(--text-secondary) !important;
+}
+
+.dark-theme .count-number {
+  color: var(--text-primary) !important;
+}
+
+.dark-theme .count-label {
+  color: var(--text-secondary) !important;
+}
+
+.dark-theme .item-desc {
+  color: #d1d5db !important;
+  font-weight: 600 !important;
+}
+
+.dark-theme .theme-label {
+  color: var(--text-secondary) !important;
+}
+
+/* Enhanced text contrast for movie details in dark mode */
+.dark-theme .details > div {
+  color: #f3f4f6 !important;
+}
+
+.dark-theme .details .item-desc {
+  color: #9ca3af !important;
+  font-weight: 600 !important;
+}
+
+.dark-theme .movie-title {
+  color: white !important;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5) !important;
+}
+
+.dark-theme .page-title {
+  color: white !important;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5) !important;
+}
+
+.dark-theme .page-subtitle {
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.dark-theme .section-title {
+  color: var(--text-primary) !important;
+}
+
+.dark-theme .results-title {
+  color: var(--text-primary) !important;
+}
+
+/* Improve readability for all text in dark mode */
+.dark-theme {
+  color: #f9fafb !important;
+}
+
+.dark-theme p,
+.dark-theme span,
+.dark-theme div {
+  color: inherit;
+}
