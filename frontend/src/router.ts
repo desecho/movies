@@ -6,6 +6,11 @@ import type { RouteLocationNormalized } from "vue-router";
 
 import { listToWatchId, listWatchedId } from "./const";
 import { useAuthStore } from "./stores/auth";
+import {
+    getQueryParamAsNumber,
+    getQueryParamAsString,
+    isValidToken,
+} from "./types/common";
 import AboutView from "./views/AboutView.vue";
 import ChangePasswordView from "./views/ChangePasswordView.vue";
 import FeedView from "./views/FeedView.vue";
@@ -30,9 +35,9 @@ import VerifyUserView from "./views/VerifyUserView.vue";
 
 function authProps(route: RouteLocationNormalized): AuthProps {
     return {
-        userId: route.query.user_id as unknown as number,
-        timestamp: route.query.timestamp as unknown as number,
-        signature: route.query.signature as unknown as string,
+        userId: getQueryParamAsNumber(route.query.user_id, 0),
+        timestamp: getQueryParamAsNumber(route.query.timestamp, 0),
+        signature: getQueryParamAsString(route.query.signature, ""),
     };
 }
 
@@ -138,13 +143,14 @@ router.beforeEach(async (to) => {
         return "/login";
     }
 
-    if (user.isLoggedIn) {
-        // Use `!` because we know that access token is not null when user is logged in
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        const decodedToken: JWTDecoded = jwtDecode(user.accessToken!);
+    if (user.isLoggedIn && isValidToken(user.accessToken)) {
+        const decodedToken: JWTDecoded = jwtDecode(user.accessToken);
         // If token expired or is about to expire (in 30 minutes) we refresh it
         if (decodedToken.exp - Date.now() / 1000 < 30 * 60) {
             await refreshToken();
         }
+    } else if (user.isLoggedIn && !isValidToken(user.accessToken)) {
+        // If user is marked as logged in but has invalid token, redirect to login
+        return "/login";
     }
 });

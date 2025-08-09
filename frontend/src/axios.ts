@@ -4,6 +4,7 @@ import type { AxiosError, AxiosRequestHeaders } from "axios";
 
 import { router } from "./router";
 import { useAuthStore } from "./stores/auth";
+import { isValidToken } from "./types/common";
 
 // Keep track of the active response interceptor so we can eject it
 let responseInterceptorId: number | null = null;
@@ -15,10 +16,8 @@ export function initAxios(): void {
     };
 
     const auth = useAuthStore();
-    if (auth.user.isLoggedIn) {
-        // Use `!` because we know that access token is not null when user is logged in
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        headers.Authorization = `Bearer ${auth.user.accessToken!}`;
+    if (auth.user.isLoggedIn && isValidToken(auth.user.accessToken)) {
+        headers.Authorization = `Bearer ${auth.user.accessToken}`;
     }
 
     axios.defaults.headers.common = headers;

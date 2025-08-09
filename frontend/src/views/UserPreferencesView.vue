@@ -84,6 +84,7 @@ import AvatarUploadComponent from "../components/AvatarUploadComponent.vue";
 import { getUrl } from "../helpers";
 import { useAuthStore } from "../stores/auth";
 import { $toast } from "../toast";
+import { parseString } from "../types/common";
 
 const url = getUrl("user/preferences/");
 
@@ -98,9 +99,8 @@ const countryOptions = ref([
 
 const profileLink = computed(() => {
   const { user } = useAuthStore();
-  // `username` is always not null when user is logged in
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  return `/users/${user.username!}/list/watched/`;
+  const username = parseString(user.username, "unknown");
+  return `/users/${username}/list/watched/`;
 });
 const absoluteProfileLink = computed(() => {
   return `${location.origin}${profileLink.value}`;

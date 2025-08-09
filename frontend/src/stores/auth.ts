@@ -9,6 +9,7 @@ import type { AvatarUploadResponse } from "../views/types";
 import { initAxios } from "../axios";
 import { getUrl } from "../helpers";
 import { router } from "../router";
+import { isValidToken } from "../types/common";
 
 const userDefault: UserStore = {
     isLoggedIn: false,
@@ -49,9 +50,12 @@ export const useAuthStore = defineStore("auth", {
         },
         // This function needs to be called only when user is logged in
         async refreshToken() {
-            // Use `!` because we know that refresh token is not null when user is logged in
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            const decodedToken: JWTDecoded = jwtDecode(this.user.refreshToken!);
+            if (!isValidToken(this.user.refreshToken)) {
+                this.logout();
+                return;
+            }
+
+            const decodedToken: JWTDecoded = jwtDecode(this.user.refreshToken);
             // If refresh token expired we log the user out
             if (decodedToken.exp < Date.now() / 1000) {
                 this.logout();

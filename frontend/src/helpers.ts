@@ -18,16 +18,6 @@ export function requireAuthenticated(): void {
     }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function rewriteArray(arrayToRewrite: any[], newArray: any[]): void {
-    while (arrayToRewrite.length > 0) {
-        arrayToRewrite.pop();
-    }
-    newArray.forEach((item) => {
-        arrayToRewrite.push(item);
-    });
-}
-
 export function getSrcSet(img1x: string, img2x: string): string {
     return `${img1x} 1x, ${img2x} 2x`;
 }
