@@ -297,10 +297,28 @@ export function useMovieOperations(): {
         addingToList,
 
         // Methods
-        addToList: (movieId: number, listId: number, record?: RecordType): void => { void addToList(movieId, listId, record); },
-        addToMyList: (movieId: number, listId: number, records: RecordType[], myRecords: RecordType[], isLoggedIn: boolean): void => { void addToMyList(movieId, listId, records, myRecords, isLoggedIn); },
-        removeRecord: (record: RecordType, records: RecordType[]): void => { void removeRecord(record, records); },
-        changeRating: (record: RecordType, rating: number): void => { void changeRating(record, rating); },
+        addToList: (
+            movieId: number,
+            listId: number,
+            record?: RecordType,
+        ): void => {
+            void addToList(movieId, listId, record);
+        },
+        addToMyList: (
+            movieId: number,
+            listId: number,
+            records: RecordType[],
+            myRecords: RecordType[],
+            isLoggedIn: boolean,
+        ): void => {
+            void addToMyList(movieId, listId, records, myRecords, isLoggedIn);
+        },
+        removeRecord: (record: RecordType, records: RecordType[]): void => {
+            void removeRecord(record, records);
+        },
+        changeRating: (record: RecordType, rating: number): void => {
+            void changeRating(record, rating);
+        },
         saveOptions,
         saveComment,
         showCommentArea,

@@ -19,15 +19,7 @@ export const useAuthStore = defineStore("auth", {
     state: () => ({
         user: userDefault,
     }),
-    persist: {
-        enabled: true,
-        strategies: [
-            {
-                key: "user",
-                storage: localStorage,
-            },
-        ],
-    },
+    persist: true,
     actions: {
         async login(username: string, password: string) {
             const response = await axios.post(getUrl("token/"), {

@@ -26,7 +26,7 @@ const authStore = useAuthStore();
 onMounted(async () => {
   // Initialize Vuetify theme integration
   themeStore.initVuetifyTheme();
-  // Initialize theme preferences
+  // Initialize theme preferences (auto-restored by plugin, set defaults for new users)
   themeStore.initTheme();
 
   // Initialize axios with authentication headers first

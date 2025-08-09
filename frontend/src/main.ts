@@ -5,7 +5,7 @@ import "x-axios-progress-bar/dist/nprogress.css";
 import "./styles/styles.scss";
 
 import { createPinia } from "pinia";
-import piniaPersist from "pinia-plugin-persist";
+import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
 import { createApp } from "vue";
 import { createGtag } from "vue-gtag";
 import { loadProgressBar } from "x-axios-progress-bar";
@@ -26,7 +26,7 @@ import { router } from "./router";
 loadProgressBar();
 
 const pinia = createPinia();
-pinia.use(piniaPersist);
+pinia.use(piniaPluginPersistedstate);
 
 const gtag = createGtag({
     tagId: import.meta.env.VITE_GOOGLE_ANALYTICS_ID as string,
