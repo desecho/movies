@@ -268,10 +268,10 @@ const { sortedRecords: sortedFilteredRecords } = useListViewSorting(filteredReco
 
 /**
  * Optimized initialization of custom sortable records.
- * Only populates when needed for dragging operations and limits items for performance.
+ * Refreshes records when filtering changes to ensure search works in custom mode.
  */
 function initializeCustomSort(): void {
-  if (sortComputed.value === "custom" && customSortableRecords.value.length === 0) {
+  if (sortComputed.value === "custom") {
     const sortedRecords = [...filteredRecords.value].sort((a, b) => (a.order ?? Infinity) - (b.order ?? Infinity));
     /* For performance, limit to first 50 items when dragging
        TODO: Implement proper pagination for custom sort later */
