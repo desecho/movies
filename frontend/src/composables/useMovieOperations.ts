@@ -7,6 +7,8 @@ import { listWatchedId } from "../const";
 import { getUrl } from "../helpers";
 import { $toast } from "../toast";
 
+import { useApiCall } from "./useAsyncOperation";
+
 export function useMovieOperations(): {
     addingToList: Ref<Record<string, boolean>>;
     addToList: (movieId: number, listId: number, record?: RecordType) => void;
@@ -33,37 +35,46 @@ export function useMovieOperations(): {
     // Track loading state for add to list buttons
     const addingToList = ref<Record<string, boolean>>({});
 
+    // Error handling composables
+    const addToListOperation = useApiCall("Add Movie to List");
+    const removeRecordOperation = useApiCall("Remove Movie from List");
+    const updateRecordOperation = useApiCall("Update Movie Record");
+
     /**
      * Add movie to a list
      */
-    function addToList(
+    async function addToList(
         movieId: number,
         listId: number,
         record?: RecordType,
-    ): void {
-        axios
-            .post(getUrl(`add-to-list/${movieId}/`), { listId })
-            .then(() => {
-                if (record !== undefined) {
-                    record.listId = listId;
-                    record.additionDate = Date.now();
-                }
-            })
-            .catch(() => {
-                $toast.error("Error adding the movie to the list");
-            });
+    ): Promise<void> {
+        const result = await addToListOperation.execute(async () => {
+            const response = await axios.post(
+                getUrl(`add-to-list/${movieId}/`),
+                { listId },
+            );
+            return response.data as Record<string, unknown>;
+        });
+
+        if (result.success) {
+            if (record !== undefined) {
+                record.listId = listId;
+                record.additionDate = Date.now();
+            }
+            $toast.success("Movie added to your list!");
+        }
     }
 
     /**
      * Add movie to user's own list (when viewing profile)
      */
-    function addToMyList(
+    async function addToMyList(
         movieId: number,
         listId: number,
         records: RecordType[],
         myRecords: RecordType[],
         isLoggedIn: boolean,
-    ): void {
+    ): Promise<void> {
         if (!isLoggedIn) {
             $toast.error("You must be logged in to add movies to your list");
             return;
@@ -77,7 +88,7 @@ export function useMovieOperations(): {
             const movieData = records.find(
                 (record) => record.movie.id === movieId,
             )?.movie;
-            addToList(movieId, listId); // Call the existing addToList function
+            await addToList(movieId, listId); // Call the existing addToList function
 
             if (movieData) {
                 const newRecord: RecordType = {
@@ -117,48 +128,62 @@ export function useMovieOperations(): {
     /**
      * Remove record from list
      */
-    function removeRecord(record: RecordType, records: RecordType[]): void {
+    async function removeRecord(
+        record: RecordType,
+        records: RecordType[],
+    ): Promise<void> {
         // Optimistically remove from UI first
         const actualIndex = records.findIndex((r) => r.id === record.id);
         if (actualIndex !== -1) {
             records.splice(actualIndex, 1);
         }
 
-        axios
-            .delete(getUrl(`remove-record/${record.id}/`))
-            .then(() => {
-                // Record already removed optimistically
-            })
-            .catch(() => {
-                // Restore the record if deletion fails
-                if (actualIndex !== -1) {
-                    records.splice(actualIndex, 0, record);
-                }
-                $toast.error("Error removing the movie");
-            });
+        const result = await removeRecordOperation.execute(async () => {
+            const response = await axios.delete(
+                getUrl(`remove-record/${record.id}/`),
+            );
+            return response.data as Record<string, unknown>;
+        });
+
+        if (result.success) {
+            $toast.success("Movie removed from your list!");
+        } else if (actualIndex !== -1) {
+            // Restore the record if deletion fails
+            records.splice(actualIndex, 0, record);
+        }
     }
 
     /**
      * Change movie rating
      */
-    function changeRating(record: RecordType, rating: number): void {
+    async function changeRating(
+        record: RecordType,
+        rating: number,
+    ): Promise<void> {
         // Store the original rating before the change
         const originalRating = record.rating;
 
         // Optimistically update the rating
         record.rating = rating;
 
-        axios
-            .put(getUrl(`change-rating/${record.id}/`), { rating })
-            .then(() => {
-                // Update the original rating to the new confirmed value
-                record.ratingOriginal = rating;
-            })
-            .catch(() => {
-                // Revert to the original rating if the save fails
-                record.rating = originalRating;
-                $toast.error("Error saving the rating");
-            });
+        const result = await updateRecordOperation.execute(async () => {
+            const response = await axios.put(
+                getUrl(`change-rating/${record.id}/`),
+                { rating },
+            );
+            return response.data as Record<string, unknown>;
+        });
+
+        if (result.success) {
+            // Update the original rating to the new confirmed value
+            // eslint-disable-next-line require-atomic-updates
+            record.ratingOriginal = rating;
+            $toast.success(`Rating updated to ${rating} stars!`);
+        } else {
+            // Revert to the original rating if the save fails
+            // eslint-disable-next-line require-atomic-updates
+            record.rating = originalRating;
+        }
     }
 
     /**
@@ -272,10 +297,10 @@ export function useMovieOperations(): {
         addingToList,
 
         // Methods
-        addToList,
-        addToMyList,
-        removeRecord,
-        changeRating,
+        addToList: (movieId: number, listId: number, record?: RecordType): void => { void addToList(movieId, listId, record); },
+        addToMyList: (movieId: number, listId: number, records: RecordType[], myRecords: RecordType[], isLoggedIn: boolean): void => { void addToMyList(movieId, listId, records, myRecords, isLoggedIn); },
+        removeRecord: (record: RecordType, records: RecordType[]): void => { void removeRecord(record, records); },
+        changeRating: (record: RecordType, rating: number): void => { void changeRating(record, rating); },
         saveOptions,
         saveComment,
         showCommentArea,

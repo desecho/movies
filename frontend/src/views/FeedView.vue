@@ -1,101 +1,103 @@
 <template>
-  <v-container>
-    <!-- Page Header -->
-    <v-row class="mb-6">
-      <v-col cols="12">
-        <div class="page-header">
-          <h1 class="page-title">
-            <v-icon icon="mdi-timeline" class="title-icon" />
-            Activity Feed
-          </h1>
-          <p class="page-subtitle">See what movies your friends are watching and rating</p>
-        </div>
-      </v-col>
-    </v-row>
-
-    <!-- Loading State -->
-    <div v-if="loading" class="loading-container">
-      <v-progress-circular indeterminate color="primary" size="50" />
-      <p class="loading-text">Loading feed...</p>
-    </div>
-
-    <!-- Empty State -->
-    <div v-else-if="feedItems.length === 0" class="empty-state">
-      <v-icon icon="mdi-timeline-clock-outline" class="empty-icon" />
-      <h3>No activity yet</h3>
-      <p>Follow some users to see their movie activity, or check back later!</p>
-      <v-btn color="primary" variant="elevated" to="/users" class="mt-4">
-        <v-icon icon="mdi-account-group" start />
-        Browse Users
-      </v-btn>
-    </div>
-
-    <!-- Feed Items -->
-    <div v-else class="feed-container">
-      <div v-for="item in feedItems" :key="item.id" class="feed-item">
-        <div class="feed-item-content">
-          <!-- User Avatar -->
-          <div class="user-avatar">
-            <img
-              v-if="item.user.avatar_url"
-              :src="item.user.avatar_url"
-              :alt="`${item.user.username}'s avatar`"
-              class="avatar-image"
-            />
-            <v-icon v-else icon="mdi-account-circle" class="avatar-icon" />
+  <ErrorBoundary context="Activity Feed" fallback-message="Unable to load the activity feed">
+    <v-container>
+      <!-- Page Header -->
+      <v-row class="mb-6">
+        <v-col cols="12">
+          <div class="page-header">
+            <h1 class="page-title">
+              <v-icon icon="mdi-timeline" class="title-icon" />
+              Activity Feed
+            </h1>
+            <p class="page-subtitle">See what movies your friends are watching and rating</p>
           </div>
+        </v-col>
+      </v-row>
 
-          <!-- Activity Content -->
-          <div class="activity-content">
-            <!-- Activity Header -->
-            <div class="activity-header">
-              <span class="username">{{ item.user.username }}</span>
-              <span class="activity-text">{{ getActivityText(item) }}</span>
-              <span class="activity-time">{{ formatDate(item.date) }}</span>
-            </div>
-
-            <!-- Movie Info -->
-            <div class="movie-info">
-              <div class="movie-poster">
-                <img
-                  v-if="item.movie.poster_small"
-                  :src="item.movie.poster_small"
-                  :alt="`${item.movie.title} poster`"
-                  class="poster-image"
-                />
-                <div v-else class="poster-placeholder">
-                  <v-icon icon="mdi-movie" />
-                </div>
-              </div>
-
-              <div class="movie-details">
-                <h4 class="movie-title">{{ item.movie.title }}</h4>
-                <p v-if="item.movie.release_date" class="movie-year">{{ item.movie.release_date }}</p>
-
-                <!-- Additional content based on action type -->
-                <div v-if="item.rating" class="rating-display">
-                  <v-icon icon="mdi-star" class="star-icon" />
-                  <span class="rating-text">{{ item.rating }}/10</span>
-                </div>
-
-                <div v-if="item.comment" class="comment-display">
-                  <v-icon icon="mdi-comment-text" class="comment-icon" />
-                  <span class="comment-text">"{{ item.comment }}"</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+      <!-- Loading State -->
+      <div v-if="loading" class="loading-container">
+        <v-progress-circular indeterminate color="primary" size="50" />
+        <p class="loading-text">Loading feed...</p>
       </div>
 
-      <!-- Load More -->
-      <div v-if="hasMore" class="load-more-container">
-        <v-btn :loading="loadingMore" color="primary" variant="outlined" class="load-more-btn" @click="loadMore">
-          Load More
+      <!-- Empty State -->
+      <div v-else-if="feedItems.length === 0" class="empty-state">
+        <v-icon icon="mdi-timeline-clock-outline" class="empty-icon" />
+        <h3>No activity yet</h3>
+        <p>Follow some users to see their movie activity, or check back later!</p>
+        <v-btn color="primary" variant="elevated" to="/users" class="mt-4">
+          <v-icon icon="mdi-account-group" start />
+          Browse Users
         </v-btn>
       </div>
-    </div>
-  </v-container>
+
+      <!-- Feed Items -->
+      <div v-else class="feed-container">
+        <div v-for="item in feedItems" :key="item.id" class="feed-item">
+          <div class="feed-item-content">
+            <!-- User Avatar -->
+            <div class="user-avatar">
+              <img
+                v-if="item.user.avatar_url"
+                :src="item.user.avatar_url"
+                :alt="`${item.user.username}'s avatar`"
+                class="avatar-image"
+              />
+              <v-icon v-else icon="mdi-account-circle" class="avatar-icon" />
+            </div>
+
+            <!-- Activity Content -->
+            <div class="activity-content">
+              <!-- Activity Header -->
+              <div class="activity-header">
+                <span class="username">{{ item.user.username }}</span>
+                <span class="activity-text">{{ getActivityText(item) }}</span>
+                <span class="activity-time">{{ formatDate(item.date) }}</span>
+              </div>
+
+              <!-- Movie Info -->
+              <div class="movie-info">
+                <div class="movie-poster">
+                  <img
+                    v-if="item.movie.poster_small"
+                    :src="item.movie.poster_small"
+                    :alt="`${item.movie.title} poster`"
+                    class="poster-image"
+                  />
+                  <div v-else class="poster-placeholder">
+                    <v-icon icon="mdi-movie" />
+                  </div>
+                </div>
+
+                <div class="movie-details">
+                  <h4 class="movie-title">{{ item.movie.title }}</h4>
+                  <p v-if="item.movie.release_date" class="movie-year">{{ item.movie.release_date }}</p>
+
+                  <!-- Additional content based on action type -->
+                  <div v-if="item.rating" class="rating-display">
+                    <v-icon icon="mdi-star" class="star-icon" />
+                    <span class="rating-text">{{ item.rating }}/10</span>
+                  </div>
+
+                  <div v-if="item.comment" class="comment-display">
+                    <v-icon icon="mdi-comment-text" class="comment-icon" />
+                    <span class="comment-text">"{{ item.comment }}"</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Load More -->
+        <div v-if="hasMore" class="load-more-container">
+          <v-btn :loading="loadingMore" color="primary" variant="outlined" class="load-more-btn" @click="loadMore">
+            Load More
+          </v-btn>
+        </div>
+      </div>
+    </v-container>
+  </ErrorBoundary>
 </template>
 
 <script lang="ts" setup>
@@ -105,6 +107,7 @@ import { onMounted, ref } from "vue";
 import type { AxiosError } from "axios";
 import type { Ref } from "vue";
 
+import ErrorBoundary from "../components/ErrorBoundary.vue";
 import { getUrl } from "../helpers";
 import { $toast } from "../toast";
 

@@ -1,104 +1,106 @@
 <template>
-  <v-container>
-    <!-- Profile header (only show when viewing another user's profile) -->
-    <ProfileHeaderComponent
-      v-if="isProfileView && username"
-      :username="username || ''"
-      :user-avatar-url="userAvatarUrl"
-      :selected-list="selectedProfileList"
-      @update:selected-list="selectedProfileList = $event"
-    />
+  <ErrorBoundary context="Movie List View" fallback-message="Unable to load your movie list">
+    <v-container>
+      <!-- Profile header (only show when viewing another user's profile) -->
+      <ProfileHeaderComponent
+        v-if="isProfileView && username"
+        :username="username || ''"
+        :user-avatar-url="userAvatarUrl"
+        :selected-list="selectedProfileList"
+        @update:selected-list="selectedProfileList = $event"
+      />
 
-    <!-- List selector for regular users (when not viewing profile) -->
-    <UserListSelectorComponent
-      v-if="!isProfileView"
-      :selected-list="selectedUserList"
-      @update:selected-list="selectedUserList = $event"
-    />
+      <!-- List selector for regular users (when not viewing profile) -->
+      <UserListSelectorComponent
+        v-if="!isProfileView"
+        :selected-list="selectedUserList"
+        @update:selected-list="selectedUserList = $event"
+      />
 
-    <!-- Controls Section -->
-    <ListControlsComponent
-      v-model:mode="modeComputed"
-      v-model:sort="sortComputed"
-      v-model:to-rewatch-filter="toRewatchFilter"
-      v-model:hide-unreleased-movies="hideUnreleasedMovies"
-      v-model:recent-releases-filter="recentReleasesFilter"
-      :current-list-id="currentListId"
-      :is-profile-view="!!isProfileView"
-    />
+      <!-- Controls Section -->
+      <ListControlsComponent
+        v-model:mode="modeComputed"
+        v-model:sort="sortComputed"
+        v-model:to-rewatch-filter="toRewatchFilter"
+        v-model:hide-unreleased-movies="hideUnreleasedMovies"
+        v-model:recent-releases-filter="recentReleasesFilter"
+        :current-list-id="currentListId"
+        :is-profile-view="!!isProfileView"
+      />
 
-    <!-- Search and Counts -->
-    <SearchAndCountsComponent
-      :query="query"
-      :watched-count="watchedCount"
-      :to-watch-count="toWatchCount"
-      :filtered-count="filteredCount"
-      :are-records-loaded="areRecordsLoaded"
-      :is-records-loading="isRecordsLoading"
-      @update:query="handleQueryUpdate"
-    />
+      <!-- Search and Counts -->
+      <SearchAndCountsComponent
+        :query="query"
+        :watched-count="watchedCount"
+        :to-watch-count="toWatchCount"
+        :filtered-count="filteredCount"
+        :are-records-loaded="areRecordsLoaded"
+        :is-records-loading="isRecordsLoading"
+        @update:query="handleQueryUpdate"
+      />
 
-    <!-- Top Pagination -->
-    <MovieListPaginationComponent
-      :current-page="page"
-      :total-pages="totalPages"
-      :are-records-loaded="areRecordsLoaded"
-      :is-records-loading="isRecordsLoading"
-      @update:page="setStorePage"
-    />
+      <!-- Top Pagination -->
+      <MovieListPaginationComponent
+        :current-page="page"
+        :total-pages="totalPages"
+        :are-records-loaded="areRecordsLoaded"
+        :is-records-loading="isRecordsLoading"
+        @update:page="setStorePage"
+      />
 
-    <!-- Loading state -->
-    <LoadingStateComponent v-if="isRecordsLoading" />
+      <!-- Loading state -->
+      <LoadingStateComponent v-if="isRecordsLoading" />
 
-    <v-row v-else>
-      <v-col cols="12">
-        <!-- Regular view modes (non-gallery) -->
-        <div v-cloak v-if="modeComputed !== 'gallery'">
-          <template v-for="(record, index) in paginatedRecords" :key="record.id">
-            <MovieItemComponent
-              :record="record"
-              :record-index="index"
-              :mode="modeComputed"
-              :current-list-id="currentListId"
-              :is-profile-view="!!isProfileView"
-              :is-sortable="isSortable"
-              :is-logged-in="isLoggedIn"
-              :my-records="myRecords"
-              @remove="handleRemoveRecord"
-              @add-to-my-list="handleAddToMyList"
-              @add-to-list="addToList"
-              @rating-changed="changeRating"
-              @save-comment="saveComment"
-              @show-comment-area="showCommentArea"
-              @save-options="saveOptions"
-              @update-comment="updateRecordComment"
-            />
-          </template>
-        </div>
+      <v-row v-else>
+        <v-col cols="12">
+          <!-- Regular view modes (non-gallery) -->
+          <div v-cloak v-if="modeComputed !== 'gallery'">
+            <template v-for="(record, index) in paginatedRecords" :key="record.id">
+              <MovieItemComponent
+                :record="record"
+                :record-index="index"
+                :mode="modeComputed"
+                :current-list-id="currentListId"
+                :is-profile-view="!!isProfileView"
+                :is-sortable="isSortable"
+                :is-logged-in="isLoggedIn"
+                :my-records="myRecords"
+                @remove="handleRemoveRecord"
+                @add-to-my-list="handleAddToMyList"
+                @add-to-list="addToList"
+                @rating-changed="changeRating"
+                @save-comment="saveComment"
+                @show-comment-area="showCommentArea"
+                @save-options="saveOptions"
+                @update-comment="updateRecordComment"
+              />
+            </template>
+          </div>
 
-        <!-- Gallery view -->
-        <GalleryViewComponent
-          v-if="modeComputed === 'gallery'"
-          v-model:records="galleryRecords"
-          :paginated-records="sortComputed === 'custom' ? galleryRecords : paginatedRecords"
-          :is-sortable="isSortable"
-          :is-profile-view="!!isProfileView"
-          @sort="handleSaveRecordsOrder"
-          @move-to-top="handleMoveToTop"
-          @move-to-bottom="handleMoveToBottom"
-        />
-      </v-col>
-    </v-row>
+          <!-- Gallery view -->
+          <GalleryViewComponent
+            v-if="modeComputed === 'gallery'"
+            v-model:records="galleryRecords"
+            :paginated-records="sortComputed === 'custom' ? galleryRecords : paginatedRecords"
+            :is-sortable="isSortable"
+            :is-profile-view="!!isProfileView"
+            @sort="handleSaveRecordsOrder"
+            @move-to-top="handleMoveToTop"
+            @move-to-bottom="handleMoveToBottom"
+          />
+        </v-col>
+      </v-row>
 
-    <!-- Bottom Pagination -->
-    <MovieListPaginationComponent
-      :current-page="page"
-      :total-pages="totalPages"
-      :are-records-loaded="areRecordsLoaded"
-      :is-records-loading="isRecordsLoading"
-      @update:page="setStorePage"
-    />
-  </v-container>
+      <!-- Bottom Pagination -->
+      <MovieListPaginationComponent
+        :current-page="page"
+        :total-pages="totalPages"
+        :are-records-loaded="areRecordsLoaded"
+        :is-records-loading="isRecordsLoading"
+        @update:page="setStorePage"
+      />
+    </v-container>
+  </ErrorBoundary>
 </template>
 
 <script lang="ts" setup>
@@ -108,6 +110,7 @@ import { computed, defineAsyncComponent, onMounted, onUnmounted, ref, shallowRef
 import type { RecordType } from "../types";
 import type { SortType, ViewMode } from "../types/listView";
 
+import ErrorBoundary from "../components/ErrorBoundary.vue";
 import ListControlsComponent from "../components/ListView/ListControlsComponent.vue";
 import LoadingStateComponent from "../components/ListView/LoadingStateComponent.vue";
 import MovieListPaginationComponent from "../components/ListView/MovieListPaginationComponent.vue";

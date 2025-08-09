@@ -1,153 +1,161 @@
 <template>
-  <v-container class="recommendations-container">
-    <div class="recommendations-header">
-      <div class="header-content">
-        <h1 class="page-title">
-          <v-icon icon="mdi-robot" class="title-icon"></v-icon>
-          AI Movie Recommendations
-        </h1>
-        <p class="page-subtitle">Get personalized movie suggestions powered by AI</p>
+  <ErrorBoundary context="AI Movie Recommendations" fallback-message="Unable to load AI recommendations">
+    <v-container class="recommendations-container">
+      <div class="recommendations-header">
+        <div class="header-content">
+          <h1 class="page-title">
+            <v-icon icon="mdi-robot" class="title-icon"></v-icon>
+            AI Movie Recommendations
+          </h1>
+          <p class="page-subtitle">Get personalized movie suggestions powered by AI</p>
+        </div>
+        <div class="ai-badge">
+          <v-chip color="secondary" size="large" variant="elevated">
+            <v-icon start icon="mdi-brain"></v-icon>
+            AI Powered
+          </v-chip>
+        </div>
       </div>
-      <div class="ai-badge">
-        <v-chip color="secondary" size="large" variant="elevated">
-          <v-icon start icon="mdi-brain"></v-icon>
-          AI Powered
-        </v-chip>
-      </div>
-    </div>
 
-    <!-- Preferences Form -->
-    <v-card class="preferences-card mb-6" elevation="2">
-      <v-card-title class="preferences-title">
-        <v-icon icon="mdi-tune" class="me-2"></v-icon>
-        Customize Your Preferences
-      </v-card-title>
-      <v-card-text>
-        <v-form @submit.prevent="getRecommendations">
-          <v-row>
-            <!-- Preferred Genre -->
-            <v-col cols="12" md="6">
-              <v-select
-                v-model="preferences.preferredGenre"
-                :items="MOVIE_GENRES"
-                label="Preferred Genre"
-                prepend-inner-icon="mdi-movie"
-                clearable
-                variant="outlined"
-                density="comfortable"
-              ></v-select>
-            </v-col>
-
-            <!-- Number of Recommendations -->
-            <v-col cols="12" md="6">
-              <div class="slider-section">
-                <label
-                  class="slider-label"
-                  title="Choose a number that is more than your actual desired recommendations. You won't get exactly that many"
-                  >Desired Number of Recommendations</label
-                >
-                <v-slider
-                  v-model="preferences.recommendationsNumber"
-                  :min="AI_MIN_RECOMMENDATIONS"
-                  :max="AI_MAX_RECOMMENDATIONS"
-                  :step="1"
-                  thumb-label
-                  show-ticks="always"
-                  tick-size="4"
-                  color="primary"
-                  class="mt-2"
-                  title="Choose a number that is more than your actual desired recommendations. You won't get exactly that many"
-                ></v-slider>
-              </div>
-            </v-col>
-
-            <!-- Minimum Rating -->
-            <v-col cols="12" md="6">
-              <div class="rating-section">
-                <label class="slider-label">Minimum Rating</label>
-                <v-rating
-                  v-model="preferences.minRating"
-                  :length="AI_MAX_RATING"
-                  color="amber"
-                  size="large"
-                  class="mt-2"
+      <!-- Preferences Form -->
+      <v-card class="preferences-card mb-6" elevation="2">
+        <v-card-title class="preferences-title">
+          <v-icon icon="mdi-tune" class="me-2"></v-icon>
+          Customize Your Preferences
+        </v-card-title>
+        <v-card-text>
+          <v-form @submit.prevent="getRecommendations">
+            <v-row>
+              <!-- Preferred Genre -->
+              <v-col cols="12" md="6">
+                <v-select
+                  v-model="preferences.preferredGenre"
+                  :items="MOVIE_GENRES"
+                  label="Preferred Genre"
+                  prepend-inner-icon="mdi-movie"
                   clearable
-                ></v-rating>
-                <div class="rating-text">{{ preferences.minRating ? preferences.minRating : "Any" }} stars</div>
-              </div>
-            </v-col>
+                  variant="outlined"
+                  density="comfortable"
+                ></v-select>
+              </v-col>
 
-            <!-- Year Range -->
-            <v-col cols="12" md="6">
-              <div class="year-range-section">
-                <label class="slider-label">Year Range</label>
-                <v-range-slider
-                  v-model="yearRange"
-                  :min="1920"
-                  :max="currentYear"
-                  :step="1"
-                  thumb-label
+              <!-- Number of Recommendations -->
+              <v-col cols="12" md="6">
+                <div class="slider-section">
+                  <label
+                    class="slider-label"
+                    title="Choose a number that is more than your actual desired recommendations. You won't get exactly that many"
+                    >Desired Number of Recommendations</label
+                  >
+                  <v-slider
+                    v-model="preferences.recommendationsNumber"
+                    :min="AI_MIN_RECOMMENDATIONS"
+                    :max="AI_MAX_RECOMMENDATIONS"
+                    :step="1"
+                    thumb-label
+                    show-ticks="always"
+                    tick-size="4"
+                    color="primary"
+                    class="mt-2"
+                    title="Choose a number that is more than your actual desired recommendations. You won't get exactly that many"
+                  ></v-slider>
+                </div>
+              </v-col>
+
+              <!-- Minimum Rating -->
+              <v-col cols="12" md="6">
+                <div class="rating-section">
+                  <label class="slider-label">Minimum Rating</label>
+                  <v-rating
+                    v-model="preferences.minRating"
+                    :length="AI_MAX_RATING"
+                    color="amber"
+                    size="large"
+                    class="mt-2"
+                    clearable
+                  ></v-rating>
+                  <div class="rating-text">{{ preferences.minRating ? preferences.minRating : "Any" }} stars</div>
+                </div>
+              </v-col>
+
+              <!-- Year Range -->
+              <v-col cols="12" md="6">
+                <div class="year-range-section">
+                  <label class="slider-label">Year Range</label>
+                  <v-range-slider
+                    v-model="yearRange"
+                    :min="1920"
+                    :max="currentYear"
+                    :step="1"
+                    thumb-label
+                    color="primary"
+                    class="mt-2"
+                  ></v-range-slider>
+                  <div class="year-range-text">{{ yearRange[0] }} - {{ yearRange[1] }}</div>
+                </div>
+              </v-col>
+            </v-row>
+
+            <v-row class="mt-4">
+              <v-col class="text-center">
+                <v-btn
+                  type="submit"
                   color="primary"
-                  class="mt-2"
-                ></v-range-slider>
-                <div class="year-range-text">{{ yearRange[0] }} - {{ yearRange[1] }}</div>
-              </div>
-            </v-col>
-          </v-row>
-
-          <v-row class="mt-4">
-            <v-col class="text-center">
-              <v-btn
-                type="submit"
-                color="primary"
-                size="large"
-                variant="elevated"
-                :loading="loading"
-                prepend-icon="mdi-magic-staff"
-              >
-                Get AI Recommendations
-              </v-btn>
-            </v-col>
-          </v-row>
-        </v-form>
-      </v-card-text>
-    </v-card>
-
-    <!-- Recommendations Results -->
-    <div v-if="movies.length > 0" class="recommendations-results">
-      <div class="section-header">
-        <h2 class="section-title">Your AI Recommendations</h2>
-        <v-chip color="success" variant="outlined">{{ movies.length }} movies</v-chip>
-      </div>
-      <MoviesList :movies="movies" />
-    </div>
-
-    <!-- Loading State -->
-    <div v-else-if="loading" class="loading-state">
-      <v-progress-circular indeterminate color="primary" size="48"></v-progress-circular>
-      <p class="loading-text">AI is analyzing your preferences...</p>
-    </div>
-
-    <!-- Empty State -->
-    <div v-else-if="hasSearched && movies.length === 0" class="empty-state">
-      <v-icon icon="mdi-robot-confused" size="64" color="grey"></v-icon>
-      <h3>No recommendations found</h3>
-      <p>Try adjusting your preferences and search again.</p>
-    </div>
-
-    <!-- Getting Started -->
-    <div v-else class="getting-started">
-      <v-card class="text-center pa-8" variant="outlined">
-        <v-icon icon="mdi-lightbulb" size="64" color="primary" class="mb-4"></v-icon>
-        <h3 class="mb-4">Ready to discover new movies?</h3>
-        <p class="mb-4">Set your preferences above and let our AI recommend movies tailored just for you!</p>
-        <v-btn color="primary" variant="text" @click="scrollToTop">
-          <v-icon start icon="mdi-arrow-up"></v-icon>
-          Set Preferences
-        </v-btn>
+                  size="large"
+                  variant="elevated"
+                  :loading="recommendationsOperation.isLoading.value"
+                  :disabled="recommendationsOperation.isLoading.value"
+                  prepend-icon="mdi-magic-staff"
+                >
+                  Get AI Recommendations
+                </v-btn>
+              </v-col>
+            </v-row>
+          </v-form>
+        </v-card-text>
       </v-card>
-    </div>
-  </v-container>
+
+      <!-- Recommendations Results -->
+      <div v-if="movies.length > 0" class="recommendations-results">
+        <div class="section-header">
+          <h2 class="section-title">Your AI Recommendations</h2>
+          <v-chip color="success" variant="outlined">{{ movies.length }} movies</v-chip>
+        </div>
+        <MoviesList :movies="movies" />
+      </div>
+
+      <!-- Loading State -->
+      <div v-else-if="recommendationsOperation.isLoading.value" class="loading-state">
+        <LoadingIndicator
+          :show="true"
+          variant="inline"
+          size="large"
+          message="AI is analyzing your preferences..."
+          :retry-count="recommendationsOperation.retryCount.value"
+        />
+      </div>
+
+      <!-- Empty State -->
+      <div v-else-if="hasSearched && movies.length === 0" class="empty-state">
+        <v-icon icon="mdi-robot-confused" size="64" color="grey"></v-icon>
+        <h3>No recommendations found</h3>
+        <p>Try adjusting your preferences and search again.</p>
+      </div>
+
+      <!-- Getting Started -->
+      <div v-else class="getting-started">
+        <v-card class="text-center pa-8" variant="outlined">
+          <v-icon icon="mdi-lightbulb" size="64" color="primary" class="mb-4"></v-icon>
+          <h3 class="mb-4">Ready to discover new movies?</h3>
+          <p class="mb-4">Set your preferences above and let our AI recommend movies tailored just for you!</p>
+          <v-btn color="primary" variant="text" @click="scrollToTop">
+            <v-icon start icon="mdi-arrow-up"></v-icon>
+            Set Preferences
+          </v-btn>
+        </v-card>
+      </div>
+    </v-container>
+  </ErrorBoundary>
 </template>
 
 <script lang="ts" setup>
@@ -155,10 +163,12 @@ import axios from "axios";
 import { computed, onMounted, ref } from "vue";
 
 import type { MoviePreview } from "../types";
-import type { AxiosError } from "axios";
 import type { Ref } from "vue";
 
+import ErrorBoundary from "../components/ErrorBoundary.vue";
+import LoadingIndicator from "../components/LoadingIndicator.vue";
 import MoviesList from "../components/MoviesList.vue";
+import { useApiCall } from "../composables/useAsyncOperation";
 import { AI_MAX_RATING, AI_MAX_RECOMMENDATIONS, AI_MIN_RATING, AI_MIN_RECOMMENDATIONS, MOVIE_GENRES } from "../const";
 import { getUrl } from "../helpers";
 import { $toast } from "../toast";
@@ -170,8 +180,10 @@ interface RecommendationPreferences {
 }
 
 const movies: Ref<MoviePreview[]> = ref([]);
-const loading = ref(false);
 const hasSearched = ref(false);
+
+// Error handling composable
+const recommendationsOperation = useApiCall("AI Movie Recommendations");
 
 const preferences: Ref<RecommendationPreferences> = ref({
   preferredGenre: null,
@@ -188,57 +200,38 @@ function scrollToTop(): void {
 }
 
 async function getRecommendations(): Promise<void> {
-  loading.value = true;
   hasSearched.value = true;
   movies.value = [];
 
-  try {
-    const params = new URLSearchParams();
+  const params = new URLSearchParams();
 
-    if (preferences.value.preferredGenre) {
-      params.append("preferredGenre", preferences.value.preferredGenre);
-    }
+  if (preferences.value.preferredGenre) {
+    params.append("preferredGenre", preferences.value.preferredGenre);
+  }
 
-    if (preferences.value.minRating && preferences.value.minRating >= AI_MIN_RATING) {
-      params.append("minRating", preferences.value.minRating.toString());
-    }
+  if (preferences.value.minRating && preferences.value.minRating >= AI_MIN_RATING) {
+    params.append("minRating", preferences.value.minRating.toString());
+  }
 
-    params.append("recommendationsNumber", preferences.value.recommendationsNumber.toString());
-    params.append("yearStart", yearRange.value[0].toString());
-    params.append("yearEnd", yearRange.value[1].toString());
+  params.append("recommendationsNumber", preferences.value.recommendationsNumber.toString());
+  params.append("yearStart", yearRange.value[0].toString());
+  params.append("yearEnd", yearRange.value[1].toString());
 
+  const result = await recommendationsOperation.execute(async () => {
     const response = await axios.get(getUrl(`recommendations/?${params.toString()}`));
-    movies.value = response.data as MoviePreview[];
+    return response.data as MoviePreview[];
+  });
+
+  if (result.success && result.data) {
+    movies.value = result.data;
 
     if (movies.value.length === 0) {
       $toast.info("No recommendations found for your preferences. Try adjusting them!");
     } else {
       $toast.success(`Found ${movies.value.length} AI recommendations for you!`);
     }
-  } catch (error: unknown) {
-    const axiosError = error as AxiosError;
-    console.error("Error getting AI recommendations:", axiosError);
-
-    // Handle authentication errors
-    if (axiosError.response?.status === 401) {
-      $toast.error("Please log in to get AI recommendations.");
-      // The axios interceptor should handle redirecting to login
-      movies.value = [];
-      return;
-    }
-
-    if (
-      axiosError.response?.data &&
-      typeof axiosError.response.data === "object" &&
-      "error" in axiosError.response.data
-    ) {
-      $toast.error(`Error: ${(axiosError.response.data as { error: string }).error}`);
-    } else {
-      $toast.error("Failed to get AI recommendations. Please try again.");
-    }
+  } else {
     movies.value = [];
-  } finally {
-    loading.value = false;
   }
 }
 

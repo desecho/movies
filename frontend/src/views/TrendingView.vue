@@ -1,42 +1,62 @@
 <template>
-  <v-container class="trending-container">
-    <div class="trending-header">
-      <div class="header-content">
-        <h1 class="page-title">
-          <v-icon icon="mdi-trending-up" class="title-icon"></v-icon>
-          Trending Movies
-        </h1>
-        <p class="page-subtitle">Discover what's popular right now</p>
-      </div>
-      <div class="trending-badge">
-        <v-chip color="primary" size="large" variant="elevated">
-          <v-icon start icon="mdi-fire"></v-icon>
-          Hot Now
-        </v-chip>
-      </div>
-    </div>
-
-    <v-row v-if="movies.length > 0">
-      <v-col cols="12">
-        <div class="movies-section">
-          <div class="section-header">
-            <h2 class="section-title">Currently Trending</h2>
-            <v-chip color="success" variant="outlined">{{ movies.length }} movies</v-chip>
-          </div>
-          <MoviesList :movies="movies" />
+  <ErrorBoundary context="Trending Movies" fallback-message="Unable to load trending movies">
+    <v-container class="trending-container">
+      <div class="trending-header">
+        <div class="header-content">
+          <h1 class="page-title">
+            <v-icon icon="mdi-trending-up" class="title-icon"></v-icon>
+            Trending Movies
+          </h1>
+          <p class="page-subtitle">Discover what's popular right now</p>
         </div>
-      </v-col>
-    </v-row>
-
-    <v-row v-else>
-      <v-col cols="12" class="text-center">
-        <div class="loading-state">
-          <v-progress-circular indeterminate color="primary" size="48"></v-progress-circular>
-          <p class="loading-text">Loading trending movies...</p>
+        <div class="trending-badge">
+          <v-chip color="primary" size="large" variant="elevated">
+            <v-icon start icon="mdi-fire"></v-icon>
+            Hot Now
+          </v-chip>
         </div>
-      </v-col>
-    </v-row>
-  </v-container>
+      </div>
+
+      <!-- Loading State -->
+      <LoadingIndicator
+        v-if="trendingOperation.isLoading.value"
+        :show="true"
+        variant="overlay"
+        message="Loading trending movies..."
+        :retry-count="trendingOperation.retryCount.value"
+      />
+
+      <!-- Movies Content -->
+      <div v-else-if="movies.length > 0">
+        <v-row>
+          <v-col cols="12">
+            <div class="movies-section">
+              <div class="section-header">
+                <h2 class="section-title">Currently Trending</h2>
+                <v-chip color="success" variant="outlined">{{ movies.length }} movies</v-chip>
+              </div>
+              <MoviesList :movies="movies" />
+            </div>
+          </v-col>
+        </v-row>
+      </div>
+
+      <!-- Empty State -->
+      <div v-else class="empty-state">
+        <v-row>
+          <v-col cols="12" class="text-center">
+            <v-icon icon="mdi-movie-off" size="64" color="grey" class="mb-4"></v-icon>
+            <h3 class="mb-2">No trending movies found</h3>
+            <p class="text-body-1 mb-4">We couldn't load trending movies right now. Please try again.</p>
+            <v-btn color="primary" variant="elevated" :loading="trendingOperation.isLoading.value" @click="loadMovies">
+              <v-icon start icon="mdi-refresh"></v-icon>
+              Try Again
+            </v-btn>
+          </v-col>
+        </v-row>
+      </div>
+    </v-container>
+  </ErrorBoundary>
 </template>
 
 <script lang="ts" setup>
@@ -44,29 +64,34 @@ import axios from "axios";
 import { onMounted, ref } from "vue";
 
 import type { MoviePreview } from "../types";
-import type { AxiosError } from "axios";
 import type { Ref } from "vue";
 
+import ErrorBoundary from "../components/ErrorBoundary.vue";
+import LoadingIndicator from "../components/LoadingIndicator.vue";
 import MoviesList from "../components/MoviesList.vue";
+import { useApiCall } from "../composables/useAsyncOperation";
 import { getUrl } from "../helpers";
-import { $toast } from "../toast";
 
 const movies: Ref<MoviePreview[]> = ref([]);
 
-function loadMovies(): void {
-  axios
-    .get(getUrl("trending/"))
-    .then((response) => {
-      movies.value = response.data as MoviePreview[];
-    })
-    .catch((error: AxiosError) => {
-      console.log(error);
-      $toast.error("Error loading movies");
-    });
+// Error handling composable
+const trendingOperation = useApiCall("Load Trending Movies");
+
+async function loadMovies(): Promise<void> {
+  const result = await trendingOperation.execute(async () => {
+    const response = await axios.get(getUrl("trending/"));
+    return response.data as MoviePreview[];
+  });
+
+  if (result.success && result.data) {
+    movies.value = result.data;
+  } else {
+    movies.value = [];
+  }
 }
 
 onMounted(() => {
-  loadMovies();
+  void loadMovies();
 });
 </script>
 
@@ -160,6 +185,10 @@ onMounted(() => {
   font-size: 1.1rem;
   color: #6c757d;
   font-weight: 500;
+}
+
+.empty-state {
+  padding: 4rem 2rem;
 }
 
 /* Mobile responsiveness */
