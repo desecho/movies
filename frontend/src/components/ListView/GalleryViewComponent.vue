@@ -4,8 +4,11 @@
       :model-value="records"
       item-key="id"
       :disabled="!isSortable"
-      @update:model-value="$emit('update:records', $event)"
-      @sort="$emit('sort')"
+      tag="div"
+      @update:model-value="handleUpdateRecords"
+      @start="handleDragStart"
+      @end="handleDragEnd"
+      @sort="handleSort"
     >
       <template #item="{ element, index }">
         <div class="gallery-record">
@@ -67,6 +70,23 @@ const emit = defineEmits<{
   "move-to-top": [record: RecordType, index: number];
   "move-to-bottom": [record: RecordType, index: number];
 }>();
+
+// Handlers for draggable events
+function handleUpdateRecords(newRecords: RecordType[]) {
+  emit("update:records", newRecords);
+}
+
+function handleDragStart(event: any) {
+  // Drag started
+}
+
+function handleDragEnd(event: any) {
+  emit("sort");
+}
+
+function handleSort(event: any) {
+  // Sort event
+}
 </script>
 
 <style scoped>

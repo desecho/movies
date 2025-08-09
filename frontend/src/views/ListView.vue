@@ -273,9 +273,8 @@ const { sortedRecords: sortedFilteredRecords } = useListViewSorting(filteredReco
 function initializeCustomSort(): void {
   if (sortComputed.value === "custom") {
     const sortedRecords = [...filteredRecords.value].sort((a, b) => (a.order ?? Infinity) - (b.order ?? Infinity));
-    /* For performance, limit to first 50 items when dragging
-       TODO: Implement proper pagination for custom sort later */
-    customSortableRecords.value = sortedRecords.slice(0, 50);
+    // Allow dragging for all filtered records in gallery mode to enable full sorting capability
+    customSortableRecords.value = sortedRecords;
   }
 }
 
@@ -293,10 +292,8 @@ function handleSaveRecordsOrder(): void {
   // Increased timeout for better performance during rapid drag operations
   saveTimeout = setTimeout(() => {
     if (sortComputed.value === "custom" && customSortableRecords.value.length > 0) {
-      // Get all records for the current list, ordered by existing order
-      const allCurrentListRecords = records.value
-        .filter((r) => r.listId === currentListId.value)
-        .sort((a, b) => (a.order ?? Infinity) - (b.order ?? Infinity));
+      // Get all records for the current list WITHOUT sorting - we'll use the drag order
+      const allCurrentListRecords = records.value.filter((r) => r.listId === currentListId.value);
 
       // Update orders for the dragged items first
       customSortableRecords.value.forEach((sortedRecord, index) => {
@@ -317,7 +314,12 @@ function handleSaveRecordsOrder(): void {
       });
 
       const payload = allCurrentListRecords.map((r) => ({ ...r }));
-      saveRecordsOrder(payload);
+
+      try {
+        saveRecordsOrder(payload);
+      } catch (error) {
+        console.error("Error saving movie order:", error);
+      }
     }
     saveTimeout = null;
   }, 300); // Increased debounce timeout for better performance during rapid drag operations
@@ -339,6 +341,10 @@ const galleryRecords = computed({
   set(value) {
     if (sortComputed.value === "custom") {
       isDragging.value = true;
+      // Update the order properties to match the new array positions
+      value.forEach((record, index) => {
+        record.order = index + 1;
+      });
       customSortableRecords.value = value;
       // Rely on explicit @sort event for saving
       isDragging.value = false;
@@ -391,8 +397,8 @@ function recomputeAndSaveOrderForCurrentList(updatedList: RecordType[]): void {
   saveRecordsOrder(updatedList);
   // Refresh local draggable source when in custom sort
   if (sortComputed.value === "custom") {
-    // Sync the visible subset
-    customSortableRecords.value = [...updatedList].slice(0, 50);
+    // Sync the updated list for dragging
+    customSortableRecords.value = [...updatedList];
   }
 }
 
@@ -455,7 +461,7 @@ watch(
 const isSortable = computed(() => {
   return (
     areRecordsLoaded.value &&
-    paginatedRecords.value.length > 0 &&
+    galleryRecords.value.length > 0 &&
     currentListId.value === listToWatchId &&
     sortComputed.value === "custom" &&
     modeComputed.value === "gallery" &&
