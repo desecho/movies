@@ -42,13 +42,6 @@ export function useListViewPagination(
     clearCache: () => void;
 } {
     /**
-     * Performance optimization: Cache pagination results to avoid unnecessary recalculations
-     */
-    let lastPageValue = 0;
-    let lastRecordsLength = 0;
-    let cachedPaginatedRecords: RecordType[] = [];
-
-    /**
      * Calculate total pages with error handling
      */
     const totalPages = computed(() => {
@@ -75,35 +68,22 @@ export function useListViewPagination(
     });
 
     /**
-     * Get paginated records with memoization for performance
+     * Get paginated records without caching for simpler reactivity
      */
     const paginatedRecords = computed(() => {
         try {
             const currentRecords = sortedRecords.value || [];
             const page = validatedPage.value;
 
-            // Use cache if page and records haven't changed
-            if (
-                page === lastPageValue &&
-                currentRecords.length === lastRecordsLength
-            ) {
-                return cachedPaginatedRecords;
-            }
-
             // Validate pagination bounds
             const start = Math.max(0, (page - 1) * itemsPerPage);
             const end = Math.min(currentRecords.length, start + itemsPerPage);
             const result = currentRecords.slice(start, end);
 
-            // Update cache
-            lastPageValue = page;
-            lastRecordsLength = currentRecords.length;
-            cachedPaginatedRecords = result;
-
             return result;
         } catch (error) {
             console.error("Error in paginatedRecords computation:", error);
-            return cachedPaginatedRecords || [];
+            return [];
         }
     });
 
@@ -135,12 +115,10 @@ export function useListViewPagination(
     );
 
     /**
-     * Clear pagination cache (useful when records change significantly)
+     * Clear pagination cache (no-op since caching was removed)
      */
     function clearCache(): void {
-        lastPageValue = 0;
-        lastRecordsLength = 0;
-        cachedPaginatedRecords = [];
+        // No-op - caching removed for simpler reactivity
     }
 
     return {
