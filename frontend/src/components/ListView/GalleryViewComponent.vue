@@ -47,7 +47,9 @@
 <script lang="ts" setup>
 import VLazyImage from "v-lazy-image";
 import Draggable from "vuedraggable";
+
 import type { RecordType } from "../../types";
+
 import { getSrcSet } from "../../helpers";
 
 interface Props {

@@ -79,9 +79,11 @@
 
 <script lang="ts" setup>
 import { computed } from "vue";
+
+import type { ListContextProps, SortProps, SortType, ViewMode, ViewModeProps } from "../../types/listView";
+
 import { useMobile } from "../../composables/mobile";
 import { listToWatchId, listWatchedId } from "../../const";
-import type { ViewMode, SortType, ListContextProps, ViewModeProps, SortProps } from "../../types/listView";
 
 interface Props extends ListContextProps, ViewModeProps, SortProps {
   toRewatchFilter: boolean;

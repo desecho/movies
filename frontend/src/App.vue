@@ -2,7 +2,9 @@
   <v-app>
     <v-main>
       <MenuComponent />
-      <RouterView />
+      <ErrorBoundary context="Main Application" :allow-retry="true">
+        <RouterView />
+      </ErrorBoundary>
     </v-main>
     <FooterComponent />
   </v-app>
@@ -12,6 +14,7 @@
 import { onMounted } from "vue";
 
 import { initAxios } from "./axios";
+import ErrorBoundary from "./components/ErrorBoundary.vue";
 import FooterComponent from "./components/FooterComponent.vue";
 import MenuComponent from "./components/MenuComponent.vue";
 import { useAuthStore } from "./stores/auth";

@@ -22,8 +22,25 @@
             @keyup.enter="onSubmit"
           ></v-text-field>
           <div class="d-flex justify-space-around align-center flex-column flex-md-row">
-            <v-btn color="primary" :disabled="!isFormValid" @click="onSubmit">Login</v-btn>
+            <v-btn
+              color="primary"
+              :disabled="!isFormValid || loginOperation.isLoading.value"
+              :loading="loginOperation.isLoading.value"
+              @click="onSubmit"
+            >
+              Login
+            </v-btn>
           </div>
+
+          <!-- Loading indicator for retry attempts -->
+          <LoadingIndicator
+            v-if="loginOperation.isRetrying.value"
+            :show="true"
+            variant="inline"
+            size="small"
+            message="Retrying login..."
+            :retry-count="loginOperation.retryCount.value"
+          />
         </v-form>
         <br />
         <div v-if="!isLoggedIn">
@@ -44,13 +61,11 @@
 <script lang="ts" setup>
 import { ref } from "vue";
 
-import type { TokenErrorData } from "./types";
-import type { AxiosError } from "axios";
-
+import LoadingIndicator from "../components/LoadingIndicator.vue";
 import { useFormValidation } from "../composables/formValidation";
+import { useAsyncOperation } from "../composables/useAsyncOperation";
 import { rulesHelper } from "../helpers";
 import { useAuthStore } from "../stores/auth";
-import { $toast } from "../toast";
 
 const rules = rulesHelper;
 
@@ -64,18 +79,24 @@ const isLoggedIn = user.isLoggedIn;
 
 const { form, isValid } = useFormValidation();
 
+// Use async operation for login with proper error handling
+const loginOperation = useAsyncOperation({
+  context: "User Login",
+  errorHandler: "authentication",
+  showLoading: true,
+  successMessage: "Welcome back!",
+  showSuccess: true,
+});
+
 async function onSubmit(): Promise<void> {
   if (!(await isValid())) {
     return;
   }
+
   const { login } = useAuthStore();
-  try {
+
+  await loginOperation.execute(async () => {
     await login(username.value, password.value);
-  } catch (error) {
-    console.log(error);
-    const errorAxios = error as AxiosError;
-    const data = errorAxios.response.data as TokenErrorData;
-    $toast.error(data.detail);
-  }
+  });
 }
 </script>

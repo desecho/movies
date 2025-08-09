@@ -22,6 +22,7 @@
 
 <script lang="ts" setup>
 import { computed } from "vue";
+
 import { useMobile } from "../../composables/mobile";
 import { listToWatchId, listWatchedId } from "../../const";
 

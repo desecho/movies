@@ -36,8 +36,8 @@
               :color="followStatus?.is_following ? 'success' : 'white'"
               :variant="followStatus?.is_following ? 'outlined' : 'elevated'"
               size="large"
-              @click="toggleFollow"
               class="follow-btn-profile"
+              @click="toggleFollow"
             >
               <v-icon 
                 :icon="followStatus?.is_following ? 'mdi-account-check' : 'mdi-account-plus'" 

@@ -100,11 +100,11 @@
         </div>
       </div>
       <div
+        v-show="mode !== 'compact' && mode !== 'minimal'"
         class="details"
         :class="{
           'details-minimal': mode == 'minimal',
         }"
-        v-show="mode !== 'compact' && mode !== 'minimal'"
       >
         <div v-show="record.movie.imdbRating" class="imdb-rating">
           <span class="item-desc">IMDb Rating:</span>
@@ -305,14 +305,16 @@
 </template>
 
 <script lang="ts" setup>
-import { computed } from "vue";
 import VLazyImage from "v-lazy-image";
+import { computed } from "vue";
 import StarRating from "vue-star-rating";
-import ShareButton from "../ShareButton.vue";
+
 import type { RecordType } from "../../types";
-import type { ViewMode, ListContextProps, ViewModeProps } from "../../types/listView";
-import { getSrcSet } from "../../helpers";
+import type { ListContextProps, ViewMode, ViewModeProps } from "../../types/listView";
+
 import { listToWatchId, listWatchedId, starSizeMinimal, starSizeNormal } from "../../const";
+import { getSrcSet } from "../../helpers";
+import ShareButton from "../ShareButton.vue";
 
 interface Props extends ListContextProps, ViewModeProps {
   record: RecordType;

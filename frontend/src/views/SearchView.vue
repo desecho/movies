@@ -23,7 +23,15 @@
             </v-form>
           </v-col>
           <v-col cols="12" md="3">
-            <v-btn color="primary" :disabled="!isFormValid" size="large" class="search-btn" block @click="search">
+            <v-btn
+              color="primary"
+              :disabled="!isFormValid || searchOperation.isLoading.value"
+              :loading="searchOperation.isLoading.value"
+              size="large"
+              class="search-btn"
+              block
+              @click="search"
+            >
               <v-icon left>mdi-magnify</v-icon>
               Search
             </v-btn>
@@ -82,11 +90,11 @@ import axios from "axios";
 import { ref } from "vue";
 
 import type { MoviePreview } from "../types";
-import type { AxiosError } from "axios";
 import type { Ref } from "vue";
 
 import MoviesList from "../components/MoviesList.vue";
 import { useFormValidation } from "../composables/formValidation";
+import { useApiCall } from "../composables/useAsyncOperation";
 import { getUrl, rulesHelper } from "../helpers";
 import { $toast } from "../toast";
 
@@ -101,6 +109,9 @@ const popularOnly = ref(true);
 const sortByDate = ref(false);
 
 const { form, isValid } = useFormValidation();
+
+// Use API call composable for better error handling
+const searchOperation = useApiCall("Movie Search");
 
 function onTypeChange(type_: string): void {
   switch (type_) {
@@ -122,33 +133,35 @@ async function search(): Promise<void> {
   if (!(await isValid())) {
     return;
   }
+
   const options = {
     popularOnly: popularOnly.value,
     sortByDate: sortByDate.value,
   };
-  const data = {
+  const searchParams = {
     query: query.value,
     type: typeCode.value,
     options: JSON.stringify(options),
   };
 
-  axios
-    .get(getUrl("search/"), { params: data })
-    .then((response) => {
-      const ms: MoviePreview[] = response.data as MoviePreview[];
-      if (ms.length === 0) {
-        $toast.info("Nothing has been found");
-      }
-      ms.forEach((m: MoviePreview) => {
-        m.hidden = false;
-      });
+  const result = await searchOperation.execute(async () => {
+    const response = await axios.get(getUrl("search/"), { params: searchParams });
+    return response.data as MoviePreview[];
+  });
 
-      movies.value = ms;
-    })
-    .catch((error: AxiosError) => {
-      console.log(error);
-      $toast.error("Search error");
+  if (result.success && result.data) {
+    const movieResults = result.data;
+
+    if (movieResults.length === 0) {
+      $toast.info("Nothing has been found");
+    }
+
+    movieResults.forEach((movie: MoviePreview) => {
+      movie.hidden = false;
     });
+
+    movies.value = movieResults;
+  }
 }
 </script>
 

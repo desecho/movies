@@ -15,6 +15,7 @@
 <script lang="ts" setup>
 import VPagination from "@hennge/vue3-pagination";
 import { computed } from "vue";
+
 import { useThemeStore } from "../../stores/theme";
 
 interface Props {
