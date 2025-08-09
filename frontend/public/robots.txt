@@ -1,0 +1,26 @@
+User-agent: *
+Allow: /
+Disallow: /login
+Disallow: /register
+Disallow: /logout
+Disallow: /reset-password
+Disallow: /reset-password-request
+Disallow: /verify-user
+Disallow: /change-password
+Disallow: /preferences
+
+# Allow search engines to crawl public pages
+Allow: /search
+Allow: /about
+Allow: /trending
+Allow: /recommendations
+Allow: /users/*/list/watched
+Allow: /users/*/list/to-watch
+Allow: /users/*/following
+Allow: /users/*/followers
+
+# Crawl-delay for search engines (optional)
+Crawl-delay: 1
+
+# Sitemap location
+Sitemap: https://moviemunch.app/sitemap.xml

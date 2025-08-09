@@ -84,7 +84,18 @@
 </template>
 
 <script lang="ts" setup>
+import { useSEO } from "../composables/useSEO";
 import { ADMIN_EMAIL } from "../const";
+
+// SEO for about page
+useSEO({
+  title: "About MovieMunch",
+  description:
+    "Learn about MovieMunch - the ultimate movie tracking platform. Create watchlists, get AI recommendations, follow friends, and discover your next favorite film.",
+  keywords: ["about moviemunch", "movie tracking features", "film database", "watchlist app", "movie recommendations"],
+  type: "article",
+  url: "/about",
+});
 
 const email = ADMIN_EMAIL;
 </script>

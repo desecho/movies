@@ -17,8 +17,30 @@ import { initAxios } from "./axios";
 import ErrorBoundary from "./components/ErrorBoundary.vue";
 import FooterComponent from "./components/FooterComponent.vue";
 import MenuComponent from "./components/MenuComponent.vue";
+import { useSEO } from "./composables/useSEO";
+import { useOrganizationStructuredData } from "./composables/useStructuredData";
 import { useAuthStore } from "./stores/auth";
 import { useThemeStore } from "./stores/theme";
+
+// Default SEO for the entire application
+useSEO({
+  title: "MovieMunch",
+  description:
+    "Track what you watch. Discover what to watch next. Join the MovieMunch community for personalized movie recommendations and discover your next favorite film.",
+  keywords: ["movies", "film", "cinema", "watch", "tracking", "recommendations", "moviemunch"],
+  type: "website",
+  url: "/",
+});
+
+// Organization structured data
+useOrganizationStructuredData({
+  name: "MovieMunch",
+  description:
+    "The ultimate movie tracking platform. Create watchlists, get AI recommendations, follow friends, and discover your next favorite film.",
+  url: "https://moviemunch.app",
+  logo: "https://moviemunch.app/img/logo.png",
+  sameAs: ["https://github.com/desecho/movies"],
+});
 
 const themeStore = useThemeStore();
 const authStore = useAuthStore();

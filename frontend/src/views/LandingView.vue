@@ -72,7 +72,26 @@
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
 
+import { useSEO } from "../composables/useSEO";
 import { useAuthStore } from "../stores/auth";
+
+// SEO for landing page
+useSEO({
+  title: "Welcome to MovieMunch",
+  description:
+    "Track what you watch. Discover what to watch next. Search movies, get AI recommendations, follow friends, and discover your perfect watchlist on MovieMunch.",
+  keywords: [
+    "movie tracker",
+    "film tracker",
+    "watchlist",
+    "movie recommendations",
+    "AI movie suggestions",
+    "trending movies",
+    "movie search",
+  ],
+  type: "website",
+  url: "/",
+});
 
 const { user } = storeToRefs(useAuthStore());
 </script>

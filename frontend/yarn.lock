@@ -980,6 +980,72 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@unhead/dom@npm:1.11.20, @unhead/dom@npm:^1.7.0":
+  version: 1.11.20
+  resolution: "@unhead/dom@npm:1.11.20"
+  dependencies:
+    "@unhead/schema": 1.11.20
+    "@unhead/shared": 1.11.20
+  checksum: 9b5186b2950458562198fcab921b78a3b22bef77157758aa9f67c89983ce72821c71c23edc5562cd2862c4ff813e4729c1421ee7c92cd2a07f927655db7b2602
+  languageName: node
+  linkType: hard
+
+"@unhead/schema@npm:1.11.20, @unhead/schema@npm:^1.7.0":
+  version: 1.11.20
+  resolution: "@unhead/schema@npm:1.11.20"
+  dependencies:
+    hookable: ^5.5.3
+    zhead: ^2.2.4
+  checksum: b0a70a2cb93ec90d81827ab410e7c822b8b449add3fa8335ba6b2f7c56e5df067e0e03f1c47297eaf744c1f4c20abc5467f47a1a6a2b344134abec4521da6302
+  languageName: node
+  linkType: hard
+
+"@unhead/shared@npm:1.11.20":
+  version: 1.11.20
+  resolution: "@unhead/shared@npm:1.11.20"
+  dependencies:
+    "@unhead/schema": 1.11.20
+    packrup: ^0.1.2
+  checksum: 2909eda828a21f5ffca4c56f57cabf7e67c06ecf857f2ef35a7d1c6b718b6aead8dd88199422c63ebc19b7a00e249343f7414895754e8ec2ee940fa9b71645a4
+  languageName: node
+  linkType: hard
+
+"@unhead/ssr@npm:^1.7.0":
+  version: 1.11.20
+  resolution: "@unhead/ssr@npm:1.11.20"
+  dependencies:
+    "@unhead/schema": 1.11.20
+    "@unhead/shared": 1.11.20
+  checksum: b7b79850b257535585d458646c9ec52e2d2d2f4984b41d8a25024f24a7f1e0fea0643af9d1fbce7126eb6df9ae85a58fe8fb6f68b5c580fb135532e422416bf8
+  languageName: node
+  linkType: hard
+
+"@unhead/vue@npm:^1.7.0":
+  version: 1.11.20
+  resolution: "@unhead/vue@npm:1.11.20"
+  dependencies:
+    "@unhead/schema": 1.11.20
+    "@unhead/shared": 1.11.20
+    hookable: ^5.5.3
+    unhead: 1.11.20
+  peerDependencies:
+    vue: ">=2.7 || >=3"
+  checksum: ad5e3a86c0808c97f133afb32b16db9e3873d909246044ba0e0b5bd0c974405a68e44a4f7a7364a87999cc5e58c2a2bb10c87762d15e363d55003d9d9e2326b0
+  languageName: node
+  linkType: hard
+
+"@unhead/vue@npm:^2.0.14":
+  version: 2.0.14
+  resolution: "@unhead/vue@npm:2.0.14"
+  dependencies:
+    hookable: ^5.5.3
+    unhead: 2.0.14
+  peerDependencies:
+    vue: ">=3.5.18"
+  checksum: 03cc178798cbb61a271868bacef2d6adbc358454fa0f3167fd9059058b2d5f2aa2c1ea4518573df0d832c749a4faaa565d98be8770350462ef20e2e3f63d66d6
+  languageName: node
+  linkType: hard
+
 "@unrs/resolver-binding-android-arm-eabi@npm:1.11.1":
   version: 1.11.1
   resolution: "@unrs/resolver-binding-android-arm-eabi@npm:1.11.1"
@@ -1332,6 +1398,20 @@ __metadata:
     vue: ^3.0.0
     vuetify: ^3.0.0
   checksum: e8694d0e9622e8ca2392356582de1163b4b5549ed74fc99fa6ab5e35b690cca7f5182f76937657ad90ead4a2e19eab578f37c2fe5a7961840b237c6175970e3a
+  languageName: node
+  linkType: hard
+
+"@vueuse/head@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "@vueuse/head@npm:2.0.0"
+  dependencies:
+    "@unhead/dom": ^1.7.0
+    "@unhead/schema": ^1.7.0
+    "@unhead/ssr": ^1.7.0
+    "@unhead/vue": ^1.7.0
+  peerDependencies:
+    vue: ">=2.7 || >=3"
+  checksum: 21e1465174acfcfb9ab64fdf558d524ba43ba28129eec6401c41d0dbca09ed7ee07ed4ade75ee0f65a225d68d7ae0417a615881ddc87c690b8aaa91d2a6a56e6
   languageName: node
   linkType: hard
 
@@ -3607,7 +3687,9 @@ __metadata:
     "@types/x-axios-progress-bar": ^1.2.4
     "@typescript-eslint/eslint-plugin": ^8.29.1
     "@typescript-eslint/parser": ^8.29.1
+    "@unhead/vue": ^2.0.14
     "@vitejs/plugin-vue": ^5.2.3
+    "@vueuse/head": ^2.0.0
     axios: ^1.8.4
     eslint: ^9.24.0
     eslint-config-prettier: ^10.1.2
@@ -3666,11 +3748,11 @@ __metadata:
   linkType: hard
 
 "napi-postinstall@npm:^0.3.0":
-  version: 0.3.2
-  resolution: "napi-postinstall@npm:0.3.2"
+  version: 0.3.3
+  resolution: "napi-postinstall@npm:0.3.3"
   bin:
     napi-postinstall: lib/cli.js
-  checksum: 5c0483abe06e0b8dedd84c420764045aa9c384a192a518bfbffe42993c2aab0ac0605868cf9a0801b45f4443066cd431e47303273a1c9021ab6a1782cf8f8aa3
+  checksum: b18f36be61045821423f6fdfa68fcf27ef781d2f7d65ef16c611ee2d815439c7db0c2482f3982d26b0bdafbaaa0e8387cbc84172080079c506364686971d76fb
   languageName: node
   linkType: hard
 
@@ -3875,6 +3957,13 @@ __metadata:
   version: 1.0.1
   resolution: "package-json-from-dist@npm:1.0.1"
   checksum: 58ee9538f2f762988433da00e26acc788036914d57c71c246bf0be1b60cdbd77dd60b6a3e1a30465f0b248aeb80079e0b34cb6050b1dfa18c06953bb1cbc7602
+  languageName: node
+  linkType: hard
+
+"packrup@npm:^0.1.2":
+  version: 0.1.2
+  resolution: "packrup@npm:0.1.2"
+  checksum: 3ba224b0373c25202c2b4ea167dd726b390567256b1af8be8bd73f4f9ed7971bf93f11d7bfce92c93526cde1aad531a0b1f82d4587cde1eb083b9351f038622d
   languageName: node
   linkType: hard
 
@@ -4839,6 +4928,27 @@ __metadata:
   languageName: node
   linkType: hard
 
+"unhead@npm:1.11.20":
+  version: 1.11.20
+  resolution: "unhead@npm:1.11.20"
+  dependencies:
+    "@unhead/dom": 1.11.20
+    "@unhead/schema": 1.11.20
+    "@unhead/shared": 1.11.20
+    hookable: ^5.5.3
+  checksum: 3678a1ae5b4d578c5beda121c05204978076cc2eac01bd80e3b4c1f79b43a2daca96a5304300d22f8458cd6f1929101680fe89163fc3e87cb77d688c9cead1df
+  languageName: node
+  linkType: hard
+
+"unhead@npm:2.0.14":
+  version: 2.0.14
+  resolution: "unhead@npm:2.0.14"
+  dependencies:
+    hookable: ^5.5.3
+  checksum: 53c4e0114c7baa858475d14c19baa2857f6f7a0a361e372e868fc6e3dbaaa8f67f2f5fcb6cfa68e539dba1b54c0f63a0618f3bec05157178fa21cb501def4025
+  languageName: node
+  linkType: hard
+
 "unique-filename@npm:^4.0.0":
   version: 4.0.0
   resolution: "unique-filename@npm:4.0.0"
@@ -5329,5 +5439,12 @@ __metadata:
   version: 0.1.0
   resolution: "yocto-queue@npm:0.1.0"
   checksum: f77b3d8d00310def622123df93d4ee654fc6a0096182af8bd60679ddcdfb3474c56c6c7190817c84a2785648cdee9d721c0154eb45698c62176c322fb46fc700
+  languageName: node
+  linkType: hard
+
+"zhead@npm:^2.2.4":
+  version: 2.2.4
+  resolution: "zhead@npm:2.2.4"
+  checksum: 22836aa6947b27d35176cde40e3f5b19c24e0f46ee52d860e8df674a35aec07b34f6c78437323c797d1dc37ec0847e61e4f07ab605d519cc742245b5fa25b889
   languageName: node
   linkType: hard

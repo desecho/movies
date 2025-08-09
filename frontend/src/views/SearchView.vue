@@ -95,14 +95,25 @@ import type { Ref } from "vue";
 import MoviesList from "../components/MoviesList.vue";
 import { useFormValidation } from "../composables/formValidation";
 import { useApiCall } from "../composables/useAsyncOperation";
+import { useSEO } from "../composables/useSEO";
 import { getUrl, rulesHelper } from "../helpers";
 import { $toast } from "../toast";
+
+// SEO for search page
+useSEO({
+  title: "Search Movies",
+  description: "Search for movies, actors, and directors on MovieMunch. Discover your next favorite film.",
+  keywords: ["movie search", "film search", "actor search", "director search", "movie database"],
+  type: "website",
+  url: "/search",
+});
+
+const query = ref("");
 
 const rules = rulesHelper;
 
 const isFormValid = ref(false);
 const movies: Ref<MoviePreview[]> = ref([]);
-const query = ref("");
 const type = ref("Movie");
 const typeCode = ref("movie");
 const popularOnly = ref(true);
