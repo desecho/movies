@@ -148,6 +148,15 @@ A concise guide to everything the site does and how to use it. This document foc
   - Logged‑in users with no follows: See recent public activity (same as anonymous)
   - Logged‑in users with follows: See activity from followed users only
   - API: `GET /feed/`
+  - Pagination: 20 items per page by default; override with `?page_size=...` (max 100)
+
+- **Network management**
+  - Page: `/network` (logged‑in only)
+  - Tabs for `Following` and `Followers`
+  - Actions: follow back, unfollow, and quick navigation to user profiles
+  - APIs:
+    - `GET /user/following/`, `GET /user/followers/`
+    - Public lists: `GET /users/<username>/following/`, `GET /users/<username>/followers/`
 
 ---
 
@@ -162,6 +171,7 @@ A concise guide to everything the site does and how to use it. This document foc
   - Top 5: Genres, Directors, Actors
   - Trends: Monthly watch counts (last 12 months) and rating distribution
   - Year in Review: Per‑year overview (movies watched, hours watched, peak month), milestones (first/last movie, highest rated, longest), and top items
+  - Release date insights: Decade distribution, average release year, oldest/newest movies, top release years, and vintage preferences (classic/retro/modern/recent)
 - **Yearly view**
   - Year selector to browse historical stats
   - Available years are provided by the API
@@ -192,6 +202,19 @@ A concise guide to everything the site does and how to use it. This document foc
 
 ---
 
+## SEO and Analytics
+
+- **Search Engine Optimization**
+  - Per‑page SEO with titles, descriptions, keywords, canonical links
+  - Social previews: Open Graph and Twitter Card meta tags
+  - Structured data (schema.org): Movie, Person, Organization, and BreadcrumbList injected as JSON‑LD
+  - `robots.txt` and `sitemap.xml` included
+
+- **Analytics**
+  - Google Analytics 4 via router‑based page tracking
+
+---
+
 ## Data Sources and Freshness
 
 - **TMDB**: Posters, trending, search results, titles, release dates, trailers
@@ -216,6 +239,8 @@ A concise guide to everything the site does and how to use it. This document foc
 
 /users/                      – List public users (GET)
 /users/<username>/avatar/    – Get a user’s avatar (GET)
+/users/<username>/following/ – Public following list for a user (GET)
+/users/<username>/followers/ – Public followers list for a user (GET)
 
 /search/                     – Search movies (GET)
 /trending/                   – Trending movies (GET)
@@ -223,6 +248,8 @@ A concise guide to everything the site does and how to use it. This document foc
 /feed/                       – Activity feed (GET)
 /follow/<username>/          – Follow status (GET), follow (POST), unfollow (DELETE)
 /stats/                      – User stats (GET, auth required)
+/user/following/             – Current user following list (GET)
+/user/followers/             – Current user followers list (GET)
 
 /records/                    – Current user’s records (GET)
 /users/<username>/records/   – Another user’s records (GET)
