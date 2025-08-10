@@ -48,6 +48,9 @@ class StatsView(APIView):
         # Get trend stats
         trend_stats = self._get_trend_stats(watched_records)
 
+        # Get release date stats
+        release_date_stats = self._get_release_date_stats(watched_records)
+
         # Always get available years for the selector
         available_years = self._get_available_years(user)
 
@@ -65,6 +68,7 @@ class StatsView(APIView):
             **time_rating_stats,
             **preference_stats,
             **trend_stats,
+            **release_date_stats,
             **yearly_stats,
         }
 
@@ -335,3 +339,103 @@ class StatsView(APIView):
         years = user.get_records().filter(list_id=List.WATCHED).dates("date", "year")
         year_list = sorted({date.year for date in years}, reverse=True)
         return year_list
+
+    @staticmethod
+    def _get_release_date_stats(watched_records: "QuerySet[Record]") -> Dict[str, Any]:
+        """Get release date statistics."""
+        # Get records with release dates
+        records_with_dates = watched_records.select_related("movie").filter(movie__release_date__isnull=False)
+
+        if not records_with_dates.exists():
+            return {
+                "decadeDistribution": {},
+                "averageReleaseYear": None,
+                "oldestMovie": None,
+                "newestMovie": None,
+                "topReleaseYears": [],
+                "vintagePreferences": {
+                    "classic": 0,  # Pre-1980
+                    "retro": 0,  # 1980-1999
+                    "modern": 0,  # 2000-2009
+                    "recent": 0,  # 2010+
+                },
+            }
+
+        # Collect release years
+        release_years = []
+        oldest_record = None
+        newest_record = None
+
+        for record in records_with_dates:
+            if record.movie.release_date:
+                release_year = record.movie.release_date.year
+                release_years.append(release_year)
+
+                # Track oldest and newest movies
+                if (
+                    oldest_record is None
+                    or oldest_record.movie.release_date is None
+                    or record.movie.release_date < oldest_record.movie.release_date
+                ):
+                    oldest_record = record
+                if (
+                    newest_record is None
+                    or newest_record.movie.release_date is None
+                    or record.movie.release_date > newest_record.movie.release_date
+                ):
+                    newest_record = record
+
+        # Calculate decade distribution
+        decade_counts: Dict[str, int] = {}
+        year_counts: Dict[int, int] = {}
+
+        for year in release_years:
+            # Decade calculation (e.g., 1985 -> 1980s)
+            decade = (year // 10) * 10
+            decade_label = f"{decade}s"
+            decade_counts[decade_label] = decade_counts.get(decade_label, 0) + 1
+
+            # Year counts for top years
+            year_counts[year] = year_counts.get(year, 0) + 1
+
+        # Calculate vintage preferences
+        classic_count = sum(1 for year in release_years if year < 1980)
+        retro_count = sum(1 for year in release_years if 1980 <= year < 2000)
+        modern_count = sum(1 for year in release_years if 2000 <= year < 2010)
+        recent_count = sum(1 for year in release_years if year >= 2010)
+
+        # Get top release years (limit to 5)
+        top_years = sorted(year_counts.items(), key=lambda x: x[1], reverse=True)[:5]
+
+        # Calculate average release year
+        average_year = sum(release_years) / len(release_years) if release_years else None
+
+        return {
+            "decadeDistribution": decade_counts,
+            "averageReleaseYear": round(average_year, 1) if average_year else None,
+            "oldestMovie": (
+                {
+                    "title": oldest_record.movie.title,
+                    "releaseDate": oldest_record.movie.release_date.strftime("%Y-%m-%d"),
+                    "releaseYear": oldest_record.movie.release_date.year,
+                }
+                if oldest_record and oldest_record.movie.release_date
+                else None
+            ),
+            "newestMovie": (
+                {
+                    "title": newest_record.movie.title,
+                    "releaseDate": newest_record.movie.release_date.strftime("%Y-%m-%d"),
+                    "releaseYear": newest_record.movie.release_date.year,
+                }
+                if newest_record and newest_record.movie.release_date
+                else None
+            ),
+            "topReleaseYears": [{"year": year, "count": count} for year, count in top_years],
+            "vintagePreferences": {
+                "classic": classic_count,
+                "retro": retro_count,
+                "modern": modern_count,
+                "recent": recent_count,
+            },
+        }

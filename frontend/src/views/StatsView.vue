@@ -362,6 +362,112 @@
                 </v-card-text>
               </v-card>
             </v-col>
+
+            <!-- Release Date Overview -->
+            <v-col cols="12" md="6">
+              <v-card class="stat-card">
+                <v-card-title>
+                  <v-icon class="mr-2">mdi-calendar-clock</v-icon>
+                  Release Date Overview
+                </v-card-title>
+                <v-card-text>
+                  <div v-if="!stats.oldestMovie && !stats.newestMovie" class="text-center">
+                    <p class="text-muted">No release date data available</p>
+                  </div>
+                  <div v-else class="release-overview">
+                    <div v-if="stats.averageReleaseYear" class="overview-item mb-4">
+                      <div class="d-flex justify-space-between align-center mb-2">
+                        <div class="d-flex align-center">
+                          <v-icon size="20" color="primary" class="mr-2">mdi-calendar-star</v-icon>
+                          <span class="font-weight-medium">Average Release Year</span>
+                        </div>
+                        <v-chip size="small" color="primary">{{ Math.round(stats.averageReleaseYear) }}</v-chip>
+                      </div>
+                    </div>
+
+                    <div v-if="stats.oldestMovie" class="overview-item mb-3">
+                      <div class="d-flex align-center mb-1">
+                        <v-icon size="16" color="brown" class="mr-2">mdi-history</v-icon>
+                        <span class="text-caption font-weight-medium">Oldest Movie</span>
+                      </div>
+                      <div class="ml-6">
+                        <p class="text-body-2 mb-0">{{ stats.oldestMovie.title }}</p>
+                        <p class="text-caption text-muted">{{ stats.oldestMovie.releaseYear }}</p>
+                      </div>
+                    </div>
+
+                    <div v-if="stats.newestMovie" class="overview-item">
+                      <div class="d-flex align-center mb-1">
+                        <v-icon size="16" color="green" class="mr-2">mdi-new-box</v-icon>
+                        <span class="text-caption font-weight-medium">Newest Movie</span>
+                      </div>
+                      <div class="ml-6">
+                        <p class="text-body-2 mb-0">{{ stats.newestMovie.title }}</p>
+                        <p class="text-caption text-muted">{{ stats.newestMovie.releaseYear }}</p>
+                      </div>
+                    </div>
+                  </div>
+                </v-card-text>
+              </v-card>
+            </v-col>
+
+            <!-- Decade Distribution -->
+            <v-col cols="12" md="6">
+              <v-card class="stat-card">
+                <v-card-title>
+                  <v-icon class="mr-2">mdi-calendar-range</v-icon>
+                  Movies by Decade
+                </v-card-title>
+                <v-card-text>
+                  <div v-if="Object.keys(stats.decadeDistribution).length === 0" class="text-center">
+                    <p class="text-muted">No decade data available</p>
+                  </div>
+                  <div v-else>
+                    <div v-for="[decade, count] in getSortedDecades()" :key="decade" class="decade-item">
+                      <div class="d-flex justify-space-between align-center mb-2">
+                        <span>{{ decade }}</span>
+                        <v-chip size="small" color="deep-purple">{{ count }}</v-chip>
+                      </div>
+                      <v-progress-linear
+                        :model-value="getDecadePercentage(count)"
+                        color="deep-purple"
+                        height="6"
+                        class="mb-3"
+                      ></v-progress-linear>
+                    </div>
+                  </div>
+                </v-card-text>
+              </v-card>
+            </v-col>
+
+            <!-- Vintage Preferences -->
+            <v-col cols="12" md="6">
+              <v-card class="stat-card">
+                <v-card-title>
+                  <v-icon class="mr-2">mdi-timeline-clock</v-icon>
+                  Era Preferences
+                </v-card-title>
+                <v-card-text>
+                  <div class="vintage-preferences">
+                    <div v-for="(count, era) in stats.vintagePreferences" :key="era" class="vintage-item">
+                      <div class="d-flex justify-space-between align-center mb-2">
+                        <div class="d-flex align-center">
+                          <span class="mr-2">{{ formatEraLabel(era) }}</span>
+                          <span class="text-caption text-muted">{{ getEraRange(era) }}</span>
+                        </div>
+                        <v-chip size="small" color="teal">{{ count }}</v-chip>
+                      </div>
+                      <v-progress-linear
+                        :model-value="getVintagePercentage(count)"
+                        color="teal"
+                        height="6"
+                        class="mb-3"
+                      ></v-progress-linear>
+                    </div>
+                  </div>
+                </v-card-text>
+              </v-card>
+            </v-col>
           </v-row>
 
           <!-- Monthly Trends -->
@@ -458,6 +564,24 @@ interface YearlyMilestones {
   topActor?: TopItemMilestone;
 }
 
+interface ReleaseMovie {
+  title: string;
+  releaseDate: string;
+  releaseYear: number;
+}
+
+interface ReleaseYearItem {
+  year: number;
+  count: number;
+}
+
+interface VintagePreferences {
+  classic: number;
+  retro: number;
+  modern: number;
+  recent: number;
+}
+
 interface Stats {
   totalMoviesWatched: number;
   totalMoviesToWatch: number;
@@ -470,6 +594,12 @@ interface Stats {
   topActors: TopItem[];
   monthlyTrends: MonthlyTrend[];
   ratingDistribution: Record<string, number>;
+  decadeDistribution: Record<string, number>;
+  averageReleaseYear: number | null;
+  oldestMovie: ReleaseMovie | null;
+  newestMovie: ReleaseMovie | null;
+  topReleaseYears: ReleaseYearItem[];
+  vintagePreferences: VintagePreferences;
   yearlyOverview?: YearlyOverview;
   yearlyMilestones?: YearlyMilestones;
   availableYears?: number[];
@@ -501,6 +631,17 @@ const stats = ref<Stats>({
   topActors: [],
   monthlyTrends: [],
   ratingDistribution: {},
+  decadeDistribution: {},
+  averageReleaseYear: null,
+  oldestMovie: null,
+  newestMovie: null,
+  topReleaseYears: [],
+  vintagePreferences: {
+    classic: 0,
+    retro: 0,
+    modern: 0,
+    recent: 0,
+  },
   availableYears: [],
 });
 
@@ -588,6 +729,48 @@ function formatMonth(monthStr: string): string {
   return date.toLocaleDateString("en-US", { month: "short", year: "numeric" });
 }
 
+function getSortedDecades(): Array<[string, number]> {
+  return Object.entries(stats.value.decadeDistribution).sort((a, b) => {
+    const yearA = parseInt(a[0].replace("s", ""), 10);
+    const yearB = parseInt(b[0].replace("s", ""), 10);
+    return yearA - yearB;
+  });
+}
+
+function getDecadePercentage(count: number): number {
+  const values = Object.values(stats.value.decadeDistribution);
+  if (values.length === 0) {
+    return 0;
+  }
+  const maxCount = Math.max(...values);
+  return maxCount > 0 ? (count / maxCount) * 100 : 0;
+}
+
+function getVintagePercentage(count: number): number {
+  const total = stats.value.totalMoviesWatched;
+  return total > 0 ? (count / total) * 100 : 0;
+}
+
+function formatEraLabel(era: string): string {
+  const labels: Record<string, string> = {
+    classic: "Classic",
+    retro: "Retro",
+    modern: "Modern",
+    recent: "Recent",
+  };
+  return labels[era] || era;
+}
+
+function getEraRange(era: string): string {
+  const ranges: Record<string, string> = {
+    classic: "Pre-1980",
+    retro: "1980-1999",
+    modern: "2000-2009",
+    recent: "2010+",
+  };
+  return ranges[era] || "";
+}
+
 onMounted(() => {
   void loadStats();
 });
@@ -647,8 +830,22 @@ onMounted(() => {
 .genre-item,
 .director-item,
 .actor-item,
-.rating-item {
+.rating-item,
+.decade-item,
+.vintage-item {
   margin-bottom: 1rem;
+}
+
+.release-overview .overview-item {
+  padding: 8px 0;
+}
+
+.release-overview .overview-item:last-child {
+  padding-bottom: 0;
+}
+
+.vintage-preferences .vintage-item:last-child {
+  margin-bottom: 0;
 }
 
 .monthly-trends {
