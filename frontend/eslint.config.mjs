@@ -43,7 +43,8 @@ export default [...fixupConfigRules(compat.extends(
         "import/resolver": {
             typescript: {
                 project: "./tsconfig.json",
-            },
+                alwaysTryTypes: true,
+            }
         },
     },
 
@@ -225,11 +226,13 @@ export default [...fixupConfigRules(compat.extends(
 
     languageOptions: {
         parser: parser,
-        ecmaVersion: 5,
+        ecmaVersion: 2022,
         sourceType: "module",
 
         parserOptions: {
             parser: "@typescript-eslint/parser",
+            project: ["./tsconfig.json"],
+            extraFileExtensions: [".vue"],
         },
     },
 }];
