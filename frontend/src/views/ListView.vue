@@ -122,9 +122,11 @@ import { useListNavigation } from "../composables/useListNavigation";
 import { useListViewFiltering } from "../composables/useListViewFiltering";
 import { useListViewPagination } from "../composables/useListViewPagination";
 import { useListViewSorting } from "../composables/useListViewSorting";
+import { useMovieListSEO } from "../composables/useMovieListSEO";
 import { useMovieOperations } from "../composables/useMovieOperations";
 import { useRecordCounts } from "../composables/useRecordCounts";
 import { useRecordsData } from "../composables/useRecordsData";
+import { useMovieListStructuredData } from "../composables/useStructuredData";
 import { listToWatchId } from "../const";
 import { useAuthStore } from "../stores/auth";
 import { useListViewStore } from "../stores/listView";
@@ -489,6 +491,57 @@ onMounted(async () => {
 
   await loadData();
 });
+
+// SEO Setup
+const seoData = computed(() => {
+  const listType = currentListId.value === 1 ? "watched" : "to-watch";
+
+  return {
+    listType,
+    username: props.username,
+    displayName: props.username, // You might want to get actual display name from user data
+    isPublic: Boolean(props.isProfileView),
+    movies: filteredRecords.value || [],
+    totalCount: filteredCount.value,
+    userAvatar: recordsData.userAvatarUrl,
+    listDescription: undefined, // Could be added later from user preferences
+  };
+});
+
+// Initialize SEO composables
+useMovieListSEO(seoData);
+
+// Structured data for movie list
+const structuredListData = computed(() => {
+  const listType = currentListId.value === 1 ? "watched" : "to-watch";
+  const listName = listType === "watched" ? "Watched Movies" : "Watchlist";
+  const userDisplay = props.username ? `@${props.username}` : "User";
+  const baseUrl = typeof window === "undefined" ? "https://moviemunch.org" : window.location.origin;
+
+  return {
+    name: props.username ? `${userDisplay}'s ${listName}` : `My ${listName}`,
+    description: `${listName} containing ${filteredCount.value} movies on MovieMunch`,
+    numberOfItems: filteredCount.value,
+    url: props.username ? `${baseUrl}/users/${props.username}/list/${listType}` : undefined,
+    author: props.username
+      ? {
+          name: userDisplay,
+          url: `${baseUrl}/users/${props.username}`,
+          image: typeof recordsData.userAvatarUrl === "string" ? recordsData.userAvatarUrl : undefined,
+        }
+      : undefined,
+    movies: (filteredRecords.value || []).slice(0, 20).map((record) => ({
+      title: record.movie.title,
+      year: record.movie.releaseDate ? new Date(record.movie.releaseDate).getFullYear() : undefined,
+      genre: record.movie.genre ? record.movie.genre.split(", ") : undefined,
+      director: undefined, // Could be added if available
+      poster: record.movie.posterPath ? `https://image.tmdb.org/t/p/w500${record.movie.posterPath}` : undefined,
+      rating: record.rating || undefined,
+    })),
+  };
+});
+
+useMovieListStructuredData(structuredListData);
 
 onUnmounted(() => {
   if (saveTimeout) {

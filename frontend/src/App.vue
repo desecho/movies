@@ -37,8 +37,8 @@ useOrganizationStructuredData({
   name: "MovieMunch",
   description:
     "The ultimate movie tracking platform. Create watchlists, get AI recommendations, follow friends, and discover your next favorite film.",
-  url: "https://moviemunch.app",
-  logo: "https://moviemunch.app/img/logo.png",
+  url: "https://moviemunch.org",
+  logo: "https://moviemunch.org/img/logo.png",
   sameAs: ["https://github.com/desecho/movies"],
 });
 

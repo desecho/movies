@@ -14,13 +14,30 @@ Allow: /search
 Allow: /about
 Allow: /trending
 Allow: /recommendations
+
+# Allow movie list and collection pages
 Allow: /users/*/list/watched
 Allow: /users/*/list/to-watch
+Allow: /list/*
+Allow: /movies/*
+Allow: /watchlist/*
+Allow: /movie-lists
+Allow: /collections
+
+# Allow user profile pages
 Allow: /users/*/following
 Allow: /users/*/followers
+Allow: /users/*/profile
+Allow: /users/*/stats
+
+# Allow movie-related pages
+Allow: /movie/*
+Allow: /genre/*
+Allow: /director/*
+Allow: /actor/*
 
 # Crawl-delay for search engines (optional)
 Crawl-delay: 1
 
 # Sitemap location
-Sitemap: https://moviemunch.app/sitemap.xml
+Sitemap: https://moviemunch.org/sitemap.xml

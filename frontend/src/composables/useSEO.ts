@@ -48,7 +48,7 @@ export function useSEO(data: MaybeRef<SEOData>): {
         if (typeof window !== "undefined") {
             return window.location.origin;
         }
-        return "https://moviemunch.app"; // Fallback for SSR
+        return "https://moviemunch.org"; // Fallback for SSR
     });
 
     const fullUrl = computed(() => {

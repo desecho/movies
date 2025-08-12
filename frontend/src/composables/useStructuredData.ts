@@ -201,3 +201,110 @@ export function useBreadcrumbStructuredData(
 
     return { structuredData };
 }
+
+export interface MovieListItem {
+    title: string;
+    year?: number;
+    genre?: string[];
+    director?: string;
+    poster?: string;
+    rating?: number;
+    url?: string;
+}
+
+export interface MovieListStructuredData {
+    name: string;
+    description: string;
+    numberOfItems: number;
+    movies: MovieListItem[];
+    author?: {
+        name: string;
+        url?: string;
+        image?: string;
+    };
+    url?: string;
+    dateCreated?: string;
+    dateModified?: string;
+}
+
+export function useMovieListStructuredData(
+    listData: MaybeRef<MovieListStructuredData>,
+): {
+    structuredData: ComputedRef<Record<string, unknown>>;
+} {
+    const movieListData = computed(() => unref(listData));
+
+    const structuredData = computed(() => {
+        const data = movieListData.value;
+
+        const schema: Record<string, unknown> = {
+            "@context": "https://schema.org",
+            "@type": ["ItemList", "CreativeWork"],
+            name: data.name,
+            description: data.description,
+            numberOfItems: data.numberOfItems,
+            ...(data.url && { url: data.url }),
+            ...(data.dateCreated && { dateCreated: data.dateCreated }),
+            ...(data.dateModified && { dateModified: data.dateModified }),
+            ...(data.author && {
+                author: {
+                    "@type": "Person",
+                    name: data.author.name,
+                    ...(data.author.url && { url: data.author.url }),
+                    ...(data.author.image && {
+                        image: {
+                            "@type": "ImageObject",
+                            url: data.author.image,
+                        },
+                    }),
+                },
+            }),
+            itemListElement: data.movies.map((movie, index) => ({
+                "@type": "ListItem",
+                position: index + 1,
+                item: {
+                    "@type": "Movie",
+                    name: movie.title,
+                    ...(movie.year && { dateCreated: movie.year.toString() }),
+                    ...(movie.genre &&
+                        movie.genre.length > 0 && { genre: movie.genre }),
+                    ...(movie.director && {
+                        director: {
+                            "@type": "Person",
+                            name: movie.director,
+                        },
+                    }),
+                    ...(movie.poster && {
+                        image: {
+                            "@type": "ImageObject",
+                            url: movie.poster,
+                        },
+                    }),
+                    ...(movie.rating && {
+                        aggregateRating: {
+                            "@type": "AggregateRating",
+                            ratingValue: movie.rating,
+                            ratingCount: 1,
+                            bestRating: 10,
+                            worstRating: 1,
+                        },
+                    }),
+                    ...(movie.url && { url: movie.url }),
+                },
+            })),
+        };
+
+        return schema;
+    });
+
+    useHead({
+        script: [
+            {
+                type: "application/ld+json",
+                children: JSON.stringify(structuredData.value),
+            },
+        ],
+    });
+
+    return { structuredData };
+}
