@@ -65,8 +65,8 @@
     </div>
 
     <!-- Movie card content below title -->
-    <div class="movie-card-content">
-      <div v-show="mode != 'minimal'" class="poster">
+    <div class="movie-card-content" v-show="mode != 'minimal'">
+      <div class="poster">
         <span v-if="mode == 'full'">
           <v-lazy-image
             class="poster-big"
