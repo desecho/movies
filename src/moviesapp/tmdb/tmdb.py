@@ -217,3 +217,9 @@ def get_trending() -> list[TmdbMovieListResultProcessed]:
     """Get trending movies."""
     tmdb_rending = tmdb.Trending(media_type="movie", time_window="week")
     return _get_processed_movie_data(tmdb_rending.info()["results"])
+
+
+def get_upcoming() -> list[TmdbMovieListResultProcessed]:
+    """Get upcoming movies."""
+    tmdb_upcoming = tmdb.Movies().upcoming()
+    return _get_processed_movie_data(tmdb_upcoming["results"])

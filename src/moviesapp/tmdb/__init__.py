@@ -7,6 +7,7 @@ from .tmdb import (
     get_tmdb_providers,
     get_tmdb_url,
     get_trending,
+    get_upcoming,
     get_watch_data,
     search_movies,
 )
@@ -21,4 +22,5 @@ __all__ = [
     "get_tmdb_movie_data",
     "get_tmdb_providers",
     "get_trending",
+    "get_upcoming",
 ]
