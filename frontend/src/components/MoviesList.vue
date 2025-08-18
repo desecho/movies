@@ -19,14 +19,14 @@
               ><v-icon icon="mdi-eye-off"
             /></a>
           </div>
-          <!--<a :href="movie.tmdbLink" target="_blank">-->
-          <v-lazy-image
-            :srcset="getSrcSet(movie.poster, movie.poster2x)"
-            :src="movie.poster2x"
-            :title="movie.titleOriginal"
-            :alt="movie.title"
-          />
-          <!--</a>-->
+          <a :href="`/movie/${movie.id}`" target="_blank">
+            <v-lazy-image
+              :srcset="getSrcSet(movie.poster, movie.poster2x)"
+              :src="movie.poster2x"
+              :title="movie.titleOriginal"
+              :alt="movie.title"
+            />
+          </a>
         </div>
       </div>
       <div class="movie-content">

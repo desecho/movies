@@ -20,6 +20,7 @@ import LandingView from "./views/LandingView.vue";
 import ListView from "./views/ListView.vue";
 import LoginView from "./views/LoginView.vue";
 import LogoutView from "./views/LogoutView.vue";
+import MovieDetailView from "./views/MovieDetailView.vue";
 import NetworkView from "./views/NetworkView.vue";
 import RecommendationsView from "./views/RecommendationsView.vue";
 import RegisterSuccessView from "./views/RegisterSuccessView.vue";
@@ -49,6 +50,7 @@ export const router = createRouter({
         { path: "/", component: LandingView },
 
         { path: "/search", component: SearchView },
+        { path: "/movie/:tmdbId", component: MovieDetailView, props: true },
         { path: "/about", component: AboutView },
         { path: "/preferences", component: UserPreferencesView },
         { path: "/stats", component: StatsView },

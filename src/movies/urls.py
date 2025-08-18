@@ -21,6 +21,7 @@ from moviesapp.views.list import (
     SaveRecordsOrderView,
     ShareToSocialMediaView,
 )
+from moviesapp.views.movie import MovieDetailView
 from moviesapp.views.recommendations import RecommendationsView
 from moviesapp.views.search import AddToListFromDbView, SearchMovieView
 from moviesapp.views.stats import StatsView
@@ -70,6 +71,7 @@ urlpatterns: list[URL] = [
     path("users/<str:username>/avatar/", UserAvatarView.as_view()),
     path("users/<str:username>/following/", PublicUserFollowingView.as_view(), name="public_user_following"),
     path("users/<str:username>/followers/", PublicUserFollowersView.as_view(), name="public_user_followers"),
+    path("movie/<int:tmdb_id>/", MovieDetailView.as_view(), name="movie_detail"),
     path("search/", SearchMovieView.as_view()),
     path("trending/", TrendingView.as_view(), name="trending"),
     path("recommendations/", RecommendationsView.as_view(), name="recommendations"),

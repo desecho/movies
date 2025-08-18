@@ -133,6 +133,13 @@ class AddToListFromDbView(APIView):
             except TmdbNoImdbIdError as e:
                 capture_exception(e)
                 return False
+
+        # Check if trying to add unreleased movie to watched list
+        if list_id == List.WATCHED:
+            movie = Movie.objects.get(pk=movie_id)
+            if not movie.is_released:
+                return False
+
         add_movie_to_list(movie_id, list_id, user)
         return True
 
@@ -151,5 +158,21 @@ class AddToListFromDbView(APIView):
         user: User = cast(User, request.user)
         result = self._add_to_list_from_db(movie_id, tmdb_id, list_id, user)
         if not result:
+            # Check if it's because the movie is unreleased and user tried to add to watched list
+            if list_id == List.WATCHED:
+                # Try to get movie info to check release status
+                try:
+                    if movie_id:
+                        movie = Movie.objects.get(pk=movie_id)
+                        if not movie.is_released:
+                            return Response({"status": "unreleased"}, status=HTTPStatus.BAD_REQUEST)
+                    else:
+                        # Movie not in DB, can't determine release status without hitting API
+                        # For now, we'll allow the request to proceed and let it fail naturally
+                        # if the movie is unreleased when it's actually added to DB
+                        pass
+                except Movie.DoesNotExist:
+                    # Movie not found in database
+                    pass
             return Response({"status": "not_found"})
         return Response()
