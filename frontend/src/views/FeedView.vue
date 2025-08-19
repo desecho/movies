@@ -76,7 +76,7 @@
                   <!-- Additional content based on action type -->
                   <div v-if="item.rating" class="rating-display">
                     <v-icon icon="mdi-star" class="star-icon" />
-                    <span class="rating-text">{{ item.rating }}/10</span>
+                    <span class="rating-text">{{ item.rating }}/5</span>
                   </div>
 
                   <div v-if="item.comment" class="comment-display">
