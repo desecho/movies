@@ -659,6 +659,16 @@ function handleRatingChange(rating: number): void {
   width: calc(100% + 48px);
 }
 
+/* iPad and tablet breakpoint - prevent horizontal overflow */
+@media (max-width: 1024px) {
+  .movie-card-content {
+    width: 100%;
+    margin: -24px -24px -24px -24px;
+    margin-top: 0;
+    padding: 20px;
+  }
+}
+
 @media (max-width: 768px) {
   .movie-card-content {
     flex-direction: column;
@@ -693,6 +703,14 @@ function handleRatingChange(rating: number): void {
     &:last-child {
       margin-bottom: 0;
     }
+  }
+}
+
+/* iPad and tablet breakpoint - fix horizontal cutting */
+@media (max-width: 1024px) {
+  .details {
+    min-width: auto;
+    flex: 1;
   }
 }
 
@@ -853,6 +871,14 @@ function handleRatingChange(rating: number): void {
       background: rgba(102, 126, 234, 0.2);
       transform: translateY(-1px);
     }
+  }
+}
+
+/* iPad and tablet breakpoint - prevent review section overflow */
+@media (max-width: 1024px) {
+  .review {
+    width: 100%;
+    max-width: 100%;
   }
 }
 
