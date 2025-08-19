@@ -61,7 +61,6 @@ export function useMovieOperations(): {
                 record.listId = listId;
                 record.additionDate = Date.now();
             }
-            $toast.success("Movie added to your list!");
         }
     }
 
