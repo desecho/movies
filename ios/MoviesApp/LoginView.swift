@@ -8,9 +8,10 @@ struct LoginView: View {
     var body: some View {
         NavigationView {
             VStack(spacing: 20) {
-                Image(systemName: "film.fill")
-                    .font(.system(size: 80))
-                    .foregroundColor(.blue)
+                Image("Logo")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 120, height: 120)
                 
                 Text("MovieMunch")
                     .font(.largeTitle)
