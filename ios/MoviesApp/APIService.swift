@@ -9,8 +9,15 @@ class APIService: ObservableObject {
     @Published var shouldShowLogin = false
     
     private var cancellables = Set<AnyCancellable>()
-    private let baseURL = "http://127.0.0.1:8000"
-//    private let baseURL = "https://api.moviemunch.org"
+//    private let baseURL = "http://127.0.0.1:8000"
+    private let baseURL = "https://api.moviemunch.org"
+    
+    // Cache for records to avoid unnecessary reloads
+    private var watchedRecordsCache: [Record] = []
+    private var toWatchRecordsCache: [Record] = []
+    private var watchedCacheTime: Date?
+    private var toWatchCacheTime: Date?
+    private let cacheValidityDuration: TimeInterval = 300 // 5 minutes
     
     private var accessToken: String? {
         get { UserDefaults.standard.string(forKey: "access_token") }
@@ -141,7 +148,20 @@ class APIService: ObservableObject {
             .store(in: &cancellables)
     }
     
-    func fetchRecords(for listType: ListType) -> AnyPublisher<[Record], APIError> {
+    func fetchRecords(for listType: ListType, forceRefresh: Bool = false) -> AnyPublisher<[Record], APIError> {
+        // Check cache first unless force refresh is requested
+        if !forceRefresh {
+            let (cache, cacheTime) = getCacheForListType(listType)
+            if let cacheTime = cacheTime, 
+               Date().timeIntervalSince(cacheTime) < cacheValidityDuration,
+               !cache.isEmpty {
+                // Return cached data
+                return Just(cache)
+                    .setFailureType(to: APIError.self)
+                    .eraseToAnyPublisher()
+            }
+        }
+        
         guard let token = accessToken else {
             return Fail(error: APIError.unauthorized)
                 .eraseToAnyPublisher()
@@ -160,9 +180,12 @@ class APIService: ObservableObject {
             .decode(type: [Record].self, decoder: JSONDecoder())
             .map { records in
                 // Filter records by list type on the client side
-                return records.filter { record in
+                let filteredRecords = records.filter { record in
                     record.listId == listType.listId
                 }
+                // Update cache
+                self.updateCacheForListType(listType, records: filteredRecords)
+                return filteredRecords
             }
             .mapError { error in
                 if error is DecodingError {
@@ -176,6 +199,71 @@ class APIService: ObservableObject {
                 }
             })
             .eraseToAnyPublisher()
+    }
+    
+    private func getCacheForListType(_ listType: ListType) -> ([Record], Date?) {
+        switch listType {
+        case .watched:
+            return (watchedRecordsCache, watchedCacheTime)
+        case .toWatch:
+            return (toWatchRecordsCache, toWatchCacheTime)
+        }
+    }
+    
+    private func updateCacheForListType(_ listType: ListType, records: [Record]) {
+        let now = Date()
+        switch listType {
+        case .watched:
+            watchedRecordsCache = records
+            watchedCacheTime = now
+        case .toWatch:
+            toWatchRecordsCache = records
+            toWatchCacheTime = now
+        }
+    }
+    
+    func invalidateCache(for listType: ListType? = nil) {
+        if let listType = listType {
+            switch listType {
+            case .watched:
+                watchedCacheTime = nil
+            case .toWatch:
+                toWatchCacheTime = nil
+            }
+        } else {
+            // Invalidate all caches
+            watchedCacheTime = nil
+            toWatchCacheTime = nil
+        }
+    }
+    
+    func updateCacheAfterDelete(recordId: Int, from listType: ListType) {
+        switch listType {
+        case .watched:
+            watchedRecordsCache.removeAll { $0.id == recordId }
+        case .toWatch:
+            toWatchRecordsCache.removeAll { $0.id == recordId }
+        }
+    }
+    
+    func updateCacheAfterMoveToWatched(_ record: Record) {
+        // Remove from To Watch cache
+        toWatchRecordsCache.removeAll { $0.id == record.id }
+        
+        // Add to Watched cache with updated properties
+        let watchedRecord = Record(
+            id: record.id,
+            order: record.order,
+            movie: record.movie,
+            rating: 0, // Reset rating when moved to watched
+            comment: record.comment,
+            commentArea: record.commentArea,
+            listId: 1, // Watched list ID
+            additionDate: Date().timeIntervalSince1970,
+            options: record.options,
+            providerRecords: record.providerRecords
+        )
+        watchedRecordsCache.append(watchedRecord)
     }
     
     func searchMovies(query: String) -> AnyPublisher<[SearchMovie], APIError> {

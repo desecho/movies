@@ -3,6 +3,8 @@ import Combine
 
 extension Notification.Name {
     static let refreshRecords = Notification.Name("refreshRecords")
+    static let movieDeleted = Notification.Name("movieDeleted")
+    static let movieMovedToWatched = Notification.Name("movieMovedToWatched")
 }
 
 enum SortOption: String, CaseIterable {
@@ -53,6 +55,7 @@ struct MovieListView: View {
     @State private var showingSortPicker = false
     @State private var currentViewMode: ViewMode = .list
     @State private var searchText = ""
+    @State private var hasLoadedOnce = false
     
     private var filteredAndSortedRecords: [Record] {
         let filtered = filterRecords(records)
@@ -244,10 +247,17 @@ struct MovieListView: View {
                                     }
                                 }
                         }
+                        .refreshable {
+                            await refreshRecords()
+                        }
                     }
                 } else {
                     // Gallery View
-                    GalleryView(records: filteredAndSortedRecords, listType: listType, currentSort: currentSort)
+                    GalleryView(records: filteredAndSortedRecords, listType: listType, currentSort: currentSort, onRefresh: {
+                        Task {
+                            await refreshRecords()
+                        }
+                    })
                 }
             }
             .searchable(text: $searchText, prompt: "Search by title, actor, or director")
@@ -284,10 +294,33 @@ struct MovieListView: View {
                 Button("Cancel", role: .cancel) { }
             }
             .onAppear {
-                loadRecords()
+                // Only load if we haven't loaded before or records are empty
+                if !hasLoadedOnce || records.isEmpty {
+                    loadRecords()
+                    hasLoadedOnce = true
+                }
             }
             .onReceive(NotificationCenter.default.publisher(for: .refreshRecords)) { _ in
                 loadRecords()
+            }
+            .onReceive(NotificationCenter.default.publisher(for: .movieMovedToWatched)) { notification in
+                // Only Watched list should handle this notification
+                if listType == .watched, let movedRecord = notification.object as? Record {
+                    // Create a new record for Watched list (rating will be 0 initially)
+                    let watchedRecord = Record(
+                        id: movedRecord.id,
+                        order: movedRecord.order,
+                        movie: movedRecord.movie,
+                        rating: 0, // Reset rating when moved to watched
+                        comment: movedRecord.comment,
+                        commentArea: movedRecord.commentArea,
+                        listId: 1, // Watched list ID
+                        additionDate: Date().timeIntervalSince1970,
+                        options: movedRecord.options,
+                        providerRecords: movedRecord.providerRecords
+                    )
+                    records.append(watchedRecord)
+                }
             }
             .alert("Error", isPresented: .constant(errorMessage != nil)) {
                 Button("OK") {
@@ -310,8 +343,12 @@ struct MovieListView: View {
                 },
                 receiveValue: { success in
                     if success {
-                        // Refresh the list
-                        loadRecords()
+                        // Remove the record locally instead of full reload
+                        records.removeAll { $0.id == record.id }
+                        // Update cache
+                        apiService.updateCacheAfterDelete(recordId: record.id, from: listType)
+                        // Notify other views that a movie was deleted
+                        NotificationCenter.default.post(name: .movieDeleted, object: record)
                     }
                 }
             )
@@ -329,20 +366,23 @@ struct MovieListView: View {
                 },
                 receiveValue: { success in
                     if success {
-                        // Backend automatically moves the movie to Watched list
-                        // Just refresh the list to show the updated state
-                        loadRecords()
+                        // Remove from To Watch list locally
+                        records.removeAll { $0.id == record.id }
+                        // Update cache
+                        apiService.updateCacheAfterMoveToWatched(record)
+                        // Notify Watched list to add this movie
+                        NotificationCenter.default.post(name: .movieMovedToWatched, object: record)
                     }
                 }
             )
             .store(in: &cancellables)
     }
     
-    private func loadRecords() {
+    private func loadRecords(forceRefresh: Bool = false) {
         isLoading = true
         errorMessage = nil
         
-        apiService.fetchRecords(for: listType)
+        apiService.fetchRecords(for: listType, forceRefresh: forceRefresh)
             .receive(on: DispatchQueue.main)
             .sink(
                 receiveCompletion: { completion in
@@ -356,6 +396,25 @@ struct MovieListView: View {
                 }
             )
             .store(in: &cancellables)
+    }
+    
+    private func refreshRecords() async {
+        await withCheckedContinuation { continuation in
+            apiService.fetchRecords(for: listType, forceRefresh: true)
+                .receive(on: DispatchQueue.main)
+                .sink(
+                    receiveCompletion: { completion in
+                        if case .failure(let error) = completion {
+                            errorMessage = "Failed to refresh movies: \(error.localizedDescription)"
+                        }
+                        continuation.resume()
+                    },
+                    receiveValue: { fetchedRecords in
+                        records = fetchedRecords
+                    }
+                )
+                .store(in: &cancellables)
+        }
     }
 }
 
@@ -611,14 +670,16 @@ struct GalleryView: View {
     let listType: ListType
     let currentSort: SortOption
     let externalRecords: [Record]
+    let onRefresh: () -> Void
     @State private var cancellables = Set<AnyCancellable>()
     @EnvironmentObject var apiService: APIService
     
-    init(records: [Record], listType: ListType, currentSort: SortOption) {
+    init(records: [Record], listType: ListType, currentSort: SortOption, onRefresh: @escaping () -> Void) {
         self._records = State(initialValue: records)
         self.externalRecords = records
         self.listType = listType
         self.currentSort = currentSort
+        self.onRefresh = onRefresh
     }
     
     private let columns = [
@@ -676,6 +737,9 @@ struct GalleryView: View {
                 }
                 .padding(8)
             }
+        }
+        .refreshable {
+            onRefresh()
         }
         .onReceive(NotificationCenter.default.publisher(for: .refreshRecords)) { _ in
             // Don't update records during custom sort mode to preserve drag changes
@@ -966,8 +1030,7 @@ struct MovieDetailView: View {
                 receiveValue: { success in
                     if success {
                         currentRating = rating
-                        // Notify parent to refresh data
-                        NotificationCenter.default.post(name: .refreshRecords, object: nil)
+                        print("Successfully updated rating to \(rating)")
                     }
                 }
             )
