@@ -9,8 +9,8 @@ class APIService: ObservableObject {
     @Published var shouldShowLogin = false
     
     private var cancellables = Set<AnyCancellable>()
-//    private let baseURL = "http://127.0.0.1:8000"
-    private let baseURL = "https://api.moviemunch.org"
+    private let baseURL = "http://127.0.0.1:8000"
+//    private let baseURL = "https://api.moviemunch.org"
     
     private var accessToken: String? {
         get { UserDefaults.standard.string(forKey: "access_token") }

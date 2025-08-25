@@ -387,10 +387,13 @@ struct StarRatingView: View {
                     
                     // Calculate which star was tapped
                     let starIndex = Int((location / (starWidth + spacing)).rounded(.up))
-                    let rating = max(1, min(5, starIndex))
+                    let tappedRating = max(1, min(5, starIndex))
                     
-                    print("DEBUG: Star \(rating) tapped at location \(location)")
-                    onRatingTap(rating)
+                    // If the same rating is tapped again, reset to 0
+                    let finalRating = (tappedRating == currentRating) ? 0 : tappedRating
+                    
+                    print("DEBUG: Star \(tappedRating) tapped at location \(location), current: \(currentRating), final: \(finalRating)")
+                    onRatingTap(finalRating)
                 }
         )
     }
