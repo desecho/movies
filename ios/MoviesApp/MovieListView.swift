@@ -52,8 +52,44 @@ struct MovieListView: View {
     @State private var currentSort: SortOption = .dateAddedNewest
     @State private var showingSortPicker = false
     @State private var currentViewMode: ViewMode = .list
+    @State private var searchText = ""
     
-    private var sortedRecords: [Record] {
+    private var filteredAndSortedRecords: [Record] {
+        let filtered = filterRecords(records)
+        return sortRecords(filtered)
+    }
+    
+    private func filterRecords(_ records: [Record]) -> [Record] {
+        if searchText.isEmpty {
+            return records
+        }
+        
+        let lowercasedSearchText = searchText.lowercased()
+        
+        return records.filter { record in
+            // Search in title
+            if record.movie.title.lowercased().contains(lowercasedSearchText) ||
+               record.movie.titleOriginal.lowercased().contains(lowercasedSearchText) {
+                return true
+            }
+            
+            // Search in director
+            if let director = record.movie.director,
+               director.lowercased().contains(lowercasedSearchText) {
+                return true
+            }
+            
+            // Search in actors
+            if let actors = record.movie.actors,
+               actors.lowercased().contains(lowercasedSearchText) {
+                return true
+            }
+            
+            return false
+        }
+    }
+    
+    private func sortRecords(_ records: [Record]) -> [Record] {
         switch currentSort {
         case .dateAddedNewest:
             return records.sorted { $0.additionDate > $1.additionDate }
@@ -144,7 +180,24 @@ struct MovieListView: View {
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                 } else if currentViewMode == .list {
                     // List View
-                    if records.isEmpty {
+                    if filteredAndSortedRecords.isEmpty && !records.isEmpty {
+                        // No results found for search
+                        VStack(spacing: 20) {
+                            Image(systemName: "magnifyingglass")
+                                .font(.system(size: 60))
+                                .foregroundColor(.gray)
+                            
+                            Text("No movies found")
+                                .font(.title2)
+                                .foregroundColor(.gray)
+                                .multilineTextAlignment(.center)
+                            
+                            Text("Try adjusting your search terms")
+                                .font(.body)
+                                .foregroundColor(.secondary)
+                        }
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    } else if records.isEmpty {
                         VStack(spacing: 20) {
                             Image(systemName: listType == .watched ? "eye.slash" : "bookmark.slash")
                                 .font(.system(size: 60))
@@ -161,7 +214,7 @@ struct MovieListView: View {
                         }
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                     } else {
-                        List(sortedRecords) { record in
+                        List(filteredAndSortedRecords) { record in
                             MovieRowView(record: record, listType: listType)
                                 .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                                     if listType == .toWatch {
@@ -194,9 +247,10 @@ struct MovieListView: View {
                     }
                 } else {
                     // Gallery View
-                    GalleryView(records: sortedRecords, listType: listType, currentSort: currentSort)
+                    GalleryView(records: filteredAndSortedRecords, listType: listType, currentSort: currentSort)
                 }
             }
+            .searchable(text: $searchText, prompt: "Search by title, actor, or director")
             .navigationTitle(listType.title)
             .toolbar {
                 ToolbarItemGroup(placement: .navigationBarLeading) {
