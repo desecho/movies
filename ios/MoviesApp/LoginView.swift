@@ -58,7 +58,6 @@ struct LoginView: View {
                 Spacer()
             }
             .padding()
-            .navigationTitle("Welcome")
         }
     }
 }

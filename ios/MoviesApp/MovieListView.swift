@@ -422,6 +422,7 @@ struct StarRatingView: View {
     let currentRating: Int
     let onRatingTap: (Int) -> Void
     let isUpdating: Bool
+    @State private var isDragging = false
     
     var body: some View {
         HStack(spacing: 4) {
@@ -430,29 +431,27 @@ struct StarRatingView: View {
                     .foregroundColor(star <= currentRating ? .yellow : .gray)
                     .font(.caption)
                     .frame(width: 16, height: 16)
+                    .onTapGesture {
+                        guard !isUpdating && !isDragging else { return }
+                        
+                        // Simple tap on specific star
+                        let finalRating = (star == currentRating) ? 0 : star
+                        
+                        print("DEBUG: Star \(star) tapped, current: \(currentRating), final: \(finalRating)")
+                        onRatingTap(finalRating)
+                    }
             }
         }
         .background(Color.clear)
-        .contentShape(Rectangle())
-        .gesture(
-            DragGesture(minimumDistance: 0)
-                .onEnded { value in
-                    guard !isUpdating else { return }
-                    
-                    let starWidth: CGFloat = 16
-                    let spacing: CGFloat = 4
-                    let totalWidth = (starWidth * 5) + (spacing * 4)
-                    let location = value.location.x
-                    
-                    // Calculate which star was tapped
-                    let starIndex = Int((location / (starWidth + spacing)).rounded(.up))
-                    let tappedRating = max(1, min(5, starIndex))
-                    
-                    // If the same rating is tapped again, reset to 0
-                    let finalRating = (tappedRating == currentRating) ? 0 : tappedRating
-                    
-                    print("DEBUG: Star \(tappedRating) tapped at location \(location), current: \(currentRating), final: \(finalRating)")
-                    onRatingTap(finalRating)
+        .simultaneousGesture(
+            DragGesture()
+                .onChanged { _ in
+                    if !isDragging {
+                        isDragging = true
+                    }
+                }
+                .onEnded { _ in
+                    isDragging = false
                 }
         )
     }
