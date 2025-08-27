@@ -9,8 +9,15 @@ class APIService: ObservableObject {
     @Published var shouldShowLogin = false
     
     private var cancellables = Set<AnyCancellable>()
-    private let baseURL = "http://127.0.0.1:8000"
-//    private let baseURL = "https://api.moviemunch.org"
+    
+    // Dynamic base URL based on build configuration
+    private let baseURL: String = {
+        #if DEBUG
+        return "http://127.0.0.1:8000"
+        #else
+        return "https://api.moviemunch.org"
+        #endif
+    }()
     
     // Cache for records to avoid unnecessary reloads
     private var watchedRecordsCache: [Record] = []

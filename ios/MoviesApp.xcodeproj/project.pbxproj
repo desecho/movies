@@ -28,7 +28,7 @@
 		8D1107380486CEB800E47096 /* LoginView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		8D1107390486CEB800E47097 /* MovieListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovieListView.swift; sourceTree = "<group>"; };
 		8D11073A0486CEB800E47098 /* SearchView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
-		8D1107B00486CEB800E47090 /* MoviesApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MoviesApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		8D1107B00486CEB800E47090 /* MovieMunchApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MovieMunchApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -45,7 +45,7 @@
 		19C28FACFE9D520D11CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				8D1107B00486CEB800E47090 /* MoviesApp.app */,
+				8D1107B00486CEB800E47090 /* MovieMunchApp.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -86,9 +86,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		8D1107260486CEB800E47090 /* MoviesApp */ = {
+		8D1107260486CEB800E47090 /* MovieMunchApp */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "MoviesApp" */;
+			buildConfigurationList = C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "MovieMunchApp" */;
 			buildPhases = (
 				8D1107290486CEB800E47090 /* Sources */,
 				8D11072C0486CEB800E47090 /* Frameworks */,
@@ -98,10 +98,10 @@
 			);
 			dependencies = (
 			);
-			name = MoviesApp;
+			name = MovieMunchApp;
 			productInstallPath = "$(HOME)/Applications";
 			productName = MoviesApp;
-			productReference = 8D1107B00486CEB800E47090 /* MoviesApp.app */;
+			productReference = 8D1107B00486CEB800E47090 /* MovieMunchApp.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -125,7 +125,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				8D1107260486CEB800E47090 /* MoviesApp */,
+				8D1107260486CEB800E47090 /* MovieMunchApp */,
 			);
 		};
 /* End PBXProject section */
@@ -324,6 +324,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = NO;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -346,7 +347,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "MoviesApp" */ = {
+		C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "MovieMunchApp" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C01FCF4B08A954540054247B /* Debug */,
