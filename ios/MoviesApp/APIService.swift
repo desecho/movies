@@ -169,6 +169,37 @@ class APIService: ObservableObject {
             }
         }
         
+        // Use optimized fetchAllRecords to populate both caches in one go
+        return fetchAllRecords(forceRefresh: forceRefresh)
+            .map { (watchedRecords, toWatchRecords) in
+                // Return the requested list type
+                switch listType {
+                case .watched:
+                    return watchedRecords
+                case .toWatch:
+                    return toWatchRecords
+                }
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    // MARK: - Optimized All Records Fetch
+    
+    func fetchAllRecords(forceRefresh: Bool = false) -> AnyPublisher<([Record], [Record]), APIError> {
+        // Check if both caches are valid unless force refresh is requested
+        if !forceRefresh {
+            let bothCachesValid = watchedCacheTime != nil && toWatchCacheTime != nil &&
+                Date().timeIntervalSince(watchedCacheTime!) < cacheValidityDuration &&
+                Date().timeIntervalSince(toWatchCacheTime!) < cacheValidityDuration
+            
+            if bothCachesValid {
+                // Return cached data for both lists
+                return Just((watchedRecordsCache, toWatchRecordsCache))
+                    .setFailureType(to: APIError.self)
+                    .eraseToAnyPublisher()
+            }
+        }
+        
         guard let token = accessToken else {
             return Fail(error: APIError.unauthorized)
                 .eraseToAnyPublisher()
@@ -185,14 +216,21 @@ class APIService: ObservableObject {
         return URLSession.shared.apiDataTaskPublisher(for: request)
             .map(\.0)
             .decode(type: [Record].self, decoder: JSONDecoder())
-            .map { records in
-                // Filter records by list type on the client side
-                let filteredRecords = records.filter { record in
-                    record.listId == listType.listId
-                }
-                // Update cache
-                self.updateCacheForListType(listType, records: filteredRecords)
-                return filteredRecords
+            .map { allRecords in
+                // Split records into watched and to-watch lists
+                let watchedRecords = allRecords.filter { $0.listId == 1 }
+                let toWatchRecords = allRecords.filter { $0.listId == 2 }
+                
+                // Update both caches with fresh data
+                let now = Date()
+                self.watchedRecordsCache = watchedRecords
+                self.watchedCacheTime = now
+                self.toWatchRecordsCache = toWatchRecords
+                self.toWatchCacheTime = now
+                
+                print("📱 Fetched all records in one call: \(watchedRecords.count) watched, \(toWatchRecords.count) to-watch")
+                
+                return (watchedRecords, toWatchRecords)
             }
             .mapError { error in
                 if error is DecodingError {
