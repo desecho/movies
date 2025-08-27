@@ -51,6 +51,11 @@ struct TrendingView: View {
     @State private var errorMessage: String?
     @State private var cancellables = Set<AnyCancellable>()
     
+    // Callback to remove movie from trending list
+    private func removeMovieFromTrending(_ movieId: Int) {
+        movies.removeAll { $0.id == movieId }
+    }
+    
     private let columns = [
         GridItem(.adaptive(minimum: 120), spacing: 12)
     ]
@@ -85,7 +90,12 @@ struct TrendingView: View {
                     ScrollView {
                         LazyVGrid(columns: columns, spacing: 16) {
                             ForEach(movies) { movie in
-                                TrendingMovieItemView(movie: movie)
+                                TrendingMovieItemView(
+                                    movie: movie,
+                                    onMovieAdded: { movieId in
+                                        removeMovieFromTrending(movieId)
+                                    }
+                                )
                             }
                         }
                         .padding()
@@ -154,6 +164,7 @@ struct TrendingView: View {
 
 struct TrendingMovieItemView: View {
     let movie: SearchMovie
+    let onMovieAdded: (Int) -> Void
     @EnvironmentObject var apiService: APIService
     @State private var showingAddToListOptions = false
     @State private var isAddingToList = false
@@ -275,6 +286,13 @@ struct TrendingMovieItemView: View {
                     if success {
                         let listName = listId == 1 ? "Watched" : "To Watch"
                         addToListMessage = "Added \(movie.title) to \(listName) list"
+                        
+                        // Remove movie from trending list
+                        onMovieAdded(movie.id)
+                        
+                        // Force refresh records to show movie immediately in lists
+                        apiService.invalidateCache()
+                        
                         // Notify other views to refresh their data
                         NotificationCenter.default.post(name: .refreshRecords, object: nil)
                     }

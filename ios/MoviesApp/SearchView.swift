@@ -286,10 +286,17 @@ struct SearchMovieRowView: View {
                 receiveValue: { success in
                     if success {
                         print("Successfully added movie to \(action) list")
+                        
                         // Hide the movie from search results
                         withAnimation(.easeOut(duration: 0.3)) {
                             isHidden = true
                         }
+                        
+                        // Force refresh records to show movie immediately in lists
+                        apiService.invalidateCache()
+                        
+                        // Notify other views to refresh their data
+                        NotificationCenter.default.post(name: .refreshRecords, object: nil)
                     }
                 }
             )
