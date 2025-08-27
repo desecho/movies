@@ -271,6 +271,9 @@ struct TrendingMovieItemView: View {
     }
     
     private func addToList(listId: Int) {
+        // Prevent multiple simultaneous requests
+        guard !isAddingToList else { return }
+        
         isAddingToList = true
         
         apiService.addMovieFromSearch(tmdbId: movie.id, listId: listId)
@@ -290,11 +293,14 @@ struct TrendingMovieItemView: View {
                         // Remove movie from trending list
                         onMovieAdded(movie.id)
                         
-                        // Force refresh records to show movie immediately in lists
-                        apiService.invalidateCache()
-                        
-                        // Notify other views to refresh their data
-                        NotificationCenter.default.post(name: .refreshRecords, object: nil)
+                        // Trigger a single optimized refresh for both lists
+                        apiService.fetchAllRecords(forceRefresh: true)
+                            .receive(on: DispatchQueue.main)
+                            .sink(receiveCompletion: { _ in }, receiveValue: { _ in 
+                                // Data is already cached, notify views to update
+                                NotificationCenter.default.post(name: .refreshRecords, object: nil)
+                            })
+                            .store(in: &cancellables)
                     }
                 }
             )

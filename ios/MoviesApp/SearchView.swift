@@ -256,6 +256,9 @@ struct SearchMovieRowView: View {
     }
     
     private func addToList(action: String) {
+        // Prevent multiple simultaneous requests
+        guard !isAddingToWatched && !isAddingToWatch && !isHidden else { return }
+        
         if action == "watched" {
             isAddingToWatched = true
         } else {
@@ -292,11 +295,14 @@ struct SearchMovieRowView: View {
                             isHidden = true
                         }
                         
-                        // Force refresh records to show movie immediately in lists
-                        apiService.invalidateCache()
-                        
-                        // Notify other views to refresh their data
-                        NotificationCenter.default.post(name: .refreshRecords, object: nil)
+                        // Trigger a single optimized refresh for both lists
+                        apiService.fetchAllRecords(forceRefresh: true)
+                            .receive(on: DispatchQueue.main)
+                            .sink(receiveCompletion: { _ in }, receiveValue: { _ in 
+                                // Data is already cached, notify views to update
+                                NotificationCenter.default.post(name: .refreshRecords, object: nil)
+                            })
+                            .store(in: &cancellables)
                     }
                 }
             )
