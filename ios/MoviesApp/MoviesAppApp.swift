@@ -1,7 +1,7 @@
 import SwiftUI
 
 @main
-struct MoviesAppApp: App {
+struct MovieMunchApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()

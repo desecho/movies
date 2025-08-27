@@ -1,49 +1,6 @@
 import SwiftUI
 import Combine
 
-struct ContentView: View {
-    @StateObject private var apiService = APIService()
-    
-    var body: some View {
-        Group {
-            if apiService.isAuthenticated && !apiService.shouldShowLogin {
-                TabView {
-                    MovieListView(listType: .watched)
-                        .tabItem {
-                            Image(systemName: "eye.fill")
-                            Text("Watched")
-                        }
-                    
-                    MovieListView(listType: .toWatch)
-                        .tabItem {
-                            Image(systemName: "bookmark.fill")
-                            Text("To Watch")
-                        }
-                    
-                    TrendingView()
-                        .tabItem {
-                            Image(systemName: "flame.fill")
-                            Text("Trending")
-                        }
-                    
-                    SearchView()
-                        .tabItem {
-                            Image(systemName: "magnifyingglass")
-                            Text("Search")
-                        }
-                }
-            } else {
-                LoginView()
-            }
-        }
-        .environmentObject(apiService)
-    }
-}
-
-#Preview {
-    ContentView()
-}
-
 struct TrendingView: View {
     @EnvironmentObject var apiService: APIService
     @State private var movies: [SearchMovie] = []
@@ -195,58 +152,50 @@ struct TrendingMovieItemView: View {
                         .foregroundColor(.secondary)
                 }
                 
+                // Trending indicator
+                HStack(spacing: 4) {
+                    Image(systemName: "flame.fill")
+                        .foregroundColor(.orange)
+                        .font(.caption2)
+                    Text("Trending")
+                        .font(.caption2)
+                        .foregroundColor(.orange)
+                        .fontWeight(.medium)
+                }
             }
             
-            // Add to List Buttons
+            // Add to List Button
             if apiService.isAuthenticated {
-                HStack(spacing: 6) {
-                    // Add to Watched button
-                    Button(action: {
+                Button(action: {
+                    showingAddToListOptions = true
+                }) {
+                    HStack(spacing: 4) {
+                        if isAddingToList {
+                            ProgressView()
+                                .scaleEffect(0.8)
+                        } else {
+                            Image(systemName: "plus.circle")
+                                .font(.caption)
+                        }
+                        Text("Add")
+                            .font(.caption)
+                            .fontWeight(.medium)
+                    }
+                    .foregroundColor(.white)
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 6)
+                    .background(Color.blue)
+                    .cornerRadius(16)
+                }
+                .disabled(isAddingToList)
+                .confirmationDialog("Add to List", isPresented: $showingAddToListOptions) {
+                    Button("Add to Watched") {
                         addToList(listId: 1) // Watched list
-                    }) {
-                        HStack(spacing: 3) {
-                            if isAddingToList {
-                                ProgressView()
-                                    .scaleEffect(0.6)
-                            } else {
-                                Image(systemName: "eye.fill")
-                                    .font(.system(size: 10))
-                            }
-                            Text("Watched")
-                                .font(.system(size: 9))
-                                .fontWeight(.medium)
-                        }
-                        .foregroundColor(.white)
-                        .padding(.horizontal, 8)
-                        .padding(.vertical, 4)
-                        .background(Color.green)
-                        .cornerRadius(12)
                     }
-                    .disabled(isAddingToList)
-                    
-                    // Add to To Watch button
-                    Button(action: {
+                    Button("Add to To Watch") {
                         addToList(listId: 2) // To Watch list
-                    }) {
-                        HStack(spacing: 3) {
-                            if isAddingToList {
-                                ProgressView()
-                                    .scaleEffect(0.6)
-                            } else {
-                                Image(systemName: "bookmark.fill")
-                                    .font(.system(size: 10))
-                            }
-                            Text("To Watch")
-                                .font(.system(size: 9))
-                                .fontWeight(.medium)
-                        }
-                        .foregroundColor(.white)
-                        .padding(.horizontal, 8)
-                        .padding(.vertical, 4)
-                        .background(Color.blue)
-                        .cornerRadius(12)
                     }
-                    .disabled(isAddingToList)
+                    Button("Cancel", role: .cancel) { }
                 }
             }
         }
@@ -282,4 +231,9 @@ struct TrendingMovieItemView: View {
             )
             .store(in: &cancellables)
     }
+}
+
+#Preview {
+    TrendingView()
+        .environmentObject(APIService())
 }

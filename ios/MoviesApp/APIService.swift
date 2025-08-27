@@ -576,4 +576,34 @@ class APIService: ObservableObject {
             })
             .eraseToAnyPublisher()
     }
+    
+    func fetchTrendingMovies() -> AnyPublisher<[SearchMovie], APIError> {
+        guard let url = URL(string: "\(baseURL)/trending/") else {
+            return Fail(error: APIError.networkError)
+                .eraseToAnyPublisher()
+        }
+        
+        var request = URLRequest(url: url)
+        
+        // Add authorization header if user is authenticated (for filtering)
+        if let token = accessToken {
+            request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        }
+        
+        return URLSession.shared.apiDataTaskPublisher(for: request)
+            .map(\.0)
+            .decode(type: [SearchMovie].self, decoder: JSONDecoder())
+            .mapError { error in
+                if error is DecodingError {
+                    return APIError.decodingError
+                }
+                return error as? APIError ?? APIError.networkError
+            }
+            .handleEvents(receiveCompletion: { completion in
+                if case .failure(let error) = completion {
+                    _ = self.handleAPIError(error)
+                }
+            })
+            .eraseToAnyPublisher()
+    }
 }
