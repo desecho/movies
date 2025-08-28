@@ -651,4 +651,40 @@ class APIService: ObservableObject {
             })
             .eraseToAnyPublisher()
     }
+    
+    func fetchAIRecommendations(preferences: RecommendationPreferences) -> AnyPublisher<[SearchMovie], APIError> {
+        guard let token = accessToken else {
+            return Fail(error: APIError.unauthorized)
+                .eraseToAnyPublisher()
+        }
+        
+        let parameters = RecommendationRequestParameters(from: preferences)
+        
+        var urlComponents = URLComponents(string: "\(baseURL)/recommendations/")!
+        urlComponents.queryItems = parameters.toQueryItems()
+        
+        guard let url = urlComponents.url else {
+            return Fail(error: APIError.networkError)
+                .eraseToAnyPublisher()
+        }
+        
+        var request = URLRequest(url: url)
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        
+        return URLSession.shared.apiDataTaskPublisher(for: request)
+            .map(\.0)
+            .decode(type: [SearchMovie].self, decoder: JSONDecoder())
+            .mapError { error in
+                if error is DecodingError {
+                    return APIError.decodingError
+                }
+                return error as? APIError ?? APIError.networkError
+            }
+            .handleEvents(receiveCompletion: { completion in
+                if case .failure(let error) = completion {
+                    _ = self.handleAPIError(error)
+                }
+            })
+            .eraseToAnyPublisher()
+    }
 }

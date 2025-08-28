@@ -26,6 +26,12 @@ struct ContentView: View {
                             Text("Trending")
                         }
                     
+                    RecommendationsView()
+                        .tabItem {
+                            Image(systemName: "brain.head.profile")
+                            Text("AI")
+                        }
+                    
                     SearchView()
                         .tabItem {
                             Image(systemName: "magnifyingglass")

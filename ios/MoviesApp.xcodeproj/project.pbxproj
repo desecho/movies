@@ -16,6 +16,8 @@
 		8D1107370486CEB800E47096 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D1107380486CEB800E47096 /* LoginView.swift */; };
 		8D1107380486CEB800E47097 /* MovieListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D1107390486CEB800E47097 /* MovieListView.swift */; };
 		8D1107390486CEB800E47098 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D11073A0486CEB800E47098 /* SearchView.swift */; };
+		B0F00963E05C4BF88F782C75 /* RecommendationPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 468A30F546E1456C88C13E2F /* RecommendationPreferences.swift */; };
+		56EC721CE6994AB7AC93B152 /* RecommendationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30352518713F49889F7F1C87 /* RecommendationsView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -29,6 +31,8 @@
 		8D1107390486CEB800E47097 /* MovieListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovieListView.swift; sourceTree = "<group>"; };
 		8D11073A0486CEB800E47098 /* SearchView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
 		8D1107B00486CEB800E47090 /* MovieMunchApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MovieMunchApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		468A30F546E1456C88C13E2F /* RecommendationPreferences.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecommendationPreferences.swift; sourceTree = "<group>"; };
+		30352518713F49889F7F1C87 /* RecommendationsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecommendationsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,8 +71,10 @@
 				8D1107380486CEB800E47096 /* LoginView.swift */,
 				8D1107390486CEB800E47097 /* MovieListView.swift */,
 				8D11073A0486CEB800E47098 /* SearchView.swift */,
+				30352518713F49889F7F1C87 /* RecommendationsView.swift */,
 				8D1107370486CEB800E47095 /* APIService.swift */,
 				8D1107360486CEB800E47094 /* Models.swift */,
+				468A30F546E1456C88C13E2F /* RecommendationPreferences.swift */,
 				8D1107340486CEB800E47092 /* Assets.xcassets */,
 				8D11073B0486CEB800E47099 /* Preview Content */,
 			);
@@ -153,6 +159,8 @@
 				8D1107390486CEB800E47098 /* SearchView.swift in Sources */,
 				8D1107360486CEB800E47095 /* APIService.swift in Sources */,
 				8D1107350486CEB800E47094 /* Models.swift in Sources */,
+				B0F00963E05C4BF88F782C75 /* RecommendationPreferences.swift in Sources */,
+				56EC721CE6994AB7AC93B152 /* RecommendationsView.swift in Sources */,
 				8D1107310486CEB800E47090 /* MoviesAppApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
