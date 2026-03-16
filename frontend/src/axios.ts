@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import type { AxiosError, AxiosRequestHeaders } from "axios";
+import type { AxiosError } from "axios";
 
 import { router } from "./router";
 import { useAuthStore } from "./stores/auth";
@@ -102,7 +102,7 @@ async function handleAuthenticationError(error: AxiosError): Promise<unknown> {
 }
 
 export function initAxios(): void {
-    const headers: AxiosRequestHeaders = {
+    const headers: Record<string, string> = {
         "Content-Type": "application/json; charset=UTF-8",
         "X-Requested-With": "XMLHttpRequest",
     };

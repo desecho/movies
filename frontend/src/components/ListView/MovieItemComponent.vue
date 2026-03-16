@@ -171,7 +171,7 @@
             <div>
               <a
                 v-for="providerRecord in record.providerRecords"
-                :key="providerRecord.provider"
+                :key="providerRecord.provider.name"
                 :href="providerRecord.tmdbWatchUrl"
                 target="_blank"
               >

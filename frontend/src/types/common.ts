@@ -83,7 +83,7 @@ export function isValidNumber(value: unknown): value is number {
  * Safely extract query parameter as number
  */
 export function getQueryParamAsNumber(
-    param: string | string[] | undefined,
+    param: string | (string | null)[] | null | undefined,
     fallback = 0,
 ): number {
     if (Array.isArray(param)) {
@@ -96,7 +96,7 @@ export function getQueryParamAsNumber(
  * Safely extract query parameter as string
  */
 export function getQueryParamAsString(
-    param: string | string[] | undefined,
+    param: string | (string | null)[] | null | undefined,
     fallback = "",
 ): string {
     if (Array.isArray(param)) {

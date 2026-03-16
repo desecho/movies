@@ -494,7 +494,7 @@ onMounted(async () => {
 
 // SEO Setup
 const seoData = computed(() => {
-  const listType = currentListId.value === 1 ? "watched" : "to-watch";
+  const listType: "watched" | "to-watch" = currentListId.value === 1 ? "watched" : "to-watch";
 
   return {
     listType,
@@ -503,7 +503,7 @@ const seoData = computed(() => {
     isPublic: Boolean(props.isProfileView),
     movies: filteredRecords.value || [],
     totalCount: filteredCount.value,
-    userAvatar: recordsData.userAvatarUrl,
+    userAvatar: recordsData.userAvatarUrl.value ?? undefined,
     listDescription: undefined, // Could be added later from user preferences
   };
 });
@@ -535,7 +535,7 @@ const structuredListData = computed(() => {
       year: record.movie.releaseDate ? new Date(record.movie.releaseDate).getFullYear() : undefined,
       genre: record.movie.genre ? record.movie.genre.split(", ") : undefined,
       director: undefined, // Could be added if available
-      poster: record.movie.posterPath ? `https://image.tmdb.org/t/p/w500${record.movie.posterPath}` : undefined,
+      poster: record.movie.hasPoster ? record.movie.posterBig : undefined,
       rating: record.rating || undefined,
     })),
   };

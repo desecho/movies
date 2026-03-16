@@ -173,10 +173,12 @@ import { AI_MAX_RATING, AI_MAX_RECOMMENDATIONS, AI_MIN_RATING, AI_MIN_RECOMMENDA
 import { getUrl } from "../helpers";
 import { $toast } from "../toast";
 
+type MovieGenre = (typeof MOVIE_GENRES)[number];
+
 interface RecommendationPreferences {
-  preferredGenre: string | null;
+  preferredGenre: MovieGenre | null;
   recommendationsNumber: number;
-  minRating: number | null;
+  minRating: number | undefined;
 }
 
 const movies: Ref<MoviePreview[]> = ref([]);
@@ -188,7 +190,7 @@ const recommendationsOperation = useApiCall("AI Movie Recommendations");
 const preferences: Ref<RecommendationPreferences> = ref({
   preferredGenre: null,
   recommendationsNumber: AI_MAX_RECOMMENDATIONS,
-  minRating: null,
+  minRating: undefined,
 });
 
 const yearRange = ref([2000, new Date().getFullYear()]);

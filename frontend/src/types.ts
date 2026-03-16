@@ -105,3 +105,5 @@ export interface ShareResponse {
 export interface ShareRequest {
     platform?: string;
 }
+
+export type ListKey = number;

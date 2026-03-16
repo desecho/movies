@@ -165,6 +165,9 @@ export class ListViewService implements IListViewService {
             filteredCount: computed(() => {
                 return this.filteringService.filteredRecords.value?.length || 0;
             }),
+            totalCount: computed(() => {
+                return records.value?.length || 0;
+            }),
         };
     }
 

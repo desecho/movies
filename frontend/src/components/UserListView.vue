@@ -102,10 +102,12 @@ interface UserListConfig {
 }
 
 interface User {
-  [key: string]: unknown;
   username: string;
   avatar_url: string | null;
   follow_date: string;
+  isFollowingBack?: boolean;
+  followLoading?: boolean;
+  unfollowLoading?: boolean;
 }
 
 interface UsersResponse {

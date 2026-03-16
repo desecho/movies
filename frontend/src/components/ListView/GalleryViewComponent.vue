@@ -19,7 +19,7 @@
               type="button"
               class="up-button"
               title="Move to the top"
-              @click="$emit('move-to-top', element)"
+              @click="emit('move-to-top', element, index)"
             >
               <v-icon icon="mdi-arrow-up" />
             </button>
@@ -28,7 +28,7 @@
               type="button"
               class="down-button"
               title="Move to the bottom"
-              @click="$emit('move-to-bottom', element)"
+              @click="emit('move-to-bottom', element, index)"
             >
               <v-icon icon="mdi-arrow-down" />
             </button>

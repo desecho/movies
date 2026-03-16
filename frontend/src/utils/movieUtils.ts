@@ -15,16 +15,16 @@ import type { RecordType } from "../types";
  * Type guard to validate RecordType structure
  */
 export function isValidRecord(record: unknown): record is RecordType {
-    return (
+    return Boolean(
         record &&
-        typeof record === "object" &&
-        record !== null &&
-        "movie" in record &&
-        "listId" in record &&
-        "id" in record &&
-        typeof (record as RecordType).listId === "number" &&
-        typeof (record as RecordType).movie?.title === "string" &&
-        (record as RecordType).id !== undefined
+            typeof record === "object" &&
+            record !== null &&
+            "movie" in record &&
+            "listId" in record &&
+            "id" in record &&
+            typeof (record as RecordType).listId === "number" &&
+            typeof (record as RecordType).movie?.title === "string" &&
+            (record as RecordType).id !== undefined,
     );
 }
 

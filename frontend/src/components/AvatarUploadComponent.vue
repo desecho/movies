@@ -21,7 +21,7 @@
         @dragover.prevent="isDragOver = true"
         @dragleave.prevent="isDragOver = false"
         @drop.prevent="handleDrop"
-        @click="$refs.fileInput?.click()"
+        @click="fileInput?.click()"
       >
         <input ref="fileInput" type="file" accept=".jpg,.jpeg,.png" style="display: none" @change="handleFileSelect" />
 

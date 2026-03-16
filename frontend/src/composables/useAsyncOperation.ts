@@ -59,6 +59,14 @@ export function useAsyncOperation(defaultConfig: AsyncOperationConfig = {}): {
         operation: () => Promise<T>,
         config?: AsyncOperationConfig,
     ) => Promise<AsyncOperationResult<T>>;
+    retry: <T>(
+        operation: () => Promise<T>,
+        config?: AsyncOperationConfig,
+    ) => Promise<AsyncOperationResult<T>>;
+    reset: () => void;
+    canRetry: () => boolean;
+    hasError: () => boolean;
+    isIdle: () => boolean;
 } {
     const isLoading = ref(false);
     const error = ref<AppError | null>(null);
@@ -295,7 +303,9 @@ export function useSilentRequest(
 export function withErrorHandling<T extends unknown[], R>(
     asyncFn: (...args: T) => Promise<R>,
     config: AsyncOperationConfig = {},
-): (...args: T) => Promise<AsyncOperationResult<R>> {
+): ReturnType<typeof useAsyncOperation> & {
+    call: (...args: T) => Promise<AsyncOperationResult<R>>;
+} {
     const operation = useAsyncOperation(config);
 
     return {

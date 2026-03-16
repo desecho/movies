@@ -2,7 +2,7 @@ import { useHead } from "@vueuse/head";
 import { computed, unref } from "vue";
 
 import type { RecordType } from "../types";
-import type { ComputedRef, MaybeRef } from "vue";
+import type { ComputedRef, MaybeRef, Ref } from "vue";
 
 export interface MovieListSEOData {
     listType: "watched" | "to-watch" | "custom";
@@ -15,7 +15,12 @@ export interface MovieListSEOData {
     listDescription?: string;
 }
 
-export function useMovieListSEO(data: MaybeRef<MovieListSEOData>): {
+export function useMovieListSEO(
+    data:
+        | MaybeRef<MovieListSEOData>
+        | Ref<MovieListSEOData>
+        | ComputedRef<MovieListSEOData>,
+): {
     pageTitle: ComputedRef<string>;
     pageDescription: ComputedRef<string>;
     fullUrl: ComputedRef<string>;
@@ -148,10 +153,10 @@ export function useMovieListSEO(data: MaybeRef<MovieListSEOData>): {
 
         // Use first movie poster if available
         const firstMovieWithPoster = d.movies.find(
-            (movie) => movie.movie.posterPath,
+            (movie) => movie.movie.hasPoster,
         );
-        if (firstMovieWithPoster?.movie.posterPath) {
-            return `https://image.tmdb.org/t/p/w500${firstMovieWithPoster.movie.posterPath}`;
+        if (firstMovieWithPoster?.movie.posterNormal) {
+            return firstMovieWithPoster.movie.posterNormal;
         }
 
         // Fallback to MovieMunch logo

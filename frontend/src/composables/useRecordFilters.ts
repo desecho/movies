@@ -58,9 +58,9 @@ export function useRecordFilters(
         return (
             record.movie.title.toLowerCase().includes(q) ||
             record.movie.titleOriginal.toLowerCase().includes(q) ||
-            (record.movie.director &&
+            (record.movie.director !== "" &&
                 record.movie.director.toLowerCase().includes(q)) ||
-            (record.movie.actors &&
+            (record.movie.actors !== "" &&
                 record.movie.actors.toLowerCase().includes(q))
         );
     }
