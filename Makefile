@@ -174,12 +174,12 @@ flush-cdn-cache:
 .PHONY: test
 ## Run tests | Tests
 test: shellcheck hadolint shfmt actionlint tox eslint prettier-json-lint prettier-scss-lint \
-	prettier-yaml-lint prettier-ts-lint prettier-html-lint prettier-vue-lint
+	prettier-yaml-lint prettier-ts-lint prettier-html-lint prettier-vue-lint ts-lint
 
 .PHONY: test2
 ## Run tests 2 | Tests
 test2: eslint prettier-json-lint prettier-scss-lint \
-	prettier-yaml-lint prettier-ts-lint prettier-html-lint prettier-vue-lint
+	prettier-yaml-lint prettier-ts-lint prettier-html-lint prettier-vue-lint ts-lint
 
 .PHONY: tox
 ## Run tox
@@ -325,6 +325,14 @@ prettier-vue-lint:
 	$(call print,Running prettier check for vue)
 	@${CMD_FRONTEND} && \
 	yarn run prettier --check src/App.vue src/components/*.vue src/views/*.vue
+
+.PHONY: ts-lint
+## Run ts linter
+ts-lint:
+	$(call print,Running ts lint)
+	@${CMD_FRONTEND} && \
+	npx vue-tsc --noEmit
+
 #------------------------------------
 
 #------------------------------------
