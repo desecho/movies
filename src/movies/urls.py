@@ -14,6 +14,7 @@ from moviesapp.views.health import HealthView
 from moviesapp.views.list import (
     AddToListView,
     ChangeRatingView,
+    ExportWatchedCsvView,
     RecordsView,
     RemoveRecordView,
     SaveCommentView,
@@ -95,6 +96,8 @@ urlpatterns: list[URL] = [
     path("save-comment/<int:record_id>/", SaveCommentView.as_view()),
     path_404("share/", "share"),
     path("share/<int:record_id>/", ShareToSocialMediaView.as_view()),
+    # Export
+    path("export/watched/", ExportWatchedCsvView.as_view()),
 ]
 
 # urlpatterns += [

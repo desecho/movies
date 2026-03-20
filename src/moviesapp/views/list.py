@@ -1,12 +1,13 @@
 """List views."""
 
+import csv
 import logging
 from http import HTTPStatus
 from typing import TYPE_CHECKING, Any, Optional, Union, cast
 
 from django.core.exceptions import PermissionDenied
 from django.db.models import QuerySet, prefetch_related_objects
-from django.http import Http404
+from django.http import Http404, HttpResponse
 from django.shortcuts import get_object_or_404
 from rest_framework.request import Request
 from rest_framework.response import Response
@@ -353,3 +354,23 @@ class SaveRecordsOrderView(APIView):
                 # Handle invalid record structure gracefully
                 return Response(status=HTTPStatus.BAD_REQUEST)
         return Response()
+
+
+class ExportWatchedCsvView(APIView):
+    """Export watched movies as CSV in Letterboxd format."""
+
+    def get(self, request: Request) -> HttpResponse:  # pylint: disable=no-self-use
+        """Export watched movies as CSV."""
+        user: User = cast(User, request.user)
+        records = Record.objects.filter(user=user, list_id=List.WATCHED).select_related("movie")
+
+        response = HttpResponse(content_type="text/csv")
+        response["Content-Disposition"] = 'attachment; filename="watched_movies.csv"'
+
+        writer = csv.writer(response)
+        writer.writerow(["tmdbID", "Rating", "WatchedDate", "Review"])
+        for record in records:
+            watched_date = record.date.strftime("%Y-%m-%d") if record.date else ""
+            writer.writerow([record.movie.tmdb_id, record.rating or "", watched_date, record.comment or ""])
+
+        return response

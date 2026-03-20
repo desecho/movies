@@ -81,11 +81,30 @@
           </v-card>
 
           <!-- Account Settings -->
-          <v-card class="elevation-2">
+          <v-card class="elevation-2 mb-6">
             <v-card-title class="text-h6">Account Settings</v-card-title>
             <v-card-text>
               <v-btn color="primary" variant="outlined" :to="'/change-password'" prepend-icon="mdi-lock">
                 Change Password
+              </v-btn>
+            </v-card-text>
+          </v-card>
+
+          <!-- Data Export -->
+          <v-card class="elevation-2">
+            <v-card-title class="text-h6">Data Export</v-card-title>
+            <v-card-text>
+              <p class="text-body-2 text-medium-emphasis mb-4">
+                Export your watched movies as a CSV file compatible with Letterboxd import.
+              </p>
+              <v-btn
+                color="primary"
+                variant="outlined"
+                prepend-icon="mdi-download"
+                :loading="isExporting"
+                @click="exportWatchedCsv"
+              >
+                Export for Letterboxd (CSV)
               </v-btn>
             </v-card-text>
           </v-card>
@@ -114,6 +133,7 @@ const url = getUrl("user/preferences/");
 
 const hidden = ref(false);
 const country = ref<string>("");
+const isExporting = ref(false);
 
 // Error handling composables
 const loadPreferencesOperation = useApiCall("Load User Preferences");
@@ -163,6 +183,23 @@ async function savePreferences(): Promise<void> {
 function onCountryChange(selectedCountryCode: string | null): void {
   country.value = selectedCountryCode || "";
   void savePreferences();
+}
+
+async function exportWatchedCsv(): Promise<void> {
+  isExporting.value = true;
+  try {
+    const response = await axios.get(getUrl("export/watched/"), { responseType: "blob" });
+    const blob = new Blob([response.data as BlobPart], { type: "text/csv" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "watched_movies.csv";
+    link.click();
+    URL.revokeObjectURL(link.href);
+  } catch {
+    $toast.error("Failed to export watched movies.");
+  } finally {
+    isExporting.value = false;
+  }
 }
 
 onMounted(() => {
