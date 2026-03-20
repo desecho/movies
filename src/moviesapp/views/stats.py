@@ -11,6 +11,8 @@ from rest_framework.views import APIView
 
 from ..models import List, Record, User
 
+TOP_ITEMS_LIMIT = 50
+
 
 class StatsView(APIView):
     """Stats view."""
@@ -121,9 +123,9 @@ class StatsView(APIView):
         director_counts = self._count_comma_separated_field(watched_records, "director")
         actor_counts = self._count_comma_separated_field(watched_records, "actors")
 
-        top_genres = sorted(genre_counts.items(), key=lambda x: x[1], reverse=True)[:5]
-        top_directors = sorted(director_counts.items(), key=lambda x: x[1], reverse=True)[:5]
-        top_actors = sorted(actor_counts.items(), key=lambda x: x[1], reverse=True)[:5]
+        top_genres = sorted(genre_counts.items(), key=lambda x: x[1], reverse=True)[:TOP_ITEMS_LIMIT]
+        top_directors = sorted(director_counts.items(), key=lambda x: x[1], reverse=True)[:TOP_ITEMS_LIMIT]
+        top_actors = sorted(actor_counts.items(), key=lambda x: x[1], reverse=True)[:TOP_ITEMS_LIMIT]
 
         return {
             "qualityPreferences": quality_stats,

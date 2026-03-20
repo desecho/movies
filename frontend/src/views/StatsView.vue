@@ -256,7 +256,14 @@
                     <p class="text-muted">No genre data available</p>
                   </div>
                   <div v-else>
-                    <div v-for="genre in stats.topGenres" :key="genre.name" class="genre-item">
+                    <div
+                      v-for="genre in stats.topGenres.slice(
+                        0,
+                        showAllGenres ? TOP_ITEMS_EXPANDED : TOP_ITEMS_COLLAPSED,
+                      )"
+                      :key="genre.name"
+                      class="genre-item"
+                    >
                       <div class="d-flex justify-space-between align-center mb-2">
                         <span>{{ genre.name }}</span>
                         <v-chip size="small" color="success">{{ genre.count }}</v-chip>
@@ -268,6 +275,14 @@
                         class="mb-3"
                       ></v-progress-linear>
                     </div>
+                    <v-btn
+                      v-if="stats.topGenres.length > TOP_ITEMS_COLLAPSED"
+                      variant="text"
+                      size="small"
+                      @click="showAllGenres = !showAllGenres"
+                    >
+                      {{ showAllGenres ? "Show less" : "Show more" }}
+                    </v-btn>
                   </div>
                 </v-card-text>
               </v-card>
@@ -285,7 +300,14 @@
                     <p class="text-muted">No director data available</p>
                   </div>
                   <div v-else>
-                    <div v-for="director in stats.topDirectors" :key="director.name" class="director-item">
+                    <div
+                      v-for="director in stats.topDirectors.slice(
+                        0,
+                        showAllDirectors ? TOP_ITEMS_EXPANDED : TOP_ITEMS_COLLAPSED,
+                      )"
+                      :key="director.name"
+                      class="director-item"
+                    >
                       <div class="d-flex justify-space-between align-center mb-2">
                         <span>{{ director.name }}</span>
                         <v-chip size="small" color="warning">{{ director.count }}</v-chip>
@@ -297,6 +319,14 @@
                         class="mb-3"
                       ></v-progress-linear>
                     </div>
+                    <v-btn
+                      v-if="stats.topDirectors.length > TOP_ITEMS_COLLAPSED"
+                      variant="text"
+                      size="small"
+                      @click="showAllDirectors = !showAllDirectors"
+                    >
+                      {{ showAllDirectors ? "Show less" : "Show more" }}
+                    </v-btn>
                   </div>
                 </v-card-text>
               </v-card>
@@ -314,7 +344,14 @@
                     <p class="text-muted">No actor data available</p>
                   </div>
                   <div v-else>
-                    <div v-for="actor in stats.topActors" :key="actor.name" class="actor-item">
+                    <div
+                      v-for="actor in stats.topActors.slice(
+                        0,
+                        showAllActors ? TOP_ITEMS_EXPANDED : TOP_ITEMS_COLLAPSED,
+                      )"
+                      :key="actor.name"
+                      class="actor-item"
+                    >
                       <div class="d-flex justify-space-between align-center mb-2">
                         <span>{{ actor.name }}</span>
                         <v-chip size="small" color="error">{{ actor.count }}</v-chip>
@@ -326,6 +363,14 @@
                         class="mb-3"
                       ></v-progress-linear>
                     </div>
+                    <v-btn
+                      v-if="stats.topActors.length > TOP_ITEMS_COLLAPSED"
+                      variant="text"
+                      size="small"
+                      @click="showAllActors = !showAllActors"
+                    >
+                      {{ showAllActors ? "Show less" : "Show more" }}
+                    </v-btn>
                   </div>
                 </v-card-text>
               </v-card>
@@ -513,6 +558,9 @@ import YearSelectorComponent from "../components/YearSelectorComponent.vue";
 import { useApiCall } from "../composables/useAsyncOperation";
 import { getUrl } from "../helpers";
 
+const TOP_ITEMS_COLLAPSED = 5;
+const TOP_ITEMS_EXPANDED = 50;
+
 interface QualityPreferences {
   theatre: number;
   hd: number;
@@ -611,6 +659,10 @@ const selectedYear = ref<number | null>(null);
 
 // Error handling composable
 const statsOperation = useApiCall("Load Statistics");
+
+const showAllGenres = ref(false);
+const showAllDirectors = ref(false);
+const showAllActors = ref(false);
 
 const stats = ref<Stats>({
   totalMoviesWatched: 0,
