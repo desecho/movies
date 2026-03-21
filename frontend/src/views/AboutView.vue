@@ -39,7 +39,7 @@
         <h3>Streaming data</h3>
         <p>
           Streaming data is currently only available in Canada, the United States are supported. You can
-          <a href="mailto:{{ ADMIN_EMAIL }}">email me</a> to request support for your country.
+          <a :href="`mailto:${email}`">email me</a> to request support for your country.
         </p>
         <br />
         <h3>Rating system</h3>
