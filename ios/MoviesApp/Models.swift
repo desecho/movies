@@ -100,6 +100,22 @@ struct Options: Codable, Equatable {
     var ignoreRewatch: Bool
 }
 
+extension Options {
+    func normalized() -> Options {
+        var normalizedOptions = self
+
+        if normalizedOptions.ultraHd {
+            normalizedOptions.fullHd = true
+        }
+
+        if normalizedOptions.fullHd {
+            normalizedOptions.hd = true
+        }
+
+        return normalizedOptions
+    }
+}
+
 struct ProviderRecord: Codable, Equatable {
     let tmdbWatchUrl: String
     let provider: Provider
@@ -128,6 +144,23 @@ struct Record: Codable, Identifiable, Transferable, Equatable {
     
     static var transferRepresentation: some TransferRepresentation {
         CodableRepresentation(contentType: .data)
+    }
+}
+
+extension Record {
+    func updating(rating: Int? = nil, options: Options? = nil, order: Int? = nil) -> Record {
+        Record(
+            id: id,
+            order: order ?? self.order,
+            movie: movie,
+            rating: rating ?? self.rating,
+            comment: comment,
+            commentArea: commentArea,
+            listId: listId,
+            additionDate: additionDate,
+            options: (options ?? self.options).normalized(),
+            providerRecords: providerRecords
+        )
     }
 }
 

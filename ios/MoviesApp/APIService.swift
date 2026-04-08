@@ -310,6 +310,20 @@ class APIService: ObservableObject {
         )
         watchedRecordsCache.append(watchedRecord)
     }
+
+    func updateCachedRecord(_ updatedRecord: Record) {
+        let now = Date()
+
+        if let watchedIndex = watchedRecordsCache.firstIndex(where: { $0.id == updatedRecord.id }) {
+            watchedRecordsCache[watchedIndex] = updatedRecord
+            watchedCacheTime = now
+        }
+
+        if let toWatchIndex = toWatchRecordsCache.firstIndex(where: { $0.id == updatedRecord.id }) {
+            toWatchRecordsCache[toWatchIndex] = updatedRecord
+            toWatchCacheTime = now
+        }
+    }
     
     func searchMovies(query: String) -> AnyPublisher<[SearchMovie], APIError> {
         guard let token = accessToken else {
@@ -540,6 +554,8 @@ class APIService: ObservableObject {
             return Fail(error: APIError.unauthorized)
                 .eraseToAnyPublisher()
         }
+
+        let normalizedOptions = options.normalized()
         
         guard let url = URL(string: "\(baseURL)/record/\(recordId)/options/") else {
             return Fail(error: APIError.networkError)
@@ -553,13 +569,13 @@ class APIService: ObservableObject {
         
         let requestBody: [String: Any] = [
             "options": [
-                "original": options.original,
-                "extended": options.extended,
-                "theatre": options.theatre,
-                "ultraHd": options.ultraHd,
-                "hd": options.hd,
-                "fullHd": options.fullHd,
-                "ignoreRewatch": options.ignoreRewatch
+                "original": normalizedOptions.original,
+                "extended": normalizedOptions.extended,
+                "theatre": normalizedOptions.theatre,
+                "ultraHd": normalizedOptions.ultraHd,
+                "hd": normalizedOptions.hd,
+                "fullHd": normalizedOptions.fullHd,
+                "ignoreRewatch": normalizedOptions.ignoreRewatch
             ]
         ]
         

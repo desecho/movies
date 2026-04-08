@@ -218,7 +218,7 @@ struct MovieListView: View {
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                     } else {
                         List(filteredAndSortedRecords) { record in
-                            MovieRowView(record: record, listType: listType)
+                            MovieRowView(record: record, listType: listType, onRecordUpdated: updateRecord)
                                 .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                                     if listType == .toWatch {
                                         // Delete action
@@ -416,6 +416,14 @@ struct MovieListView: View {
                 .store(in: &cancellables)
         }
     }
+
+    private func updateRecord(_ updatedRecord: Record) {
+        if let recordIndex = records.firstIndex(where: { $0.id == updatedRecord.id }) {
+            records[recordIndex] = updatedRecord
+        }
+
+        apiService.updateCachedRecord(updatedRecord)
+    }
 }
 
 struct StarRatingView: View {
@@ -460,15 +468,17 @@ struct StarRatingView: View {
 struct MovieRowView: View {
     let record: Record
     let listType: ListType
+    let onRecordUpdated: (Record) -> Void
     @State private var currentRating: Int
     @State private var isUpdatingRating = false
     @State private var showingOptionsSheet = false
     @State private var cancellables = Set<AnyCancellable>()
     @EnvironmentObject var apiService: APIService
     
-    init(record: Record, listType: ListType) {
+    init(record: Record, listType: ListType, onRecordUpdated: @escaping (Record) -> Void) {
         self.record = record
         self.listType = listType
+        self.onRecordUpdated = onRecordUpdated
         self._currentRating = State(initialValue: record.rating)
     }
     
@@ -552,11 +562,13 @@ struct MovieRowView: View {
         .padding(.vertical, 4)
         .sheet(isPresented: $showingOptionsSheet) {
             if listType == .watched {
-                OptionsView(record: record, onSave: {
-                    // Notify parent to refresh data
-                    NotificationCenter.default.post(name: .refreshRecords, object: nil)
+                OptionsView(record: record, onSave: { updatedOptions in
+                    onRecordUpdated(record.updating(options: updatedOptions))
                 })
             }
+        }
+        .onChange(of: record) { _, newRecord in
+            currentRating = newRecord.rating
         }
     }
     
@@ -589,14 +601,14 @@ struct MovieRowView: View {
 
 struct OptionsView: View {
     let record: Record
-    let onSave: () -> Void
+    let onSave: (Options) -> Void
     @State private var options: Options
     @State private var isUpdating = false
     @State private var cancellables = Set<AnyCancellable>()
     @EnvironmentObject var apiService: APIService
     @Environment(\.dismiss) private var dismiss
     
-    init(record: Record, onSave: @escaping () -> Void) {
+    init(record: Record, onSave: @escaping (Options) -> Void) {
         self.record = record
         self.onSave = onSave
         self._options = State(initialValue: record.options)
@@ -642,8 +654,9 @@ struct OptionsView: View {
     
     private func saveOptions() {
         isUpdating = true
+        let normalizedOptions = options.normalized()
         
-        apiService.updateMovieOptions(recordId: record.id, options: options)
+        apiService.updateMovieOptions(recordId: record.id, options: normalizedOptions)
             .receive(on: DispatchQueue.main)
             .sink(
                 receiveCompletion: { completion in
@@ -654,8 +667,9 @@ struct OptionsView: View {
                 },
                 receiveValue: { success in
                     if success {
+                        options = normalizedOptions
                         print("Successfully updated options")
-                        onSave()
+                        onSave(normalizedOptions)
                         dismiss()
                     }
                 }
@@ -1004,8 +1018,7 @@ struct MovieDetailView: View {
         }
         .sheet(isPresented: $showingOptionsSheet) {
             if listType == .watched {
-                OptionsView(record: record, onSave: {
-                    // Notify parent to refresh data
+                OptionsView(record: record, onSave: { _ in
                     NotificationCenter.default.post(name: .refreshRecords, object: nil)
                 })
             }
