@@ -166,7 +166,7 @@ class OpenAIClient:
         if min_rating is not None:
             if not settings.AI_MIN_RATING <= min_rating <= settings.AI_MAX_RATING:
                 raise ValueError(
-                    f"Minimum rating must be between {settings.AI_MIN_RATING} " f"and {settings.AI_MAX_RATING}"
+                    f"Minimum rating must be between {settings.AI_MIN_RATING} and {settings.AI_MAX_RATING}"
                 )
 
     @staticmethod

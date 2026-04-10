@@ -13,7 +13,6 @@ from ..base import BaseTestCase
 
 
 class TrendingViewTestCase(BaseTestCase):
-
     def setUp(self):
         super().setUp()
         self.url = "/trending/"
@@ -188,7 +187,6 @@ class TrendingViewTestCase(BaseTestCase):
 
 
 class TrendingViewAuthenticatedTestCase(TestCase):
-
     def setUp(self):
         super().setUp()
         self.url = "/trending/"

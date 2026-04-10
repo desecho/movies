@@ -14,7 +14,6 @@ from moviesapp.tmdb import TmdbNoImdbIdError
 
 
 class LoadProvidersCommandTestCase(TestCase):
-
     @patch("moviesapp.management.commands.load_providers.get_tmdb_providers")
     def test_load_providers_success(self, mock_get_tmdb_providers):
         """Test successful loading of providers."""
@@ -73,7 +72,6 @@ class LoadProvidersCommandTestCase(TestCase):
 
 
 class RemoveUnusedMoviesCommandTestCase(TestCase):
-
     def setUp(self):
         # Create List objects
         List.objects.get_or_create(id=List.WATCHED, defaults={"name": "Watched", "key_name": "watched"})
@@ -116,7 +114,6 @@ class RemoveUnusedMoviesCommandTestCase(TestCase):
 
 
 class UpdateImdbRatingsCommandTestCase(TestCase):
-
     def setUp(self):
         self.movie = Movie.objects.create(
             tmdb_id=603, title="The Matrix", title_original="The Matrix", imdb_id="tt0133093"
@@ -172,7 +169,6 @@ class UpdateImdbRatingsCommandTestCase(TestCase):
 
 
 class UpdateMovieDataCommandTestCase(TestCase):
-
     def setUp(self):
         self.movie = Movie.objects.create(tmdb_id=603, title="The Matrix", title_original="The Matrix")
 
@@ -268,7 +264,6 @@ class UpdateMovieDataCommandTestCase(TestCase):
 
 
 class UpdateWatchDataCommandTestCase(TestCase):
-
     def setUp(self):
         self.movie = Movie.objects.create(
             tmdb_id=603,
@@ -474,7 +469,6 @@ class UpdateWatchDataCommandTestCase(TestCase):
 
 
 class DownloadProviderLogosCommandTestCase(TestCase):
-
     @patch("moviesapp.management.commands.download_provider_logos.get_tmdb_providers")
     @patch("moviesapp.management.commands.download_provider_logos.wget.download")
     @patch("moviesapp.management.commands.download_provider_logos.exists")

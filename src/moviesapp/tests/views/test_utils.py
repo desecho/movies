@@ -16,7 +16,6 @@ from ..base import BaseTestCase
 
 
 class AddMovieToListTestCase(TestCase):
-
     def setUp(self):
         super().setUp()
         # Create List objects
@@ -99,7 +98,6 @@ class AddMovieToListTestCase(TestCase):
 
 
 class GetAnothersAccountTestCase(BaseTestCase):
-
     def test_get_anothers_account_existing_user(self):
         """Test getting an existing user by username."""
         user = get_anothers_account("neo")
@@ -124,7 +122,6 @@ class GetAnothersAccountTestCase(BaseTestCase):
 
 
 class FormatDateTestCase(TestCase):
-
     def test_format_date_with_valid_date(self):
         """Test formatting a valid date."""
         test_date = date(2020, 1, 15)
@@ -151,7 +148,6 @@ class FormatDateTestCase(TestCase):
 
 
 class GetMovieListResultTestCase(TestCase):
-
     def test_get_movie_list_result_complete_data(self):
         """Test converting TMDB movie data to MovieListResult with complete data."""
         tmdb_movie = {
@@ -207,7 +203,6 @@ class GetMovieListResultTestCase(TestCase):
 
 
 class FilterOutMoviesUserAlreadyHasInListsTestCase(TestCase):
-
     def setUp(self):
         super().setUp()
         # Create List objects

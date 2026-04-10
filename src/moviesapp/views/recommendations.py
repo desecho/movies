@@ -85,7 +85,7 @@ class RecommendationsView(APIView):
             min_rating_int = int(min_rating)
             if not settings.AI_MIN_RATING <= min_rating_int <= settings.AI_MAX_RATING:
                 raise ValueError(
-                    f"Minimum rating must be between {settings.AI_MIN_RATING} " f"and {settings.AI_MAX_RATING}"
+                    f"Minimum rating must be between {settings.AI_MIN_RATING} and {settings.AI_MAX_RATING}"
                 )
             return min_rating_int
         except ValueError as exc:

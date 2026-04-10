@@ -15,7 +15,6 @@ from ..base import BaseTestCase
 
 
 class SearchMovieViewTestCase(BaseTestCase):
-
     def setUp(self):
         super().setUp()
         self.url = "/search/"
@@ -225,7 +224,6 @@ class SearchMovieViewTestCase(BaseTestCase):
 
 
 class AddToListFromDbViewTestCase(TestCase):
-
     def setUp(self):
         super().setUp()
         self.url = "/add-to-list-from-db/"

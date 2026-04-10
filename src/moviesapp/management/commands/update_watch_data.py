@@ -127,10 +127,12 @@ class Command(BaseCommand):
 
                 existing_provider_records = movie.provider_records.all().values("id", "provider_id", "country")
                 removed = self._remove_no_longer_available_provider_records(
-                    list(existing_provider_records), watch_data  # type: ignore
+                    list(existing_provider_records),
+                    watch_data,  # type: ignore
                 )
                 self._filter_out_already_existing_provider_records(
-                    list(existing_provider_records.values("provider_id", "country")), watch_data  # type: ignore
+                    list(existing_provider_records.values("provider_id", "country")),
+                    watch_data,  # type: ignore
                 )
                 try:  # pylint: disable=duplicate-code
                     movie.save_watch_data(watch_data)

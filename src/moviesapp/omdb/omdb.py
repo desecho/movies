@@ -21,7 +21,9 @@ def _get_processed_omdb_movie_data(data_raw: OmdbMovie) -> OmdbMovieProcessed:
         "imdbRating": None,
     }
     items: list[tuple[OmdbMoviePreprocessedKey, str]] = [
-        (key, value) for (key, value) in data_raw.items() if key in data and value != "N/A"  # type: ignore
+        (key, value)
+        for (key, value) in data_raw.items()
+        if key in data and value != "N/A"  # type: ignore
     ]
     for key, value in items:
         if len(value) > 255:
