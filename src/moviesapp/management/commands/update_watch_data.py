@@ -1,7 +1,8 @@
 """Update watch data."""
 
 import sys
-from typing import Any, Optional
+from collections.abc import Mapping
+from typing import Any, Optional, cast
 
 from django.conf import settings
 from django.core.management.base import CommandParser
@@ -52,6 +53,23 @@ class Command(BaseCommand):
                 movies.remove(movie)
 
     @staticmethod
+    def _get_provider_record_type(provider_record: Mapping[str, object]) -> ProviderRecordType:
+        """Convert a queryset row into a typed provider record."""
+        return {
+            "id": cast(int, provider_record["id"]),
+            "provider_id": cast(int, provider_record["provider_id"]),
+            "country": cast(str, provider_record["country"]),
+        }
+
+    @staticmethod
+    def _get_watch_data_record(provider_record: ProviderRecordType) -> WatchDataRecord:
+        """Convert a provider record into its watch data shape."""
+        return {
+            "provider_id": provider_record["provider_id"],
+            "country": provider_record["country"],
+        }
+
+    @staticmethod
     def _remove_no_longer_available_provider_records(
         existing_provider_records: list[ProviderRecordType],
         watch_data: list[WatchDataRecord],
@@ -59,16 +77,17 @@ class Command(BaseCommand):
         """Remove provider records that are no longer available."""
         removed = False
         for provider_record in existing_provider_records:
-            provider_record_id = provider_record.pop("id")
+            provider_record_id = provider_record["id"]
+            watch_data_record = Command._get_watch_data_record(provider_record)
             # Remove the record if it's no longer available.
-            if provider_record not in watch_data:
+            if watch_data_record not in watch_data:
                 ProviderRecord.objects.get(pk=provider_record_id).delete()
                 removed = True
         return removed
 
     @staticmethod
     def _filter_out_already_existing_provider_records(
-        existing_provider_records: list[ProviderRecordType],
+        existing_provider_records: list[WatchDataRecord],
         watch_data: list[WatchDataRecord],
     ) -> None:
         """
@@ -125,14 +144,17 @@ class Command(BaseCommand):
                     tqdm.update()
                     continue
 
-                existing_provider_records = movie.provider_records.all().values("id", "provider_id", "country")
+                existing_provider_records = [
+                    self._get_provider_record_type(provider_record)
+                    for provider_record in movie.provider_records.all().values("id", "provider_id", "country")
+                ]
                 removed = self._remove_no_longer_available_provider_records(
-                    list(existing_provider_records),
-                    watch_data,  # type: ignore
+                    existing_provider_records,
+                    watch_data,
                 )
                 self._filter_out_already_existing_provider_records(
-                    list(existing_provider_records.values("provider_id", "country")),
-                    watch_data,  # type: ignore
+                    [self._get_watch_data_record(provider_record) for provider_record in existing_provider_records],
+                    watch_data,
                 )
                 try:  # pylint: disable=duplicate-code
                     movie.save_watch_data(watch_data)

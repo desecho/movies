@@ -1,5 +1,8 @@
 """OMDb."""
 
+from collections.abc import Mapping
+from typing import cast
+
 import requests
 from django.conf import settings
 from requests.exceptions import RequestException
@@ -8,6 +11,15 @@ from sentry_sdk import capture_exception
 from ..types import OmdbMovieProcessed
 from .exceptions import OmdbError, OmdbLimitReachedError, OmdbRequestError
 from .types import OmdbMovie, OmdbMoviePreprocessed, OmdbMoviePreprocessedKey
+
+OMDB_MOVIE_PREPROCESSED_KEYS: tuple[OmdbMoviePreprocessedKey, ...] = (
+    "Writer",
+    "Director",
+    "Actors",
+    "Genre",
+    "Country",
+    "imdbRating",
+)
 
 
 def _get_processed_omdb_movie_data(data_raw: OmdbMovie) -> OmdbMovieProcessed:
@@ -20,12 +32,13 @@ def _get_processed_omdb_movie_data(data_raw: OmdbMovie) -> OmdbMovieProcessed:
         "Country": None,
         "imdbRating": None,
     }
-    items: list[tuple[OmdbMoviePreprocessedKey, str]] = [
-        (key, value)
-        for (key, value) in data_raw.items()
-        if key in data and value != "N/A"  # type: ignore
-    ]
-    for key, value in items:
+    data_raw_mapping: Mapping[str, object] = data_raw
+    for key in OMDB_MOVIE_PREPROCESSED_KEYS:
+        if key not in data_raw_mapping:
+            continue
+        value = cast(str, data_raw_mapping[key])
+        if value == "N/A":
+            continue
         if len(value) > 255:
             data[key] = value[:252] + "..."
         data[key] = value
