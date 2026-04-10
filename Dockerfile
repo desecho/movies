@@ -2,21 +2,20 @@ FROM python:3.11.0-alpine3.16
 
 ENV PROJECT=movies
 ENV PYTHONUNBUFFERED=1
+ENV VIRTUAL_ENV=/app/.venv
+ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 
 WORKDIR /app
 
 COPY pyproject.toml .
-COPY poetry.lock .
+COPY uv.lock .
 
-# Removing poetry manually because it doesn't work otherwise
 RUN apk add --no-cache --virtual .build-deps git gcc musl-dev libffi-dev openssl-dev python3-dev cargo && \
     apk add --no-cache mariadb-dev && \
-    pip3 install --no-cache-dir poetry==2.1.3 && \
-    poetry config virtualenvs.create false --local && \
-    poetry install --without dev --no-root && \
+    pip3 install --no-cache-dir uv==0.11.6 && \
+    uv sync --no-dev --frozen && \
     apk del .build-deps && \
-    rm -rf /usr/local/lib/python3.11/site-packages/poetry && \
-    rm poetry.toml poetry.lock pyproject.toml
+    rm uv.lock pyproject.toml
 
 COPY entrypoint.sh .
 COPY src .

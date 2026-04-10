@@ -47,8 +47,8 @@ jobs:
       - name: Install shellcheck
         run: sudo apt install shellcheck -y
 
-      - name: Install Poetry
-        run: pip3 install poetry
+      - name: Install uv
+        run: pip3 install uv
 
       - name: Install tox
         run: pip install tox

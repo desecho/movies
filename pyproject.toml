@@ -1,116 +1,87 @@
-[tool.black]
-line-length = 119
-target-version = ['py310']
-skip-string-normalization = false
-include = '\.pyi?$'
-exclude = '''
-/(
-    __pycache__
-    | \.hypothesis
-    | \.idea
-    | \.mypy_cache
-    | \.pytest_cache
-    | \.tox
-    | \.venv
-    | \.vscode
-    | migrations
-    | node_modules
-    | htmlcov
-/)
-'''
-
-[tool.poetry]
+[project]
 name = "movies"
 version = "0.0.0"
-description = ""
-authors = ["Anton Samarchyan <desecho@gmail.com>"]
-license = "MIT"
+description = "Movies is a movie database and recommendation system built with Django."
+authors = [{name = "Anton Samarchyan", email = "desecho@gmail.com"}]
+license = {text = "MIT"}
 readme = "README.rst"
+requires-python = ">=3.11"
+dependencies = [
+    # Django
+    "Django>=5.2.4,<6.0.0",
+    # django-annoying is only used in existing migrations.
+    "django-annoying>=0.10.6,<0.11.0",
+    "django-tqdm>=1.3.1,<2.0.0",
+    "django-custom-anonymous>=0.5.0,<0.6.0",
+    "django-modeladmin-reorder>=0.3.1,<0.4.0",
+    "django-stubs-ext>=5.2.2,<6.0.0",
+    "django-celery-results>=2.4.0,<3.0.0",
+    "django-countries[pyuca]>=7.6.1,<8.0.0",
+    "django-timezone-field>=7.1,<8.0.0",
+    "djangorestframework>=3.13.1,<4.0.0",
+    "djangorestframework-simplejwt>=5.5.1,<6.0.0",
+    "django-cors-headers>=4.4.0,<5.0.0",
+    "django-rest-registration>=0.9.0,<0.10.0",
 
-[tool.poetry.dependencies]
-python = "^3.11"
+    # Requests
+    "requests>=2.31.0,<3.0.0",
+    "requests-toolbelt>=1.0.0,<2.0.0",
 
-# Django
-Django = "^5.2.4"
-# django-annoying is only used in existing migrations.
-django-annoying = "^0.10.6"
-django-tqdm = "^1.3.1"
-django-custom-anonymous = "^0.5.0"
-django-modeladmin-reorder = "^0.3.1"
-django-stubs-ext = "^5.2.2"
-django-celery-results = "^2.4.0"
-django-countries = {extras = ["pyuca"], version = "^7.6.1"}
-django-timezone-field = "^7.1"
-djangorestframework = "^3.13.1"
-djangorestframework-simplejwt = "^5.5.1"
-django-cors-headers = "^4.4.0"
-django-rest-registration = "^0.9.0"
+    # Dates
+    "python-dateutil>=2.8.2,<3.0.0",
+    "Babel>=2.10.3,<3.0.0",
 
-# Requests
-requests = "^2.31.0"
-requests-toolbelt = "^1.0.0"
+    "mysqlclient>=2.2.0,<3.0.0",
+    "sentry-sdk>=2.14.0,<3.0.0",
+    "gunicorn>=23.0.0,<24.0.0",
+    "typing-extensions>=4.3.0,<5.0.0",
+    "Authlib>=1.0.1,<2.0.0",
+    "pip>=25.2,<26.0.0",
+    "wget>=3.2,<4.0.0",
+    "tmdbsimple>=2.9.1,<3.0.0",
+    "celery[redis]>=5.2.7,<6.0.0",
+    # This seems to be required for django-timezone-field
+    "tzdata>=2025.2,<2026.0",
 
-# Dates
-python-dateutil = "^2.8.2"
-Babel = "^2.10.3"
+    # File storage and image processing
+    "django-storages[boto3]>=1.14.4,<2.0.0",
+    "Pillow>=11.0.0,<12.0.0",
 
-mysqlclient = "^2.2.0"
-sentry-sdk = "^2.14.0"
-gunicorn = "^23.0.0"
-typing-extensions = "^4.3.0"
-Authlib = "^1.0.1"
-pip = "^25.2"
-wget = "^3.2"
-tmdbsimple = "^2.9.1"
-celery = {extras = ["redis"], version = "^5.2.7"}
-# This seems to be required for django-timezone-field
-tzdata = "^2025.2"
+    # AI/ML
+    "openai>=1.0.0,<2.0.0",
+]
 
-# File storage and image processing
-django-storages = {extras = ["boto3"], version = "^1.14.4"}
-Pillow = "^11.0.0"
+[dependency-groups]
+dev = [
+    # Pytest
+    "pytest",
+    "pytest-cov",
+    "pytest-sugar",
+    "pytest-mock",
+    "pytest-django",
 
-# AI/ML
-openai = "^1.0.0"
+    # Django
+    "django-test-without-migrations",
 
-[tool.poetry.group.dev.dependencies]
-# Pytest
-pytest = "*"
-pytest-cov = "*"
-pytest-sugar = "*"
-pytest-mock = "*"
-pytest-django = "*"
+    # Linting
+    "ruff",
+    "safety",
+    "restructuredtext_lint",
+    "mypy",
+    "pygments", # For syntax highlighting in code examples
 
-# Django
-django-test-without-migrations = "*"
+    # Stubs
+    # Setting version manually because it wouldn't install the latest version for whatever reason
+    "django-stubs>=5.2.2,<6.0.0",
+    "djangorestframework-stubs",
+    "types-python-dateutil",
+    "types-requests",
+    "types-babel",
+    "celery-types",
 
-# Linting
-pylint = "*"
-isort = "*"
-flake8 = "*"
-bandit = "*"
-pydiatra = "*"
-pydocstyle = "*"
-safety = "*"
-autoflake = "*"
-black = "*"
-restructuredtext_lint = "*"
-mypy = "*"
-pygments = "*" # For syntax highlighting in code examples
+    "beautifulsoup4",
+    "requests-mock",
+]
 
-# Stubs
-# Setting version manually because it wouldn't install the latest version for whatever reason
-django-stubs = "^5.2.2"
-djangorestframework-stubs = "*"
-types-python-dateutil = "*"
-types-requests = "*"
-types-babel = "*"
-celery-types = "*"
-
-beautifulsoup4 = "*"
-
-requests-mock = "*"
-
-[build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+[tool.uv]
+package = false

@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   app:
-    image: ${PROJECT}
+    image: ${PROJECT}:backend
     ports:
       - 8000:8000
     extra_hosts:

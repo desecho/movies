@@ -124,8 +124,8 @@ jobs:
           path: venv
           key: venv-${{ hashFiles('requirements.txt', 'requirements-dev.txt', 'requirements-additional.txt') }}
 
-      - name: Install Poetry
-        run: pip3 install poetry
+      - name: Install uv
+        run: pip3 install uv
 
       # This is needed to avoid errors when running collectstatic command
       - name: Create env files

@@ -322,7 +322,8 @@ class RecordsView(APIView):
 
         actual_user: User = cast(User, request.user)
         if actual_user.is_authenticated and actual_user.is_country_supported:
-            prefetch_related_objects(records, "movie__provider_records__provider")
+            record_list = list(records)
+            prefetch_related_objects(record_list, "movie__provider_records__provider")
 
         # if anothers_account:
         #     self._inject_list_ids(records, record_objects)
