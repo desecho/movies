@@ -85,3 +85,8 @@ dev = [
 
 [tool.uv]
 package = false
+
+[tool.ruff]
+line-length = 119
+target-version = "py311"
+extend-exclude = ["src/moviesapp/migrations"]
